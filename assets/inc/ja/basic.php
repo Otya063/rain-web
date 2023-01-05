@@ -1,5 +1,7 @@
 <?php
 $url = $_SERVER["REQUEST_URI"];
+
+//各パス
 $manual_path = "/manual/ja/";
 $img_path = "/manual/assets/img/";
 $css_path = "/manual/assets/css/";
@@ -18,7 +20,8 @@ $titleName = [
 // 概要管理
 $descContents = [
     $manual_path => "Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル",
-    $manual_path . "entry/acccreate/" => "Rainサーバーにおけるアカウントの作成手順をご紹介します。"
+    $manual_path . "entry/acccreate/" => "Rainサーバーにおけるアカウントの作成手順をご紹介します。",
+    $manual_path . "/entry/acclink/" => "RainサーバーにおけるDiscordアカウントの連携方法についてご紹介します。"
 ];
 
 $titleTxt = $titleName[$url] ?? $defaultTitle;

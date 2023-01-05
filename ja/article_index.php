@@ -1,4 +1,4 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/manual/assets/inc/ja/info.php" ?>
+<?php include $_SERVER['DOCUMENT_ROOT'] . "/manual/assets/inc/ja/basic.php" ?>
 
 <!DOCTYPE html>
 <html lang="ja">
