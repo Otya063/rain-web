@@ -1,0 +1,7 @@
+@charset "UTF-8";
+// ※globalは読み込まない。
+
+// 共通パーツ
+@use "common";
+// エラーページ
+@use "manual";

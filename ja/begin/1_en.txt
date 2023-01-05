@@ -1,0 +1,391 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="description" content="株式会社カプコンが運営するオンラインゲーム『モンスターハンター フロンティアＺ(MHF-Ｚ)』の公式WEBサイト。">
+<meta name="keywords" content="モンスターハンター,フロンティア,Ｚ,mhf,monster hunter frontierＺ,オンラインゲーム,動画,カプコン,CAPCOM">
+<meta content="text/css" http-equiv="content-style-type">
+<meta content="text/javascript" http-equiv="content-script-type">
+<title>MHF-Ｚオンラインマニュアル | ゲームのはじめかた</title>
+<link href="/css/manual/common.css" rel="stylesheet" type="text/css">
+<link href="/css/manual/top.css" rel="stylesheet" type="text/css">
+<link href="/css/manual/left_column.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/js/init.js"></script>
+<script type="text/javascript" src="/js/manual/ini.js"></script>
+<script language="JavaScript" type="text/javascript" src="/js/gao.js"></script>
+</head>
+<body>
+<div id="box">
+
+<div id="head">
+<h1><img src="/images/manual/head_ps4.jpg" alt="PlayStation®4版モンスターハンター フロンティアＺ オンラインマニュアル" width="830" height="132"></h1>
+<div id="search">
+<form action="/sp/manual/search.html" method="get"><input type="text" name="wd" maxlength="40" class="w134"><input name="imageField" type="image" src="/images/manual/search_btn.jpg" align="middle" alt="検索"></form>
+</div>
+</div>
+
+<div id="container">
+<div class="articleBox">
+<h2><span>How to Start the Game</span></h2>
+
+<p class="submenu"><a href="#b50154605b72a9385293277a65741880">System Requirements for Original Edition(OE)</a>　｜　<a href="#590bf696cc687eb4de2d1ebad096a9c8">System Requirements for High Grade Edition(HGE)</a>　｜　<a href="#f81fd2e4c52864042852c112ce927ae2">Download</a>　｜　<a href="#14b7d76f2abce310837a677aad65c1ad">Installation</a>　｜　<a href="#fda0a4c67b309c651de060fe1aedbad9">About the Launcher Screen</a>　｜　<a href="#29ae62f6121aa1cfa1b080fda4cd60f0">Log In and How to Start the Game</a>　｜　<a href="#255854d6cf8510c6c94f8efed221e618">How to Set up High Grade Edition</a></p>
+<p class="leadtxt"> The PC version of "MHF-Z" has two editions as follows:<br>
+ー The Original Edition(OE) which can be played in normal quality in a casual environment.<br>
+ー The High Grade Edition(HGE) which allows users to experience powerful hunting in high quality.<br>
+This guide will cover the system requirements and how to start the game, including download and installation.</p>
+<p>&nbsp;</p>
+<p class="check">・You can choose to play MHF in either "OE" or "HGE" depending on your computer environments.<br />
+・You don't need to have any courses and packages on playing MHF in "HGE".<br />
+・Please note that the game may not start properly due to components, etc, even if your computer meets system requirements.</p>
+<div class="section" id="b50154605b72a9385293277a65741880">
+<h3>System Requirements for Original Edition(OE)</h3>
+<table class="default">
+    <tbody>
+        <tr>
+            <th width="20%" scope="row">System<br>Requirements</th>
+            <td width="40%" class="center"><strong>Recommended</strong><br />
+            MHF-Ｚのプレイに推奨する<br />
+            動作環境</td>
+            <td width="40%" class="center"><strong>Minimum</strong><br />
+            MHF-Ｚの動作を確認した<br />
+            最低限の動作環境</td>
+        </tr>
+        <tr>
+            <th scope="row">Resolution</th>
+            <td class="center">1600&times;1200</td>
+            <td class="center">800x600</td>
+        </tr>
+        <tr>
+            <th height="38" scope="row">OS</th>
+            <td colspan="2">
+            <p>Windows 7, 8, 8.1, 10 (32-bit/64-bit※ Japanese Language)<br />
+            ※A 64-bit runs on WOW64 (Windows on Windows 64).
+            </p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row" rowspan="2">CPU</th>
+            <td class="left">
+            <p style="margin-bottom:5px; line-height:1.1em;">Intel&reg; Core&trade;2（Duo、Extreme、Quad）Series</p>
+            <p style="margin-bottom:5px; line-height:1.1em;">Intel&reg; Core&trade; （i3、i5、i7）Series</p>
+            <p style="margin-bottom:5px; line-height:1.1em;">Intel&reg; Core&trade; （i5-2000、i7-2000） Series ※1</p>
+            <p style="margin-bottom:5px; line-height:1.1em;">AMD Athlon&trade; X2 Dual-Core 4600+ or higher</p>
+            <p style="margin-bottom:5px; line-height:1.1em;">AMD Phenom&trade; Series</p>
+            <p style="margin-bottom:5px; line-height:1.1em;">AMD AthlonII&trade; Series</p>
+            <p style="margin-bottom:5px; line-height:1.1em;">AMD PhenomII&trade; Series</p>
+            <p style="margin-bottom:0; line-height:1.1em;">AMD A-Series APU (A8-3850,A6-3650) ※2</p>
+            </td>
+            <td class="left">
+            <p style="margin-bottom:5px; line-height:1.1em;">Intel&reg; Pentium&reg; 4 2.0 GHz or higher</p>
+            <p style="margin-bottom:0; line-height:1.1em;">AMD Athlon&trade;64 3500+ or higher</p>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2" class="center">CPU supporting SSE</td>
+        </tr>
+        <tr>
+            <th scope="row">Memory</th>
+            <td class="center">1 GB or higher</td>
+            <td class="center">512 MB or higher</td>
+        </tr>
+        <tr>
+            <th scope="row">Graphics<br />
+            Card</th>
+            <td class="left" style="font-size:89%;">NVIDIA&reg; GeForce&reg; 8600 Series or higher<br />
+            NVIDIA&reg; GeForce&reg; 9600 Series or higher<br />
+            NVIDIA&reg; GeForce&reg; 200 Series or higher<br />
+            AMD Radeon&trade; HD 2600 Series or higher<br />
+            AMD Radeon&trade; HD 3650 Series or higher<br />
+            AMD Radeon&trade; HD 4650 Series or higher<br />
+            AMD Radeon&trade; HD 5550 Series or higher<br />
+            AMD Radeon&trade; HD 6450 Series or higher</td>
+            <td class="left" style="font-size:89%;">NVIDIA&reg; GeForce&reg; FX　5700 Series or higher<br />
+            NVIDIA&reg; GeForce&reg; 6600 Series or higher<br />
+            NVIDIA&reg; GeForce&reg; 7600 Series or higher<br />
+            ATi Radeon&trade; 9500 Series or higher<br />
+            AMD Radeon&trade; HD 4350 Series or higher<br />
+            AMD Radeon&trade; HD 5450 Series or higher</td>
+        </tr>
+        <tr>
+            <th scope="row">DirectX&reg;</th>
+            <td colspan="2" class="center">DirectX 9.0c or higher</td>
+        </tr>
+        <tr>
+            <th scope="row">Audio<br>Device</th>
+            <td colspan="2" class="center">16-bit 44.1kHz supporting DirectSound&reg;<br />
+            or sound card supporting 48kHz wave files</td>
+        </tr>
+        <tr>
+            <th scope="row">Storage</th>
+            <td class="left" colspan="2">20 GB available space required<br />
+            ※The above available space includes space for DirectX&reg; installation and OS swap file space.<br />
+            ※It also includes the work space used temporarily by the installer. This work space is required in the root drive (usually C: drive) and is freed up after installation.</td>
+        </tr>
+        <tr>
+            <th scope="row">Internet<br />
+            Connection</th>
+            <td class="center" colspan="2">ADSL 1.0 Mbps or higher permanent Internet connection</td>
+        </tr>
+    </tbody>
+</table>
+<p>※1 If equipped with Intel HD Graphics 3000 in the Core i7-2000 series, a graphics card is not required; however, this may change depending on future developments.</p>
+<p>※2 If equipped with AMD A-Series APU (A8-3850,A6-3650), a graphics card is not required; however, this may change depending on future developments.</p>
+<p>■These system requirements are as of April 9, 2014.</p>
+<p style="color:#f00;">■MHF-Z hasn't native support for 64-bit, so running MHF-Z on a 64-bit version of the OS will not improve its performance. Please understand this in advance.</p>
+<p>■Please use the latest driver provided by the manufacturer for your graphics card.</p>
+<p>■It's at your own risk to use the latest OS service packs and graphics card driver.</p>
+<p class="sectionBtm"><a href="#head">▲ Back to Top</a></p>
+</div><div class="section" id="590bf696cc687eb4de2d1ebad096a9c8">
+<h3>System Requirements for High Grade Edition (HGE)</h3>
+<table class="default">
+    <tbody>
+        <tr>
+            <th width="30%" scope="row">System<br>Requirements</th>
+            <td width="70%" class="center"><strong>Recommended</strong><br />
+            MHF-Ｚ High Grade Editionの動作を確認した動作環境<br />
+            ※You can set up a more comfortable playing environment by changing the settings from the Display (Graphics) in the Options depending to the specifications of your computer.</td>
+        </tr>
+        <tr>
+            <th scope="row">Resolution</th>
+            <td class="center">1920&times;1080</td>
+        </tr>
+        <tr>
+            <th height="38" scope="row">OS</th>
+            <td colspan="2">
+            <p>Windows 7, 8, 8.1, 10 (32-bit/64-bit※ Japanese Language)<br />
+            ※A 64-bit runs on WOW64 (Windows on Windows 64).</p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">CPU</th>
+            <td class="left">
+            <p style="margin-bottom:5px; line-height:1.1em;">Intel&reg; Core&trade; i5 2.66 GHz or higher</p>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Memory</th>
+            <td class="center">4 GB or higher</td>
+        </tr>
+        <tr>
+            <th scope="row">Graphics<br />
+            Card</th>
+            <td class="left" style="font-size:89%;">NVIDIA&reg; Geforce&reg; GTX 660 (2 GB) Series or higher<br />
+            Or the same level of graphics cards or higher</td>
+        </tr>
+        <tr>
+            <th scope="row">DirectX&reg;</th>
+            <td colspan="2" class="center">DirectX&reg; 9.0c or higher<br />
+            ※DirectX End-User Runtime is required separately, even for PC which DirectX already installed on.<br />
+            The download link is<a href="https://www.microsoft.com/ja-jp/download/details.aspx?id=34429&#10;" target="_blank">here</a>.</td>
+        </tr>
+        <tr>
+            <th scope="row">Sound</th>
+            <td colspan="2" class="center">16-bit 44.1kHz supporting DirectSound&reg;<br />
+            or sound card supporting 48kHz wave files</td>
+        </tr>
+        <tr>
+            <th scope="row">Storage</th>
+            <td class="left" colspan="2">20 GB available space required</td>
+        </tr>
+        <tr>
+            <th scope="row">Internet<br />
+            Connection</th>
+            <td class="center" colspan="2">ADSL 1.0 Mbps or higher permanent Internet connection</td>
+        </tr>
+    </tbody>
+</table>
+<p>&nbsp;</p>
+<p class="sectionBtm"><a href="#head">▲ Back to Top</a></p>
+</div><div class="section" id="f81fd2e4c52864042852c112ce927ae2">
+<h3>Download</h3>
+<div class="subsection">
+<h4 class="head_dia">Procedure for Download</h4>
+<p><strong>( 1 )</strong>First, if you already own a client (e.g. you have been playing on another server before), please delete the client file in advance to avoid unexpected problems. After deleting the file, please proceed to the next step.</p>
+</div>
+<div class="subsection">
+<p><strong>( 2 )</strong>Download all-in-one client file from setup-navigation channel in Rain Official Discord.<br>(This includes all necessary files, so there is no need to download any patch files, etc.)</p>
+</div>
+<div class="subsection">
+<p><strong>( 3 )</strong>Run "mhf.exe" in the client file downloaded in ( 2 ), and if you can see the launcher screen, the download is complete.</p>
+</div>
+<p class="sectionBtm"><a href="#head">▲ Back to Top</a></p>
+</div>
+
+
+<!-- <div class="section" id="14b7d76f2abce310837a677aad65c1ad">
+<h3>Installation</h3>
+<p class="leadtxt">To play MHF(Rain Edition), you must join the official Rain Discoid first and create your account.</p>
+<div class="subsection">
+<h4 class="head_dia">Procedure for Installation</h4>
+<p><strong>（１）</strong>ダウンロードしたゲームプログラムファイル「mhfsetup.exe」をダブルクリックして起動させます。<br />
+※&nbsp;実際には「mhfsetup****.exe」のように、ゲームプログラムのバージョン番号****が入ります。</p>
+</div>
+<div class="subsection">
+<div class="imgBox"><img width="268" height="212" src="/images/manual/static/21/ins_01.jpg" alt="" />
+<p><strong>（２）</strong>「ユーザー アカウント制御」の画面が表示されます。[許可]をクリックして下さい。</p>
+</div>
+</div>
+<div class="subsection">
+<div class="imgBox"><img src="/images/manual/static/21/ins_02.jpg" alt="" />
+<p><strong>（３）</strong>インストーラが表示されます。インストールを続けるには[次へ]をクリックします。</p>
+</div>
+</div>
+<div class="subsection">
+<div class="imgBox"><img src="/images/manual/static/21/ins_03.jpg" alt="" />
+<p><strong>（４）</strong>「使用許諾契約書」を読み、同意していただける場合には［同意する］をクリックしてから、［次へ］をクリックします。</p>
+<p>&nbsp;</p>
+<p>※『MHF-Ｚ』のプレイには、使用許諾誓約書への同意が必要となります。同意できない場合、『MHF-Ｚ』をプレイすることができません。</p>
+</div>
+</div>
+<div class="subsection">
+<div class="imgBox"><img src="/images/manual/static/21/ins_04.jpg" alt="" />
+<p><strong>（５）</strong>インストール先のフォルダを選択し、[次へ]をクリックします。特別な場合を除き、変更する必要はありません。</p>
+</div>
+</div>
+<div class="subsection">
+<div class="imgBox"><img src="/images/manual/static/21/ins_05.jpg" alt="" />
+<p><strong>（６）</strong>ご利用のアカウントに応じてインストールタイプを選択できます。[カプコンオンラインゲームズ版 ゲームプログラム]のチェックボックスをクリックして [次へ]をクリックします。</p>
+</div>
+</div>
+<div class="subsection">
+<div class="imgBox"><img src="/images/manual/static/21/ins_06.jpg" alt="" />
+<p><strong>（７）</strong>[インストール]をクリックすると指定されたフォルダにインストールが開始されます。</p>
+</div>
+</div>
+<div class="subsection">
+<div class="imgBox"><img src="/images/manual/static/21/ins_07.jpg" alt="" />
+<p><strong>（８）</strong>「インストールが完了しました」と表示されましたら、[完了]をクリックします。これでインストール完了です。</p>
+</div>
+</div>
+<div class="subsection">
+<p><strong>（９）</strong>デスクトップ上に「モンスターハンター フロンティアＺ」のアイコンが表示されれば完了です。</p>
+</div>
+<p class="sectionBtm"><a href="#head">▲ 上へ戻る</a></p>
+</div> -->
+
+
+<div class="section" id="fda0a4c67b309c651de060fe1aedbad9">
+<h3>About the Launcher Screen</h3>
+<p class="leadtxt">The launcher screen is the screen that appears after running MHF. You can log in to your account, add or delete characters, set preferences, etc in the launcher.</p>
+<p class="center"><img width="500" src="/sp/manual/image/18_18.jpg" alt="ランチャー画面" /></p>
+<div class="subsection">
+<h4 class="head_dia">Preferences</h4>
+<p>&nbsp;</p>
+<p>In preferences setting, you can adjust various settings such as screen size and audio.</p>
+<p>Also, you can switch to HGE from here.Please refer to "How to Set up High Grade Edition" for details.</p>
+<p><a class="click" href="#255854d6cf8510c6c94f8efed221e618">How to Set up High Grade Edition</a></p>
+</div>
+<div class="subsection">
+<h4>［Settings］Tab</h4>
+<div class="center"><img src="/sp/manual/image/18_9.jpg" alt="" /></div>
+</div>
+<p>&nbsp;</p>
+<div class="subsection">
+<h4>［Display］Tab</h4>
+<div class="center"><img width="536" height="310" src="/images/manual/static/21/14.gif" alt="" /></div>
+</div>
+<p>&nbsp;</p>
+<div class="subsection">
+<h4>［Sound］Tab</h4>
+<div class="center"><img width="536" height="307" src="/images/manual/static/21/15.gif" alt="" /></div>
+</div>
+<p>&nbsp;</p>
+<div class="subsection">
+<h4>［Proxy］Tab</h4>
+<div class="center"><img width="536" height="307" src="/images/manual/static/21/16.gif" alt="" /></div>
+</div>
+<p class="sectionBtm"><a href="#head">▲ Back to Top</a></p>
+</div><div class="section" id="29ae62f6121aa1cfa1b080fda4cd60f0">
+<h3>Log In and How to Start the Game</h3>
+<p class="leadtxt">After downloading the client, you can play MHF by logging in.</p>
+<div class="subsection">
+<h4 class="head_dia">Procedure for Login</h4>
+<p><strong>( 1 )</strong>Click on "mhf.exe" in the client folder.</p>
+<p class="notice check">If you are using a computer equipped with a multi-core processor, you can run multiple MHF at the same time.</p>
+<a class="click" href="page37.html">Multiple Launch of the Game</a></div>
+
+<div class="subsection">
+<div class="imgBox"><img width="268" src="/sp/manual/image/18_20.jpg" alt="" />
+<p><strong>( 2 )</strong>The launcher will be running.<br />
+Enter your username and password in the red boxes in the above image and press the "Log In" to display your character information.</p>
+</div>
+</div>
+<div class="subsection">
+<div class="imgBox">
+<p class="clear-l">&nbsp;</p>
+<p class="center"><img width="268" src="/sp/manual/image/18_21.jpg" alt="ランチャー画面" /></p>
+<p><strong>( 3 )</strong>Press "Start Game" to log in to the game.</p>
+</div>
+</div>
+<div class="subsection">
+<div class="imgBox"><img width="268" height="201" src="/sp/manual/image/18_22.jpg" alt="" />
+<p><strong>( 4 )</strong>The game title screen will appear. Press Enter key or click on the screen to open the menu.</p>
+</div>
+</div>
+<p class="sectionBtm"><a href="#head">▲ Back to Top</a></p>
+</div><div class="section" id="255854d6cf8510c6c94f8efed221e618">
+<h3>How to Set up High Grade Edition</h3>
+<p class="leadtxt">To enable HGE, the instructions are following:</p>
+<div class="subsection">
+<div class="imgBox"><img width="268" src="/sp/manual/image/18_23.jpg" alt="" />
+<p><strong>( 1 )</strong>Click "Preferences" in the launcher.</p>
+</div>
+</div>
+<div class="subsection">
+<div class="imgBox"><img width="268" src="/sp/manual/image/18_3.jpg" alt="" />
+<p><strong>( 2 )</strong>You can see the settings screen. Check "Enable High Grade Edition" in the settings tab and click "OK".</p>
+</div>
+</div>
+<div class="subsection">
+<div class="imgBox"><img width="268" src="/sp/manual/image/18_24.jpg" alt="" />
+<p><strong>( 3 )</strong>After logging in, if "High Grade Edition" is displayed on the title screen, you can play the game in HGE.</p>
+</div>
+</div>
+<div class="subsection">
+<h4 class="head_dia">In-game adjustments</h4>
+<div class="imgBox"><img width="217" alt="" src="/sp/manual/image/18_10.jpg" />
+<p>After moving to Mezeporta Square, graphics can be adjusted in [Menu]＞[Options]＞[Display (High  Grade)].</p>
+</div>
+</div>
+<div class="subsection">
+<div class="imgBox"><img width="500" alt="" src="/sp/manual/image/18_7.jpg" /></div>
+<h4 class="head_dia">More about "Display (High  Grade)"</h4>
+<h4>１．Presets</h4>
+<p>"Maximum": Set to the highest settings that all various items turned on.</p>
+<p>"Quality Priority": Set to a high-definition setting that prioritizes graphics.</p>
+<p>"Performance Priority": Set a low load setting that prioritizes ease of operation.</p>
+<p>"Custom": Various items can be set freely.</p>
+<br />
+<h4>２．Various Items</h4>
+<p>"Realistic Shadows (Town)": Shadow setting for hunters and NPCs in the town.</p>
+<p>"Realistic Shadows (Quest)": Shadow setting for hunters, monsters, etc. in quests.</p>
+<p>"Depth of Field": Blurring the background when looking at objects up close can enhance the immersive experience.</p>
+<p>"High Dynamic Range": More realistic expression of light effect.</p>
+<p>"SSAO": Reflects more natural shading of shadows.</p>
+<p>"God Rays": Expresses light coming through the crack or the leaves.</p>
+<p>"Anti-Aliasing": Smoothly describe the outline of objects.</p>
+<p>"Soft Particles": Smoothly describe the outline of objects.</p>
+</div>
+<p class="sectionBtm"><a href="#head">▲ Back to Top</a></p>
+</div>
+
+</div><!-- /.articleBox -->
+
+<div class="menuBox">
+	<div id="bnrArea"></div>
+	<div id="menuArea"></div>
+</div>
+
+</div>
+
+<div id="footer">
+<div id="logo_box">
+<div class="ft_bottom"><script src="/js/copyright.js" type="text/javascript"></script></div>
+</div>
+</div>
+
+</div>
+</body>
+<script type="text/javascript" src="/js/xhr.js"></script>
+</html>
