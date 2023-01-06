@@ -1,5 +1,5 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . "/manual/assets/inc/language_check.php" ?>
+require_once $_SERVER['DOCUMENT_ROOT'] . "/manual/assets/inc/language_check.php" ?>
 
 <?php
 /* 転送設定 */

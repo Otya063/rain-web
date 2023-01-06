@@ -7,12 +7,11 @@
 @mixin pc {
     /* ヘッダー
 ====================================================*/
-    /* ヘッダー帯 */
+    // ヘッダー帯
     header {
-        display: flex;
         background: #000;
         width: 100%;
-        align-items: center;
+        height: 70px;
         position: relative;
 
         // ヘッダー帯下部装飾
@@ -20,72 +19,72 @@
             display: block;
             content: "";
             position: absolute;
-            top: 6vw;
+            bottom: 0;
             width: 100%;
-            height: 0.4vw;
-            background: rgb(200, 200, 200);
+            height: 0.2vw;
+            background: rgb(190, 193, 195);
         }
     }
 
-    /* ヘッダーロゴ */
+    //ヘッダーロゴ
     .header_logo {
-        width: 18vw;
-        padding: 0.5% 0.5% 0.7% 3%;
+        display: flex;
+        @include right_left;
 
         a {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-        }
-
-        img {
-            height: 5vw;
-
-            // ロゴテキスト画像
-            &:nth-child(2) {
-                height: 4vw;
-                margin-left: 2%;
-            }
+            width: 130px;
+            height: 67px;
+            background: url(#{$path_img}/common/rain_textlogo.webp) center center no-repeat;
+            background-size: 100%;
         }
     }
 
     /* 本文
 ====================================================*/
-    /* 本文 */
-    .main {
+    // 本文
+    .error_page {
+        flex: 1;
+        text-align: center;
         display: flex;
-        justify-content: center;
-        align-items: center;
         flex-direction: column;
+        align-items: stretch;
+        justify-content: center;
 
-        // タイトル
-        h1 {
-            font-size: 2.8rem;
-            padding: 2% 0 1% 0;
-
-            &:lang(en) {
-                font-size: 3.4rem;
+        .main {
+            // コケ猫
+            .kokecat {
+                width: 20%;
+                height: 19vw;
+                margin: 0 auto;
+                background: url(#{$path_img}/common/koke.jpg) center no-repeat;
+                background-size: 100%;
             }
-        }
 
-        // 内容
-        p {
-            text-align: center;
-            font-size: 1.6rem;
-            padding-bottom: 3%;
+            // タイトル
+            h1 {
+                font-size: 2.8rem;
+                font-weight: 600;
+                padding: 2% 0 1% 0;
 
-            &:lang(en) {
-                font-size: 1.8rem;
+                &:lang(en) {
+                    font-size: 3.4rem;
+                }
+            }
+
+            // 内容
+            p {
+                text-align: center;
+                font-size: 1.6rem;
+                padding-bottom: 3%;
+
+                &:lang(en) {
+                    font-size: 1.8rem;
+                }
             }
         }
     }
 
-    /* コケ猫 */
-    .kokecat {
-        width: 20vw;
-    }
-
-    /* 戻るボタン */
+    // 戻るボタン
     .btn {
         padding: 0.8% 4%;
         border: 2px solid #17c3b2;
@@ -136,20 +135,21 @@
 
     /* フッター
 ====================================================*/
-    /* フッター帯 */
+    // フッター帯
     footer {
         display: block;
         position: relative;
+        background: #000;
 
         // フッター帯上部装飾
         &::before {
             display: block;
             content: "";
             position: absolute;
-            top: -8%;
+            top: 0;
             width: 100%;
-            height: 0.4vw;
-            background: rgb(200, 200, 200);
+            height: 0.2vw;
+            background: rgb(190, 193, 195);
         }
 
         // フッター内コンテンツ調整
@@ -157,35 +157,25 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1% 1.5%;
-            background: #000;
+            padding: 0.5% 1.5%;
 
-            /* フッターロゴ */
+            // フッターロゴ
             .footer_logo {
-                a {
-                    display: block;
-                    line-height: 0;
-                }
-
-                img {
-                    height: 3vw;
-                }
+                width: 19vw;
             }
-        }
-    }
 
-    /* フッターテキスト */
-    .footer_text {
-        line-height: 1.7;
+            // フッターテキスト
+            .footer_text {
+                // テキスト調整
+                p {
+                    color: white;
+                    font-size: 1.1rem;
+                    text-align: right;
 
-        // テキスト調整
-        p {
-            color: white;
-            font-size: 1rem;
-            text-align: right;
-
-            &:lang(en) {
-                font-size: 1.2rem;
+                    &:lang(en) {
+                        font-size: 1.2rem;
+                    }
+                }
             }
         }
     }
@@ -197,13 +187,11 @@
 @mixin sp {
     /* ヘッダー
 ====================================================*/
-    /* ヘッダー帯 */
+    // ヘッダー帯
     header {
-        display: flex;
         background: #000;
         width: 100%;
-        justify-content: center;
-        align-items: center;
+        height: 60px;
         position: relative;
 
         // ヘッダー帯下部装飾
@@ -211,86 +199,93 @@
             display: block;
             content: "";
             position: absolute;
-            top: 17vw;
+            bottom: 0;
             width: 100%;
-            height: 1.5vw;
-            background: rgb(200, 200, 200);
+            height: 4px;
+            background: rgb(190, 193, 195);
         }
     }
 
-    /* ヘッダーロゴ */
+    // ヘッダーロゴ
     .header_logo {
-        margin: 1% 31%;
+        display: flex;
+        @include right_left;
 
         a {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            width: 38vw;
-        }
-
-        img {
-            height: 15vw;
-
-            // ロゴテキスト画像
-            &:nth-child(2) {
-                height: 10vw;
-                margin-left: 2%;
-            }
+            width: 110px;
+            height: 56px;
+            background: url(#{$path_img}/common/rain_textlogo.webp) center center no-repeat;
+            background-size: 100%;
         }
     }
 
     /* 本文
 ====================================================*/
-    /* 本文 */
-    .main {
+    // 本文
+    .error_page {
+        flex: 1;
+        text-align: center;
         display: flex;
-        justify-content: center;
-        align-items: center;
         flex-direction: column;
-        padding: 20vw 0;
+        align-items: stretch;
+        justify-content: center;
 
-        // タイトル
-        h1 {
-            font-size: 2.2rem;
-            padding: 5% 3% 1%;
+        .main {
+            padding: 20% 0;
 
-            &:lang(en) {
-                font-size: 3.4rem;
+            // コケ猫
+            .kokecat {
+                width: 60vw;
+                height: 60vw;
+                margin: 0 auto;
+                background: url(#{$path_img}/common/koke.jpg) center no-repeat;
+                background-size: 100%;
             }
-        }
 
-        // 内容
-        p {
-            text-align: center;
-            font-size: 1.4rem;
-            padding: 7%;
+            // タイトル
+            h1 {
+                font-size: 2.1rem;
+                font-weight: 600;
+                padding: 0 5% 0;
 
-            &:lang(en) {
-                font-size: 1.5rem;
+                &:lang(en) {
+                    font-size: 2.8rem;
+                }
+            }
+
+            // 内容
+            p {
+                text-align: center;
+                font-size: 1.4rem;
+                padding: 7% 5% 7%;
+
+                &:lang(en) {
+                    font-size: 1.5rem;
+                }
             }
         }
     }
 
-    /* コケ猫 */
-    .kokecat {
-        width: 70vw;
-    }
-
-    /* 戻るボタン */
+    // 戻るボタン
     .btn {
-        padding: 1rem 3rem;
+        padding: 3% 8.5%;
+        margin-bottom: 4%;
         border: 2px solid #17c3b2;
         position: relative;
         border-radius: 60px;
         background-color: #17c3b2;
         text-align: center;
-        font-size: 1.7rem;
+        font-size: 1.5rem;
         filter: drop-shadow(0 0 0.3rem rgba(0, 0, 0, 0.6));
         -webkit-filter: drop-shadow(0 0 0.3rem rgba(0, 0, 0, 0.6));
         z-index: 1;
         color: white;
         font-weight: bold;
+
+        &:lang(en) {
+            font-size: 1.6rem;
+        }
+
         &:hover {
             background-color: white;
             color: #17c3b2;
@@ -299,7 +294,7 @@
 
     /* フッター
 ====================================================*/
-    /* フッター帯 */
+    // フッター帯
     footer {
         display: block;
         position: relative;
@@ -310,9 +305,10 @@
             display: block;
             content: "";
             position: absolute;
+            top: 0;
             width: 100%;
-            height: 1.5vw;
-            background: rgb(200, 200, 200);
+            height: 4px;
+            background: rgb(190, 193, 195);
         }
 
         // フッター内コンテンツ調整
@@ -324,22 +320,14 @@
             margin-left: auto;
             padding: 4vw;
 
-            /* フッターロゴ */
+            // フッターロゴ
             .footer_logo {
-                a {
-                    display: block;
-                    line-height: 0;
-                }
-
-                img {
-                    height: 13vw;
-                    width: auto;
-                }
+                width: 70vw;
             }
         }
     }
 
-    /* フッターテキスト */
+    // フッターテキスト
     .footer_text {
         line-height: 1.7;
         padding: 4% 1% 0;
@@ -347,7 +335,7 @@
         // テキスト調整
         p {
             color: white;
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-align: center;
 
             &:lang(en) {

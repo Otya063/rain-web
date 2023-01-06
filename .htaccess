@@ -4,5 +4,5 @@ Options -Indexes
 ErrorDocument 403 /manual/errors/403.php
 ErrorDocument 404 /manual/errors/404.php
 
-#Require all denied
-#Require local
+Require all denied
+Require local

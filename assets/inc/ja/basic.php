@@ -1,6 +1,7 @@
 <?php
 $url = $_SERVER["REQUEST_URI"];
 
+
 //各パス
 $manual_path = "/manual/ja/";
 $img_path = "/manual/assets/img/";
@@ -9,20 +10,34 @@ $js_path = "/manual/assets/js/";
 $inc_path = "/manual/assets/inc/";
 
 // タイトル管理
-$defaultTitle = "MHF-Z オンラインマニュアル";
-$titleName = [
-    $manual_path => $defaultTitle,
-    $manual_path . "news/" => "更新履歴" . " | " . $defaultTitle,
-    $manual_path . "entry/acccreate/" => "アカウント作成手順" . " | " . $defaultTitle,
-    $manual_path . "/entry/acclink/" => "Discordアカウント連携" . " | " . $defaultTitle
+$defaultManualTitle = "MHF-Z オンラインマニュアル";
+$defaultTitle = "Rain Server";
+$array = [
+
+    // トップページ
+    $manual_path => [
+        "title" => $defaultManualTitle,
+        "desc" => "Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル"
+    ],
+
+    // アカウント作成手順
+    $manual_path . "entry/acccreate/" => [
+        "title" => "アカウント作成手順" . " | " . $defaultManualTitle,
+        "desc" => "Rainサーバーにおけるアカウントの作成手順をご紹介します。"
+    ],
+
+    // Discordアカウント連携
+    $manual_path . "entry/acclink/" => [
+        "title" => "Discordアカウント連携" . " | " . $defaultManualTitle,
+        "desc" => "RainサーバーにおけるDiscordアカウントの連携方法についてご紹介します。"
+    ],
 ];
 
-// 概要管理
-$descContents = [
-    $manual_path => "Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル",
-    $manual_path . "entry/acccreate/" => "Rainサーバーにおけるアカウントの作成手順をご紹介します。",
-    $manual_path . "/entry/acclink/" => "RainサーバーにおけるDiscordアカウントの連携方法についてご紹介します。"
-];
-
-$titleTxt = $titleName[$url] ?? $defaultTitle;
-$descTxt = $descContents[$url];
+// 各ページ処理
+foreach ($array as $key => $value) {
+    if ($url === $key) {
+        $titleTxt = $value["title"];
+        $descTxt = $value["desc"];
+        break;
+    }
+};

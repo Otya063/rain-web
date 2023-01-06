@@ -1,4 +1,4 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/manual/assets/inc/en/basic.php" ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . "/manual/assets/inc/en/basic.php" ?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,18 +34,18 @@
     <div class="wrapper">
         <header>
             <!-- header -->
-            <?php include $_SERVER['DOCUMENT_ROOT'] . $inc_path . "en/header.php" ?>
+            <?php require_once $_SERVER['DOCUMENT_ROOT'] . $inc_path . "en/header.php" ?>
         </header>
 
         <main class="main_inner">
             <nav class="side_menu">
                 <!-- menu -->
-                <?php include $_SERVER['DOCUMENT_ROOT'] . $inc_path . "en/menu.php" ?>
+                <?php require_once $_SERVER['DOCUMENT_ROOT'] . $inc_path . "en/menu.php" ?>
             </nav>
 
             <article class="contents">
                 <!-- article -->
-                <?php include "./acccreate.php" ?>
+                <?php require_once "./acccreate.php" ?>
             </article>
         </main>
 
@@ -53,7 +53,7 @@
 
         <footer>
             <!-- footer -->
-            <?php include $_SERVER['DOCUMENT_ROOT'] . $inc_path . "en/footer.php" ?>
+            <?php require_once $_SERVER['DOCUMENT_ROOT'] . $inc_path . "en/footer.php" ?>
         </footer>
     </div>
     <!-- js -->

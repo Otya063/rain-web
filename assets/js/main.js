@@ -10,15 +10,6 @@ root_el.oncontextmenu = () => {
   return false;
 };
 
-/* ドラッグ制限
-====================================================*/
-root_el.onselectstart = () => {
-  return false;
-};
-root_el.onmousedown = () => {
-  return false;
-};
-
 /* ピンチイン/アウト制限
 ====================================================*/
 root_el.addEventListener(
@@ -42,18 +33,6 @@ const bg_random = arr_bg[Math.floor(Math.random() * arr_bg.length)];
 if (bg) {
   bg.src = path_imgcommon + bg_random + '.webp';
 }
-
-/* $(function () {
-  $('.bg:not(:first-child)').hide(); // 1枚目以外をハイド
-  setInterval(() => {
-    $('.bg:first-child') // 以下1枚目処理
-      .fadeOut('slow')
-      .next('img')
-      .fadeIn('slow')
-      .end()
-      .appendTo('.top_images');
-  }, 5000); // タイムセット5秒
-}); */
 
 /*=========================================================
 　　　　　言語関連
@@ -87,24 +66,13 @@ ls.addEventListener('click', (e) => {
   } else {
     slideUp(la);
   }
-
-  // 選択欄フェード操作
-  /*   if (!la.classList.contains('langsel_open')) {
-    la.classList.add('langsel_open');
-  } else {
-    la.style = 'opacity:0';
-    setTimeout(() => {
-      la.classList.remove('langsel_open');
-      la.style = 'opacity:1';
-    }, 400);
-  } */
 });
 
 /* 言語切り替えリンク
 ====================================================*/
 doc.querySelectorAll('.LANG').forEach((langQuery) => {
   langQuery.addEventListener('click', () => {
-    ids = langQuery.getAttribute('id');
+    const ids = langQuery.getAttribute('id');
 
     // クッキー値セット
     if (ids === 'ja') {

@@ -8,9 +8,10 @@
 ==================================*/
 /* body */
 body {
-    height : auto;
+    height: auto;
     background: url(/manual/assets/img/common/body_bg.jpg) center center repeat-y;
     background-size: 100%;
+    -webkit-text-size-adjust:100%;
 }
 
 /* wrapper初期設定 */

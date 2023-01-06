@@ -20,7 +20,7 @@
     <!-- <link rel="alternate" href="http://.com/en/" hreflang="en">
   <link rel="alternate" href="http://.com/ja/" hreflang="ja"> -->
     <!-- css -->
-    <link href="<?= $css_path . "style.css"; ?>" rel="stylesheet" type="text/css">
+    <link href="/manual/assets/css/style.css" rel="stylesheet" type="text/css">
     <!-- font -->
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Sans:wght@400;700;900&display=swap');
@@ -37,10 +37,6 @@
             <?php require_once $_SERVER['DOCUMENT_ROOT'] . $inc_path . "ja/header.php" ?>
         </header>
 
-        <div class="top_images">
-            <img class="bg" src="" alt="トップ画像">
-        </div>
-
         <main class="main_inner">
             <nav class="side_menu">
                 <!-- menu -->
@@ -49,7 +45,7 @@
 
             <article class="contents">
                 <!-- article -->
-                <?php require_once "./top.php" ?>
+                <?php require_once "./acclink.php" ?>
             </article>
         </main>
 

@@ -6,31 +6,23 @@
 /*==================================
 　　　　　初期設定
 ==================================*/
+html,
+body {
+    height: 100%;
+}
+
 /* body内初期設定 */
 body {
-    display: flex;
-    flex-direction: column;
     background: $bg_color_error;
+    -webkit-text-size-adjust:100%;
 }
 
 /* wrapper初期設定 */
 .wrapper {
+    min-height: 100%;
     display: flex;
     flex-direction: column;
 }
-
-/* 本文位置調整 */
-.error_page {
-    padding: 10vw 0;
-    flex: 1;
-    text-align: center;
-    color: #4e2208;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: center;
-}
-
 // 以下PC表示
 @media (min-width: 900px) {
     @include pc;

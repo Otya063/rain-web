@@ -1,4 +1,4 @@
-<?php include $_SERVER['DOCUMENT_ROOT'] . "/manual/assets/inc/ja/basic.php" ?>
+<?php require_once $_SERVER['DOCUMENT_ROOT'] . "/manual/assets/inc/ja/basic.php" ?>
 
 <!DOCTYPE html>
 <html lang="ja">
@@ -34,22 +34,18 @@
     <div class="wrapper">
         <header>
             <!-- header -->
-            <?php include $_SERVER['DOCUMENT_ROOT'] . $inc_path . "ja/header.php" ?>
+            <?php require_once $_SERVER['DOCUMENT_ROOT'] . $inc_path . "ja/header.php" ?>
         </header>
-
-        <div class="top_images">
-            <img class="bg" src="" alt="トップ画像">
-        </div>
 
         <main class="main_inner">
             <nav class="side_menu">
                 <!-- menu -->
-                <?php include $_SERVER['DOCUMENT_ROOT'] . $inc_path . "ja/menu.php" ?>
+                <?php require_once $_SERVER['DOCUMENT_ROOT'] . $inc_path . "ja/menu.php" ?>
             </nav>
 
             <article class="contents">
                 <!-- article -->
-                <?php include("./acccreate.php") ?>
+                <?php require_once("./acccreate.php") ?>
             </article>
         </main>
 
@@ -57,7 +53,7 @@
 
         <footer>
             <!-- footer -->
-            <?php include $_SERVER['DOCUMENT_ROOT'] . $inc_path . "ja/footer.php" ?>
+            <?php require_once $_SERVER['DOCUMENT_ROOT'] . $inc_path . "ja/footer.php" ?>
         </footer>
     </div>
     <!-- js -->
