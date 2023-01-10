@@ -1,8 +1,9 @@
-name: 'test build and cache dependency'
-
+name: 'built-on-push'
 on:
-  push :
-    branch:["svelte"]
+  push:
+    branches: [ "svelte" ]
+  pull_request:
+    branches: [ "svelte" ]
 
 jobs:
   cache-and-install:
