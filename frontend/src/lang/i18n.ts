@@ -1,11 +1,11 @@
-import { writable } from "svelte/store"
+import { writable } from 'svelte/store';
 
 //get value of key item languange from cache
-const cached = localStorage.getItem('lang')
+const cached = localStorage.getItem('lang');
 
 //set global variable to chached value or default english
-export const lang = writable(cached||'en')
+export const cached_lang = writable(cached);
+export const browser_lang = navigator.language;
 
 //monitor the value of 'lang', update the cache if the value changed
-lang.subscribe(e=>localStorage.setItem('lang',e))
-
+//cached_lang.subscribe((e) => localStorage.setItem('lang', e));
