@@ -1,11 +1,10 @@
 <script lang="ts">
-    import { cached_lang, browser_lang } from "./lang/i18n";
+    import { cached_lang } from "./lang/i18n";
     import { enTrans, jaTrans } from "./lang/translation";
     import Header from "./lib/Header.svelte";
     import Top from "./lib/Top.svelte";
     import Footer from "./lib/Footer.svelte";
     import Menu from "./lib/Menu.svelte";
-    import { HtmlTag } from "svelte/internal";
     /*
   ------------------------------------------------------------
   ------------------------------------------------------------
@@ -14,44 +13,31 @@
   ------------------------------------------------------------
   */
     //take value of lang and subscribe it according to global state
-    let language: string;
-    cached_lang.subscribe((e) => (language = e));
-    //get header translation according to variable language
-    let translator = () => {
-        // if language cashe is already exist
-        if (language !== null) {
-            if (language === "ja") {
-                // if selected "ja"
-                return jaTrans.head;
-            } else {
-                // if selected "en"
-                return enTrans.head;
-            }
-            // if language cashe is not exist
-        } else {
-            if (browser_lang === "ja") {
-                // if browser language is "ja"
-                return jaTrans.head;
-            } else {
-                // if other languages
-                return enTrans.head;
-            }
-        }
-    };
+    let language: string; //this is local state
+    // chached lang is global state
+    cached_lang.subscribe(e=>{
+      //change local state same as global
+      language = e
+      //change html tag
+      document.documentElement.lang = e
+      //update the local cache
+      localStorage.setItem("lang",e)
+    });
+    //short hand one liner trick
+    $: translator = () => language == 'ja'? jaTrans.head : enTrans.head; 
     const jaClick = () => {
-        localStorage.setItem("lang", "ja");
+      //just update global state on click
+      cached_lang.set("ja")
     };
     const enClick = () => {
-        localStorage.setItem("lang", "en");
+      cached_lang.set("en")
     };
-    //change html tag lang
-    $: document.documentElement.lang = translator().lang;
 </script>
 
 <!-- add header to html tag on server render -->
 <svelte:head>
     <title>{translator().title}</title>
-    <meta name="description" content="Online manual for En player" />
+    <meta name="description" content={translator().desc} />
     <meta name="keywords" content={translator().desc} />
     <!-- favicon -->
     <link rel="icon" type="image/png" href="/img/common/favicon.ico" />
@@ -93,7 +79,3 @@
     </div>
 </body>
 
-<!-- use sass as main stylesheet -->
-<style lang="scss">
-    @import "../public/sass/style";
-</style>

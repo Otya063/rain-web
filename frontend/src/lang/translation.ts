@@ -4,12 +4,18 @@ export const enTrans =  {
       lang:'en',
       title:'Rain Server - Online Manual',
       desc:'Online guide how to play monster hunter frontier on rain server'
-    }
+    },
+    header:{
+      label:"English"
+  }
 };
 export const jaTrans = {
     head:{
       lang:'ja',
       title:'Rain Server - オンラインマニュアル',
-      desc:'Online guide how to play monster hunter frontier on rain server'
-    }
+      desc:'Show something different'
+    },
+    header:{
+      label:"日本語"
+  }
 }
