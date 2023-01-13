@@ -7,6 +7,29 @@ export const enTrans = {
     keywords:
       'monster hunter frontier, official online manual, mhf, online game',
   },
+  side_menu: {
+    category_toppage: {
+      title: 'Home',
+      home: 'Home',
+      news: 'Update History',
+    },
+    category_entry: {
+      title: 'Sign Up',
+      acccreate: 'Account Creation Procedure',
+      acclink: 'Account Linking Procedure',
+    },
+    category_begin: {
+      title: 'Starting the Game',
+      start: 'How to Start the Game',
+      menu: 'Title Menu',
+      character: 'Character Creation',
+      adddelete: 'Adding and Deleting Characters',
+      world: 'World Selection',
+      tutorial: 'Tutorial',
+      multiple: 'Multiple Launch of the Game',
+      quit: 'Quit the Game',
+    },
+  },
   header: {
     label: 'English',
     ja_subName: 'Japanese',
@@ -35,6 +58,29 @@ export const jaTrans = {
     desc: 'Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル',
     keywords:
       'モンスターハンター フロンティア 公式オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
+  },
+  side_menu: {
+    category_toppage: {
+      title: 'トップページ',
+      home: 'トップページ',
+      news: '更新履歴',
+    },
+    category_entry: {
+      title: '会員登録',
+      acccreate: 'アカウント作成手順',
+      acclink: 'アカウント連携手順',
+    },
+    category_begin: {
+      title: 'ゲームを始めるまで',
+      start: 'ゲームの始め方',
+      menu: 'メニュー画面',
+      character: 'キャラクタークリエイション',
+      adddelete: 'キャラクターの追加・削除',
+      world: 'ワールドを選ぼう',
+      tutorial: 'チュートリアル',
+      multiple: 'ゲームの多重起動',
+      quit: 'ゲームの終了',
+    },
   },
   header: {
     label: '日本語',
