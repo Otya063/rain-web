@@ -805,7 +805,7 @@
                         &:nth-child(2) {
                             font-family: $font_title_ja;
                             margin-left: 1%;
-                            padding: 1px 7px;
+                            padding: 4px 7px 1px;
                             font-size: 1.5rem;
                             font-weight: 600;
                             background: rgba(245, 245, 220, 0.2);
@@ -813,7 +813,6 @@
                             border-radius: 50%;
 
                             &:lang(en) {
-                                padding: 4px 7px 0;
                                 font-size: 1.4rem;
                             }
                         }

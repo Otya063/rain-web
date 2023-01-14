@@ -7,6 +7,20 @@ export const enTrans = {
     keywords:
       'monster hunter frontier, official online manual, mhf, online game',
   },
+  // the following translations are for article "Account Creation Procedure"
+  acccreate_head: {
+    // not functional yet, just copied and pasted
+    path: '/enrty/acccreate',
+    title: 'Account Creation Procedure | Rain Server - Online Manual',
+    desc: 'Procedures for creating an account on the Rain server.',
+  },
+  // the following translations are for article "Account Linking Procedure"
+  acclink_head: {
+    // not functional yet, just copied and pasted
+    path: '/enrty/acclink',
+    title: 'Account linking Procedure | Rain Server - Online Manual',
+    desc: 'Procedures for linking an account on the Rain server.',
+  },
   side_menu: {
     category_toppage: {
       title: 'Home',
@@ -35,19 +49,33 @@ export const enTrans = {
     ja_subName: 'Japanese',
     en_subName: 'English',
   },
-  // the following translations are for article "Account Creation Procedure"
-  acccreate: {
-    // not functional yet, just copied and pasted
-    path: 'enrty/acccreate',
-    title: 'Account Creation Procedure | Rain Server - Online Manual',
-    desc: 'Procedures for creating an account on the Rain server.',
-  },
-  // the following translations are for article "Account Linking Procedure"
-  acclink: {
-    // not functional yet, just copied and pasted
-    path: 'enrty/acclink',
-    title: 'Account linking Procedure | Rain Server - Online Manual',
-    desc: 'Procedures for linking an account on the Rain server.',
+  article: {
+    // identify each article by path
+    '/': {
+      title: 'Home',
+      news_title: 'Update History',
+      news_date: 'January 1, 2023',
+      news_ver: 'Ver.1.0',
+      news_text:
+        'Online Manual is available now!<br>Detailed differences from the former official online manual and updates can be found from "More."',
+      news_more: '▶More',
+      featured_title: 'Featured Contents',
+      featured_first:
+        'Before playing on the "Rain Server,"<br>what is the first thing to do?',
+      featured_utahime:
+        'Repel the oncoming threat!<br>For more information on the "Diva Defence(歌姫狩衛戦: 真説)," click here.',
+      featured_lavi: 'I want to challenge "Berserk Laviente"!',
+      featured_tenrou:
+        'Investigate the unknown tower!<br>For more information on the "Sky Corridor(天廊遠征録)," click here.',
+      featured_road: 'What is the "Road(狩煉道)," the endless of hunting?',
+      featured_return:
+        'Did you come back for the first time in ages? Then let\'s go to "Return Ward"!',
+      extlink_title: 'External Links',
+      extlink_beginner: 'Beginner Guide',
+      extlink_faq: 'FAQ',
+      notes:
+        '*Some images are from the development server.<br>*Also, please note that some of images and texts may be changed for some reason.',
+    },
   },
 };
 
@@ -58,6 +86,20 @@ export const jaTrans = {
     desc: 'Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル',
     keywords:
       'モンスターハンター フロンティア 公式オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
+  },
+  // the following translations are for article "アカウント作成手順"
+  acccreate_head: {
+    // not functional yet, just copied and pasted
+    path: '/enrty/acccreate',
+    title: 'アカウント作成手順 | Rain Server - オンラインマニュアル',
+    desc: 'Rainサーバーにおけるアカウントの作成手順をご紹介します。',
+  },
+  // the following translations are for article "アカウント連携手順"
+  acclink_head: {
+    // not functional yet, just copied and pasted
+    path: '/enrty/acclink',
+    title: 'アカウント連携手順 | Rain Server - オンラインマニュアル',
+    desc: 'Rainサーバーにおけるアカウントの連携手順についてご紹介します。',
   },
   side_menu: {
     category_toppage: {
@@ -87,18 +129,31 @@ export const jaTrans = {
     ja_subName: '日本語',
     en_subName: '英語',
   },
-  // the following translations are for article "アカウント作成手順"
-  acccreate: {
-    // not functional yet, just copied and pasted
-    path: 'enrty/acccreate',
-    title: 'アカウント作成手順 | Rain Server - オンラインマニュアル',
-    desc: 'Rainサーバーにおけるアカウントの作成手順をご紹介します。',
-  },
-  // the following translations are for article "アカウント連携手順"
-  acclink: {
-    // not functional yet, just copied and pasted
-    path: 'enrty/acclink',
-    title: 'アカウント連携手順 | Rain Server - オンラインマニュアル',
-    desc: 'Rainサーバーにおけるアカウントの連携手順についてご紹介します。',
+  article: {
+    // identify each article by path
+    '/': {
+      title: 'トップページ',
+      news_title: '更新履歴',
+      news_date: '2023年1月1日',
+      news_ver: 'Ver.1.0',
+      news_text:
+        'オンラインマニュアルを開設いたしました。<br>旧公式オンラインマニュアルとの詳しい相違点及び更新内容は「詳細を見る」よりご確認いただけます。',
+      news_more: '▶詳細を見る',
+      featured_title: '注目のコンテンツ',
+      featured_first: 'Rainサーバーは初めてですが、<br />まずは何をすれば？',
+      featured_utahime:
+        'メゼポルタへ迫る脅威を退けよ！<br />｢歌姫狩衛戦・真説｣の詳細はこちら',
+      featured_lavi: '｢ラヴィエンテ 猛狂期｣に<br />挑みたい！',
+      featured_tenrou:
+        '天穿つ謎の巨塔を調査せよ！<br />｢天廊遠征録｣の詳細はこちら',
+      featured_road: '終わりなき狩りの道<br />｢狩煉道｣とは？',
+      featured_return:
+        '久しぶりに復帰した<br />ハンターさんへ<br />｢復帰区｣をご紹介！',
+      extlink_title: '外部リンク',
+      extlink_beginner: '初心者ガイド',
+      extlink_faq: 'よくある質問',
+      notes:
+        '※一部のゲーム内スクリーンショット画像は、プライベートサーバー版の画像を使用しています。何卒ご了承ください。<br />※また、一部画像及びテキストは今後差替わる可能性がありますので、予めご注意ください。',
+    },
   },
 };

@@ -16,20 +16,20 @@
         if (target instanceof HTMLElement) {
             if (!target.classList.contains("selected")) {
                 // need more simplified codes
-                const hasClass: HTMLLIElement = document.querySelector(".selected");
+                const hasClass = document.querySelector<HTMLLIElement>(".selected");
                 hasClass.classList.remove("selected");
                 target.classList.add("selected");
-                const la_parent: HTMLUListElement = target.closest(".language_selectArea");
-                const lj_parent: HTMLLIElement = target.closest(".lang_sel_judge");
-                const ls: HTMLLIElement = document.querySelector(".header_language_selector");
+                const la_parent = target.closest<HTMLUListElement>(".language_selectArea");
+                const lj_parent = target.closest<HTMLLIElement>(".lang_sel_judge");
+                const ls = document.querySelector<HTMLLIElement>(".header_language_selector");
                 lj_parent.classList.remove("open");
                 ls.classList.remove("langArrow_open");
                 slideUp(la_parent);
             } else {
                 // need more simplified codes
-                const la_parent: HTMLUListElement = target.closest(".language_selectArea");
-                const lj_parent: HTMLLIElement = target.closest(".lang_sel_judge");
-                const ls: HTMLLIElement = document.querySelector(".header_language_selector");
+                const la_parent = target.closest<HTMLUListElement>(".language_selectArea");
+                const lj_parent = target.closest<HTMLLIElement>(".lang_sel_judge");
+                const ls = document.querySelector<HTMLLIElement>(".header_language_selector");
                 lj_parent.classList.remove("open");
                 ls.classList.remove("langArrow_open");
                 slideUp(la_parent);
@@ -87,8 +87,8 @@
     // toggle language selection field
     const toggleLangSel = (e: Event) => {
         const target = e.currentTarget;
-        const lj: HTMLLIElement = document.querySelector(".lang_sel_judge");
-        const la: HTMLUListElement = document.querySelector(".language_selectArea");
+        const lj = document.querySelector<HTMLLIElement>(".lang_sel_judge");
+        const la = document.querySelector<HTMLUListElement>(".language_selectArea");
         if (target instanceof Element) {
             target.classList.toggle("langArrow_open");
             lj.classList.toggle("open");
@@ -103,11 +103,7 @@
 
 <div class="header_inner">
     <picture class="header_platform">
-        <source
-            srcset="/img/common/platform_sp.webp"
-            media="(max-width: 899px)"
-            type="image/webp"
-        />
+        <source srcset="/img/common/platform_sp.webp" media="(max-width: 899px)" type="image/webp" />
         <img src="/img/common/platform_pc.webp" alt="pc" />
     </picture>
     <p class="header_logo">
@@ -123,19 +119,11 @@
             <li class="lang_sel_judge">
                 <ul class="language_selectArea">
                     <dl class="language_selectArea_list">
-                        <li
-                            id="ja"
-                            on:click={(e) => langSelect("ja", e)}
-                            class="LANG language_names pointer"
-                        >
+                        <li id="ja" on:click={(e) => langSelect("ja", e)} class="LANG language_names pointer">
                             <label class="language_mainName">日本語</label>
                             <label class="language_subName">{translator().ja_subName}</label>
                         </li>
-                        <li
-                            id="en"
-                            on:click={(e) => langSelect("en", e)}
-                            class="LANG language_names pointer"
-                        >
+                        <li id="en" on:click={(e) => langSelect("en", e)} class="LANG language_names pointer">
                             <label class="language_mainName">English</label>
                             <label class="language_subName">{translator().en_subName}</label>
                         </li>
