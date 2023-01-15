@@ -5,7 +5,6 @@
     let language: string;
     cached_lang.subscribe((e) => (language = e));
     $: translator = () => (language == "ja" ? jaTrans.article : enTrans.article);
-    // need to import google font for text decoration
 </script>
 
 <h1>{translator()["/"].title}</h1>

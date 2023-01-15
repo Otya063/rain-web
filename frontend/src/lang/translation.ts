@@ -74,8 +74,15 @@ export const enTrans = {
       extlink_beginner: 'Beginner Guide',
       extlink_faq: 'FAQ',
       notes:
-        '*Some images are from the development server.<br>*Also, please note that some of images and texts may be changed for some reason.',
+        '*Some images are from development server.<br>*Also, please note that some of images and texts may be changed for some reason.',
     },
+  },
+  footer: {
+    off_site: 'Rain Server Official Site',
+    off_discord: 'Rain Server Official Discord',
+    pewpew: 'PewPewDojo Official Discord',
+    disclaimer:
+      '*Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.',
   },
 };
 
@@ -155,5 +162,12 @@ export const jaTrans = {
       notes:
         '※一部のゲーム内スクリーンショット画像は、プライベートサーバー版の画像を使用しています。何卒ご了承ください。<br />※また、一部画像及びテキストは今後差替わる可能性がありますので、予めご注意ください。',
     },
+  },
+  footer: {
+    off_site: 'Rainサーバー公式サイト',
+    off_discord: 'Rainサーバー公式Discord',
+    pewpew: 'PewPewDojo公式Discord',
+    disclaimer:
+      '※Rainサーバーは、株式会社カプコンまたはその子会社とは一切関係ありません。当プロジェクトは多数のボランティアによる協力の下で成り立っており、いかなる収益も発生しません。',
   },
 };

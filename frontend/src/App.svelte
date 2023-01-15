@@ -41,13 +41,17 @@
     <!-- favicon -->
     <link rel="icon" type="image/png" href="/img/common/favicon.ico" />
     <!-- mobile -->
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="format-detection" content="telephone=no" />
     <link rel="apple-touch-icon-precomposed" href="/img/common/favicon_sp.png" />
-    <!-- <link href="/css/style.css" rel="stylesheet" type="text/css"> -->
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+    {#if language === "ja"}
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+    {:else}
+        <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" rel="stylesheet" />
+    {/if}
 </svelte:head>
 <body>
     <div class="wrapper">
@@ -57,11 +61,7 @@
 
         <div class="top_images">
             <picture>
-                <source
-                    srcset="/img/common/bg{randNum}_sp.webp"
-                    media="(max-width: 899px)"
-                    type="image/webp"
-                />
+                <source srcset="/img/common/bg{randNum}_sp.webp" media="(max-width: 899px)" type="image/webp" />
                 <img class="top_img" src="/img/common/bg{randNum}.webp" alt="top_pc" />
             </picture>
         </div>
