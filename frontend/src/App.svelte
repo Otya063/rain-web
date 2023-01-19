@@ -31,6 +31,27 @@
 
     // random numbers for selecting background images (1 ≦ randNum ≦ 4)
     let randNum: number = Math.floor(Math.random() * 4) + 1;
+
+    // right-click restriction
+    document.documentElement.oncontextmenu = () => {
+        return false;
+    };
+
+    // pinch-to-zoom restriction
+    document.documentElement.addEventListener(
+        "touchstart",
+        (e) => {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        },
+        { passive: false }
+    );
+
+    // scroll to top of page
+    const scrollTop = () => {
+        window.scrollTo(0, 0);
+    };
 </script>
 
 <!-- add header to html tag on server render -->
@@ -78,7 +99,7 @@
             </main>
         </div>
 
-        <div class="pagetop" />
+        <div on:click={scrollTop} class="pagetop" />
 
         <nav class="bottom_navigations">
             <!-- bottom navigation for mobile -->

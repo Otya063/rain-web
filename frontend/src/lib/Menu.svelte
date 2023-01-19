@@ -1,6 +1,7 @@
 <script lang="ts">
     import { cached_lang } from "../lang/i18n";
     import { jaTrans, enTrans } from "../lang/translation";
+    import { onMount } from "svelte";
 
     let language: string;
     cached_lang.subscribe((e) => (language = e));
@@ -75,6 +76,39 @@
             });
         });
     };
+
+    // automatic operation of side_menu decoration based on the viewed article
+    onMount(() => {
+        const path_name = location.pathname; // path of current page
+        const path_value = path_name.split("/"); // split path by "/"
+        const mcpath = path_value[0]; // main_category_path
+        const scpath = path_value[1]; // sub_category_path
+        let mc_value = ""; // メインカテゴリー該当パス
+        let sc_value = ""; // サブカテゴリー該当パス
+
+        if (mcpath === "") {
+            // for top article
+            mc_value = "toppage";
+            sc_value = "home";
+        } else if (scpath === "news") {
+            // for news article
+            mc_value = "toppage";
+            sc_value = "news";
+        } else {
+            // for each article
+            mc_value = mcpath;
+            sc_value = scpath;
+        }
+
+        const mc: HTMLElement = document.getElementById(mc_value);
+        mc.classList.add("open");
+        const content: Element = mc.children[1];
+        if (content instanceof HTMLElement) {
+            content.style.height = "auto";
+        }
+        const sc: HTMLElement = document.getElementById(sc_value);
+        sc.classList.add("selected");
+    });
 </script>
 
 <p class="logo">
@@ -82,9 +116,7 @@
 </p>
 <ul class="categories">
     <li id="toppage" class="category">
-        <button class="category_title" type="button"
-            ><span class="mark" />{translator().category_toppage["title"]}</button
-        >
+        <button class="category_title" type="button"><span class="mark" />{translator().category_toppage["title"]}</button>
         <ul class="sub_categories">
             <dl class="sub_categories_list">
                 <li id="home" class="sub_category" on:click={() => console.log("clicked")}>
@@ -97,9 +129,7 @@
         </ul>
     </li>
     <li id="entry" class="category">
-        <button class="category_title" type="button"
-            ><span class="mark" />{translator().category_entry["title"]}</button
-        >
+        <button class="category_title" type="button"><span class="mark" />{translator().category_entry["title"]}</button>
         <ul class="sub_categories">
             <dl class="sub_categories_list">
                 <li id="acccreate" class="sub_category" on:click={() => console.log("clicked")}>
@@ -112,9 +142,7 @@
         </ul>
     </li>
     <li class="category">
-        <button id="begin" class="category_title" type="button"
-            ><span class="mark" />{translator().category_begin["title"]}</button
-        >
+        <button id="begin" class="category_title" type="button"><span class="mark" />{translator().category_begin["title"]}</button>
         <ul class="sub_categories">
             <dl class="sub_categories_list">
                 <li id="start" class="sub_category" on:click={() => console.log("clicked")}>

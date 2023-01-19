@@ -44,6 +44,11 @@ export const enTrans = {
       quit: 'Quit the Game',
     },
   },
+  bottom_menu: {
+    toppage: 'Home',
+    lang_sel: 'Language Select',
+    menu: 'Menu',
+  },
   header: {
     label: 'English',
     ja_subName: 'Japanese',
@@ -130,6 +135,11 @@ export const jaTrans = {
       multiple: 'ゲームの多重起動',
       quit: 'ゲームの終了',
     },
+  },
+  bottom_menu: {
+    toppage: "トップページ",
+    lang_sel: "言語選択",
+    menu: "メニュー",
   },
   header: {
     label: '日本語',

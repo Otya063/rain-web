@@ -1294,14 +1294,14 @@
 
     /* ボトムナビゲーション
 ====================================================*/
-    ul.bottom_navigations {
+    .bottom_navigations {
         position: fixed;
         @include flex_center;
         justify-content: space-around;
         left: 0;
         bottom: 0;
         width: 100%;
-        height: 43px; /*アイコン枠の高さ*/
+        height: 50px; /*アイコン枠の高さ*/
         margin: 0;
         padding: 0;
         background-color: white; /*背景色*/
@@ -1309,10 +1309,15 @@
         border-bottom: 2px solid gray; /*バーの下線*/
         z-index: 30;
         padding-bottom: env(safe-area-inset-bottom);
-    }
 
-    ul.bottom_navigations li {
-        text-align: center;
+        ul {
+            @include flex_center;
+            text-align: center;
+
+            li {
+                margin: 0 20px;
+            }
+        }
     }
 
     .side_menu {
