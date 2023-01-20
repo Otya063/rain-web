@@ -79,12 +79,12 @@
 
     // automatic operation of side_menu decoration based on the viewed article
     onMount(() => {
-        const path_name = location.pathname; // path of current page
-        const path_value = path_name.split("/"); // split path by "/"
-        const mcpath = path_value[0]; // main_category_path
-        const scpath = path_value[1]; // sub_category_path
-        let mc_value = ""; // メインカテゴリー該当パス
-        let sc_value = ""; // サブカテゴリー該当パス
+        const path_name:string = location.pathname; // path of current page
+        const path_value:string[] = path_name.split("/"); // split path by "/"
+        const mcpath:string = path_value[0]; // main_category_path
+        const scpath:string = path_value[1]; // sub_category_path
+        let mc_value:string; // getById for main_category
+        let sc_value:string; // getById for sub_category
 
         if (mcpath === "") {
             // for top article
@@ -100,13 +100,13 @@
             sc_value = scpath;
         }
 
-        const mc: HTMLElement = document.getElementById(mc_value);
+        const mc = <HTMLElement>document.getElementById(mc_value);
         mc.classList.add("open");
         const content: Element = mc.children[1];
         if (content instanceof HTMLElement) {
             content.style.height = "auto";
         }
-        const sc: HTMLElement = document.getElementById(sc_value);
+        const sc = <HTMLElement>document.getElementById(sc_value);
         sc.classList.add("selected");
     });
 </script>

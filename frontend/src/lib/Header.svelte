@@ -42,7 +42,7 @@
     // selected language decoration
     onMount(() => {
         const lang_code: string = document.documentElement.lang;
-        const now_lang: HTMLElement = document.getElementById(lang_code);
+        const now_lang = <HTMLElement>document.getElementById(lang_code);
         now_lang.classList.add("selected");
     });
 
