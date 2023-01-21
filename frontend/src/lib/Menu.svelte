@@ -79,12 +79,12 @@
 
     // automatic operation of side_menu decoration based on the viewed article
     onMount(() => {
-        const path_name:string = location.pathname; // path of current page
-        const path_value:string[] = path_name.split("/"); // split path by "/"
-        const mcpath:string = path_value[0]; // main_category_path
-        const scpath:string = path_value[1]; // sub_category_path
-        let mc_value:string; // getById for main_category
-        let sc_value:string; // getById for sub_category
+        const path_name: string = location.pathname; // path of current page
+        const path_value: string[] = path_name.split("/"); // split path by "/"
+        const mcpath: string = path_value[0]; // main_category_path
+        const scpath: string = path_value[1]; // sub_category_path
+        let mc_value: string; // getById for main_category
+        let sc_value: string; // getById for sub_category
 
         if (mcpath === "") {
             // for top article
@@ -141,8 +141,8 @@
             </dl>
         </ul>
     </li>
-    <li class="category">
-        <button id="begin" class="category_title" type="button"><span class="mark" />{translator().category_begin["title"]}</button>
+    <li id="begin" class="category">
+        <button class="category_title" type="button"><span class="mark" />{translator().category_begin["title"]}</button>
         <ul class="sub_categories">
             <dl class="sub_categories_list">
                 <li id="start" class="sub_category" on:click={() => console.log("clicked")}>
@@ -168,6 +168,25 @@
                 </li>
                 <li id="quit" class="sub_category" on:click={() => console.log("clicked")}>
                     {translator().category_begin["quit"]}
+                </li>
+            </dl>
+        </ul>
+    </li>
+    <li id="server" class="category">
+        <button class="category_title" type="button"><span class="mark" />{translator().category_server["title"]}</button>
+        <ul class="sub_categories">
+            <dl class="sub_categories_list">
+                <li id="bounty" class="sub_category" on:click={() => console.log("clicked")}>
+                    {translator().category_server["bounty"]}
+                </li>
+                <li id="gacha" class="sub_category" on:click={() => console.log("clicked")}>
+                    {translator().category_server["gacha"]}
+                </li>
+                <li id="market" class="sub_category" on:click={() => console.log("clicked")}>
+                    {translator().category_server["market"]}
+                </li>
+                <li id="command" class="sub_category" on:click={() => console.log("clicked")}>
+                    {translator().category_server["command"]}
                 </li>
             </dl>
         </ul>

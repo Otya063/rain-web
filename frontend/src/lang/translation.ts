@@ -7,6 +7,7 @@ export const enTrans = {
     keywords:
       'monster hunter frontier, official online manual, mhf, online game',
   },
+
   // the following translations are for article "Account Creation Procedure"
   acccreate_head: {
     // not functional yet, just copied and pasted
@@ -14,6 +15,7 @@ export const enTrans = {
     title: 'Account Creation Procedure | Rain Server - Online Manual',
     desc: 'Procedures for creating an account on the Rain server.',
   },
+
   // the following translations are for article "Account Linking Procedure"
   acclink_head: {
     // not functional yet, just copied and pasted
@@ -21,6 +23,7 @@ export const enTrans = {
     title: 'Account linking Procedure | Rain Server - Online Manual',
     desc: 'Procedures for linking an account on the Rain server.',
   },
+
   side_menu: {
     category_toppage: {
       title: 'Home',
@@ -43,17 +46,27 @@ export const enTrans = {
       multiple: 'Multiple Launch of the Game',
       quit: 'Quit the Game',
     },
+    category_server: {
+      title: 'Discord Features',
+      bounty: 'Bounty System',
+      gacha: 'Gacha System',
+      market: 'Marketplace',
+      command: 'Slash Command',
+    },
   },
+
   bottom_menu: {
     toppage: 'Home',
     lang_sel: 'Language Select',
     menu: 'Menu',
   },
+
   header: {
     label: 'English',
     ja_subName: 'Japanese',
     en_subName: 'English',
   },
+
   article: {
     // identify each article by path
     '/': {
@@ -82,6 +95,7 @@ export const enTrans = {
         '*Some images are from development server.<br>*Also, please note that some of images and texts may be changed for some reason.',
     },
   },
+
   footer: {
     off_site: 'Rain Server Official Site',
     off_discord: 'Rain Server Official Discord',
@@ -99,6 +113,7 @@ export const jaTrans = {
     keywords:
       'モンスターハンター フロンティア 公式オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
   },
+
   // the following translations are for article "アカウント作成手順"
   acccreate_head: {
     // not functional yet, just copied and pasted
@@ -106,6 +121,7 @@ export const jaTrans = {
     title: 'アカウント作成手順 | Rain Server - オンラインマニュアル',
     desc: 'Rainサーバーにおけるアカウントの作成手順をご紹介します。',
   },
+
   // the following translations are for article "アカウント連携手順"
   acclink_head: {
     // not functional yet, just copied and pasted
@@ -113,6 +129,7 @@ export const jaTrans = {
     title: 'アカウント連携手順 | Rain Server - オンラインマニュアル',
     desc: 'Rainサーバーにおけるアカウントの連携手順についてご紹介します。',
   },
+
   side_menu: {
     category_toppage: {
       title: 'トップページ',
@@ -135,17 +152,27 @@ export const jaTrans = {
       multiple: 'ゲームの多重起動',
       quit: 'ゲームの終了',
     },
+    category_server: {
+      title: 'Discord内各種機能',
+      bounty: 'バウンティシステム',
+      gacha: 'ガチャシステム',
+      market: 'マーケットプレイス',
+      command: 'スラッシュコマンド',
+    },
   },
+
   bottom_menu: {
-    toppage: "トップページ",
-    lang_sel: "言語選択",
-    menu: "メニュー",
+    toppage: 'トップページ',
+    lang_sel: '言語選択',
+    menu: 'メニュー',
   },
+
   header: {
     label: '日本語',
     ja_subName: '日本語',
     en_subName: '英語',
   },
+
   article: {
     // identify each article by path
     '/': {
@@ -173,6 +200,7 @@ export const jaTrans = {
         '※一部のゲーム内スクリーンショット画像は、プライベートサーバー版の画像を使用しています。何卒ご了承ください。<br />※また、一部画像及びテキストは今後差替わる可能性がありますので、予めご注意ください。',
     },
   },
+
   footer: {
     off_site: 'Rainサーバー公式サイト',
     off_discord: 'Rainサーバー公式Discord',

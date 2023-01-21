@@ -7,34 +7,16 @@
     cached_lang.subscribe((e) => (language = e));
     $: translator = () => (language == "ja" ? jaTrans.header : enTrans.header);
 
+    // reload page
+    const reload = () => {
+        window.location.reload();
+    };
+
     // select for languages
-    const langSelect = (lang: "ja" | "en", e: Event) => {
-        //just update global state on click
+    const langSelect = (lang: "ja" | "en") => {
+        //just update global state on click, and reload current page
+        reload();
         cached_lang.set(lang);
-        // change the target of selected language decoration and close language selection tab
-        const target = e.currentTarget;
-        if (target instanceof HTMLElement) {
-            if (!target.classList.contains("selected")) {
-                // need more simplified codes
-                const hasClass = document.querySelector<HTMLLIElement>(".selected");
-                hasClass.classList.remove("selected");
-                target.classList.add("selected");
-                const la_parent = target.closest<HTMLUListElement>(".language_selectArea");
-                const lj_parent = target.closest<HTMLLIElement>(".lang_sel_judge");
-                const ls = document.querySelector<HTMLLIElement>(".header_language_selector");
-                lj_parent.classList.remove("open");
-                ls.classList.remove("langArrow_open");
-                slideUp(la_parent);
-            } else {
-                // need more simplified codes
-                const la_parent = target.closest<HTMLUListElement>(".language_selectArea");
-                const lj_parent = target.closest<HTMLLIElement>(".lang_sel_judge");
-                const ls = document.querySelector<HTMLLIElement>(".header_language_selector");
-                lj_parent.classList.remove("open");
-                ls.classList.remove("langArrow_open");
-                slideUp(la_parent);
-            }
-        }
     };
 
     /* language selector operations (at least it works without any errors, but not sure if it's safe and correct code.)
@@ -119,11 +101,11 @@
             <li class="lang_sel_judge">
                 <ul class="language_selectArea">
                     <dl class="language_selectArea_list">
-                        <li id="ja" on:click={(e) => langSelect("ja", e)} class="LANG language_names pointer">
+                        <li id="ja" on:click={(e) => langSelect("ja")} class="LANG language_names pointer">
                             <label class="language_mainName">日本語</label>
                             <label class="language_subName">{translator().ja_subName}</label>
                         </li>
-                        <li id="en" on:click={(e) => langSelect("en", e)} class="LANG language_names pointer">
+                        <li id="en" on:click={(e) => langSelect("en")} class="LANG language_names pointer">
                             <label class="language_mainName">English</label>
                             <label class="language_subName">{translator().en_subName}</label>
                         </li>
