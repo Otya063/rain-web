@@ -6,13 +6,19 @@
 /*==================================
 　　　　　初期設定
 ==================================*/
-/* body */
+// ボトムメニューオープン時スクロール禁止
+html {
+    &.fixed {
+        height: 100%;
+        overflow: hidden;
+    }
+}
+
 body {
     height: auto;
     -webkit-text-size-adjust: 100%;
 }
 
-/* wrapper初期設定 */
 .wrapper {
     width: 100%;
     overflow: hidden;

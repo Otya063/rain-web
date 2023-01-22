@@ -1279,10 +1279,23 @@
 
     // サイドメニュー、メインコンテンツ位置調整及び背景画像設定
     .bg {
-        background: url(#{$path_img}/common/bg_ribbon.webp) center top repeat-x,
-            url(#{$path_img}/common/body_bg.webp) center center repeat-y;
-        background-size: auto 8px, 100%;
+        background: url(#{$path_img}/common/bg_ribbon.webp) center top repeat-x;
+        background-size: auto 8px;
         padding-top: 8px;
+
+        &::before {
+            display: block;
+            content: "";
+            position: fixed;
+            background: url(#{$path_img}/common/body_bg.webp) center center repeat-y;
+            background-size: 100%;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -3;
+            transform: translate3d(0, 0, 0);
+        }
 
         .main_inner {
             display: flex;
@@ -1301,12 +1314,12 @@
         left: 0;
         bottom: 0;
         width: 100%;
-        height: 50px; /*アイコン枠の高さ*/
+        height: 50px;
         margin: 0;
         padding: 0;
-        background-color: white; /*背景色*/
-        border-top: 2px solid gray; /*バーの上線*/
-        border-bottom: 2px solid gray; /*バーの下線*/
+        background-color: white;
+        border-top: 2px solid gray;
+        border-bottom: 2px solid gray;
         z-index: 30;
         padding-bottom: env(safe-area-inset-bottom);
 
@@ -1320,65 +1333,51 @@
         }
     }
 
+    // メニュー本体
     .side_menu {
-        /*position:fixed;にし、z-indexの数値を大きくして前面へ*/
         position: fixed;
         z-index: 10;
-        /*ナビのスタート位置と形状*/
         bottom: -120%;
         left: 0;
         width: 100%;
-        height: 100vh; /*ナビの高さ*/
+        height: 100vh;
         background: #999;
-        /*動き*/
         transition: all 0.6s;
-    }
 
-    /*アクティブクラスがついたら位置を0に*/
-    .side_menu.panelactive {
-        bottom: 0;
-    }
+        &.open {
+            bottom: 0;
 
-    /*ナビゲーションの縦スクロール*/
-    .side_menu.panelactive .side_menu-list {
-        /*ナビの数が増えた場合縦スクロール*/
-        position: fixed;
-        z-index: 999;
-        width: 100%;
-        height: 100vh; /*表示する高さ*/
-        overflow: auto;
-        -webkit-overflow-scrolling: touch;
-    }
+            &.side_menu-list {
+                position: fixed;
+                z-index: 999;
+                width: 100%;
+                height: 100vh;
+                overflow: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
 
-    /*ナビゲーション*/
-    .side_menu ul {
-        /*ナビゲーション天地中央揃え*/
-        position: absolute;
-        z-index: 999;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
+        ul {
+            position: absolute;
+            z-index: 999;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
 
-    /*リストのレイアウト設定*/
+            li {
+                list-style: none;
+                text-align: center;
 
-    .side_menu li {
-        list-style: none;
-        text-align: center;
-    }
-
-    .side_menu li a {
-        color: #333;
-        text-decoration: none;
-        padding: 10px;
-        display: block;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        font-weight: bold;
-    }
-
-    .fixed {
-        height: 100%;
-        overflow: hidden;
+                a {
+                    color: #333;
+                    text-decoration: none;
+                    padding: 10px;
+                    display: block;
+                    text-transform: uppercase;
+                    letter-spacing: 0.1em;
+                    font-weight: bold;
+                }
+            }
+        }
     }
 }
