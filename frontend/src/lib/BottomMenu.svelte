@@ -8,8 +8,8 @@
     $: translator = () => (language == "ja" ? jaTrans.bottom_menu : enTrans.bottom_menu);
 
     const openMenu = () => {
-        const html = document.documentElement;
-        const bottom_menu = document.querySelector(".side_menu");
+        const html = document.documentElement as HTMLElement;
+        const bottom_menu = document.querySelector(".side_menu") as HTMLElement;
         bottom_menu.classList.toggle("open");
         html.classList.toggle("fixed");
     };
@@ -23,11 +23,11 @@
 
     <!-- アイコン2つ目-->
     <li class="openbtn" on:click={openMenu}>
-        <span class="mini-text">{translator().lang_sel}</span>
+        <span class="mini-text">{translator().menu}</span>
     </li>
 
     <!-- アイコン3つ目 Bookmark -->
     <li class="openbtn">
-        <span class="mini-text">{translator().menu}</span>
+        <span class="mini-text">{translator().lang_sel}</span>
     </li>
 </ul>

@@ -24,7 +24,7 @@
     // selected language decoration
     onMount(() => {
         const lang_code: string = document.documentElement.lang;
-        const now_lang = <HTMLElement>document.getElementById(lang_code);
+        const now_lang = document.getElementById(lang_code) as HTMLLIElement;
         now_lang.classList.add("selected");
     });
 
@@ -69,8 +69,8 @@
     // toggle language selection field
     const toggleLangSel = (e: Event) => {
         const target = e.currentTarget;
-        const lj = document.querySelector<HTMLLIElement>(".lang_sel_judge");
-        const la = document.querySelector<HTMLUListElement>(".language_selectArea");
+        const lj = document.querySelector(".lang_sel_judge") as HTMLLIElement;
+        const la = document.querySelector(".language_selectArea") as HTMLUListElement;
         if (target instanceof Element) {
             target.classList.toggle("langArrow_open");
             lj.classList.toggle("open");

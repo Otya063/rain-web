@@ -52,9 +52,22 @@
     const scrollTop = () => {
         window.scrollTo(0, 0);
     };
+
+    // bottom_navigation for mobile operation
+    window.addEventListener("scroll", () => {
+        const bn = document.querySelector(".bottom_navigations") as HTMLElement;
+        let scrollY: number = window.scrollY;
+            if (scrollY >= 200) {
+                //classにactive付与
+                bn.classList.add("hide");
+            } else {
+                //classからactive削除
+                bn.classList.remove("hide");
+            }
+        
+    });
 </script>
 
-<!-- add header to html tag on server render -->
 <svelte:head>
     <title>{translator().title}</title>
     <meta name="description" content={translator().desc} />

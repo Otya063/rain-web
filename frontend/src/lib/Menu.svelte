@@ -50,14 +50,14 @@
     // toggle side_menu
     window.onload = () => {
         let menuNow: number = null; // memorize the clicked tab by index number
-        const menuBtns = document.querySelectorAll<HTMLLIElement>(".category");
+        const menuBtns = document.querySelectorAll<HTMLUListElement>(".category");
         menuBtns.forEach((menuBtn, index) => {
             menuBtn.addEventListener("click", (e: Event) => {
                 const target = e.currentTarget;
                 if (target instanceof Element) {
                     menuNow = index;
                     target.classList.toggle("open");
-                    const content: Element = target.children[1];
+                    const content = target.children[1] as HTMLLIElement;
                     if (target.classList.contains("open")) {
                         slideDown(content);
                     } else {
@@ -69,7 +69,7 @@
                 menuBtns.forEach((menuBtn, index) => {
                     if (menuNow !== index) {
                         menuBtn.classList.remove("open");
-                        const openedTab: Element = menuBtn.children[1];
+                        const openedTab = menuBtn.children[1] as HTMLLIElement;
                         slideUp(openedTab);
                     }
                 });
@@ -100,13 +100,11 @@
             sc_value = scpath;
         }
 
-        const mc = <HTMLElement>document.getElementById(mc_value);
+        const mc = document.getElementById(mc_value) as HTMLLIElement;
         mc.classList.add("open");
-        const content: Element = mc.children[1];
-        if (content instanceof HTMLElement) {
-            content.style.height = "auto";
-        }
-        const sc = <HTMLElement>document.getElementById(sc_value);
+        const content = mc.children[1] as HTMLUListElement;
+        content.style.height = "auto";
+        const sc = document.getElementById(sc_value) as HTMLLIElement;
         sc.classList.add("selected");
     });
 </script>
