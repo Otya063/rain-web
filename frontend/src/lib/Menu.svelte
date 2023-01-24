@@ -49,7 +49,7 @@
 
     // toggle side_menu
     window.onload = () => {
-        let menuNow: number = null; // memorize the clicked tab by index number
+        let menuNow: number; // memorize the clicked tab by index number
         const menuBtns = document.querySelectorAll<HTMLUListElement>(".category");
         menuBtns.forEach((menuBtn, index) => {
             menuBtn.addEventListener("click", (e: Event) => {
