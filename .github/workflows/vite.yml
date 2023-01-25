@@ -1,9 +1,9 @@
 name: 'built-on-push'
 on:
   push:
-    branches: [ "svelte" ]
+    branches: [ "sveltekit" ]
   pull_request:
-    branches: [ "svelte" ]
+    branches: [ "sveltekit" ]
 
 jobs:
   cache-and-install:

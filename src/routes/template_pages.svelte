@@ -1,9 +1,16 @@
 <script lang="ts">
-	//import Header from '../lib/Header.svelte';
-	//import Menu from '../lib/Menu.svelte';
-	//import BottomNav from '../lib/BottomNav.svelte';
-	//import Footer from '../lib/Footer.svelte';
+	//import Header from '../lib/common/Header.svelte';
+	import TestMenu from '../lib/common/TestMenu.svelte';
+	//import BottomNav from '../lib/common/BottomNav.svelte';
+	//import Footer from '../lib/common/Footer.svelte';
+	import { onMount } from 'svelte';
+	import '../../static/sass/style.scss';
+
+	// temporary
 	const language = 'ja';
+	onMount(() => {
+		document.documentElement.lang = 'ja';
+	});
 </script>
 
 <svelte:head>
@@ -35,34 +42,33 @@
 	{/if}
 </svelte:head>
 
-<body>
-	<div class="wrapper">
-		<header>
-			<!-- <Header /> -->
-		</header>
+<div class="wrapper">
+	<header>
+		<!-- <Header /> -->
+	</header>
 
-		<slot name="top_img" />
+	<slot name="top_img" />
 
-		<div class="bg">
-			<main class="main_inner">
-				<nav class="side_menu">
-					<!-- <Menu /> -->
-				</nav>
+	<div class="bg">
+		<main class="main_inner">
+			<nav class="side_menu">
+				<TestMenu />
+			</nav>
 
-				<article class="contents">
-					<slot name="article" />
-				</article>
-			</main>
-		</div>
-
-		<!-- <div on:click={scrollTop} class="pagetop" /> -->
-
-		<nav class="bottom_navigations">
-			<!-- <BottomNav /> -->
-		</nav>
-
-		<footer>
-			<!-- <Footer /> -->
-		</footer>
+			<article class="contents">
+				<p>Visit "<a href="/">Home</a>" to go back root page.</p>
+				<slot name="article"/>
+			</article>
+		</main>
 	</div>
-</body>
+
+	<!-- <div on:click={scrollTop} class="pagetop" /> -->
+
+	<nav class="bottom_navigations">
+		<!-- <BottomNav /> -->
+	</nav>
+
+	<footer>
+		<!-- <Footer /> -->
+	</footer>
+</div>
