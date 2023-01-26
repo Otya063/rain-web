@@ -1,7 +1,11 @@
 <script lang="ts">
 	import Tp from '../../template_pages.svelte';
+	export let data;
 </script>
 
 <Tp>
-	<div slot="article">This is a link1,2 section.</div>
+	<slot slot="article">
+		<h1>{data.article.title}</h1>
+		<div>{@html data.article.content}</div>
+	</slot>
 </Tp>

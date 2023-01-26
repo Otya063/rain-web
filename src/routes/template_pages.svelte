@@ -42,33 +42,31 @@
 	{/if}
 </svelte:head>
 
-<div class="wrapper">
-	<header>
-		<!-- <Header /> -->
-	</header>
+<header>
+	<!-- <Header /> -->
+</header>
 
-	<slot name="top_img" />
+<slot name="top_img" />
 
-	<div class="bg">
-		<main class="main_inner">
-			<nav class="side_menu">
-				<TestMenu />
-			</nav>
+<div class="bg">
+	<main class="main_inner">
+		<nav class="side_menu">
+			<TestMenu />
+		</nav>
 
-			<article class="contents">
-				<p>Visit "<a href="/">Home</a>" to go back root page.</p>
-				<slot name="article"/>
-			</article>
-		</main>
-	</div>
-
-	<!-- <div on:click={scrollTop} class="pagetop" /> -->
-
-	<nav class="bottom_navigations">
-		<!-- <BottomNav /> -->
-	</nav>
-
-	<footer>
-		<!-- <Footer /> -->
-	</footer>
+		<article class="contents">
+			<p>Visit "<a href="/">Home</a>" to go back root page.</p>
+			<slot name="article" />
+		</article>
+	</main>
 </div>
+
+<!-- <div on:click={scrollTop} class="pagetop" /> -->
+
+<nav class="bottom_navigations">
+	<!-- <BottomNav /> -->
+</nav>
+
+<footer>
+	<!-- <Footer /> -->
+</footer>
