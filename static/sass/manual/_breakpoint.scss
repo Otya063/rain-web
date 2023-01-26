@@ -142,7 +142,11 @@
                                 position: absolute;
                                 top: 14%;
                                 font-size: 1.9rem;
-
+                                -webkit-user-select: none;
+                                   -moz-user-select: none;
+                                    -ms-user-select: none;
+                                        user-select: none;
+                                
                                 &:lang(en) {
                                     top: 15%;
                                 }
@@ -179,13 +183,17 @@
                                     flex-direction: column;
                                     color: #fff;
                                     font-size: 2rem;
-                                    padding: 15% 0 2% 0;
+                                    margin: 15% 0 2% 0;
                                     position: relative;
                                     will-change: opacity;
+                                    -webkit-user-select: none;
+                                       -moz-user-select: none;
+                                        -ms-user-select: none;
+                                            user-select: none;
 
                                     // 言語名初めのみ上部余白なし
                                     &:first-child {
-                                        padding-top: 0;
+                                        margin-top: 0;
                                     }
 
                                     // 言語名ホバー時
@@ -436,6 +444,10 @@
                             line-height: 1.6;
                             padding: 8% 8% 8% 28%;
                             width: 100%;
+                            -webkit-user-select: none;
+                               -moz-user-select: none;
+                                -ms-user-select: none;
+                                    user-select: none;
 
                             // サブカテゴリーホバー時
                             &:hover {
@@ -1321,7 +1333,7 @@
         background-color: white;
         border-top: 2px solid gray;
         border-bottom: 2px solid gray;
-        transition: .5s;
+        transition: 0.5s;
         z-index: 30;
         padding-bottom: env(safe-area-inset-bottom);
 

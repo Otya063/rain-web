@@ -1,15 +1,31 @@
 <script lang="ts">
-	//import Header from '../lib/common/Header.svelte';
+	import { browser } from '$app/environment';
+	import { cached_lang } from '../lang/i18n';
+	import Header from '../lib/common/Header.svelte';
 	import TestMenu from '../lib/common/TestMenu.svelte';
 	//import BottomNav from '../lib/common/BottomNav.svelte';
 	//import Footer from '../lib/common/Footer.svelte';
-	import { onMount } from 'svelte';
 	import '../../static/sass/style.scss';
 
-	// temporary
-	const language = 'ja';
-	onMount(() => {
-		document.documentElement.lang = 'ja';
+	/*
+  ------------------------------------------------------------
+  ------------------------------------------------------------
+        Initialize The Web Language and Translation
+  ------------------------------------------------------------
+  ------------------------------------------------------------
+  */
+	//take value of lang and subscribe it according to global state
+	let language: string; //this is local state
+	// chached lang is global state
+	cached_lang.subscribe((e) => {
+		//change local state same as global
+		language = e;
+		if (browser) {
+			//change html tag
+			document.documentElement.lang = e;
+			//update the local cache
+			localStorage.setItem('lang', e);
+		}
 	});
 </script>
 
@@ -43,7 +59,7 @@
 </svelte:head>
 
 <header>
-	<!-- <Header /> -->
+	<Header />
 </header>
 
 <slot name="top_img" />
