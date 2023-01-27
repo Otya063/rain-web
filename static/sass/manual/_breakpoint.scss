@@ -47,7 +47,7 @@
                 display: flex;
                 @include right_left;
 
-                a {
+                .header_logo_button {
                     width: 130px;
                     height: 67px;
                     background: url(#{$path_img}/common/rain_textlogo.webp) center center no-repeat;
@@ -104,11 +104,6 @@
                             width: 8em;
                             height: 2.4em;
                             padding: 0 12% 0 25%;
-                            transform: translateY(8%);
-                            -webkit-transform: translateY(8%);
-                            -moz-transform: translateY(8%);
-                            -ms-transform: translateY(8%);
-                            -o-transform: translateY(8%);
 
                             // グローバルマーク
                             &::before {
@@ -134,7 +129,7 @@
                                 top: 50%;
                                 right: 0;
                                 transition: transform 0.4s;
-                                transform: translateY(-40%);
+                                transform: translateY(-25%);
                             }
 
                             // 現在表示言語
@@ -142,6 +137,7 @@
                                 position: absolute;
                                 top: 14%;
                                 font-size: 1.9rem;
+                                line-height: 1.4;
                                 -webkit-user-select: none;
                                    -moz-user-select: none;
                                     -ms-user-select: none;
@@ -1226,7 +1222,7 @@
                 display: flex;
                 @include pos_center;
 
-                a {
+                .header_logo_button {
                     width: 100px;
                     height: 60px;
                     background: url(#{$path_img}/common/rain_textlogo.webp) center center no-repeat;

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { loadArticle } from "../../../static/module/testFunctions";
+    import { loadArticle } from "../../../static/js/testFunctions";
 </script>
 
 <ul class="categories">

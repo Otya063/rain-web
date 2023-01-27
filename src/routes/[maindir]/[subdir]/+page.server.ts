@@ -1,6 +1,5 @@
-import { articles } from './article_data';
+import { articles } from '../../../lib/articles/article_data';
 import type { PageServerLoad } from './$types'
-
 
 // We have imported the `PageServerLoad` type from the relative `./$types` folder that
 // is hidden in the generated `.svelte-kit` folder. Those generated types
