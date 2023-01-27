@@ -7,6 +7,6 @@
 <Tp>
 	<slot slot="article">
 		<h1>{article.title}</h1>
-		<div>{@html article.content}</div>
+		{@html article.content}
 	</slot>
 </Tp>

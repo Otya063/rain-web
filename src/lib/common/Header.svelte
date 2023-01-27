@@ -14,7 +14,7 @@
 		//just update global state on click, and reload current page
 		cached_lang.set(lang);
 	};
-
+	
 	// style of selected language
 	onMount(async () => {
 		const lang_code: string = document.documentElement.lang;
