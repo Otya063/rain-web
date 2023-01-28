@@ -2,7 +2,7 @@
 	import { browser } from '$app/environment';
 	import { cached_lang } from '../lang/i18n';
 	import Header from '../lib/common/Header.svelte';
-	import TestMenu from '../lib/common/TestMenu.svelte';
+	import Menu from '../lib/common/Menu.svelte';
 	//import BottomNav from '../lib/common/BottomNav.svelte';
 	//import Footer from '../lib/common/Footer.svelte';
 	import '../../static/sass/style.scss';
@@ -43,17 +43,27 @@
 	<meta name="format-detection" content="telephone=no" />
 	<link rel="apple-touch-icon-precomposed" href="/img/common/favicon_sp.png" />
 	<!-- font -->
-	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
 	{#if language === 'ja'}
 		<link
+			rel="preload"
+			as="style"
 			href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;500;700&display=swap"
+		/>
+		<link
 			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;500;700&display=swap"
 		/>
 	{:else}
 		<link
+			rel="preload"
+			as="style"
 			href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap"
+		/>
+		<link
 			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap"
 		/>
 	{/if}
 </svelte:head>
@@ -67,11 +77,10 @@
 <div class="bg">
 	<main class="main_inner">
 		<nav class="side_menu">
-			<TestMenu />
+			<Menu />
 		</nav>
 
 		<article class="contents">
-			<p>Visit "<a href="/">Home</a>" to go back root page.</p>
 			<slot name="article" />
 		</article>
 	</main>

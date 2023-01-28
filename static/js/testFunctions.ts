@@ -1,9 +1,3 @@
-export const loadArticle = (path1: string = '', path2: string = '') => {
-	event!.stopPropagation();
-	let href_path = `${path1}/${path2}`;
-	location.pathname = href_path;
-};
-
 // slide open
 const slideDown = (target: Element) => {
 	if (target instanceof HTMLElement) {
@@ -46,14 +40,27 @@ const slideUp = (target: Element) => {
 export const toggleLangSel = (e: Event) => {
 	const target = e.currentTarget;
 	const lj = document.querySelector('.lang_sel_judge') as HTMLLIElement;
-	const la = document.querySelector('.language_selectArea') as HTMLUListElement;
-	if (target instanceof Element) {
+	const content = document.querySelector('.language_selectArea') as HTMLUListElement;
+	if (target instanceof HTMLElement) {
 		target.classList.toggle('langArrow_open');
 		lj.classList.toggle('open');
 		if (lj.classList.contains('open')) {
-			slideDown(la);
+			slideDown(content);
 		} else {
-			slideUp(la);
+			slideUp(content);
+		}
+	}
+};
+
+export const toggleMenuSel = (e: Event) => {
+	const target = e.currentTarget;
+	if (target instanceof HTMLElement) {
+		target.classList.toggle('open');
+		const content = target.nextElementSibling as HTMLUListElement;
+		if (target.classList.contains('open')) {
+			slideDown(content);
+		} else {
+			slideUp(content);
 		}
 	}
 };

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { toggleLangSel,loadArticle } from '../../../static/js/testFunctions';
+    import { toggleLangSel } from '../../../static/js/testFunctions';
 	import { cached_lang } from '../../lang/i18n';
 	import { jaTrans, enTrans } from '../../lang/translation';
 	import { onMount } from 'svelte';
@@ -29,26 +29,27 @@
 		<img src="/img/common/platform_pc.webp" alt="pc" />
 	</picture>
 	<p class="header_logo">
-		<button class="header_logo_button" on:click={() => loadArticle()} />
+		<!-- svelte-ignore a11y-missing-content -->
+		<a class="header_logo_button" href="/" />
 	</p>
 	<aside class="header_language">
 		<ul>
 			<button on:click={toggleLangSel} class="header_language_selector pointer">
 				<p>
-					<label class="current_language">{translator().label}</label>
+					<span class="current_language">{translator().label}</span>
 				</p>
 			</button>
 			<li class="lang_sel_judge">
 				<ul class="language_selectArea">
 					<dl class="language_selectArea_list">
-						<li id="ja" on:click={() => langSelect('ja')} class="LANG language_names pointer">
-							<label class="language_mainName">日本語</label>
-							<label class="language_subName">{translator().ja_subName}</label>
-						</li>
-						<li id="en" on:click={() => langSelect('en')} class="LANG language_names pointer">
-							<label class="language_mainName">English</label>
-							<label class="language_subName">{translator().en_subName}</label>
-						</li>
+						<button id="ja" on:click={() => langSelect('ja')} class="LANG language_names pointer">
+							<span class="language_mainName">日本語</span>
+							<span class="language_subName">{translator().ja_subName}</span>
+						</button>
+						<button id="en" on:click={() => langSelect('en')} class="LANG language_names pointer">
+							<span class="language_mainName">English</span>
+							<span class="language_subName">{translator().en_subName}</span>
+						</button>
 					</dl>
 				</ul>
 			</li>
