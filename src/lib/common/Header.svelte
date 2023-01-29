@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { toggleLangSel } from '../../../static/js/testFunctions';
-	import { cached_lang } from '../../lang/i18n';
-	import { jaTrans, enTrans } from '../../lang/translation';
+    import { toggleLangSel,loadArticle } from '../../../static/js/testFunctions';
+	import { cached_lang } from '$lang/i18n';
+	import { jaTrans, enTrans } from '$lang/translation';
 	import { onMount } from 'svelte';
 
 	let language: string;
@@ -30,7 +30,7 @@
 	</picture>
 	<p class="header_logo">
 		<!-- svelte-ignore a11y-missing-content -->
-		<a class="header_logo_button" href="/" />
+		<button class="header_logo_button" on:click={() => loadArticle()} />
 	</p>
 	<aside class="header_language">
 		<ul>
