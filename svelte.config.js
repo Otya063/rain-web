@@ -8,10 +8,7 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapter(),
-		prerender: {
-			entries: ['/entry/link1', '/entry/link2']
-		}
+		adapter: adapter()
 	}
 };
 
