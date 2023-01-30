@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { cached_lang } from '../../lang/i18n';
-	import { jaTrans, enTrans } from '../../lang/translation';
-	import { toggleMenuSel } from '../../../static/js/testFunctions';
+	import { cached_lang } from '$lang/i18n';
+	import { jaTrans, enTrans } from '$lang/translation';
+	import { toggleMenuSel, loadArticle } from '$ts/testFunctions';
 
 	let language: string;
 	cached_lang.subscribe((e) => (language = e));
@@ -15,12 +15,12 @@
 		</button>
 		<ul class="sub_categories">
 			<li class="sub_categories_list">
-				<a id="home" class="sub_category" href="/entry/link1">
+				<button id="home" class="sub_category" on:click={()=>loadArticle("entry", "link1")}>
 					{translator().category_toppage['home']}
-				</a>
-				<a id="news" class="sub_category" href="/entry/link2">
+				</button>
+				<button id="home" class="sub_category" on:click={()=>loadArticle("entry", "link2")}>
 					{translator().category_toppage['news']}
-				</a>
+				</button>
 			</li>
 		</ul>
 	</li>

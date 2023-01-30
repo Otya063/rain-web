@@ -9,8 +9,13 @@ const config = {
 
   kit: {
     adapter: adapter(),
-    prerender: {
-      entries: ['/entry/link1', '/entry/link2'],
+    alias: {
+      $lib: 'src/lib',
+      $i18n: 'src/i18n',
+      $lang: 'src/lang',
+      $ts: 'static/js',
+      $img: 'static/img',
+      $scss: 'static/sass',
     },
   },
 };

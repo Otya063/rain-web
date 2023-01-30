@@ -52,6 +52,7 @@ export const toggleLangSel = (e: Event) => {
 	}
 };
 
+// toggle side menu
 export const toggleMenuSel = (e: Event) => {
 	const target = e.currentTarget;
 	if (target instanceof HTMLElement) {
@@ -63,4 +64,11 @@ export const toggleMenuSel = (e: Event) => {
 			slideUp(content);
 		}
 	}
+};
+
+// load article
+export const loadArticle = (path1: string = '', path2: string = '') => {
+  event.stopPropagation();
+  let href_path = `${path1}/${path2}`;
+  location.pathname = href_path;
 };
