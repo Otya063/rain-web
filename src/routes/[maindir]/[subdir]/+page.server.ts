@@ -1,4 +1,4 @@
-import { articles } from '$lib/articles/article_data';
+import { articles } from '../../../lib/articles/article_data';
 import type { PageServerLoad } from './$types'
 
 // We have imported the `PageServerLoad` type from the relative `./$types` folder that
@@ -13,3 +13,5 @@ export const load:PageServerLoad = async ({ params }) => {
 		article
 	};
 };
+
+export const prerender = true;
