@@ -13,6 +13,7 @@
     export let data: LayoutData;
     setLocale(data.locale);
 
+    // random numbers for selecting background images (1 ≦ randNum ≦ 4)
     let r: number;
     onMount(async () => {
         r = Math.floor(Math.random() * 4) + 1;
