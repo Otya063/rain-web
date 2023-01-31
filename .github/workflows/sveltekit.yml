@@ -1,9 +1,9 @@
 name: 'Test Build Sveltekit'
 on:
   push:
-    branches: [ "sveltekit" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "sveltekit" ]
+    branches: [ "main" ]
 
 jobs:
   cache-and-install:
