@@ -1,3 +1,5 @@
+import { setLocale } from "$i18n/i18n-svelte";
+
 // slide open
 const slideDown = (target: Element) => {
 	if (target instanceof HTMLElement) {

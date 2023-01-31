@@ -1,4 +1,3 @@
-import { browser } from '$app/environment';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = ({ locals: { locale, LL } }) => {

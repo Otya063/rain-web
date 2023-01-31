@@ -23,33 +23,27 @@ type RootTranslation = {
 		 * E​n​g​l​i​s​h
 		 */
 		label: string
-		ja: {
-			/**
-			 * j​a
-			 */
-			lang_code: string
-			/**
-			 * 日​本​語
-			 */
-			main_name: string
-			/**
-			 * J​a​p​a​n​e​s​e
-			 */
-			sub_name: string
-		}
-		en: {
-			/**
-			 * e​n
-			 */
-			lang_code: string
-			/**
-			 * E​n​g​l​i​s​h
-			 */
-			main_name: string
-			/**
-			 * E​n​g​l​i​s​h
-			 */
-			sub_name: string
+		lang_menu: {
+			ja: {
+				/**
+				 * 日​本​語
+				 */
+				main_name: string
+				/**
+				 * J​a​p​a​n​e​s​e
+				 */
+				sub_name: string
+			}
+			en: {
+				/**
+				 * E​n​g​l​i​s​h
+				 */
+				main_name: string
+				/**
+				 * E​n​g​l​i​s​h
+				 */
+				sub_name: string
+			}
 		}
 	}
 }
@@ -64,33 +58,27 @@ export type TranslationFunctions = {
 		 * English
 		 */
 		label: () => LocalizedString
-		ja: {
-			/**
-			 * ja
-			 */
-			lang_code: () => LocalizedString
-			/**
-			 * 日本語
-			 */
-			main_name: () => LocalizedString
-			/**
-			 * Japanese
-			 */
-			sub_name: () => LocalizedString
-		}
-		en: {
-			/**
-			 * en
-			 */
-			lang_code: () => LocalizedString
-			/**
-			 * English
-			 */
-			main_name: () => LocalizedString
-			/**
-			 * English
-			 */
-			sub_name: () => LocalizedString
+		lang_menu: {
+			ja: {
+				/**
+				 * 日本語
+				 */
+				main_name: () => LocalizedString
+				/**
+				 * Japanese
+				 */
+				sub_name: () => LocalizedString
+			}
+			en: {
+				/**
+				 * English
+				 */
+				main_name: () => LocalizedString
+				/**
+				 * English
+				 */
+				sub_name: () => LocalizedString
+			}
 		}
 	}
 }
