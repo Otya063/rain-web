@@ -1,27 +1,24 @@
 <script lang="ts">
-	import { cached_lang } from '$lang/i18n';
-	import { jaTrans, enTrans } from '$lang/translation';
-	import { toggleMenuSel, loadArticle } from '$ts/testFunctions';
-
-	let language: string;
-	cached_lang.subscribe((e) => (language = e));
-	$: translator = () => (language == 'ja' ? jaTrans.side_menu : enTrans.side_menu);
+    import LL, { locale } from "$i18n/i18n-svelte";
+    import { toggleMenuSel, loadArticle } from "$ts/main";
 </script>
 
 <ul class="categories">
-	<li id="toppage" class="category">
-		<button on:click={toggleMenuSel} class="category_title" type="button">
-			<span class="mark" />{translator().category_toppage["title"]}
-		</button>
-		<ul class="sub_categories">
-			<li class="sub_categories_list">
-				<button id="home" class="sub_category" on:click={()=>loadArticle("entry", "link1")}>
-					{translator().category_toppage['home']}
-				</button>
-				<button id="home" class="sub_category" on:click={()=>loadArticle("entry", "link2")}>
-					{translator().category_toppage['news']}
-				</button>
-			</li>
-		</ul>
-	</li>
+    {#each Object.entries($LL.side_menu) as [maindir, { title, contents }]}
+        <li class="category">
+            <button on:click={toggleMenuSel} class="category_title" type="button">
+                <span class="mark" />
+                {title()}
+            </button>
+            <ul class="sub_categories">
+                <li class="sub_categories_list">
+                    {#each Object.entries(contents) as [subdir, content]}
+                        <button class="sub_category" on:click={() => loadArticle(`${$locale}/`, `${maindir}/`, `${subdir}/`)}>
+                            {content()}
+                        </button>
+                    {/each}
+                </li>
+            </ul>
+        </li>
+    {/each}
 </ul>

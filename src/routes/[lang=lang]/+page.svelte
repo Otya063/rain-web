@@ -4,6 +4,6 @@
     import { locale } from "$i18n/i18n-svelte"
 </script>
 
-<p>{$LL.HI()}</p>
+<p>{$LL.test()}</p>
 <p>now lang : {$locale}</p>
 <TestTop />

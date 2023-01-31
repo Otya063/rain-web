@@ -8,8 +8,11 @@ import type { PageServerLoad } from './$types';
 export const load: PageServerLoad = async ({ params }) => {
   const article = articles.find(
     (article) =>
-      article.maindir === params.maindir && article.subdir === params.subdir
+      article.lang === params.lang &&
+      article.maindir === params.maindir &&
+      article.subdir === params.subdir
   );
+
   return {
     article,
   };

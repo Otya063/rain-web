@@ -15,15 +15,15 @@ export type Translations = RootTranslation
 
 type RootTranslation = {
 	/**
-	 * t​e​s​t
+	 * T​h​i​s​ ​i​s​ ​a​ ​h​o​m​e​ ​p​a​g​e​.
 	 */
-	HI: string
+	test: string
 	header: {
 		/**
 		 * E​n​g​l​i​s​h
 		 */
-		label: string
-		lang_menu: {
+		now_lang: string
+		lang_sel: {
 			ja: {
 				/**
 				 * 日​本​語
@@ -46,19 +46,101 @@ type RootTranslation = {
 			}
 		}
 	}
+	side_menu: {
+		entry: {
+			/**
+			 * S​i​g​n​ ​U​p
+			 */
+			title: string
+			contents: {
+				/**
+				 * A​c​c​o​u​n​t​ ​C​r​e​a​t​i​o​n​ ​P​r​o​c​e​d​u​r​e
+				 */
+				acccreate: string
+				/**
+				 * A​c​c​o​u​n​t​ ​L​i​n​k​i​n​g​ ​P​r​o​c​e​d​u​r​e
+				 */
+				acclink: string
+			}
+		}
+		begin: {
+			/**
+			 * S​t​a​r​t​i​n​g​ ​t​h​e​ ​G​a​m​e
+			 */
+			title: string
+			contents: {
+				/**
+				 * H​o​w​ ​t​o​ ​S​t​a​r​t​ ​t​h​e​ ​G​a​m​e
+				 */
+				start: string
+				/**
+				 * T​i​t​l​e​ ​M​e​n​u
+				 */
+				menu: string
+				/**
+				 * C​h​a​r​a​c​t​e​r​ ​C​r​e​a​t​i​o​n
+				 */
+				character: string
+				/**
+				 * A​d​d​i​n​g​ ​a​n​d​ ​D​e​l​e​t​i​n​g​ ​C​h​a​r​a​c​t​e​r​s
+				 */
+				adddelete: string
+				/**
+				 * W​o​r​l​d​ ​S​e​l​e​c​t​i​o​n
+				 */
+				world: string
+				/**
+				 * T​u​t​o​r​i​a​l
+				 */
+				tutorial: string
+				/**
+				 * M​u​l​t​i​p​l​e​ ​L​a​u​n​c​h​ ​o​f​ ​t​h​e​ ​G​a​m​e
+				 */
+				multiple: string
+				/**
+				 * Q​u​i​t​ ​t​h​e​ ​G​a​m​e
+				 */
+				quit: string
+			}
+		}
+		server: {
+			/**
+			 * D​i​s​c​o​r​d​ ​F​e​a​t​u​r​e​s
+			 */
+			title: string
+			contents: {
+				/**
+				 * B​o​u​n​t​y​ ​S​y​s​t​e​m
+				 */
+				bounty: string
+				/**
+				 * G​a​c​h​a​ ​S​y​s​t​e​m
+				 */
+				gacha: string
+				/**
+				 * M​a​r​k​e​t​p​l​a​c​e
+				 */
+				market: string
+				/**
+				 * S​l​a​s​h​ ​C​o​m​m​a​n​d
+				 */
+				command: string
+			}
+		}
+	}
 }
 
 export type TranslationFunctions = {
 	/**
-	 * test
+	 * This is a home page.
 	 */
-	HI: () => LocalizedString
+	test: () => LocalizedString
 	header: {
 		/**
 		 * English
 		 */
-		label: () => LocalizedString
-		lang_menu: {
+		now_lang: () => LocalizedString
+		lang_sel: {
 			ja: {
 				/**
 				 * 日本語
@@ -78,6 +160,88 @@ export type TranslationFunctions = {
 				 * English
 				 */
 				sub_name: () => LocalizedString
+			}
+		}
+	}
+	side_menu: {
+		entry: {
+			/**
+			 * Sign Up
+			 */
+			title: () => LocalizedString
+			contents: {
+				/**
+				 * Account Creation Procedure
+				 */
+				acccreate: () => LocalizedString
+				/**
+				 * Account Linking Procedure
+				 */
+				acclink: () => LocalizedString
+			}
+		}
+		begin: {
+			/**
+			 * Starting the Game
+			 */
+			title: () => LocalizedString
+			contents: {
+				/**
+				 * How to Start the Game
+				 */
+				start: () => LocalizedString
+				/**
+				 * Title Menu
+				 */
+				menu: () => LocalizedString
+				/**
+				 * Character Creation
+				 */
+				character: () => LocalizedString
+				/**
+				 * Adding and Deleting Characters
+				 */
+				adddelete: () => LocalizedString
+				/**
+				 * World Selection
+				 */
+				world: () => LocalizedString
+				/**
+				 * Tutorial
+				 */
+				tutorial: () => LocalizedString
+				/**
+				 * Multiple Launch of the Game
+				 */
+				multiple: () => LocalizedString
+				/**
+				 * Quit the Game
+				 */
+				quit: () => LocalizedString
+			}
+		}
+		server: {
+			/**
+			 * Discord Features
+			 */
+			title: () => LocalizedString
+			contents: {
+				/**
+				 * Bounty System
+				 */
+				bounty: () => LocalizedString
+				/**
+				 * Gacha System
+				 */
+				gacha: () => LocalizedString
+				/**
+				 * Marketplace
+				 */
+				market: () => LocalizedString
+				/**
+				 * Slash Command
+				 */
+				command: () => LocalizedString
 			}
 		}
 	}
