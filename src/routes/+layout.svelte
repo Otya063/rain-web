@@ -1,29 +1,20 @@
 <script lang="ts">
     import type { LayoutData } from "./$types";
-    import { page } from "$app/stores";
-    import { onMount } from "svelte";
     import { setLocale } from "$i18n/i18n-svelte";
-    import Alternate from "$lib/common/Alternate.svelte";
+    import LL from "$i18n/i18n-svelte";
     import Header from "$lib/common/Header.svelte";
-    import Menu from "$lib/common/Menu.svelte";
+    import Alternate from "$lib/common/Alternate.svelte";
     //import BottomNav from '$lib/common/BottomNav.svelte';
     //import Footer from '$lib/common/Footer.svelte';
     import "$scss/style.scss";
 
     export let data: LayoutData;
     setLocale(data.locale);
-
-    // random select for top images (1 ≦ r ≦ 4)
-    const r = Math.floor(Math.random() * 4) + 1;
-    let top_img: boolean = false;
-    onMount(() => {
-        if ($page.url.pathname === `/${data.locale}`) {
-            top_img = true;
-        }
-    });
 </script>
 
 <svelte:head>
+    <meta name="description" content={$LL.articles["description"]()} />
+    <meta name="keywords" content={$LL.articles["keywords"]()} />
     <!-- favicon -->
     <link rel="icon" type="image/png" href="/img/common/favicon.ico" />
     <!-- mobile -->
@@ -45,29 +36,11 @@
 </svelte:head>
 
 <header>
+    <!-- header -->
     <Header />
 </header>
 
-{#if top_img}
-    <div class="top_images">
-        <picture>
-            <source srcset="../../static/img/common/bg{r}_sp.webp" media="(max-width: 899px)" type="image/webp" />
-            <img class="top_img" src="../../static/img/common/bg{r}.webp" alt="top_pc" />
-        </picture>
-    </div>
-{/if}
-
-<div class="bg">
-    <main class="main_inner">
-        <nav class="side_menu">
-            <Menu />
-        </nav>
-
-        <article class="contents">
-            <slot />
-        </article>
-    </main>
-</div>
+<slot />
 
 <!-- <div on:click={scrollTop} class="pagetop" /> -->
 

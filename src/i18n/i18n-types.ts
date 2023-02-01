@@ -15,7 +15,7 @@ export type Translations = RootTranslation
 
 type RootTranslation = {
 	/**
-	 * T​h​i​s​ ​i​s​ ​a​ ​h​o​m​e​ ​p​a​g​e​.
+	 * T​e​s​t​ ​T​e​x​t
 	 */
 	test: string
 	header: {
@@ -129,26 +129,50 @@ type RootTranslation = {
 		}
 	}
 	articles: {
+		/**
+		 * O​f​f​i​c​i​a​l​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​ ​o​f​ ​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​f​o​r​ ​R​a​i​n​ ​S​e​r​v​e​r​.
+		 */
+		description: string
+		/**
+		 * m​o​n​s​t​e​r​ ​h​u​n​t​e​r​ ​f​r​o​n​t​i​e​r​,​ ​o​f​f​i​c​i​a​l​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​,​ ​m​h​f​,​ ​o​n​l​i​n​e​ ​g​a​m​e
+		 */
+		keywords: string
 		home: {
 			/**
 			 * M​H​F​ ​O​n​l​i​n​e​ ​M​a​n​u​a​l
 			 */
 			head_title: string
 			/**
-			 * O​f​f​i​c​i​a​l​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​ ​o​f​ ​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​f​o​r​ ​R​a​i​n​ ​S​e​r​v​e​r​.
+			 * H​o​m​e
 			 */
-			description: string
+			title: string
 			/**
-			 * m​o​n​s​t​e​r​ ​h​u​n​t​e​r​ ​f​r​o​n​t​i​e​r​,​ ​o​f​f​i​c​i​a​l​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​,​ ​m​h​f​,​ ​o​n​l​i​n​e​ ​g​a​m​e
+			 * U​p​d​a​t​e​ ​H​i​s​t​o​r​y
 			 */
-			keywords: string
+			news_title: string
+			/**
+			 * J​a​n​u​a​r​y​ ​1​,​ ​2​0​2​3
+			 */
+			news_date: string
+			/**
+			 * V​e​r​.​1​.​0
+			 */
+			news_ver: string
+			/**
+			 * O​n​l​i​n​e​ ​M​a​n​u​a​l​ ​i​s​ ​a​v​a​i​l​a​b​l​e​ ​n​o​w​!​<​b​r​>​D​e​t​a​i​l​e​d​ ​d​i​f​f​e​r​e​n​c​e​s​ ​f​r​o​m​ ​t​h​e​ ​f​o​r​m​e​r​ ​o​f​f​i​c​i​a​l​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​ ​a​n​d​ ​u​p​d​a​t​e​s​ ​c​a​n​ ​b​e​ ​f​o​u​n​d​ ​f​r​o​m​ ​"​M​o​r​e​.​"
+			 */
+			news_text: string
+			/**
+			 * ▶​M​o​r​e
+			 */
+			news_more: string
 		}
 	}
 }
 
 export type TranslationFunctions = {
 	/**
-	 * This is a home page.
+	 * Test Text
 	 */
 	test: () => LocalizedString
 	header: {
@@ -262,19 +286,43 @@ export type TranslationFunctions = {
 		}
 	}
 	articles: {
+		/**
+		 * Official online manual of Monster Hunter Frontier for Rain Server.
+		 */
+		description: () => LocalizedString
+		/**
+		 * monster hunter frontier, official online manual, mhf, online game
+		 */
+		keywords: () => LocalizedString
 		home: {
 			/**
 			 * MHF Online Manual
 			 */
 			head_title: () => LocalizedString
 			/**
-			 * Official online manual of Monster Hunter Frontier for Rain Server.
+			 * Home
 			 */
-			description: () => LocalizedString
+			title: () => LocalizedString
 			/**
-			 * monster hunter frontier, official online manual, mhf, online game
+			 * Update History
 			 */
-			keywords: () => LocalizedString
+			news_title: () => LocalizedString
+			/**
+			 * January 1, 2023
+			 */
+			news_date: () => LocalizedString
+			/**
+			 * Ver.1.0
+			 */
+			news_ver: () => LocalizedString
+			/**
+			 * Online Manual is available now!<br>Detailed differences from the former official online manual and updates can be found from "More."
+			 */
+			news_text: () => LocalizedString
+			/**
+			 * ▶More
+			 */
+			news_more: () => LocalizedString
 		}
 	}
 }

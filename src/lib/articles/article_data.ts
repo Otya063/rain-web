@@ -17,8 +17,8 @@ export interface Contents {
 }
 
 // デフォルトタイトル
-const default_title_ja = ' | MHF オンラインマニュアル';
-const default_title_en = ' | MHF Online Manual';
+const default_title_ja: string = 'MHF オンラインマニュアル';
+const default_title_en: string = 'MHF Online Manual';
 
 export const articles: Articles[] = [
   {
@@ -26,7 +26,7 @@ export const articles: Articles[] = [
     lang: 'ja',
     maindir: 'entry',
     subdir: 'acccreate',
-    head_title: `アカウント作成手順${default_title_ja}`,
+    head_title: `アカウント作成手順 | ${default_title_ja}`,
     title: 'アカウント作成手順',
     content: acccreate.ja,
   },
@@ -35,7 +35,7 @@ export const articles: Articles[] = [
     lang: 'en',
     maindir: 'entry',
     subdir: 'acccreate',
-    head_title: `Account Creation Procedure${default_title_en}`,
+    head_title: `Account Creation Procedure | ${default_title_en}`,
     title: 'Account Creation Procedure',
     content: acccreate.en,
   },
@@ -45,7 +45,7 @@ export const articles: Articles[] = [
     lang: 'ja',
     maindir: 'entry',
     subdir: 'acclink',
-    head_title: `アカウント連携手順${default_title_ja}`,
+    head_title: `アカウント連携手順 | ${default_title_ja}`,
     title: 'アカウント連携手順',
     content: acclink.ja,
   },
@@ -54,7 +54,7 @@ export const articles: Articles[] = [
     lang: 'en',
     maindir: 'entry',
     subdir: 'acclink',
-    head_title: `Account linking Procedure${default_title_en}`,
+    head_title: `Account linking Procedure | ${default_title_en}`,
     title: 'Account linking Procedure',
     content: acclink.en,
   },

@@ -1,7 +1,7 @@
 import type { BaseTranslation } from '../i18n-types';
 
 const en: BaseTranslation = {
-  test: 'This is a home page.',
+  test: 'Test Text',
 
   // ヘッダー言語設定
   header: {
@@ -53,12 +53,19 @@ const en: BaseTranslation = {
 
   // 動的ルート対象外記事
   articles: {
+    description:
+      'Official online manual of Monster Hunter Frontier for Rain Server.',
+    keywords:
+      'monster hunter frontier, official online manual, mhf, online game',
     home: {
       head_title: 'MHF Online Manual',
-      description:
-        'Official online manual of Monster Hunter Frontier for Rain Server.',
-      keywords:
-        'monster hunter frontier, official online manual, mhf, online game',
+      title: 'Home',
+      news_title: 'Update History',
+      news_date: 'January 1, 2023',
+      news_ver: 'Ver.1.0',
+      news_text:
+        'Online Manual is available now!<br>Detailed differences from the former official online manual and updates can be found from "More."',
+      news_more: '▶More',
     },
   },
 };

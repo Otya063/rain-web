@@ -1,7 +1,7 @@
 import type { Translation } from '../i18n-types';
 
 const ja: Translation = {
-  test: 'このページはトップページです。',
+  test: 'テストテキスト',
 
   // ヘッダー言語設定
   header: {
@@ -53,12 +53,19 @@ const ja: Translation = {
 
   // 動的ルート対象外記事
   articles: {
+    description:
+      'Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル',
+    keywords:
+      'モンスターハンター フロンティア 公式オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
     home: {
       head_title: 'MHF オンラインマニュアル',
-      description:
-        'Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル',
-      keywords:
-        'モンスターハンター フロンティア 公式オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
+      title: 'トップページ',
+      news_title: '更新履歴',
+      news_date: '2023年1月1日',
+      news_ver: 'Ver.1.0',
+      news_text:
+        'オンラインマニュアルを開設いたしました。<br>旧公式オンラインマニュアルとの詳しい相違点及び更新内容は「詳細を見る」よりご確認いただけます。',
+      news_more: '▶詳細を見る',
     },
   },
 };
