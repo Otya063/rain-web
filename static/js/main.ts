@@ -1,3 +1,6 @@
+/*=========================================================
+　　　　　none export functions
+=======================================================*/
 // slide open
 const slideDown = (target: Element) => {
   if (target instanceof HTMLElement) {
@@ -36,6 +39,10 @@ const slideUp = (target: Element) => {
   }
 };
 
+
+/*=========================================================
+　　　　　export functions
+=======================================================*/
 // toggle language selection field
 export const toggleLangSel = (e: Event) => {
   const target = e.currentTarget;

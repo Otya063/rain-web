@@ -3,6 +3,7 @@ import type { BaseTranslation } from '../i18n-types';
 const en: BaseTranslation = {
   test: 'This is a home page.',
 
+  // ヘッダー言語設定
   header: {
     now_lang: 'English',
     lang_sel: {
@@ -17,6 +18,7 @@ const en: BaseTranslation = {
     },
   },
 
+  // サイドメニュー
   side_menu: {
     entry: {
       title: 'Sign Up',
@@ -46,6 +48,17 @@ const en: BaseTranslation = {
         market: 'Marketplace',
         command: 'Slash Command',
       },
+    },
+  },
+
+  // 動的ルート対象外記事
+  articles: {
+    home: {
+      head_title: 'MHF Online Manual',
+      description:
+        'Official online manual of Monster Hunter Frontier for Rain Server.',
+      keywords:
+        'monster hunter frontier, official online manual, mhf, online game',
     },
   },
 };

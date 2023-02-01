@@ -3,6 +3,7 @@ import type { Translation } from '../i18n-types';
 const ja: Translation = {
   test: 'このページはトップページです。',
 
+  // ヘッダー言語設定
   header: {
     now_lang: '日本語',
     lang_sel: {
@@ -16,7 +17,8 @@ const ja: Translation = {
       },
     },
   },
-  
+
+  // サイドメニュー
   side_menu: {
     entry: {
       title: '会員登録',
@@ -46,6 +48,17 @@ const ja: Translation = {
         market: 'マーケットプレイス',
         command: 'スラッシュコマンド',
       },
+    },
+  },
+
+  // 動的ルート対象外記事
+  articles: {
+    home: {
+      head_title: 'MHF オンラインマニュアル',
+      description:
+        'Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル',
+      keywords:
+        'モンスターハンター フロンティア 公式オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
     },
   },
 };

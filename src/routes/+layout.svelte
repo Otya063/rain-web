@@ -13,17 +13,17 @@
     export let data: LayoutData;
     setLocale(data.locale);
 
-    // random numbers for selecting background images (1 ≦ randNum ≦ 4)
-    let r: number;
-    onMount(async () => {
-        r = Math.floor(Math.random() * 4) + 1;
+    // random select for top images (1 ≦ r ≦ 4)
+    const r = Math.floor(Math.random() * 4) + 1;
+    let top_img: boolean = false;
+    onMount(() => {
+        if ($page.url.pathname === `/${data.locale}`) {
+            top_img = true;
+        }
     });
 </script>
 
 <svelte:head>
-    <title>title</title>
-    <meta name="description" content="desc" />
-    <meta name="keywords" content="keywords" />
     <!-- favicon -->
     <link rel="icon" type="image/png" href="/img/common/favicon.ico" />
     <!-- mobile -->
@@ -48,7 +48,7 @@
     <Header />
 </header>
 
-{#if $page.url.pathname === `/${data.locale}`}
+{#if top_img}
     <div class="top_images">
         <picture>
             <source srcset="../../static/img/common/bg{r}_sp.webp" media="(max-width: 899px)" type="image/webp" />

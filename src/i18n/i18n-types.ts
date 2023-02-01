@@ -128,6 +128,22 @@ type RootTranslation = {
 			}
 		}
 	}
+	articles: {
+		home: {
+			/**
+			 * M​H​F​ ​O​n​l​i​n​e​ ​M​a​n​u​a​l
+			 */
+			head_title: string
+			/**
+			 * O​f​f​i​c​i​a​l​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​ ​o​f​ ​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​f​o​r​ ​R​a​i​n​ ​S​e​r​v​e​r​.
+			 */
+			description: string
+			/**
+			 * m​o​n​s​t​e​r​ ​h​u​n​t​e​r​ ​f​r​o​n​t​i​e​r​,​ ​o​f​f​i​c​i​a​l​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​,​ ​m​h​f​,​ ​o​n​l​i​n​e​ ​g​a​m​e
+			 */
+			keywords: string
+		}
+	}
 }
 
 export type TranslationFunctions = {
@@ -243,6 +259,22 @@ export type TranslationFunctions = {
 				 */
 				command: () => LocalizedString
 			}
+		}
+	}
+	articles: {
+		home: {
+			/**
+			 * MHF Online Manual
+			 */
+			head_title: () => LocalizedString
+			/**
+			 * Official online manual of Monster Hunter Frontier for Rain Server.
+			 */
+			description: () => LocalizedString
+			/**
+			 * monster hunter frontier, official online manual, mhf, online game
+			 */
+			keywords: () => LocalizedString
 		}
 	}
 }

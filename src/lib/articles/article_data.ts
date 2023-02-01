@@ -1,43 +1,61 @@
+import { acccreate, acclink } from './contents';
+
+// 各記事要素　型定義
 interface Articles {
   lang: string;
   maindir: string;
   subdir: string;
+  head_title: string;
   title: string;
   content: string;
 }
 
+// 各記事内容　型定義
+export interface Contents {
+  ja: string;
+  en: string;
+}
+
+// デフォルトタイトル
+const default_title_ja = ' | MHF オンラインマニュアル';
+const default_title_en = ' | MHF Online Manual';
+
 export const articles: Articles[] = [
-  // アカウント作成手順
   {
+    // アカウント作成手順（日本語）
     lang: 'ja',
     maindir: 'entry',
     subdir: 'acccreate',
+    head_title: `アカウント作成手順${default_title_ja}`,
     title: 'アカウント作成手順',
-    content:
-      '<p>これはアカウント作成手順コンテンツです。</p><section class="news"><h2 class="news_title">text</h2><div class="news_content"><ul class="content_list"><li class="news_date"><span>text</span><span>text</span></li><li class="news_text">text</li></ul><a class="news_more">text</a></div></section>',
+    content: acccreate.ja,
   },
   {
+    // アカウント作成手順（英語）
     lang: 'en',
     maindir: 'entry',
     subdir: 'acccreate',
-    title: 'Acccreate',
-    content:
-      '<p>This is a "Acccreate" content.</p><section class="news"><h2 class="news_title">text</h2><div class="news_content"><ul class="content_list"><li class="news_date"><span>text</span><span>text</span></li><li class="news_text">text</li></ul><a class="news_more">text</a></div></section>',
+    head_title: `Account Creation Procedure${default_title_en}`,
+    title: 'Account Creation Procedure',
+    content: acccreate.en,
   },
 
-  // アカウント連携手順
   {
+    // アカウント連携手順（日本語）
     lang: 'ja',
     maindir: 'entry',
     subdir: 'acclink',
+    head_title: `アカウント連携手順${default_title_ja}`,
     title: 'アカウント連携手順',
-    content: '<p>これはアカウント連携手順コンテンツです。</p>',
+    content: acclink.ja,
   },
   {
+    // アカウント連携手順（英語）
     lang: 'en',
     maindir: 'entry',
     subdir: 'acclink',
-    title: 'Acclink',
-    content: '<p>This is a "Acclink" content.</p>',
+    head_title: `Account linking Procedure${default_title_en}`,
+    title: 'Account linking Procedure',
+    content: acclink.en,
   },
 ];
