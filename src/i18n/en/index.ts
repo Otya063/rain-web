@@ -66,6 +66,17 @@ const en: BaseTranslation = {
       news_text:
         'Online Manual is available now!<br>Detailed differences from the former official online manual and updates can be found from "More."',
       news_more: '▶More',
+      featured_title: 'Featured Contents',
+      featured_first:
+        'Before playing on the "Rain Server,"<br>what is the first thing to do?',
+      featured_utahime:
+        'Repel the oncoming threat!<br>For more information on the "Diva Defence(歌姫狩衛戦: 真説)," click here.',
+      featured_lavi: 'I want to challenge "Berserk Laviente"!',
+      featured_tenrou:
+        'Investigate the unknown tower!<br>For more information on the "Sky Corridor(天廊遠征録)," click here.',
+      featured_road: 'What is the "Road(狩煉道)," the endless of hunting?',
+      featured_return:
+        'Did you come back for the first time in ages? Then let\'s go to "Return Ward"!',
     },
   },
 };

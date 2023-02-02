@@ -66,6 +66,16 @@ const ja: Translation = {
       news_text:
         'オンラインマニュアルを開設いたしました。<br>旧公式オンラインマニュアルとの詳しい相違点及び更新内容は「詳細を見る」よりご確認いただけます。',
       news_more: '▶詳細を見る',
+      featured_title: '注目のコンテンツ',
+      featured_first: 'Rainサーバーは初めてですが、<br />まずは何をすれば？',
+      featured_utahime:
+        'メゼポルタへ迫る脅威を退けよ！<br />｢歌姫狩衛戦・真説｣の詳細はこちら',
+      featured_lavi: '｢ラヴィエンテ 猛狂期｣に<br />挑みたい！',
+      featured_tenrou:
+        '天穿つ謎の巨塔を調査せよ！<br />｢天廊遠征録｣の詳細はこちら',
+      featured_road: '終わりなき狩りの道<br />｢狩煉道｣とは？',
+      featured_return:
+        '久しぶりに復帰した<br />ハンターさんへ<br />｢復帰区｣をご紹介！',
     },
   },
 };

@@ -11,7 +11,7 @@
         <img src="/img/common/platform_pc.webp" alt="pc" />
     </picture>
     <p class="header_logo">
-        <button class="header_logo_button" on:click={() => loadArticle(`${$locale}/`)} />
+        <button class="header_logo_button" on:click={() => loadArticle($locale)} />
     </p>
     <aside class="header_language">
         <ul>

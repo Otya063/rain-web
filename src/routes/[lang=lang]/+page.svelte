@@ -1,6 +1,6 @@
 <script lang="ts">
     import Menu from "$lib/common/Menu.svelte";
-    import Top from "$lib/articles/Top.svelte";
+    import Home from "$lib/articles/Home.svelte";
     import LL from "$i18n/i18n-svelte";
     import type { PageData } from "./$types";
 
@@ -29,7 +29,7 @@
 
         <article class="contents">
             <!-- article -->
-            <Top />
+            <Home />
         </article>
     </main>
 </div>

@@ -1,8 +1,5 @@
-/*=========================================================
-　　　　　none export functions
-=======================================================*/
 // slide open
-const slideDown = (target: Element) => {
+export const slideDown = (target: Element) => {
   if (target instanceof HTMLElement) {
     target.style.height = 'auto';
     const h = target.offsetHeight;
@@ -39,10 +36,6 @@ const slideUp = (target: Element) => {
   }
 };
 
-
-/*=========================================================
-　　　　　export functions
-=======================================================*/
 // toggle language selection field
 export const toggleLangSel = (e: Event) => {
   const target = e.currentTarget;
@@ -82,6 +75,6 @@ export const loadArticle = (
   subdir: string = ''
 ) => {
   event.stopPropagation();
-  let href_path = `${lang_code}${maindir}${subdir}`;
+  let href_path = `${lang_code}/${maindir}${subdir}`;
   location.pathname = href_path;
 };

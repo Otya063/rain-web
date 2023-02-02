@@ -433,7 +433,7 @@
                             }
 
                             // サブカテゴリーページ表示時
-                            &.selected {
+                            &.tab_active {
                                 position: relative;
                                 background: rgba(77, 77, 77, 0.3);
                                 text-shadow: 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke,
@@ -872,7 +872,7 @@
                 margin-bottom: 0;
             }
 
-            a {
+            button {
                 // アイテム位置調整
                 .featured_items {
                     @include flex_center;

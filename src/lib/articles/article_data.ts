@@ -1,4 +1,4 @@
-import { acccreate, acclink } from './contents';
+import { acccreate, acclink, start } from './contents';
 
 // 各記事要素　型定義
 interface Articles {
@@ -57,5 +57,24 @@ export const articles: Articles[] = [
     head_title: `Account linking Procedure | ${default_title_en}`,
     title: 'Account linking Procedure',
     content: acclink.en,
+  },
+
+  {
+    // ゲームの始め方（日本語）
+    lang: 'ja',
+    maindir: 'begin',
+    subdir: 'start',
+    head_title: `ゲームの始め方 | ${default_title_ja}`,
+    title: 'ゲームの始め方',
+    content: start.ja,
+  },
+  {
+    // ゲームの始め方（英語）
+    lang: 'en',
+    maindir: 'begin',
+    subdir: 'start',
+    head_title: `How to Start the Game | ${default_title_en}`,
+    title: 'How to Start the Game',
+    content: start.en,
   },
 ];

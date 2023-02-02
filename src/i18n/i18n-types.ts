@@ -166,6 +166,34 @@ type RootTranslation = {
 			 * ▶​M​o​r​e
 			 */
 			news_more: string
+			/**
+			 * F​e​a​t​u​r​e​d​ ​C​o​n​t​e​n​t​s
+			 */
+			featured_title: string
+			/**
+			 * B​e​f​o​r​e​ ​p​l​a​y​i​n​g​ ​o​n​ ​t​h​e​ ​"​R​a​i​n​ ​S​e​r​v​e​r​,​"​<​b​r​>​w​h​a​t​ ​i​s​ ​t​h​e​ ​f​i​r​s​t​ ​t​h​i​n​g​ ​t​o​ ​d​o​?
+			 */
+			featured_first: string
+			/**
+			 * R​e​p​e​l​ ​t​h​e​ ​o​n​c​o​m​i​n​g​ ​t​h​r​e​a​t​!​<​b​r​>​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​"​D​i​v​a​ ​D​e​f​e​n​c​e​(​歌​姫​狩​衛​戦​:​ ​真​説​)​,​"​ ​c​l​i​c​k​ ​h​e​r​e​.
+			 */
+			featured_utahime: string
+			/**
+			 * I​ ​w​a​n​t​ ​t​o​ ​c​h​a​l​l​e​n​g​e​ ​"​B​e​r​s​e​r​k​ ​L​a​v​i​e​n​t​e​"​!
+			 */
+			featured_lavi: string
+			/**
+			 * I​n​v​e​s​t​i​g​a​t​e​ ​t​h​e​ ​u​n​k​n​o​w​n​ ​t​o​w​e​r​!​<​b​r​>​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​"​S​k​y​ ​C​o​r​r​i​d​o​r​(​天​廊​遠​征​録​)​,​"​ ​c​l​i​c​k​ ​h​e​r​e​.
+			 */
+			featured_tenrou: string
+			/**
+			 * W​h​a​t​ ​i​s​ ​t​h​e​ ​"​R​o​a​d​(​狩​煉​道​)​,​"​ ​t​h​e​ ​e​n​d​l​e​s​s​ ​o​f​ ​h​u​n​t​i​n​g​?
+			 */
+			featured_road: string
+			/**
+			 * D​i​d​ ​y​o​u​ ​c​o​m​e​ ​b​a​c​k​ ​f​o​r​ ​t​h​e​ ​f​i​r​s​t​ ​t​i​m​e​ ​i​n​ ​a​g​e​s​?​ ​T​h​e​n​ ​l​e​t​'​s​ ​g​o​ ​t​o​ ​"​R​e​t​u​r​n​ ​W​a​r​d​"​!
+			 */
+			featured_return: string
 		}
 	}
 }
@@ -323,6 +351,34 @@ export type TranslationFunctions = {
 			 * ▶More
 			 */
 			news_more: () => LocalizedString
+			/**
+			 * Featured Contents
+			 */
+			featured_title: () => LocalizedString
+			/**
+			 * Before playing on the "Rain Server,"<br>what is the first thing to do?
+			 */
+			featured_first: () => LocalizedString
+			/**
+			 * Repel the oncoming threat!<br>For more information on the "Diva Defence(歌姫狩衛戦: 真説)," click here.
+			 */
+			featured_utahime: () => LocalizedString
+			/**
+			 * I want to challenge "Berserk Laviente"!
+			 */
+			featured_lavi: () => LocalizedString
+			/**
+			 * Investigate the unknown tower!<br>For more information on the "Sky Corridor(天廊遠征録)," click here.
+			 */
+			featured_tenrou: () => LocalizedString
+			/**
+			 * What is the "Road(狩煉道)," the endless of hunting?
+			 */
+			featured_road: () => LocalizedString
+			/**
+			 * Did you come back for the first time in ages? Then let's go to "Return Ward"!
+			 */
+			featured_return: () => LocalizedString
 		}
 	}
 }
