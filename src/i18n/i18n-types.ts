@@ -170,30 +170,92 @@ type RootTranslation = {
 			 * F​e​a​t​u​r​e​d​ ​C​o​n​t​e​n​t​s
 			 */
 			featured_title: string
+			featured_contents: {
+				first: {
+					/**
+					 * e​n​t​r​y​/
+					 */
+					maindir: string
+					/**
+					 * a​c​c​c​r​e​a​t​e​/
+					 */
+					subdir: string
+					/**
+					 * f​i​r​s​t
+					 */
+					alt: string
+					/**
+					 * B​e​f​o​r​e​ ​p​l​a​y​i​n​g​ ​o​n​ ​t​h​e​ ​"​R​a​i​n​ ​S​e​r​v​e​r​,​"​<​b​r​>​w​h​a​t​ ​i​s​ ​t​h​e​ ​f​i​r​s​t​ ​t​h​i​n​g​ ​t​o​ ​d​o​?
+					 */
+					text: string
+				}
+				utahime: {
+					maindir: string
+					subdir: string
+					/**
+					 * u​t​a​h​i​m​e
+					 */
+					alt: string
+					/**
+					 * R​e​p​e​l​ ​t​h​e​ ​o​n​c​o​m​i​n​g​ ​t​h​r​e​a​t​!​<​b​r​>​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​"​B​a​t​t​l​e​ ​o​f​ ​D​i​v​a​ ​D​e​f​e​n​c​e​:​ ​T​r​u​e​ ​S​t​o​r​y​,​"​ ​c​l​i​c​k​ ​h​e​r​e​.
+					 */
+					text: string
+				}
+				ravi: {
+					maindir: string
+					subdir: string
+					/**
+					 * r​a​v​i​e​n​t​e
+					 */
+					alt: string
+					/**
+					 * I​ ​w​a​n​t​ ​t​o​ ​c​h​a​l​l​e​n​g​e​ ​"​B​e​r​s​e​r​k​ ​R​a​v​i​e​n​t​e​"​!
+					 */
+					text: string
+				}
+				tenrou: {
+					maindir: string
+					subdir: string
+					/**
+					 * s​k​y​ ​c​o​r​r​i​d​o​r
+					 */
+					alt: string
+					/**
+					 * I​n​v​e​s​t​i​g​a​t​e​ ​t​h​e​ ​u​n​k​n​o​w​n​ ​t​o​w​e​r​!​<​b​r​>​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​"​S​k​y​ ​C​o​r​r​i​d​o​r​ ​E​x​p​l​o​r​i​n​g​ ​R​e​c​o​r​d​s​,​"​ ​c​l​i​c​k​ ​h​e​r​e​.
+					 */
+					text: string
+				}
+				road: {
+					maindir: string
+					subdir: string
+					/**
+					 * r​o​a​d
+					 */
+					alt: string
+					/**
+					 * W​h​a​t​ ​i​s​ ​t​h​e​ ​"​H​u​n​t​i​n​g​ ​R​o​a​d​,​"​ ​t​h​e​ ​e​n​d​l​e​s​s​ ​o​f​ ​h​u​n​t​i​n​g​?
+					 */
+					text: string
+				}
+				'return': {
+					maindir: string
+					subdir: string
+					/**
+					 * r​e​t​u​r​n​ ​w​a​r​d
+					 */
+					alt: string
+					/**
+					 * D​i​d​ ​y​o​u​ ​c​o​m​e​ ​b​a​c​k​ ​f​o​r​ ​t​h​e​ ​f​i​r​s​t​ ​t​i​m​e​ ​i​n​ ​a​g​e​s​?​ ​T​h​e​n​ ​l​e​t​'​s​ ​g​o​ ​t​o​ ​"​R​e​t​u​r​n​ ​W​a​r​d​"​!
+					 */
+					text: string
+				}
+			}
 			/**
-			 * B​e​f​o​r​e​ ​p​l​a​y​i​n​g​ ​o​n​ ​t​h​e​ ​"​R​a​i​n​ ​S​e​r​v​e​r​,​"​<​b​r​>​w​h​a​t​ ​i​s​ ​t​h​e​ ​f​i​r​s​t​ ​t​h​i​n​g​ ​t​o​ ​d​o​?
+			 * E​x​t​e​r​n​a​l​ ​L​i​n​k​s
 			 */
-			featured_first: string
-			/**
-			 * R​e​p​e​l​ ​t​h​e​ ​o​n​c​o​m​i​n​g​ ​t​h​r​e​a​t​!​<​b​r​>​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​"​D​i​v​a​ ​D​e​f​e​n​c​e​(​歌​姫​狩​衛​戦​:​ ​真​説​)​,​"​ ​c​l​i​c​k​ ​h​e​r​e​.
-			 */
-			featured_utahime: string
-			/**
-			 * I​ ​w​a​n​t​ ​t​o​ ​c​h​a​l​l​e​n​g​e​ ​"​B​e​r​s​e​r​k​ ​L​a​v​i​e​n​t​e​"​!
-			 */
-			featured_lavi: string
-			/**
-			 * I​n​v​e​s​t​i​g​a​t​e​ ​t​h​e​ ​u​n​k​n​o​w​n​ ​t​o​w​e​r​!​<​b​r​>​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​"​S​k​y​ ​C​o​r​r​i​d​o​r​(​天​廊​遠​征​録​)​,​"​ ​c​l​i​c​k​ ​h​e​r​e​.
-			 */
-			featured_tenrou: string
-			/**
-			 * W​h​a​t​ ​i​s​ ​t​h​e​ ​"​R​o​a​d​(​狩​煉​道​)​,​"​ ​t​h​e​ ​e​n​d​l​e​s​s​ ​o​f​ ​h​u​n​t​i​n​g​?
-			 */
-			featured_road: string
-			/**
-			 * D​i​d​ ​y​o​u​ ​c​o​m​e​ ​b​a​c​k​ ​f​o​r​ ​t​h​e​ ​f​i​r​s​t​ ​t​i​m​e​ ​i​n​ ​a​g​e​s​?​ ​T​h​e​n​ ​l​e​t​'​s​ ​g​o​ ​t​o​ ​"​R​e​t​u​r​n​ ​W​a​r​d​"​!
-			 */
-			featured_return: string
+			extlink_title: string
+			extlink_contents: {
+			}
 		}
 	}
 }
@@ -355,30 +417,92 @@ export type TranslationFunctions = {
 			 * Featured Contents
 			 */
 			featured_title: () => LocalizedString
+			featured_contents: {
+				first: {
+					/**
+					 * entry/
+					 */
+					maindir: () => LocalizedString
+					/**
+					 * acccreate/
+					 */
+					subdir: () => LocalizedString
+					/**
+					 * first
+					 */
+					alt: () => LocalizedString
+					/**
+					 * Before playing on the "Rain Server,"<br>what is the first thing to do?
+					 */
+					text: () => LocalizedString
+				}
+				utahime: {
+					maindir: () => LocalizedString
+					subdir: () => LocalizedString
+					/**
+					 * utahime
+					 */
+					alt: () => LocalizedString
+					/**
+					 * Repel the oncoming threat!<br>For more information on the "Battle of Diva Defence: True Story," click here.
+					 */
+					text: () => LocalizedString
+				}
+				ravi: {
+					maindir: () => LocalizedString
+					subdir: () => LocalizedString
+					/**
+					 * raviente
+					 */
+					alt: () => LocalizedString
+					/**
+					 * I want to challenge "Berserk Raviente"!
+					 */
+					text: () => LocalizedString
+				}
+				tenrou: {
+					maindir: () => LocalizedString
+					subdir: () => LocalizedString
+					/**
+					 * sky corridor
+					 */
+					alt: () => LocalizedString
+					/**
+					 * Investigate the unknown tower!<br>For more information on the "Sky Corridor Exploring Records," click here.
+					 */
+					text: () => LocalizedString
+				}
+				road: {
+					maindir: () => LocalizedString
+					subdir: () => LocalizedString
+					/**
+					 * road
+					 */
+					alt: () => LocalizedString
+					/**
+					 * What is the "Hunting Road," the endless of hunting?
+					 */
+					text: () => LocalizedString
+				}
+				'return': {
+					maindir: () => LocalizedString
+					subdir: () => LocalizedString
+					/**
+					 * return ward
+					 */
+					alt: () => LocalizedString
+					/**
+					 * Did you come back for the first time in ages? Then let's go to "Return Ward"!
+					 */
+					text: () => LocalizedString
+				}
+			}
 			/**
-			 * Before playing on the "Rain Server,"<br>what is the first thing to do?
+			 * External Links
 			 */
-			featured_first: () => LocalizedString
-			/**
-			 * Repel the oncoming threat!<br>For more information on the "Diva Defence(歌姫狩衛戦: 真説)," click here.
-			 */
-			featured_utahime: () => LocalizedString
-			/**
-			 * I want to challenge "Berserk Laviente"!
-			 */
-			featured_lavi: () => LocalizedString
-			/**
-			 * Investigate the unknown tower!<br>For more information on the "Sky Corridor(天廊遠征録)," click here.
-			 */
-			featured_tenrou: () => LocalizedString
-			/**
-			 * What is the "Road(狩煉道)," the endless of hunting?
-			 */
-			featured_road: () => LocalizedString
-			/**
-			 * Did you come back for the first time in ages? Then let's go to "Return Ward"!
-			 */
-			featured_return: () => LocalizedString
+			extlink_title: () => LocalizedString
+			extlink_contents: {
+			}
 		}
 	}
 }

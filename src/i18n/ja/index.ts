@@ -66,16 +66,51 @@ const ja: Translation = {
       news_text:
         'オンラインマニュアルを開設いたしました。<br>旧公式オンラインマニュアルとの詳しい相違点及び更新内容は「詳細を見る」よりご確認いただけます。',
       news_more: '▶詳細を見る',
+
+      // 注目のコンテンツ
       featured_title: '注目のコンテンツ',
-      featured_first: 'Rainサーバーは初めてですが、<br />まずは何をすれば？',
-      featured_utahime:
-        'メゼポルタへ迫る脅威を退けよ！<br />｢歌姫狩衛戦・真説｣の詳細はこちら',
-      featured_lavi: '｢ラヴィエンテ 猛狂期｣に<br />挑みたい！',
-      featured_tenrou:
-        '天穿つ謎の巨塔を調査せよ！<br />｢天廊遠征録｣の詳細はこちら',
-      featured_road: '終わりなき狩りの道<br />｢狩煉道｣とは？',
-      featured_return:
-        '久しぶりに復帰した<br />ハンターさんへ<br />｢復帰区｣をご紹介！',
+      featured_contents: {
+        first: {
+          maindir: 'entry/', // スラッシュ（ / ）が最後に必要
+          subdir: 'acccreate/', // スラッシュ（ / ）が最後に必要
+          alt: '初めに',
+          text: 'Rainサーバーは初めてですが、<br />まずは何をすれば？',
+        },
+        utahime: {
+          maindir: '',
+          subdir: '',
+          alt: '歌姫狩衛戦',
+          text: 'メゼポルタへ迫る脅威を退けよ！<br />｢歌姫狩衛戦・真説｣の詳細はこちら',
+        },
+        ravi: {
+          maindir: '',
+          subdir: '',
+          alt: 'ラヴィエンテ',
+          text: '｢ラヴィエンテ 猛狂期｣に<br />挑みたい！',
+        },
+        tenrou: {
+          maindir: '',
+          subdir: '',
+          alt: '天廊遠征録',
+          text: '天穿つ謎の巨塔を調査せよ！<br />｢天廊遠征録｣の詳細はこちら',
+        },
+        road: {
+          maindir: '',
+          subdir: '',
+          alt: '狩煉道',
+          text: '終わりなき狩りの道<br />｢狩煉道｣とは？',
+        },
+        return: {
+          maindir: '',
+          subdir: '',
+          alt: '復帰区',
+          text: '久しぶりに復帰した<br />ハンターさんへ<br />｢復帰区｣をご紹介！',
+        },
+      },
+
+      // 外部リンク
+      extlink_title: '外部リンク',
+      extlink_contents: {},
     },
   },
 };

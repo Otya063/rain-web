@@ -2,6 +2,7 @@
     import { locale } from "$i18n/i18n-svelte";
     import { loadArticle } from "$ts/main";
     import LL from "$i18n/i18n-svelte";
+    import { articles } from "./article_data";
 </script>
 
 <p>
@@ -29,65 +30,21 @@
 <section class="featured">
     <h2>{$LL.articles["home"].featured_title()}</h2>
     <ul class="featured_list">
-        <li>
-            <button on:click={() => loadArticle($locale, "entry/", "acccreate/")}>
-                <dl class="featured_items">
-                    <dt class="featured_img first">
-                        <img src="/img/{$locale}/featured/featured_first_chara.webp" alt="初めに" />
-                    </dt>
-                    <dd class="featured_text">{@html $LL.articles["home"].featured_first()}</dd>
-                </dl>
-            </button>
-        </li>
-        <li>
-            <button on:click={() => loadArticle($locale)}>
-                <dl class="featured_items">
-                    <dt class="featured_img utahime">
-                        <img src="/img/{$locale}/featured/featured_utahime_chara.webp" alt="歌姫狩衛戦・真説" />
-                    </dt>
-                    <dd class="featured_text">{@html $LL.articles["home"].featured_utahime()}</dd>
-                </dl>
-            </button>
-        </li>
-        <li>
-            <button on:click={() => loadArticle($locale)}>
-                <dl class="featured_items">
-                    <dt class="featured_img lavi">
-                        <img src="/img/{$locale}/featured/featured_lavi_chara.webp" alt="ラヴィエンテ" />
-                    </dt>
-                    <dd class="featured_text">{@html $LL.articles["home"].featured_lavi()}</dd>
-                </dl>
-            </button>
-        </li>
-        <li>
-            <button on:click={() => loadArticle($locale)}>
-                <dl class="featured_items">
-                    <dt class="featured_img tenrou">
-                        <img src="/img/{$locale}/featured/featured_tenrou_chara.webp" alt="天廊遠征録" />
-                    </dt>
-                    <dd class="featured_text">{@html $LL.articles["home"].featured_tenrou()}</dd>
-                </dl>
-            </button>
-        </li>
-        <li>
-            <button on:click={() => loadArticle($locale)}>
-                <dl class="featured_items">
-                    <dt class="featured_img road">
-                        <img src="/img/{$locale}/featured/featured_road_chara.webp" alt="狩煉道" />
-                    </dt>
-                    <dd class="featured_text">{@html $LL.articles["home"].featured_road()}</dd>
-                </dl>
-            </button>
-        </li>
-        <li>
-            <button on:click={() => loadArticle($locale)}>
-                <dl class="featured_items">
-                    <dt class="featured_img return">
-                        <img src="/img/{$locale}/featured/featured_return_chara.webp" alt="復帰区" />
-                    </dt>
-                    <dd class="featured_text">{@html $LL.articles["home"].featured_return()}</dd>
-                </dl>
-            </button>
-        </li>
+        {#each Object.entries($LL.articles["home"].featured_contents) as [item, { maindir, subdir, alt, text }]}
+            <li>
+                <button on:click={() => loadArticle($locale, maindir(), subdir())}>
+                    <dl class="featured_items">
+                        <dt class="featured_img {item}">
+                            <img src="/img/{$locale}/featured/featured_{item}_chara.webp" alt={alt()} />
+                        </dt>
+                        <dd class="featured_text">{@html text()}</dd>
+                    </dl>
+                </button>
+            </li>
+        {/each}
     </ul>
+</section>
+
+<section class="extlink">
+    <h2>{$LL.articles["home"].extlink_title()}</h2>
 </section>

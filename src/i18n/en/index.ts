@@ -66,17 +66,51 @@ const en: BaseTranslation = {
       news_text:
         'Online Manual is available now!<br>Detailed differences from the former official online manual and updates can be found from "More."',
       news_more: '▶More',
+
+      // 注目のコンテンツ
       featured_title: 'Featured Contents',
-      featured_first:
-        'Before playing on the "Rain Server,"<br>what is the first thing to do?',
-      featured_utahime:
-        'Repel the oncoming threat!<br>For more information on the "Diva Defence(歌姫狩衛戦: 真説)," click here.',
-      featured_lavi: 'I want to challenge "Berserk Laviente"!',
-      featured_tenrou:
-        'Investigate the unknown tower!<br>For more information on the "Sky Corridor(天廊遠征録)," click here.',
-      featured_road: 'What is the "Road(狩煉道)," the endless of hunting?',
-      featured_return:
-        'Did you come back for the first time in ages? Then let\'s go to "Return Ward"!',
+      featured_contents: {
+        first: {
+          maindir: 'entry/', // スラッシュ（ / ）が最後に必要
+          subdir: 'acccreate/', // スラッシュ（ / ）が最後に必要
+          alt: 'first',
+          text: 'Before playing on the "Rain Server,"<br>what is the first thing to do?',
+        },
+        utahime: {
+          maindir: '',
+          subdir: '',
+          alt: 'utahime',
+          text: 'Repel the oncoming threat!<br>For more information on the "Battle of Diva Defence: True Story," click here.',
+        },
+        ravi: {
+          maindir: '',
+          subdir: '',
+          alt: 'raviente',
+          text: 'I want to challenge "Berserk Raviente"!',
+        },
+        tenrou: {
+          maindir: '',
+          subdir: '',
+          alt: 'sky corridor',
+          text: 'Investigate the unknown tower!<br>For more information on the "Sky Corridor Exploring Records," click here.',
+        },
+        road: {
+          maindir: '',
+          subdir: '',
+          alt: 'road',
+          text: 'What is the "Hunting Road," the endless of hunting?',
+        },
+        return: {
+          maindir: '',
+          subdir: '',
+          alt: 'return ward',
+          text: 'Did you come back for the first time in ages? Then let\'s go to "Return Ward"!',
+        },
+      },
+
+      // 外部リンク
+      extlink_title: 'External Links',
+      extlink_contents: {},
     },
   },
 };
