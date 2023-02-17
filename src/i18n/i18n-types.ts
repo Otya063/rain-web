@@ -213,15 +213,15 @@ type RootTranslation = {
 					 */
 					text: string
 				}
-				tenrou: {
+				festival: {
 					maindir: string
 					subdir: string
 					/**
-					 * s​k​y​ ​c​o​r​r​i​d​o​r
+					 * 狩​人​祭
 					 */
 					alt: string
 					/**
-					 * I​n​v​e​s​t​i​g​a​t​e​ ​t​h​e​ ​u​n​k​n​o​w​n​ ​t​o​w​e​r​!​<​b​r​>​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​"​S​k​y​ ​C​o​r​r​i​d​o​r​ ​E​x​p​l​o​r​i​n​g​ ​R​e​c​o​r​d​s​,​"​ ​c​l​i​c​k​ ​h​e​r​e​.
+					 * W​o​r​k​ ​t​o​g​e​t​h​e​r​ ​a​s​ ​y​o​u​r​ ​t​e​a​m​ ​t​o​ ​a​c​h​i​v​e​ ​t​h​e​ ​t​r​i​a​l​s​!​<​b​r​ ​/​>​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​"​H​u​n​t​i​n​g​ ​F​e​s​t​i​v​a​l​,​"​ ​c​l​i​c​k​ ​h​e​r​e​.
 					 */
 					text: string
 				}
@@ -255,6 +255,52 @@ type RootTranslation = {
 			 */
 			extlink_title: string
 			extlink_contents: {
+				beginner_guide: {
+					/**
+					 * B​e​g​i​n​n​e​r​ ​G​u​i​d​e
+					 */
+					title: string
+					/**
+					 * b​e​g​i​n​n​e​r
+					 */
+					alt: string
+					/**
+					 * _​b​l​a​n​k
+					 */
+					target: string
+					/**
+					 * n​o​o​p​e​n​e​r​ ​n​o​r​e​f​e​r​r​e​r
+					 */
+					rel: string
+					/**
+					 * h​t​t​p​s​:​/​/​w​w​w​.​y​o​u​t​u​b​e​.​c​o​m​/​w​a​t​c​h​?​v​=​o​k​H​t​S​D​1​p​k​w​c
+					 */
+					href: string
+					/**
+					 * e​x​t​l​i​n​k​_​b​e​g​i​n​n​e​r​_​c​h​a​r​a
+					 */
+					img_chara: string
+				}
+				faq: {
+					/**
+					 * F​A​Q
+					 */
+					title: string
+					/**
+					 * f​a​q
+					 */
+					alt: string
+					target: string
+					rel: string
+					/**
+					 * d​i​s​c​o​r​d​:​/​/​d​i​s​c​o​r​d​.​c​o​m​/​c​h​a​n​n​e​l​s​/​9​3​7​2​3​0​1​6​8​2​2​3​7​8​9​0​6​6​/​1​0​4​0​5​2​9​5​6​6​2​9​8​5​5​0​2​9​2
+					 */
+					href: string
+					/**
+					 * e​x​t​l​i​n​k​_​f​a​q​_​c​h​a​r​a
+					 */
+					img_chara: string
+				}
 			}
 		}
 	}
@@ -460,15 +506,15 @@ export type TranslationFunctions = {
 					 */
 					text: () => LocalizedString
 				}
-				tenrou: {
+				festival: {
 					maindir: () => LocalizedString
 					subdir: () => LocalizedString
 					/**
-					 * sky corridor
+					 * 狩人祭
 					 */
 					alt: () => LocalizedString
 					/**
-					 * Investigate the unknown tower!<br>For more information on the "Sky Corridor Exploring Records," click here.
+					 * Work together as your team to achive the trials!<br />For more information on the "Hunting Festival," click here.
 					 */
 					text: () => LocalizedString
 				}
@@ -502,6 +548,52 @@ export type TranslationFunctions = {
 			 */
 			extlink_title: () => LocalizedString
 			extlink_contents: {
+				beginner_guide: {
+					/**
+					 * Beginner Guide
+					 */
+					title: () => LocalizedString
+					/**
+					 * beginner
+					 */
+					alt: () => LocalizedString
+					/**
+					 * _blank
+					 */
+					target: () => LocalizedString
+					/**
+					 * noopener noreferrer
+					 */
+					rel: () => LocalizedString
+					/**
+					 * https://www.youtube.com/watch?v=okHtSD1pkwc
+					 */
+					href: () => LocalizedString
+					/**
+					 * extlink_beginner_chara
+					 */
+					img_chara: () => LocalizedString
+				}
+				faq: {
+					/**
+					 * FAQ
+					 */
+					title: () => LocalizedString
+					/**
+					 * faq
+					 */
+					alt: () => LocalizedString
+					target: () => LocalizedString
+					rel: () => LocalizedString
+					/**
+					 * discord://discord.com/channels/937230168223789066/1040529566298550292
+					 */
+					href: () => LocalizedString
+					/**
+					 * extlink_faq_chara
+					 */
+					img_chara: () => LocalizedString
+				}
 			}
 		}
 	}

@@ -908,8 +908,14 @@
                         }
 
                         // 天廊遠征録
-                        &.tenrou {
+                        /* &.tenrou {
                             background: url(#{$path_img}/common/featured/featured_tenrou_bg.webp) center no-repeat;
+                            background-size: 101%;
+                        } */
+
+                        // 狩人祭
+                        &.festival {
+                            background: url(#{$path_img}/common/featured/featured_festival_bg.webp) center no-repeat;
                             background-size: 101%;
                         }
 
@@ -1743,8 +1749,14 @@
                         }
 
                         // 天廊遠征録
-                        &.tenrou {
+                        /* &.tenrou {
                             background: url(#{$path_img}/common/featured/featured_tenrou_bg.webp) center no-repeat;
+                            background-size: 101%;
+                        } */
+
+                        // 狩人祭
+                        &.festival {
+                            background: url(#{$path_img}/common/featured/featured_festival_bg.webp) center no-repeat;
                             background-size: 101%;
                         }
 

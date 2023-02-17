@@ -47,4 +47,23 @@
 
 <section class="extlink">
     <h2>{$LL.articles["home"].extlink_title()}</h2>
+    <ul class="extlink_list">
+        {#each Object.entries($LL.articles["home"].extlink_contents) as [item, { title, alt, target, rel, href, img_chara }]}
+            <li class="extlink_items">
+                <a href={href()} class="extlink_items_link {item}" target={target()} rel={rel()}>
+                    <figure class="extlink_frame">
+                        <img src="/img/common/extlink/extlink_frame.webp" alt="">
+                    </figure>
+                    <div class="extlink_text_adj">
+                        <div class="extlink_text_content">
+                            <p class="extlink_text_title">{title()}</p>
+                        </div>
+                    </div>
+                    <figure class="extlink_chara">
+                        <img src="/img/common/extlink/{img_chara()}.webp" alt={alt()}>
+                    </figure>
+                </a>
+            </li>
+        {/each}
+    </ul>
 </section>
