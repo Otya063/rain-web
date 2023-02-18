@@ -1,3 +1,0 @@
-* linguist-vendored
-*.svelte linguist-vendored=false
-*.ts linguist-vendored=false

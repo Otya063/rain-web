@@ -1,6 +1,6 @@
 <script lang="ts">
-    import Menu from "$lib/common/Menu.svelte";
-    
+    import Menu from '$lib/common/Menu.svelte';
+
     export let data;
     const { article } = data;
 </script>

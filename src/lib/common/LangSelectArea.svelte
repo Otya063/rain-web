@@ -1,25 +1,25 @@
 <script lang="ts">
-    import { loadArticle } from "$ts/main";
-    import LL, { locale } from "$i18n/i18n-svelte";
-    import { onMount } from "svelte";
+    import { loadArticle } from '$ts/main';
+    import LL, { locale } from '$i18n/i18n-svelte';
+    import { onMount } from 'svelte';
 
     // allow users to change language while displaying articles
-    let maindir: string = "";
-    let subdir: string = "";
+    let maindir: string = '';
+    let subdir: string = '';
     onMount(() => {
         const pathname: string = location.pathname;
         let path1: string;
         let path2: string;
-        const arr: string[] = ([, path1 = "", path2 = ""] = pathname.split("/").filter(Boolean));
+        const arr: string[] = ([, path1 = '', path2 = ''] = pathname.split('/').filter(Boolean));
         if (arr.length > 1) {
-            maindir = path1.concat("/");
-            subdir = path2.concat("/");
+            maindir = path1.concat('/');
+            subdir = path2.concat('/');
         }
-    })
+    });
 </script>
 
 <dl class="language_selectArea_list">
-    {#each Object.entries($LL.header["lang_sel"]) as [lang_code, { main_name, sub_name }]}
+    {#each Object.entries($LL.header['lang_sel']) as [lang_code, { main_name, sub_name }]}
         <button on:click={() => loadArticle(lang_code, maindir, subdir)} class="LANG language_names pointer" class:selected={lang_code === $locale}>
             <span class="language_mainName">{main_name()}</span>
             <span class="language_subName">{sub_name()}</span>

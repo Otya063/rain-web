@@ -1,44 +1,41 @@
 import { detectLocale, i18n, isLocale } from '$i18n/i18n-util';
 import { loadAllLocales } from '$i18n/i18n-util.sync';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
-import {
-  initAcceptLanguageHeaderDetector,
-  localStorageDetector,
-} from 'typesafe-i18n/detectors';
+import { initAcceptLanguageHeaderDetector, localStorageDetector } from 'typesafe-i18n/detectors';
 
 loadAllLocales();
 const L = i18n();
 
 export const handle: Handle = async ({ event, resolve }) => {
-  // read language slug
-  const [, lang] = event.url.pathname.split('/');
+    // read language slug
+    const [, lang] = event.url.pathname.split('/');
 
-  // redirect to base locale if no locale slug was found
-  if (!lang) {
-    const locale = getPreferredLocale(event);
+    // redirect to base locale if no locale slug was found
+    if (!lang) {
+        const locale = getPreferredLocale(event);
 
-    return new Response(null, {
-      status: 302,
-      headers: { Location: `/${locale}` },
+        return new Response(null, {
+            status: 302,
+            headers: { Location: `/${locale}` },
+        });
+    }
+
+    // if slug is not a locale, use base locale (e.g. api endpoints)
+    const locale = isLocale(lang) ? (lang as Locales) : getPreferredLocale(event);
+    const LL = L[locale];
+
+    // bind locale and translation functions to current request
+    event.locals.locale = locale;
+    event.locals.LL = LL;
+
+    // replace html lang attribute with correct language
+    return resolve(event, {
+        transformPageChunk: ({ html }) => html.replace('%lang%', locale),
     });
-  }
-
-  // if slug is not a locale, use base locale (e.g. api endpoints)
-  const locale = isLocale(lang) ? (lang as Locales) : getPreferredLocale(event);
-  const LL = L[locale];
-
-  // bind locale and translation functions to current request
-  event.locals.locale = locale;
-  event.locals.LL = LL;
-
-  // replace html lang attribute with correct language
-  return resolve(event, {
-    transformPageChunk: ({ html }) => html.replace('%lang%', locale),
-  });
 };
 
 const getPreferredLocale = ({ request }: RequestEvent) => {
-  const acceptLanguageDetector = initAcceptLanguageHeaderDetector(request);
+    const acceptLanguageDetector = initAcceptLanguageHeaderDetector(request);
 
-  return detectLocale(acceptLanguageDetector);
+    return detectLocale(acceptLanguageDetector);
 };

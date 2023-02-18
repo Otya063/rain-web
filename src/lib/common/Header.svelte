@@ -1,8 +1,8 @@
 <script lang="ts">
-    import { locale } from "$i18n/i18n-svelte";
-    import { toggleLangSel, loadArticle } from "$ts/main";
-    import LangSelectArea from "./LangSelectArea.svelte";
-    import LL from "$i18n/i18n-svelte";
+    import { locale } from '$i18n/i18n-svelte';
+    import { toggleLangSel, loadArticle } from '$ts/main';
+    import LangSelectArea from './LangSelectArea.svelte';
+    import LL from '$i18n/i18n-svelte';
 </script>
 
 <div class="header_inner">
@@ -17,7 +17,7 @@
         <ul>
             <button on:click={toggleLangSel} class="header_language_selector pointer">
                 <p>
-                    <span class="current_language">{$LL.header["now_lang"]()}</span>
+                    <span class="current_language">{$LL.header['now_lang']()}</span>
                 </p>
             </button>
             <li class="lang_sel_judge">

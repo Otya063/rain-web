@@ -6,6 +6,15 @@ node_modules
 .vscode
 .env
 .env.*
+.gitattributes
+.prettierrc
+.npmrc
+.typesafe-i18n.json
 !.env.example
+package.json
+package-lock.json
+tsconfig.json
+svelte.config.js
+vite.config.ts
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*

@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@use "../global/" as *;
+@use '../global/' as *;
 
 * {
     padding: 0;
@@ -127,15 +127,15 @@ a {
 }
 
 // ボタン装飾削除
-button{
-        background-color: transparent;
-        border: none;
-        cursor: pointer;
-        outline: none;
-        padding: 0;
-        -webkit-appearance: none;
-           -moz-appearance: none;
-                appearance: none;
+button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 // カーソルポインター
@@ -145,7 +145,7 @@ button{
 
 // タイトルフォント
 h1,
-h2{
+h2 {
     font-family: $font_title_ja;
 
     &:lang(en) {

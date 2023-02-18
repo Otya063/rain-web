@@ -53,18 +53,15 @@ const ja: Translation = {
 
     // 動的ルート対象外記事
     articles: {
-        description:
-            'Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル',
-        keywords:
-            'モンスターハンター フロンティア 公式オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
+        description: 'Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル',
+        keywords: 'モンスターハンター フロンティア 公式オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
         home: {
             head_title: 'MHF オンラインマニュアル',
             title: 'トップページ',
             news_title: '更新履歴',
             news_date: '2023年1月1日',
             news_ver: 'Ver.1.0',
-            news_text:
-                'オンラインマニュアルを開設いたしました。<br>旧公式オンラインマニュアルとの詳しい相違点及び更新内容は「詳細を見る」よりご確認いただけます。',
+            news_text: 'オンラインマニュアルを開設いたしました。<br>旧公式オンラインマニュアルとの詳しい相違点及び更新内容は「詳細を見る」よりご確認いただけます。',
             news_more: '▶詳細を見る',
 
             // 注目のコンテンツ
@@ -88,12 +85,12 @@ const ja: Translation = {
                     alt: 'ラヴィエンテ',
                     text: '｢ラヴィエンテ 猛狂期｣に<br />挑みたい！',
                 },
-                /* tenrou: {
+                /*tenrou: {
                     maindir: '',
                     subdir: '',
                     alt: '天廊遠征録',
                     text: '天穿つ謎の巨塔を調査せよ！<br />｢天廊遠征録｣の詳細はこちら',
-                }, */
+                },*/
                 festival: {
                     maindir: '',
                     subdir: '',

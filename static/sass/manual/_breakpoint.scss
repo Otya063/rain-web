@@ -1,5 +1,5 @@
 @charset "UTF-8";
-@use "../global/" as *;
+@use '../global/' as *;
 
 /*=========================================================
 　　　　　以下PC表示
@@ -19,7 +19,7 @@
         // ヘッダー帯下部装飾
         &::after {
             display: block;
-            content: "";
+            content: '';
             position: absolute;
             bottom: 0;
             width: 100%;
@@ -79,7 +79,7 @@
                         &.langArrow_open {
                             p {
                                 &::after {
-                                    content: "";
+                                    content: '';
                                     position: absolute;
                                     background: url(#{$path_img}/common/lang_arrow.webp) no-repeat;
                                     background-size: 100% 100%;
@@ -107,7 +107,7 @@
 
                             // グローバルマーク
                             &::before {
-                                content: "";
+                                content: '';
                                 position: absolute;
                                 background: url(#{$path_img}/common/global.webp) no-repeat;
                                 background-size: 100% 100%;
@@ -120,7 +120,7 @@
 
                             // 矢印
                             &::after {
-                                content: "";
+                                content: '';
                                 position: absolute;
                                 background: url(#{$path_img}/common/lang_arrow.webp) no-repeat;
                                 background-size: 100% 100%;
@@ -213,7 +213,7 @@
                                     // 言語名選択時下線
                                     &::before {
                                         background: #ff701e;
-                                        content: "";
+                                        content: '';
                                         width: 100%;
                                         height: 2px;
                                         position: absolute;
@@ -246,8 +246,7 @@
         position: relative;
         width: 100%;
         height: 33.6vw;
-        background: url(#{$path_img}/common/bg_ribbon.webp) -14vw 32.3vw no-repeat,
-            url(#{$path_img}/common/bg.webp) center top repeat-y;
+        background: url(#{$path_img}/common/bg_ribbon.webp) -14vw 32.3vw no-repeat, url(#{$path_img}/common/bg.webp) center top repeat-y;
         background-size: auto 1.3vw, 100%;
         z-index: -2;
 
@@ -255,7 +254,7 @@
         &::before {
             display: block;
             position: absolute;
-            content: "";
+            content: '';
             background: url(#{$path_img}/common/rainserver_logo.webp) center center no-repeat;
             background-size: 100%;
             width: 22%;
@@ -271,7 +270,7 @@
             @include right_left;
             top: auto;
             bottom: 3%;
-            content: "";
+            content: '';
             background: url(#{$path_img}/common/manual_title.webp) no-repeat;
             background-size: 100%;
             width: 80%;
@@ -313,7 +312,7 @@
 
         // サイドメニュー上部装飾
         &::before {
-            content: "";
+            content: '';
             display: block;
             width: 100%;
             height: 4px;
@@ -322,7 +321,7 @@
 
         // サイドメニュー下部装飾
         &::after {
-            content: "";
+            content: '';
             display: block;
             width: 100%;
             height: 4px;
@@ -423,28 +422,22 @@
                             // サブカテゴリーホバー時
                             &:hover {
                                 background: rgba(77, 77, 77, 0.3);
-                                text-shadow: 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke,
-                                    10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke,
-                                    -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke,
-                                    0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke,
-                                    0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke,
-                                    0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke;
+                                text-shadow: 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke,
+                                    -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke,
+                                    0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke;
                             }
 
                             // サブカテゴリーページ表示時
                             &.tab_active {
                                 position: relative;
                                 background: rgba(77, 77, 77, 0.3);
-                                text-shadow: 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke,
-                                    10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke,
-                                    -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke,
-                                    0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke,
-                                    0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke,
-                                    0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke;
+                                text-shadow: 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke,
+                                    -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke,
+                                    0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke;
 
                                 // 肉球アイコン
                                 &::before {
-                                    content: "";
+                                    content: '';
                                     position: absolute;
                                     background: url(#{$path_img}/common/icon_paw.webp) center left no-repeat;
                                     top: 14%;
@@ -509,7 +502,7 @@
                         // 開閉マーク縦線
                         &::before {
                             position: absolute;
-                            content: "";
+                            content: '';
                             display: block;
                             top: 0;
                             right: 0;
@@ -525,7 +518,7 @@
                         // 開閉マーク横線
                         &::after {
                             position: absolute;
-                            content: "";
+                            content: '';
                             display: block;
                             top: 0;
                             right: 0;
@@ -582,7 +575,7 @@
 
         // サブタイトル上部装飾
         &::before {
-            content: "";
+            content: '';
             @include right_left;
             top: -90%;
             width: 90%;
@@ -595,7 +588,7 @@
 
         // サブタイトル下部装飾
         &::after {
-            content: "";
+            content: '';
             @include right_left;
             top: auto;
             bottom: -97%;
@@ -736,7 +729,7 @@
         opacity: 0.7;
 
         &::before {
-            content: "";
+            content: '';
             @include flex_center;
             top: -90%;
             width: 46%;
@@ -768,8 +761,7 @@
 
     // 更新履歴セクション全体
     .news {
-        background: url(#{$path_img}/common/frame_upper.webp) center top no-repeat,
-            url(#{$path_img}/common/frame_lower.webp) center bottom no-repeat;
+        background: url(#{$path_img}/common/frame_upper.webp) center top no-repeat, url(#{$path_img}/common/frame_lower.webp) center bottom no-repeat;
         background-size: 100% 20%;
         padding: 0 3.5% 7%;
 
@@ -976,7 +968,7 @@
                 &::before {
                     display: block;
                     @include up_down;
-                    content: "";
+                    content: '';
                     left: 15%;
                     width: 40px;
                     aspect-ratio: 1 / 1;
@@ -987,7 +979,7 @@
                 &::after {
                     @include up_down;
                     display: block;
-                    content: "";
+                    content: '';
                     background: url(#{$path_img}/common/extlink/extlink_arrow.webp) center no-repeat;
                     background-size: contain;
                     width: 15%;
@@ -1130,7 +1122,7 @@
 
                         // 画像ーテキスト間の仕切り
                         .footer_list_img::after {
-                            content: "";
+                            content: '';
                             width: 2px;
                             height: 102%;
                             background-color: #fff;
@@ -1151,7 +1143,7 @@
                             @include up_down;
                             left: auto;
                             right: 3%;
-                            content: "";
+                            content: '';
                             background: url(#{$path_img}/common/footer/footer_list_items_arrow.webp) center no-repeat;
                             background-size: cover;
                             width: 35px;
@@ -1193,7 +1185,7 @@
         // ヘッダー帯下部装飾
         &::after {
             display: block;
-            content: "";
+            content: '';
             position: absolute;
             bottom: 0;
             width: 100%;
@@ -1258,7 +1250,7 @@
         &::before {
             display: block;
             position: absolute;
-            content: "";
+            content: '';
             background: url(#{$path_img}/common/rainserver_logo.webp) center center no-repeat;
             background-size: 100%;
             width: 35vw;
@@ -1273,7 +1265,7 @@
             @include right_left;
             top: auto;
             bottom: 3%;
-            content: "";
+            content: '';
             background: url(#{$path_img}/common/manual_title.webp) no-repeat;
             background-size: 100%;
             width: 105%;
@@ -1298,7 +1290,7 @@
 
         &::before {
             display: block;
-            content: "";
+            content: '';
             position: fixed;
             background: url(#{$path_img}/common/body_bg.webp) center center repeat-y;
             background-size: 100%;
@@ -1427,7 +1419,7 @@
 
         // サブタイトル上部装飾
         &::before {
-            content: "";
+            content: '';
             @include right_left;
             top: -4.5vw;
             width: 90%;
@@ -1440,7 +1432,7 @@
 
         // サブタイトル下部装飾
         &::after {
-            content: "";
+            content: '';
             @include right_left;
             top: auto;
             bottom: -5vw;
@@ -1581,7 +1573,7 @@
         z-index: 10;
 
         &::before {
-            content: "";
+            content: '';
             @include flex_center;
             top: -90%;
             width: 30px;
@@ -1608,8 +1600,7 @@
 
     // 更新履歴セクション全体
     .news {
-        background: url(#{$path_img}/common/frame_upper.webp) center top no-repeat,
-            url(#{$path_img}/common/frame_lower.webp) center bottom no-repeat;
+        background: url(#{$path_img}/common/frame_upper.webp) center top no-repeat, url(#{$path_img}/common/frame_lower.webp) center bottom no-repeat;
         background-size: 100% 20%;
         padding: 0 3.5% 10%;
         margin: 5% 3% 0;
@@ -1817,7 +1808,7 @@
                 &::before {
                     display: block;
                     @include up_down;
-                    content: "";
+                    content: '';
                     left: 15%;
                     width: 40px;
                     aspect-ratio: 1 / 1;
@@ -1828,7 +1819,7 @@
                 &::after {
                     @include up_down;
                     display: block;
-                    content: "";
+                    content: '';
                     background: url(#{$path_img}/common/extlink/extlink_arrow.webp) center no-repeat;
                     background-size: contain;
                     width: 15%;
@@ -1971,7 +1962,7 @@
 
                         // 画像ーテキスト間の仕切り
                         .footer_list_img::after {
-                            content: "";
+                            content: '';
                             width: 2px;
                             height: 102%;
                             background-color: #fff;
@@ -1992,7 +1983,7 @@
                             @include up_down;
                             left: auto;
                             right: 3%;
-                            content: "";
+                            content: '';
                             background: url(#{$path_img}/common/footer/footer_list_items_arrow.webp) center no-repeat;
                             background-size: cover;
                             width: 35px;

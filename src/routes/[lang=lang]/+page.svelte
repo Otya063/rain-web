@@ -1,8 +1,8 @@
 <script lang="ts">
-    import Menu from "$lib/common/Menu.svelte";
-    import Home from "$lib/articles/Home.svelte";
-    import LL from "$i18n/i18n-svelte";
-    import type { PageData } from "./$types";
+    import Menu from '$lib/common/Menu.svelte';
+    import Home from '$lib/articles/Home.svelte';
+    import LL from '$i18n/i18n-svelte';
+    import type { PageData } from './$types';
 
     // random select for top images (1 ≦ rad ≦ 4)
     export let data: PageData;
@@ -10,7 +10,7 @@
 </script>
 
 <svelte:head>
-    <title>{$LL.articles["home"].head_title()}</title>
+    <title>{$LL.articles['home'].head_title()}</title>
 </svelte:head>
 
 <div class="top_images">

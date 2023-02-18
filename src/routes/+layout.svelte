@@ -1,20 +1,20 @@
 <script lang="ts">
-    import type { LayoutData } from "./$types";
-    import { setLocale } from "$i18n/i18n-svelte";
-    import LL from "$i18n/i18n-svelte";
-    import Header from "$lib/common/Header.svelte";
-    import Alternate from "$lib/common/Alternate.svelte";
+    import type { LayoutData } from './$types';
+    import { setLocale } from '$i18n/i18n-svelte';
+    import LL from '$i18n/i18n-svelte';
+    import Header from '$lib/common/Header.svelte';
+    import Alternate from '$lib/common/Alternate.svelte';
     //import BottomNav from '$lib/common/BottomNav.svelte';
-    //import Footer from '$lib/common/Footer.svelte';
-    import "$scss/style.scss";
+    import Footer from '$lib/common/Footer.svelte';
+    import '$scss/style.scss';
 
     export let data: LayoutData;
     setLocale(data.locale);
 </script>
 
 <svelte:head>
-    <meta name="description" content={$LL.articles["description"]()} />
-    <meta name="keywords" content={$LL.articles["keywords"]()} />
+    <meta name="description" content={$LL.articles['description']()} />
+    <meta name="keywords" content={$LL.articles['keywords']()} />
     <!-- favicon -->
     <link rel="icon" type="image/png" href="/img/common/favicon.ico" />
     <!-- mobile -->
@@ -26,7 +26,7 @@
     <!-- font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-    {#if data.locale === "ja"}
+    {#if data.locale === 'ja'}
         <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;500;700&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;500;700&display=swap" />
     {:else}
@@ -40,6 +40,7 @@
     <Header />
 </header>
 
+<!-- menu + article = page.svelte -->
 <slot />
 
 <!-- <div on:click={scrollTop} class="pagetop" /> -->
@@ -49,5 +50,6 @@
 </nav>
 
 <footer>
-    <!-- <Footer /> -->
+    <!-- footer -->
+    <Footer />
 </footer>
