@@ -17,7 +17,9 @@
         <ul>
             <button on:click={toggleLangSel} class="header_language_selector pointer">
                 <p>
-                    <span class="current_language">{$LL.header['now_lang']()}</span>
+                    <span class="current_language">
+                        {$LL.header['now_lang']()}
+                    </span>
                 </p>
             </button>
             <li class="lang_sel_judge">

@@ -12,7 +12,6 @@ const config = {
     alias: {
       $lib: 'src/lib',
       $i18n: 'src/i18n',
-      $lang: 'src/lang',
       $ts: 'static/js',
       $img: 'static/img',
       $scss: 'static/sass',

@@ -133,6 +133,26 @@ const ja: Translation = {
             },
         },
     },
+
+    // フッター
+    footer: {
+        rain_officialsite: {
+            title: 'Rainサーバー公式サイト',
+            href: '',
+            alt: '公式サイト',
+        },
+        rain_discord: {
+            title: 'Rainサーバー公式Discord',
+            href: 'https://discord.gg/TcpkpUpeGw',
+            alt: '公式ディスコ',
+        },
+        pewpewdojo_server: {
+            title: 'PewPewDojo公式Discord<br>【パートナーシップ】',
+            href: 'https://discord.gg/Wpc7Cus9rb',
+            alt: 'pewpewdojo',
+        },
+    },
+    disclaimer: '※Rainサーバーは、株式会社カプコンまたはその子会社とは一切関係ありません。当プロジェクトは多数のボランティアによる協力の下で成り立っており、いかなる収益も発生しません。',
 };
 
 export default ja;

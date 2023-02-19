@@ -304,6 +304,51 @@ type RootTranslation = {
 			}
 		}
 	}
+	footer: {
+		rain_officialsite: {
+			/**
+			 * R​a​i​n​ ​S​e​r​v​e​r​ ​O​f​f​i​c​i​a​l​ ​S​i​t​e
+			 */
+			title: string
+			href: string
+			/**
+			 * o​f​f​i​c​i​a​l​-​s​i​t​e
+			 */
+			alt: string
+		}
+		rain_discord: {
+			/**
+			 * R​a​i​n​ ​S​e​r​v​e​r​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d
+			 */
+			title: string
+			/**
+			 * h​t​t​p​s​:​/​/​d​i​s​c​o​r​d​.​g​g​/​T​c​p​k​p​U​p​e​G​w
+			 */
+			href: string
+			/**
+			 * o​f​f​i​c​i​a​l​-​d​i​s​c​o​r​d
+			 */
+			alt: string
+		}
+		pewpewdojo_server: {
+			/**
+			 * P​e​w​P​e​w​D​o​j​o​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d​<​b​r​>​[​C​o​n​t​r​i​b​u​t​o​r​s​]
+			 */
+			title: string
+			/**
+			 * h​t​t​p​s​:​/​/​d​i​s​c​o​r​d​.​g​g​/​W​p​c​7​C​u​s​9​r​b
+			 */
+			href: string
+			/**
+			 * p​e​w​p​e​w​d​o​j​o
+			 */
+			alt: string
+		}
+	}
+	/**
+	 * *​R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​T​h​i​s​ ​p​r​o​j​e​c​t​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​p​r​o​j​e​c​t​.
+	 */
+	disclaimer: string
 }
 
 export type TranslationFunctions = {
@@ -597,6 +642,51 @@ export type TranslationFunctions = {
 			}
 		}
 	}
+	footer: {
+		rain_officialsite: {
+			/**
+			 * Rain Server Official Site
+			 */
+			title: () => LocalizedString
+			href: () => LocalizedString
+			/**
+			 * official-site
+			 */
+			alt: () => LocalizedString
+		}
+		rain_discord: {
+			/**
+			 * Rain Server Official Discord
+			 */
+			title: () => LocalizedString
+			/**
+			 * https://discord.gg/TcpkpUpeGw
+			 */
+			href: () => LocalizedString
+			/**
+			 * official-discord
+			 */
+			alt: () => LocalizedString
+		}
+		pewpewdojo_server: {
+			/**
+			 * PewPewDojo Official Discord<br>[Contributors]
+			 */
+			title: () => LocalizedString
+			/**
+			 * https://discord.gg/Wpc7Cus9rb
+			 */
+			href: () => LocalizedString
+			/**
+			 * pewpewdojo
+			 */
+			alt: () => LocalizedString
+		}
+	}
+	/**
+	 * *Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.
+	 */
+	disclaimer: () => LocalizedString
 }
 
 export type Formatters = {}

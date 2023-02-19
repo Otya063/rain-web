@@ -4,7 +4,6 @@
     import LL from '$i18n/i18n-svelte';
     import Header from '$lib/common/Header.svelte';
     import Alternate from '$lib/common/Alternate.svelte';
-    //import BottomNav from '$lib/common/BottomNav.svelte';
     import Footer from '$lib/common/Footer.svelte';
     import '$scss/style.scss';
 
@@ -44,10 +43,6 @@
 <slot />
 
 <!-- <div on:click={scrollTop} class="pagetop" /> -->
-
-<nav class="bottom_navigations">
-    <!-- <BottomNav /> -->
-</nav>
 
 <footer>
     <!-- footer -->

@@ -133,6 +133,27 @@ const en: BaseTranslation = {
             },
         },
     },
+
+    // フッター
+    footer: {
+        rain_officialsite: {
+            title: 'Rain Server Official Site',
+            href: '',
+            alt: 'official-site',
+        },
+        rain_discord: {
+            title: 'Rain Server Official Discord',
+            href: 'https://discord.gg/TcpkpUpeGw',
+            alt: 'official-discord',
+        },
+        pewpewdojo_server: {
+            title: 'PewPewDojo Official Discord<br>[Contributors]',
+            href: 'https://discord.gg/Wpc7Cus9rb',
+            alt: 'pewpewdojo',
+        },
+    },
+    disclaimer:
+        '*Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.',
 };
 
 export default en;

@@ -1,5 +1,6 @@
 <script lang="ts">
     import Menu from '$lib/common/Menu.svelte';
+    //import BottomNav from '$lib/articles/BottomNav.svelte';
 
     export let data;
     const { article } = data;
@@ -23,3 +24,7 @@
         </article>
     </main>
 </div>
+
+<nav class="bottom_navigations">
+    <!-- <BottomNav /> -->
+</nav>
