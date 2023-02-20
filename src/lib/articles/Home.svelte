@@ -2,11 +2,8 @@
     import { locale } from '$i18n/i18n-svelte';
     import { loadArticle } from '$ts/main';
     import LL from '$i18n/i18n-svelte';
+    import { scrollTop } from 'svelte-scrolling';
 </script>
-
-<p>
-    now_lang is "{$locale}"
-</p>
 
 <h1>{$LL.articles['home'].title()}</h1>
 
@@ -15,14 +12,18 @@
     <div class="news_content">
         <ul class="content_list">
             <li class="news_date">
-                <span>{$LL.articles['home'].news_date()}</span>
-                <span>{$LL.articles['home'].news_ver()}</span>
+                <span>
+                    {$LL.articles['home'].news_date()}
+                </span>
             </li>
             <li class="news_text">
                 {@html $LL.articles['home'].news_text()}
             </li>
         </ul>
-        <button class="news_more" on:click={() => loadArticle($locale)}>{$LL.articles['home'].news_more()}</button>
+        <button class="news_more" on:click={() => loadArticle($locale)}>
+            <span>&#9650;</span>
+            {$LL.articles['home'].news_more()}
+        </button>
     </div>
 </section>
 
@@ -66,3 +67,5 @@
         {/each}
     </ul>
 </section>
+
+<button on:click={() => scrollTop()} class="scroll-to-top" />

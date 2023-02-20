@@ -60,9 +60,8 @@ const en: BaseTranslation = {
             title: 'Home',
             news_title: 'Update History',
             news_date: 'January 1, 2023',
-            news_ver: 'Ver.1.0',
             news_text: 'Online Manual is available now!<br>Detailed differences from the former official online manual and updates can be found from "More."',
-            news_more: '▶More',
+            news_more: 'More',
 
             // 注目のコンテンツ
             featured_title: 'Featured Contents',

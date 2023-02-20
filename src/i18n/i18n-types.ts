@@ -155,15 +155,11 @@ type RootTranslation = {
 			 */
 			news_date: string
 			/**
-			 * V​e​r​.​1​.​0
-			 */
-			news_ver: string
-			/**
 			 * O​n​l​i​n​e​ ​M​a​n​u​a​l​ ​i​s​ ​a​v​a​i​l​a​b​l​e​ ​n​o​w​!​<​b​r​>​D​e​t​a​i​l​e​d​ ​d​i​f​f​e​r​e​n​c​e​s​ ​f​r​o​m​ ​t​h​e​ ​f​o​r​m​e​r​ ​o​f​f​i​c​i​a​l​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​ ​a​n​d​ ​u​p​d​a​t​e​s​ ​c​a​n​ ​b​e​ ​f​o​u​n​d​ ​f​r​o​m​ ​"​M​o​r​e​.​"
 			 */
 			news_text: string
 			/**
-			 * ▶​M​o​r​e
+			 * M​o​r​e
 			 */
 			news_more: string
 			/**
@@ -493,15 +489,11 @@ export type TranslationFunctions = {
 			 */
 			news_date: () => LocalizedString
 			/**
-			 * Ver.1.0
-			 */
-			news_ver: () => LocalizedString
-			/**
 			 * Online Manual is available now!<br>Detailed differences from the former official online manual and updates can be found from "More."
 			 */
 			news_text: () => LocalizedString
 			/**
-			 * ▶More
+			 * More
 			 */
 			news_more: () => LocalizedString
 			/**

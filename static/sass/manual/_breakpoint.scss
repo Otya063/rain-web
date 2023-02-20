@@ -713,7 +713,6 @@
 
     // 上に戻る
     .pagetop {
-        cursor: pointer;
         position: fixed;
         right: 30px;
         bottom: 30px;
@@ -834,6 +833,11 @@
                 font-weight: 600;
                 font-size: 1.8rem;
                 transition: color 0.3s ease-in-out;
+
+                span {
+                    display: inline-block;
+                    transform: rotate(90deg);
+                }
 
                 // 詳細ホバー時
                 &:hover {
@@ -1241,10 +1245,9 @@
         position: relative;
         width: 100%;
         height: 70vw;
-        //background: url(#{$path_img}/common/bg_ribbon.webp) center 90vw repeat-x;
-        //background-size: auto 7px;
         z-index: -2;
         overflow: hidden;
+        padding-bottom: 8px;
 
         // RainServerロゴ
         &::before {
@@ -1284,10 +1287,6 @@
 
     // サイドメニュー、メインコンテンツ位置調整及び背景画像設定
     .bg {
-        background: url(#{$path_img}/common/bg_ribbon.webp) center top repeat-x;
-        background-size: auto 8px;
-        padding-top: 8px;
-
         &::before {
             display: block;
             content: '';
@@ -1403,14 +1402,14 @@
         margin: 2%;
         color: black;
         font-weight: 600;
-        font-size: 2.8rem;
+        font-size: 2.5rem;
         text-align: center;
     }
 
     // サブタイトルh2
     h2 {
         position: relative;
-        font-size: 2.3rem;
+        font-size: 2rem;
         font-weight: 600;
         text-align: center;
         color: #4d4d4f;
@@ -1457,7 +1456,7 @@
     // 記事内セクションタグ
     section {
         position: relative;
-        margin: 15% 3% 0;
+        margin-top: 15%;
     }
 
     // 画像とpタグセット時
@@ -1555,38 +1554,8 @@
     }
 
     // 上に戻る
-    .pagetop {
-        cursor: pointer;
-        position: fixed;
-        right: 10px;
-        bottom: 60px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 60px;
-        aspect-ratio: 1 / 1;
-        border-radius: 50%;
-        transition: 0.5s;
-        color: #00a6c4;
-        background: #fff;
-        opacity: 0.7;
-        z-index: 10;
-
-        &::before {
-            content: '';
-            @include flex_center;
-            top: -90%;
-            width: 30px;
-            aspect-ratio: 1 / 1;
-            background: url(#{$path_img}/common/backtotop_arrow.webp) center top no-repeat;
-            background-size: 100%;
-            transition: 0.5s;
-            opacity: 0.7;
-
-            &:hover {
-                opacity: 1;
-            }
-        }
+    .scroll-to-top {
+        display: none;
 
         // ホバー時明るく
         &:hover {
@@ -1608,7 +1577,7 @@
         // 更新履歴タイトル
         .news_title {
             padding: 4% 0 3% 0;
-            font-size: 2.3rem;
+            font-size: 2rem;
             font-weight: 600;
             text-align: center;
             color: #00cc66;
@@ -1675,6 +1644,11 @@
                 font-size: 1.5rem;
                 transition: color 0.3s ease-in-out;
 
+                span {
+                    display: inline-block;
+                    transform: rotate(90deg);
+                }
+
                 // 詳細ホバー時
                 &:hover {
                     color: #70ebad;
@@ -1688,38 +1662,60 @@
 
     // 注目リスト上部余白
     .featured_list {
-        @include flex_center;
-        align-items: flex-start;
-        flex-wrap: wrap;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
         // リスト内アイテム個別
         li {
             position: relative;
-            width: calc(50% - 30px);
+            width: calc(100% - 20px);
             height: 40%;
-            margin: 0 15px 6%;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #fffef9 5%, #fffef9 95%, rgba(0, 0, 0, 0) 100%);
+            margin: 0 10px 3%;
+            //margin: 0 15px 6%;
 
-            &:nth-child(n + 5) {
-                margin-bottom: 0;
+            &::before {
+                display: block;
+                content: '';
+                position: absolute;
+                top: 0;
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, black 50%, rgba(0, 0, 0, 0) 100%);
+                z-index: 1;
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                display: block;
+                bottom: 0;
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, black 50%, rgba(0, 0, 0, 0) 100%);
             }
 
             button {
                 // アイテム位置調整
                 .featured_items {
-                    @include flex_center;
-                    flex-direction: column;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 3% 7% 3% 0;
 
                     // アイテム画像
                     .featured_img {
-                        width: 90%;
-                        margin: 0 0 10px;
+                        width: 50%;
+                        margin: 0 3% 0 3%;
+                        max-width: 200px;
                         border: 2px solid #adf;
                         box-sizing: border-box;
                         line-height: 0;
                         transition: border 0.3s;
                         overflow: hidden;
                         box-shadow: 0 0 10px rgb(0 0 0 / 50%);
-                        transition: all 0.3s;
+                        transition: all 0.2s;
 
                         // 初めに
                         &.first {
@@ -1766,19 +1762,12 @@
 
                     // アイテムテキスト
                     .featured_text {
+                        position: relative;
                         font-weight: 600;
-                        font-size: 1.9rem;
+                        font-size: 1.4rem;
                         text-align: center;
-                    }
-                }
-
-                // ホバー時画像拡大
-                &:hover {
-                    .featured_items {
-                        .featured_img {
-                            background-size: 120%;
-                            border: 2px solid rgb(146, 255, 255);
-                        }
+                        line-height: 120%;
+                        width: 60%;
                     }
                 }
             }

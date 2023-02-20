@@ -42,8 +42,6 @@
 <!-- menu + article = page.svelte -->
 <slot />
 
-<!-- <div on:click={scrollTop} class="pagetop" /> -->
-
 <footer>
     <!-- footer -->
     <Footer />

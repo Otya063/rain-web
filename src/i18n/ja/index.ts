@@ -60,9 +60,8 @@ const ja: Translation = {
             title: 'トップページ',
             news_title: '更新履歴',
             news_date: '2023年1月1日',
-            news_ver: 'Ver.1.0',
             news_text: 'オンラインマニュアルを開設いたしました。<br>旧公式オンラインマニュアルとの詳しい相違点及び更新内容は「詳細を見る」よりご確認いただけます。',
-            news_more: '▶詳細を見る',
+            news_more: '詳細を見る',
 
             // 注目のコンテンツ
             featured_title: '注目のコンテンツ',
