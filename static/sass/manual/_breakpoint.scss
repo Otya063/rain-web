@@ -1668,6 +1668,8 @@
 
         // リスト内アイテム個別
         li {
+            display: flex;
+            flex-direction: column;
             position: relative;
             width: calc(100% - 20px);
             height: 40%;
@@ -1712,10 +1714,12 @@
                         border: 2px solid #adf;
                         box-sizing: border-box;
                         line-height: 0;
-                        transition: border 0.3s;
                         overflow: hidden;
                         box-shadow: 0 0 10px rgb(0 0 0 / 50%);
-                        transition: all 0.2s;
+
+                        @include landscape {
+                            width: 100%;
+                        }
 
                         // 初めに
                         &.first {
@@ -1768,6 +1772,10 @@
                         text-align: center;
                         line-height: 120%;
                         width: 60%;
+
+                        @include landscape {
+                            font-size: 1.6rem;
+                        }
                     }
                 }
             }
@@ -1779,12 +1787,14 @@
 
     // 外部リスト
     .extlink_list {
-        @include flex_center;
+        display: flex;
+        flex-wrap: wrap;
         flex-direction: column;
+        align-content: center;
 
         // 外部リスト内アイテム個別
         .extlink_items {
-            width: 80%;
+            width: 90%;
             margin: 0 4% 5% 4%;
 
             // アイテムリンク
@@ -1799,7 +1809,7 @@
                     @include up_down;
                     content: '';
                     left: 15%;
-                    width: 40px;
+                    width: 30px;
                     aspect-ratio: 1 / 1;
                     z-index: 5;
                 }
@@ -1863,7 +1873,7 @@
                     left: 0;
                     right: 0;
                     bottom: 0;
-                    padding: 0 15% 0 27%;
+                    padding: 0 15% 0 29%;
                     background-size: 95% 96%;
 
                     // アイテム内部テキスト調整
@@ -1881,7 +1891,7 @@
                             font-weight: 600;
                             font-family: $font_title_ja;
                             color: #fff;
-                            font-size: 3rem;
+                            font-size: 2rem;
                             text-shadow: 0.156vw 0.156vw 0.156vw rgb(0 0 0 / 50%);
                             margin: 0;
                         }

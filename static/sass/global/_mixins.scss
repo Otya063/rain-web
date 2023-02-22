@@ -3,7 +3,7 @@
 /* レスポンシブ対応
 ====================================================*/
 // PC表示
-@mixin pc() {
+@mixin pc {
     @media (min-width: 900px) {
         @content;
     }
@@ -14,6 +14,13 @@
     @media (max-width: 899px) {
         @content;
     }
+}
+
+// モバイル横画面表示
+@mixin landscape {
+    @media (orientation: landscape){
+        @content;
+      }
 }
 
 /* flexでの上下左右中央揃え
