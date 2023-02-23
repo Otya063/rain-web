@@ -25,6 +25,6 @@
     </main>
 </div>
 
-<nav class="bottom_navigations">
-    <!-- <BottomNav /> -->
-</nav>
+<!-- <nav class="bottom_navigations">
+</nav> -->
+<!-- <BottomNav /> -->

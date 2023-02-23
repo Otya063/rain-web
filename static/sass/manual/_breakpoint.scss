@@ -36,10 +36,22 @@
 
             // プラットフォーム
             .header_platform {
-                @include flex_center;
+                position: relative;
                 width: 70px;
-                aspect-ratio: 1 / 1;
-                padding-left: 1%;
+                height: 70px;
+                cursor: auto;
+
+                &::before {
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 10%;
+                    content: '';
+                    width: 70px;
+                    aspect-ratio: 1 / 1;
+                    background: url(#{$path_img}/common/platform_pc.webp) no-repeat center center;
+                    background-size: auto 75%;
+                }
             }
 
             // ヘッダーロゴ
@@ -712,7 +724,7 @@
     }
 
     // 上に戻る
-    .pagetop {
+    .scroll_to_top {
         position: fixed;
         right: 30px;
         bottom: 30px;
@@ -1119,7 +1131,7 @@
                         .footer_list_img {
                             @include flex_center;
                             position: relative;
-                            width: 19%;
+                            width: 91px;
                             height: 100%;
                             //background: rgba(255, 255, 255, 0.9);
                         }
@@ -1206,14 +1218,31 @@
 
             // プラットフォーム
             .header_platform {
-                @include flex_center;
-                width: 60px;
-                height: 40px;
-                padding-left: 1%;
+                position: relative;
+                width: 70px;
+                height: 70px;
+                cursor: auto;
 
-                img {
-                    width: 30px;
+                &::before {
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 10%;
+                    content: '';
+                    width: 43px;
                     aspect-ratio: 3 / 5;
+                    background: url(#{$path_img}/common/platform_sp_portrait.webp) no-repeat center center;
+                    background-size: auto 75%;
+
+                    @include landscape {
+                        top: 10%;
+                        left: 5%;
+                        content: '';
+                        width: 90px;
+                        aspect-ratio: 1.7 / 1;
+                        background: url(#{$path_img}/common/platform_sp_landscape.webp) no-repeat center center;
+                        background-size: auto 75%;
+                    }
                 }
             }
 
@@ -1223,10 +1252,16 @@
                 @include pos_center;
 
                 .header_logo_button {
-                    width: 100px;
-                    height: 60px;
+                    width: 110px;
+                    height: 70px;
                     background: url(#{$path_img}/common/rain_textlogo.webp) center center no-repeat;
                     background-size: 100%;
+
+                    @include landscape {
+                        width: 120px;
+                        height: 70px;
+                        background-position: center 6px;
+                    }
                 }
             }
 
@@ -1346,7 +1381,7 @@
     .side_menu {
         position: fixed;
         z-index: 10;
-        bottom: -130%;
+        bottom: -200%;
         left: 0;
         width: 100%;
         height: 100vh;
@@ -1404,6 +1439,11 @@
         font-weight: 600;
         font-size: 2.5rem;
         text-align: center;
+
+        @include landscape {
+            margin: 2.5%;
+            font-size: 3rem;
+        }
     }
 
     // サブタイトルh2
@@ -1415,6 +1455,10 @@
         color: #4d4d4f;
         text-shadow: 1px 1px 2px rgb(0 0 0 / 50%);
         margin-bottom: 10%;
+
+        @include landscape {
+            font-size: 2.5rem;
+        }
 
         // サブタイトル上部装飾
         &::before {
@@ -1554,7 +1598,7 @@
     }
 
     // 上に戻る
-    .scroll-to-top {
+    .scroll_to_top {
         display: none;
 
         // ホバー時明るく
@@ -1584,6 +1628,10 @@
             text-shadow: none;
             margin: 0;
 
+            @include landscape {
+                font-size: 2.5rem;
+            }
+
             &::before,
             &::after {
                 background: none;
@@ -1599,29 +1647,14 @@
                 .news_date {
                     @include flex_center;
                     border-bottom: solid 2px #000;
-                    align-items: flex-start;
 
+                    // 更新日
                     span {
-                        // 更新日
-                        &:nth-child(1) {
-                            font-size: 1.8rem;
-                            font-weight: 600;
-                        }
+                        font-size: 1.8rem;
+                        font-weight: 600;
 
-                        // バージョン
-                        &:nth-child(2) {
-                            font-family: $font_title_ja;
-                            margin-left: 1%;
-                            padding: 1px 7px;
-                            font-size: 0.9rem;
-                            font-weight: 600;
-                            background: rgba(245, 245, 220, 0.2);
-                            border: solid 2px #000;
-                            border-radius: 50%;
-
-                            &:lang(en) {
-                                font-size: 1.4rem;
-                            }
+                        @include landscape {
+                            font-size: 2rem;
                         }
                     }
                 }
@@ -1631,6 +1664,10 @@
                     font-size: 1.5rem;
                     padding: 2% 1% 0;
                     line-height: 1.6;
+
+                    @include landscape {
+                        font-size: 1.6rem;
+                    }
                 }
             }
 
@@ -1641,8 +1678,13 @@
                 bottom: -8vw;
                 color: #00cc66;
                 font-weight: 600;
-                font-size: 1.5rem;
+                font-size: 1.3rem;
                 transition: color 0.3s ease-in-out;
+
+                @include landscape {
+                    bottom: -8.5vw;
+                    font-size: 1.5rem;
+                }
 
                 span {
                     display: inline-block;
@@ -1675,7 +1717,10 @@
             height: 40%;
             background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #fffef9 5%, #fffef9 95%, rgba(0, 0, 0, 0) 100%);
             margin: 0 10px 3%;
-            //margin: 0 15px 6%;
+
+            @include landscape {
+                width: calc(95% - 20px);
+            }
 
             &::before {
                 display: block;
@@ -1710,7 +1755,7 @@
                     .featured_img {
                         width: 50%;
                         margin: 0 3% 0 3%;
-                        max-width: 200px;
+                        max-width: 150px;
                         border: 2px solid #adf;
                         box-sizing: border-box;
                         line-height: 0;
@@ -1719,6 +1764,7 @@
 
                         @include landscape {
                             width: 100%;
+                            max-width: 180px;
                         }
 
                         // 初めに
@@ -1797,6 +1843,10 @@
             width: 90%;
             margin: 0 4% 5% 4%;
 
+            @include landscape {
+                width: 80%;
+            }
+
             // アイテムリンク
             .extlink_items_link {
                 display: block;
@@ -1809,9 +1859,13 @@
                     @include up_down;
                     content: '';
                     left: 15%;
-                    width: 30px;
+                    width: 9%;
                     aspect-ratio: 1 / 1;
                     z-index: 5;
+
+                    @include landscape {
+                        width: 7%;
+                    }
                 }
 
                 // タイトル右側矢印
@@ -1826,6 +1880,10 @@
                     left: auto;
                     right: 4%;
                     z-index: 6;
+
+                    @include landscape {
+                        width: 7%;
+                    }
                 }
 
                 // 初心者ガイド
@@ -1894,6 +1952,10 @@
                             font-size: 2rem;
                             text-shadow: 0.156vw 0.156vw 0.156vw rgb(0 0 0 / 50%);
                             margin: 0;
+
+                            @include landscape {
+                                font-size: 2.5rem;
+                            }
                         }
                     }
                 }
@@ -1929,23 +1991,21 @@
 
             // リンクリスト
             .footer_link_list {
-                @include flex_center;
-                align-items: flex-start;
+                display: flex;
+                flex-direction: column;
                 flex-wrap: wrap;
+                align-content: center;
 
                 // リスト間隔調整
                 li {
                     position: relative;
-                    width: calc(30% - 30px);
-                    height: 40%;
-                    margin: 0 20px;
+                    padding-bottom: 8%;
 
                     // リストアイテム内部調整
                     .footer_list_items {
                         display: flex;
                         align-items: center;
                         position: relative;
-                        height: 95px;
                         background-color: #000;
                         border: 2px solid #fff;
                         color: #fff;
@@ -1954,9 +2014,12 @@
                         .footer_list_img {
                             @include flex_center;
                             position: relative;
-                            width: 19%;
-                            height: 100%;
-                            //background: rgba(255, 255, 255, 0.9);
+                            width: 27%;
+                            aspect-ratio: 1 / 1;
+
+                            @include landscape {
+                                width: 18%;
+                            }
                         }
 
                         // 画像ーテキスト間の仕切り
@@ -1971,10 +2034,16 @@
 
                         // アイテムタイトル
                         .footer_list_title {
-                            font-size: 2rem;
+                            width: 200px;
+                            font-size: 1.5rem;
                             font-weight: bold;
                             color: #fff;
-                            padding: 5% 10% 5% 5%;
+                            padding-left: 5%;
+
+                            @include landscape {
+                                width: 450px;
+                                font-size: 1.7rem;
+                            }
                         }
 
                         // アイテム矢印
@@ -1994,13 +2063,17 @@
 
             // フッターテキスト領域
             .footer_text {
-                padding: 3% 0 2%;
+                padding: 3% 0 5%;
                 text-align: center;
 
                 // お断り文
                 .footer_text_disclaimer {
                     color: #fff;
-                    font-size: 1.5rem;
+                    font-size: 1.2rem;
+
+                    @include landscape {
+                        font-size: 1.3rem;
+                    }
                 }
             }
         }

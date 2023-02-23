@@ -6,10 +6,8 @@
 </script>
 
 <div class="header_inner">
-    <picture class="header_platform">
-        <source srcset="/img/common/platform_sp.webp" media="(max-width: 899px)" type="image/webp" />
-        <img src="/img/common/platform_pc.webp" alt="pc" />
-    </picture>
+    <!-- svelte-ignore a11y-label-has-associated-control -->
+    <label class="header_platform" />
     <p class="header_logo">
         <button class="header_logo_button" on:click={() => loadArticle($locale)} />
     </p>

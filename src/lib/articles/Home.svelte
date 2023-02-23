@@ -68,4 +68,4 @@
     </ul>
 </section>
 
-<button on:click={() => scrollTop()} class="scroll-to-top" />
+<button on:click={() => scrollTop()} class="scroll_to_top" />
