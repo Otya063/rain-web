@@ -1264,11 +1264,6 @@
                     }
                 }
             }
-
-            // ヘッダーメニュー(PC非表示)
-            .header_language {
-                display: none;
-            }
         }
     }
 
@@ -1348,8 +1343,6 @@
 ====================================================*/
     .bottom_navigations {
         position: fixed;
-        @include flex_center;
-        justify-content: space-around;
         left: 0;
         bottom: 0;
         width: 100%;
@@ -1369,10 +1362,33 @@
 
         ul {
             @include flex_center;
+            justify-content: space-around;
             text-align: center;
+            height: 100%;
 
-            li {
-                margin: 0 20px;
+            // ナビゲーションボタン位置調整
+            .openbtn {
+                height: 100%;
+                display: flex;
+                align-items: center;
+                padding: 0 5%;
+
+                // アイコン
+                .icon-tabler {
+                    width: 28px;
+                    height: 28px;
+                    stroke-width: 1.2;
+                    transition: all 0.4s;
+                }
+                
+                // 選択時装飾
+                &.selected {
+                    color: orange;
+
+                    .icon-tabler {
+                        color: orange;
+                    }
+                }
             }
         }
     }
@@ -1390,7 +1406,7 @@
         z-index: 11;
 
         &.open {
-            bottom: 0;
+            bottom: -14%;
 
             &.side_menu-list {
                 position: fixed;
@@ -1422,6 +1438,32 @@
                     letter-spacing: 0.1em;
                     font-weight: bold;
                 }
+            }
+        }
+    }
+
+    // 言語選択
+    .header_language {
+        position: fixed;
+        z-index: 10;
+        bottom: -200%;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: #999;
+        transition: all 0.5s;
+        z-index: 11;
+
+        &.open {
+            bottom: -14%;
+
+            &.side_menu-list {
+                position: fixed;
+                z-index: 999;
+                width: 100%;
+                height: 100vh;
+                overflow: auto;
+                -webkit-overflow-scrolling: touch;
             }
         }
     }

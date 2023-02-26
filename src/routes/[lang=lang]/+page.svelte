@@ -1,7 +1,7 @@
 <script lang="ts">
     import Menu from '$lib/common/Menu.svelte';
     import Home from '$lib/articles/Home.svelte';
-    //import BottomNav from '$lib/articles/BottomNav.svelte';
+    import BottomNav from '$lib/common/BottomNav.svelte';
     import LL from '$i18n/i18n-svelte';
     import type { PageData } from './$types';
 
@@ -34,3 +34,7 @@
         </article>
     </main>
 </div>
+
+<nav class="bottom_navigations">
+    <BottomNav />
+</nav>
