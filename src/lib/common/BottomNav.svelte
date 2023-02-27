@@ -1,18 +1,18 @@
 <script lang="ts">
-    const toggleNav = () => {
+    /* const toggleNav = () => {
         const html = document.documentElement as HTMLElement;
         const bottom_menu = document.querySelector('.side_menu') as HTMLElement;
         const btn = document.querySelector('.openbtn');
         html.classList.toggle('fixed');
         bottom_menu.classList.toggle('open');
         btn?.classList.toggle('selected');
-    };
+    }; */
 </script>
 
 <ul>
     <!-- アイコン1つ目-->
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <li class="openbtn" on:click={toggleNav}>
+    <li id="side_menu" class="btm_nav_item">
         <svg
             xmlns="http://www.w3.org/2000/svg"
             class="icon icon-tabler icon-tabler-category"
@@ -35,7 +35,8 @@
     </li>
 
     <!-- アイコン2つ目-->
-    <li class="openbtn" on:click={toggleNav}>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <li id="header_language" class="btm_nav_item">
         <svg
             xmlns="http://www.w3.org/2000/svg"
             class="icon icon-tabler icon-tabler-world"

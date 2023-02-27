@@ -23,7 +23,7 @@
 
 <div class="bg">
     <main class="main_inner">
-        <nav class="side_menu">
+        <nav class="side_menu slidable_on_mobile">
             <!-- side_menu -->
             <Menu />
         </nav>

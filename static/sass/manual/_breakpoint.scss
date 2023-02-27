@@ -1341,6 +1341,8 @@
 
     /* ボトムナビゲーション
 ====================================================*/
+
+    // 位置調整
     .bottom_navigations {
         position: fixed;
         left: 0;
@@ -1356,10 +1358,12 @@
         z-index: 30;
         padding-bottom: env(safe-area-inset-bottom);
 
+        // 下スクロールで非表示(未実装)
         &.hide {
             transform: translateY(100%);
         }
 
+        // ボトムナビゲーション本体
         ul {
             @include flex_center;
             justify-content: space-around;
@@ -1367,7 +1371,7 @@
             height: 100%;
 
             // ナビゲーションボタン位置調整
-            .openbtn {
+            .btm_nav_item {
                 height: 100%;
                 display: flex;
                 align-items: center;
@@ -1380,7 +1384,7 @@
                     stroke-width: 1.2;
                     transition: all 0.4s;
                 }
-                
+
                 // 選択時装飾
                 &.selected {
                     color: orange;
@@ -1393,50 +1397,465 @@
         }
     }
 
-    // メニュー本体
+    // メニュー本体非選択時
     .side_menu {
         position: fixed;
-        z-index: 10;
-        bottom: -200%;
-        left: 0;
+        z-index: 11;
+        top: 0;
+        left: -120%;
         width: 100%;
         height: 100vh;
-        background: #999;
-        transition: all 0.5s;
-        z-index: 11;
+        background: rgba(255, 255, 255, 0.8);
+        transition: all 0.4s;
 
+        // サイドメニュー上部装飾
+        &::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 4px;
+            background: #1ecbff;
+        }
+
+        // サイドメニュー下部装飾
+        &::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 4px;
+            background: #1ecbff;
+            margin-bottom: 40%;
+        }
+
+        // サイドメニュー本体
+        .categories {
+            // メインカテゴリー
+            .category {
+                border-top: 1px solid #b2b5cb;
+                background-color: #dcdfe4;
+
+                // 初めのメニューのみトップボーダー削除
+                &:nth-child(1) {
+                    border-top: none;
+                }
+
+                // サブカテゴリー
+                .sub_categories {
+                    padding: 0;
+                    margin: 0;
+                    height: 0;
+                    overflow: hidden;
+                    transition: 0.5s;
+                    border-top: none;
+                    background: rgba(85, 85, 85, 0.3);
+                    box-shadow: 0px 0px 8px 7px #7c7c7c inset;
+
+                    // サブカテゴリー内部装飾
+                    .sub_categories_list {
+                        @include flex_center;
+                        flex-direction: column;
+                        justify-content: space-around;
+                        border: 2px solid #b2b5cb;
+                        border-top: none;
+                        line-height: 3;
+
+                        // サブカテゴリー内部テキスト
+                        .sub_category {
+                            position: relative;
+                            font-weight: 600;
+                            font-size: 1.7rem;
+                            color: #000;
+                            cursor: pointer;
+                            transition: all 0.3s ease-in-out;
+                            line-height: 1.6;
+                            text-align: left;
+                            padding: 8% 8% 8% 28%;
+                            width: 100%;
+                            -webkit-user-select: none;
+                            -moz-user-select: none;
+                            -ms-user-select: none;
+                            user-select: none;
+
+                            // サブカテゴリーホバー時
+                            &:hover {
+                                background: rgba(77, 77, 77, 0.3);
+                                text-shadow: 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke,
+                                    -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke,
+                                    0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke;
+                            }
+
+                            // サブカテゴリーページ表示時
+                            &.tab_active {
+                                position: relative;
+                                background: rgba(77, 77, 77, 0.3);
+                                text-shadow: 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke,
+                                    -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke,
+                                    0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke;
+
+                                // 肉球アイコン
+                                &::before {
+                                    content: '';
+                                    position: absolute;
+                                    background: url(#{$path_img}/common/icon_paw.webp) center left no-repeat;
+                                    top: 14%;
+                                    left: 4%;
+                                    width: 17%;
+                                    height: 50px;
+                                    background-size: 100%;
+                                    transition-duration: 0.2s;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // カテゴリータイトル
+                .category_title {
+                    @include flex_center;
+                    position: relative;
+                    width: 100%;
+                    border: none;
+                    font-weight: 600;
+                    font-size: 2rem;
+                    padding: 20px 0 20px 30px;
+                    transition-property: background-color, color;
+                    transition-duration: 0.3s, 0.2s;
+                    transition-timing-function: ease;
+
+                    // メインカテゴリーオープン時
+                    &.open {
+                        color: #fff;
+                        background-color: #61a7f7;
+
+                        // 開閉マークオープン時
+                        .mark {
+                            background-color: #5390d4;
+
+                            // 開閉マーク縦線変化
+                            &::before {
+                                background: transparent;
+                                transform: rotate(360deg);
+                            }
+
+                            // 開閉マーク横線変化
+                            &::after {
+                                background: #adb4c2;
+                                transform: rotate(540deg);
+                            }
+                        }
+                    }
+
+                    // 開閉マーク領域
+                    .mark {
+                        display: block;
+                        width: 30px;
+                        height: 100%;
+                        background-color: #e1e6ef;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        transition: all 0.3s ease;
+
+                        // 開閉マーク縦線
+                        &::before {
+                            position: absolute;
+                            content: '';
+                            display: block;
+                            top: 0;
+                            right: 0;
+                            left: 0;
+                            bottom: 0;
+                            width: 12px;
+                            height: 2px;
+                            background: #05162e;
+                            margin: auto;
+                            transition: all 0.3s ease-in-out;
+                        }
+
+                        // 開閉マーク横線
+                        &::after {
+                            position: absolute;
+                            content: '';
+                            display: block;
+                            top: 0;
+                            right: 0;
+                            left: 0;
+                            bottom: 0;
+                            width: 12px;
+                            height: 2px;
+                            background: #05162e;
+                            margin: auto;
+                            transform: rotate(90deg);
+                            transition: all 0.3s ease-in-out;
+                        }
+                    }
+
+                    // メニューホバー時
+                    &:hover {
+                        color: #fff;
+                        background-color: #61a7f7;
+
+                        // 開閉マークホバー時
+                        .mark {
+                            background-color: #5390d4;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 選択時
         &.open {
-            bottom: -14%;
+            position: fixed;
+            width: 100vw;
+            height: 100%;
+            z-index: 11;
+            left: 0;
 
-            &.side_menu-list {
+            &.slidable_on_mobile {
                 position: fixed;
-                z-index: 999;
+                z-index: 11;
                 width: 100%;
                 height: 100vh;
                 overflow: auto;
                 -webkit-overflow-scrolling: touch;
             }
-        }
 
-        ul {
-            position: absolute;
-            z-index: 999;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            // サイドメニュー上部装飾
+            &::before {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 4px;
+                background: #1ecbff;
+            }
 
-            li {
-                list-style: none;
-                text-align: center;
+            // サイドメニュー下部装飾
+            &::after {
+                content: '';
+                display: block;
+                width: 100%;
+                height: 4px;
+                background: #1ecbff;
+                margin-bottom: 40%;
+            }
+
+            // MHFZZロゴ
+            .logo {
+                position: relative;
+                padding: 1px 0;
+                background: url(#{$path_img}/common/bg_logo.webp) no-repeat center center;
+                background-size: 100%;
+                border-right: 2px solid #1ecbff;
+                border-left: 2px solid #1ecbff;
+                border-bottom: 2px solid #1ecbff;
 
                 a {
-                    color: #333;
-                    text-decoration: none;
-                    padding: 10px;
                     display: block;
-                    text-transform: uppercase;
-                    letter-spacing: 0.1em;
-                    font-weight: bold;
+                    position: relative;
+                    width: 100%;
+                    aspect-ratio: 100 / 37;
+                    margin: 20px 0;
+                    color: #fff;
+                    font-size: 1.6rem;
+                    opacity: 1;
+                    transition: -webkit-filter 0.3s;
+                    transition: filter 0.3s;
+                    transition: filter 0.3s, -webkit-filter 0.3s;
+
+                    // 日本語ロゴ
+                    &:lang(ja) {
+                        background: url(#{$path_img}/ja/MHFZZ_logo.webp) no-repeat center top;
+                        background-size: 100%;
+                    }
+
+                    // 英語ロゴ
+                    &:lang(en) {
+                        background: url(#{$path_img}/en/MHFZZ_logo.webp) no-repeat center top;
+                        background-size: 100%;
+                    }
+
+                    &:hover {
+                        -webkit-filter: brightness(1.2);
+                        filter: brightness(1.2);
+                    }
+                }
+            }
+
+            // サイドメニュー本体
+            .categories {
+                // メインカテゴリー
+                .category {
+                    border-top: 1px solid #b2b5cb;
+                    background-color: #dcdfe4;
+
+                    // 初めのメニューのみトップボーダー削除
+                    &:nth-child(1) {
+                        border-top: none;
+                    }
+
+                    // サブカテゴリー
+                    .sub_categories {
+                        padding: 0;
+                        margin: 0;
+                        height: 0;
+                        overflow: hidden;
+                        transition: 0.5s;
+                        border-top: none;
+                        background: rgba(85, 85, 85, 0.3);
+                        box-shadow: 0px 0px 8px 7px #7c7c7c inset;
+
+                        // サブカテゴリー内部装飾
+                        .sub_categories_list {
+                            @include flex_center;
+                            flex-direction: column;
+                            justify-content: space-around;
+                            border: 2px solid #b2b5cb;
+                            border-top: none;
+                            line-height: 3;
+
+                            // サブカテゴリー内部テキスト
+                            .sub_category {
+                                position: relative;
+                                font-weight: 600;
+                                font-size: 1.7rem;
+                                color: #000;
+                                cursor: pointer;
+                                transition: all 0.3s ease-in-out;
+                                line-height: 1.6;
+                                text-align: left;
+                                padding: 8% 8% 8% 28%;
+                                width: 100%;
+                                -webkit-user-select: none;
+                                -moz-user-select: none;
+                                -ms-user-select: none;
+                                user-select: none;
+
+                                // サブカテゴリーホバー時
+                                &:hover {
+                                    background: rgba(77, 77, 77, 0.3);
+                                    text-shadow: 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke,
+                                        -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke,
+                                        0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke;
+                                }
+
+                                // サブカテゴリーページ表示時
+                                &.tab_active {
+                                    position: relative;
+                                    background: rgba(77, 77, 77, 0.3);
+                                    text-shadow: 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke,
+                                        -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke,
+                                        0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke;
+
+                                    // 肉球アイコン
+                                    &::before {
+                                        content: '';
+                                        position: absolute;
+                                        background: url(#{$path_img}/common/icon_paw.webp) center left no-repeat;
+                                        top: 14%;
+                                        left: 4%;
+                                        width: 17%;
+                                        height: 50px;
+                                        background-size: 100%;
+                                        transition-duration: 0.2s;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // カテゴリータイトル
+                    .category_title {
+                        @include flex_center;
+                        position: relative;
+                        width: 100%;
+                        border: none;
+                        font-weight: 600;
+                        font-size: 2rem;
+                        padding: 20px 0 20px 30px;
+                        transition-property: background-color, color;
+                        transition-duration: 0.3s, 0.2s;
+                        transition-timing-function: ease;
+
+                        // メインカテゴリーオープン時
+                        &.open {
+                            color: #fff;
+                            background-color: #61a7f7;
+
+                            // 開閉マークオープン時
+                            .mark {
+                                background-color: #5390d4;
+
+                                // 開閉マーク縦線変化
+                                &::before {
+                                    background: transparent;
+                                    transform: rotate(360deg);
+                                }
+
+                                // 開閉マーク横線変化
+                                &::after {
+                                    background: #adb4c2;
+                                    transform: rotate(540deg);
+                                }
+                            }
+                        }
+
+                        // 開閉マーク領域
+                        .mark {
+                            display: block;
+                            width: 30px;
+                            height: 100%;
+                            background-color: #e1e6ef;
+                            position: absolute;
+                            top: 0;
+                            left: 0;
+                            transition: all 0.3s ease;
+
+                            // 開閉マーク縦線
+                            &::before {
+                                position: absolute;
+                                content: '';
+                                display: block;
+                                top: 0;
+                                right: 0;
+                                left: 0;
+                                bottom: 0;
+                                width: 12px;
+                                height: 2px;
+                                background: #05162e;
+                                margin: auto;
+                                transition: all 0.3s ease-in-out;
+                            }
+
+                            // 開閉マーク横線
+                            &::after {
+                                position: absolute;
+                                content: '';
+                                display: block;
+                                top: 0;
+                                right: 0;
+                                left: 0;
+                                bottom: 0;
+                                width: 12px;
+                                height: 2px;
+                                background: #05162e;
+                                margin: auto;
+                                transform: rotate(90deg);
+                                transition: all 0.3s ease-in-out;
+                            }
+                        }
+
+                        // メニューホバー時
+                        &:hover {
+                            color: #fff;
+                            background-color: #61a7f7;
+
+                            // 開閉マークホバー時
+                            .mark {
+                                background-color: #5390d4;
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -1445,17 +1864,16 @@
     // 言語選択
     .header_language {
         position: fixed;
-        z-index: 10;
-        bottom: -200%;
-        left: 0;
+        z-index: 11;
+        top: 0;
+        right: -120%;
         width: 100%;
         height: 100vh;
-        background: #999;
-        transition: all 0.5s;
-        z-index: 11;
+        background: rgba(255, 255, 255, 0.8);
+        transition: all 0.4s;
 
         &.open {
-            bottom: -14%;
+            right: 0%;
 
             &.side_menu-list {
                 position: fixed;

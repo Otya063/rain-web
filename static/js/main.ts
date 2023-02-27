@@ -1,3 +1,5 @@
+import { browser } from '$app/environment';
+
 // slide open
 export const slideDown = (target: Element) => {
     if (target instanceof HTMLElement) {
@@ -72,3 +74,18 @@ export const loadArticle = (lang_code: string = '', maindir: string = '', subdir
     let href_path = `${lang_code}/${maindir}${subdir}`;
     location.pathname = href_path;
 };
+
+// bottom navigetion toggle
+if (browser) {
+    document.querySelectorAll('.btm_nav_item').forEach((btm_nav, index) => {
+        btm_nav.addEventListener('click', (e) => {
+            let activeIndex: number = null;
+            const target = e.currentTarget;
+            if (target instanceof HTMLElement) {
+                const target_id = target.id;
+                const menu = document.querySelector(`.${target_id}`);
+                menu.classList.toggle('open');
+            }
+        });
+    });
+}
