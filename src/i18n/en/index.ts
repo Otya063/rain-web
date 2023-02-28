@@ -33,10 +33,10 @@ const en: BaseTranslation = {
                 start: 'How to Start the Game',
                 menu: 'Title Menu',
                 character: 'Character Creation',
-                adddelete: 'Adding and Deleting Characters',
+                adddelete: 'Managing Characters',
                 world: 'World Selection',
                 tutorial: 'Tutorial',
-                multiple: 'Multiple Launch of the Game',
+                multiple: 'Multiple Launch',
                 quit: 'Quit the Game',
             },
         },
@@ -59,7 +59,7 @@ const en: BaseTranslation = {
             head_title: 'MHF Online Manual',
             title: 'Home',
             news_title: 'Update History',
-            news_date: 'January 1, 2023',
+            news_date: 'January 1, 2099',
             news_text: 'Online Manual is available now!<br>Detailed differences from the former official online manual and updates can be found from "More."',
             news_more: 'More',
 
@@ -153,6 +153,18 @@ const en: BaseTranslation = {
     },
     disclaimer:
         '*Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.',
+
+    // ボトムナビゲーション
+    bottom_nav: {
+        side_menu: {
+            svg_path: '<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 4h6v6h-6z" /><path d="M14 4h6v6h-6z" /><path d="M4 14h6v6h-6z" /><path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />',
+            text: 'Menu',
+        },
+        language_selectArea: {
+            svg_path: '<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M3.6 9l16.8 0" /><path d="M3.6 15l16.8 0" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" />',
+            text: 'Language',
+        },
+    },
 };
 
 export default en;

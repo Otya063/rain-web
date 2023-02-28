@@ -59,7 +59,7 @@ const ja: Translation = {
             head_title: 'MHF オンラインマニュアル',
             title: 'トップページ',
             news_title: '更新履歴',
-            news_date: '2023年1月1日',
+            news_date: '2099年1月1日',
             news_text: 'オンラインマニュアルを開設いたしました。<br>旧公式オンラインマニュアルとの詳しい相違点及び更新内容は「詳細を見る」よりご確認いただけます。',
             news_more: '詳細を見る',
 
@@ -152,6 +152,18 @@ const ja: Translation = {
         },
     },
     disclaimer: '※Rainサーバーは、株式会社カプコンまたはその子会社とは一切関係ありません。当プロジェクトは多数のボランティアによる協力の下で成り立っており、いかなる収益も発生しません。',
+
+    // ボトムナビゲーション
+    bottom_nav: {
+        side_menu: {
+            svg_path: '<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 4h6v6h-6z" /><path d="M14 4h6v6h-6z" /><path d="M4 14h6v6h-6z" /><path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />',
+            text: 'メニュー',
+        },
+        language_selectArea: {
+            svg_path: '<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M3.6 9l16.8 0" /><path d="M3.6 15l16.8 0" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" />',
+            text: '言語選択',
+        },
+    },
 };
 
 export default ja;

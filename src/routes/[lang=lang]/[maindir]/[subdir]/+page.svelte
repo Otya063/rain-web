@@ -1,6 +1,6 @@
 <script lang="ts">
     import Menu from '$lib/common/Menu.svelte';
-    //import BottomNav from '$lib/articles/BottomNav.svelte';
+    import BottomNav from '$lib/common/BottomNav.svelte';
 
     export let data;
     const { article } = data;
@@ -12,7 +12,7 @@
 
 <div class="bg">
     <main class="main_inner">
-        <nav class="side_menu">
+        <nav class="side_menu slidable_on_mobile">
             <!-- side_menu -->
             <Menu />
         </nav>
@@ -25,6 +25,6 @@
     </main>
 </div>
 
-<!-- <nav class="bottom_navigations">
-</nav> -->
-<!-- <BottomNav /> -->
+<nav class="bottom_navigations">
+    <BottomNav />
+</nav>

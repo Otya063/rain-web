@@ -82,7 +82,7 @@ type RootTranslation = {
 				 */
 				character: string
 				/**
-				 * A​d​d​i​n​g​ ​a​n​d​ ​D​e​l​e​t​i​n​g​ ​C​h​a​r​a​c​t​e​r​s
+				 * M​a​n​a​g​i​n​g​ ​C​h​a​r​a​c​t​e​r​s
 				 */
 				adddelete: string
 				/**
@@ -94,7 +94,7 @@ type RootTranslation = {
 				 */
 				tutorial: string
 				/**
-				 * M​u​l​t​i​p​l​e​ ​L​a​u​n​c​h​ ​o​f​ ​t​h​e​ ​G​a​m​e
+				 * M​u​l​t​i​p​l​e​ ​L​a​u​n​c​h
 				 */
 				multiple: string
 				/**
@@ -151,7 +151,7 @@ type RootTranslation = {
 			 */
 			news_title: string
 			/**
-			 * J​a​n​u​a​r​y​ ​1​,​ ​2​0​2​3
+			 * J​a​n​u​a​r​y​ ​1​,​ ​2​0​9​9
 			 */
 			news_date: string
 			/**
@@ -345,6 +345,28 @@ type RootTranslation = {
 	 * *​R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​T​h​i​s​ ​p​r​o​j​e​c​t​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​p​r​o​j​e​c​t​.
 	 */
 	disclaimer: string
+	bottom_nav: {
+		side_menu: {
+			/**
+			 * <​p​a​t​h​ ​s​t​r​o​k​e​=​"​n​o​n​e​"​ ​d​=​"​M​0​ ​0​h​2​4​v​2​4​H​0​z​"​ ​f​i​l​l​=​"​n​o​n​e​"​ ​/​>​<​p​a​t​h​ ​d​=​"​M​4​ ​4​h​6​v​6​h​-​6​z​"​ ​/​>​<​p​a​t​h​ ​d​=​"​M​1​4​ ​4​h​6​v​6​h​-​6​z​"​ ​/​>​<​p​a​t​h​ ​d​=​"​M​4​ ​1​4​h​6​v​6​h​-​6​z​"​ ​/​>​<​p​a​t​h​ ​d​=​"​M​1​7​ ​1​7​m​-​3​ ​0​a​3​ ​3​ ​0​ ​1​ ​0​ ​6​ ​0​a​3​ ​3​ ​0​ ​1​ ​0​ ​-​6​ ​0​"​ ​/​>
+			 */
+			svg_path: string
+			/**
+			 * M​e​n​u
+			 */
+			text: string
+		}
+		language_selectArea: {
+			/**
+			 * <​p​a​t​h​ ​s​t​r​o​k​e​=​"​n​o​n​e​"​ ​d​=​"​M​0​ ​0​h​2​4​v​2​4​H​0​z​"​ ​f​i​l​l​=​"​n​o​n​e​"​ ​/​>​<​p​a​t​h​ ​d​=​"​M​1​2​ ​1​2​m​-​9​ ​0​a​9​ ​9​ ​0​ ​1​ ​0​ ​1​8​ ​0​a​9​ ​9​ ​0​ ​1​ ​0​ ​-​1​8​ ​0​"​ ​/​>​<​p​a​t​h​ ​d​=​"​M​3​.​6​ ​9​l​1​6​.​8​ ​0​"​ ​/​>​<​p​a​t​h​ ​d​=​"​M​3​.​6​ ​1​5​l​1​6​.​8​ ​0​"​ ​/​>​<​p​a​t​h​ ​d​=​"​M​1​1​.​5​ ​3​a​1​7​ ​1​7​ ​0​ ​0​ ​0​ ​0​ ​1​8​"​ ​/​>​<​p​a​t​h​ ​d​=​"​M​1​2​.​5​ ​3​a​1​7​ ​1​7​ ​0​ ​0​ ​1​ ​0​ ​1​8​"​ ​/​>
+			 */
+			svg_path: string
+			/**
+			 * L​a​n​g​u​a​g​e
+			 */
+			text: string
+		}
+	}
 }
 
 export type TranslationFunctions = {
@@ -416,7 +438,7 @@ export type TranslationFunctions = {
 				 */
 				character: () => LocalizedString
 				/**
-				 * Adding and Deleting Characters
+				 * Managing Characters
 				 */
 				adddelete: () => LocalizedString
 				/**
@@ -428,7 +450,7 @@ export type TranslationFunctions = {
 				 */
 				tutorial: () => LocalizedString
 				/**
-				 * Multiple Launch of the Game
+				 * Multiple Launch
 				 */
 				multiple: () => LocalizedString
 				/**
@@ -485,7 +507,7 @@ export type TranslationFunctions = {
 			 */
 			news_title: () => LocalizedString
 			/**
-			 * January 1, 2023
+			 * January 1, 2099
 			 */
 			news_date: () => LocalizedString
 			/**
@@ -679,6 +701,28 @@ export type TranslationFunctions = {
 	 * *Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.
 	 */
 	disclaimer: () => LocalizedString
+	bottom_nav: {
+		side_menu: {
+			/**
+			 * <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 4h6v6h-6z" /><path d="M14 4h6v6h-6z" /><path d="M4 14h6v6h-6z" /><path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+			 */
+			svg_path: () => LocalizedString
+			/**
+			 * Menu
+			 */
+			text: () => LocalizedString
+		}
+		language_selectArea: {
+			/**
+			 * <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M3.6 9l16.8 0" /><path d="M3.6 15l16.8 0" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" />
+			 */
+			svg_path: () => LocalizedString
+			/**
+			 * Language
+			 */
+			text: () => LocalizedString
+		}
+	}
 }
 
 export type Formatters = {}

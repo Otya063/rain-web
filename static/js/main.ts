@@ -46,11 +46,7 @@ export const toggleLangSel = (e: Event) => {
     if (target instanceof HTMLElement) {
         target.classList.toggle('langArrow_open');
         lj.classList.toggle('open');
-        if (lj.classList.contains('open')) {
-            slideDown(content);
-        } else {
-            slideUp(content);
-        }
+        lj.classList.contains('open') ? slideDown(content) : slideUp(content);
     }
 };
 
@@ -60,11 +56,7 @@ export const toggleMenuSel = (e: Event) => {
     if (target instanceof HTMLElement) {
         target.classList.toggle('open');
         const content = target.nextElementSibling as HTMLUListElement;
-        if (target.classList.contains('open')) {
-            slideDown(content);
-        } else {
-            slideUp(content);
-        }
+        target.classList.contains('open') ? slideDown(content) : slideUp(content);
     }
 };
 
@@ -77,15 +69,50 @@ export const loadArticle = (lang_code: string = '', maindir: string = '', subdir
 
 // bottom navigetion toggle
 if (browser) {
-    document.querySelectorAll('.btm_nav_item').forEach((btm_nav, index) => {
+    // remember which menu is now selected by index
+    let menuNow: string = null;
+    const btm_navs = document.querySelectorAll('.btm_nav_item');
+    btm_navs.forEach((btm_nav, index) => {
         btm_nav.addEventListener('click', (e) => {
-            let activeIndex: number = null;
             const target = e.currentTarget;
             if (target instanceof HTMLElement) {
-                const target_id = target.id;
-                const menu = document.querySelector(`.${target_id}`);
-                menu.classList.toggle('open');
+                const html = document.documentElement as HTMLElement;
+                const target_id: string = target.id;
+                const menu = document.querySelector(`.${target_id}`) as HTMLElement;
+                const selected_nav = document.querySelector('.btm_nav_selected') as HTMLElement;
+                const selected_text = document.querySelector('.btm_nav_text_selected') as HTMLLIElement;
+
+                // automatically close the menu opened already
+                menuNow !== null && menuNow !== index && selected_nav?.classList.remove('btm_nav_selected');
+
+                // normal toggle function
+                menu.classList.toggle('btm_nav_selected');
+                menuNow = index;
+
+                // add class "fixed" to html tag to prevent users from moving the background while the menu is open
+                menu.classList.contains('btm_nav_selected') ? html.classList.add('fixed') : html.classList.remove('fixed');
+
+                // decorations for the text selected now
+                target.classList.add('btm_nav_text_selected');
+                selected_text && selected_text.classList.remove('btm_nav_text_selected');
             }
         });
+    });
+}
+
+// bottom navigation scroll event
+if (browser) {
+    const bottom_navigation = document.querySelector('.bottom_navigations') as HTMLElement;
+    window.addEventListener('scroll', () => {
+        const pos_y = window.pageYOffset;
+        pos_y < 150
+            ? setTimeout(() => {
+                  bottom_navigation.style.opacity = 1;
+                  bottom_navigation.style.visibility = 'visible';
+              }, 1)
+            : setTimeout(() => {
+                  bottom_navigation.style.opacity = 0;
+                  bottom_navigation.style.visibility = 'hidden';
+              }, 1);
     });
 }
