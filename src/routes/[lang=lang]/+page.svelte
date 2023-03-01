@@ -16,8 +16,8 @@
 
 <div class="top_images">
     <picture>
-        <source srcset="../../static/img/common/bg{rad}_sp.webp" media="(max-width: 899px)" type="image/webp" />
-        <img class="top_img" src="../../static/img/common/bg{rad}.webp" alt="top_pc" />
+        <source srcset="/img/common/bg{rad}_sp.webp" media="(max-width: 899px)" type="image/webp" />
+        <img class="top_img" src="/img/common/bg{rad}.webp" alt="top_pc" />
     </picture>
 </div>
 

@@ -116,3 +116,33 @@ if (browser) {
               }, 1);
     });
 }
+
+// prohibit users from using landscape mode
+if (browser) {
+    window.onorientationchange = () => {
+        switch (window.orientation) {
+            case 90:
+            case -90:
+                // unfinished
+                alert('Landscape Mode Detected.');
+                break;
+        }
+    };
+}
+
+// scroll to target element
+if (browser) {
+    const contents = document.querySelectorAll('.scroll');
+    contents.forEach((content) => {
+        content.addEventListener('click', (e) => {
+            const target = e.currentTarget;
+            if (target instanceof HTMLElement) {
+                const data_target = target.getAttribute('data-target');
+                const target_element = document.getElementById(data_target);
+                target_element.scrollIntoView({
+                    behavior: 'smooth',
+                });
+            }
+        });
+    });
+}

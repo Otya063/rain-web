@@ -21,7 +21,7 @@
                 </p>
             </button>
             <li class="lang_sel_judge">
-                <ul class="language_selectArea">
+                <ul class="language_selectArea slidable_on_mobile">
                     <LangSelectArea />
                 </ul>
             </li>

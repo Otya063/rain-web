@@ -33,7 +33,7 @@ const ja: Translation = {
                 start: 'ゲームの始め方',
                 menu: 'メニュー画面',
                 character: 'キャラクタークリエイション',
-                adddelete: 'キャラクターの追加・削除',
+                manage: 'キャラクターの追加・削除',
                 world: 'ワールドを選ぼう',
                 tutorial: 'チュートリアル',
                 multiple: 'ゲームの多重起動',
@@ -151,16 +151,18 @@ const ja: Translation = {
             alt: 'pewpewdojo',
         },
     },
-    disclaimer: '※Rainサーバーは、株式会社カプコンまたはその子会社とは一切関係ありません。当プロジェクトは多数のボランティアによる協力の下で成り立っており、いかなる収益も発生しません。',
+    footer_note: '※ページ閲覧中に端末の向きを変更した場合、レイアウト崩れを防止するため、ページ全体の再読み込みが行われます。予めご了承ください。（モバイル端末使用時のみ）<br><br>※Rainサーバーは、株式会社カプコンまたはその子会社とは一切関係ありません。当プロジェクトは多数のボランティアによる協力の下で成り立っており、いかなる収益も発生しません。',
 
     // ボトムナビゲーション
     bottom_nav: {
         side_menu: {
-            svg_path: '<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 4h6v6h-6z" /><path d="M14 4h6v6h-6z" /><path d="M4 14h6v6h-6z" /><path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />',
+            svg_path:
+                '<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M4 4h6v6h-6z" /><path d="M14 4h6v6h-6z" /><path d="M4 14h6v6h-6z" /><path d="M17 17m-3 0a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />',
             text: 'メニュー',
         },
         language_selectArea: {
-            svg_path: '<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M3.6 9l16.8 0" /><path d="M3.6 15l16.8 0" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" />',
+            svg_path:
+                '<path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M3.6 9l16.8 0" /><path d="M3.6 15l16.8 0" /><path d="M11.5 3a17 17 0 0 0 0 18" /><path d="M12.5 3a17 17 0 0 1 0 18" />',
             text: '言語選択',
         },
     },

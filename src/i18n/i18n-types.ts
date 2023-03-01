@@ -84,7 +84,7 @@ type RootTranslation = {
 				/**
 				 * M​a​n​a​g​i​n​g​ ​C​h​a​r​a​c​t​e​r​s
 				 */
-				adddelete: string
+				manage: string
 				/**
 				 * W​o​r​l​d​ ​S​e​l​e​c​t​i​o​n
 				 */
@@ -342,9 +342,9 @@ type RootTranslation = {
 		}
 	}
 	/**
-	 * *​R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​T​h​i​s​ ​p​r​o​j​e​c​t​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​p​r​o​j​e​c​t​.
+	 * *​I​f​ ​y​o​u​ ​c​h​a​n​g​e​ ​t​h​e​ ​o​r​i​e​n​t​a​t​i​o​n​ ​o​f​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​i​l​e​ ​v​i​e​w​i​n​g​ ​a​ ​p​a​g​e​,​ ​t​h​e​ ​e​n​t​i​r​e​ ​p​a​g​e​ ​w​i​l​l​ ​b​e​ ​r​e​l​o​a​d​e​d​ ​t​o​ ​p​r​e​v​e​n​t​ ​l​a​y​o​u​t​ ​c​o​r​r​u​p​t​i​o​n​.​<​b​r​>​<​b​r​>​*​R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​T​h​i​s​ ​p​r​o​j​e​c​t​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​p​r​o​j​e​c​t​.
 	 */
-	disclaimer: string
+	footer_note: string
 	bottom_nav: {
 		side_menu: {
 			/**
@@ -440,7 +440,7 @@ export type TranslationFunctions = {
 				/**
 				 * Managing Characters
 				 */
-				adddelete: () => LocalizedString
+				manage: () => LocalizedString
 				/**
 				 * World Selection
 				 */
@@ -698,9 +698,9 @@ export type TranslationFunctions = {
 		}
 	}
 	/**
-	 * *Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.
+	 * *If you change the orientation of your device while viewing a page, the entire page will be reloaded to prevent layout corruption.<br><br>*Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.
 	 */
-	disclaimer: () => LocalizedString
+	footer_note: () => LocalizedString
 	bottom_nav: {
 		side_menu: {
 			/**

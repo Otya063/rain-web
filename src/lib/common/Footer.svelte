@@ -17,9 +17,9 @@
             </li>
         {/each}
     </ul>
-    <div class="footer_text">
-        <p class="footer_text_disclaimer">
-            {$LL.disclaimer()}
+    <div class="footer_note">
+        <p>
+            {@html $LL.footer_note()}
         </p>
     </div>
 </section>

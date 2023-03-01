@@ -2,7 +2,11 @@
     import { locale } from '$i18n/i18n-svelte';
     import { loadArticle } from '$ts/main';
     import LL from '$i18n/i18n-svelte';
-    import { scrollTop } from 'svelte-scrolling';
+
+    // scroll to top function
+    const scrollToTop = () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
 </script>
 
 <h1>{$LL.articles['home'].title()}</h1>
@@ -68,4 +72,9 @@
     </ul>
 </section>
 
-<button on:click={() => scrollTop()} class="scroll_to_top" />
+<button
+    on:click={() => {
+        scrollToTop;
+    }}
+    id="scroll_to_top"
+/>

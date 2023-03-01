@@ -13,7 +13,6 @@ const config = {
       $lib: 'src/lib',
       $i18n: 'src/i18n',
       $ts: 'static/js',
-      $img: 'static/img',
       $scss: 'static/sass',
     },
   },

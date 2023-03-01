@@ -190,7 +190,6 @@
                                     @include flex_center;
                                     flex-direction: column;
                                     color: #fff;
-                                    font-size: 2rem;
                                     margin-top: 15%;
                                     padding-bottom: 2%;
                                     position: relative;
@@ -724,7 +723,7 @@
     }
 
     // 上に戻る
-    .scroll_to_top {
+    #scroll_to_top {
         position: fixed;
         right: 30px;
         bottom: 30px;
@@ -1170,15 +1169,11 @@
             }
 
             // フッターテキスト領域
-            .footer_text {
+            .footer_note {
                 padding: 3% 0 2%;
                 text-align: center;
-
-                // お断り文
-                .footer_text_disclaimer {
-                    color: #fff;
-                    font-size: 1.5rem;
-                }
+                color: #fff;
+                font-size: 1.5rem;
             }
         }
     }
@@ -1333,7 +1328,6 @@
 
         .main_inner {
             display: flex;
-            justify-content: space-between;
             max-width: 1220px;
             margin: auto;
         }
@@ -1471,6 +1465,10 @@
                             -ms-user-select: none;
                             user-select: none;
 
+                            @include landscape {
+                                padding: 4% 8% 4% 14%;
+                            }
+
                             // サブカテゴリーホバー時
                             &:hover {
                                 background: rgba(77, 77, 77, 0.3);
@@ -1492,12 +1490,17 @@
                                     content: '';
                                     position: absolute;
                                     background: url(#{$path_img}/common/icon_paw.webp) center left no-repeat;
-                                    top: 14%;
+                                    top: 13%;
                                     left: 4%;
                                     width: 11%;
                                     height: 50px;
                                     background-size: 100%;
                                     transition-duration: 0.2s;
+
+                                    @include landscape {
+                                        top: 19%;
+                                        width: 7%;
+                                    }
                                 }
                             }
                         }
@@ -1516,6 +1519,11 @@
                     transition-property: background-color, color;
                     transition-duration: 0.3s, 0.2s;
                     transition-timing-function: ease;
+
+                    @include landscape {
+                        font-size: 1.8rem;
+                        padding: 3% 0 3% 30px;
+                    }
 
                     // メインカテゴリーオープン時
                     &.open {
@@ -1629,13 +1637,11 @@
         .language_selectArea_list {
             position: relative;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
+            justify-content: space-around;
             background: rgba(0, 0, 0, 0.8);
             border: gray 4px solid;
             border-top: none;
-            padding: 15% 5%;
+            padding: 10% 5%;
             z-index: 1;
 
             // 各言語
@@ -1643,8 +1649,6 @@
                 @include flex_center;
                 flex-direction: column;
                 color: #fff;
-                font-size: 2rem;
-                margin-top: 15%;
                 padding-bottom: 2%;
                 position: relative;
                 will-change: opacity;
@@ -1665,13 +1669,13 @@
 
                 // 言語名メイン
                 .language_mainName {
-                    font-size: 1.9rem;
+                    font-size: 2rem;
                     transform: translateY(6%);
                 }
 
                 // 言語名サブ
                 .language_subName {
-                    font-size: 1.2rem;
+                    font-size: 1.4rem;
                     transform: translateY(6%);
                 }
 
@@ -1687,7 +1691,7 @@
                     margin: auto;
                     transform-origin: center top;
                     transform: scale(0, 1);
-                    transition: transform 0.3s;
+                    transition: transform 0.1s;
                 }
                 // +
                 &:hover::before {
@@ -1884,7 +1888,7 @@
     }
 
     // 上に戻る
-    .scroll_to_top {
+    #scroll_to_top {
         display: none;
 
         // ホバー時明るく
@@ -2348,18 +2352,14 @@
             }
 
             // フッターテキスト領域
-            .footer_text {
+            .footer_note {
                 padding: 3% 0 5%;
                 text-align: center;
+                color: #fff;
+                font-size: 1.2rem;
 
-                // お断り文
-                .footer_text_disclaimer {
-                    color: #fff;
-                    font-size: 1.2rem;
-
-                    @include landscape {
-                        font-size: 1.3rem;
-                    }
+                @include landscape {
+                    font-size: 1.3rem;
                 }
             }
         }
