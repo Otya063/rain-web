@@ -730,8 +730,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 3.5%;
-        height: 7%;
+        width: 65px;
+        aspect-ratio: 1 / 1;
         border-radius: 50%;
         transition: 0.5s;
         color: #00a6c4;
@@ -1086,6 +1086,12 @@
                 }
             }
         }
+    }
+
+    /* ランドスケープモード
+====================================================*/
+    .landscape_mode {
+        display: none;
     }
 
     /* フッター
@@ -2264,6 +2270,50 @@
         }
     }
 
+    /* ランドスケープモード
+====================================================*/
+    .landscape_mode {
+        width: 100%;
+        height: 100%;
+        background: url(#{$path_img}/common/landscape_mode.jpg) center center no-repeat;
+        background-size: cover;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 999;
+        display: none;
+        text-align: center;
+
+        .rotate_device {
+            @include pos_center;
+            transform: rotate(90deg);
+            width: 30%;
+        }
+
+        &::before {
+            content: '';
+            background-color: rgba(255, 255, 255, 0.6);
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        &.detected {
+            display: block;
+        }
+    }
+
+    // メニュー側のfixedとの競合防止
+    .fixed_landscape {
+        height: 100vh;
+        overflow-y: hidden;
+        position: fixed;
+    }
+
     /* フッター
 ====================================================*/
 
@@ -2296,7 +2346,7 @@
                         display: flex;
                         align-items: center;
                         position: relative;
-                        background-color: #000;
+                        background-color: rgb(40, 40, 40);
                         border: 2px solid #fff;
                         color: #fff;
 

@@ -85,12 +85,13 @@ if (browser) {
                 // automatically close the menu opened already
                 menuNow !== null && menuNow !== index && selected_nav?.classList.remove('btm_nav_selected');
 
-                // normal toggle function
+                // main toggle function
                 menu.classList.toggle('btm_nav_selected');
                 menuNow = index;
 
                 // add class "fixed" to html tag to prevent users from moving the background while the menu is open
-                menu.classList.contains('btm_nav_selected') ? html.classList.add('fixed') : html.classList.remove('fixed');
+                const contains_class: boolean = menu.classList.contains('btm_nav_selected');
+                html.classList.toggle('fixed', contains_class);
 
                 // decorations for the text selected now
                 target.classList.add('btm_nav_text_selected');
@@ -104,7 +105,7 @@ if (browser) {
 if (browser) {
     const bottom_navigation = document.querySelector('.bottom_navigations') as HTMLElement;
     window.addEventListener('scroll', () => {
-        const pos_y = window.pageYOffset;
+        const pos_y: number = window.pageYOffset;
         pos_y < 150
             ? setTimeout(() => {
                   bottom_navigation.style.opacity = 1;
@@ -117,17 +118,12 @@ if (browser) {
     });
 }
 
-// prohibit users from using landscape mode
+// scroll to top function
 if (browser) {
-    window.onorientationchange = () => {
-        switch (window.orientation) {
-            case 90:
-            case -90:
-                // unfinished
-                alert('Landscape Mode Detected.');
-                break;
-        }
-    };
+    const back_top_btn = document.getElementById('scroll_to_top') as HTMLParagraphElement;
+    back_top_btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
 }
 
 // scroll to target element

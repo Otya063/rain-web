@@ -6,10 +6,19 @@
     import Alternate from '$lib/common/Alternate.svelte';
     import Footer from '$lib/common/Footer.svelte';
     import '$scss/style.scss';
+    import { browser } from '$app/environment';
 
     export let data: LayoutData;
     setLocale(data.locale);
+
+    // prohibit users from using landscape mode
+    let innerWidth: number = 0;
+    let innerHeight: number = 0;
+    $: landscape = innerWidth > innerHeight;
+    $: if (browser) document.documentElement.classList.toggle('fixed_landscape', landscape);
 </script>
+
+<svelte:window bind:innerWidth bind:innerHeight />
 
 <svelte:head>
     <meta name="description" content={$LL.articles['description']()} />
@@ -41,6 +50,10 @@
 
 <!-- menu + article = page.svelte -->
 <slot />
+
+<div class="landscape_mode" class:detected={landscape}>
+    <img src="/img/common/rotate_device.webp" alt="rotate" class="rotate_device">
+</div>
 
 <footer>
     <!-- footer -->
