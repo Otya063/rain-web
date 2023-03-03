@@ -1,7 +1,7 @@
 import type { BaseTranslation } from '../i18n-types';
 
 const en: BaseTranslation = {
-    test: 'Test Text',
+    landscape_mode: 'Please view the page in portrait mode.',
 
     // ヘッダー言語設定
     header: {
@@ -152,7 +152,7 @@ const en: BaseTranslation = {
         },
     },
     footer_note:
-        '*If you change the orientation of your device while viewing a page, the entire page will be reloaded to prevent layout corruption.<br><br>*Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.',
+        '*Due to the layout, the landscape mode is restricted in this website.<br><br>*Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.',
 
     // ボトムナビゲーション
     bottom_nav: {

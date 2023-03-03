@@ -1,4 +1,5 @@
 import { browser } from '$app/environment';
+import { disableBodyScroll, enableBodyScroll } from 'body-scroll-lock';
 
 // slide open
 export const slideDown = (target: Element) => {
@@ -140,5 +141,13 @@ if (browser) {
                 });
             }
         });
+    });
+}
+
+if (browser) {
+    const overlay = document.querySelector('.landscape_mode');
+    innerWidth > innerHeight ? disableBodyScroll(overlay) : enableBodyScroll(overlay);
+    window.addEventListener('orientationchange', () => {
+        innerWidth < innerHeight ? disableBodyScroll(overlay) : enableBodyScroll(overlay);
     });
 }

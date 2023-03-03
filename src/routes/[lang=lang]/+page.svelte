@@ -35,7 +35,6 @@
     </main>
 </div>
 
-<!-- svelte-ignore a11y-missing-content -->
 <p class="pointer" id="scroll_to_top" />
 
 <nav class="bottom_navigations">

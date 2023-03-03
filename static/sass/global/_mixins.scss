@@ -18,20 +18,12 @@
 
 // モバイル横画面表示
 @mixin landscape {
-    @media (orientation: landscape){
+    @media (orientation: landscape) {
         @content;
-      }
+    }
 }
 
-/* flexでの上下左右中央揃え
-====================================================*/
-@mixin flex_center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/* absoluteでの中央揃え関連
+/* position中央揃え関連
 ====================================================*/
 // 上下
 @mixin up_down {
@@ -66,4 +58,49 @@
     -webkit-transform: translate(-50%, -50%);
     -moz-transform: translate(-50%, -50%);
     -o-transform: translate(-50%, -50%);
+}
+
+// flexでの上下左右
+@mixin flex_center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* アニメーションキーフレーム
+====================================================*/
+// デバイス回転
+@mixin rotateDeviceKey {
+    @keyframes rotateDeviceAni {
+        0% {
+            transform: rotate(0deg);
+        }
+        25% {
+            transform: rotate(0deg);
+        }
+        70% {
+            transform: rotate(90deg);
+        }
+        100% {
+            transform: rotate(90deg);
+        }
+    }
+}
+
+// ロード画面ライクなバウント装飾
+@mixin loadLikeBoundKey {
+    @keyframes loadLikeBoundAni {
+        0% {
+            translate: 0% 0%;
+        }
+        15% {
+            translate: 0% -60%;
+        }
+        40% {
+            translate: 0% 0%;
+        }
+        50% {
+            translate: 0% 0%;
+        }
+    }
 }

@@ -808,22 +808,6 @@
                             font-size: 3rem;
                             font-weight: 600;
                         }
-
-                        // バージョン
-                        &:nth-child(2) {
-                            font-family: $font_title_ja;
-                            margin-left: 1%;
-                            padding: 4px 7px 1px;
-                            font-size: 1.5rem;
-                            font-weight: 600;
-                            background: rgba(245, 245, 220, 0.2);
-                            border: solid 2px #000;
-                            border-radius: 50%;
-
-                            &:lang(en) {
-                                font-size: 1.4rem;
-                            }
-                        }
                     }
                 }
 
@@ -2275,7 +2259,7 @@
     .landscape_mode {
         width: 100%;
         height: 100%;
-        background: url(#{$path_img}/common/landscape_mode.jpg) center center no-repeat;
+        background: url(#{$path_img}/common/landscape/landscape_mode.jpg) center center no-repeat;
         background-size: cover;
         position: fixed;
         left: 0;
@@ -2286,10 +2270,89 @@
         display: none;
         text-align: center;
 
+        // 注意書き
+        .rotate_text {
+            @include right_left;
+            width: 100%;
+            font-size: 1.8rem;
+            font-weight: 600;
+            top: 8%;
+            font-family: $font_title_ja;
+
+            &:lang(en) {
+                font-family: $font_title_en;
+            }
+        }
+
+        // デバイス回転画像
         .rotate_device {
-            @include pos_center;
+            @include rotateDeviceKey;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
             transform: rotate(90deg);
-            width: 30%;
+            width: 25%;
+            animation: rotateDeviceAni 1.3s ease infinite alternate;
+        }
+
+        // Now Waiting画像
+        .now_waiting {
+            display: flex;
+            position: absolute;
+            right: -39%;
+            bottom: 3%;
+            width: 100%;
+            @include loadLikeBoundKey;
+
+            img {
+                width: 7%;
+                margin-left: -1%;
+
+                &:nth-of-type(1) {
+                    animation: loadLikeBoundAni 3s ease 0s infinite;
+                }
+
+                &:nth-of-type(2) {
+                    animation: loadLikeBoundAni 3s ease 0.2s infinite;
+                }
+
+                &:nth-of-type(3) {
+                    animation: loadLikeBoundAni 3s ease 0.4s infinite;
+                    margin-right: 3%;
+                }
+
+                &:nth-of-type(4) {
+                    animation: loadLikeBoundAni 3s ease 0.6s infinite;
+                }
+
+                &:nth-of-type(5) {
+                    animation: loadLikeBoundAni 3s ease 0.8s infinite;
+                }
+
+                &:nth-of-type(6) {
+                    animation: loadLikeBoundAni 3s ease 1s infinite;
+                    margin-left: -2%;
+                }
+
+                &:nth-of-type(7) {
+                    animation: loadLikeBoundAni 3s ease 1.2s infinite;
+                    margin-left: -1.5%;
+                }
+                &:nth-of-type(8) {
+                    animation: loadLikeBoundAni 3s ease 1.4s infinite;
+                    margin-left: -2%;
+                }
+                &:nth-of-type(9) {
+                    animation: loadLikeBoundAni 3s ease 1.6s infinite;
+                    margin-left: -2%;
+                }
+                &:nth-of-type(10) {
+                    animation: loadLikeBoundAni 3s ease 1.8s infinite;
+                }
+            }
         }
 
         &::before {
@@ -2305,13 +2368,6 @@
         &.detected {
             display: block;
         }
-    }
-
-    // メニュー側のfixedとの競合防止
-    .fixed_landscape {
-        height: 100vh;
-        overflow-y: hidden;
-        position: fixed;
     }
 
     /* フッター

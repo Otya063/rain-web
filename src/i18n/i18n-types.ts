@@ -15,9 +15,9 @@ export type Translations = RootTranslation
 
 type RootTranslation = {
 	/**
-	 * T​e​s​t​ ​T​e​x​t
+	 * P​l​e​a​s​e​ ​v​i​e​w​ ​t​h​e​ ​p​a​g​e​ ​i​n​ ​p​o​r​t​r​a​i​t​ ​m​o​d​e​.
 	 */
-	test: string
+	landscape_mode: string
 	header: {
 		/**
 		 * E​n​g​l​i​s​h
@@ -342,7 +342,7 @@ type RootTranslation = {
 		}
 	}
 	/**
-	 * *​I​f​ ​y​o​u​ ​c​h​a​n​g​e​ ​t​h​e​ ​o​r​i​e​n​t​a​t​i​o​n​ ​o​f​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​i​l​e​ ​v​i​e​w​i​n​g​ ​a​ ​p​a​g​e​,​ ​t​h​e​ ​e​n​t​i​r​e​ ​p​a​g​e​ ​w​i​l​l​ ​b​e​ ​r​e​l​o​a​d​e​d​ ​t​o​ ​p​r​e​v​e​n​t​ ​l​a​y​o​u​t​ ​c​o​r​r​u​p​t​i​o​n​.​<​b​r​>​<​b​r​>​*​R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​T​h​i​s​ ​p​r​o​j​e​c​t​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​p​r​o​j​e​c​t​.
+	 * *​D​u​e​ ​t​o​ ​t​h​e​ ​l​a​y​o​u​t​,​ ​t​h​e​ ​l​a​n​d​s​c​a​p​e​ ​m​o​d​e​ ​i​s​ ​r​e​s​t​r​i​c​t​e​d​ ​i​n​ ​t​h​i​s​ ​w​e​b​s​i​t​e​.​<​b​r​>​<​b​r​>​*​R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​T​h​i​s​ ​p​r​o​j​e​c​t​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​p​r​o​j​e​c​t​.
 	 */
 	footer_note: string
 	bottom_nav: {
@@ -371,9 +371,9 @@ type RootTranslation = {
 
 export type TranslationFunctions = {
 	/**
-	 * Test Text
+	 * Please view the page in portrait mode.
 	 */
-	test: () => LocalizedString
+	landscape_mode: () => LocalizedString
 	header: {
 		/**
 		 * English
@@ -698,7 +698,7 @@ export type TranslationFunctions = {
 		}
 	}
 	/**
-	 * *If you change the orientation of your device while viewing a page, the entire page will be reloaded to prevent layout corruption.<br><br>*Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.
+	 * *Due to the layout, the landscape mode is restricted in this website.<br><br>*Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.
 	 */
 	footer_note: () => LocalizedString
 	bottom_nav: {
