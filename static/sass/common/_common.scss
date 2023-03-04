@@ -143,6 +143,11 @@ button {
     cursor: pointer;
 }
 
+// 入力待機中無効
+picture {
+    user-select: none;
+}
+
 // タイトルフォント
 h1,
 h2 {

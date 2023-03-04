@@ -127,6 +127,30 @@ type RootTranslation = {
 				command: string
 			}
 		}
+		event: {
+			/**
+			 * I​n​-​G​a​m​e​ ​E​v​e​n​t
+			 */
+			title: string
+			contents: {
+				/**
+				 * H​u​n​t​i​n​g​ ​R​o​a​d
+				 */
+				road: string
+				/**
+				 * B​a​t​t​l​e​ ​o​f​ ​D​i​v​a​ ​D​e​f​e​n​c​e​:​ ​T​r​u​e​ ​S​t​o​r​y
+				 */
+				diva: string
+				/**
+				 * G​r​e​a​t​ ​S​l​a​y​i​n​g​ ​Q​u​e​s​t
+				 */
+				gslaying: string
+				/**
+				 * H​u​n​t​i​n​g​ ​F​e​s​t​i​v​a​l
+				 */
+				huntfest: string
+			}
+		}
 	}
 	articles: {
 		/**
@@ -481,6 +505,30 @@ export type TranslationFunctions = {
 				 * Slash Command
 				 */
 				command: () => LocalizedString
+			}
+		}
+		event: {
+			/**
+			 * In-Game Event
+			 */
+			title: () => LocalizedString
+			contents: {
+				/**
+				 * Hunting Road
+				 */
+				road: () => LocalizedString
+				/**
+				 * Battle of Diva Defence: True Story
+				 */
+				diva: () => LocalizedString
+				/**
+				 * Great Slaying Quest
+				 */
+				gslaying: () => LocalizedString
+				/**
+				 * Hunting Festival
+				 */
+				huntfest: () => LocalizedString
 			}
 		}
 	}

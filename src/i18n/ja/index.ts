@@ -49,6 +49,19 @@ const ja: Translation = {
                 command: 'スラッシュコマンド',
             },
         },
+        event: {
+            title: 'ゲーム内イベント',
+            contents: {
+                road: '狩煉道',
+                diva: '歌姫狩衛戦・真説',
+                gslaying: '大討伐クエスト',
+                huntfest: "狩人祭",
+                /* skycorridor: '天廊遠征録（廃止）',
+                voyage: 'パローネ大航祭（廃止）',
+                anarchy: '極限征伐戦（廃止）',
+                ascendant: '至天征伐戦（廃止）', */
+            },
+        },
     },
 
     // 動的ルート対象外記事

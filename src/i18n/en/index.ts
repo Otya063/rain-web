@@ -49,6 +49,19 @@ const en: BaseTranslation = {
                 command: 'Slash Command',
             },
         },
+        event: {
+            title: 'In-Game Event',
+            contents: {
+                road: 'Hunting Road',
+                diva: 'Battle of Diva Defence: True Story',
+                gslaying: 'Great Slaying Quest',
+                huntfest: "Hunting Festival",
+                /* skycorridor: 'Sky Corridor Exploring Records(Abolition)',
+                voyage: 'Pallone Grand Voyage(Abolition)',
+                anarchy: 'Battlecry in the Anarchy(Abolition)',
+                ascendant: 'Honor of the Ascendant(Abolition)', */
+            },
+        },
     },
 
     // 動的ルート対象外記事
