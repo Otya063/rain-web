@@ -12,10 +12,13 @@
     export let data: LayoutData;
     setLocale(data.locale);
 
+    // define the regular expression of mobile device as a variable
+    const mobileDevices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+
     // prohibit users from using landscape mode
     let innerWidth: number = 0;
     let innerHeight: number = 0;
-    $: landscape = innerWidth > innerHeight;
+    $: landscape = innerWidth > innerHeight && mobileDevices.test(navigator.userAgent);
     $: if (browser) document.body.classList.toggle('noscroll', landscape);
 </script>
 

@@ -1,9 +1,10 @@
 <script lang="ts">
+    import type { PageData } from './$types';
+    import { scrollToTop } from '$ts/main';
     import Menu from '$lib/common/Menu.svelte';
     import Home from '$lib/articles/Home.svelte';
     import BottomNav from '$lib/common/BottomNav.svelte';
     import LL from '$i18n/i18n-svelte';
-    import type { PageData } from './$types';
 
     // random select for top images (1 ≦ rad ≦ 4)
     export let data: PageData;
@@ -35,7 +36,7 @@
     </main>
 </div>
 
-<div class="pointer no_select" id="scroll_to_top" />
+<button on:click={scrollToTop} id="scroll_to_top" />
 
 <nav class="bottom_navigations">
     <BottomNav />

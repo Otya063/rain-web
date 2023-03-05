@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { scrollToTop } from '$ts/main';
     import Menu from '$lib/common/Menu.svelte';
     import BottomNav from '$lib/common/BottomNav.svelte';
 
@@ -25,8 +26,7 @@
     </main>
 </div>
 
-
-<div class="pointer no_select" id="scroll_to_top" />
+<button on:click={scrollToTop} id="scroll_to_top" />
 
 <nav class="bottom_navigations">
     <BottomNav />

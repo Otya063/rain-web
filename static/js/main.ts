@@ -119,11 +119,8 @@ if (browser) {
 }
 
 // scroll to top function
-if (browser) {
-    const back_top_btn = document.getElementById('scroll_to_top') as HTMLParagraphElement;
-    back_top_btn.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
+export const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // scroll to target element
