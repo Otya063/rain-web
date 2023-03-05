@@ -1,10 +1,12 @@
 <script lang="ts">
     import type { LayoutData } from './$types';
     import { setLocale } from '$i18n/i18n-svelte';
+    import { browser } from '$app/environment';
     import LL from '$i18n/i18n-svelte';
     import Header from '$lib/common/Header.svelte';
     import Alternate from '$lib/common/Alternate.svelte';
     import Footer from '$lib/common/Footer.svelte';
+    import LandscapeMode from '$lib/common/LandscapeMode.svelte';
     import '$scss/style.scss';
 
     export let data: LayoutData;
@@ -14,6 +16,7 @@
     let innerWidth: number = 0;
     let innerHeight: number = 0;
     $: landscape = innerWidth > innerHeight;
+    $: if (browser) document.body.classList.toggle('noscroll', landscape);
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
@@ -49,24 +52,7 @@
 <!-- menu + article = page.svelte -->
 <slot />
 
-<div class="landscape_mode" class:detected={landscape}>
-    <span class="rotate_text">
-        {$LL.landscape_mode()}
-    </span>
-    <img src="/img/common/landscape/rotate_device.webp" alt="rotate" class="rotate_device" />
-    <div class="now_waiting">
-        <img src="/img/common/landscape/now_waiting_N1.webp" alt="N" />
-        <img src="/img/common/landscape/now_waiting_O.webp" alt="O" />
-        <img src="/img/common/landscape/now_waiting_W1.webp" alt="W" />
-        <img src="/img/common/landscape/now_waiting_W2.webp" alt="W" />
-        <img src="/img/common/landscape/now_waiting_A.webp" alt="A" />
-        <img src="/img/common/landscape/now_waiting_I1.webp" alt="I" />
-        <img src="/img/common/landscape/now_waiting_T.webp" alt="T" />
-        <img src="/img/common/landscape/now_waiting_I2.webp" alt="I" />
-        <img src="/img/common/landscape/now_waiting_N2.webp" alt="N" />
-        <img src="/img/common/landscape/now_waiting_G.webp" alt="G" />
-    </div>
-</div>
+<LandscapeMode {landscape} />
 
 <footer>
     <!-- footer -->

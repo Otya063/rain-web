@@ -87,6 +87,7 @@ html {
     height: auto;
     font-size: 62.5%;
 }
+
 body {
     font-size: 1.6rem;
     font-family: $font_ja;
@@ -99,6 +100,14 @@ body {
 
     &:lang(en) {
         font-family: $font_en;
+    }
+
+    // スクロール無効
+    &.noscroll {
+        position: fixed;
+        width: 100%;
+        top: 0;
+        left: 0;
     }
 }
 
