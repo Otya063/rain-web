@@ -137,6 +137,7 @@ if (browser) {
                 const data_target = target.getAttribute('data-target');
                 const target_element = document.getElementById(data_target);
                 target_element.scrollIntoView({
+                    block: 'start',
                     behavior: 'smooth',
                 });
             }

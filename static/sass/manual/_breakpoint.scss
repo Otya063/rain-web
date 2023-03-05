@@ -150,10 +150,6 @@
                                 top: 14%;
                                 font-size: 1.9rem;
                                 line-height: 1.4;
-                                -webkit-user-select: none;
-                                -moz-user-select: none;
-                                -ms-user-select: none;
-                                user-select: none;
 
                                 &:lang(en) {
                                     top: 17%;
@@ -194,10 +190,6 @@
                                     padding-bottom: 2%;
                                     position: relative;
                                     will-change: opacity;
-                                    -webkit-user-select: none;
-                                    -moz-user-select: none;
-                                    -ms-user-select: none;
-                                    user-select: none;
 
                                     // 言語名初めのみ上部余白なし
                                     &:first-child {
@@ -425,10 +417,6 @@
                             text-align: left;
                             padding: 8% 8% 8% 28%;
                             width: 100%;
-                            -webkit-user-select: none;
-                            -moz-user-select: none;
-                            -ms-user-select: none;
-                            user-select: none;
 
                             // サブカテゴリーホバー時
                             &:hover {
@@ -1354,7 +1342,6 @@
                 height: 100%;
                 display: flex;
                 align-items: center;
-                user-select: none;
 
                 // アイコン
                 .icon-tabler {
@@ -1450,10 +1437,6 @@
                             text-align: left;
                             padding: 5% 8% 5% 21%;
                             width: 100%;
-                            -webkit-user-select: none;
-                            -moz-user-select: none;
-                            -ms-user-select: none;
-                            user-select: none;
 
                             @include landscape {
                                 padding: 4% 8% 4% 14%;
@@ -1642,10 +1625,6 @@
                 padding-bottom: 2%;
                 position: relative;
                 will-change: opacity;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
 
                 // 言語名初めのみ上部余白なし
                 &:first-child {

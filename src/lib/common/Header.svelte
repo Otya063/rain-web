@@ -13,7 +13,7 @@
     </p>
     <aside class="header_language">
         <ul>
-            <button on:click={toggleLangSel} class="header_language_selector pointer">
+            <button on:click={toggleLangSel} class="header_language_selector">
                 <p>
                     <span class="current_language">
                         {$LL.header['now_lang']()}

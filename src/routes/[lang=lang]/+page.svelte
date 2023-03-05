@@ -35,7 +35,7 @@
     </main>
 </div>
 
-<p class="pointer" id="scroll_to_top" />
+<div class="pointer no_select" id="scroll_to_top" />
 
 <nav class="bottom_navigations">
     <BottomNav />

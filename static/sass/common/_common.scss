@@ -143,8 +143,23 @@ button {
     cursor: pointer;
 }
 
-// 入力待機中無効
+// 一括入力待機中無効
+h1,
+h2,
+li,
+button,
 picture {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+// 個別入力待機中無効
+.no_select {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 }
 
