@@ -1,5 +1,18 @@
 <script lang="ts">
+    import { onMount } from 'svelte';
+    import { browser } from '$app/environment';
     import LL from '$i18n/i18n-svelte';
+
+    // bottom navigation scroll event
+    let hide_judge = false;
+    const handleHide = () => {
+        const hide_true = window.pageYOffset > 150;
+        hide_true !== hide_judge && (hide_judge = hide_true);
+    };
+    onMount(() => {
+        window.addEventListener('scroll', handleHide);
+    });
+    $: if (browser) document.querySelector('.bottom_navigations')!.classList.toggle('nav_hide', hide_judge);
 </script>
 
 <ul>
@@ -18,7 +31,7 @@
                 stroke-linecap="round"
                 stroke-linejoin="round"
             >
-            {@html svg_path()}
+                {@html svg_path()}
             </svg>
             {text()}
         </li>

@@ -12,10 +12,8 @@
     export let data: LayoutData;
     setLocale(data.locale);
 
-    // define the regular expression of mobile device as a variable
-    const mobileDevices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
-
     // prohibit users from using landscape mode
+    const mobileDevices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
     let innerWidth: number = 0;
     let innerHeight: number = 0;
     $: landscape = innerWidth > innerHeight && mobileDevices.test(navigator.userAgent);

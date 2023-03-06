@@ -1361,6 +1361,11 @@
                 }
             }
         }
+
+        &.nav_hide {
+            opacity: 0;
+            visibility: hidden;
+        }
     }
 
     // メニュー本体非選択時

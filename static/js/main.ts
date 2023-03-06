@@ -101,27 +101,10 @@ if (browser) {
     });
 }
 
-// bottom navigation scroll event
-if (browser) {
-    const bottom_navigation = document.querySelector('.bottom_navigations') as HTMLElement;
-    window.addEventListener('scroll', () => {
-        const pos_y: number = window.pageYOffset;
-        pos_y < 150
-            ? setTimeout(() => {
-                  bottom_navigation.style.opacity = 1;
-                  bottom_navigation.style.visibility = 'visible';
-              }, 1)
-            : setTimeout(() => {
-                  bottom_navigation.style.opacity = 0;
-                  bottom_navigation.style.visibility = 'hidden';
-              }, 1);
-    });
-}
-
 // scroll to top function
 export const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+};
 
 // scroll to target element
 if (browser) {
@@ -140,4 +123,3 @@ if (browser) {
         });
     });
 }
-
