@@ -1,4 +1,5 @@
 import { articles } from '$lib/articles/article_data';
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 // We have imported the `PageServerLoad` type from the relative `./$types` folder that
@@ -7,6 +8,10 @@ import type { PageServerLoad } from './$types';
 // You need to run the dev server or `svelte-kit sync` to generate them.
 export const load: PageServerLoad = async ({ params }) => {
     const article = articles.find((article) => article.lang === params.lang && article.maindir === params.maindir && article.subdir === params.subdir);
+
+    if (!article) {
+        throw error(404);
+    }
 
     return {
         article,

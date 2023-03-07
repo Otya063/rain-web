@@ -18,6 +18,10 @@ type RootTranslation = {
 	 * P​l​e​a​s​e​ ​v​i​e​w​ ​t​h​e​ ​p​a​g​e​ ​i​n​ ​p​o​r​t​r​a​i​t​ ​m​o​d​e​.
 	 */
 	landscape_mode: string
+	/**
+	 * N​o​t​ ​F​o​u​n​d
+	 */
+	e404: string
 	header: {
 		/**
 		 * E​n​g​l​i​s​h
@@ -149,12 +153,28 @@ type RootTranslation = {
 				 * H​u​n​t​i​n​g​ ​F​e​s​t​i​v​a​l
 				 */
 				huntfest: string
+				/**
+				 * S​k​y​ ​C​o​r​r​i​d​o​r​ ​E​x​p​l​o​r​i​n​g​ ​R​e​c​o​r​d​s​(​A​b​o​l​i​t​i​o​n​)
+				 */
+				skycorridor: string
+				/**
+				 * P​a​l​l​o​n​e​ ​G​r​a​n​d​ ​V​o​y​a​g​e​(​A​b​o​l​i​t​i​o​n​)
+				 */
+				voyage: string
+				/**
+				 * B​a​t​t​l​e​c​r​y​ ​i​n​ ​t​h​e​ ​A​n​a​r​c​h​y​(​A​b​o​l​i​t​i​o​n​)
+				 */
+				anarchy: string
+				/**
+				 * H​o​n​o​r​ ​o​f​ ​t​h​e​ ​A​s​c​e​n​d​a​n​t​(​A​b​o​l​i​t​i​o​n​)
+				 */
+				ascendant: string
 			}
 		}
 	}
 	articles: {
 		/**
-		 * O​f​f​i​c​i​a​l​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​ ​o​f​ ​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​f​o​r​ ​R​a​i​n​ ​S​e​r​v​e​r​.
+		 * O​f​f​i​c​i​a​l​ ​O​n​l​i​n​e​ ​M​a​n​u​a​l​ ​o​f​ ​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​f​o​r​ ​R​a​i​n​ ​S​e​r​v​e​r​.
 		 */
 		description: string
 		/**
@@ -398,6 +418,10 @@ export type TranslationFunctions = {
 	 * Please view the page in portrait mode.
 	 */
 	landscape_mode: () => LocalizedString
+	/**
+	 * Not Found
+	 */
+	e404: () => LocalizedString
 	header: {
 		/**
 		 * English
@@ -529,12 +553,28 @@ export type TranslationFunctions = {
 				 * Hunting Festival
 				 */
 				huntfest: () => LocalizedString
+				/**
+				 * Sky Corridor Exploring Records(Abolition)
+				 */
+				skycorridor: () => LocalizedString
+				/**
+				 * Pallone Grand Voyage(Abolition)
+				 */
+				voyage: () => LocalizedString
+				/**
+				 * Battlecry in the Anarchy(Abolition)
+				 */
+				anarchy: () => LocalizedString
+				/**
+				 * Honor of the Ascendant(Abolition)
+				 */
+				ascendant: () => LocalizedString
 			}
 		}
 	}
 	articles: {
 		/**
-		 * Official online manual of Monster Hunter Frontier for Rain Server.
+		 * Official Online Manual of Monster Hunter Frontier for Rain Server.
 		 */
 		description: () => LocalizedString
 		/**

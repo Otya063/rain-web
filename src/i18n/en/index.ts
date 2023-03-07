@@ -1,7 +1,11 @@
 import type { BaseTranslation } from '../i18n-types';
 
 const en: BaseTranslation = {
+    // ランドスケープモードテキスト
     landscape_mode: 'Please view the page in portrait mode.',
+
+    // エラーページ
+    e404: 'Not Found',
 
     // ヘッダー言語設定
     header: {
@@ -55,18 +59,18 @@ const en: BaseTranslation = {
                 road: 'Hunting Road',
                 diva: 'Battle of Diva Defence: True Story',
                 gslaying: 'Great Slaying Quest',
-                huntfest: "Hunting Festival",
-                /* skycorridor: 'Sky Corridor Exploring Records(Abolition)',
+                huntfest: 'Hunting Festival',
+                skycorridor: 'Sky Corridor Exploring Records(Abolition)',
                 voyage: 'Pallone Grand Voyage(Abolition)',
                 anarchy: 'Battlecry in the Anarchy(Abolition)',
-                ascendant: 'Honor of the Ascendant(Abolition)', */
+                ascendant: 'Honor of the Ascendant(Abolition)',
             },
         },
     },
 
     // 動的ルート対象外記事
     articles: {
-        description: 'Official online manual of Monster Hunter Frontier for Rain Server.',
+        description: 'Official Online Manual of Monster Hunter Frontier for Rain Server.',
         keywords: 'monster hunter frontier, official online manual, mhf, online game',
         home: {
             head_title: 'MHF Online Manual',

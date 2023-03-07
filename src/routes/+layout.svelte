@@ -12,6 +12,12 @@
     export let data: LayoutData;
     setLocale(data.locale);
 
+    // get root-path
+    let origin: string;
+    if (browser) {
+        origin = window.location.origin;
+    }
+
     // prohibit users from using landscape mode
     const mobileDevices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
     let innerWidth: number = 0;
@@ -25,12 +31,18 @@
 <svelte:head>
     <meta name="description" content={$LL.articles['description']()} />
     <meta name="keywords" content={$LL.articles['keywords']()} />
+    <!-- ogp -->
+    <meta property="og:url" content={origin} />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content={$LL.articles['description']()} />
+    <meta property="og:site_name" content="Rain Server" />
+    <meta property="og:image" content="" />
     <!-- favicon -->
     <link rel="icon" type="image/png" href="/img/common/favicon.ico" />
     <!-- mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="format-detection" content="telephone=no" />
-    <link rel="apple-touch-icon-precomposed" href="/img/common/favicon_sp.png" />
+    <link rel="apple-touch-icon" href="/img/common/favicon_sp.png" />
     <!-- alternate -->
     <Alternate />
     <!-- font -->
@@ -45,17 +57,18 @@
     {/if}
 </svelte:head>
 
+<!-- header -->
 <header>
-    <!-- header -->
     <Header />
 </header>
 
 <!-- menu + article = page.svelte -->
 <slot />
 
+<!-- landscape_mode_overlay -->
 <LandscapeMode {landscape} />
 
+<!-- footer -->
 <footer>
-    <!-- footer -->
     <Footer />
 </footer>

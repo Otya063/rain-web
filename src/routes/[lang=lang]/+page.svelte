@@ -13,6 +13,7 @@
 
 <svelte:head>
     <title>{$LL.articles['home'].head_title()}</title>
+    <meta property="og:title" content={$LL.articles['home'].head_title()} />
 </svelte:head>
 
 <div class="top_images">
@@ -24,13 +25,13 @@
 
 <div class="bg">
     <main class="main_inner">
+        <!-- side_menu -->
         <nav class="side_menu slidable_on_mobile">
-            <!-- side_menu -->
             <Menu />
         </nav>
 
+        <!-- article -->
         <article class="contents">
-            <!-- article -->
             <Home />
         </article>
     </main>
@@ -38,6 +39,7 @@
 
 <button on:click={scrollToTop} id="scroll_to_top" />
 
+<!-- bottom_navigation -->
 <nav class="bottom_navigations">
     <BottomNav />
 </nav>

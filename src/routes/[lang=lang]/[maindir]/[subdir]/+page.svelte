@@ -9,17 +9,18 @@
 
 <svelte:head>
     <title>{article.head_title}</title>
+    <meta property="og:title" content={article.head_title} />
 </svelte:head>
 
 <div class="bg">
     <main class="main_inner">
+        <!-- side_menu -->
         <nav class="side_menu slidable_on_mobile">
-            <!-- side_menu -->
             <Menu />
         </nav>
 
+        <!-- article -->
         <article class="contents">
-            <!-- article -->
             <h1>{article.title}</h1>
             {@html article.content}
         </article>
@@ -28,6 +29,7 @@
 
 <button on:click={scrollToTop} id="scroll_to_top" />
 
+<!-- bottom_navigation -->
 <nav class="bottom_navigations">
     <BottomNav />
 </nav>

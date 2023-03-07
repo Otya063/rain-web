@@ -9,6 +9,8 @@ node_modules
 .prettierrc
 .npmrc
 !.env.example
+.cloudflare
+wrangler.toml
 tree.txt
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
