@@ -1,4 +1,4 @@
-name: 'Build Sveltekit'
+name: 'Test Build Sveltekit'
 on:
     push:
         branches: ['main']
@@ -6,13 +6,38 @@ on:
         branches: ['main']
 
 jobs:
-    deploy:
+    cache-and-install:
         runs-on: ubuntu-latest
-        name: Deploy
+
         steps:
-            - uses: actions/checkout@v3
-            - name: Publish app
-              uses: cloudflare/wrangler-action@2.0.0
+            - name: Checkout
+              uses: actions/checkout@v3
+
+            - name: Install Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 16
+
+            - uses: pnpm/action-setup@v2
+              name: Install pnpm
+              id: pnpm-install
+              with:
+                  version: 7
+                  run_install: false
+
+            - name: Get pnpm store directory
+              id: pnpm-cache
+              shell: bash
+              run: |
+                  echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+            - name: Install dependencies
+              run: pnpm i
+
+            - name: built web
+              run: pnpm build
+
+            - uses: cloudflare/wrangler-action@2.0.0
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_ACCOUNT_ID }}
