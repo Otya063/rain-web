@@ -10,6 +10,7 @@
 <svelte:head>
     <title>{article.head_title}</title>
     <meta property="og:title" content={article.head_title} />
+    <meta name="twitter:title" content={article.head_title} />
 </svelte:head>
 
 <div class="bg">

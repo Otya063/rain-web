@@ -12,12 +12,6 @@
     export let data: LayoutData;
     setLocale(data.locale);
 
-    // get root-path
-    let origin: string;
-    if (browser) {
-        origin = window.location.origin;
-    }
-
     // prohibit users from using landscape mode
     const mobileDevices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
     let innerWidth: number = 0;
@@ -32,17 +26,22 @@
     <meta name="description" content={$LL.articles['description']()} />
     <meta name="keywords" content={$LL.articles['keywords']()} />
     <!-- ogp -->
-    <meta property="og:url" content={origin} />
+    <meta property="og:url" content="https://online-manual.rain-server.workers.dev" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content={$LL.articles['description']()} />
     <meta property="og:site_name" content="Rain Server" />
-    <meta property="og:image" content="" />
+    <meta property="og:image" content="https://online-manual.rain-server.workers.dev/img/common/sns_share.webp" />
+    <!-- twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:description" content={$LL.articles['description']()} />
+    <meta name="twitter:image" content="https://online-manual.rain-server.workers.dev/img/common/sns_share.webp" />
     <!-- favicon -->
-    <link rel="icon" type="image/png" href="/img/common/favicon.ico" />
+    <link rel="icon" href="/img/common/favicon.ico" sizes="any" /><!-- 32×32 -->
+    <link rel="apple-touch-icon" href="/img/common/apple-touch-icon.png" /><!-- 180×180 -->
+    <link rel="manifest" href="/manifest.webmanifest" />
     <!-- mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="format-detection" content="telephone=no" />
-    <link rel="apple-touch-icon" href="/img/common/favicon_sp.png" />
     <!-- alternate -->
     <Alternate />
     <!-- font -->
