@@ -1,0 +1,12 @@
+name = "online-manual"
+account_id = "${{ secrets.CF_ACCOUNT_ID }}"
+api_token = "${{ secrets.CF_API_TOKEN }}"
+
+
+main = "./.cloudflare/worker.js"
+site.bucket = "./.cloudflare/public"
+
+build.command = "npm run build"
+
+compatibility_date = "2021-11-12"
+workers_dev = true
