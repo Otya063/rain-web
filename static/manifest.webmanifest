@@ -1,6 +1,11 @@
 {
     "icons": [
-        { "src": "/img/common/icon-192.png", "type": "image/png", "sizes": "192x192" },
-        { "src": "/img/common/icon-512.png", "type": "image/png", "sizes": "512x512" }
-    ]
+        { "src": "/img/common/icon_192.png", "type": "image/png", "sizes": "192x192" },
+        { "src": "/img/common/icon_512.png", "type": "image/png", "sizes": "512x512" }
+    ],
+    "start_url": "https://online-manual.rain-server.workers.dev/",
+    "display": "standalone",
+    "orientation": "any",
+    "background_color": "#000",
+    "theme_color": "#000"
 }

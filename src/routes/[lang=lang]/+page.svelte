@@ -14,7 +14,6 @@
 <svelte:head>
     <title>{$LL.articles['home'].head_title()}</title>
     <meta property="og:title" content={$LL.articles['home'].head_title()} />
-    <meta name="twitter:title" content={$LL.articles['home'].head_title()} />
 </svelte:head>
 
 <div class="top_images">
