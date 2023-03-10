@@ -1254,7 +1254,7 @@
 
         // RainServerロゴ
         &::before {
-            display: block;
+            /* display: block;
             position: absolute;
             content: '';
             background: url(#{$path_img}/common/rainserver_logo.webp) center center no-repeat;
@@ -1262,7 +1262,8 @@
             width: 35vw;
             aspect-ratio: 20 / 13;
             top: 0;
-            left: 1%;
+            left: 1%; */
+            display: none;
         }
 
         // トップページマニュアルタイトル
@@ -1339,6 +1340,7 @@
 
             // ナビゲーションボタン位置調整
             .btm_nav_item {
+                position: relative;
                 height: 100%;
                 display: flex;
                 align-items: center;
@@ -1348,18 +1350,42 @@
                     width: 28px;
                     height: 28px;
                     stroke-width: 1.2;
-                    transition: all 0.2s;
+                    transition: all 0.4s;
                 }
 
-                // 選択時装飾
+                // 選択時テキスト装飾
                 &.btm_nav_text_selected {
                     font-weight: 600;
-                    color: orange;
+                    color: rgb(255, 189, 68);
 
+                    // 選択時アイコン装飾
                     .icon-tabler {
                         stroke-width: 1.6;
-                        color: orange;
+                        color: rgb(255, 189, 68);
                     }
+
+                    // 選択時のアイテム下「・」装飾
+                    &::after{
+                        height: 3px;
+                        border-radius: 0;
+                        background: rgb(255, 186, 58);  
+                        transform: scale(1, 1);
+                    }
+                }
+
+                // 非選択時のアイテム下「・」装飾
+                &::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 10%;
+                    left: 0;
+                    width: 100%;
+                    height: 5px;
+                    border-radius: 50%;
+                    background: white;
+                    transition: all 0.4s;
+                    transform: scale(0.04, 1);
+                    transform-origin: center bottom;
                 }
             }
         }
