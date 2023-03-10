@@ -5,7 +5,7 @@ const ja: Translation = {
     landscape_mode: '端末を縦向きにして閲覧してください。',
 
     // エラーページ
-    e404: 'お探しのページが見つかりません。',
+    e404: 'お探しのページが見つかりません',
 
     // ヘッダー言語設定
     header: {
@@ -71,7 +71,7 @@ const ja: Translation = {
     // 動的ルート対象外記事
     articles: {
         description: 'Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル',
-        keywords: 'モンスターハンター フロンティア 公式オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
+        keywords: 'モンスターハンター フロンティア, モンスターハンター, モンハン, オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
         home: {
             head_title: 'MHF オンラインマニュアル',
             title: 'トップページ',

@@ -71,7 +71,7 @@ const en: BaseTranslation = {
     // 動的ルート対象外記事
     articles: {
         description: 'Official Online Manual of Monster Hunter Frontier for Rain Server.',
-        keywords: 'monster hunter frontier, official online manual, mhf, online game',
+        keywords: 'monster hunter frontier, monster hunter, online manual, mhf, online game',
         home: {
             head_title: 'MHF Online Manual',
             title: 'Home',

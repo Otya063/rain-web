@@ -34,9 +34,9 @@
     <!-- twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <!-- favicon -->
-    <link rel="icon" href="/img/common/rain_favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/img/common/rain_apple_icon.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="icon" href="/img/common/rain_favicon.ico?v=1" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/common/rain_apple_icon.png?v=1" />
+    <link rel="manifest" href="/manifest.webmanifest?v=1" />
     <!-- mobile -->
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
     <meta name="format-detection" content="telephone=no" />

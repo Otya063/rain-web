@@ -1,6 +1,6 @@
 <script lang="ts">
     import LL, { locale } from '$i18n/i18n-svelte';
-    import { toggleMenuSel, loadArticle, slideDown } from '$ts/main';
+    import { toggleMenuSel, loadArticle, slideOpen } from '$ts/main';
     import { onMount } from 'svelte';
 
     // selected menu auto decoration
@@ -10,8 +10,8 @@
         const pathname: string = location.pathname;
         [, path1, path2] = pathname.split('/').filter(Boolean);
         const btn = document.getElementById(path1) as HTMLButtonElement;
-        const ul = btn?.nextElementSibling as HTMLUListElement;
-        slideDown(ul);
+        const ul = btn.nextElementSibling as HTMLUListElement;
+        slideOpen(ul);
     });
 </script>
 

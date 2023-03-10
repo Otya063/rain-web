@@ -1,125 +1,127 @@
 import { browser } from '$app/environment';
 
-// slide open
-export const slideDown = (target: Element) => {
-    if (target instanceof HTMLElement) {
-        target.style.height = 'auto';
-        const h = target.offsetHeight;
-        const tabHeight: string = h + 'px';
-        target.style.height = tabHeight;
-        target.animate(
-            {
-                height: ['0', tabHeight],
-            },
-            {
-                duration: 400,
-                easing: 'ease',
-            }
-        );
-    }
+/*=========================================================
+　　　　　Slide Functions
+=======================================================*/
+/* Slide Open
+====================================================*/
+export const slideOpen = (target: HTMLElement) => {
+    // error handling
+    if (!target && console.log('Target was not found.')) return;
+
+    target.style.height = 'auto';
+    const h: number = target.offsetHeight;
+    const tabHeight: number = h;
+    target.animate(
+        {
+            height: ['0', tabHeight + 'px'],
+        },
+        {
+            duration: 400,
+            easing: 'ease',
+        }
+    );
 };
 
-// slide close
-const slideUp = (target: Element) => {
-    if (target instanceof HTMLElement) {
-        const h = target.offsetHeight;
-        const tabHeight: string = h + 'px';
-        target.style.height = tabHeight;
-        target.animate(
-            {
-                height: [tabHeight, '0'],
-            },
-            {
-                duration: 400,
-                easing: 'ease',
-            }
-        );
-        target.style.height = '0';
-    }
+/* Slide Close
+====================================================*/
+const slideClose = (target: HTMLElement) => {
+    // error handling
+    if (!target && console.log('Target was not found.')) return;
+
+    const h: number = target.offsetHeight;
+    const tabHeight: number = h;
+    target.animate(
+        {
+            height: [tabHeight + 'px', '0'],
+        },
+        {
+            duration: 400,
+            easing: 'ease',
+        }
+    );
+    target.style.height = '0';
 };
 
-// toggle language selection field
+/* Toggle Languages Selection Field
+====================================================*/
 export const toggleLangSel = (e: Event) => {
-    const target = e.currentTarget;
-    const lj = document.querySelector('.lang_sel_judge') as HTMLLIElement;
+    const target = e.currentTarget as EventTarget;
+    const judge = document.querySelector('.lang_sel_judge') as HTMLLIElement;
     const content = document.querySelector('.language_selectArea') as HTMLUListElement;
-    if (target instanceof HTMLElement) {
-        target.classList.toggle('langArrow_open');
-        lj.classList.toggle('open');
-        lj.classList.contains('open') ? slideDown(content) : slideUp(content);
-    }
+    target.classList.toggle('langArrow_open'); // rotate arrow
+    judge.classList.toggle('open'); // first time
+    judge.classList.contains('open') ? slideOpen(content) : slideClose(content); // after the second time
 };
 
-// toggle side menu
+/* Toggle Side Menu
+====================================================*/
 export const toggleMenuSel = (e: Event) => {
-    const target = e.currentTarget;
-    if (target instanceof HTMLElement) {
-        target.classList.toggle('open');
-        const content = target.nextElementSibling as HTMLUListElement;
-        target.classList.contains('open') ? slideDown(content) : slideUp(content);
-    }
+    const target = e.currentTarget as EventTarget;
+    const content = target.nextElementSibling as HTMLUListElement;
+    target.classList.toggle('open'); // first time
+    target.classList.contains('open') ? slideOpen(content) : slideClose(content); // after the second time
 };
 
-// load article
+/*=========================================================
+　　　　　Article Functions
+=======================================================*/
+/* Scroll to Top
+====================================================*/
+export const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+/* Scroll to Target Element
+====================================================*/
+if (browser) {
+    const contents = document.querySelectorAll('.scroll') as NodeListOf<HTMLAnchorElement>;
+    contents.forEach((content: HTMLAnchorElement) => {
+        content.addEventListener('click', (e: MouseEvent) => {
+            const data_target: string = e.currentTarget.getAttribute('data-target');
+            const target_element = document.getElementById(data_target) as HTMLElement;
+            target_element.scrollIntoView({
+                block: 'start',
+                behavior: 'smooth',
+            });
+        });
+    });
+}
+
+/* Load Article
+====================================================*/
 export const loadArticle = (lang_code: string = '', maindir: string = '', subdir: string = '') => {
-    event.stopPropagation();
-    let href_path = `${lang_code}/${maindir}${subdir}`;
+    const href_path: string = `${lang_code}/${maindir}${subdir}`;
     location.pathname = href_path;
 };
 
 // bottom navigetion toggle
 if (browser) {
     // remember which menu is now selected by index
-    let menuNow: string = null;
-    const btm_navs = document.querySelectorAll('.btm_nav_item');
-    btm_navs.forEach((btm_nav, index) => {
-        btm_nav.addEventListener('click', (e) => {
-            const target = e.currentTarget;
-            if (target instanceof HTMLElement) {
-                const html = document.documentElement as HTMLElement;
-                const target_id: string = target.id;
-                const menu = document.querySelector(`.${target_id}`) as HTMLElement;
-                const selected_nav = document.querySelector('.btm_nav_selected') as HTMLElement;
-                const selected_text = document.querySelector('.btm_nav_text_selected') as HTMLLIElement;
+    let menuNow: number | null = null;
+    const btm_navs = document.querySelectorAll('.btm_nav_item') as NodeListOf<HTMLLIElement>;
+    btm_navs.forEach((btm_nav: HTMLLIElement, index: number) => {
+        btm_nav.addEventListener('click', (e: MouseEvent) => {
+            const target = e.currentTarget as EventTarget;
+            const { id }: { id: string } = e.currentTarget;
+            const menu = document.querySelector(`.${id}`) as HTMLElement;
+            const selected_nav = document.querySelector('.btm_nav_selected') as HTMLElement | null;
+            const selected_text = document.querySelector('.btm_nav_text_selected') as HTMLLIElement | null;
 
-                // automatically close the menu opened already
-                menuNow !== null && menuNow !== index && selected_nav?.classList.remove('btm_nav_selected');
+            // automatically close the menu opened already
+            menuNow !== null && menuNow !== index && selected_nav?.classList.remove('btm_nav_selected');
 
-                // main toggle function
-                menu.classList.toggle('btm_nav_selected');
-                menuNow = index;
+            // main toggle function
+            menu.classList.toggle('btm_nav_selected');
+            menuNow = index;
 
-                // add class "fixed" to html tag to prevent users from moving the background while the menu is open
-                const contains_class: boolean = menu.classList.contains('btm_nav_selected');
-                html.classList.toggle('fixed', contains_class);
+            // add class "fixed" to html tag to prevent users from moving the background while the menu is open
+            const contains_class: boolean = menu.classList.contains('btm_nav_selected');
+            document.documentElement.classList.toggle('fixed', contains_class);
 
-                // decorations for the text selected now
-                target.classList.add('btm_nav_text_selected');
-                selected_text && selected_text.classList.remove('btm_nav_text_selected');
-            }
-        });
-    });
-}
-
-// scroll to top function
-export const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-};
-
-// scroll to target element
-if (browser) {
-    const contents = document.querySelectorAll('.scroll');
-    contents.forEach((content) => {
-        content.addEventListener('click', (e) => {
-            const target = e.currentTarget;
-            if (target instanceof HTMLElement) {
-                const data_target = target.getAttribute('data-target');
-                const target_element = document.getElementById(data_target);
-                target_element.scrollIntoView({
-                    block: 'start',
-                    behavior: 'smooth',
-                });
-            }
+            // decorations for the text selected now
+            target.classList.add('btm_nav_text_selected');
+            selected_text?.classList.remove('btm_nav_text_selected');
         });
     });
 }

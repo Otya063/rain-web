@@ -1348,20 +1348,23 @@
                     width: 28px;
                     height: 28px;
                     stroke-width: 1.2;
-                    transition: all 0.4s;
+                    transition: all 0.2s;
                 }
 
                 // 選択時装飾
                 &.btm_nav_text_selected {
+                    font-weight: 600;
                     color: orange;
 
                     .icon-tabler {
+                        stroke-width: 1.6;
                         color: orange;
                     }
                 }
             }
         }
 
+        // 非表示
         &.nav_hide {
             opacity: 0;
             visibility: hidden;

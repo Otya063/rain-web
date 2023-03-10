@@ -178,7 +178,7 @@ type RootTranslation = {
 		 */
 		description: string
 		/**
-		 * m​o​n​s​t​e​r​ ​h​u​n​t​e​r​ ​f​r​o​n​t​i​e​r​,​ ​o​f​f​i​c​i​a​l​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​,​ ​m​h​f​,​ ​o​n​l​i​n​e​ ​g​a​m​e
+		 * m​o​n​s​t​e​r​ ​h​u​n​t​e​r​ ​f​r​o​n​t​i​e​r​,​ ​m​o​n​s​t​e​r​ ​h​u​n​t​e​r​,​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​,​ ​m​h​f​,​ ​o​n​l​i​n​e​ ​g​a​m​e
 		 */
 		keywords: string
 		home: {
@@ -578,7 +578,7 @@ export type TranslationFunctions = {
 		 */
 		description: () => LocalizedString
 		/**
-		 * monster hunter frontier, official online manual, mhf, online game
+		 * monster hunter frontier, monster hunter, online manual, mhf, online game
 		 */
 		keywords: () => LocalizedString
 		home: {
