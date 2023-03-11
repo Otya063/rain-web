@@ -10,8 +10,12 @@
         const pathname: string = location.pathname;
         let path1: string;
         let path2: string;
-        const arr: string[] = ([, path1 = '', path2 = ''] = pathname.split('/').filter(Boolean));
-        if (arr.length > 1) {
+
+        // when the path is [lang]/manual/
+        const arr: string[] = ([, , path1 = '', path2 = ''] = pathname.split('/').filter(Boolean));
+
+        // when the path is [lang]/manual/[maincat]/[subcat]
+        if (arr.length > 2) {
             maindir = path1.concat('/');
             subdir = path2.concat('/');
         }

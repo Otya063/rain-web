@@ -91,7 +91,7 @@ if (browser) {
 /* Load Article
 ====================================================*/
 export const loadArticle = (lang_code: string = '', maindir: string = '', subdir: string = '') => {
-    const href_path: string = `${lang_code}/${maindir}${subdir}`;
+    const href_path: string = `${lang_code}/manual/${maindir}${subdir}`;
     location.pathname = href_path;
 };
 
