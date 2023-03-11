@@ -16,7 +16,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
         return new Response(null, {
             status: 302,
-            headers: { Location: `/${locale}` },
+            headers: { Location: `/${locale}/manual` },
         });
     }
 

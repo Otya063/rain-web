@@ -66,6 +66,18 @@ export const toggleMenuSel = (e: Event) => {
 /*=========================================================
 　　　　　Article Functions
 =======================================================*/
+/* Pinch Zoom Restriction
+====================================================*/
+if (browser) {
+    document.documentElement.addEventListener(
+        'touchstart',
+        (e: TouchEvent) => {
+            e.touches.length > 1 && e.preventDefault();
+        },
+        { passive: false }
+    );
+}
+
 /* Scroll to Top
 ====================================================*/
 export const scrollToTop = () => {

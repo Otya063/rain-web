@@ -8,10 +8,10 @@
     let path2: string;
     onMount(() => {
         const pathname: string = location.pathname;
-        [, path1, path2] = pathname.split('/').filter(Boolean);
+        [, , path1, path2] = pathname.split('/').filter(Boolean);
         const btn = document.getElementById(path1) as HTMLButtonElement;
-        const ul = btn.nextElementSibling as HTMLUListElement;
-        slideOpen(ul);
+        const side_cat = btn.nextElementSibling as HTMLUListElement;
+        slideOpen(side_cat);
     });
 </script>
 
