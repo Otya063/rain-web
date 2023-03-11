@@ -1,8 +1,16 @@
 <script lang="ts">
     import LL from '$i18n/i18n-svelte';
+    import { browser } from '$app/environment';
 
-    export let landscape: boolean;
+    // prohibit users from using landscape mode
+    const mobileDevices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+    let innerWidth: number = 0;
+    let innerHeight: number = 0;
+    $: landscape = innerWidth > innerHeight && mobileDevices.test(navigator.userAgent);
+    $: if (browser) document.body.classList.toggle('noscroll', landscape);
 </script>
+
+<svelte:window bind:innerWidth bind:innerHeight />
 
 <div class="landscape_mode" class:detected={landscape}>
     <span class="rotate_text">

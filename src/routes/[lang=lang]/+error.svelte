@@ -1,21 +1,25 @@
 <script lang="ts">
     import { page } from '$app/stores';
+    import ErrorHeader from '$lib/common/ErrorHeader.svelte';
     import LL from '$i18n/i18n-svelte';
+    import '$scss/style_error.scss';
 </script>
 
-<div class="bg">
-    <main class="main_inner">
-        <h1>{$LL.e404()}</h1>
-        <img src="https://http.cat/{$page.status}" alt="{$page.status}_cat" />
-    </main>
-</div>
+<svelte:head>
+    <title>{$LL.E404['title']()}</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="description" content={$LL.articles['description']()} />
+    <meta name="keywords" content={$LL.articles['keywords']()} />
+</svelte:head>
 
-<style>
-    .main_inner {
-        flex-direction: column;
-    }
+<header>
+    <!-- header -->
+    <ErrorHeader />
+</header>
 
-    h1 {
-        padding: 3.7% 2%;
-    }
-</style>
+<main class="main_inner_error">
+        <img class="ouch_cat" alt="">
+        <h1>{$LL.E404['h1']()}</h1>
+        <p class="inner_text">{@html $LL.E404['main_text']()}</p>
+
+</main>

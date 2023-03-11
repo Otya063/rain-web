@@ -1,0 +1,203 @@
+@charset "UTF-8";
+@use '../global/' as *;
+
+@include pc() {
+    /* ヘッダー
+====================================================*/
+
+    // ヘッダー帯
+    header {
+        background: #000;
+        width: 100%;
+        height: 70px;
+        position: relative;
+
+        // ヘッダー帯下部装飾
+        &::after {
+            display: block;
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 0.2vw;
+            background: rgb(190, 193, 195);
+        }
+
+        // ヘッダー内部
+        .header_inner {
+            width: 100%;
+            height: 67px;
+            @include flex_center;
+            justify-content: space-between;
+
+            // プラットフォーム
+            .header_platform {
+                position: relative;
+                width: 70px;
+                height: 70px;
+                cursor: auto;
+
+                // プラットフォーム画像
+                &::before {
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 10%;
+                    content: '';
+                    width: 70px;
+                    aspect-ratio: 1 / 1;
+                    background: url(#{$path_img}/common/platform_pc.webp) no-repeat center center;
+                    background-size: auto 75%;
+                }
+            }
+
+            // ヘッダーロゴ
+            .header_logo {
+                display: flex;
+                @include right_left;
+
+                .header_logo_button {
+                    width: 130px;
+                    height: 67px;
+                    background: url(#{$path_img}/common/rain_textlogo.webp) center center no-repeat;
+                    background-size: 100%;
+                }
+            }
+        }
+    }
+
+    /* メインインナー
+====================================================*/
+
+    // インナー調整
+    .main_inner_error {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        // コケ猫
+        .ouch_cat {
+            width: 23%;
+            aspect-ratio: 1 / 1.05;
+            background: url(#{$path_img}/common/ouch_cat.webp) center no-repeat;
+            background-size: 100%;
+        }
+
+        // タイトル
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            padding: 3.7% 2%;
+
+            &:lang(en) {
+                font-size: 3.4rem;
+            }
+        }
+
+        // 内容
+        p {
+            text-align: center;
+            font-size: 1.6rem;
+            padding-bottom: 3%;
+
+            &:lang(en) {
+                font-size: 1.8rem;
+            }
+        }
+    }
+
+    // 戻るボタン
+    .btn {
+        padding: 0.8% 4%;
+        border: 2px solid #17c3b2;
+        position: relative;
+        overflow: hidden;
+        border-radius: 60px;
+        background-color: #17c3b2;
+        text-align: center;
+        font-size: 1.7rem;
+        filter: drop-shadow(0 0 0.3rem rgba(0, 0, 0, 0.6));
+        -webkit-filter: drop-shadow(0 0 0.3rem rgba(0, 0, 0, 0.6));
+        transition: 0.3s;
+        z-index: 1;
+        color: white;
+        font-weight: bold;
+
+        &:lang(en) {
+            font-size: 2.2rem;
+            padding: 0.6% 3%;
+        }
+
+        &::before {
+            content: '';
+            width: 0;
+            height: 500%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(45deg);
+            -webkit-transform: translate(-50%, -50%) rotate(45deg);
+            -moz-transform: translate(-50%, -50%) rotate(45deg);
+            -ms-transform: translate(-50%, -50%) rotate(45deg);
+            -o-transform: translate(-50%, -50%) rotate(45deg);
+            background: white;
+            transition: 0.5s ease;
+            display: block;
+            z-index: -1;
+        }
+
+        &:hover::before {
+            width: 105%;
+        }
+
+        &:hover {
+            color: #17c3b2;
+        }
+    }
+
+    /* フッター
+====================================================*/
+    // フッター帯
+    footer {
+        display: block;
+        position: relative;
+        background: #000;
+
+        // フッター帯上部装飾
+        &::before {
+            display: block;
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 0.2vw;
+            background: rgb(190, 193, 195);
+        }
+
+        // フッター内コンテンツ調整
+        .footer_bar_contents {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.5% 1.5%;
+
+            // フッターロゴ
+            .footer_logo {
+                width: 19vw;
+            }
+
+            // フッターテキスト
+            .footer_text {
+                // テキスト調整
+                p {
+                    color: white;
+                    font-size: 1.1rem;
+                    text-align: right;
+
+                    &:lang(en) {
+                        font-size: 1.2rem;
+                    }
+                }
+            }
+        }
+    }
+}

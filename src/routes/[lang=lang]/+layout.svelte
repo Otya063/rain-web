@@ -1,30 +1,14 @@
 <script lang="ts">
     import type { LayoutData } from './$types';
     import { setLocale } from '$i18n/i18n-svelte';
-    import { browser } from '$app/environment';
     import LL from '$i18n/i18n-svelte';
-    import Header from '$lib/common/Header.svelte';
     import Alternate from '$lib/common/Alternate.svelte';
-    import Footer from '$lib/common/Footer.svelte';
-    import LandscapeMode from '$lib/common/LandscapeMode.svelte';
-    import '$scss/style.scss';
 
     export let data: LayoutData;
     setLocale(data.locale);
-
-    // prohibit users from using landscape mode
-    const mobileDevices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
-    let innerWidth: number = 0;
-    let innerHeight: number = 0;
-    $: landscape = innerWidth > innerHeight && mobileDevices.test(navigator.userAgent);
-    $: if (browser) document.body.classList.toggle('noscroll', landscape);
 </script>
 
-<svelte:window bind:innerWidth bind:innerHeight />
-
 <svelte:head>
-    <meta name="description" content={$LL.articles['description']()} />
-    <meta name="keywords" content={$LL.articles['keywords']()} />
     <!-- ogp -->
     <meta property="og:url" content="https://online-manual.rain-server.workers.dev/" />
     <meta property="og:type" content="website" />
@@ -56,18 +40,4 @@
     {/if}
 </svelte:head>
 
-<!-- header -->
-<header>
-    <Header />
-</header>
-
-<!-- menu + article = page.svelte -->
 <slot />
-
-<!-- landscape_mode_overlay -->
-<LandscapeMode {landscape} />
-
-<!-- footer -->
-<footer>
-    <Footer />
-</footer>

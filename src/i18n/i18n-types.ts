@@ -18,10 +18,20 @@ type RootTranslation = {
 	 * P​l​e​a​s​e​ ​v​i​e​w​ ​t​h​e​ ​p​a​g​e​ ​i​n​ ​p​o​r​t​r​a​i​t​ ​m​o​d​e​.
 	 */
 	landscape_mode: string
-	/**
-	 * N​o​t​ ​F​o​u​n​d
-	 */
-	e404: string
+	E404: {
+		/**
+		 * 4​0​4​ ​N​o​t​ ​F​o​u​n​d​ ​|​ ​R​a​i​n​ ​S​e​r​v​e​r
+		 */
+		title: string
+		/**
+		 * 4​0​4​ ​N​o​t​ ​F​o​u​n​d
+		 */
+		h1: string
+		/**
+		 * T​h​e​ ​r​e​q​u​e​s​t​e​d​ ​U​R​L​ ​w​a​s​ ​n​o​t​ ​f​o​u​n​d​ ​o​n​ ​t​h​i​s​ ​s​e​r​v​e​r​.​<​b​r​>​P​l​e​a​s​e​ ​c​h​e​c​k​ ​t​h​e​ ​u​p​d​a​t​e​ ​h​i​s​t​o​r​y​ ​a​n​d​ ​c​o​n​t​a​c​t​ ​a​d​m​i​n​i​s​t​r​a​t​o​r​s​ ​i​f​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​d​e​s​c​r​i​p​t​i​o​n​ ​o​f​ ​t​h​i​s​ ​p​a​g​e​.
+		 */
+		main_text: string
+	}
 	header: {
 		/**
 		 * E​n​g​l​i​s​h
@@ -418,10 +428,20 @@ export type TranslationFunctions = {
 	 * Please view the page in portrait mode.
 	 */
 	landscape_mode: () => LocalizedString
-	/**
-	 * Not Found
-	 */
-	e404: () => LocalizedString
+	E404: {
+		/**
+		 * 404 Not Found | Rain Server
+		 */
+		title: () => LocalizedString
+		/**
+		 * 404 Not Found
+		 */
+		h1: () => LocalizedString
+		/**
+		 * The requested URL was not found on this server.<br>Please check the update history and contact administrators if you can see the description of this page.
+		 */
+		main_text: () => LocalizedString
+	}
 	header: {
 		/**
 		 * English

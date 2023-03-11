@@ -5,7 +5,11 @@ const en: BaseTranslation = {
     landscape_mode: 'Please view the page in portrait mode.',
 
     // エラーページ
-    e404: 'Not Found',
+    E404: {
+        title: '404 Not Found | Rain Server',
+        h1: '404 Not Found',
+        main_text: 'The requested URL was not found on this server.<br>Please check the update history and contact administrators if you can see the description of this page.',
+    },
 
     // ヘッダー言語設定
     header: {
