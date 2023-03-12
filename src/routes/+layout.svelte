@@ -8,6 +8,8 @@
     setLocale(data.locale);
 </script>
 
+<slot />
+
 <svelte:head>
     <!-- ogp -->
     <meta property="og:url" content="https://online-manual.rain-server.workers.dev/" />
@@ -39,5 +41,3 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" />
     {/if}
 </svelte:head>
-
-<slot />

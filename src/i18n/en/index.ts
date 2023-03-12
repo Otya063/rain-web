@@ -8,7 +8,16 @@ const en: BaseTranslation = {
     E404: {
         title: '404 Not Found | Rain Server',
         h1: '404 Not Found',
-        main_text: 'The requested URL was not found on this server.<br>Please check the update history and contact administrators if you can see the description of this page.',
+        inner_text1: 'The requested page was not found due to the following reasons.',
+        error_cause: {
+            cause1: 'The page file does not exist.',
+            cause2: 'The page has been moved or deleted.',
+            cause3: 'The URL was not correct or has been updated.',
+        },
+        inner_text2: 'If you have any problems with our website, please contact the Rain Team.',
+        btn_name: 'Return to Home',
+        footer_text:
+            'Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. <br>This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.',
     },
 
     // ヘッダー言語設定

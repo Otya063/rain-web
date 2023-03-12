@@ -28,9 +28,35 @@ type RootTranslation = {
 		 */
 		h1: string
 		/**
-		 * T​h​e​ ​r​e​q​u​e​s​t​e​d​ ​U​R​L​ ​w​a​s​ ​n​o​t​ ​f​o​u​n​d​ ​o​n​ ​t​h​i​s​ ​s​e​r​v​e​r​.​<​b​r​>​P​l​e​a​s​e​ ​c​h​e​c​k​ ​t​h​e​ ​u​p​d​a​t​e​ ​h​i​s​t​o​r​y​ ​a​n​d​ ​c​o​n​t​a​c​t​ ​a​d​m​i​n​i​s​t​r​a​t​o​r​s​ ​i​f​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​d​e​s​c​r​i​p​t​i​o​n​ ​o​f​ ​t​h​i​s​ ​p​a​g​e​.
+		 * T​h​e​ ​r​e​q​u​e​s​t​e​d​ ​p​a​g​e​ ​w​a​s​ ​n​o​t​ ​f​o​u​n​d​ ​d​u​e​ ​t​o​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​r​e​a​s​o​n​s​.
 		 */
-		main_text: string
+		inner_text1: string
+		error_cause: {
+			/**
+			 * T​h​e​ ​p​a​g​e​ ​f​i​l​e​ ​d​o​e​s​ ​n​o​t​ ​e​x​i​s​t​.
+			 */
+			cause1: string
+			/**
+			 * T​h​e​ ​p​a​g​e​ ​h​a​s​ ​b​e​e​n​ ​m​o​v​e​d​ ​o​r​ ​d​e​l​e​t​e​d​.
+			 */
+			cause2: string
+			/**
+			 * T​h​e​ ​U​R​L​ ​w​a​s​ ​n​o​t​ ​c​o​r​r​e​c​t​ ​o​r​ ​h​a​s​ ​b​e​e​n​ ​u​p​d​a​t​e​d​.
+			 */
+			cause3: string
+		}
+		/**
+		 * I​f​ ​y​o​u​ ​h​a​v​e​ ​a​n​y​ ​p​r​o​b​l​e​m​s​ ​w​i​t​h​ ​o​u​r​ ​w​e​b​s​i​t​e​,​ ​p​l​e​a​s​e​ ​c​o​n​t​a​c​t​ ​t​h​e​ ​R​a​i​n​ ​T​e​a​m​.
+		 */
+		inner_text2: string
+		/**
+		 * R​e​t​u​r​n​ ​t​o​ ​H​o​m​e
+		 */
+		btn_name: string
+		/**
+		 * R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​<​b​r​>​T​h​i​s​ ​p​r​o​j​e​c​t​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​p​r​o​j​e​c​t​.
+		 */
+		footer_text: string
 	}
 	header: {
 		/**
@@ -438,9 +464,35 @@ export type TranslationFunctions = {
 		 */
 		h1: () => LocalizedString
 		/**
-		 * The requested URL was not found on this server.<br>Please check the update history and contact administrators if you can see the description of this page.
+		 * The requested page was not found due to the following reasons.
 		 */
-		main_text: () => LocalizedString
+		inner_text1: () => LocalizedString
+		error_cause: {
+			/**
+			 * The page file does not exist.
+			 */
+			cause1: () => LocalizedString
+			/**
+			 * The page has been moved or deleted.
+			 */
+			cause2: () => LocalizedString
+			/**
+			 * The URL was not correct or has been updated.
+			 */
+			cause3: () => LocalizedString
+		}
+		/**
+		 * If you have any problems with our website, please contact the Rain Team.
+		 */
+		inner_text2: () => LocalizedString
+		/**
+		 * Return to Home
+		 */
+		btn_name: () => LocalizedString
+		/**
+		 * Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. <br>This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.
+		 */
+		footer_text: () => LocalizedString
 	}
 	header: {
 		/**

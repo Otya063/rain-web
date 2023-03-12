@@ -1,6 +1,5 @@
 <script lang="ts">
-    import { page } from '$app/stores';
-    import ErrorHeader from '$lib/common/ErrorHeader.svelte';
+    import ErrorFooter from '$lib/common/ErrorFooter.svelte';
     import LL from '$i18n/i18n-svelte';
     import '$scss/style_error.scss';
 </script>
@@ -12,14 +11,25 @@
     <meta name="keywords" content={$LL.articles['keywords']()} />
 </svelte:head>
 
-<header>
-    <!-- header -->
-    <ErrorHeader />
-</header>
+<div class="error_wrapper">
+    <main class="main_inner_error">
+        <p class="ouch_cat">
+            <img src="/img/common/ouch_cat.webp" alt="" />
+        </p>
+        <h1 class="error_h1">{$LL.E404['h1']()}</h1>
+        <div class="inner_text">
+            <p>{$LL.E404['inner_text1']()}</p>
+            <ul class="error_cause">
+                {#each Object.entries($LL.E404['error_cause']) as [number, cause]}
+                    <li>{cause()}</li>
+                {/each}
+            </ul>
+            <p>{$LL.E404['inner_text2']()}</p>
+        </div>
+        <button class="btn" on:click={() => (location.href = '/')}>{$LL.E404['btn_name']()}</button>
+    </main>
+</div>
 
-<main class="main_inner_error">
-        <img class="ouch_cat" alt="">
-        <h1>{$LL.E404['h1']()}</h1>
-        <p class="inner_text">{@html $LL.E404['main_text']()}</p>
-
-</main>
+<footer>
+    <ErrorFooter />
+</footer>
