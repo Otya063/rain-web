@@ -3,6 +3,7 @@
     import { setLocale } from '$i18n/i18n-svelte';
     import LL from '$i18n/i18n-svelte';
     import Alternate from '$lib/common/Alternate.svelte';
+    import '$scss/global.scss';
 
     export let data: LayoutData;
     setLocale(data.locale);
@@ -69,6 +70,7 @@
     </footer>
 </div>
 
+<!-- svelte-ignore css-unused-selector -->
 <style lang="scss">
     @import '$scss/style_error.scss';
 </style>
