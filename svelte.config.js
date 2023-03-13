@@ -16,6 +16,9 @@ const config = {
             $scss: 'static/sass',
         },
     },
+    compilerOptions: {
+        preserveComments: true,
+    },
 };
 
 export default config;

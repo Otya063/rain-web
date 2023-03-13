@@ -8,9 +8,11 @@
     setLocale(data.locale);
 </script>
 
-<slot />
-
 <svelte:head>
+    <title>{$LL.E404['title']()}</title>
+    <meta name="robots" content="noindex,nofollow" />
+    <meta name="description" content={$LL.articles['description']()} />
+    <meta name="keywords" content={$LL.articles['keywords']()} />
     <!-- ogp -->
     <meta property="og:url" content="https://online-manual.rain-server.workers.dev/" />
     <meta property="og:type" content="website" />
@@ -41,3 +43,32 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" />
     {/if}
 </svelte:head>
+
+<div class="error_wrapper">
+    <main class="main_inner_error">
+        <p class="ouch_cat">
+            <img src="/img/common/ouch_cat.webp" alt="" />
+        </p>
+        <h1 class="error_h1">{$LL.E404['h1']()}</h1>
+        <div class="inner_text">
+            <p>{$LL.E404['inner_text1']()}</p>
+            <ul class="error_cause">
+                {#each Object.entries($LL.E404['error_cause']) as [number, cause]}
+                    <li>{cause()}</li>
+                {/each}
+            </ul>
+            <p>{$LL.E404['inner_text2']()}</p>
+        </div>
+        <button class="btn" on:click={() => (location.href = '/')}>{$LL.E404['btn_name']()}</button>
+    </main>
+    <footer>
+        <section class="error_footer">
+            <img class="footer_logo" src="/img/common/rain_textlogo.webp" alt="rain_textlogo" />
+            <p class="footer_text">{@html $LL.E404['footer_text']()}</p>
+        </section>
+    </footer>
+</div>
+
+<style lang="scss">
+    @import '$scss/style_error.scss';
+</style>
