@@ -1,4 +1,4 @@
-import { acccreate, acclink, start } from './contents';
+import { discord, start } from './contents';
 
 // 各記事要素　型定義
 interface Articles {
@@ -22,42 +22,42 @@ const default_title_en: string = 'MHF Online Manual';
 
 export const articles: Articles[] = [
     {
-        // アカウント作成手順（日本語）
+        // 会員登録手順（Discord）
         lang: 'ja',
-        maindir: 'entry',
-        subdir: 'acccreate',
-        head_title: `アカウント作成手順 | ${default_title_ja}`,
-        title: 'アカウント作成手順',
-        content: acccreate.ja,
+        maindir: 'signup',
+        subdir: 'discord',
+        head_title: `会員登録手順（Discord）| ${default_title_ja}`,
+        title: '会員登録手順（Discord）',
+        content: discord.ja,
     },
     {
-        // アカウント作成手順（英語）
+        // Sign-up Procedure (Discord)
         lang: 'en',
-        maindir: 'entry',
-        subdir: 'acccreate',
-        head_title: `Account Creation Procedure | ${default_title_en}`,
-        title: 'Account Creation Procedure',
-        content: acccreate.en,
+        maindir: 'signup',
+        subdir: 'discord',
+        head_title: `Sign-up Procedure (Discord) | ${default_title_en}`,
+        title: 'Sign-up Procedure (Discord)',
+        content: discord.en,
     },
 
-    {
-        // アカウント連携手順（日本語）
+/*     {
+        // 会員登録手順（メンバーサイト）
         lang: 'ja',
-        maindir: 'entry',
-        subdir: 'acclink',
-        head_title: `アカウント連携手順 | ${default_title_ja}`,
-        title: 'アカウント連携手順',
-        content: acclink.ja,
-    },
-    {
-        // アカウント連携手順（英語）
+        maindir: 'signup',
+        subdir: 'membersite',
+        head_title: `会員登録手順（メンバーサイト）| ${default_title_ja}`,
+        title: '会員登録手順（メンバーサイト）',
+        content: membersite.ja,
+    }, */
+/*     {
+        // Sign-up Procedure (Member Site)
         lang: 'en',
-        maindir: 'entry',
-        subdir: 'acclink',
-        head_title: `Account linking Procedure | ${default_title_en}`,
-        title: 'Account linking Procedure',
-        content: acclink.en,
-    },
+        maindir: 'signup',
+        subdir: 'membersite',
+        head_title: `Sign-up Procedure (Member Site) | ${default_title_en}`,
+        title: 'Sign-up Procedure (Member Site)',
+        content: membersite.en,
+    }, */
 
     {
         // ゲームの始め方（日本語）
@@ -69,7 +69,7 @@ export const articles: Articles[] = [
         content: start.ja,
     },
     {
-        // ゲームの始め方（英語）
+        // How to Start the Game
         lang: 'en',
         maindir: 'begin',
         subdir: 'start',

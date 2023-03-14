@@ -37,11 +37,11 @@ const en: BaseTranslation = {
 
     // サイドメニュー
     side_menu: {
-        entry: {
+        signup: {
             title: 'Sign Up',
             contents: {
-                acccreate: 'Account Creation Procedure',
-                acclink: 'Account Linking Procedure',
+                discord: 'Sign-up Procedure (Discord)',
+                membersite: 'Sign-up Procedure (Member Site)',
             },
         },
         begin: {

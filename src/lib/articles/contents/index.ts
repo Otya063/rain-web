@@ -1,3 +1,3 @@
-export * from './acccreate';
-export * from './acclink';
+export * from './discord';
+//export * from './membersite';
 export * from './start';

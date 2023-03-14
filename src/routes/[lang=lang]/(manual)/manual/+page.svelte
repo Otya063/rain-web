@@ -31,6 +31,7 @@
         </nav>
 
         <article class="contents">
+                <button on:click={() => location.href="./manual/workspace"}>→Go Workspace←</button>
             <!-- article -->
             <Home />
         </article>

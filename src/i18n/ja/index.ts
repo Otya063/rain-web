@@ -36,11 +36,11 @@ const ja: Translation = {
 
     // サイドメニュー
     side_menu: {
-        entry: {
+        signup: {
             title: '会員登録',
             contents: {
-                acccreate: 'アカウント作成手順',
-                acclink: 'アカウント連携手順',
+                discord: '会員登録手順（Discord）',
+                membersite: '会員登録手順（メンバーサイト）',
             },
         },
         begin: {

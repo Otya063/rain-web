@@ -87,20 +87,20 @@ type RootTranslation = {
 		}
 	}
 	side_menu: {
-		entry: {
+		signup: {
 			/**
 			 * S​i​g​n​ ​U​p
 			 */
 			title: string
 			contents: {
 				/**
-				 * A​c​c​o​u​n​t​ ​C​r​e​a​t​i​o​n​ ​P​r​o​c​e​d​u​r​e
+				 * S​i​g​n​-​u​p​ ​P​r​o​c​e​d​u​r​e​ ​(​D​i​s​c​o​r​d​)
 				 */
-				acccreate: string
+				discord: string
 				/**
-				 * A​c​c​o​u​n​t​ ​L​i​n​k​i​n​g​ ​P​r​o​c​e​d​u​r​e
+				 * S​i​g​n​-​u​p​ ​P​r​o​c​e​d​u​r​e​ ​(​M​e​m​b​e​r​ ​S​i​t​e​)
 				 */
-				acclink: string
+				membersite: string
 			}
 		}
 		begin: {
@@ -523,20 +523,20 @@ export type TranslationFunctions = {
 		}
 	}
 	side_menu: {
-		entry: {
+		signup: {
 			/**
 			 * Sign Up
 			 */
 			title: () => LocalizedString
 			contents: {
 				/**
-				 * Account Creation Procedure
+				 * Sign-up Procedure (Discord)
 				 */
-				acccreate: () => LocalizedString
+				discord: () => LocalizedString
 				/**
-				 * Account Linking Procedure
+				 * Sign-up Procedure (Member Site)
 				 */
-				acclink: () => LocalizedString
+				membersite: () => LocalizedString
 			}
 		}
 		begin: {

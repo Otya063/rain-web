@@ -550,7 +550,7 @@
     // メインタイトルh1
     h1 {
         background: url(#{$path_img}/common/title_frame.webp) center no-repeat;
-        background-size: 100% auto;
+        background-size: 100% 100%;
         padding: 2.7% 2%;
         margin: 2%;
         color: black;
@@ -613,14 +613,22 @@
         margin: 10% 8% 0;
     }
 
-    // 画像とpタグセット時
-    .itemset {
+    // 中央レイアウト
+    .center_box {
+        text-align: center;
         margin: 0;
         margin-bottom: 5%;
 
-        p {
+        // テキスト
+        .center_box_text {
             font-size: 1.8rem;
-            padding-bottom: 1.5%;
+            text-align: start;
+        }
+
+        // 画像
+        .center_box_img {
+            display: inline-block;
+            width: 80%;
         }
     }
 
