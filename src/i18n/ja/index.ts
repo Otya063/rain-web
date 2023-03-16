@@ -19,6 +19,16 @@ const ja: Translation = {
         footer_text: 'Rainサーバーは、株式会社カプコンまたはその子会社とは一切関係ありません。<br>当プロジェクトは多数のボランティアによる協力の下で成り立っており、いかなる収益も発生いたしません。',
     },
 
+    // 会員登録ページ
+    register: {
+        register_title: 'Rain サーバー アカウント作成',
+        email_label: 'メールアドレス',
+        username_label: 'ユーザー名',
+        password_label: 'パスワード',
+        register_button: '登録する',
+        already: '既に存在するユーザーです。',
+    },
+
     // ヘッダー言語設定
     header: {
         now_lang: '日本語',

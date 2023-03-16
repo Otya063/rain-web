@@ -20,6 +20,15 @@ const en: BaseTranslation = {
             'Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. <br>This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.',
     },
 
+    register: {
+        register_title: "Rain Server Account Creation",
+        email_label: 'Email',
+        username_label: 'Username',
+        password_label: 'Password',
+        register_button: 'Sign Up',
+        already: 'The user already exists.',
+    },
+
     // ヘッダー言語設定
     header: {
         now_lang: 'English',

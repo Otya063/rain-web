@@ -58,6 +58,32 @@ type RootTranslation = {
 		 */
 		footer_text: string
 	}
+	register: {
+		/**
+		 * R​a​i​n​ ​S​e​r​v​e​r​ ​A​c​c​o​u​n​t​ ​C​r​e​a​t​i​o​n
+		 */
+		register_title: string
+		/**
+		 * E​m​a​i​l
+		 */
+		email_label: string
+		/**
+		 * U​s​e​r​n​a​m​e
+		 */
+		username_label: string
+		/**
+		 * P​a​s​s​w​o​r​d
+		 */
+		password_label: string
+		/**
+		 * S​i​g​n​ ​U​p
+		 */
+		register_button: string
+		/**
+		 * T​h​e​ ​u​s​e​r​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s​.
+		 */
+		already: string
+	}
 	header: {
 		/**
 		 * E​n​g​l​i​s​h
@@ -493,6 +519,32 @@ export type TranslationFunctions = {
 		 * Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. <br>This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.
 		 */
 		footer_text: () => LocalizedString
+	}
+	register: {
+		/**
+		 * Rain Server Account Creation
+		 */
+		register_title: () => LocalizedString
+		/**
+		 * Email
+		 */
+		email_label: () => LocalizedString
+		/**
+		 * Username
+		 */
+		username_label: () => LocalizedString
+		/**
+		 * Password
+		 */
+		password_label: () => LocalizedString
+		/**
+		 * Sign Up
+		 */
+		register_button: () => LocalizedString
+		/**
+		 * The user already exists.
+		 */
+		already: () => LocalizedString
 	}
 	header: {
 		/**
