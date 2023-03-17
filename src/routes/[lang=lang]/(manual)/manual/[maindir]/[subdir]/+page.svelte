@@ -15,15 +15,15 @@
 
         <!-- article -->
         <article class="contents">
-            <h1>{article.title}</h1>
-            {@html article.content}
+            <h1>{article?.title}</h1>
+            {@html article?.content}
         </article>
     </main>
 </div>
 
 <svelte:head>
-    <title>{article.head_title}</title>
+    <title>{article?.head_title}</title>
     <meta name="description" content={$LL.articles['description']()} />
     <meta name="keywords" content={$LL.articles['keywords']()} />
-    <meta property="og:title" content={article.head_title} />
+    <meta property="og:title" content={article?.head_title} />
 </svelte:head>

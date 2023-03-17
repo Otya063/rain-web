@@ -22,27 +22,32 @@ const register: Action = async ({ request, cookies }) => {
     const preRegExp = cookies.get('SIDRegister');
     const emailVerifyCode = crypto.randomUUID();
 
-    if (typeof username !== 'string' || typeof password !== 'string' || !username || !password) {
-        return fail(400, { invalid: true });
-    }
+    let errors = {};
+    const credentials = { email, username, password };
+
+    (typeof email !== 'string' || !email) && (errors.invalidEmail = true);
+    (typeof username !== 'string' || !username) && (errors.invalidUsername = true);
+    (typeof password !== 'string' || !password) && (errors.invalidPassword = true);
 
     const userExist = await db.users.findUnique({
         where: { username },
     });
 
-    if (userExist) {
-        return fail(400, { userExist: true });
-    }
+    userExist && (errors.userExist = true);
 
-    await db.temp_account.create({
-        data: {
-            username,
-            password: await bcrypt.hash(password, 10),
-            email,
-            email_verify: emailVerifyCode,
-            pre_reg_exp: preRegExp,
-        },
-    });
+    if (Object.keys(errors).length > 0) {
+        return { errors, credentials };
+    } else {
+        await db.temp_account.create({
+            data: {
+                username,
+                password: await bcrypt.hash(password, 10),
+                email,
+                email_verify: emailVerifyCode,
+                pre_reg_exp: preRegExp,
+            },
+        });
+    }
 
     /*     await db.users.create({
         data: {
