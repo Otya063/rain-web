@@ -1,11 +1,19 @@
 import type { PageServerLoad } from './$types';
-import bcrypt from 'bcrypt';
+import { bcrypt } from 'hash-wasm';
+import { browser } from '$app/environment';
 
 export const load: PageServerLoad = async () => {
-    const number = '1234';
-    const bcrypted = bcrypt.hash(number, 10);
+    const salt = new Uint8Array(16);
+    browser && window.crypto.getRandomValues(salt);
+
+    const key = await bcrypt({
+        password: 'otya1542',
+        salt,
+        costFactor: 11,
+        outputType: 'encoded',
+    });
 
     return {
-        bcrypted,
+        key,
     };
 };

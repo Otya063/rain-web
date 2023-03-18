@@ -3,7 +3,7 @@
     import type { PageData } from './$types';
 
     export let data: PageData;
-    const { bcrypted } = data;
+    const { key } = data;
 </script>
 
 <svelte:head>
@@ -18,8 +18,8 @@
         </nav>
 
         <article class="contents">
-            <p>{bcrypted}</p>
             <!-- article -->
+            <p>{key}</p>
         </article>
     </main>
 </div>
