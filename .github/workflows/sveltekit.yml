@@ -25,18 +25,14 @@ jobs:
                   version: 7
                   run_install: false
 
-            - name: Get pnpm store directory
-              id: pnpm-cache
-              shell: bash
-              run: |
-                  echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
             - name: Install dependencies
               run: pnpm i
 
             - name: built web
               run: pnpm build
 
-            - uses: cloudflare/wrangler-action@2.0.0
+            - name: Deploy
+              uses: cloudflare/wrangler-action@2.0.0
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_ACCOUNT_ID }}
