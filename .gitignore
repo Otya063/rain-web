@@ -10,6 +10,7 @@ node_modules
 .npmrc
 !.env.example
 .cloudflare
+wrangler.toml
 robots.txt
 tree.txt
 vite.config.js.timestamp-*
