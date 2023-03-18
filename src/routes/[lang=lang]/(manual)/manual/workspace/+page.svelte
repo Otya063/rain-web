@@ -1,5 +1,9 @@
 <script lang="ts">
     import Menu from '$lib/common/Menu.svelte';
+    import type { PageData } from './$types';
+
+    export let data: PageData;
+    const { bcrypted } = data;
 </script>
 
 <svelte:head>
@@ -14,6 +18,7 @@
         </nav>
 
         <article class="contents">
+            <p>{bcrypted}</p>
             <!-- article -->
         </article>
     </main>
