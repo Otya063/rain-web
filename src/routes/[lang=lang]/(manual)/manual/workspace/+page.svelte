@@ -1,9 +1,5 @@
 <script lang="ts">
     import Menu from '$lib/common/Menu.svelte';
-    import type { PageData } from './$types';
-
-    export let data: PageData;
-    const { key } = data;
 </script>
 
 <svelte:head>
@@ -19,7 +15,6 @@
 
         <article class="contents">
             <!-- article -->
-            <p>{key}</p>
         </article>
     </main>
 </div>
