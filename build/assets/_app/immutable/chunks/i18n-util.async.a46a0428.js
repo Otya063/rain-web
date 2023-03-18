@@ -1,1 +1,0 @@
-import{_ as a}from"./preload-helper.41c905a7.js";import{l as s,a as r}from"./i18n-util.b0b8c982.js";const e=t=>({}),i={en:()=>a(()=>import("./index.c1724ad6.js"),[],import.meta.url),ja:()=>a(()=>import("./index.7a2c49ca.js"),[],import.meta.url)},n=(t,o)=>r[t]={...r[t],...o},m=async t=>(await i[t]()).default,l=async t=>{n(t,await m(t)),c(t)},c=t=>void(s[t]=e());export{l};

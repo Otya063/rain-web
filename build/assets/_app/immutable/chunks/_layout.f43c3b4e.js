@@ -1,1 +1,0 @@
-import{l as t}from"./i18n-util.async.a46a0428.js";import{s as a,L as e}from"./i18n-svelte.02567117.js";import{K as r}from"./index.1abc9ca4.js";const s=async({data:{locale:o}})=>(await t(o),a(o),r(e),{locale:o}),m=Object.freeze(Object.defineProperty({__proto__:null,load:s},Symbol.toStringTag,{value:"Module"}));export{m as _,s as l};
