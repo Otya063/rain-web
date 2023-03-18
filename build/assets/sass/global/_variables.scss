@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+/* フォントファミリー
+====================================================*/
+// 汎用
+$font_ja: 'Noto Sans JP', sans-serif;
+$font_en: 'Roboto', 'Open Sans', sans-serif;
+
+// タイトル用
+$font_title_ja: 'Noto Serif JP', serif;
+$font_title_en: 'Noto Serif', serif;
+
+/* アセットルートパス
+====================================================*/
+// 画像
+$path_img: '/img';

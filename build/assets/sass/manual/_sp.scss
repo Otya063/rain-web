@@ -1,0 +1,1324 @@
+@charset "UTF-8";
+@use '../global/' as *;
+
+@include sp() {
+    /* ヘッダー
+====================================================*/
+
+    // ヘッダー帯
+    header {
+        background: #000;
+        width: 100%;
+        height: 70px;
+        position: relative;
+
+        // ヘッダー帯下部装飾
+        &::after {
+            display: block;
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 0.6vw;
+            background: rgb(190, 193, 195);
+        }
+
+        // ヘッダー内部
+        .header_inner {
+            width: 100%;
+            height: 67px;
+            @include flex_center;
+            justify-content: space-between;
+
+            // プラットフォーム
+            .header_platform {
+                position: relative;
+                width: 70px;
+                height: 70px;
+                cursor: auto;
+
+                // プラットフォーム画像
+                &::before {
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 10%;
+                    content: '';
+                    width: 43px;
+                    aspect-ratio: 3 / 5;
+                    background: url(#{$path_img}/common/platform_sp_portrait.webp) no-repeat center center;
+                    background-size: auto 75%;
+
+                    @include landscape {
+                        top: 10%;
+                        left: 5%;
+                        content: '';
+                        width: 90px;
+                        aspect-ratio: 1.7 / 1;
+                        background: url(#{$path_img}/common/platform_sp_landscape.webp) no-repeat center center;
+                        background-size: auto 75%;
+                    }
+                }
+            }
+
+            // ヘッダーロゴ
+            .header_logo {
+                display: flex;
+                @include pos_center;
+
+                .header_logo_button {
+                    width: 110px;
+                    height: 70px;
+                    background: url(#{$path_img}/common/rain_textlogo.webp) center center no-repeat;
+                    background-size: 100%;
+
+                    @include landscape {
+                        width: 120px;
+                        height: 70px;
+                        background-position: center 6px;
+                    }
+                }
+            }
+        }
+    }
+
+    /* メインインナー
+====================================================*/
+
+    // トップページ画像
+    .top_images {
+        position: relative;
+        width: 100%;
+        height: 70vw;
+        z-index: -2;
+        overflow: hidden;
+        padding-bottom: 8px;
+
+        // RainServerロゴ
+        &::before {
+            /* display: block;
+            position: absolute;
+            content: '';
+            background: url(#{$path_img}/common/rainserver_logo.webp) center center no-repeat;
+            background-size: 100%;
+            width: 35vw;
+            aspect-ratio: 20 / 13;
+            top: 0;
+            left: 1%; */
+            display: none;
+        }
+
+        // トップページマニュアルタイトル
+        &::after {
+            display: block;
+            @include right_left;
+            top: auto;
+            bottom: 3%;
+            content: '';
+            background: url(#{$path_img}/common/manual_title.webp) no-repeat;
+            background-size: 100%;
+            width: 105%;
+            aspect-ratio: 63 / 10;
+            z-index: 4;
+        }
+
+        // トップページ画像位置調整
+        .top_img {
+            width: 100vw;
+            @include right_left;
+            top: -10%;
+            z-index: -1;
+        }
+    }
+
+    // サイドメニュー、メインコンテンツ位置調整及び背景画像設定
+    .bg {
+        &::before {
+            display: block;
+            content: '';
+            position: fixed;
+            background: url(#{$path_img}/common/body_bg.webp) center center repeat-y;
+            background-size: 100%;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -3;
+            transform: translate3d(0, 0, 0);
+        }
+
+        .main_inner {
+            display: flex;
+            max-width: 1220px;
+            margin: auto;
+        }
+    }
+
+    /* ボトムナビゲーション
+====================================================*/
+
+    // 位置調整
+    .bottom_navigations {
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 50px;
+        margin: 0;
+        padding: 0;
+        background-color: white;
+        border-top: 2px solid gray;
+        border-bottom: 2px solid gray;
+        transition: all 0.5s;
+        z-index: 30;
+        padding-bottom: env(safe-area-inset-bottom);
+
+        // ボトムナビゲーション本体
+        ul {
+            @include flex_center;
+            justify-content: space-around;
+            text-align: center;
+            height: 100%;
+
+            // ナビゲーションボタン位置調整
+            .btm_nav_item {
+                position: relative;
+                height: 100%;
+                display: flex;
+                align-items: center;
+
+                // アイコン
+                .icon-tabler {
+                    width: 28px;
+                    height: 28px;
+                    stroke-width: 1.2;
+                    transition: all 0.4s;
+                }
+
+                // 選択時テキスト装飾
+                &.btm_nav_text_selected {
+                    font-weight: 600;
+                    color: rgb(255, 189, 68);
+
+                    // 選択時アイコン装飾
+                    .icon-tabler {
+                        stroke-width: 1.6;
+                        color: rgb(255, 189, 68);
+                    }
+
+                    // 選択時のアイテム下「・」装飾
+                    &::after {
+                        height: 3px;
+                        border-radius: 0;
+                        background: rgb(255, 186, 58);
+                        transform: scale(1, 1);
+                    }
+                }
+
+                // 非選択時のアイテム下「・」装飾
+                &::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 10%;
+                    left: 0;
+                    width: 100%;
+                    height: 5px;
+                    border-radius: 50%;
+                    background: white;
+                    transition: all 0.4s;
+                    transform: scale(0.04, 1);
+                    transform-origin: center bottom;
+                }
+            }
+        }
+
+        // 非表示
+        &.nav_hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+
+    // メニュー本体非選択時
+    .side_menu {
+        position: fixed;
+        z-index: 11;
+        top: 0;
+        left: -120%;
+        width: 100%;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.8);
+        transition: all 0.3s;
+
+        // サイドメニュー上部装飾
+        &::before {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 4px;
+            background: #1ecbff;
+        }
+
+        // サイドメニュー下部装飾
+        &::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 4px;
+            background: #1ecbff;
+            margin-bottom: 40%;
+        }
+
+        // サイドメニュー本体
+        .categories {
+            // メインカテゴリー
+            .category {
+                border-top: 1px solid #b2b5cb;
+                background-color: #dcdfe4;
+
+                // 初めのメニューのみトップボーダー削除
+                &:nth-child(1) {
+                    border-top: none;
+                }
+
+                // サブカテゴリー
+                .sub_categories {
+                    padding: 0;
+                    margin: 0;
+                    height: 0;
+                    overflow: hidden;
+                    transition: 0.5s;
+                    border-top: none;
+                    background: rgba(85, 85, 85, 0.3);
+                    box-shadow: 0px 0px 8px 7px #7c7c7c inset;
+
+                    // サブカテゴリー内部装飾
+                    .sub_categories_list {
+                        @include flex_center;
+                        flex-direction: column;
+                        justify-content: space-around;
+                        border: 2px solid #b2b5cb;
+                        border-top: none;
+                        line-height: 3;
+
+                        // サブカテゴリー内部テキスト
+                        .sub_category {
+                            position: relative;
+                            font-weight: 600;
+                            font-size: 1.7rem;
+                            color: #000;
+                            cursor: pointer;
+                            transition: all 0.1s ease-in-out;
+                            line-height: 1.6;
+                            text-align: left;
+                            padding: 5% 8% 5% 21%;
+                            width: 100%;
+
+                            @include landscape {
+                                padding: 4% 8% 4% 14%;
+                            }
+
+                            // サブカテゴリーホバー時
+                            &:hover {
+                                background: rgba(77, 77, 77, 0.3);
+                                text-shadow: 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke,
+                                    -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke,
+                                    0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke;
+                            }
+
+                            // サブカテゴリーページ表示時
+                            &.tab_active {
+                                position: relative;
+                                background: rgba(77, 77, 77, 0.3);
+                                text-shadow: 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke,
+                                    -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke,
+                                    0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke;
+
+                                // 肉球アイコン
+                                &::before {
+                                    content: '';
+                                    position: absolute;
+                                    background: url(#{$path_img}/common/icon_paw.webp) center left no-repeat;
+                                    top: 13%;
+                                    left: 4%;
+                                    width: 11%;
+                                    height: 50px;
+                                    background-size: 100%;
+                                    transition-duration: 0.2s;
+
+                                    @include landscape {
+                                        top: 19%;
+                                        width: 7%;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // カテゴリータイトル
+                .category_title {
+                    @include flex_center;
+                    position: relative;
+                    width: 100%;
+                    border: none;
+                    font-weight: 600;
+                    font-size: 2rem;
+                    padding: 5% 0 5% 30px;
+                    transition-property: background-color, color;
+                    transition-duration: 0.3s, 0.2s;
+                    transition-timing-function: ease;
+
+                    @include landscape {
+                        font-size: 1.8rem;
+                        padding: 3% 0 3% 30px;
+                    }
+
+                    // メインカテゴリーオープン時
+                    &.open {
+                        color: #fff;
+                        background-color: #61a7f7;
+
+                        // 開閉マークオープン時
+                        .mark {
+                            background-color: #5390d4;
+
+                            // 開閉マーク縦線変化
+                            &::before {
+                                background: transparent;
+                                transform: rotate(360deg);
+                            }
+
+                            // 開閉マーク横線変化
+                            &::after {
+                                background: #adb4c2;
+                                transform: rotate(540deg);
+                            }
+                        }
+                    }
+
+                    // 開閉マーク領域
+                    .mark {
+                        display: block;
+                        width: 30px;
+                        height: 100%;
+                        background-color: #e1e6ef;
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        transition: all 0.3s ease;
+
+                        // 開閉マーク縦線
+                        &::before {
+                            position: absolute;
+                            content: '';
+                            display: block;
+                            top: 0;
+                            right: 0;
+                            left: 0;
+                            bottom: 0;
+                            width: 12px;
+                            height: 2px;
+                            background: #05162e;
+                            margin: auto;
+                            transition: all 0.3s ease-in-out;
+                        }
+
+                        // 開閉マーク横線
+                        &::after {
+                            position: absolute;
+                            content: '';
+                            display: block;
+                            top: 0;
+                            right: 0;
+                            left: 0;
+                            bottom: 0;
+                            width: 12px;
+                            height: 2px;
+                            background: #05162e;
+                            margin: auto;
+                            transform: rotate(90deg);
+                            transition: all 0.3s ease-in-out;
+                        }
+                    }
+
+                    // メニューホバー時
+                    &:hover {
+                        color: #fff;
+                        background-color: #61a7f7;
+
+                        // 開閉マークホバー時
+                        .mark {
+                            background-color: #5390d4;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 選択時
+        &.btm_nav_selected {
+            left: 0;
+
+            // スライド可能
+            &.slidable_on_mobile {
+                position: fixed;
+                z-index: 11;
+                width: 100%;
+                height: 100vh;
+                overflow: auto;
+            }
+        }
+    }
+
+    // 言語選択
+    .language_selectArea {
+        position: fixed;
+        z-index: 11;
+        top: 0;
+        right: -120%;
+        width: 100%;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.8);
+        transition: all 0.3s;
+
+        // 言語選択欄
+        .language_selectArea_list {
+            position: relative;
+            display: flex;
+            justify-content: space-around;
+            background: rgba(0, 0, 0, 0.8);
+            border: gray 4px solid;
+            border-top: none;
+            padding: 10% 5%;
+            z-index: 1;
+
+            // 各言語
+            .language_names {
+                @include flex_center;
+                flex-direction: column;
+                color: #fff;
+                padding-bottom: 2%;
+                position: relative;
+                will-change: opacity;
+
+                // 言語名初めのみ上部余白なし
+                &:first-child {
+                    margin-top: 0;
+                }
+
+                // 言語名ホバー時
+                &.lang_selected {
+                    color: orange;
+                }
+
+                // 言語名メイン
+                .language_mainName {
+                    font-size: 2rem;
+                    transform: translateY(6%);
+                }
+
+                // 言語名サブ
+                .language_subName {
+                    font-size: 1.4rem;
+                    transform: translateY(6%);
+                }
+
+                // 言語名選択時下線
+                &::before {
+                    background: #ff701e;
+                    content: '';
+                    width: 100%;
+                    height: 2px;
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    margin: auto;
+                    transform-origin: center top;
+                    transform: scale(0, 1);
+                    transition: transform 0.1s;
+                }
+                // +
+                &:hover::before {
+                    transform-origin: center top;
+                    transform: scale(1, 1);
+                }
+            }
+        }
+
+        // 選択時
+        &.btm_nav_selected {
+            right: 0%;
+
+            // スライド可能
+            &.slidable_on_mobile {
+                position: fixed;
+                z-index: 11;
+                width: 100%;
+                height: 100vh;
+                overflow: auto;
+            }
+        }
+    }
+
+    /* 記事汎用
+====================================================*/
+
+    // メインタイトルh1
+    h1 {
+        background: url(#{$path_img}/common/title_frame.webp) center no-repeat;
+        background-size: 100% 100%;
+        padding: 2.7% 2% 3%;
+        margin: 2%;
+        color: black;
+        font-weight: 600;
+        font-size: 2rem;
+        text-align: center;
+
+        @include landscape {
+            margin: 2.5%;
+            font-size: 3rem;
+        }
+    }
+
+    // サブタイトルh2
+    h2 {
+        position: relative;
+        font-size: 1.8rem;
+        font-weight: 600;
+        text-align: center;
+        color: #4d4d4f;
+        text-shadow: 1px 1px 2px rgb(0 0 0 / 50%);
+        margin-bottom: 10%;
+
+        @include landscape {
+            font-size: 2.5rem;
+        }
+
+        // サブタイトル上部装飾
+        &::before {
+            content: '';
+            @include right_left;
+            top: -4.5vw;
+            width: 90%;
+            height: 28px;
+            background: url(#{$path_img}/common/subtitle_upper.webp) center top no-repeat;
+            background-size: 100%;
+            -webkit-filter: drop-shadow(0px 2px 5px rgb(50, 50, 50));
+            filter: drop-shadow(0px 2px 5px rgb(50, 50, 50));
+        }
+
+        // サブタイトル下部装飾
+        &::after {
+            content: '';
+            @include right_left;
+            top: auto;
+            bottom: -5vw;
+            width: 90%;
+            height: 28px;
+            background: url(#{$path_img}/common/subtitle_lower.webp) center bottom no-repeat;
+            background-size: 100%;
+            -webkit-filter: drop-shadow(0px -2px 5px rgb(50, 50, 50));
+            filter: drop-shadow(0px -2px 5px rgb(50, 50, 50));
+        }
+    }
+
+    // 記事コンテンツ領域
+    .contents {
+        background: rgba(255, 255, 255, 0.6);
+        border: rgba(0, 0, 0, 0.2) solid 2px;
+        padding: 2%;
+        width: 900px;
+        min-height: 1000px;
+    }
+
+    // 記事内セクションタグ
+    section {
+        position: relative;
+        margin-top: 15%;
+    }
+
+    // 中央レイアウト
+    .center_box {
+        text-align: center;
+        margin: 0 3% 5%;
+
+        // テキスト
+        .center_box_text {
+            font-size: 1.5rem;
+            text-align: start;
+        }
+
+        // 画像
+        .center_box_img {
+            display: inline-block;
+            width: 80%;
+        }
+    }
+
+    // 目次欄
+    .table_contents {
+        position: relative;
+        padding: 8% 1%;
+        margin: 10%;
+        border-top: 2px solid white;
+        border-bottom: 2px solid white;
+        box-shadow: 0 0 0 2rem #6e6b6d;
+        background-color: #6e6b6d;
+
+        // 目次タイトル
+        &::before {
+            position: absolute;
+            top: -11%;
+            left: -1%;
+            padding: 1% 2%;
+            border-radius: 30px;
+            border: 2px solid white;
+            background-image: linear-gradient(135deg, #f6ceec 10%, #d939cd 100%);
+            font-size: 1.4rem;
+            color: white;
+            content: attr(data-title);
+        }
+
+        // 目次リスト
+        ul {
+            color: white;
+            line-height: 2;
+
+            // 項目
+            li {
+                text-align: center;
+                font-size: 1.5rem;
+                font-weight: 600;
+
+                a {
+                    &:hover {
+                        -webkit-text-decoration: underline;
+                        text-decoration: underline;
+                    }
+                }
+            }
+        }
+    }
+
+    // 記事内COMMENT及びCHECK
+    .article_memo {
+        position: relative;
+        padding: 15% 4% 4%;
+        background-color: #f1f1f1;
+        outline: 2px solid #333;
+        outline-offset: -0.5rem;
+        margin: 0 7.5% 15%;
+
+        &::before {
+            position: absolute;
+            top: 1rem;
+            left: 0;
+            width: 100%;
+            padding: 0.5rem 0;
+            background-color: rgb(28, 136, 214, 0.7);
+            color: white;
+            text-align: center;
+            content: attr(data-title);
+        }
+
+        .inner_text {
+            color: #333;
+            line-height: 1.5;
+            font-size: 1.5rem;
+        }
+    }
+
+    // 上に戻る
+    #scroll_to_top {
+        display: none;
+    }
+
+    /* 更新履歴
+====================================================*/
+
+    // 更新履歴セクション全体
+    .news {
+        background: url(#{$path_img}/common/frame_upper.webp) center top no-repeat, url(#{$path_img}/common/frame_lower.webp) center bottom no-repeat;
+        background-size: 100% 20%;
+        padding: 0 3.5% 10%;
+        margin: 5% 3% 0;
+
+        // 更新履歴タイトル
+        .news_title {
+            padding: 4% 0 3% 0;
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: center;
+            color: #00cc66;
+            text-shadow: none;
+            margin: 0;
+
+            @include landscape {
+                font-size: 2.5rem;
+            }
+
+            &::before,
+            &::after {
+                background: none;
+            }
+        }
+
+        // 更新履歴内容
+        .news_content {
+            position: relative;
+
+            // 更新日及びバージョン位置調整
+            .content_list {
+                .news_date {
+                    @include flex_center;
+                    border-bottom: solid 2px #000;
+
+                    // 更新日
+                    span {
+                        font-size: 1.8rem;
+                        font-weight: 600;
+
+                        @include landscape {
+                            font-size: 2rem;
+                        }
+                    }
+                }
+
+                // 更新内容要約文
+                .news_text {
+                    font-size: 1.5rem;
+                    padding: 2% 1% 0;
+                    line-height: 1.6;
+
+                    @include landscape {
+                        font-size: 1.6rem;
+                    }
+                }
+            }
+
+            // 詳細を見る
+            .news_more {
+                position: absolute;
+                right: 15%;
+                bottom: -8vw;
+                color: #00cc66;
+                font-weight: 600;
+                font-size: 1.3rem;
+                transition: color 0.3s ease-in-out;
+
+                @include landscape {
+                    bottom: -8.5vw;
+                    font-size: 1.5rem;
+                }
+
+                span {
+                    display: inline-block;
+                    transform: rotate(90deg);
+                }
+
+                // 詳細ホバー時
+                &:hover {
+                    color: #70ebad;
+                }
+            }
+        }
+    }
+
+    /* 注目のコンテンツ
+====================================================*/
+
+    // 注目リスト上部余白
+    .featured_list {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        // リスト内アイテム個別
+        li {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            width: calc(100% - 20px);
+            height: 40%;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, #fffef9 5%, #fffef9 95%, rgba(0, 0, 0, 0) 100%);
+            margin: 0 10px 3%;
+
+            @include landscape {
+                width: calc(95% - 20px);
+            }
+
+            &::before {
+                display: block;
+                content: '';
+                position: absolute;
+                top: 0;
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, black 50%, rgba(0, 0, 0, 0) 100%);
+                z-index: 1;
+            }
+
+            &::after {
+                content: '';
+                position: absolute;
+                display: block;
+                bottom: 0;
+                width: 100%;
+                height: 2px;
+                background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, black 50%, rgba(0, 0, 0, 0) 100%);
+            }
+
+            button {
+                // アイテム位置調整
+                .featured_items {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    padding: 3% 7% 3% 0;
+
+                    // アイテム画像
+                    .featured_img {
+                        width: 50%;
+                        margin: 0 3% 0 3%;
+                        max-width: 150px;
+                        border: 2px solid #adf;
+                        box-sizing: border-box;
+                        line-height: 0;
+                        overflow: hidden;
+                        box-shadow: 0 0 10px rgb(0 0 0 / 50%);
+
+                        @include landscape {
+                            width: 100%;
+                            max-width: 180px;
+                        }
+
+                        // 初めに
+                        &.first {
+                            background: url(#{$path_img}/common/featured/featured_first_bg.webp) center no-repeat;
+                            background-size: 101%;
+                        }
+
+                        // 歌姫狩衛戦・真説
+                        &.utahime {
+                            background: url(#{$path_img}/common/featured/featured_utahime_bg.webp) center no-repeat;
+                            background-size: 101%;
+                        }
+
+                        // ラヴィエンテ猛狂期
+                        &.ravi {
+                            background: url(#{$path_img}/common/featured/featured_ravi_bg.webp) center no-repeat;
+                            background-size: 101%;
+                        }
+
+                        // 天廊遠征録
+                        /* &.tenrou {
+                            background: url(#{$path_img}/common/featured/featured_tenrou_bg.webp) center no-repeat;
+                            background-size: 101%;
+                        } */
+
+                        // 狩人祭
+                        &.festival {
+                            background: url(#{$path_img}/common/featured/featured_festival_bg.webp) center no-repeat;
+                            background-size: 101%;
+                        }
+
+                        // 狩煉道
+                        &.road {
+                            background: url(#{$path_img}/common/featured/featured_road_bg.webp) center no-repeat;
+                            background-size: 101%;
+                        }
+
+                        // 復帰区
+                        &.return {
+                            background: url(#{$path_img}/common/featured/featured_return_bg.webp) center no-repeat;
+                            background-size: 101%;
+                        }
+                    }
+
+                    // アイテムテキスト
+                    .featured_text {
+                        position: relative;
+                        font-weight: 600;
+                        font-size: 1.4rem;
+                        text-align: center;
+                        line-height: 120%;
+                        width: 60%;
+
+                        @include landscape {
+                            font-size: 1.6rem;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /* 外部リンク
+====================================================*/
+
+    // 外部リスト
+    .extlink_list {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-content: center;
+
+        // 外部リスト内アイテム個別
+        .extlink_items {
+            width: 90%;
+            margin: 0 4% 5% 4%;
+
+            @include landscape {
+                width: 80%;
+            }
+
+            // アイテムリンク
+            .extlink_items_link {
+                display: block;
+                position: relative;
+                z-index: 2;
+
+                // タイトル左側マーク
+                &::before {
+                    display: block;
+                    @include up_down;
+                    content: '';
+                    left: 15%;
+                    width: 9%;
+                    aspect-ratio: 1 / 1;
+                    z-index: 5;
+
+                    @include landscape {
+                        width: 7%;
+                    }
+                }
+
+                // タイトル右側矢印
+                &::after {
+                    @include up_down;
+                    display: block;
+                    content: '';
+                    background: url(#{$path_img}/common/extlink/extlink_arrow.webp) center no-repeat;
+                    background-size: contain;
+                    width: 15%;
+                    height: 15%;
+                    left: auto;
+                    right: 4%;
+                    z-index: 6;
+
+                    @include landscape {
+                        width: 7%;
+                    }
+                }
+
+                // 初心者ガイド
+                &.beginner_guide {
+                    // 左側マーク
+                    &::before {
+                        background: url(#{$path_img}/common/extlink/beginnermark.webp) center no-repeat;
+                        background-size: contain;
+                    }
+
+                    // 背景
+                    .extlink_text_adj {
+                        background: url(#{$path_img}/common/extlink/extlink_beginner_bg.webp) center no-repeat;
+                        background-size: 95% 96%;
+                    }
+                }
+
+                // よくある質問
+                &.faq {
+                    // 左側マーク
+                    &::before {
+                        background: url(#{$path_img}/common/extlink/faqmark.webp) center no-repeat;
+                        background-size: contain;
+                    }
+
+                    // 背景
+                    .extlink_text_adj {
+                        background: url(#{$path_img}/common/extlink/extlink_faq_bg.webp) center no-repeat;
+                        background-size: 95% 96%;
+                    }
+                }
+
+                // 外部フレーム
+                .extlink_frame {
+                    position: relative;
+                    z-index: 7;
+                }
+
+                // アイテム内部配置調整及び背景画像
+                .extlink_text_adj {
+                    @include flex_center;
+                    justify-content: flex-start;
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    padding: 0 15% 0 29%;
+                    background-size: 95% 96%;
+
+                    // アイテム内部テキスト調整
+                    .extlink_text_content {
+                        z-index: 8;
+                        width: -webkit-fit-content;
+                        width: -moz-fit-content;
+                        width: fit-content;
+
+                        // テキストタイトル
+                        .extlink_text_title {
+                            display: inline-block;
+                            position: relative;
+                            font-style: italic;
+                            font-weight: 600;
+                            font-family: $font_title_ja;
+                            color: #fff;
+                            font-size: 1.8rem;
+                            text-shadow: 0.156vw 0.156vw 0.156vw rgb(0 0 0 / 50%);
+                            margin: 0;
+
+                            @include landscape {
+                                font-size: 2.5rem;
+                            }
+                        }
+                    }
+                }
+
+                // キャラクター画像調整
+                .extlink_chara {
+                    position: absolute;
+                    z-index: 3;
+                    width: 95%;
+                    height: 95%;
+                    top: 2%;
+                    right: 3%;
+                    overflow: hidden;
+                }
+            }
+        }
+    }
+
+    /* ランドスケープモード
+====================================================*/
+
+    // オーバーレイ
+    .landscape_mode {
+        width: 100%;
+        height: 100%;
+        background: url(#{$path_img}/common/landscape/landscape_mode.jpg) center center no-repeat;
+        background-size: cover;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 999;
+        display: none;
+        text-align: center;
+
+        // 注意書き
+        .rotate_text {
+            @include right_left;
+            width: 100%;
+            font-size: 1.8rem;
+            font-weight: 600;
+            bottom: 8%;
+            top: auto;
+            font-family: $font_title_ja;
+
+            &:lang(en) {
+                font-family: $font_title_en;
+            }
+        }
+
+        // デバイス回転画像
+        .rotate_device {
+            @include rotateDeviceKey;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            transform: rotate(90deg);
+            width: 25%;
+            animation: rotateDeviceAni 1.3s ease infinite alternate;
+        }
+
+        // Now Waiting画像
+        .now_waiting {
+            display: flex;
+            position: absolute;
+            right: -48%;
+            top: 7%;
+            width: 100%;
+            @include loadLikeBoundKey;
+
+            img {
+                width: 6%;
+                margin-left: -1%;
+
+                &:nth-of-type(1) {
+                    animation: loadLikeBoundAni 3s ease 0s infinite;
+                }
+
+                &:nth-of-type(2) {
+                    animation: loadLikeBoundAni 3s ease 0.2s infinite;
+                }
+
+                &:nth-of-type(3) {
+                    animation: loadLikeBoundAni 3s ease 0.4s infinite;
+                    margin-right: 3%;
+                }
+
+                &:nth-of-type(4) {
+                    animation: loadLikeBoundAni 3s ease 0.6s infinite;
+                }
+
+                &:nth-of-type(5) {
+                    animation: loadLikeBoundAni 3s ease 0.8s infinite;
+                }
+
+                &:nth-of-type(6) {
+                    animation: loadLikeBoundAni 3s ease 1s infinite;
+                    margin-left: -2%;
+                }
+
+                &:nth-of-type(7) {
+                    animation: loadLikeBoundAni 3s ease 1.2s infinite;
+                    margin-left: -1.5%;
+                }
+                &:nth-of-type(8) {
+                    animation: loadLikeBoundAni 3s ease 1.4s infinite;
+                    margin-left: -2%;
+                }
+                &:nth-of-type(9) {
+                    animation: loadLikeBoundAni 3s ease 1.6s infinite;
+                    margin-left: -2%;
+                }
+                &:nth-of-type(10) {
+                    animation: loadLikeBoundAni 3s ease 1.8s infinite;
+                }
+            }
+        }
+
+        // オーバーレイ背景色
+        &::before {
+            content: '';
+            background-color: rgba(255, 255, 255, 0.6);
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+        // 検知時表示
+        &.detected {
+            display: block;
+        }
+    }
+
+    /* フッター
+====================================================*/
+
+    // フッター背景
+    footer {
+        background: url(#{$path_img}/common/footer/footer_bg.webp) center top no-repeat;
+        background-color: #000;
+        background-size: 100%;
+
+        // フッターセクション余白調整
+        .footer_link {
+            margin: auto;
+            width: 90%;
+            padding-top: 5%;
+
+            // リンクリスト
+            .footer_link_list {
+                display: flex;
+                flex-direction: column;
+                flex-wrap: wrap;
+                align-content: center;
+
+                // リスト間隔調整
+                li {
+                    position: relative;
+                    padding-bottom: 8%;
+
+                    // リストアイテム内部調整
+                    .footer_list_items {
+                        display: flex;
+                        align-items: center;
+                        position: relative;
+                        background-color: rgb(40, 40, 40);
+                        border: 2px solid #fff;
+                        color: #fff;
+
+                        // アイテム画像
+                        .footer_list_img {
+                            @include flex_center;
+                            position: relative;
+                            width: 27%;
+                            aspect-ratio: 1 / 1;
+
+                            @include landscape {
+                                width: 18%;
+                            }
+                        }
+
+                        // 画像ーテキスト間の仕切り
+                        .footer_list_img::after {
+                            content: '';
+                            width: 2px;
+                            height: 102%;
+                            background-color: #fff;
+                            @include up_down;
+                            left: 100%;
+                        }
+
+                        // アイテムタイトル
+                        .footer_list_title {
+                            width: 200px;
+                            font-size: 1.5rem;
+                            font-weight: bold;
+                            color: #fff;
+                            padding-left: 5%;
+
+                            @include landscape {
+                                width: 450px;
+                                font-size: 1.7rem;
+                            }
+                        }
+
+                        // アイテム矢印
+                        &::after {
+                            @include up_down;
+                            left: auto;
+                            right: 3%;
+                            content: '';
+                            background: url(#{$path_img}/common/footer/footer_list_items_arrow.webp) center no-repeat;
+                            background-size: cover;
+                            width: 35px;
+                            aspect-ratio: 1 / 1;
+                        }
+                    }
+                }
+            }
+
+            // フッターテキスト領域
+            .footer_note {
+                padding: 3% 0 5%;
+                text-align: center;
+                color: #fff;
+                font-size: 1.2rem;
+
+                @include landscape {
+                    font-size: 1.3rem;
+                }
+            }
+        }
+    }
+}
