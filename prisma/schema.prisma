@@ -7,6 +7,64 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model characters {
+  id                   Int       @id @default(autoincrement())
+  user_id              BigInt?
+  is_female            Boolean?
+  is_new_character     Boolean?
+  name                 String?   @db.VarChar(15)
+  unk_desc_string      String?   @db.VarChar(31)
+  gr                   Int?      @default(0)
+  hrp                  Int?      @default(0)
+  weapon_type          Int?      @default(0)
+  last_login           Int?
+  savedata             Bytes?
+  decomyset            Bytes?
+  hunternavi           Bytes?
+  otomoairou           Bytes?
+  partner              Bytes?
+  platebox             Bytes?
+  platedata            Bytes?
+  platemyset           Bytes?
+  rengokudata          Bytes?
+  savemercenary        Bytes?
+  restrict_guild_scout Boolean   @default(false)
+  minidata             Bytes?
+  gacha_trial          Int?
+  gacha_prem           Int?
+  gacha_items          Bytes?
+  daily_time           DateTime? @db.Timestamp(6)
+  frontier_points      Int?
+  house_info           Bytes?
+  login_boost          Bytes?
+  skin_hist            Bytes?
+  kouryou_point        Int?
+  gcp                  Int?
+  guild_post_checked   DateTime  @default(now()) @db.Timestamp(6)
+  time_played          Int       @default(0)
+  weapon_id            Int       @default(0)
+  scenariodata         Bytes?
+  savefavoritequest    Bytes?
+  friends              String    @default("")
+  blocked              String    @default("")
+  deleted              Boolean   @default(false)
+  cafe_time            Int?      @default(0)
+  netcafe_points       Int?      @default(0)
+  boost_time           DateTime? @db.Timestamp(6)
+  cafe_reset           DateTime? @db.Timestamp(6)
+}
+
+model users {
+  id             Int       @id @default(autoincrement())
+  username       String    @unique
+  password       String
+  item_box       Bytes?
+  rights         Int       @default(14)
+  last_character Int?      @default(0)
+  last_login     DateTime? @db.Timestamp(6)
+  return_expires DateTime? @db.Timestamp(6)
+}
+
 model account_ban {
   user_id     Int     @id(map: "ban_pkey")
   title       String?
@@ -92,57 +150,6 @@ model cafebonus {
   item_type Int
   item_id   Int
   quantity  Int
-}
-
-model characters {
-  id                                                             Int                  @id @default(autoincrement())
-  user_id                                                        BigInt?
-  is_female                                                      Boolean?
-  is_new_character                                               Boolean?
-  name                                                           String?              @db.VarChar(15)
-  unk_desc_string                                                String?              @db.VarChar(31)
-  gr                                                             Int?                 @default(0)
-  hrp                                                            Int?                 @default(0)
-  weapon_type                                                    Int?                 @default(0)
-  last_login                                                     Int?
-  savedata                                                       Bytes?
-  decomyset                                                      Bytes?
-  hunternavi                                                     Bytes?
-  otomoairou                                                     Bytes?
-  partner                                                        Bytes?
-  platebox                                                       Bytes?
-  platedata                                                      Bytes?
-  platemyset                                                     Bytes?
-  rengokudata                                                    Bytes?
-  savemercenary                                                  Bytes?
-  restrict_guild_scout                                           Boolean              @default(false)
-  minidata                                                       Bytes?
-  gacha_trial                                                    Int?
-  gacha_prem                                                     Int?
-  gacha_items                                                    Bytes?
-  daily_time                                                     DateTime?            @db.Timestamp(6)
-  frontier_points                                                Int?
-  house_info                                                     Bytes?
-  login_boost                                                    Bytes?
-  skin_hist                                                      Bytes?
-  kouryou_point                                                  Int?
-  gcp                                                            Int?
-  guild_post_checked                                             DateTime             @default(now()) @db.Timestamp(6)
-  time_played                                                    Int                  @default(0)
-  weapon_id                                                      Int                  @default(0)
-  scenariodata                                                   Bytes?
-  savefavoritequest                                              Bytes?
-  friends                                                        String               @default("")
-  blocked                                                        String               @default("")
-  deleted                                                        Boolean              @default(false)
-  cafe_time                                                      Int?                 @default(0)
-  netcafe_points                                                 Int?                 @default(0)
-  boost_time                                                     DateTime?            @db.Timestamp(6)
-  cafe_reset                                                     DateTime?            @db.Timestamp(6)
-  guild_applications_guild_applications_actor_idTocharacters     guild_applications[] @relation("guild_applications_actor_idTocharacters")
-  guild_applications_guild_applications_character_idTocharacters guild_applications[] @relation("guild_applications_character_idTocharacters")
-  mail_mail_recipient_idTocharacters                             mail[]               @relation("mail_recipient_idTocharacters")
-  mail_mail_sender_idTocharacters                                mail[]               @relation("mail_sender_idTocharacters")
 }
 
 model distribution {
@@ -291,15 +298,13 @@ model guild_alliances {
 }
 
 model guild_applications {
-  id                                                     Int                    @id @default(autoincrement())
-  guild_id                                               Int
-  character_id                                           Int
-  actor_id                                               Int
-  application_type                                       guild_application_type
-  created_at                                             DateTime               @default(now()) @db.Timestamp(6)
-  characters_guild_applications_actor_idTocharacters     characters             @relation("guild_applications_actor_idTocharacters", fields: [actor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  characters_guild_applications_character_idTocharacters characters             @relation("guild_applications_character_idTocharacters", fields: [character_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  guilds                                                 guilds                 @relation(fields: [guild_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id               Int                    @id @default(autoincrement())
+  guild_id         Int
+  character_id     Int
+  actor_id         Int
+  application_type guild_application_type
+  created_at       DateTime               @default(now()) @db.Timestamp(6)
+  guilds           guilds                 @relation(fields: [guild_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@unique([guild_id, character_id], map: "guild_application_character_id")
   @@index([application_type], map: "guild_application_type_index")
@@ -404,21 +409,19 @@ model lucky_box_state {
 }
 
 model mail {
-  id                                       Int        @id @default(autoincrement())
-  sender_id                                Int
-  recipient_id                             Int
-  subject                                  String     @default("") @db.VarChar
-  body                                     String     @default("") @db.VarChar
-  read                                     Boolean    @default(false)
-  attached_item_received                   Boolean    @default(false)
-  attached_item                            Int?
-  attached_item_amount                     Int        @default(1)
-  is_guild_invite                          Boolean    @default(false)
-  created_at                               DateTime   @default(now()) @db.Timestamp(6)
-  deleted                                  Boolean    @default(false)
-  locked                                   Boolean    @default(false)
-  characters_mail_recipient_idTocharacters characters @relation("mail_recipient_idTocharacters", fields: [recipient_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  characters_mail_sender_idTocharacters    characters @relation("mail_sender_idTocharacters", fields: [sender_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id                     Int      @id @default(autoincrement())
+  sender_id              Int
+  recipient_id           Int
+  subject                String   @default("") @db.VarChar
+  body                   String   @default("") @db.VarChar
+  read                   Boolean  @default(false)
+  attached_item_received Boolean  @default(false)
+  attached_item          Int?
+  attached_item_amount   Int      @default(1)
+  is_guild_invite        Boolean  @default(false)
+  created_at             DateTime @default(now()) @db.Timestamp(6)
+  deleted                Boolean  @default(false)
+  locked                 Boolean  @default(false)
 
   @@index([recipient_id, deleted, created_at(sort: Desc), id(sort: Desc)], map: "mail_recipient_deleted_created_id_index")
 }
@@ -511,15 +514,6 @@ model stepup_state {
   @@ignore
 }
 
-model temp_account {
-  id           Int    @id @default(autoincrement())
-  username     String @unique
-  email        String @unique
-  password     String
-  email_verify String @unique
-  pre_reg_exp  String @unique
-}
-
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model titles {
   id          Int
@@ -544,17 +538,6 @@ model user_binary {
   tore            Bytes?
   garden          Bytes?
   mission         Bytes?
-}
-
-model users {
-  id             Int       @id @default(autoincrement())
-  username       String    @unique
-  password       String
-  item_box       Bytes?
-  rights         Int       @default(14)
-  last_character Int?      @default(0)
-  last_login     DateTime? @db.Timestamp(6)
-  return_expires DateTime? @db.Timestamp(6)
 }
 
 model warehouse {
