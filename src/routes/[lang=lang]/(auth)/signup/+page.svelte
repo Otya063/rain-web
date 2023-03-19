@@ -1,18 +1,13 @@
 <script lang="ts">
-    import type { ActionData, PageData } from './$types';
+    import type { ActionData } from './$types';
     import LL from '$i18n/i18n-svelte';
 
     export let form: ActionData;
-    export let data: PageData;
-
-    const { rawPass, hashedPass } = data;
 </script>
 
 <h1>{$LL.register['register_title']()}</h1>
-<p>rawPass: {rawPass}</p>
-<p>hashedPass: {hashedPass}</p>
 
-<form action="?/register" method="POST">
+<form action="?/signup" method="POST">
     <div>
         <label for="email">{$LL.register['email_label']()}</label>
         <input id="email" name="email" type="text" value={form?.credentials?.email ?? ''} autocomplete="off" />

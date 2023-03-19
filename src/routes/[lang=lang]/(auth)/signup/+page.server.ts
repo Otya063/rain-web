@@ -4,11 +4,6 @@ import bcrypt from 'bcryptjs';
 import { db } from '$lib/database';
 
 export const load: PageServerLoad = async ({ cookies }) => {
-    // test code
-    const rawPass = 'Password';
-    const salt = await bcrypt.genSalt(10);
-    const hashedPass = await bcrypt.hash(rawPass, salt);
-
     const SIDRegister = crypto.randomUUID();
     cookies.set('SIDRegister', SIDRegister, {
         path: '/',
@@ -17,14 +12,9 @@ export const load: PageServerLoad = async ({ cookies }) => {
         secure: true,
         maxAge: 60 * 60,
     });
-
-    return {
-        rawPass,
-        hashedPass,
-    };
 };
 
-const register: Action = async ({ request, cookies }) => {
+const signup: Action = async ({ request, cookies }) => {
     const data = await request.formData();
     const username = data.get('username');
     const email = data.get('email');
@@ -48,10 +38,10 @@ const register: Action = async ({ request, cookies }) => {
     (typeof password !== 'string' || !password) && (errors.invalidPassword = true);
     userExist && (errors.userExist = true);
 
-    /*     if (Object.keys(errors).length > 0) {
+    if (Object.keys(errors).length > 0) {
         return { errors, credentials };
     } else {
-        await db.temp_account.create({
+        /* await db.temp_account.create({
             data: {
                 username,
                 password: hashedPass,
@@ -59,10 +49,11 @@ const register: Action = async ({ request, cookies }) => {
                 email_verify: emailVerifyCode,
                 pre_reg_exp: preRegExp,
             },
-        });
+        }); */
     }
 
-    throw redirect(303, './conf'); */
+    //throw redirect(303, './conf');
+    throw redirect(303, '/');
 };
 
-export const actions: Actions = { register };
+export const actions: Actions = { signup };

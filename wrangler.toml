@@ -1,6 +1,4 @@
-name = "online-manual"
-account_id = ""
-
+name = "rain-web"
 
 main = "./.cloudflare/worker.js"
 site.bucket = "./.cloudflare/public"

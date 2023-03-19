@@ -1,4 +1,4 @@
-import { adapter } from 'sveltekit-adapter-aws';
+import adapter from '@sveltejs/adapter-cloudflare-workers';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 
 /** @type {import('@sveltejs/kit').Config} */
@@ -8,9 +8,7 @@ const config = {
     preprocess: vitePreprocess(),
 
     kit: {
-        adapter: adapter({
-            autoDeploy: true,
-        }),
+        adapter: adapter(),
         alias: {
             $lib: 'src/lib',
             $i18n: 'src/i18n',
