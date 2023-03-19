@@ -1,4 +1,4 @@
-name: 'Online-Manual Project'
+name: 'Rain-Web'
 on:
     push:
         branches: ['main']
@@ -28,5 +28,11 @@ jobs:
             - name: Install dependencies
               run: pnpm i
 
-            - name: built web
+            - name: Build
               run: pnpm build
+
+            - name: Deploy on Cloudflare Workers
+              uses: cloudflare/wrangler-action@2.0.0
+              with:
+                  apiToken: ${{ secrets.CF_API_TOKEN }}
+                  accountId: ${{ secrets.CF_ACCOUNT_ID }}
