@@ -677,7 +677,7 @@
         }
     }
 
-    // 記事内COMMENT及びCHECK
+    // 記事内Comment
     .article_memo {
         position: relative;
         padding: 6.5% 2% 2%;
@@ -701,6 +701,40 @@
         p {
             color: #333;
             line-height: 1.5;
+        }
+    }
+
+    // 記事内Check
+    .check_contents {
+        position: relative;
+        padding: 4% 1%;
+        margin: 10%;
+        border-top: 2px solid white;
+        border-bottom: 2px solid white;
+        box-shadow: 0 0 0 2rem #6e6b6d;
+        background-color: #6e6b6d;
+
+        // 目次タイトル
+        &::before {
+            content: '';
+            position: absolute;
+            top: -35%;
+            left: -10%;
+            width: 16%;
+            aspect-ratio: 1 / 1;
+            background: url(#{$path_img}/common/check_mark.webp) center center no-repeat;
+            background-size: 100%;
+            font-size: 1.8rem;
+        }
+
+        // 目次リスト
+        ul {
+            color: white;
+            line-height: 2;
+
+            // 項目
+            li {
+            }
         }
     }
 

@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { fail, redirect } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
-import { db } from '$lib/database';
+//import { db } from '$lib/database';
 
 export const load: PageServerLoad = async () => {
     // todo
@@ -18,7 +18,7 @@ const signup: Action = async ({ request }) => {
         return fail(400, { message: 'ユーザー名・パスワードを入力してください。' });
     }
 
-    const userExist = await db.users.findUnique({
+    /* const userExist = await db.users.findUnique({
         where: { username },
     });
 
@@ -50,7 +50,7 @@ const signup: Action = async ({ request }) => {
             unk_desc_string: '',
             last_login: lastLoginTime,
         },
-    });
+    }); */
 
     throw redirect(303, '/');
 };
