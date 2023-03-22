@@ -73,7 +73,7 @@ const signup: Action = async ({ request, cookies }) => {
 
         const lastLoginTime = Math.floor(Date.now() / 1000);
 
-        await db.characters.create({
+        /* await db.characters.create({
             data: {
                 user_id: regUserId,
                 name: '',
@@ -82,7 +82,7 @@ const signup: Action = async ({ request, cookies }) => {
                 is_new_character: true,
                 last_login: lastLoginTime,
             },
-        });
+        }); */
         // end
     }
 
