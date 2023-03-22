@@ -8,6 +8,8 @@ on:
 jobs:
     cache-and-install:
         runs-on: ubuntu-latest
+        env:
+            VITE_DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
         steps:
             - name: Checkout
