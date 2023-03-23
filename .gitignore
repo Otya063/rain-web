@@ -11,7 +11,7 @@ node_modules
 !.env.example
 .cloudflare
 robots.txt
+src\routes\[lang=lang]\(manual)\manual\workspace\+page.svelte
 changelog.txt
-tree.txt
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
