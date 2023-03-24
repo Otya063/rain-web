@@ -41,4 +41,4 @@ jobs:
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_ACCOUNT_ID }}
-                  command: wrangler publish --name=development
+                  command: wrangler publish --name development
