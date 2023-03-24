@@ -2,10 +2,10 @@ name: 'Rain-Web'
 on:
     push:
         branches:
-            - main
+            - development
     pull_request:
         branches:
-            - main
+            - development
 
 jobs:
     cache-and-install:
@@ -41,3 +41,4 @@ jobs:
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_ACCOUNT_ID }}
+                  command: wrangler publish --name=development
