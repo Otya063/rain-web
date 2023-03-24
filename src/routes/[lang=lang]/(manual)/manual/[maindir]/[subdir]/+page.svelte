@@ -1,6 +1,12 @@
 <script lang="ts">
     import Menu from '$lib/common/Menu.svelte';
     import LL from '$i18n/i18n-svelte';
+    //import { onMount, type ComponentType } from 'svelte';
+
+    //let Component: ComponentType;
+    /* onMount(async () => {
+        Component = (await import('../../../../../../lib/articles/article_components/ja_signup_discord.svelte')).default;
+    }); */
 
     export let data;
     const { article } = data;
@@ -15,8 +21,8 @@
 
         <!-- article -->
         <article class="contents">
-            <h1>{article?.title}</h1>
-            {@html article?.content}
+            <!-- <h1>{article?.title}</h1> -->
+            <!-- <svelte:component this={Component} /> -->
         </article>
     </main>
 </div>
