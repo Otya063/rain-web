@@ -90,10 +90,12 @@ const ja: Translation = {
         },
     },
 
-    // 動的ルート対象外記事
+    // 記事
     articles: {
         description: 'Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル',
         keywords: 'モンスターハンター フロンティア, モンスターハンター, モンハン, オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
+
+        // トップページ
         home: {
             head_title: 'MHF オンラインマニュアル',
             title: 'トップページ',
@@ -168,6 +170,24 @@ const ja: Translation = {
                     href: 'discord://discord.com/channels/937230168223789066/1040529566298550292',
                     img_chara: 'extlink_faq_chara',
                 },
+            },
+        },
+
+        // 会員登録
+        signup: {
+            // Discord
+            discord: {
+                title: '会員登録手順（Discord）',
+                table_contents: '公式Discordにて会員登録',
+                data_title: "コンテンツ",
+                article_memo:
+                    '「モンスターハンター フロンティア オンライン」をプレイするためには、Rainサーバーへの会員登録が必要となります。登録画面にて設定した「ユーザー名」及び「パスワード」をゲームランチャーへ入力してログインすることで、ゲームをプレイすることができます。<br>ここでは、公式Discord内での会員登録手順についてご紹介いたします。',
+                subtitle: '公式Discordにて会員登録',
+                center_box1: '「bot-commands」チャンネル内にあるインターフェイスより、Registerボタンを押します。',
+                center_box2:
+                    '以下のようなウィンドウが表示されたら、「Username」及び「Password」欄にそれぞれ自身の設定したい値を入力して、送信ボタンを押してください。<br />送信が完了すると、「account successfully created」というメッセージが表示されます。',
+                center_box3:
+                    '/card コマンド使用後、空のキャラクターが表示されます。<br />Useボタンを押して、使用キャラクターを確定させると、「successfully switch main character」というメッセージが表示されます。<br />これにて会員登録は完了となります。',
             },
         },
     },

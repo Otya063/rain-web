@@ -405,6 +405,42 @@ type RootTranslation = {
 				}
 			}
 		}
+		signup: {
+			discord: {
+				/**
+				 * S​i​g​n​-​u​p​ ​P​r​o​c​e​d​u​r​e​ ​(​D​i​s​c​o​r​d​)
+				 */
+				title: string
+				/**
+				 * 公​式​D​i​s​c​o​r​d​に​て​会​員​登​録
+				 */
+				table_contents: string
+				/**
+				 * C​o​n​t​e​n​t​s
+				 */
+				data_title: string
+				/**
+				 * 「​モ​ン​ス​タ​ー​ハ​ン​タ​ー​ ​フ​ロ​ン​テ​ィ​ア​ ​オ​ン​ラ​イ​ン​」​を​プ​レ​イ​す​る​た​め​に​は​、​R​a​i​n​サ​ー​バ​ー​へ​の​会​員​登​録​が​必​要​と​な​り​ま​す​。​登​録​画​面​に​て​設​定​し​た​「​ユ​ー​ザ​ー​名​」​及​び​「​パ​ス​ワ​ー​ド​」​を​ゲ​ー​ム​ラ​ン​チ​ャ​ー​へ​入​力​し​て​ロ​グ​イ​ン​す​る​こ​と​で​、​ゲ​ー​ム​を​プ​レ​イ​す​る​こ​と​が​で​き​ま​す​。​こ​こ​で​は​、​公​式​D​i​s​c​o​r​d​内​で​の​会​員​登​録​手​順​に​つ​い​て​ご​紹​介​い​た​し​ま​す​。
+				 */
+				article_memo: string
+				/**
+				 * 公​式​D​i​s​c​o​r​d​に​て​会​員​登​録
+				 */
+				subtitle: string
+				/**
+				 * 「​b​o​t​-​c​o​m​m​a​n​d​s​」​チ​ャ​ン​ネ​ル​内​に​あ​る​イ​ン​タ​ー​フ​ェ​イ​ス​よ​り​、​R​e​g​i​s​t​e​r​ボ​タ​ン​を​押​し​ま​す​。
+				 */
+				center_box1: string
+				/**
+				 * 以​下​の​よ​う​な​ウ​ィ​ン​ド​ウ​が​表​示​さ​れ​た​ら​、​「​U​s​e​r​n​a​m​e​」​及​び​「​P​a​s​s​w​o​r​d​」​欄​に​そ​れ​ぞ​れ​自​身​の​設​定​し​た​い​値​を​入​力​し​て​、​送​信​ボ​タ​ン​を​押​し​て​く​だ​さ​い​。​<​b​r​ ​/​>​送​信​が​完​了​す​る​と​、​「​a​c​c​o​u​n​t​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​r​e​a​t​e​d​」​と​い​う​メ​ッ​セ​ー​ジ​が​表​示​さ​れ​ま​す​。
+				 */
+				center_box2: string
+				/**
+				 * /​c​a​r​d​ ​コ​マ​ン​ド​使​用​後​、​空​の​キ​ャ​ラ​ク​タ​ー​が​表​示​さ​れ​ま​す​。​<​b​r​ ​/​>​U​s​e​ボ​タ​ン​を​押​し​て​、​使​用​キ​ャ​ラ​ク​タ​ー​を​確​定​さ​せ​る​と​、​「​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​w​i​t​c​h​ ​m​a​i​n​ ​c​h​a​r​a​c​t​e​r​」​と​い​う​メ​ッ​セ​ー​ジ​が​表​示​さ​れ​ま​す​。​<​b​r​ ​/​>​こ​れ​に​て​会​員​登​録​は​完​了​と​な​り​ま​す​。
+				 */
+				center_box3: string
+			}
+		}
 	}
 	footer: {
 		rain_officialsite: {
@@ -865,6 +901,42 @@ export type TranslationFunctions = {
 					 */
 					img_chara: () => LocalizedString
 				}
+			}
+		}
+		signup: {
+			discord: {
+				/**
+				 * Sign-up Procedure (Discord)
+				 */
+				title: () => LocalizedString
+				/**
+				 * 公式Discordにて会員登録
+				 */
+				table_contents: () => LocalizedString
+				/**
+				 * Contents
+				 */
+				data_title: () => LocalizedString
+				/**
+				 * 「モンスターハンター フロンティア オンライン」をプレイするためには、Rainサーバーへの会員登録が必要となります。登録画面にて設定した「ユーザー名」及び「パスワード」をゲームランチャーへ入力してログインすることで、ゲームをプレイすることができます。ここでは、公式Discord内での会員登録手順についてご紹介いたします。
+				 */
+				article_memo: () => LocalizedString
+				/**
+				 * 公式Discordにて会員登録
+				 */
+				subtitle: () => LocalizedString
+				/**
+				 * 「bot-commands」チャンネル内にあるインターフェイスより、Registerボタンを押します。
+				 */
+				center_box1: () => LocalizedString
+				/**
+				 * 以下のようなウィンドウが表示されたら、「Username」及び「Password」欄にそれぞれ自身の設定したい値を入力して、送信ボタンを押してください。<br />送信が完了すると、「account successfully created」というメッセージが表示されます。
+				 */
+				center_box2: () => LocalizedString
+				/**
+				 * /card コマンド使用後、空のキャラクターが表示されます。<br />Useボタンを押して、使用キャラクターを確定させると、「successfully switch main character」というメッセージが表示されます。<br />これにて会員登録は完了となります。
+				 */
+				center_box3: () => LocalizedString
 			}
 		}
 	}
