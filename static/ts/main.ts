@@ -104,7 +104,10 @@ if (browser) {
 ====================================================*/
 export const loadArticle = (lang_code: string = '', maindir: string = '', subdir: string = '') => {
     const href_path: string = `${lang_code}/manual/${maindir}${subdir}`;
-    location.pathname = href_path;
+    const url = new URL(href_path, location.origin);
+    // remove query params if they are
+    url.search = '';
+    location.href = url.toString();
 };
 
 // bottom navigetion toggle

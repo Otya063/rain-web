@@ -610,7 +610,7 @@
     // 記事内セクションタグ
     section {
         position: relative;
-        margin: 10% 8% 0;
+        margin: 10% 10% 0;
     }
 
     // 中央レイアウト
@@ -623,12 +623,14 @@
         .center_box_text {
             font-size: 1.8rem;
             text-align: start;
+            text-indent: -2.5em;
+            padding-bottom: 2%;
         }
 
         // 画像
         .center_box_img {
             display: inline-block;
-            width: 80%;
+            width: 85%;
         }
     }
 

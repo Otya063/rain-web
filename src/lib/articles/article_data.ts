@@ -35,7 +35,7 @@ export const articles: Articles[] = [
     {
         lang: 'en',
         maindir: 'signup',
-        subdir: 'membersite',
+        subdir: 'member',
         head_title: `Sign-up Procedure (Member Site) | ${default_title_en}`,
     },
 
