@@ -731,10 +731,6 @@
         ul {
             color: white;
             line-height: 2;
-
-            // 項目
-            li {
-            }
         }
     }
 
@@ -786,6 +782,22 @@
             box-shadow: 0 0 10px #00a6c4;
             opacity: 1;
         }
+    }
+
+    // 記事内容ロードアニメーション
+    .article_loader {
+        position: relative;
+        color: #999999;
+        font-size: 90px;
+        text-indent: -9999em;
+        overflow: hidden;
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+        margin: 72px auto;
+        transform: translateZ(0);
+        @include loaderKey;
+        animation: loaderAni1 1.7s infinite ease, loaderAni2 1.7s infinite ease;
     }
 
     // SPボトムメニュー非表示

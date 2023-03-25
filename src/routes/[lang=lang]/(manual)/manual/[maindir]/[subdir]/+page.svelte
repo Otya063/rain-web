@@ -1,12 +1,7 @@
 <script lang="ts">
+    import { fade } from 'svelte/transition';
     import Menu from '$lib/common/Menu.svelte';
     import LL from '$i18n/i18n-svelte';
-    //import { onMount, type ComponentType } from 'svelte';
-
-    //let Component: ComponentType;
-    /* onMount(async () => {
-        Component = (await import('../../../../../../lib/articles/article_components/ja_signup_discord.svelte')).default;
-    }); */
 
     export let data;
     const { article } = data;
@@ -21,8 +16,13 @@
 
         <!-- article -->
         <article class="contents">
-            <!-- <h1>{article?.title}</h1> -->
-            <!-- <svelte:component this={Component} /> -->
+            {#await import(`../../../../../../lib/articles/article_components/${article.lang}_${article.maindir}_${article.subdir}.svelte`)}
+                <p class="article_loader">Loading</p>
+            {:then value}
+                <svelte:component this={value.default} />
+            {:catch}
+                <p style="color: red">404 Not Found</p>
+            {/await}
         </article>
     </main>
 </div>
