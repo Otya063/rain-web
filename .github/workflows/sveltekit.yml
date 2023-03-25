@@ -38,7 +38,7 @@ jobs:
               run: pnpm build
 
             - name: Deploy on Cloudflare Development
-              if: contains(toJSON(github.ref), 'development')
+              if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'development'
               uses: cloudflare/wrangler-action@2.0.0
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
@@ -46,7 +46,7 @@ jobs:
                   command: publish --name development
 
             - name: Deploy on Cloudflare Production
-              if: contains(toJSON(github.ref), 'main')
+              if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
               uses: cloudflare/wrangler-action@2.0.0
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
