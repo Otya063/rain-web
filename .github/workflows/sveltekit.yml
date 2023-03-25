@@ -5,10 +5,11 @@ on:
             - development
     pull_request:
         branches:
+            - main
             - development
 
 jobs:
-    cache-and-install:
+    rain-web-deploy:
         runs-on: ubuntu-latest
         env:
             VITE_DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -36,9 +37,18 @@ jobs:
             - name: Build
               run: pnpm build
 
-            - name: Deploy on Cloudflare Workers
+            - name: Deploy on Cloudflare Development
+              if: contains(toJSON(github.ref), 'development')
               uses: cloudflare/wrangler-action@2.0.0
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_ACCOUNT_ID }}
                   command: publish --name development
+
+            - name: Deploy on Cloudflare Production
+              if: contains(toJSON(github.ref), 'main')
+              uses: cloudflare/wrangler-action@2.0.0
+              with:
+                  apiToken: ${{ secrets.CF_API_TOKEN }}
+                  accountId: ${{ secrets.CF_ACCOUNT_ID }}
+                  command: publish --name production
