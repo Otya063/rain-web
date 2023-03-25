@@ -20,7 +20,7 @@
             {:then value}
                 <svelte:component this={value.default} />
             {:catch}
-                <p style="color: red">404 Not Found</p>
+                <p style="color: red">{$LL.E404['h1']()}</p>
             {/await}
         </article>
     </main>

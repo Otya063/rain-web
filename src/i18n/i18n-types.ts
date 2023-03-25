@@ -412,7 +412,7 @@ type RootTranslation = {
 				 */
 				title: string
 				/**
-				 * 公​式​D​i​s​c​o​r​d​に​て​会​員​登​録
+				 * S​i​g​n​ ​U​p​ ​w​i​t​h​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d
 				 */
 				table_contents: string
 				/**
@@ -420,23 +420,23 @@ type RootTranslation = {
 				 */
 				data_title: string
 				/**
-				 * 「​モ​ン​ス​タ​ー​ハ​ン​タ​ー​ ​フ​ロ​ン​テ​ィ​ア​ ​オ​ン​ラ​イ​ン​」​を​プ​レ​イ​す​る​た​め​に​は​、​R​a​i​n​サ​ー​バ​ー​へ​の​会​員​登​録​が​必​要​と​な​り​ま​す​。​登​録​画​面​に​て​設​定​し​た​「​ユ​ー​ザ​ー​名​」​及​び​「​パ​ス​ワ​ー​ド​」​を​ゲ​ー​ム​ラ​ン​チ​ャ​ー​へ​入​力​し​て​ロ​グ​イ​ン​す​る​こ​と​で​、​ゲ​ー​ム​を​プ​レ​イ​す​る​こ​と​が​で​き​ま​す​。​こ​こ​で​は​、​公​式​D​i​s​c​o​r​d​内​で​の​会​員​登​録​手​順​に​つ​い​て​ご​紹​介​い​た​し​ま​す​。
+				 * I​n​ ​o​r​d​e​r​ ​t​o​ ​p​l​a​y​ ​"​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​O​n​l​i​n​e​,​"​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​s​i​g​n​ ​u​p​ ​f​o​r​ ​t​h​e​ ​R​a​i​n​ ​S​e​r​v​e​r​ ​f​i​r​s​t​.​ ​Y​o​u​ ​c​a​n​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​b​y​ ​e​n​t​e​r​i​n​g​ ​t​h​e​ ​"​U​s​e​r​n​a​m​e​"​ ​a​n​d​ ​"​P​a​s​s​w​o​r​d​,​"​ ​w​h​i​c​h​ ​y​o​u​ ​s​e​t​ ​o​n​ ​t​h​e​ ​r​e​g​i​s​t​r​a​t​i​o​n​ ​s​c​r​e​e​n​,​ ​i​n​t​o​ ​t​h​e​ ​g​a​m​e​ ​l​a​u​n​c​h​e​r​ ​a​n​d​ ​l​o​g​g​i​n​g​ ​i​n​.​ ​<​b​r​>​T​h​i​s​ ​s​e​c​t​i​o​n​ ​d​e​s​c​r​i​b​e​s​ ​s​i​g​n​-​u​p​ ​p​r​o​c​e​d​u​r​e​ ​w​i​t​h​ ​o​f​f​i​c​i​a​l​ ​d​i​s​c​o​r​d​.
 				 */
 				article_memo: string
 				/**
-				 * 公​式​D​i​s​c​o​r​d​に​て​会​員​登​録
+				 * S​i​g​n​ ​U​p​ ​w​i​t​h​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d
 				 */
 				subtitle: string
 				/**
-				 * 「​b​o​t​-​c​o​m​m​a​n​d​s​」​チ​ャ​ン​ネ​ル​内​に​あ​る​イ​ン​タ​ー​フ​ェ​イ​ス​よ​り​、​R​e​g​i​s​t​e​r​ボ​タ​ン​を​押​し​ま​す​。
+				 * O​n​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​i​n​ ​t​h​e​ ​"​b​o​t​-​c​o​m​m​a​n​d​s​"​ ​c​h​a​n​n​e​l​,​ ​p​r​e​s​s​ ​"​R​e​g​i​s​t​e​r​"​ ​b​u​t​t​o​n​.
 				 */
 				center_box1: string
 				/**
-				 * 以​下​の​よ​う​な​ウ​ィ​ン​ド​ウ​が​表​示​さ​れ​た​ら​、​「​U​s​e​r​n​a​m​e​」​及​び​「​P​a​s​s​w​o​r​d​」​欄​に​そ​れ​ぞ​れ​自​身​の​設​定​し​た​い​値​を​入​力​し​て​、​送​信​ボ​タ​ン​を​押​し​て​く​だ​さ​い​。​<​b​r​ ​/​>​送​信​が​完​了​す​る​と​、​「​a​c​c​o​u​n​t​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​r​e​a​t​e​d​」​と​い​う​メ​ッ​セ​ー​ジ​が​表​示​さ​れ​ま​す​。
+				 * W​h​e​n​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​w​i​n​d​o​w​ ​a​p​p​e​a​r​s​,​ ​e​n​t​e​r​ ​t​h​e​ ​v​a​l​u​e​s​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​e​t​ ​i​n​ ​t​h​e​ ​"​U​s​e​r​n​a​m​e​"​ ​a​n​d​ ​"​P​a​s​s​w​o​r​d​"​ ​f​i​e​l​d​s​ ​r​e​s​p​e​c​t​i​v​e​l​y​,​ ​t​h​e​n​ ​p​r​e​s​s​ ​"​S​u​b​m​i​t​"​ ​b​u​t​t​o​n​.​<​b​r​>​W​h​e​n​ ​s​u​b​m​i​t​t​i​n​g​ ​i​s​ ​c​o​m​p​l​e​t​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​a​c​c​o​u​n​t​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​r​e​a​t​e​d​.​"
 				 */
 				center_box2: string
 				/**
-				 * /​c​a​r​d​ ​コ​マ​ン​ド​使​用​後​、​空​の​キ​ャ​ラ​ク​タ​ー​が​表​示​さ​れ​ま​す​。​<​b​r​ ​/​>​U​s​e​ボ​タ​ン​を​押​し​て​、​使​用​キ​ャ​ラ​ク​タ​ー​を​確​定​さ​せ​る​と​、​「​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​w​i​t​c​h​ ​m​a​i​n​ ​c​h​a​r​a​c​t​e​r​」​と​い​う​メ​ッ​セ​ー​ジ​が​表​示​さ​れ​ま​す​。​<​b​r​ ​/​>​こ​れ​に​て​会​員​登​録​は​完​了​と​な​り​ま​す​。
+				 * A​f​t​e​r​ ​u​s​i​n​g​ ​/​c​a​r​d​,​ ​s​l​a​s​h​ ​c​o​m​m​a​n​d​,​ ​a​n​ ​e​m​p​t​y​ ​c​h​a​r​a​c​t​e​r​ ​i​s​ ​d​i​s​p​l​a​y​e​d​.​<​b​r​>​W​h​e​n​ ​y​o​u​ ​p​r​e​s​s​ ​"​U​s​e​"​ ​b​u​t​t​o​n​ ​t​o​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​c​h​a​r​a​c​t​e​r​ ​t​o​ ​b​e​ ​u​s​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​w​i​t​c​h​ ​m​a​i​n​ ​c​h​a​r​a​c​t​e​r​.​"​<​b​r​>​S​i​g​n​i​n​g​ ​u​p​ ​f​o​r​ ​R​a​i​n​ ​i​s​ ​n​o​w​ ​c​o​m​p​l​e​t​e​d​.
 				 */
 				center_box3: string
 			}
@@ -910,7 +910,7 @@ export type TranslationFunctions = {
 				 */
 				title: () => LocalizedString
 				/**
-				 * 公式Discordにて会員登録
+				 * Sign Up with Official Discord
 				 */
 				table_contents: () => LocalizedString
 				/**
@@ -918,23 +918,23 @@ export type TranslationFunctions = {
 				 */
 				data_title: () => LocalizedString
 				/**
-				 * 「モンスターハンター フロンティア オンライン」をプレイするためには、Rainサーバーへの会員登録が必要となります。登録画面にて設定した「ユーザー名」及び「パスワード」をゲームランチャーへ入力してログインすることで、ゲームをプレイすることができます。ここでは、公式Discord内での会員登録手順についてご紹介いたします。
+				 * In order to play "Monster Hunter Frontier Online," you need to sign up for the Rain Server first. You can play the game by entering the "Username" and "Password," which you set on the registration screen, into the game launcher and logging in. <br>This section describes sign-up procedure with official discord.
 				 */
 				article_memo: () => LocalizedString
 				/**
-				 * 公式Discordにて会員登録
+				 * Sign Up with Official Discord
 				 */
 				subtitle: () => LocalizedString
 				/**
-				 * 「bot-commands」チャンネル内にあるインターフェイスより、Registerボタンを押します。
+				 * On the interface in the "bot-commands" channel, press "Register" button.
 				 */
 				center_box1: () => LocalizedString
 				/**
-				 * 以下のようなウィンドウが表示されたら、「Username」及び「Password」欄にそれぞれ自身の設定したい値を入力して、送信ボタンを押してください。<br />送信が完了すると、「account successfully created」というメッセージが表示されます。
+				 * When the following window appears, enter the values you want to set in the "Username" and "Password" fields respectively, then press "Submit" button.<br>When submitting is completed, you can see the message "account successfully created."
 				 */
 				center_box2: () => LocalizedString
 				/**
-				 * /card コマンド使用後、空のキャラクターが表示されます。<br />Useボタンを押して、使用キャラクターを確定させると、「successfully switch main character」というメッセージが表示されます。<br />これにて会員登録は完了となります。
+				 * After using /card, slash command, an empty character is displayed.<br>When you press "Use" button to confirm the character to be used, you can see the message "successfully switch main character."<br>Signing up for Rain is now completed.
 				 */
 				center_box3: () => LocalizedString
 			}

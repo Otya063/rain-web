@@ -1,10 +1,10 @@
 import type { Translation } from '../i18n-types';
 
 const ja: Translation = {
-    // ランドスケープモードテキスト
+    // Landscape Mode
     landscape_mode: '端末を縦向きにして閲覧してください。',
 
-    // エラーページ
+    // Error Page
     E404: {
         title: 'お探しのページが存在しません | Rain Server',
         h1: 'お探しのページが存在しません',

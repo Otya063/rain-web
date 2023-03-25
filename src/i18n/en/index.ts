@@ -178,16 +178,16 @@ const en: BaseTranslation = {
             // Discord
             discord: {
                 title: 'Sign-up Procedure (Discord)',
-                table_contents: '公式Discordにて会員登録',
-                data_title: "Contents",
+                table_contents: 'Sign Up with Official Discord',
+                data_title: 'Contents',
                 article_memo:
-                    '「モンスターハンター フロンティア オンライン」をプレイするためには、Rainサーバーへの会員登録が必要となります。登録画面にて設定した「ユーザー名」及び「パスワード」をゲームランチャーへ入力してログインすることで、ゲームをプレイすることができます。ここでは、公式Discord内での会員登録手順についてご紹介いたします。',
-                subtitle: '公式Discordにて会員登録',
-                center_box1: '「bot-commands」チャンネル内にあるインターフェイスより、Registerボタンを押します。',
+                    'In order to play "Monster Hunter Frontier Online," you need to sign up for the Rain Server first. You can play the game by entering the "Username" and "Password," which you set on the registration screen, into the game launcher and logging in. <br>This section describes sign-up procedure with official discord.',
+                subtitle: 'Sign Up with Official Discord',
+                center_box1: 'On the interface in the "bot-commands" channel, press "Register" button.',
                 center_box2:
-                    '以下のようなウィンドウが表示されたら、「Username」及び「Password」欄にそれぞれ自身の設定したい値を入力して、送信ボタンを押してください。<br />送信が完了すると、「account successfully created」というメッセージが表示されます。',
+                    'When the following window appears, enter the values you want to set in the "Username" and "Password" fields respectively, then press "Submit" button.<br>When submitting is completed, you can see the message "account successfully created."',
                 center_box3:
-                    '/card コマンド使用後、空のキャラクターが表示されます。<br />Useボタンを押して、使用キャラクターを確定させると、「successfully switch main character」というメッセージが表示されます。<br />これにて会員登録は完了となります。',
+                    'After using /card, slash command, an empty character is displayed.<br>When you press "Use" button to confirm the character to be used, you can see the message "successfully switch main character."<br>Signing up for Rain is now completed.',
             },
         },
     },
