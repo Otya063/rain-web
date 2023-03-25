@@ -1,10 +1,10 @@
 import type { BaseTranslation } from '../i18n-types';
 
 const en: BaseTranslation = {
-    // ランドスケープモードテキスト
+    // Landscape Mode
     landscape_mode: 'Please view the page in portrait mode.',
 
-    // エラーページ
+    // Error Page
     E404: {
         title: '404 Not Found | Rain Server',
         h1: '404 Not Found',
@@ -20,16 +20,17 @@ const en: BaseTranslation = {
             'Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. <br>This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.',
     },
 
-    register: {
-        register_title: 'Rain Server Account Creation',
+    // Sign Up Page
+    signup: {
+        signup_title: 'Rain Server Account Creation',
         email_label: 'Email',
         username_label: 'Username',
         password_label: 'Password',
-        register_button: 'Sign Up',
+        signup_button: 'Sign Up',
         already: 'The user already exists.',
     },
 
-    // ヘッダー言語設定
+    // Header Language Selection
     header: {
         now_lang: 'English',
         lang_sel: {
@@ -44,13 +45,13 @@ const en: BaseTranslation = {
         },
     },
 
-    // サイドメニュー
+    // Side Menu
     side_menu: {
         signup: {
             title: 'Sign Up',
             contents: {
                 discord: 'Sign-up Procedure (Discord)',
-                membersite: 'Sign-up Procedure (Member Site)',
+                member: 'Sign-up Procedure (Member Site)',
             },
         },
         begin: {
@@ -90,12 +91,12 @@ const en: BaseTranslation = {
         },
     },
 
-    // 記事
+    // Articles
     articles: {
         description: 'Official Online Manual of Monster Hunter Frontier for Rain Server.',
         keywords: 'monster hunter frontier, monster hunter, online manual, mhf, online game',
 
-        // トップページ
+        // Home
         home: {
             head_title: 'MHF Online Manual',
             title: 'Home',
@@ -104,7 +105,7 @@ const en: BaseTranslation = {
             news_text: 'Online Manual is available now!<br>Detailed differences from the former official online manual and updates can be found from "More."',
             news_more: 'More',
 
-            // 注目のコンテンツ
+            // Featured Contents
             featured_title: 'Featured Contents',
             featured_contents: {
                 first: {
@@ -151,7 +152,7 @@ const en: BaseTranslation = {
                 },
             },
 
-            // 外部リンク
+            // External Links
             extlink_title: 'External Links',
             extlink_contents: {
                 beginner_guide: {
@@ -173,9 +174,8 @@ const en: BaseTranslation = {
             },
         },
 
-        // 会員登録
         signup: {
-            // Discord
+            // Sign-up Procedure (Discord)
             discord: {
                 title: 'Sign-up Procedure (Discord)',
                 table_contents: 'Sign Up with Official Discord',
@@ -192,7 +192,7 @@ const en: BaseTranslation = {
         },
     },
 
-    // フッター
+    // Footer
     footer: {
         rain_officialsite: {
             title: 'Rain Server Official Site',
@@ -213,7 +213,7 @@ const en: BaseTranslation = {
     footer_note:
         '*Due to the layout, the landscape mode is restricted in this website.<br><br>*Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.',
 
-    // ボトムナビゲーション
+    // Bottom Navigation
     bottom_nav: {
         side_menu: {
             svg_path:

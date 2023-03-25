@@ -19,17 +19,17 @@ const ja: Translation = {
         footer_text: 'Rainサーバーは、株式会社カプコンまたはその子会社とは一切関係ありません。<br>当プロジェクトは多数のボランティアによる協力の下で成り立っており、いかなる収益も発生いたしません。',
     },
 
-    // 会員登録ページ
-    register: {
-        register_title: 'Rain サーバー アカウント作成',
+    // Sign Up Page
+    signup: {
+        signup_title: 'Rain サーバー アカウント作成',
         email_label: 'メールアドレス',
         username_label: 'ユーザー名',
         password_label: 'パスワード',
-        register_button: '登録する',
+        signup_button: '登録する',
         already: '既に存在するユーザーです。',
     },
 
-    // ヘッダー言語設定
+    // Header Language Selection
     header: {
         now_lang: '日本語',
         lang_sel: {
@@ -44,13 +44,13 @@ const ja: Translation = {
         },
     },
 
-    // サイドメニュー
+    // Side Menu
     side_menu: {
         signup: {
             title: '会員登録',
             contents: {
                 discord: '会員登録手順（Discord）',
-                membersite: '会員登録手順（メンバーサイト）',
+                member: '会員登録手順（メンバーサイト）',
             },
         },
         begin: {
@@ -90,12 +90,12 @@ const ja: Translation = {
         },
     },
 
-    // 記事
+    // Articles
     articles: {
         description: 'Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル',
         keywords: 'モンスターハンター フロンティア, モンスターハンター, モンハン, オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
 
-        // トップページ
+        // Home
         home: {
             head_title: 'MHF オンラインマニュアル',
             title: 'トップページ',
@@ -104,7 +104,7 @@ const ja: Translation = {
             news_text: 'オンラインマニュアルを開設いたしました。<br>旧公式オンラインマニュアルとの詳しい相違点及び更新内容は「詳細を見る」よりご確認いただけます。',
             news_more: '詳細を見る',
 
-            // 注目のコンテンツ
+            // Featured Contents
             featured_title: '注目のコンテンツ',
             featured_contents: {
                 first: {
@@ -151,7 +151,7 @@ const ja: Translation = {
                 },
             },
 
-            // 外部リンク
+            // External Links
             extlink_title: '外部リンク',
             extlink_contents: {
                 beginner_guide: {
@@ -173,9 +173,8 @@ const ja: Translation = {
             },
         },
 
-        // 会員登録
         signup: {
-            // Discord
+            // Sign-up Procedure (Discord)
             discord: {
                 title: '会員登録手順（Discord）',
                 table_contents: '公式Discordにて会員登録',
@@ -192,7 +191,7 @@ const ja: Translation = {
         },
     },
 
-    // フッター
+    // Footer
     footer: {
         rain_officialsite: {
             title: 'Rainサーバー公式サイト',
@@ -213,7 +212,7 @@ const ja: Translation = {
     footer_note:
         '※レイアウトの関係上、本サイト内では横画面が制限されます。予めご了承ください。<br><br>※Rainサーバーは、株式会社カプコンまたはその子会社とは一切関係ありません。当プロジェクトは多数のボランティアによる協力の下で成り立っており、いかなる収益も発生いたしません。',
 
-    // ボトムナビゲーション
+    // Bottom Navigation
     bottom_nav: {
         side_menu: {
             svg_path:

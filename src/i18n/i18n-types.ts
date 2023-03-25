@@ -58,11 +58,11 @@ type RootTranslation = {
 		 */
 		footer_text: string
 	}
-	register: {
+	signup: {
 		/**
 		 * R​a​i​n​ ​S​e​r​v​e​r​ ​A​c​c​o​u​n​t​ ​C​r​e​a​t​i​o​n
 		 */
-		register_title: string
+		signup_title: string
 		/**
 		 * E​m​a​i​l
 		 */
@@ -78,7 +78,7 @@ type RootTranslation = {
 		/**
 		 * S​i​g​n​ ​U​p
 		 */
-		register_button: string
+		signup_button: string
 		/**
 		 * T​h​e​ ​u​s​e​r​ ​a​l​r​e​a​d​y​ ​e​x​i​s​t​s​.
 		 */
@@ -126,7 +126,7 @@ type RootTranslation = {
 				/**
 				 * S​i​g​n​-​u​p​ ​P​r​o​c​e​d​u​r​e​ ​(​M​e​m​b​e​r​ ​S​i​t​e​)
 				 */
-				membersite: string
+				member: string
 			}
 		}
 		begin: {
@@ -556,11 +556,11 @@ export type TranslationFunctions = {
 		 */
 		footer_text: () => LocalizedString
 	}
-	register: {
+	signup: {
 		/**
 		 * Rain Server Account Creation
 		 */
-		register_title: () => LocalizedString
+		signup_title: () => LocalizedString
 		/**
 		 * Email
 		 */
@@ -576,7 +576,7 @@ export type TranslationFunctions = {
 		/**
 		 * Sign Up
 		 */
-		register_button: () => LocalizedString
+		signup_button: () => LocalizedString
 		/**
 		 * The user already exists.
 		 */
@@ -624,7 +624,7 @@ export type TranslationFunctions = {
 				/**
 				 * Sign-up Procedure (Member Site)
 				 */
-				membersite: () => LocalizedString
+				member: () => LocalizedString
 			}
 		}
 		begin: {

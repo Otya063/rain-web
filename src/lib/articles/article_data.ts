@@ -29,7 +29,7 @@ export const articles: Articles[] = [
     {
         lang: 'ja',
         maindir: 'signup',
-        subdir: 'membersite',
+        subdir: 'member',
         head_title: `会員登録手順（メンバーサイト）| ${default_title_ja}`,
     },
     {
