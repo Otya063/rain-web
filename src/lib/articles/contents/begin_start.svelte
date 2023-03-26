@@ -1,11 +1,11 @@
 <script lang="ts">
     import { page } from '$app/stores';
-    import { fade } from 'svelte/transition';
     import Original from '$lib/articles/contents/parts/Original.svelte';
     import HGE from '$lib/articles/contents/parts/HGE.svelte';
-    import { cubicOut } from 'svelte/easing';
+    import { onMount } from 'svelte';
 
     let activedElement: HTMLElement;
+    let nowTarget: HTMLElement;
     let isDefault = true;
     const tabInfoHandler = (key: string, value: string, e: MouseEvent) => {
         // tab handling
@@ -16,11 +16,18 @@
         isDefault = param === 'original';
 
         // class handling
-        const nowTarget = e.target as HTMLElement;
+        nowTarget = e.target as HTMLElement;
         activedElement && activedElement.classList.remove('active');
         nowTarget.classList.add('active');
         activedElement = nowTarget;
     };
+
+    // default class set
+    onMount(() => {
+        const defaultActive = document.getElementsByTagName('h3')[0] as HTMLHeadingElement;
+        defaultActive.classList.add('active');
+        activedElement = defaultActive;
+    });
 </script>
 
 <h1>ゲームの始め方</h1>
@@ -29,11 +36,7 @@
     <ul>
         <li>
             <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="scroll" data-target="original">オリジナル版の動作環境</a>
-        </li>
-        <li>
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="scroll" data-target="hge">High Grade Editionの動作環境</a>
+            <a class="scroll" data-target="spec">各種動作環境</a>
         </li>
         <li>
             <!-- svelte-ignore a11y-missing-attribute -->
@@ -72,7 +75,9 @@
     </ul>
 </div>
 
-<div class="section" id="b50154605b72a9385293277a65741880">
+<section id="spec">
+    <h2>各種動作環境</h2>
+
     <div class="table_tabs">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <h3 class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler('tab', 'original', e)}>オリジナル版の動作環境</h3>
@@ -98,7 +103,7 @@
             <HGE />
         </table>
     {/if}
-</div>
+</section>
 
 <div class="section" id="f81fd2e4c52864042852c112ce927ae2">
     <h3>ダウンロード</h3>
