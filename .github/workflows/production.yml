@@ -12,7 +12,7 @@ on:
             - closed
 
 jobs:
-    build for production:
+    build-for-production:
         runs-on: ubuntu-latest
         env:
             VITE_DATABASE_URL: ${{ secrets.DATABASE_URL }}
