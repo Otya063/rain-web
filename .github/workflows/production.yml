@@ -1,4 +1,4 @@
-name: 'Rain-Web'
+name: 'Rain Web'
 on:
     push:
         branches:
@@ -6,9 +6,13 @@ on:
     pull_request:
         branches:
             - main
+        types:
+            - opened
+            - synchronize
+            - closed
 
 jobs:
-    cache-and-install:
+    build-for-production:
         runs-on: ubuntu-latest
         env:
             VITE_DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -36,8 +40,10 @@ jobs:
             - name: Build
               run: pnpm build
 
-            - name: Deploy on Cloudflare Workers
+            - name: Deploy on Cloudflare Production
+              if: github.event_name == 'push' || github.event.pull_request.merged
               uses: cloudflare/wrangler-action@2.0.0
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_ACCOUNT_ID }}
+                  command: publish --name production
