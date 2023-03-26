@@ -7,7 +7,8 @@ import type { PageServerLoad } from './$types';
 // contain a `PageServerLoad` type with a `params` object that matches our route.
 // You need to run the dev server or `svelte-kit sync` to generate them.
 export const load: PageServerLoad = async ({ params }) => {
-    const article = articles.find((article) => article.lang === params.lang && article.maindir === params.maindir && article.subdir === params.subdir);
+    const { lang, maindir, subdir } = params;
+    const article = articles.find((article) => article.lang === lang && article.maindir === maindir && article.subdir === subdir);
 
     if (!article) throw error(404);
 

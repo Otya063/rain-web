@@ -15,8 +15,13 @@
 
         <!-- article -->
         <article class="contents">
-            <h1>{article?.title}</h1>
-            {@html article?.content}
+            {#await import(`../../../../../../lib/articles/contents/${article.maindir}_${article.subdir}.svelte`)}
+                <p class="article_loader">Loading</p>
+            {:then value}
+                <svelte:component this={value.default} />
+            {:catch}
+                <p style="color: red">{$LL.E404['h1']()}</p>
+            {/await}
         </article>
     </main>
 </div>
