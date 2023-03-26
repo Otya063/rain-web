@@ -12,7 +12,7 @@ const config = {
         alias: {
             $lib: 'src/lib',
             $i18n: 'src/i18n',
-            $ts: 'static/js',
+            $ts: 'static/ts',
             $scss: 'static/sass',
         },
     },
