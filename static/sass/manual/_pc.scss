@@ -713,8 +713,8 @@
         margin: 10%;
         border-top: 2px solid white;
         border-bottom: 2px solid white;
-        box-shadow: 0 0 0 2rem #6e6b6d;
-        background-color: #6e6b6d;
+        box-shadow: 0 0 0 2rem #fdb979;
+        background-color:#f19b4a;
 
         // 目次タイトル
         &::before {
@@ -733,7 +733,7 @@
         .check_contents_list {
             color: white;
             line-height: 2;
-
+            
             .check_contents_list_text {
                 text-indent: -1em;
             }
