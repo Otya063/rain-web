@@ -1,10 +1,10 @@
 import type { Translation } from '../i18n-types';
 
 const ja: Translation = {
-    // ランドスケープモードテキスト
+    // Landscape Mode
     landscape_mode: '端末を縦向きにして閲覧してください。',
 
-    // エラーページ
+    // Error Page
     E404: {
         title: 'お探しのページが存在しません | Rain Server',
         h1: 'お探しのページが存在しません',
@@ -19,17 +19,17 @@ const ja: Translation = {
         footer_text: 'Rainサーバーは、株式会社カプコンまたはその子会社とは一切関係ありません。<br>当プロジェクトは多数のボランティアによる協力の下で成り立っており、いかなる収益も発生いたしません。',
     },
 
-    // 会員登録ページ
-    register: {
-        register_title: 'Rain サーバー アカウント作成',
+    // Sign Up Page
+    signup: {
+        signup_title: 'Rain サーバー アカウント作成',
         email_label: 'メールアドレス',
         username_label: 'ユーザー名',
         password_label: 'パスワード',
-        register_button: '登録する',
+        signup_button: '登録する',
         already: '既に存在するユーザーです。',
     },
 
-    // ヘッダー言語設定
+    // Header Language Selection
     header: {
         now_lang: '日本語',
         lang_sel: {
@@ -44,13 +44,13 @@ const ja: Translation = {
         },
     },
 
-    // サイドメニュー
+    // Side Menu
     side_menu: {
         signup: {
             title: '会員登録',
             contents: {
                 discord: '会員登録手順（Discord）',
-                membersite: '会員登録手順（メンバーサイト）',
+                member: '会員登録手順（メンバーサイト）',
             },
         },
         begin: {
@@ -90,10 +90,12 @@ const ja: Translation = {
         },
     },
 
-    // 動的ルート対象外記事
+    // Articles
     articles: {
         description: 'Rain Server版モンスターハンターフロンティアの公式オンラインマニュアル',
         keywords: 'モンスターハンター フロンティア, モンスターハンター, モンハン, オンラインマニュアル, mhf, monster hunter frontier, オンラインゲーム',
+
+        // Home
         home: {
             head_title: 'MHF オンラインマニュアル',
             title: 'トップページ',
@@ -102,7 +104,7 @@ const ja: Translation = {
             news_text: 'オンラインマニュアルを開設いたしました。<br>旧公式オンラインマニュアルとの詳しい相違点及び更新内容は「詳細を見る」よりご確認いただけます。',
             news_more: '詳細を見る',
 
-            // 注目のコンテンツ
+            // Featured Contents
             featured_title: '注目のコンテンツ',
             featured_contents: {
                 first: {
@@ -149,7 +151,7 @@ const ja: Translation = {
                 },
             },
 
-            // 外部リンク
+            // External Links
             extlink_title: '外部リンク',
             extlink_contents: {
                 beginner_guide: {
@@ -170,9 +172,26 @@ const ja: Translation = {
                 },
             },
         },
+
+        signup: {
+            // Sign-up Procedure (Discord)
+            discord: {
+                title: '会員登録手順（Discord）',
+                table_contents: '公式Discordにて会員登録',
+                data_title: "コンテンツ",
+                article_memo:
+                    '「モンスターハンター フロンティア オンライン」をプレイするためには、Rainサーバーへの会員登録が必要となります。登録画面にて設定した「ユーザー名」及び「パスワード」をゲームランチャーへ入力してログインすることで、ゲームをプレイすることができます。<br>ここでは、公式Discord内での会員登録手順についてご紹介いたします。',
+                subtitle: '公式Discordにて会員登録',
+                center_box1: '「bot-commands」チャンネル内にあるインターフェイスより、Registerボタンを押します。',
+                center_box2:
+                    '以下のようなウィンドウが表示されたら、「Username」及び「Password」欄にそれぞれ自身の設定したい値を入力して、送信ボタンを押してください。<br />送信が完了すると、「account successfully created」というメッセージが表示されます。',
+                center_box3:
+                    '/card コマンド使用後、空のキャラクターが表示されます。<br />Useボタンを押して、使用キャラクターを確定させると、「successfully switch main character」というメッセージが表示されます。<br />これにて会員登録は完了となります。',
+            },
+        },
     },
 
-    // フッター
+    // Footer
     footer: {
         rain_officialsite: {
             title: 'Rainサーバー公式サイト',
@@ -193,7 +212,7 @@ const ja: Translation = {
     footer_note:
         '※レイアウトの関係上、本サイト内では横画面が制限されます。予めご了承ください。<br><br>※Rainサーバーは、株式会社カプコンまたはその子会社とは一切関係ありません。当プロジェクトは多数のボランティアによる協力の下で成り立っており、いかなる収益も発生いたしません。',
 
-    // ボトムナビゲーション
+    // Bottom Navigation
     bottom_nav: {
         side_menu: {
             svg_path:
