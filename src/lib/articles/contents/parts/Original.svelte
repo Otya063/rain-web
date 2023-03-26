@@ -26,8 +26,7 @@
             <p>
                 Windows 7, 8, 8.1, 10 (32bit/64bit※ 日本語版)<br />
                 ※64bit版はWOW64 (Windows on Windows 64) での動作です。<br />
-                ※OSによって必要な動作環境が別にございますので、ご確認ください。<br />
-                ※Windows は米国 Microsoft Corporation の米国およびその他の国における登録商標です。
+                ※OSによって必要な動作環境が別にございますので、ご確認ください。
             </p>
         </td>
     </tr>

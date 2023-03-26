@@ -5,20 +5,27 @@
     import HGE from '$lib/articles/contents/parts/HGE.svelte';
     import { cubicOut } from 'svelte/easing';
 
+    let activedElement: HTMLElement;
     let isDefault = true;
-    const tabInfoHandler = (key: string, value: string) => {
+    const tabInfoHandler = (key: string, value: string, e: MouseEvent) => {
+        // tab handling
         const currentURL = $page.url;
         currentURL.searchParams.set(key, value);
         window.history.pushState({ path: currentURL.href }, '', currentURL.href);
-
         const param = currentURL.searchParams.get('tab');
         isDefault = param === 'original';
+
+        // class handling
+        const nowTarget = e.target as HTMLElement;
+        activedElement && activedElement.classList.remove('active');
+        nowTarget.classList.add('active');
+        activedElement = nowTarget;
     };
 </script>
 
 <h1>ゲームの始め方</h1>
 
-<div class="table_contents" data-title="コンテンツ">
+<div class="outline_contents" data-title="コンテンツ">
     <ul>
         <li>
             <!-- svelte-ignore a11y-missing-attribute -->
@@ -66,13 +73,15 @@
 </div>
 
 <div class="section" id="b50154605b72a9385293277a65741880">
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <h3 on:click={() => tabInfoHandler('tab', 'original')}>オリジナル版の動作環境</h3>
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <h3 on:click={() => tabInfoHandler('tab', 'hge')}>High Grade Editionの動作環境</h3>
+    <div class="table_tabs">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <h3 class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler('tab', 'original', e)}>オリジナル版の動作環境</h3>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <h3 class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler('tab', 'hge', e)}>High Grade Editionの動作環境</h3>
+    </div>
 
     {#if isDefault}
-        <table in:fade={{ duration: 500, easing: cubicOut }}>
+        <table class="table_contents">
             <Original />
         </table>
         <p>
@@ -84,13 +93,8 @@
         <p style="color: #f00">■64bitネイティブサポートではございませんので、64bit版のOSでMHF-Ｚを起動しても、動作などの性能があがるわけではございません。あらかじめご了承ください。</p>
         <p>■グラフィックスボードには製造元の公式サイトで提供されている最新のドライバをご使用ください。</p>
         <p>■OSのサービスパックやグラフィックスボードのドライバについては、お客様ご自身の責任において最新のものをご利用ください。</p>
-        <p>
-            ■Microsoft, DirectX, DirectSound,および Windows は、米国 Microsoft Corporation の、米国、日本およびその他の国における登録商標または商標です。<br />
-            Intel、インテル、Intel ロゴ、Intel Inside、Intel Inside ロゴ、Intel Core、Core Insideは、アメリカ合衆国およびその他の国におけるIntel Corporation の商標です。<br />
-            NVIDIA、GeForceは米国NVIDIA Corporationの商標もしくは登録商標です。
-        </p>
     {:else}
-        <table in:fade={{ duration: 500, easing: cubicOut }}>
+        <table class="table_contents">
             <HGE />
         </table>
     {/if}

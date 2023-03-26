@@ -4,7 +4,7 @@
 
 <h1>{$LL.articles['signup'].discord['title']()}</h1>
 
-<div class="table_contents" data-title={$LL.articles['signup'].discord['data_title']()}>
+<div class="outline_contents" data-title={$LL.articles['signup'].discord['data_title']()}>
     <ul>
         <li>
             <!-- svelte-ignore a11y-missing-attribute -->

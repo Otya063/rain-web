@@ -635,7 +635,7 @@
     }
 
     // 目次欄
-    .table_contents {
+    .outline_contents {
         position: relative;
         padding: 3% 1%;
         margin: 10%;
@@ -714,7 +714,7 @@
         border-top: 2px solid white;
         border-bottom: 2px solid white;
         box-shadow: 0 0 0 2rem #fdb979;
-        background-color:#f19b4a;
+        background-color: #f19b4a;
 
         // 目次タイトル
         &::before {
@@ -733,7 +733,7 @@
         .check_contents_list {
             color: white;
             line-height: 2;
-            
+
             .check_contents_list_text {
                 text-indent: -1em;
             }
@@ -804,6 +804,38 @@
         transform: translateZ(0);
         @include loaderKey;
         animation: loaderAni1 1.7s infinite ease, loaderAni2 1.7s infinite ease;
+    }
+
+    // 表タブ位置調整
+    .table_tabs {
+        position: relative;
+        display: flex;
+        justify-content: space-around;
+        z-index: 20;
+
+        // 表タブ本体
+        .table_tabs_item {
+            background: DeepSkyBlue;
+            padding: 2%;
+            margin-bottom: .7%;
+            border-radius: 10px 10px 0 0;
+            filter: drop-shadow(0px 0px 6px rgb(50, 50, 50));
+
+            // 押したとき
+            &.active {
+                margin-bottom: 0;
+                background: rgb(0, 225, 255);
+                filter: drop-shadow(0px -3px 2px rgb(50, 50, 50));
+            }
+        }
+    }
+
+    // 表本体
+    .table_contents {
+        background: white;
+        border: 5px solid rgb(0, 225, 255);
+        box-sizing:content-box;
+        filter: drop-shadow(0px 0px 4px rgb(50, 50, 50));
     }
 
     // SPボトムメニュー非表示
