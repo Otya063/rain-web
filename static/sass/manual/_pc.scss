@@ -710,7 +710,7 @@
     .check_contents {
         position: relative;
         padding: 4% 3%;
-        margin: 10%;
+        margin: 0 10% 15%;
         border-top: 2px solid white;
         border-bottom: 2px solid white;
         box-shadow: 0 0 0 2rem #fdb979;
@@ -817,30 +817,82 @@
         .table_tabs_item {
             background: DeepSkyBlue;
             padding: 2%;
-            margin-bottom: .7%;
-            border-radius: 10px 10px 0 0;
+            margin-bottom: 2%;
+            border-radius: 20px;
             filter: drop-shadow(0px 0px 6px rgb(50, 50, 50));
 
             // 押したとき
             &.active {
                 margin-bottom: 0;
                 background: rgb(0, 225, 255);
+                border-radius: 20px 20px 0 0;
                 filter: drop-shadow(0px -3px 2px rgb(50, 50, 50));
             }
         }
     }
 
-    // 表本体
-    .table_contents {
-        background: white;
-        border: 5px solid rgb(0, 225, 255);
-        box-sizing:content-box;
-        filter: drop-shadow(0px 0px 4px rgb(50, 50, 50));
-    }
-
     // SPボトムメニュー非表示
     .bottom_navigations {
         display: none;
+    }
+
+    /* 各種動作環境テーブルレイアウト
+====================================================*/
+
+    // 表本体
+    .table_contents {
+        border-spacing: 0;
+        background: white;
+        border: 5px solid rgb(0, 225, 255);
+        box-sizing: content-box;
+        filter: drop-shadow(0px 0px 4px rgb(50, 50, 50));
+
+        // 表内容
+        .table_row {
+            // 表ヘッダー
+            .table_header {
+                color: white;
+                border-top: white solid 2px;
+                //border-right: white solid 5px;
+                background: linear-gradient(rgb(0 101 201 / 70%), rgb(0 93 188 / 90%) 50%);
+            }
+
+            // 表データ
+            td {
+                padding: 1%;
+                border-bottom: black solid 2px;
+                border-right: black solid 2px;
+
+                // 中央揃え用
+                &.table_data_center {
+                    text-align: center;
+                }
+
+                // オリジナル版用
+                &.table_header_original {
+                    color: white;
+                    width: 40%;
+                    font-weight: 700;
+                    background: linear-gradient(rgb(0 101 201 / 70%), rgb(0 93 188 / 90%) 50%);
+                }
+
+                // HGE版用
+                &.table_header_hge {
+                    color: white;
+                    width: 70%;
+                    font-weight: 700;
+                    background: linear-gradient(rgb(0 101 201 / 70%), rgb(0 93 188 / 90%) 50%);
+                }
+            }
+
+            // 表ヘッダー一番上ボーダー調整
+            &:nth-child(1) {
+                .table_header {
+                    border-right: black solid 2px;
+                    border-top: 0px;
+                }
+            }
+        }
     }
 
     /* 更新履歴

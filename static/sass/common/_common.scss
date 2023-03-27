@@ -88,6 +88,10 @@ picture {
     user-select: none;
 }
 
+.no_border_right {
+    border-right: 0px !important;
+}
+
 // タイトルフォント
 h1,
 h2 {
