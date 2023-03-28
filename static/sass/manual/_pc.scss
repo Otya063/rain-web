@@ -836,7 +836,7 @@
         display: none;
     }
 
-    /* 各種動作環境テーブルレイアウト
+    /* 動作環境
 ====================================================*/
 
     // 表本体
@@ -858,9 +858,9 @@
             }
 
             // 表データ
-            td {
+            .table_data {
                 padding: 1%;
-                border-bottom: black solid 2px;
+                border-top: black solid 2px;
                 border-right: black solid 2px;
 
                 // 中央揃え用
@@ -883,15 +883,60 @@
                     font-weight: 700;
                     background: linear-gradient(rgb(0 101 201 / 70%), rgb(0 93 188 / 90%) 50%);
                 }
+
+                // 表データリスト用
+                .table_data_list {
+                    font-size: 1.3rem;
+
+                    .table_data_list_item {
+                        width: fit-content;
+
+                        .table_data_list_item_part {
+                            position: relative;
+                            display: block;
+                            height: 2px;
+
+                            &::before {
+                                content: '';
+                                background-image: linear-gradient(to right, gray, gray 5px, transparent 5px, transparent 12px);
+                                background-size: 9px 2px;
+                                background-repeat: repeat-x;
+                                position: absolute;
+                                top: 0;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                            }
+                        }
+                    }
+                }
             }
 
-            // 表ヘッダー一番上ボーダー調整
+            // 表ヘッダー一番目列ボーダー調整
             &:nth-child(1) {
                 .table_header {
-                    border-right: black solid 2px;
+                    border-top: 0px;
+                }
+
+                .table_data {
                     border-top: 0px;
                 }
             }
+
+            // 表ヘッダー二番目列ボーダー調整
+            &:nth-child(2) {
+                .table_data {
+                    border-top: 0px;
+                }
+            }
+        }
+    }
+
+    .spec_notes {
+        padding: 2% 2% 0;
+
+        p {
+            text-indent: -1em;
         }
     }
 
