@@ -4,7 +4,7 @@
 
 <h1>{$LL.articles['signup'].discord['title']()}</h1>
 
-<div class="outline_contents" data-title={$LL.articles['signup'].discord['data_title']()}>
+<div class="outline_contents" data-title={$LL.articles['data_title']()}>
     <ul>
         <li>
             <!-- svelte-ignore a11y-missing-attribute -->
@@ -21,19 +21,13 @@
     <h2>{$LL.articles['signup'].discord['subtitle']()}</h2>
 
     <ul>
-        <li class="center_box">
-            <p class="center_box_text">（1）{@html $LL.articles['signup'].discord['center_box1']()}</p>
-            <p class="center_box_img"><img src="/img/{$locale}/articles/signup/discord/discord_1.png" alt="discord_1" /></p>
-        </li>
-        <li class="center_box">
-            <p class="center_box_text">（2）{@html $LL.articles['signup'].discord['center_box2']()}</p>
-            <p class="center_box_img"><img src="/img/{$locale}/articles/signup/discord/discord_2_1.png" alt="discord_2_1" /></p>
-            <p class="center_box_img"><img src="/img/{$locale}/articles/signup/discord/discord_2_2.png" alt="discord_2_2" /></p>
-        </li>
-        <li class="center_box">
-            <p class="center_box_text">（3）{@html $LL.articles['signup'].discord['center_box3']()}</p>
-            <p class="center_box_img"><img src="/img/{$locale}/articles/signup/discord/discord_3_1.png" alt="discord_3_1" /></p>
-            <p class="center_box_img"><img src="/img/{$locale}/articles/signup/discord/discord_3_2.png" alt="discord_3_2" /></p>
-        </li>
+        {#each Object.entries($LL.articles['signup'].discord['center_box']) as [number, { text, img }]}
+            <li class="center_box">
+                <p class="center_box_text">（{number}）{@html text()}</p>
+                {#each Object.values(img) as src}
+                    <p class="center_box_img"><img src="/img/{$locale}/articles/signup/discord/{src()}.png" alt={src()} /></p>
+                {/each}
+            </li>
+        {/each}
     </ul>
 </section>

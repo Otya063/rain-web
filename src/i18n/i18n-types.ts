@@ -243,6 +243,10 @@ type RootTranslation = {
 		 * m​o​n​s​t​e​r​ ​h​u​n​t​e​r​ ​f​r​o​n​t​i​e​r​,​ ​m​o​n​s​t​e​r​ ​h​u​n​t​e​r​,​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​,​ ​m​h​f​,​ ​o​n​l​i​n​e​ ​g​a​m​e
 		 */
 		keywords: string
+		/**
+		 * C​o​n​t​e​n​t​s
+		 */
+		data_title: string
 		home: {
 			/**
 			 * M​H​F​ ​O​n​l​i​n​e​ ​M​a​n​u​a​l
@@ -416,10 +420,6 @@ type RootTranslation = {
 				 */
 				table_contents: string
 				/**
-				 * C​o​n​t​e​n​t​s
-				 */
-				data_title: string
-				/**
 				 * I​n​ ​o​r​d​e​r​ ​t​o​ ​p​l​a​y​ ​"​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​O​n​l​i​n​e​,​"​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​s​i​g​n​ ​u​p​ ​f​o​r​ ​t​h​e​ ​R​a​i​n​ ​S​e​r​v​e​r​ ​f​i​r​s​t​.​ ​Y​o​u​ ​c​a​n​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​b​y​ ​e​n​t​e​r​i​n​g​ ​t​h​e​ ​"​U​s​e​r​n​a​m​e​"​ ​a​n​d​ ​"​P​a​s​s​w​o​r​d​,​"​ ​w​h​i​c​h​ ​y​o​u​ ​s​e​t​ ​o​n​ ​t​h​e​ ​r​e​g​i​s​t​r​a​t​i​o​n​ ​s​c​r​e​e​n​,​ ​i​n​t​o​ ​t​h​e​ ​g​a​m​e​ ​l​a​u​n​c​h​e​r​ ​a​n​d​ ​l​o​g​g​i​n​g​ ​i​n​.​ ​<​b​r​>​T​h​i​s​ ​s​e​c​t​i​o​n​ ​d​e​s​c​r​i​b​e​s​ ​s​i​g​n​-​u​p​ ​p​r​o​c​e​d​u​r​e​ ​w​i​t​h​ ​o​f​f​i​c​i​a​l​ ​d​i​s​c​o​r​d​.
 				 */
 				article_memo: string
@@ -427,18 +427,52 @@ type RootTranslation = {
 				 * S​i​g​n​ ​U​p​ ​w​i​t​h​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d
 				 */
 				subtitle: string
-				/**
-				 * O​n​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​i​n​ ​t​h​e​ ​"​b​o​t​-​c​o​m​m​a​n​d​s​"​ ​c​h​a​n​n​e​l​,​ ​p​r​e​s​s​ ​"​R​e​g​i​s​t​e​r​"​ ​b​u​t​t​o​n​.
-				 */
-				center_box1: string
-				/**
-				 * W​h​e​n​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​w​i​n​d​o​w​ ​a​p​p​e​a​r​s​,​ ​e​n​t​e​r​ ​t​h​e​ ​v​a​l​u​e​s​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​e​t​ ​i​n​ ​t​h​e​ ​"​U​s​e​r​n​a​m​e​"​ ​a​n​d​ ​"​P​a​s​s​w​o​r​d​"​ ​f​i​e​l​d​s​ ​r​e​s​p​e​c​t​i​v​e​l​y​,​ ​t​h​e​n​ ​p​r​e​s​s​ ​"​S​u​b​m​i​t​"​ ​b​u​t​t​o​n​.​<​b​r​>​W​h​e​n​ ​s​u​b​m​i​t​t​i​n​g​ ​i​s​ ​c​o​m​p​l​e​t​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​a​c​c​o​u​n​t​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​r​e​a​t​e​d​.​"
-				 */
-				center_box2: string
-				/**
-				 * A​f​t​e​r​ ​u​s​i​n​g​ ​/​c​a​r​d​,​ ​s​l​a​s​h​ ​c​o​m​m​a​n​d​,​ ​a​n​ ​e​m​p​t​y​ ​c​h​a​r​a​c​t​e​r​ ​i​s​ ​d​i​s​p​l​a​y​e​d​.​<​b​r​>​W​h​e​n​ ​y​o​u​ ​p​r​e​s​s​ ​"​U​s​e​"​ ​b​u​t​t​o​n​ ​t​o​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​c​h​a​r​a​c​t​e​r​ ​t​o​ ​b​e​ ​u​s​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​w​i​t​c​h​ ​m​a​i​n​ ​c​h​a​r​a​c​t​e​r​.​"​<​b​r​>​S​i​g​n​i​n​g​ ​u​p​ ​f​o​r​ ​R​a​i​n​ ​i​s​ ​n​o​w​ ​c​o​m​p​l​e​t​e​d​.
-				 */
-				center_box3: string
+				center_box: {
+					'1': {
+						/**
+						 * O​n​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​i​n​ ​t​h​e​ ​"​b​o​t​-​c​o​m​m​a​n​d​s​"​ ​c​h​a​n​n​e​l​,​ ​p​r​e​s​s​ ​"​R​e​g​i​s​t​e​r​"​ ​b​u​t​t​o​n​.
+						 */
+						text: string
+						img: {
+							/**
+							 * d​i​s​c​o​r​d​_​1
+							 */
+							'0': string
+						}
+					}
+					'2': {
+						/**
+						 * W​h​e​n​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​w​i​n​d​o​w​ ​a​p​p​e​a​r​s​,​ ​e​n​t​e​r​ ​t​h​e​ ​v​a​l​u​e​s​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​e​t​ ​i​n​ ​t​h​e​ ​"​U​s​e​r​n​a​m​e​"​ ​a​n​d​ ​"​P​a​s​s​w​o​r​d​"​ ​f​i​e​l​d​s​ ​r​e​s​p​e​c​t​i​v​e​l​y​,​ ​t​h​e​n​ ​p​r​e​s​s​ ​"​S​u​b​m​i​t​"​ ​b​u​t​t​o​n​.​<​b​r​>​W​h​e​n​ ​s​u​b​m​i​t​t​i​n​g​ ​i​s​ ​c​o​m​p​l​e​t​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​a​c​c​o​u​n​t​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​r​e​a​t​e​d​.​"
+						 */
+						text: string
+						img: {
+							/**
+							 * d​i​s​c​o​r​d​_​2​_​1
+							 */
+							'0': string
+							/**
+							 * d​i​s​c​o​r​d​_​2​_​2
+							 */
+							'1': string
+						}
+					}
+					'3': {
+						/**
+						 * A​f​t​e​r​ ​u​s​i​n​g​ ​/​c​a​r​d​,​ ​s​l​a​s​h​ ​c​o​m​m​a​n​d​,​ ​a​n​ ​e​m​p​t​y​ ​c​h​a​r​a​c​t​e​r​ ​i​s​ ​d​i​s​p​l​a​y​e​d​.​<​b​r​>​W​h​e​n​ ​y​o​u​ ​p​r​e​s​s​ ​"​U​s​e​"​ ​b​u​t​t​o​n​ ​t​o​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​c​h​a​r​a​c​t​e​r​ ​t​o​ ​b​e​ ​u​s​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​w​i​t​c​h​ ​m​a​i​n​ ​c​h​a​r​a​c​t​e​r​.​"​<​b​r​>​S​i​g​n​i​n​g​ ​u​p​ ​f​o​r​ ​R​a​i​n​ ​i​s​ ​n​o​w​ ​c​o​m​p​l​e​t​e​d​.
+						 */
+						text: string
+						img: {
+							/**
+							 * d​i​s​c​o​r​d​_​3​_​1
+							 */
+							'0': string
+							/**
+							 * d​i​s​c​o​r​d​_​3​_​2
+							 */
+							'1': string
+						}
+					}
+				}
 			}
 		}
 	}
@@ -741,6 +775,10 @@ export type TranslationFunctions = {
 		 * monster hunter frontier, monster hunter, online manual, mhf, online game
 		 */
 		keywords: () => LocalizedString
+		/**
+		 * Contents
+		 */
+		data_title: () => LocalizedString
 		home: {
 			/**
 			 * MHF Online Manual
@@ -914,10 +952,6 @@ export type TranslationFunctions = {
 				 */
 				table_contents: () => LocalizedString
 				/**
-				 * Contents
-				 */
-				data_title: () => LocalizedString
-				/**
 				 * In order to play "Monster Hunter Frontier Online," you need to sign up for the Rain Server first. You can play the game by entering the "Username" and "Password," which you set on the registration screen, into the game launcher and logging in. <br>This section describes sign-up procedure with official discord.
 				 */
 				article_memo: () => LocalizedString
@@ -925,18 +959,52 @@ export type TranslationFunctions = {
 				 * Sign Up with Official Discord
 				 */
 				subtitle: () => LocalizedString
-				/**
-				 * On the interface in the "bot-commands" channel, press "Register" button.
-				 */
-				center_box1: () => LocalizedString
-				/**
-				 * When the following window appears, enter the values you want to set in the "Username" and "Password" fields respectively, then press "Submit" button.<br>When submitting is completed, you can see the message "account successfully created."
-				 */
-				center_box2: () => LocalizedString
-				/**
-				 * After using /card, slash command, an empty character is displayed.<br>When you press "Use" button to confirm the character to be used, you can see the message "successfully switch main character."<br>Signing up for Rain is now completed.
-				 */
-				center_box3: () => LocalizedString
+				center_box: {
+					'1': {
+						/**
+						 * On the interface in the "bot-commands" channel, press "Register" button.
+						 */
+						text: () => LocalizedString
+						img: {
+							/**
+							 * discord_1
+							 */
+							'0': () => LocalizedString
+						}
+					}
+					'2': {
+						/**
+						 * When the following window appears, enter the values you want to set in the "Username" and "Password" fields respectively, then press "Submit" button.<br>When submitting is completed, you can see the message "account successfully created."
+						 */
+						text: () => LocalizedString
+						img: {
+							/**
+							 * discord_2_1
+							 */
+							'0': () => LocalizedString
+							/**
+							 * discord_2_2
+							 */
+							'1': () => LocalizedString
+						}
+					}
+					'3': {
+						/**
+						 * After using /card, slash command, an empty character is displayed.<br>When you press "Use" button to confirm the character to be used, you can see the message "successfully switch main character."<br>Signing up for Rain is now completed.
+						 */
+						text: () => LocalizedString
+						img: {
+							/**
+							 * discord_3_1
+							 */
+							'0': () => LocalizedString
+							/**
+							 * discord_3_2
+							 */
+							'1': () => LocalizedString
+						}
+					}
+				}
 			}
 		}
 	}
