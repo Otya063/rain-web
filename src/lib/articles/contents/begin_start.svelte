@@ -36,11 +36,7 @@
     <ul>
         <li>
             <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="scroll" data-target="spec">各種動作環境</a>
-        </li>
-        <li>
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="scroll" data-target="download">ダウンロード</a>
+            <a class="scroll" data-target="spec">動作環境</a>
         </li>
         <li>
             <!-- svelte-ignore a11y-missing-attribute -->
@@ -76,7 +72,7 @@
 </div>
 
 <section id="spec">
-    <h2>各種動作環境</h2>
+    <h2>動作環境</h2>
 
     <div class="table_tabs">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -102,92 +98,62 @@
     </div>
 </section>
 
-<section id="download">
-    <h2>ダウンロード</h2>
-    <div class="subsection">
-        <h4 class="head_dia">ダウンロードの手順</h4>
-        <p><strong>（１）</strong>MHF-Ｚ公式ビギナーサイトにある&ldquo;MHF-Ｚを始めよう！&rdquo;から、STEP4を選択し、リンク先にある[ダウンロード]ボタンをクリックします。</p>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img width="268" height="144" src="img/page18/02.jpg" alt="" />
-            <p><strong>（２</strong><strong>）</strong>[ファイルのダウンロード]画面が表示されたら、[保存]をクリックします。</p>
-        </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img width="268" height="159" src="img/page18/03.jpg" alt="" />
-            <p><strong>（３）</strong>ゲームプログラムを保存する場所をデスクトップに変更し、[保存]をクリックします。</p>
-        </div>
-    </div>
-    <div class="subsection">
-        <p>
-            <strong>（４）</strong>デスクトップ上にゲームプログラムファイル「mhfsetup.exe」が表示されたらダウンロード完了です。<br />
-            ※&nbsp;実際には「mhfsetup****.exe」のように、ゲームプログラムのバージョン番号****が入ります。
-        </p>
-    </div>
-</section>
-<div class="section" id="14b7d76f2abce310837a677aad65c1ad">
-    <h3>インストール</h3>
-    <p class="leadtxt">モンスターハンター フロンティアＺ（MHF-Ｚ）をプレイするには、COG会員にご登録いただく必要があります（無料です）。</p>
-    <div class="subsection">
-        <h4 class="head_dia">インストールの手順</h4>
-        <p>
-            <strong>（１）</strong>ダウンロードしたゲームプログラムファイル「mhfsetup.exe」をダブルクリックして起動させます。<br />
-            ※&nbsp;実際には「mhfsetup****.exe」のように、ゲームプログラムのバージョン番号****が入ります。
-        </p>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img width="268" height="212" src="img/page18/ins_01.jpg" alt="" />
-            <p><strong>（２）</strong>「ユーザー アカウント制御」の画面が表示されます。[許可]をクリックして下さい。</p>
-        </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img src="img/page18/ins_02.jpg" alt="" />
-            <p><strong>（３）</strong>インストーラが表示されます。インストールを続けるには[次へ]をクリックします。</p>
-        </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img src="img/page18/ins_03.jpg" alt="" />
-            <p><strong>（４）</strong>「使用許諾契約書」を読み、同意していただける場合には［同意する］をクリックしてから、［次へ］をクリックします。</p>
-            <p>&nbsp;</p>
-            <p>※『MHF-Ｚ』のプレイには、使用許諾誓約書への同意が必要となります。同意できない場合、『MHF-Ｚ』をプレイすることができません。</p>
-        </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img src="img/page18/ins_04.jpg" alt="" />
-            <p><strong>（５）</strong>インストール先のフォルダを選択し、[次へ]をクリックします。特別な場合を除き、変更する必要はありません。</p>
-        </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img src="img/page18/ins_05.jpg" alt="" />
-            <p>
-                <strong>（６）</strong>ご利用のアカウントに応じてインストールタイプを選択できます。[カプコンオンラインゲームズ版 ゲームプログラム]のチェックボックスをクリックして
-                [次へ]をクリックします。
+<section id="installation">
+    <h2>インストール</h2>
+
+    <ul>
+        <li class="center_box">
+            <p class="center_box_text">
+                （1）メンバーサイトにある「ゲームダウンロード」ボタンをクリックし、セットアップインストーラー「mhfSetup_ZZ_v○.exe」をダウンロードします。<br
+                />※「v○」にはインストーラーのバージョン（例: v1.2）が表示されます。
             </p>
-        </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img src="img/page18/ins_06.jpg" alt="" />
-            <p><strong>（７）</strong>[インストール]をクリックすると指定されたフォルダにインストールが開始されます。</p>
-        </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img src="img/page18/ins_07.jpg" alt="" />
-            <p><strong>（８）</strong>「インストールが完了しました」と表示されましたら、[完了]をクリックします。これでインストール完了です。</p>
-        </div>
-    </div>
-    <div class="subsection">
-        <p><strong>（９）</strong>デスクトップ上に「モンスターハンター フロンティアＺ」のアイコンが表示されれば完了です。</p>
-    </div>
-</div>
+            <p class="center_box_img">
+                <img src="" alt="install_1" />
+            </p>
+        </li>
+        <li class="center_box">
+            <p class="center_box_text">
+                （2）インストーラーを実行し、言語を選択します。<br />インストールされるゲームタイトルおよびゲームフォルダー名はここで選択した言語に依存します。
+            </p>
+            <p class="center_box_img">
+                <img src="" alt="install_2" />
+            </p>
+        </li>
+        <li class="center_box">
+            <p class="center_box_text">（3）インストール前に表示される重要情報を必ずご確認ください。</p>
+            <p class="center_box_img">
+                <img src="" alt="install_3" />
+            </p>
+        </li>
+        <li class="center_box">
+            <p class="center_box_text">（4）インストール先フォルダが表示されます。基本的にはデフォルトのままで問題ありませんが、ご自身の環境に合わせて、フォルダを任意で変更することも可能です。</p>
+            <p class="center_box_img">
+                <img src="" alt="install_4" />
+            </p>
+        </li>
+        <li class="center_box">
+            <p class="center_box_text">
+                （5）インストールするゲーム内言語およびゲームパッドボタンアイコンを選択します。<br />ゲームパッドを使用しない場合であっても、アイコンタイプは必ずどちらかご選択いただく必要があります。
+            </p>
+            <p class="center_box_img">
+                <img src="" alt="install_5" />
+            </p>
+        </li>
+        <li class="center_box">
+            <p class="center_box_text">（6）「インストール」ボタンをクリックすると、インストールが開始されます。</p>
+            <p class="center_box_img">
+                <img src="" alt="install_6" />
+            </p>
+        </li>
+        <li class="center_box">
+            <p class="center_box_text">（7）以下画像が表示され、デスクトップにMHFアイコンが生成されていれば、インストール完了です。</p>
+            <p class="center_box_img">
+                <img src="" alt="install_7" />
+            </p>
+        </li>
+    </ul>
+</section>
+
 <div class="section" id="fda0a4c67b309c651de060fe1aedbad9">
     <h3>ランチャー画面について</h3>
     <p class="leadtxt">ランチャー画面とは、『MHF-Ｚ』起動後に出る画面のことです。ここでは、ゲームへのログインやキャラクターの追加・削除、アップデート、環境設定などが行なえます。</p>
