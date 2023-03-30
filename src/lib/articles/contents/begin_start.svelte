@@ -25,7 +25,7 @@
 
     // default class set
     onMount(() => {
-        const defaultActive = document.getElementsByTagName('h3')[0] as HTMLHeadingElement;
+        const defaultActive = document.querySelectorAll('.table_tabs_item')[0] as HTMLParagraphElement;
         defaultActive.classList.add('active');
         activedElement = defaultActive;
     });
