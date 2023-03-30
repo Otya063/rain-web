@@ -178,22 +178,26 @@ const ja: Translation = {
             // Sign-up Procedure (Discord)
             discord: {
                 title: '会員登録手順（Discord）',
-                table_contents: '公式Discordにて会員登録',
+                outline_contents: {
+                    signup_discord: '公式Discordにて会員登録',
+                },
                 article_memo:
                     '「モンスターハンター フロンティア オンライン」をプレイするためには、Rainサーバーへの会員登録が必要となります。登録画面にて設定した「ユーザー名」及び「パスワード」をゲームランチャーへ入力してログインすることで、ゲームをプレイすることができます。<br>ここでは、公式Discord内での会員登録手順についてご紹介いたします。',
-                subtitle: '公式Discordにて会員登録',
-                center_box: {
-                    1: {
-                        text: '「bot-commands」チャンネル内にあるインターフェイスより、Registerボタンを押します。',
-                        img: ['discord_1'],
-                    },
-                    2: {
-                        text: '以下のようなウィンドウが表示されたら、「Username」及び「Password」欄にそれぞれ自身の設定したい値を入力して、送信ボタンを押してください。<br />送信が完了すると、「account successfully created」というメッセージが表示されます。',
-                        img: ['discord_2_1', 'discord_2_2'],
-                    },
-                    3: {
-                        text: '/card コマンド使用後、空のキャラクターが表示されます。<br />Useボタンを押して、使用キャラクターを確定させると、「successfully switch main character」というメッセージが表示されます。<br />これにて会員登録は完了となります。',
-                        img: ['discord_3_1', 'discord_3_2'],
+                section: {
+                    subtitle: '公式Discordにて会員登録',
+                    center_box: {
+                        1: {
+                            text: '「bot-commands」チャンネル内にあるインターフェイスより、Registerボタンを押します。',
+                            img: ['discord_1'],
+                        },
+                        2: {
+                            text: '以下のようなウィンドウが表示されたら、「Username」及び「Password」欄にそれぞれ自身の設定したい値を入力して、送信ボタンを押してください。<br />送信が完了すると、「account successfully created」というメッセージが表示されます。',
+                            img: ['discord_2_1', 'discord_2_2'],
+                        },
+                        3: {
+                            text: '/card コマンド使用後、空のキャラクターが表示されます。<br />Useボタンを押して、使用キャラクターを確定させると、「successfully switch main character」というメッセージが表示されます。<br />これにて会員登録は完了となります。',
+                            img: ['discord_3_1', 'discord_3_2'],
+                        },
                     },
                 },
             },

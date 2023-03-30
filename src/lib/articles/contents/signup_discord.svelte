@@ -6,10 +6,12 @@
 
 <div class="outline_contents" data-title={$LL.articles['data_title']()}>
     <ul>
-        <li>
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="scroll" data-target="signup_discord">{$LL.articles['signup'].discord['table_contents']()}</a>
-        </li>
+        {#each Object.entries($LL.articles['signup'].discord['outline_contents']) as [data_target, text]}
+            <li>
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <a class="scroll" data-target={data_target}>{text()}</a>
+            </li>
+        {/each}
     </ul>
 </div>
 
@@ -18,10 +20,10 @@
 </div>
 
 <section id="signup_discord">
-    <h2>{$LL.articles['signup'].discord['subtitle']()}</h2>
+    <h2>{$LL.articles['signup'].discord['section'].subtitle()}</h2>
 
     <ul>
-        {#each Object.entries($LL.articles['signup'].discord['center_box']) as [number, { text, img }]}
+        {#each Object.entries($LL.articles['signup'].discord['section'].center_box) as [number, { text, img }]}
             <li class="center_box">
                 <p class="center_box_text">（{number}）{@html text()}</p>
                 {#each Object.values(img) as src}

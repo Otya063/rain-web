@@ -1,8 +1,9 @@
 <script lang="ts">
     import { page } from '$app/stores';
+    import { onMount } from 'svelte';
     import Original from '$lib/articles/contents/parts/Original.svelte';
     import HGE from '$lib/articles/contents/parts/HGE.svelte';
-    import { onMount } from 'svelte';
+    import { locale } from '$i18n/i18n-svelte';
 
     let activedElement: HTMLElement;
     let nowTarget: HTMLElement;
@@ -44,7 +45,7 @@
         </li>
         <li>
             <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="scroll" data-target="launcher">ランチャー画面について</a>
+            <a class="scroll" data-target="launcher">ランチャー画面</a>
         </li>
         <li>
             <!-- svelte-ignore a11y-missing-attribute -->
@@ -76,9 +77,9 @@
 
     <div class="table_tabs">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <h3 class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler('tab', 'original', e)}>オリジナル版の動作環境</h3>
+        <p class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler('tab', 'original', e)}>オリジナル版の動作環境</p>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <h3 class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler('tab', 'hge', e)}>High Grade Editionの動作環境</h3>
+        <p class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler('tab', 'hge', e)}>High Grade Editionの動作環境</p>
     </div>
 
     {#if isDefault}
@@ -146,7 +147,7 @@
             </p>
         </li>
         <li class="center_box">
-            <p class="center_box_text">（7）以下画像が表示され、デスクトップにMHFアイコンが生成されていれば、インストール完了です。</p>
+            <p class="center_box_text">（7）以下画像が表示されれば、インストール完了です。</p>
             <p class="center_box_img">
                 <img src="" alt="install_7" />
             </p>
@@ -154,39 +155,44 @@
     </ul>
 </section>
 
-<div class="section" id="fda0a4c67b309c651de060fe1aedbad9">
-    <h3>ランチャー画面について</h3>
-    <p class="leadtxt">ランチャー画面とは、『MHF-Ｚ』起動後に出る画面のことです。ここでは、ゲームへのログインやキャラクターの追加・削除、アップデート、環境設定などが行なえます。</p>
-    <p class="center"><img width="500" src="img/page18/18_18.jpg" alt="ランチャー画面" /></p>
-    <div class="subsection">
-        <h4 class="head_dia">ランチャー画面の環境設定</h4>
-        <p>&nbsp;</p>
-        <p>ランチャー画面の環境設定では、ゲーム画面の起動時のサイズや音声など、パソコン側の設定を行うことができます。</p>
-        <p>また、High Grade Editionへの切替もここで可能です。詳細は、「High Grade Editionの設定方法」をご確認ください</p>
-        <p><a class="click" href="#255854d6cf8510c6c94f8efed221e618">High Grade Editionの設定方法</a></p>
-    </div>
-    <div class="subsection">
-        <h4>【設定】タブ</h4>
-        <div class="center"><img src="img/page18/18_9.jpg" alt="" /></div>
-    </div>
-    <p>&nbsp;</p>
-    <div class="subsection">
-        <h4>【表示】タブ</h4>
-        <div class="center"><img width="536" height="310" src="img/page18/14.gif" alt="" /></div>
-    </div>
-    <p>&nbsp;</p>
-    <div class="subsection">
-        <h4>【音声】タブ</h4>
-        <div class="center"><img width="536" height="307" src="img/page18/15.gif" alt="" /></div>
-    </div>
-    <p>&nbsp;</p>
-    <div class="subsection">
-        <h4>【接続】タブ</h4>
-        <div class="center"><img width="536" height="307" src="img/page18/16.gif" alt="" /></div>
-    </div>
-</div>
-<div class="section" id="29ae62f6121aa1cfa1b080fda4cd60f0">
-    <h3>ログイン、ゲームのはじめかた</h3>
+<section id="launcher">
+    <h2>ランチャー画面</h2>
+
+    <ul>
+        <li class="section_inrto_box">
+            <p class="intro_box_text">ランチャー画面とは、「MHF」起動後に表示される画面のことです。ここでは、ゲームへのログインやキャラクターの追加・削除、アップデート、環境設定等を行なえます。</p>
+            <p class="intro_box_img"><img src="/img/{$locale}/articles/begin/start/launcher_0.png" alt="launcher_0" /></p>
+        </li>
+    </ul>
+
+    <h3>ランチャー画面の環境設定</h3>
+    <p class="h3_under_text">
+        ランチャー画面の環境設定では、ゲーム画面の起動時のサイズや音声など、パソコン側の設定を行うことができます。 <br />また、High Grade Editionへの切替もここで可能です。
+    </p>
+
+    <ul>
+        <li class="center_box_no_number">
+            <p class="center_box_no_number_text">【設定】タブ</p>
+            <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/launcher_1.png" alt="launcher_1" /></p>
+        </li>
+        <li class="center_box_no_number">
+            <p class="center_box_no_number_text">【表示】タブ</p>
+            <p class="center_box_no_number_img"><img src="" alt="launcher_2" /></p>
+        </li>
+        <li class="center_box_no_number">
+            <p class="center_box_no_number_text">【音声】タブ</p>
+            <p class="center_box_no_number_img"><img src="" alt="launcher_3" /></p>
+        </li>
+        <li class="center_box_no_number">
+            <p class="center_box_no_number_text">【接続】タブ</p>
+            <p class="center_box_no_number_img"><img src="" alt="launcher_4" /></p>
+        </li>
+    </ul>
+</section>
+
+<section id="29ae62f6121aa1cfa1b080fda4cd60f0">
+    <h2>ログイン・ゲーム開始</h2>
+
     <p class="leadtxt">インストール後、ログインすることで『モンスターハンター フロンティアＺ』をプレイできます。</p>
     <div class="subsection">
         <h4 class="head_dia">ログインの手順</h4>
@@ -234,9 +240,11 @@
             <p><strong>（６）</strong>ゲームのタイトル画面が表示されます。［Enter］キーを押す、または画面をクリックすると、メニューが出現します。</p>
         </div>
     </div>
-</div>
-<div class="section" id="255854d6cf8510c6c94f8efed221e618">
-    <h3>High Grade Editionの設定方法</h3>
+</section>
+
+<section id="255854d6cf8510c6c94f8efed221e618">
+    <h2>High Grade Editionの設定方法</h2>
+
     <p class="leadtxt">High Grade Editionへの切替方法は以下の通りです。</p>
     <div class="subsection">
         <div class="imgBox">
@@ -291,4 +299,4 @@
         <p>・アンチエイリアス：オブジェクトの輪郭を滑らかに表現する機能のON／OFFを設定します。</p>
         <p>・ソフトパーティクル：オブジェクトの輪郭を滑らかに表現する機能のON／OFFを設定します。</p>
     </div>
-</div>
+</section>

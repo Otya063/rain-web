@@ -597,6 +597,32 @@
         }
     }
 
+    // サブタイトルh3
+    h3 {
+        position: relative;
+        font-size: 2.5rem;
+        font-weight: 600;
+        padding-left: 3%;
+        margin-bottom: 8%;
+        color: rgb(21, 199, 190);
+
+        &::before {
+            content: '';
+            position: absolute;
+            background: url(#{$path_img}/common/h3_frame.webp) center center no-repeat;
+            background-size: 100%;
+            width: 80%;
+            aspect-ratio: 75 / 15;
+            bottom: -45px;
+            left: -10px;
+        }
+    }
+
+    // h3直下テキスト
+    .h3_under_text {
+        padding-bottom: 5%;
+    }
+
     // 記事コンテンツ領域
     .contents {
         background: rgba(255, 255, 255, 0.6);
@@ -621,7 +647,6 @@
 
         // テキスト
         .center_box_text {
-            font-size: 1.7rem;
             text-align: start;
             text-indent: -2.5em;
             padding-bottom: 2%;
@@ -632,6 +657,29 @@
         .center_box_img {
             display: inline-block;
             width: 85%;
+        }
+    }
+
+    // セクション内紹介ボックス
+    .section_inrto_box {
+        margin-bottom: 10%;
+
+        .intro_box_text {
+            padding-bottom: 2%;
+        }
+    }
+
+    // 番号なし中央レイアウト
+    .center_box_no_number {
+        margin: 0;
+        margin-bottom: 5%;
+
+        .center_box_no_number_text {
+            font-weight: 700;
+            padding-bottom: 1%;
+        }
+        .center_box_no_number_img {
+            display: inline-block;
         }
     }
 
@@ -648,8 +696,8 @@
         // 目次タイトル
         &::before {
             position: absolute;
-            top: -11%;
-            left: -1%;
+            top: -11px;
+            left: -7px;
             padding: 1% 2%;
             border-radius: 30px;
             border: 2px solid white;
@@ -687,7 +735,7 @@
         background-color: #f1f1f1;
         outline: 2px solid #333;
         outline-offset: -0.5rem;
-        margin: 0 7.5% 15%;
+        margin: 15% 7.5%;
 
         &::before {
             position: absolute;
@@ -711,7 +759,7 @@
     .check_contents {
         position: relative;
         padding: 4% 3%;
-        margin: 0 10% 15%;
+        margin: 15% 10%;
         border-top: 2px solid white;
         border-bottom: 2px solid white;
         box-shadow: 0 0 0 2rem #fdb979;
@@ -818,6 +866,8 @@
         .table_tabs_item {
             background: DeepSkyBlue;
             padding: 2%;
+            font-weight: 700;
+            font-size: 1.8rem;
             margin-bottom: 2%;
             border-radius: 20px;
             filter: drop-shadow(0px 0px 6px rgb(50, 50, 50));
