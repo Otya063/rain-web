@@ -65,15 +65,15 @@
     </p>
 </div>
 
-<div class="check_contents">
-    <ul class="check_contents_list">
-        <li class="check_contents_list_text">・ご利用のパソコン環境に合わせ「オリジナル版」「High Grade Edition」のどちらかを選んでMHFをプレイすることが可能です 。</li>
-        <li class="check_contents_list_text">・動作環境を満たしているパソコンでも、パーツ構成などにより、ゲームが正常に起動しない場合があります。予めご了承ください。</li>
-    </ul>
-</div>
-
 <section id="spec">
     <h2>動作環境</h2>
+
+    <div class="check_contents">
+        <ul class="check_contents_list">
+            <li class="check_contents_list_text">・ご利用のパソコン環境に合わせ「オリジナル版」「High Grade Edition」のどちらかを選んでMHFをプレイすることが可能です。</li>
+            <li class="check_contents_list_text">・動作環境を満たしているパソコンでも、パーツ構成などにより、ゲームが正常に起動しない場合があります。予めご了承ください。</li>
+        </ul>
+    </div>
 
     <div class="table_tabs">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -92,7 +92,6 @@
         </table>
     {/if}
     <div class="spec_notes">
-        <p>■必要、推奨動作環境を満たしているパソコンであっても、パーツ構成等により、ゲームが正常に起動しない場合があります。</p>
         <p>■本ゲームは64bitネイティブ対応ではないため、64bit版Windows OS上でゲームを起動したとしても、システム性能が32bit版と比較して向上することはありません。</p>
         <p>■グラフィックカードには製造元の公式サイトで提供されている最新のドライバをご使用ください。</p>
         <p>■OSのサービスパックやグラフィックスボードのドライバについては、ご自身の責任において最新のものをご利用ください。</p>
@@ -193,53 +192,61 @@
 <section id="29ae62f6121aa1cfa1b080fda4cd60f0">
     <h2>ログイン・ゲーム開始</h2>
 
-    <p class="leadtxt">インストール後、ログインすることで『モンスターハンター フロンティアＺ』をプレイできます。</p>
-    <div class="subsection">
-        <h4 class="head_dia">ログインの手順</h4>
-        <p><strong>（１）</strong>デスクトップ上にある「モンスターハンター フロンティアＺ」のアイコンをダブルクリックします。</p>
-        <p class="notice check">マルチコアプロセッサーを搭載したパソコンでは、1台のパソコンでゲームプログラムを2つ起動してプレイすることができます。</p>
-        <!-- svelte-ignore a11y-missing-attribute -->
-        <a class="click">ゲームの多重起動</a>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img width="268" src="img/page18/18_19.jpg" alt="" />
-            <p><strong>（２）</strong>nProtect GameGuardが自動的に設定されます。</p>
-            <p>&nbsp;</p>
-            <p class="notice check">
-                ※nProtect GameGuardとは、ゲームを安全に遊んでいただくためのセキュリティソフトのことです。nProtect
-                GameGuardはパソコンのタスクバーに常駐され、規約違反に該当する不正行為があるかをチェックしています。不正行為が発見された場合には、ゲームが強制的に終了されます。
+    <ul>
+        <li class="center_box">
+            <p>（1）デスクトップ上にある「モンスターハンター フロンティア オンライン」のアイコンをクリックします。</p>
+            <p class="center_box_img">
+                <img src="" alt="login_1" />
             </p>
+
+            <div class="check_contents">
+                <ul class="check_contents_list">
+                    <li class="check_contents_list_text">・マルチコアプロセッサーを搭載したパソコンでは、1台のパソコンでゲームプログラムを2つ起動してプレイすることができます。</li>
+                    <!-- svelte-ignore a11y-missing-attribute -->
+                    <li class="check_contents_list_text">＞＞<a style="text-decoration:underline;">ゲームの多重起動</a>＜＜</li>
+                </ul>
+            </div>
+        </li>
+        <div class="subsection">
+            <div class="imgBox">
+                <img width="268" src="img/page18/18_19.jpg" alt="" />
+                <p><strong>（２）</strong>nProtect GameGuardが自動的に設定されます。</p>
+                <p>&nbsp;</p>
+                <p class="notice check">
+                    ※nProtect GameGuardとは、ゲームを安全に遊んでいただくためのセキュリティソフトのことです。nProtect
+                    GameGuardはパソコンのタスクバーに常駐され、規約違反に該当する不正行為があるかをチェックしています。不正行為が発見された場合には、ゲームが強制的に終了されます。
+                </p>
+            </div>
         </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img width="268" height="212" src="img/page18/19.jpg" alt="" />
-            <p><strong>（３）</strong>ご使用のパソコンによっては、パソコンランチャーの起動前に「ユーザー アカウント制御」の画面が表示されます。ここでは、「許可」をクリックします。</p>
+        <div class="subsection">
+            <div class="imgBox">
+                <img width="268" height="212" src="img/page18/19.jpg" alt="" />
+                <p><strong>（３）</strong>ご使用のパソコンによっては、パソコンランチャーの起動前に「ユーザー アカウント制御」の画面が表示されます。ここでは、「許可」をクリックします。</p>
+            </div>
         </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img width="268" src="img/page18/18_20.jpg" alt="" />
-            <p>
-                <strong>（４）</strong>ランチャー画面が起動します。<br />
-                上記の図の赤枠内にCOG IDとパスワードを入力し、［ログイン］ボタンをクリックするとログインが行なわれ、アップデートが開始されます。
-            </p>
+        <div class="subsection">
+            <div class="imgBox">
+                <img width="268" src="img/page18/18_20.jpg" alt="" />
+                <p>
+                    <strong>（４）</strong>ランチャー画面が起動します。<br />
+                    上記の図の赤枠内にCOG IDとパスワードを入力し、［ログイン］ボタンをクリックするとログインが行なわれ、アップデートが開始されます。
+                </p>
+            </div>
         </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <p class="clear-l">&nbsp;</p>
-            <p class="center"><img width="268" src="img/page18/18_21.jpg" alt="ランチャー画面" /></p>
-            <p><strong>（５）</strong>ゲームスタートを押すとゲームにログインします。</p>
+        <div class="subsection">
+            <div class="imgBox">
+                <p class="clear-l">&nbsp;</p>
+                <p class="center"><img width="268" src="img/page18/18_21.jpg" alt="ランチャー画面" /></p>
+                <p><strong>（５）</strong>ゲームスタートを押すとゲームにログインします。</p>
+            </div>
         </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img width="268" height="201" src="img/page18/18_22.jpg" alt="" />
-            <p><strong>（６）</strong>ゲームのタイトル画面が表示されます。［Enter］キーを押す、または画面をクリックすると、メニューが出現します。</p>
+        <div class="subsection">
+            <div class="imgBox">
+                <img width="268" height="201" src="img/page18/18_22.jpg" alt="" />
+                <p><strong>（６）</strong>ゲームのタイトル画面が表示されます。［Enter］キーを押す、または画面をクリックすると、メニューが出現します。</p>
+            </div>
         </div>
-    </div>
+    </ul>
 </section>
 
 <section id="255854d6cf8510c6c94f8efed221e618">
