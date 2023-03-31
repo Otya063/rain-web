@@ -664,6 +664,7 @@
     .section_inrto_box {
         margin-bottom: 10%;
 
+        // テキスト
         .intro_box_text {
             padding-bottom: 2%;
         }
@@ -674,12 +675,46 @@
         margin: 0;
         margin-bottom: 5%;
 
+        // テキスト
         .center_box_no_number_text {
             font-weight: 700;
             padding-bottom: 1%;
         }
+
+        // 画像設定
         .center_box_no_number_img {
             display: inline-block;
+        }
+    }
+
+    // 画像に対する説明文
+    .img_desc_section {
+        --x-gradient: linear-gradient(90deg, #6bec9c 0 25px, transparent 0 calc(100% - 25px), #6bec9c calc(100% - 25px));
+        --y-gradient: linear-gradient(#6bec9c 0 25px, transparent 0 calc(100% - 25px), #6bec9c calc(100% - 25px));
+        outline: 2px solid;
+        outline-offset: -5px;
+        background-image: var(--x-gradient), var(--y-gradient), var(--x-gradient), var(--y-gradient);
+        background-repeat: no-repeat;
+        background-size: 100% 3px, 3px 100%, 100% 3px, 3px 100%;
+        background-position: top, right, bottom, left;
+        margin: 1% 0;
+
+        // 個別アイテム
+        .img_desc_section_item {
+            padding: 1% 2%;
+            border-top: black solid 2px;
+            color: red;
+
+            // テキスト
+            .img_desc_section_text {
+                padding-left: 1em;
+                color: black;
+            }
+
+            // アイテム一番目トップボーダーなし
+            &:nth-child(1) {
+                border-top: 0;
+            }
         }
     }
 
@@ -783,8 +818,67 @@
             color: white;
             line-height: 2;
 
+            // テキスト
             .check_contents_list_text {
                 text-indent: -1em;
+            }
+        }
+    }
+
+    // 記事内Check（リンク付き）
+    .check_contents_with_link {
+        position: relative;
+        padding: 4% 7%;
+        margin: 15% 0;
+        border-top: 2px solid white;
+        border-bottom: 2px solid white;
+        box-shadow: 0 0 0 2rem #fdb979;
+        background-color: #f19b4a;
+
+        // 目次タイトル
+        &::before {
+            content: '';
+            position: absolute;
+            top: -35%;
+            left: -10%;
+            width: 16%;
+            aspect-ratio: 1 / 1;
+            background: url(#{$path_img}/common/check_mark.webp) center center no-repeat;
+            background-size: 100%;
+            font-size: 1.8rem;
+        }
+
+        // 目次リスト
+        .check_contents_with_link_list {
+            color: white;
+            line-height: 2;
+
+            // リストアイテム
+            .check_contents_with_link_list_item {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-items: center;
+                padding-top: 3%;
+
+                // テキスト
+                .check_contents_list_text {
+                    text-align: start;
+                    margin-right: 5%;
+                    width: 700px;
+                }
+
+                // リンク
+                .check_contents_list_link {
+                    text-decoration: underline;
+                    margin-left: 5%;
+                    white-space: nowrap;
+                }
+
+                // アイテム一番目上部余白なし
+                &:nth-child(1) {
+                    padding-top: 0;
+                }
             }
         }
     }

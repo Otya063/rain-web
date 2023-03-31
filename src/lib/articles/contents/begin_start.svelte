@@ -173,18 +173,42 @@
         <li class="center_box_no_number">
             <p class="center_box_no_number_text">【設定】タブ</p>
             <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/launcher_1.png" alt="launcher_1" /></p>
+            <ul class="img_desc_section">
+                <li class="img_desc_section_item">
+                    ①設定スライダ
+                    <p class="img_desc_section_text">表示タブおよび音声タブの設定に対してプリセット3種（「高」「中」「低」）から一つ選択できます。<br />詳細設定ボタンをオンにした際は選択不可となり、プリセット表記は「カスタム」と表示されます。</p>
+                </li>
+                <li class="img_desc_section_item">
+                    ②詳細設定ボタン
+                    <p class="img_desc_section_text">オンにすると、表示タブおよび音声タブにて設定を自由に変更することができます。<br />カスタム設定有効時には、設定スライダ内のプリセット表記が「カスタム」となります。</p>
+                </li>
+                <li class="img_desc_section_item">
+                    ③HGEチェックボックス
+                    <p class="img_desc_section_text">チェックを入れると、「High Grade Edition」が有効となります。</p>
+                </li>
+            </ul>
         </li>
         <li class="center_box_no_number">
             <p class="center_box_no_number_text">【表示】タブ</p>
-            <p class="center_box_no_number_img"><img src="" alt="launcher_2" /></p>
+            <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/launcher_2.png" alt="launcher_2" /></p>
+            <ul class="img_desc_section">
+                <li class="img_desc_section_item">
+                    ①画面サイズ設定
+                    <p class="img_desc_section_text">「起動モード」にてゲーム開始時の画面モードを、「ウィンドウモード」もしくは「フルスクリーンモード」から選択し、「画面サイズ」にて各画面モードでの画面サイズの指定ができます。</p>
+                </li>
+                <li class="img_desc_section_item">
+                    ②圧縮テクスチャ
+                    <p class="img_desc_section_text">DXTC（画像圧縮技術）の有効もしくは無効を選択します。<br />「有効」では、画像処理は速くなる一方、画像細部が粗くなります。<br>「無効」では、画像処理は遅くなる一方、画像細部が高精細になります。</p>
+                </li>
+            </ul>
         </li>
         <li class="center_box_no_number">
             <p class="center_box_no_number_text">【音声】タブ</p>
-            <p class="center_box_no_number_img"><img src="" alt="launcher_3" /></p>
+            <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/launcher_3.png" alt="launcher_3" /></p>
         </li>
         <li class="center_box_no_number">
             <p class="center_box_no_number_text">【接続】タブ</p>
-            <p class="center_box_no_number_img"><img src="" alt="launcher_4" /></p>
+            <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/launcher_4.png" alt="launcher_4" /></p>
         </li>
     </ul>
 </section>
@@ -192,60 +216,43 @@
 <section id="29ae62f6121aa1cfa1b080fda4cd60f0">
     <h2>ログイン・ゲーム開始</h2>
 
+    <div class="check_contents_with_link">
+        <ul class="check_contents_with_link_list">
+            <li class="check_contents_with_link_list_item">
+                <p class="check_contents_list_text">マルチコアプロセッサーを搭載したパソコンでは、1台のパソコンでゲームプログラムを2つ起動してプレイすることができます。</p>
+                <!-- svelte-ignore a11y-missing-attribute -->
+                ＞＞<a class="check_contents_list_link">ゲームの多重起動</a>
+            </li>
+        </ul>
+    </div>
+
     <ul>
         <li class="center_box">
-            <p>（1）デスクトップ上にある「モンスターハンター フロンティア オンライン」のアイコンをクリックします。</p>
-            <p class="center_box_img">
-                <img src="" alt="login_1" />
-            </p>
-
-            <div class="check_contents">
-                <ul class="check_contents_list">
-                    <li class="check_contents_list_text">・マルチコアプロセッサーを搭載したパソコンでは、1台のパソコンでゲームプログラムを2つ起動してプレイすることができます。</li>
-                    <!-- svelte-ignore a11y-missing-attribute -->
-                    <li class="check_contents_list_text">＞＞<a style="text-decoration:underline;">ゲームの多重起動</a>＜＜</li>
-                </ul>
-            </div>
+            <p class="center_box_text">（1）デスクトップ上にある「モンスターハンター フロンティア オンライン」のアイコンをクリックします。</p>
         </li>
-        <div class="subsection">
-            <div class="imgBox">
-                <img width="268" src="img/page18/18_19.jpg" alt="" />
-                <p><strong>（２）</strong>nProtect GameGuardが自動的に設定されます。</p>
-                <p>&nbsp;</p>
-                <p class="notice check">
-                    ※nProtect GameGuardとは、ゲームを安全に遊んでいただくためのセキュリティソフトのことです。nProtect
-                    GameGuardはパソコンのタスクバーに常駐され、規約違反に該当する不正行為があるかをチェックしています。不正行為が発見された場合には、ゲームが強制的に終了されます。
-                </p>
-            </div>
-        </div>
-        <div class="subsection">
-            <div class="imgBox">
-                <img width="268" height="212" src="img/page18/19.jpg" alt="" />
-                <p><strong>（３）</strong>ご使用のパソコンによっては、パソコンランチャーの起動前に「ユーザー アカウント制御」の画面が表示されます。ここでは、「許可」をクリックします。</p>
-            </div>
-        </div>
-        <div class="subsection">
-            <div class="imgBox">
-                <img width="268" src="img/page18/18_20.jpg" alt="" />
-                <p>
-                    <strong>（４）</strong>ランチャー画面が起動します。<br />
-                    上記の図の赤枠内にCOG IDとパスワードを入力し、［ログイン］ボタンをクリックするとログインが行なわれ、アップデートが開始されます。
-                </p>
-            </div>
-        </div>
-        <div class="subsection">
-            <div class="imgBox">
-                <p class="clear-l">&nbsp;</p>
-                <p class="center"><img width="268" src="img/page18/18_21.jpg" alt="ランチャー画面" /></p>
-                <p><strong>（５）</strong>ゲームスタートを押すとゲームにログインします。</p>
-            </div>
-        </div>
-        <div class="subsection">
-            <div class="imgBox">
-                <img width="268" height="201" src="img/page18/18_22.jpg" alt="" />
-                <p><strong>（６）</strong>ゲームのタイトル画面が表示されます。［Enter］キーを押す、または画面をクリックすると、メニューが出現します。</p>
-            </div>
-        </div>
+        <li class="center_box">
+            <p class="center_box_text">
+                （2）ランチャー画面が起動します。<br />
+                赤枠内にユーザー名とパスワードを入力し、「ログイン」ボタンをクリックするとログインが行なわれ、アップデートもしくはファイルチェックが開始されます。
+            </p>
+            <p class="center_box_img">
+                <img src="/img/{$locale}/articles/begin/start/login_2.png" alt="login_2" />
+            </p>
+        </li>
+        <li class="center_box">
+            <p class="center_box_text">
+                （3）キャラクターを選択し、「ゲームスタート」を押すとMHFが起動します。<br />初期状態では下図のように「<span style="color: blue;">狩人申請可能</span>」のみが表示されます。
+            </p>
+            <p class="center_box_img">
+                <img src="/img/{$locale}/articles/begin/start/login_3.png" alt="login_3" />
+            </p>
+        </li>
+        <li class="center_box">
+            <p class="center_box_text">（4）ゲームのタイトル画面では、Enterキーを押す、もしくは画面をクリックすると、タイトルメニューが表示されます。</p>
+            <p class="center_box_img">
+                <img src="/img/{$locale}/articles/begin/start/login_4.png" alt="login_4" />
+            </p>
+        </li>
     </ul>
 </section>
 
