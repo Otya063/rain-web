@@ -603,7 +603,7 @@
         font-size: 2.5rem;
         font-weight: 600;
         padding-left: 3%;
-        margin-bottom: 8%;
+        margin: 8% 0;
         color: rgb(21, 199, 190);
 
         &::before {
@@ -616,11 +616,6 @@
             bottom: -45px;
             left: -10px;
         }
-    }
-
-    // h3直下テキスト
-    .h3_under_text {
-        padding-bottom: 5%;
     }
 
     // 記事コンテンツ領域
@@ -666,6 +661,7 @@
 
         // テキスト
         .intro_box_text {
+            text-align: start;
             padding-bottom: 2%;
         }
     }
@@ -674,9 +670,11 @@
     .center_box_no_number {
         margin: 0;
         margin-bottom: 5%;
+        text-align: center;
 
         // テキスト
         .center_box_no_number_text {
+            text-align: start;
             font-weight: 700;
             padding-bottom: 1%;
         }
@@ -687,7 +685,24 @@
         }
     }
 
-    // 画像に対する説明文
+    // 画像右、テキスト左レイアウト
+    .half_box {
+        display: flex;
+        margin-bottom: 5%;
+
+        // テキスト
+        .half_box_text {
+            padding: 0 3%;
+        }
+
+        // 画像
+        .half_box_img {
+            display: inline-block;
+            width: 100%;
+        }
+    }
+
+    // 画像に対する説明表
     .img_desc_section {
         --x-gradient: linear-gradient(90deg, #6bec9c 0 25px, transparent 0 calc(100% - 25px), #6bec9c calc(100% - 25px));
         --y-gradient: linear-gradient(#6bec9c 0 25px, transparent 0 calc(100% - 25px), #6bec9c calc(100% - 25px));
@@ -698,6 +713,7 @@
         background-size: 100% 3px, 3px 100%, 100% 3px, 3px 100%;
         background-position: top, right, bottom, left;
         margin: 1% 0;
+        text-align: start;
 
         // 個別アイテム
         .img_desc_section_item {
@@ -709,6 +725,25 @@
             .img_desc_section_text {
                 padding-left: 1em;
                 color: black;
+
+                // 表内テキスト下部仕切り
+                .img_desc_section_text_part {
+                    position: relative;
+                    display: block;
+                    height: 2px;
+
+                    &::before {
+                        content: '';
+                        background-image: linear-gradient(to right, gray, gray 5px, transparent 5px, transparent 12px);
+                        background-size: 9px 2px;
+                        background-repeat: repeat-x;
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                    }
+                }
             }
 
             // アイテム一番目トップボーダーなし

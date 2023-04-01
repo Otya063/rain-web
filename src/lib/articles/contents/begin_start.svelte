@@ -41,7 +41,7 @@
         </li>
         <li>
             <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="scroll" data-target="installation ">インストール</a>
+            <a class="scroll" data-target="installation">インストール</a>
         </li>
         <li>
             <!-- svelte-ignore a11y-missing-attribute -->
@@ -165,9 +165,11 @@
     </ul>
 
     <h3>ランチャー画面の環境設定</h3>
-    <p class="h3_under_text">
-        ランチャー画面の環境設定では、ゲーム画面の起動時のサイズや音声など、パソコン側の設定を行うことができます。 <br />また、High Grade Editionへの切替もここで可能です。
-    </p>
+    <div class="center_box_no_number">
+        <p style="font-weight: 500;" class="center_box_no_number_text">
+            ランチャー画面の環境設定では、ゲーム画面の起動時のサイズや音声など、パソコン側の設定を行うことができます。 <br />また、High Grade Editionへの切替もここで可能です。
+        </p>
+    </div>
 
     <ul>
         <li class="center_box_no_number">
@@ -236,14 +238,17 @@
             <ul class="img_desc_section">
                 <li class="img_desc_section_item">
                     ①プロキシ設定
-                    <p class="img_desc_section_text">「ダウンロードにプロキシを使用」にチェックを入れると、プロキシサーバーを経由してゲームへ接続することができます。<br>※現在、日本語版では利用不可、英語版およびフランス語版でのみ利用可能です。</p>
+                    <p class="img_desc_section_text">
+                        「ダウンロードにプロキシを使用」にチェックを入れると、プロキシサーバーを経由してゲームへ接続することができます。<br
+                        />※現在、日本語版では利用不可、英語版およびフランス語版でのみ利用可能です。
+                    </p>
                 </li>
             </ul>
         </li>
     </ul>
 </section>
 
-<section id="29ae62f6121aa1cfa1b080fda4cd60f0">
+<section id="start">
     <h2>ログイン・ゲーム開始</h2>
 
     <div class="check_contents_with_link">
@@ -266,7 +271,7 @@
                 赤枠内にユーザー名とパスワードを入力し、「ログイン」ボタンをクリックするとログインが行なわれ、アップデートが開始されます。
             </p>
             <p class="center_box_img">
-                <img src="/img/{$locale}/articles/begin/start/login_2.png" alt="login_2" />
+                <img src="/img/{$locale}/articles/begin/start/start_2.png" alt="start_2" />
             </p>
         </li>
         <li class="center_box">
@@ -274,73 +279,100 @@
                 （3）キャラクターを選択し、「ゲームスタート」を押すとMHFが起動します。<br />初期状態では下図のように「<span style="color: blue;">狩人申請可能</span>」のみが表示されます。
             </p>
             <p class="center_box_img">
-                <img src="/img/{$locale}/articles/begin/start/login_3.png" alt="login_3" />
+                <img src="/img/{$locale}/articles/begin/start/start_3.png" alt="start_3" />
             </p>
         </li>
         <li class="center_box">
             <p class="center_box_text">（4）ゲームのタイトル画面では、Enterキーを押す、もしくは画面をクリックすると、タイトルメニューが表示されます。</p>
             <p class="center_box_img">
-                <img src="/img/{$locale}/articles/begin/start/login_4.png" alt="login_4" />
+                <img src="/img/{$locale}/articles/begin/start/start_4.png" alt="start_4" />
             </p>
         </li>
     </ul>
 </section>
 
-<section id="255854d6cf8510c6c94f8efed221e618">
+<section id="hge_setting">
     <h2>High Grade Editionの設定方法</h2>
 
-    <p class="leadtxt">High Grade Editionへの切替方法は以下の通りです。</p>
-    <div class="subsection">
-        <div class="imgBox">
-            <img width="268" src="img/page18/18_23.jpg" alt="" />
-            <p><strong>（１）</strong>ランチャー画面で「環境設定」をクリックします。</p>
-        </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img width="268" src="img/page18/18_3.jpg" alt="" />
-            <p><strong>（２）</strong>設定画面が表示されます。設定タブ内の「High Grade　Editionを有効にする」にチェックを入れ、OKをクリックします。</p>
-        </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img width="268" src="img/page18/18_20.jpg" alt="ランチャー画面" />
-            <p>&nbsp;</p>
-            <p><strong>（３）</strong>ランチャー画面に戻り、左図の赤枠内にCOG IDとパスワードを入力し、［ログイン］ボタンをクリックし、タイトル画面に移動します。</p>
-        </div>
-    </div>
-    <div class="subsection">
-        <div class="imgBox">
-            <img width="268" src="img/page18/18_24.jpg" alt="" />
-            <p><strong>（４）</strong>タイトル画面で「High Grade Edition」と表示されているとHigh Grade Editionでプレイ可能となります。</p>
-        </div>
-    </div>
-    <div class="subsection">
-        <h4 class="head_dia">ゲーム内での調整</h4>
-        <div class="imgBox">
-            <img width="217" alt="" src="img/page18/18_10.jpg" />
-            <p>
-                ゲームにログインし、メゼポルタ広場に降り立った後、[メニュー]-[オプション]-[表示（グラフィック）]でグラフィック機能の調整が可能です。ご自身のパソコン環境にあった調整をしてみましょう。
+    <ul>
+        <li class="center_box">
+            <p class="center_box_text">（1）ランチャー画面で「環境設定」をクリックします。</p>
+            <p class="center_box_img">
+                <img src="/img/{$locale}/articles/begin/start/hge_1.png" alt="hge_1" />
             </p>
-        </div>
+        </li>
+        <li class="center_box">
+            <p class="center_box_text">
+                （2）設定画面が表示されます。<br />設定タブ内の「High Grade Editionを有効にする」にチェックを入れ、OKをクリックします。
+            </p>
+            <p class="center_box_img">
+                <img src="/img/{$locale}/articles/begin/start/hge_2.png" alt="hge_2" />
+            </p>
+        </li>
+        <li class="center_box">
+            <p class="center_box_text">（3）ログイン後、タイトル画面で「High Grade Edition」と表示されているとHigh Grade Editionでプレイ可能となります。</p>
+            <p class="center_box_img">
+                <img src="/img/{$locale}/articles/begin/start/hge_3.png" alt="hge_3" />
+            </p>
+        </li>
+    </ul>
+
+    <h3 class="head_dia">オプション調整</h3>
+    <div class="half_box">
+        <p class="half_box_text">メニューを開き、［オプション］＞［表示（グラフィック）］でグラフィックの調整が可能です。ご自身のパソコン環境に合わせて調整してみましょう。</p>
+        <p class="half_box_img">
+            <img src="/img/{$locale}/articles/begin/start/hge_4.png" alt="hge_4" />
+        </p>
     </div>
-    <div class="subsection">
-        <div class="imgBox"><img width="500" alt="" src="img/page18/18_7.jpg" /></div>
-        <h4 class="head_dia">表示（グラフィック）の詳細</h4>
-        <h4>１．プリセットメニュー</h4>
-        <p>・最高画質：すべての各種項目をONにした、最高設定にします。</p>
-        <p>・グラフィック優先：グラフィックを優先した、高画質設定にします。</p>
-        <p>・パフォーマンス優先：操作性を優先した、不可処理の少ない設定にします。</p>
-        <p>・カスタム：各種項目を自由に設定することができます。</p>
-        <br />
-        <h4>２．各種項目</h4>
-        <p>・リアルシャドウ(ロビー)：ロビーでのハンター、NPCの影処理の実影表現のON／OFFを設定します。</p>
-        <p>・リアルシャドウ(クエスト)：クエストでのハンター、モンスター等の影処理の実影表現のON／OFFを設定します。</p>
-        <p>・被写界深度：ぼかしだすことによって距離感を表現します。この機能のON／OFFを設定します。</p>
-        <p>・ブルーム：光の表現をリアルに演出する機能のON／OFFを設定します。</p>
-        <p>・SSAO：影の濃淡を自然な形で反映する機能のON／OFFを設定します。</p>
-        <p>・ゴッドレイ：光の差し込み、木漏れ日の表現を行ないます。この機能のON／OFFを設定します。</p>
-        <p>・アンチエイリアス：オブジェクトの輪郭を滑らかに表現する機能のON／OFFを設定します。</p>
-        <p>・ソフトパーティクル：オブジェクトの輪郭を滑らかに表現する機能のON／OFFを設定します。</p>
+
+    <div class="center_box_no_number">
+        <p class="center_box_no_number_text">表示（グラフィック）</p>
+        <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/hge_5.png" alt="hge_5" /></p>
+        <ul class="img_desc_section">
+            <li class="img_desc_section_item">
+                ①プリセット
+                <ul class="img_desc_section_text">
+                    <li>最高画質：全ての項目をONにした、最高設定にします。<span class="img_desc_section_text_part" /></li>
+                    <li>グラフィック優先：グラフィックを優先した、高画質設定にします。<span class="img_desc_section_text_part" /></li>
+                    <li>パフォーマンス優先：操作性を優先した、不可処理の少ない設定にします。<span class="img_desc_section_text_part" /></li>
+                    <li>カスタム：各種項目を自由に設定することができます。<span class="img_desc_section_text_part" /></li>
+                </ul>
+            </li>
+            <li class="img_desc_section_item">
+                ②各種項目
+                <ul class="img_desc_section_text">
+                    <li>リアルシャドウ（ロビー）：ロビーでのハンター、NPCの影処理の実影表現のON/OFFを設定します。<span class="img_desc_section_text_part" /></li>
+                    <li>リアルシャドウ（クエスト）：クエストでのハンター、モンスター等に対する実影処理のON/OFFを設定します。<span class="img_desc_section_text_part" /></li>
+                    <li>
+                        被写界深度：カメラ等のレンズを通して対象物を撮影した際、ピントが合っている領域の前後にある範囲で、どれほどボケるかを表す指標の事です。ONでは、対象物にフォーカスが合った時に、その前後の範囲がボケるように描写され、より自然な距離感を感じることができます。OFFでは、対象物とその周囲の距離感があまり表現されず、映像がはっきりと表示されますが、現実世界で普段目にする風景とは異質に映り、多少の違和感を覚えるかもしれません。<span
+                            class="img_desc_section_text_part"
+                        />
+                    </li>
+                    <li>
+                        ブルーム：光源から光が周囲に広がっていくエフェクトの事です。ONでは、よりリアルな光の表現が可能となります。OFFでは、ブルーム効果は表現されず、ややリアリティに欠けると感じるかもしれません。<span
+                            class="img_desc_section_text_part"
+                        />
+                    </li>
+                    <li>
+                        SSAO：立体物の隙間や曲がり角等、実際に光が入り込みにくい場所にも陰影が生まれ、よりリアルな3D表現を実現できますが、高い処理能力が必要となるため、ゲームがカクついてしまう場合は、OFFにされることをお勧めいたします。ONでは、よりリアルな陰影が表現され、立体感のあるグラフィックスを楽しむことができます。OFFでは、陰影の表現は行われず、画面がよりシンプルな印象を受けます。<span
+                            class="img_desc_section_text_part"
+                        />
+                    </li>
+                    <li>
+                        ゴッドレイ：光の差し込み、木漏れ日等、光が散乱して空気中に照り返す現象を可能にしますが、高い処理能力が必要となるため、ゲームがカクついてしまう場合は、OFFにされることをお勧めいたします。<span
+                            class="img_desc_section_text_part"
+                        />
+                    </li>
+                    <li>
+                        アンチエイリアス：オブジェクトの輪郭線を滑らかにして、より自然な見た目を実現しますが、高い処理能力が必要となるため、ゲームがカクついてしまう場合は、OFFにされることをお勧めいたします。
+                    </li>
+                    <li>
+                        ソフトパーティクル：オブジェクトの輪郭線を滑らかにして、より自然な見た目を実現しますが、高い処理能力が必要となるため、ゲームがカクついてしまう場合は、OFFにされることをお勧めいたします。<span
+                            class="img_desc_section_text_part"
+                        />
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </div>
 </section>

@@ -3,7 +3,7 @@
         { "src": "/img/common/icon_192.png?v=1", "type": "image/png", "sizes": "192x192" },
         { "src": "/img/common/icon_512.png?v=1", "type": "image/png", "sizes": "512x512" }
     ],
-    "start_url": "https://rain-web.rain-server.workers.dev/",
+    "start_url": "https://production.rain-server.workers.dev/",
     "display": "standalone",
     "orientation": "any",
     "background_color": "#000",
