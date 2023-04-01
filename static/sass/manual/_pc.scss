@@ -691,7 +691,7 @@
     .img_desc_section {
         --x-gradient: linear-gradient(90deg, #6bec9c 0 25px, transparent 0 calc(100% - 25px), #6bec9c calc(100% - 25px));
         --y-gradient: linear-gradient(#6bec9c 0 25px, transparent 0 calc(100% - 25px), #6bec9c calc(100% - 25px));
-        outline: 2px solid;
+        outline: rgb(160, 160, 160) 2px solid;
         outline-offset: -5px;
         background-image: var(--x-gradient), var(--y-gradient), var(--x-gradient), var(--y-gradient);
         background-repeat: no-repeat;
