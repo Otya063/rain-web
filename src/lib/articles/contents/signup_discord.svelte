@@ -1,12 +1,15 @@
 <script lang="ts">
     import LL, { locale } from '$i18n/i18n-svelte';
+
+    const articleData = $LL.articles['signup'].discord;
+    const sectionData = articleData.section;
 </script>
 
-<h1>{$LL.articles['signup'].discord['title']()}</h1>
+<h1>{articleData.title()}</h1>
 
 <div class="outline_contents" data-title={$LL.articles['data_title']()}>
     <ul>
-        {#each Object.entries($LL.articles['signup'].discord['outline_contents']) as [data_target, text]}
+        {#each Object.entries(articleData.outline_contents) as [data_target, text]}
             <li>
                 <!-- svelte-ignore a11y-missing-attribute -->
                 <a class="scroll" data-target={data_target}>{text()}</a>
@@ -16,14 +19,14 @@
 </div>
 
 <div class="article_memo" data-title="COMMENT">
-    <p class="inner_text">{@html $LL.articles['signup'].discord['article_memo']()}</p>
+    <p class="inner_text">{@html articleData.article_memo()}</p>
 </div>
 
 <section id="signup_discord">
-    <h2>{$LL.articles['signup'].discord['section'].subtitle()}</h2>
+    <h2>{sectionData["1"].subtitle()}</h2>
 
     <ul>
-        {#each Object.entries($LL.articles['signup'].discord['section'].center_box) as [number, { text, img }]}
+        {#each Object.entries(sectionData["1"].contents) as [number, { text, img }]}
             <li class="center_box">
                 <p class="center_box_text">（{number}）{@html text()}</p>
                 {#each Object.values(img) as src}

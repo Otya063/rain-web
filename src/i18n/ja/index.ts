@@ -184,19 +184,132 @@ const ja: Translation = {
                 article_memo:
                     '「モンスターハンター フロンティア オンライン」をプレイするためには、Rainサーバーへの会員登録が必要となります。登録画面にて設定した「ユーザー名」及び「パスワード」をゲームランチャーへ入力してログインすることで、ゲームをプレイすることができます。<br>ここでは、公式Discord内での会員登録手順についてご紹介いたします。',
                 section: {
-                    subtitle: '公式Discordにて会員登録',
-                    center_box: {
-                        1: {
-                            text: '「bot-commands」チャンネル内にあるインターフェイスより、Registerボタンを押します。',
-                            img: ['discord_1'],
+                    1: {
+                        subtitle: '公式Discordにて会員登録',
+                        contents: {
+                            1: {
+                                text: '「bot-commands」チャンネル内にあるインターフェイスより、Registerボタンを押します。',
+                                img: ['discord_1'],
+                            },
+                            2: {
+                                text: '以下のようなウィンドウが表示されたら、「Username」及び「Password」欄にそれぞれ自身の設定したい値を入力して、送信ボタンを押してください。<br />送信が完了すると、「account successfully created」というメッセージが表示されます。',
+                                img: ['discord_2_1', 'discord_2_2'],
+                            },
+                            3: {
+                                text: '/card コマンド使用後、空のキャラクターが表示されます。<br />Useボタンを押して、使用キャラクターを確定させると、「successfully switch main character」というメッセージが表示されます。<br />これにて会員登録は完了となります。',
+                                img: ['discord_3_1', 'discord_3_2'],
+                            },
                         },
-                        2: {
-                            text: '以下のようなウィンドウが表示されたら、「Username」及び「Password」欄にそれぞれ自身の設定したい値を入力して、送信ボタンを押してください。<br />送信が完了すると、「account successfully created」というメッセージが表示されます。',
-                            img: ['discord_2_1', 'discord_2_2'],
+                    },
+                },
+            },
+        },
+
+        begin: {
+            // How to Start the Game
+            start: {
+                title: 'ゲームの始め方',
+                outline_contents: {
+                    spec: '動作環境',
+                    installation: 'インストール',
+                    launcher: 'ランチャー画面',
+                    start: 'ログイン・ゲーム開始',
+                    hge_setting: 'High Grade Editionの設定方法',
+                },
+                article_memo:
+                    '「モンスターハンター フロンティア オンライン」には通常の画質かつ手軽な環境でゲームをプレイいただけるオリジナル版と、高画質で迫力のある狩猟を体験いただけるHigh Grade Editionがあります。<br />ここでは、その動作環境やダウンロード・インストール方法といったゲームにおける基本事項についてご紹介いたします。',
+                section: {
+                    1: {
+                        subtitle: '動作環境',
+                        check_contents: [
+                            'ご利用のパソコン環境に合わせ「オリジナル版」「High Grade Edition」のどちらかを選んでMHFをプレイすることが可能です。',
+                            '動作環境を満たしているパソコンでも、パーツ構成などにより、ゲームが正常に起動しない場合があります。予めご了承ください。',
+                        ],
+                        table_data: {
+                            tab_name: {
+                                original: 'オリジナル版の動作環境',
+                                hge: 'High Grade Editionの動作環境',
+                            },
+                            column_name: {
+                                min: '必要動作環境',
+                                rec: '推奨動作環境',
+                            },
+                            row_data: {
+                                resolution: {
+                                    name: '解像度',
+                                    data_min: '800×600',
+                                    data_rec: '1600×1200',
+                                },
+                                os: {
+                                    name: 'OS',
+                                    data_common: ['Windows 7, 8, 8.1, 10（32bit/64bit 日本語版）', '※64bit版はWOW64（Windows on Windows 64）での動作です。'],
+                                },
+                                cpu: {
+                                    name: 'CPU',
+                                    data_min: ['インテル® Pentium® 4 2.0GHz以上', 'AMD Athlon™64 3500+以上'],
+                                    data_rec: [
+                                        'インテル® Core™2（Duo, Extreme, Quad）シリーズ',
+                                        'インテル® Core™（i3, i5, i7）シリーズ',
+                                        'インテル® Core™（i5-2000, i7-2000）シリーズ',
+                                        'AMD Athlon™ X2 デュアルコア・プロセッサ4600+以上',
+                                        'AMD Phenom™ シリーズ',
+                                        'AMD AthlonII™ シリーズ',
+                                        'AMD PhenomII™ シリーズ',
+                                        'AMD A-Series APU（A8-3850, A6-3650）',
+                                    ],
+                                    data_common: 'SSE対応のCPU',
+                                },
+                                memory: {
+                                    name: 'メモリ',
+                                    data_min: '512MB以上',
+                                    data_rec: '1GB以上',
+                                },
+                                card: {
+                                    name: 'グラフィック<br>カード',
+                                    data_min: [
+                                        'NVIDIA® GeForce® FX 5700シリーズ以上',
+                                        'NVIDIA® GeForce® 6600シリーズ以上',
+                                        'NVIDIA® GeForce® 7600シリーズ以上',
+                                        'ATi Radeon™ 9500シリーズ以上',
+                                        'AMD Radeon™ HD 4350シリーズ以上',
+                                        'AMD Radeon™ HD 5450シリーズ以上',
+                                    ],
+                                    data_rec: [
+                                        'NVIDIA® GeForce® 8600シリーズ以上',
+                                        'NVIDIA® GeForce® 9600シリーズ以上',
+                                        'NVIDIA® GeForce® 200シリーズ以上',
+                                        'AMD Radeon™ HD 2600シリーズ以上',
+                                        'AMD Radeon™ HD 3650シリーズ以上',
+                                        'AMD Radeon™ HD 4650シリーズ以上',
+                                        'AMD Radeon™ HD 5550シリーズ以上',
+                                        'AMD Radeon™ HD 6450シリーズ以上',
+                                    ],
+                                },
+                                directx: {
+                                    data_common: 'DirectX 9.0c以上',
+                                },
+                                sound: {
+                                    name: 'サウンド<br>カード',
+                                    data_common: ['DirectSound®対応16bitステレオ44.1kHz', 'もしくは48kHz WAVE形式が再生可能なサウンドカード'],
+                                },
+                                hdd: {
+                                    name: 'HDD空き容量',
+                                    data_common: [
+                                        'インストールするハードディスク内に20GB以上必須',
+                                        '※上記の空き容量にはDirectX® インストール用の領域、OSのスワップファイル領域を含みます。',
+                                        '※インストーラーが一時的に使用する作業領域を含みます。この作業領域はルートドライブ（通常はC:ドライブ） に必要で、インストール後に開放されます。',
+                                    ],
+                                },
+                                internet: {
+                                    name: 'インターネット<br>接続環境',
+                                    data_common: 'ADSL1.0Mbps以上のブロードバンド環境',
+                                },
+                            },
                         },
-                        3: {
-                            text: '/card コマンド使用後、空のキャラクターが表示されます。<br />Useボタンを押して、使用キャラクターを確定させると、「successfully switch main character」というメッセージが表示されます。<br />これにて会員登録は完了となります。',
-                            img: ['discord_3_1', 'discord_3_2'],
+                        spec_notes: {
+                            1: '本ゲームは64bitネイティブ対応ではないため、64bit版Windows OS上でゲームを起動したとしても、システム性能が32bit版と比較して向上することはありません。',
+                            2: 'グラフィックカードには製造元の公式サイトで提供されている最新のドライバをご使用ください。',
+                            3: 'OSのサービスパックやグラフィックスボードのドライバについては、ご自身の責任において最新のものをご利用ください。',
                         },
                     },
                 },

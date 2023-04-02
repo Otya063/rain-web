@@ -185,19 +185,132 @@ const en: BaseTranslation = {
                 article_memo:
                     'In order to play "Monster Hunter Frontier Online," you need to sign up for the Rain Server first. You can play the game by entering the "Username" and "Password," which you set on the registration screen, into the game launcher and logging in. <br>This section describes sign-up procedure with official discord.',
                 section: {
-                    subtitle: 'Sign Up with Official Discord',
-                    center_box: {
-                        1: {
-                            text: 'On the interface in the "bot-commands" channel, press "Register" button.',
-                            img: ['discord_1'],
+                    1: {
+                        subtitle: 'Sign Up with Official Discord',
+                        contents: {
+                            1: {
+                                text: 'On the interface in the "bot-commands" channel, press "Register" button.',
+                                img: ['discord_1'],
+                            },
+                            2: {
+                                text: 'When the following window appears, enter the values you want to set in the "Username" and "Password" fields respectively, then press "Submit" button.<br>When submitting is completed, you can see the message "account successfully created."',
+                                img: ['discord_2_1', 'discord_2_2'],
+                            },
+                            3: {
+                                text: 'After using /card, slash command, an empty character is displayed.<br>When you press "Use" button to confirm the character to be used, you can see the message "successfully switch main character."<br>Signing up for Rain is now completed.',
+                                img: ['discord_3_1', 'discord_3_2'],
+                            },
                         },
-                        2: {
-                            text: 'When the following window appears, enter the values you want to set in the "Username" and "Password" fields respectively, then press "Submit" button.<br>When submitting is completed, you can see the message "account successfully created."',
-                            img: ['discord_2_1', 'discord_2_2'],
+                    },
+                },
+            },
+        },
+
+        begin: {
+            // How to Start the Game
+            start: {
+                title: 'How to Start the Game',
+                outline_contents: {
+                    spec: 'System Requirements',
+                    installation: 'Installation',
+                    launcher: 'Launcher Screen',
+                    start: 'Log In and Start the Game',
+                    hge_setting: 'High Grade Edition Settings',
+                },
+                article_memo:
+                    '"MHF" has now two editions as follows:<br> ー Original Editon: You can play the game with normal quality and in a casual environment.<br> ー High Grade Edition: You will experience powerful hunting in high quality.<br>This article describes basic information on the game, such as its system requirements, how to install, and log in.',
+                section: {
+                    1: {
+                        subtitle: 'System Requirements',
+                        check_contents: [
+                            'You can choose to play MHF in either "Original Edition" or "High Grade Edition" based on your computer environments.',
+                            'Please note that the game may not run properly due to components, etc, even if your computer meets system requirements.',
+                        ],
+                        table_data: {
+                            tab_name: {
+                                original: 'Requirements on Original Edition',
+                                hge: 'Requirements on High Grade Edition',
+                            },
+                            column_name: {
+                                min: 'Minimum Requirements',
+                                rec: 'Recommended Requirements',
+                            },
+                            row_data: {
+                                resolution: {
+                                    name: 'Resolution',
+                                    data_min: '800×600',
+                                    data_rec: '1600×1200',
+                                },
+                                os: {
+                                    name: 'Operating System',
+                                    data_common: ['Windows 7, 8, 8.1, 10 (32bit/64bit)', '*64-bit runs on WOW64 (Windows on Windows 64)'],
+                                },
+                                cpu: {
+                                    name: 'Processor',
+                                    data_min: ['Intel® Pentium® 4 2.0GHz or higher', 'AMD Athlon™64 3500+ or higher'],
+                                    data_rec: [
+                                        'Intel® Core™2 (Duo, Extreme, Quad) Series',
+                                        'Intel® Core™ (i3, i5, i7) Series',
+                                        'Intel® Core™ (i5-2000, i7-2000) Series',
+                                        'AMD Athlon™ X2 Dual-Core 4600+ or higher',
+                                        'AMD Phenom™ Series',
+                                        'AMD AthlonII™ Series',
+                                        'AMD PhenomII™ Series',
+                                        'AMD A-Series APU (A8-3850, A6-3650)',
+                                    ],
+                                    data_common: 'CPU with SSE Support',
+                                },
+                                memory: {
+                                    name: 'Memory',
+                                    data_min: '512MB or higher',
+                                    data_rec: '1GB or higher',
+                                },
+                                card: {
+                                    name: 'Graphics Card',
+                                    data_min: [
+                                        'NVIDIA® GeForce® FX 5700 Series or higher',
+                                        'NVIDIA® GeForce® 6600 Series or higher',
+                                        'NVIDIA® GeForce® 7600 Series or higher',
+                                        'ATi Radeon™ 9500 Series or higher',
+                                        'AMD Radeon™ HD 4350 Series or higher',
+                                        'AMD Radeon™ HD 5450 Series or higher',
+                                    ],
+                                    data_rec: [
+                                        'NVIDIA® GeForce® 8600 Series or higher',
+                                        'NVIDIA® GeForce® 9600 Series or higher',
+                                        'NVIDIA® GeForce® 200 Series or higher',
+                                        'AMD Radeon™ HD 2600 Series or higher',
+                                        'AMD Radeon™ HD 3650 Series or higher',
+                                        'AMD Radeon™ HD 4650 Series or higher',
+                                        'AMD Radeon™ HD 5550 Series or higher',
+                                        'AMD Radeon™ HD 6450 Series or higher',
+                                    ],
+                                },
+                                directx: {
+                                    data_common: 'DirectX 9.0c or higher',
+                                },
+                                sound: {
+                                    name: 'Sound Card',
+                                    data_common: ['DirectSound® compatible 16-bit stereo 44.1kHz', 'Or sound cards that can play 48kHz WAVE format'],
+                                },
+                                hdd: {
+                                    name: 'Hard Drive',
+                                    data_common: [
+                                        '20 GB or more required',
+                                        '*The above available space includes space for DirectX® installation and OS swap file space.',
+                                        '*It also includes the work space used temporarily by the installer. This work space is required in the root drive (usually C: drive) and is freed up after installation.',
+                                    ],
+                                },
+                                internet: {
+                                    name: 'Internet<br>Connection',
+                                    data_common: 'Broadband environment with ADSL 1.0Mbps or faster',
+                                },
+                            },
                         },
-                        3: {
-                            text: 'After using /card, slash command, an empty character is displayed.<br>When you press "Use" button to confirm the character to be used, you can see the message "successfully switch main character."<br>Signing up for Rain is now completed.',
-                            img: ['discord_3_1', 'discord_3_2'],
+                        spec_notes: {
+                            1: '1',
+                            2: '2',
+                            3: '3',
                         },
                     },
                 },

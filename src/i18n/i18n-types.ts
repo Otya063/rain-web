@@ -426,54 +426,362 @@ type RootTranslation = {
 				 */
 				article_memo: string
 				section: {
+					'1': {
+						/**
+						 * S​i​g​n​ ​U​p​ ​w​i​t​h​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d
+						 */
+						subtitle: string
+						contents: {
+							'1': {
+								/**
+								 * O​n​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​i​n​ ​t​h​e​ ​"​b​o​t​-​c​o​m​m​a​n​d​s​"​ ​c​h​a​n​n​e​l​,​ ​p​r​e​s​s​ ​"​R​e​g​i​s​t​e​r​"​ ​b​u​t​t​o​n​.
+								 */
+								text: string
+								img: {
+									/**
+									 * d​i​s​c​o​r​d​_​1
+									 */
+									'0': string
+								}
+							}
+							'2': {
+								/**
+								 * W​h​e​n​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​w​i​n​d​o​w​ ​a​p​p​e​a​r​s​,​ ​e​n​t​e​r​ ​t​h​e​ ​v​a​l​u​e​s​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​e​t​ ​i​n​ ​t​h​e​ ​"​U​s​e​r​n​a​m​e​"​ ​a​n​d​ ​"​P​a​s​s​w​o​r​d​"​ ​f​i​e​l​d​s​ ​r​e​s​p​e​c​t​i​v​e​l​y​,​ ​t​h​e​n​ ​p​r​e​s​s​ ​"​S​u​b​m​i​t​"​ ​b​u​t​t​o​n​.​<​b​r​>​W​h​e​n​ ​s​u​b​m​i​t​t​i​n​g​ ​i​s​ ​c​o​m​p​l​e​t​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​a​c​c​o​u​n​t​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​r​e​a​t​e​d​.​"
+								 */
+								text: string
+								img: {
+									/**
+									 * d​i​s​c​o​r​d​_​2​_​1
+									 */
+									'0': string
+									/**
+									 * d​i​s​c​o​r​d​_​2​_​2
+									 */
+									'1': string
+								}
+							}
+							'3': {
+								/**
+								 * A​f​t​e​r​ ​u​s​i​n​g​ ​/​c​a​r​d​,​ ​s​l​a​s​h​ ​c​o​m​m​a​n​d​,​ ​a​n​ ​e​m​p​t​y​ ​c​h​a​r​a​c​t​e​r​ ​i​s​ ​d​i​s​p​l​a​y​e​d​.​<​b​r​>​W​h​e​n​ ​y​o​u​ ​p​r​e​s​s​ ​"​U​s​e​"​ ​b​u​t​t​o​n​ ​t​o​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​c​h​a​r​a​c​t​e​r​ ​t​o​ ​b​e​ ​u​s​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​w​i​t​c​h​ ​m​a​i​n​ ​c​h​a​r​a​c​t​e​r​.​"​<​b​r​>​S​i​g​n​i​n​g​ ​u​p​ ​f​o​r​ ​R​a​i​n​ ​i​s​ ​n​o​w​ ​c​o​m​p​l​e​t​e​d​.
+								 */
+								text: string
+								img: {
+									/**
+									 * d​i​s​c​o​r​d​_​3​_​1
+									 */
+									'0': string
+									/**
+									 * d​i​s​c​o​r​d​_​3​_​2
+									 */
+									'1': string
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		begin: {
+			start: {
+				/**
+				 * H​o​w​ ​t​o​ ​S​t​a​r​t​ ​t​h​e​ ​G​a​m​e
+				 */
+				title: string
+				outline_contents: {
 					/**
-					 * S​i​g​n​ ​U​p​ ​w​i​t​h​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d
+					 * S​y​s​t​e​m​ ​R​e​q​u​i​r​e​m​e​n​t​s
 					 */
-					subtitle: string
-					center_box: {
-						'1': {
+					spec: string
+					/**
+					 * I​n​s​t​a​l​l​a​t​i​o​n
+					 */
+					installation: string
+					/**
+					 * L​a​u​n​c​h​e​r​ ​S​c​r​e​e​n
+					 */
+					launcher: string
+					/**
+					 * L​o​g​ ​I​n​ ​a​n​d​ ​S​t​a​r​t​ ​t​h​e​ ​G​a​m​e
+					 */
+					start: string
+					/**
+					 * H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​ ​S​e​t​t​i​n​g​s
+					 */
+					hge_setting: string
+				}
+				/**
+				 * "​M​H​F​"​ ​h​a​s​ ​n​o​w​ ​t​w​o​ ​e​d​i​t​i​o​n​s​ ​a​s​ ​f​o​l​l​o​w​s​:​<​b​r​>​ ​ー​ ​O​r​i​g​i​n​a​l​ ​E​d​i​t​o​n​:​ ​Y​o​u​ ​c​a​n​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​w​i​t​h​ ​n​o​r​m​a​l​ ​q​u​a​l​i​t​y​ ​a​n​d​ ​i​n​ ​a​ ​c​a​s​u​a​l​ ​e​n​v​i​r​o​n​m​e​n​t​.​<​b​r​>​ ​ー​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​:​ ​Y​o​u​ ​w​i​l​l​ ​e​x​p​e​r​i​e​n​c​e​ ​p​o​w​e​r​f​u​l​ ​h​u​n​t​i​n​g​ ​i​n​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.​<​b​r​>​T​h​i​s​ ​a​r​t​i​c​l​e​ ​d​e​s​c​r​i​b​e​s​ ​b​a​s​i​c​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​g​a​m​e​,​ ​s​u​c​h​ ​a​s​ ​i​t​s​ ​s​y​s​t​e​m​ ​r​e​q​u​i​r​e​m​e​n​t​s​,​ ​h​o​w​ ​t​o​ ​i​n​s​t​a​l​l​,​ ​a​n​d​ ​l​o​g​ ​i​n​.
+				 */
+				article_memo: string
+				section: {
+					'1': {
+						/**
+						 * S​y​s​t​e​m​ ​R​e​q​u​i​r​e​m​e​n​t​s
+						 */
+						subtitle: string
+						check_contents: {
 							/**
-							 * O​n​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​i​n​ ​t​h​e​ ​"​b​o​t​-​c​o​m​m​a​n​d​s​"​ ​c​h​a​n​n​e​l​,​ ​p​r​e​s​s​ ​"​R​e​g​i​s​t​e​r​"​ ​b​u​t​t​o​n​.
+							 * Y​o​u​ ​c​a​n​ ​c​h​o​o​s​e​ ​t​o​ ​p​l​a​y​ ​M​H​F​ ​i​n​ ​e​i​t​h​e​r​ ​"​O​r​i​g​i​n​a​l​ ​E​d​i​t​i​o​n​"​ ​o​r​ ​"​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​b​a​s​e​d​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​e​n​v​i​r​o​n​m​e​n​t​s​.
 							 */
-							text: string
-							img: {
+							'0': string
+							/**
+							 * P​l​e​a​s​e​ ​n​o​t​e​ ​t​h​a​t​ ​t​h​e​ ​g​a​m​e​ ​m​a​y​ ​n​o​t​ ​r​u​n​ ​p​r​o​p​e​r​l​y​ ​d​u​e​ ​t​o​ ​c​o​m​p​o​n​e​n​t​s​,​ ​e​t​c​,​ ​e​v​e​n​ ​i​f​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​m​e​e​t​s​ ​s​y​s​t​e​m​ ​r​e​q​u​i​r​e​m​e​n​t​s​.
+							 */
+							'1': string
+						}
+						table_data: {
+							tab_name: {
 								/**
-								 * d​i​s​c​o​r​d​_​1
+								 * R​e​q​u​i​r​e​m​e​n​t​s​ ​o​n​ ​O​r​i​g​i​n​a​l​ ​E​d​i​t​i​o​n
 								 */
-								'0': string
+								original: string
+								/**
+								 * R​e​q​u​i​r​e​m​e​n​t​s​ ​o​n​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n
+								 */
+								hge: string
+							}
+							column_name: {
+								/**
+								 * M​i​n​i​m​u​m​ ​R​e​q​u​i​r​e​m​e​n​t​s
+								 */
+								min: string
+								/**
+								 * R​e​c​o​m​m​e​n​d​e​d​ ​R​e​q​u​i​r​e​m​e​n​t​s
+								 */
+								rec: string
+							}
+							row_data: {
+								resolution: {
+									/**
+									 * R​e​s​o​l​u​t​i​o​n
+									 */
+									name: string
+									/**
+									 * 8​0​0​×​6​0​0
+									 */
+									data_min: string
+									/**
+									 * 1​6​0​0​×​1​2​0​0
+									 */
+									data_rec: string
+								}
+								os: {
+									/**
+									 * O​p​e​r​a​t​i​n​g​ ​S​y​s​t​e​m
+									 */
+									name: string
+									data_common: {
+										/**
+										 * W​i​n​d​o​w​s​ ​7​,​ ​8​,​ ​8​.​1​,​ ​1​0​ ​(​3​2​b​i​t​/​6​4​b​i​t​)
+										 */
+										'0': string
+										/**
+										 * *​6​4​-​b​i​t​ ​r​u​n​s​ ​o​n​ ​W​O​W​6​4​ ​(​W​i​n​d​o​w​s​ ​o​n​ ​W​i​n​d​o​w​s​ ​6​4​)
+										 */
+										'1': string
+									}
+								}
+								cpu: {
+									/**
+									 * P​r​o​c​e​s​s​o​r
+									 */
+									name: string
+									data_min: {
+										/**
+										 * I​n​t​e​l​®​ ​P​e​n​t​i​u​m​®​ ​4​ ​2​.​0​G​H​z​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'0': string
+										/**
+										 * A​M​D​ ​A​t​h​l​o​n​™​6​4​ ​3​5​0​0​+​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'1': string
+									}
+									data_rec: {
+										/**
+										 * I​n​t​e​l​®​ ​C​o​r​e​™​2​ ​(​D​u​o​,​ ​E​x​t​r​e​m​e​,​ ​Q​u​a​d​)​ ​S​e​r​i​e​s
+										 */
+										'0': string
+										/**
+										 * I​n​t​e​l​®​ ​C​o​r​e​™​ ​(​i​3​,​ ​i​5​,​ ​i​7​)​ ​S​e​r​i​e​s
+										 */
+										'1': string
+										/**
+										 * I​n​t​e​l​®​ ​C​o​r​e​™​ ​(​i​5​-​2​0​0​0​,​ ​i​7​-​2​0​0​0​)​ ​S​e​r​i​e​s
+										 */
+										'2': string
+										/**
+										 * A​M​D​ ​A​t​h​l​o​n​™​ ​X​2​ ​D​u​a​l​-​C​o​r​e​ ​4​6​0​0​+​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'3': string
+										/**
+										 * A​M​D​ ​P​h​e​n​o​m​™​ ​S​e​r​i​e​s
+										 */
+										'4': string
+										/**
+										 * A​M​D​ ​A​t​h​l​o​n​I​I​™​ ​S​e​r​i​e​s
+										 */
+										'5': string
+										/**
+										 * A​M​D​ ​P​h​e​n​o​m​I​I​™​ ​S​e​r​i​e​s
+										 */
+										'6': string
+										/**
+										 * A​M​D​ ​A​-​S​e​r​i​e​s​ ​A​P​U​ ​(​A​8​-​3​8​5​0​,​ ​A​6​-​3​6​5​0​)
+										 */
+										'7': string
+									}
+									/**
+									 * C​P​U​ ​w​i​t​h​ ​S​S​E​ ​S​u​p​p​o​r​t
+									 */
+									data_common: string
+								}
+								memory: {
+									/**
+									 * M​e​m​o​r​y
+									 */
+									name: string
+									/**
+									 * 5​1​2​M​B​ ​o​r​ ​h​i​g​h​e​r
+									 */
+									data_min: string
+									/**
+									 * 1​G​B​ ​o​r​ ​h​i​g​h​e​r
+									 */
+									data_rec: string
+								}
+								card: {
+									/**
+									 * G​r​a​p​h​i​c​s​ ​C​a​r​d
+									 */
+									name: string
+									data_min: {
+										/**
+										 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​F​X​ ​5​7​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'0': string
+										/**
+										 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​6​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'1': string
+										/**
+										 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​7​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'2': string
+										/**
+										 * A​T​i​ ​R​a​d​e​o​n​™​ ​9​5​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'3': string
+										/**
+										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​4​3​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'4': string
+										/**
+										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​5​4​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'5': string
+									}
+									data_rec: {
+										/**
+										 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​8​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'0': string
+										/**
+										 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​9​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'1': string
+										/**
+										 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​2​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'2': string
+										/**
+										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​2​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'3': string
+										/**
+										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​3​6​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'4': string
+										/**
+										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​4​6​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'5': string
+										/**
+										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​5​5​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'6': string
+										/**
+										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​6​4​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										'7': string
+									}
+								}
+								directx: {
+									/**
+									 * D​i​r​e​c​t​X​ ​9​.​0​c​ ​o​r​ ​h​i​g​h​e​r
+									 */
+									data_common: string
+								}
+								sound: {
+									/**
+									 * S​o​u​n​d​ ​C​a​r​d
+									 */
+									name: string
+									data_common: {
+										/**
+										 * D​i​r​e​c​t​S​o​u​n​d​®​ ​c​o​m​p​a​t​i​b​l​e​ ​1​6​-​b​i​t​ ​s​t​e​r​e​o​ ​4​4​.​1​k​H​z
+										 */
+										'0': string
+										/**
+										 * O​r​ ​s​o​u​n​d​ ​c​a​r​d​s​ ​t​h​a​t​ ​c​a​n​ ​p​l​a​y​ ​4​8​k​H​z​ ​W​A​V​E​ ​f​o​r​m​a​t
+										 */
+										'1': string
+									}
+								}
+								hdd: {
+									/**
+									 * H​a​r​d​ ​D​r​i​v​e
+									 */
+									name: string
+									data_common: {
+										/**
+										 * 2​0​ ​G​B​ ​o​r​ ​m​o​r​e​ ​r​e​q​u​i​r​e​d
+										 */
+										'0': string
+										/**
+										 * *​T​h​e​ ​a​b​o​v​e​ ​a​v​a​i​l​a​b​l​e​ ​s​p​a​c​e​ ​i​n​c​l​u​d​e​s​ ​s​p​a​c​e​ ​f​o​r​ ​D​i​r​e​c​t​X​®​ ​i​n​s​t​a​l​l​a​t​i​o​n​ ​a​n​d​ ​O​S​ ​s​w​a​p​ ​f​i​l​e​ ​s​p​a​c​e​.
+										 */
+										'1': string
+										/**
+										 * *​I​t​ ​a​l​s​o​ ​i​n​c​l​u​d​e​s​ ​t​h​e​ ​w​o​r​k​ ​s​p​a​c​e​ ​u​s​e​d​ ​t​e​m​p​o​r​a​r​i​l​y​ ​b​y​ ​t​h​e​ ​i​n​s​t​a​l​l​e​r​.​ ​T​h​i​s​ ​w​o​r​k​ ​s​p​a​c​e​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​i​n​ ​t​h​e​ ​r​o​o​t​ ​d​r​i​v​e​ ​(​u​s​u​a​l​l​y​ ​C​:​ ​d​r​i​v​e​)​ ​a​n​d​ ​i​s​ ​f​r​e​e​d​ ​u​p​ ​a​f​t​e​r​ ​i​n​s​t​a​l​l​a​t​i​o​n​.
+										 */
+										'2': string
+									}
+								}
+								internet: {
+									/**
+									 * I​n​t​e​r​n​e​t​<​b​r​>​C​o​n​n​e​c​t​i​o​n
+									 */
+									name: string
+									/**
+									 * B​r​o​a​d​b​a​n​d​ ​e​n​v​i​r​o​n​m​e​n​t​ ​w​i​t​h​ ​A​D​S​L​ ​1​.​0​M​b​p​s​ ​o​r​ ​f​a​s​t​e​r
+									 */
+									data_common: string
+								}
 							}
 						}
-						'2': {
+						spec_notes: {
 							/**
-							 * W​h​e​n​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​w​i​n​d​o​w​ ​a​p​p​e​a​r​s​,​ ​e​n​t​e​r​ ​t​h​e​ ​v​a​l​u​e​s​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​e​t​ ​i​n​ ​t​h​e​ ​"​U​s​e​r​n​a​m​e​"​ ​a​n​d​ ​"​P​a​s​s​w​o​r​d​"​ ​f​i​e​l​d​s​ ​r​e​s​p​e​c​t​i​v​e​l​y​,​ ​t​h​e​n​ ​p​r​e​s​s​ ​"​S​u​b​m​i​t​"​ ​b​u​t​t​o​n​.​<​b​r​>​W​h​e​n​ ​s​u​b​m​i​t​t​i​n​g​ ​i​s​ ​c​o​m​p​l​e​t​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​a​c​c​o​u​n​t​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​r​e​a​t​e​d​.​"
+							 * 1
 							 */
-							text: string
-							img: {
-								/**
-								 * d​i​s​c​o​r​d​_​2​_​1
-								 */
-								'0': string
-								/**
-								 * d​i​s​c​o​r​d​_​2​_​2
-								 */
-								'1': string
-							}
-						}
-						'3': {
+							'1': string
 							/**
-							 * A​f​t​e​r​ ​u​s​i​n​g​ ​/​c​a​r​d​,​ ​s​l​a​s​h​ ​c​o​m​m​a​n​d​,​ ​a​n​ ​e​m​p​t​y​ ​c​h​a​r​a​c​t​e​r​ ​i​s​ ​d​i​s​p​l​a​y​e​d​.​<​b​r​>​W​h​e​n​ ​y​o​u​ ​p​r​e​s​s​ ​"​U​s​e​"​ ​b​u​t​t​o​n​ ​t​o​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​c​h​a​r​a​c​t​e​r​ ​t​o​ ​b​e​ ​u​s​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​w​i​t​c​h​ ​m​a​i​n​ ​c​h​a​r​a​c​t​e​r​.​"​<​b​r​>​S​i​g​n​i​n​g​ ​u​p​ ​f​o​r​ ​R​a​i​n​ ​i​s​ ​n​o​w​ ​c​o​m​p​l​e​t​e​d​.
+							 * 2
 							 */
-							text: string
-							img: {
-								/**
-								 * d​i​s​c​o​r​d​_​3​_​1
-								 */
-								'0': string
-								/**
-								 * d​i​s​c​o​r​d​_​3​_​2
-								 */
-								'1': string
-							}
+							'2': string
+							/**
+							 * 3
+							 */
+							'3': string
 						}
 					}
 				}
@@ -962,54 +1270,362 @@ export type TranslationFunctions = {
 				 */
 				article_memo: () => LocalizedString
 				section: {
+					'1': {
+						/**
+						 * Sign Up with Official Discord
+						 */
+						subtitle: () => LocalizedString
+						contents: {
+							'1': {
+								/**
+								 * On the interface in the "bot-commands" channel, press "Register" button.
+								 */
+								text: () => LocalizedString
+								img: {
+									/**
+									 * discord_1
+									 */
+									'0': () => LocalizedString
+								}
+							}
+							'2': {
+								/**
+								 * When the following window appears, enter the values you want to set in the "Username" and "Password" fields respectively, then press "Submit" button.<br>When submitting is completed, you can see the message "account successfully created."
+								 */
+								text: () => LocalizedString
+								img: {
+									/**
+									 * discord_2_1
+									 */
+									'0': () => LocalizedString
+									/**
+									 * discord_2_2
+									 */
+									'1': () => LocalizedString
+								}
+							}
+							'3': {
+								/**
+								 * After using /card, slash command, an empty character is displayed.<br>When you press "Use" button to confirm the character to be used, you can see the message "successfully switch main character."<br>Signing up for Rain is now completed.
+								 */
+								text: () => LocalizedString
+								img: {
+									/**
+									 * discord_3_1
+									 */
+									'0': () => LocalizedString
+									/**
+									 * discord_3_2
+									 */
+									'1': () => LocalizedString
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		begin: {
+			start: {
+				/**
+				 * How to Start the Game
+				 */
+				title: () => LocalizedString
+				outline_contents: {
 					/**
-					 * Sign Up with Official Discord
+					 * System Requirements
 					 */
-					subtitle: () => LocalizedString
-					center_box: {
-						'1': {
+					spec: () => LocalizedString
+					/**
+					 * Installation
+					 */
+					installation: () => LocalizedString
+					/**
+					 * Launcher Screen
+					 */
+					launcher: () => LocalizedString
+					/**
+					 * Log In and Start the Game
+					 */
+					start: () => LocalizedString
+					/**
+					 * High Grade Edition Settings
+					 */
+					hge_setting: () => LocalizedString
+				}
+				/**
+				 * "MHF" has now two editions as follows:<br> ー Original Editon: You can play the game with normal quality and in a casual environment.<br> ー High Grade Edition: You will experience powerful hunting in high quality.<br>This article describes basic information on the game, such as its system requirements, how to install, and log in.
+				 */
+				article_memo: () => LocalizedString
+				section: {
+					'1': {
+						/**
+						 * System Requirements
+						 */
+						subtitle: () => LocalizedString
+						check_contents: {
 							/**
-							 * On the interface in the "bot-commands" channel, press "Register" button.
+							 * You can choose to play MHF in either "Original Edition" or "High Grade Edition" based on your computer environments.
 							 */
-							text: () => LocalizedString
-							img: {
+							'0': () => LocalizedString
+							/**
+							 * Please note that the game may not run properly due to components, etc, even if your computer meets system requirements.
+							 */
+							'1': () => LocalizedString
+						}
+						table_data: {
+							tab_name: {
 								/**
-								 * discord_1
+								 * Requirements on Original Edition
 								 */
-								'0': () => LocalizedString
+								original: () => LocalizedString
+								/**
+								 * Requirements on High Grade Edition
+								 */
+								hge: () => LocalizedString
+							}
+							column_name: {
+								/**
+								 * Minimum Requirements
+								 */
+								min: () => LocalizedString
+								/**
+								 * Recommended Requirements
+								 */
+								rec: () => LocalizedString
+							}
+							row_data: {
+								resolution: {
+									/**
+									 * Resolution
+									 */
+									name: () => LocalizedString
+									/**
+									 * 800×600
+									 */
+									data_min: () => LocalizedString
+									/**
+									 * 1600×1200
+									 */
+									data_rec: () => LocalizedString
+								}
+								os: {
+									/**
+									 * Operating System
+									 */
+									name: () => LocalizedString
+									data_common: {
+										/**
+										 * Windows 7, 8, 8.1, 10 (32bit/64bit)
+										 */
+										'0': () => LocalizedString
+										/**
+										 * *64-bit runs on WOW64 (Windows on Windows 64)
+										 */
+										'1': () => LocalizedString
+									}
+								}
+								cpu: {
+									/**
+									 * Processor
+									 */
+									name: () => LocalizedString
+									data_min: {
+										/**
+										 * Intel® Pentium® 4 2.0GHz or higher
+										 */
+										'0': () => LocalizedString
+										/**
+										 * AMD Athlon™64 3500+ or higher
+										 */
+										'1': () => LocalizedString
+									}
+									data_rec: {
+										/**
+										 * Intel® Core™2 (Duo, Extreme, Quad) Series
+										 */
+										'0': () => LocalizedString
+										/**
+										 * Intel® Core™ (i3, i5, i7) Series
+										 */
+										'1': () => LocalizedString
+										/**
+										 * Intel® Core™ (i5-2000, i7-2000) Series
+										 */
+										'2': () => LocalizedString
+										/**
+										 * AMD Athlon™ X2 Dual-Core 4600+ or higher
+										 */
+										'3': () => LocalizedString
+										/**
+										 * AMD Phenom™ Series
+										 */
+										'4': () => LocalizedString
+										/**
+										 * AMD AthlonII™ Series
+										 */
+										'5': () => LocalizedString
+										/**
+										 * AMD PhenomII™ Series
+										 */
+										'6': () => LocalizedString
+										/**
+										 * AMD A-Series APU (A8-3850, A6-3650)
+										 */
+										'7': () => LocalizedString
+									}
+									/**
+									 * CPU with SSE Support
+									 */
+									data_common: () => LocalizedString
+								}
+								memory: {
+									/**
+									 * Memory
+									 */
+									name: () => LocalizedString
+									/**
+									 * 512MB or higher
+									 */
+									data_min: () => LocalizedString
+									/**
+									 * 1GB or higher
+									 */
+									data_rec: () => LocalizedString
+								}
+								card: {
+									/**
+									 * Graphics Card
+									 */
+									name: () => LocalizedString
+									data_min: {
+										/**
+										 * NVIDIA® GeForce® FX 5700 Series or higher
+										 */
+										'0': () => LocalizedString
+										/**
+										 * NVIDIA® GeForce® 6600 Series or higher
+										 */
+										'1': () => LocalizedString
+										/**
+										 * NVIDIA® GeForce® 7600 Series or higher
+										 */
+										'2': () => LocalizedString
+										/**
+										 * ATi Radeon™ 9500 Series or higher
+										 */
+										'3': () => LocalizedString
+										/**
+										 * AMD Radeon™ HD 4350 Series or higher
+										 */
+										'4': () => LocalizedString
+										/**
+										 * AMD Radeon™ HD 5450 Series or higher
+										 */
+										'5': () => LocalizedString
+									}
+									data_rec: {
+										/**
+										 * NVIDIA® GeForce® 8600 Series or higher
+										 */
+										'0': () => LocalizedString
+										/**
+										 * NVIDIA® GeForce® 9600 Series or higher
+										 */
+										'1': () => LocalizedString
+										/**
+										 * NVIDIA® GeForce® 200 Series or higher
+										 */
+										'2': () => LocalizedString
+										/**
+										 * AMD Radeon™ HD 2600 Series or higher
+										 */
+										'3': () => LocalizedString
+										/**
+										 * AMD Radeon™ HD 3650 Series or higher
+										 */
+										'4': () => LocalizedString
+										/**
+										 * AMD Radeon™ HD 4650 Series or higher
+										 */
+										'5': () => LocalizedString
+										/**
+										 * AMD Radeon™ HD 5550 Series or higher
+										 */
+										'6': () => LocalizedString
+										/**
+										 * AMD Radeon™ HD 6450 Series or higher
+										 */
+										'7': () => LocalizedString
+									}
+								}
+								directx: {
+									/**
+									 * DirectX 9.0c or higher
+									 */
+									data_common: () => LocalizedString
+								}
+								sound: {
+									/**
+									 * Sound Card
+									 */
+									name: () => LocalizedString
+									data_common: {
+										/**
+										 * DirectSound® compatible 16-bit stereo 44.1kHz
+										 */
+										'0': () => LocalizedString
+										/**
+										 * Or sound cards that can play 48kHz WAVE format
+										 */
+										'1': () => LocalizedString
+									}
+								}
+								hdd: {
+									/**
+									 * Hard Drive
+									 */
+									name: () => LocalizedString
+									data_common: {
+										/**
+										 * 20 GB or more required
+										 */
+										'0': () => LocalizedString
+										/**
+										 * *The above available space includes space for DirectX® installation and OS swap file space.
+										 */
+										'1': () => LocalizedString
+										/**
+										 * *It also includes the work space used temporarily by the installer. This work space is required in the root drive (usually C: drive) and is freed up after installation.
+										 */
+										'2': () => LocalizedString
+									}
+								}
+								internet: {
+									/**
+									 * Internet<br>Connection
+									 */
+									name: () => LocalizedString
+									/**
+									 * Broadband environment with ADSL 1.0Mbps or faster
+									 */
+									data_common: () => LocalizedString
+								}
 							}
 						}
-						'2': {
+						spec_notes: {
 							/**
-							 * When the following window appears, enter the values you want to set in the "Username" and "Password" fields respectively, then press "Submit" button.<br>When submitting is completed, you can see the message "account successfully created."
+							 * 1
 							 */
-							text: () => LocalizedString
-							img: {
-								/**
-								 * discord_2_1
-								 */
-								'0': () => LocalizedString
-								/**
-								 * discord_2_2
-								 */
-								'1': () => LocalizedString
-							}
-						}
-						'3': {
+							'1': () => LocalizedString
 							/**
-							 * After using /card, slash command, an empty character is displayed.<br>When you press "Use" button to confirm the character to be used, you can see the message "successfully switch main character."<br>Signing up for Rain is now completed.
+							 * 2
 							 */
-							text: () => LocalizedString
-							img: {
-								/**
-								 * discord_3_1
-								 */
-								'0': () => LocalizedString
-								/**
-								 * discord_3_2
-								 */
-								'1': () => LocalizedString
-							}
+							'2': () => LocalizedString
+							/**
+							 * 3
+							 */
+							'3': () => LocalizedString
 						}
 					}
 				}

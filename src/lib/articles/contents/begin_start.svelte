@@ -3,7 +3,10 @@
     import { onMount } from 'svelte';
     import Original from '$lib/articles/contents/parts/Original.svelte';
     import HGE from '$lib/articles/contents/parts/HGE.svelte';
-    import { locale } from '$i18n/i18n-svelte';
+    import LL, { locale } from '$i18n/i18n-svelte';
+
+    const articleData = $LL.articles['begin'].start;
+    const { 1: spec } = articleData.section;
 
     let activedElement: HTMLElement;
     let nowTarget: HTMLElement;
@@ -31,55 +34,39 @@
     });
 </script>
 
-<h1>ゲームの始め方</h1>
+<h1>{articleData.title()}</h1>
 
-<div class="outline_contents" data-title="コンテンツ">
+<div class="outline_contents" data-title={$LL.articles['data_title']()}>
     <ul>
-        <li>
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="scroll" data-target="spec">動作環境</a>
-        </li>
-        <li>
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="scroll" data-target="installation">インストール</a>
-        </li>
-        <li>
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="scroll" data-target="launcher">ランチャー画面</a>
-        </li>
-        <li>
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="scroll" data-target="start">ログイン・ゲーム開始</a>
-        </li>
-        <li>
-            <!-- svelte-ignore a11y-missing-attribute -->
-            <a class="scroll" data-target="hge_setting">High Grade Editionの設定方法</a>
-        </li>
+        {#each Object.entries(articleData.outline_contents) as [data_target, text]}
+            <li>
+                <!-- svelte-ignore a11y-missing-attribute -->
+                <a class="scroll" data-target={data_target}>{text()}</a>
+            </li>
+        {/each}
     </ul>
 </div>
 
 <div class="article_memo" data-title="COMMENT">
-    <p class="inner_text">
-        「モンスターハンター フロンティア オンライン」には通常の画質で手軽な環境でもプレイいただけるオリジナル版と、高画質で迫力のある狩猟を体験いただけるHigh Grade Editionがあります。<br />
-        ここでは、その動作環境やダウンロード・インストール方法といったゲームにおける基本事項についてご紹介いたします。
-    </p>
+    <p class="inner_text">{@html articleData.article_memo()}</p>
 </div>
 
 <section id="spec">
-    <h2>動作環境</h2>
+    <h2>{spec.subtitle()}</h2>
 
     <div class="check_contents">
         <ul class="check_contents_list">
-            <li class="check_contents_list_text">・ご利用のパソコン環境に合わせ「オリジナル版」「High Grade Edition」のどちらかを選んでMHFをプレイすることが可能です。</li>
-            <li class="check_contents_list_text">・動作環境を満たしているパソコンでも、パーツ構成などにより、ゲームが正常に起動しない場合があります。予めご了承ください。</li>
+            {#each Object.values(spec.check_contents) as text}
+                <li class="check_contents_list_text">・{text()}</li>
+            {/each}
         </ul>
     </div>
 
     <div class="table_tabs">
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <p class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler('tab', 'original', e)}>オリジナル版の動作環境</p>
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <p class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler('tab', 'hge', e)}>High Grade Editionの動作環境</p>
+        {#each Object.entries(spec.table_data["tab_name"]) as [arg, text]}
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <p class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler('tab', arg, e)}>{text()}</p>
+        {/each}
     </div>
 
     {#if isDefault}
@@ -92,9 +79,9 @@
         </table>
     {/if}
     <div class="spec_notes">
-        <p>■本ゲームは64bitネイティブ対応ではないため、64bit版Windows OS上でゲームを起動したとしても、システム性能が32bit版と比較して向上することはありません。</p>
-        <p>■グラフィックカードには製造元の公式サイトで提供されている最新のドライバをご使用ください。</p>
-        <p>■OSのサービスパックやグラフィックスボードのドライバについては、ご自身の責任において最新のものをご利用ください。</p>
+        {#each Object.values(spec.spec_notes) as text}
+            <p>■{text()}</p>
+        {/each}
     </div>
 </section>
 
