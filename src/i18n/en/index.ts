@@ -212,18 +212,18 @@ const en: BaseTranslation = {
                 title: 'How to Start the Game',
                 outline_contents: {
                     spec: 'System Requirements',
-                    installation: 'Installation',
+                    install: 'Installation',
                     launcher: 'Launcher Screen',
                     start: 'Log In and Start the Game',
                     hge_setting: 'High Grade Edition Settings',
                 },
                 article_memo:
-                    '"MHF" has now two editions as follows:<br> ー Original Editon: You can play the game with normal quality and in a casual environment.<br> ー High Grade Edition: You will experience powerful hunting in high quality.<br>This article describes basic information on the game, such as its system requirements, how to install, and log in.',
+                    '"Monster Hunter Frontier Online" has now two editions as follows:<br> ー Original Editon: You can play the game with normal quality and in a casual environment.<br> ー High Grade Edition: You will experience powerful hunting in high quality.<br>This article describes basic information on the game, such as its system requirements, how to install, and log in.',
                 section: {
                     1: {
                         subtitle: 'System Requirements',
                         check_contents: [
-                            'You can choose to play MHF in either "Original Edition" or "High Grade Edition" based on your computer environments.',
+                            'You can choose to play the game in either "Original Edition" or "High Grade Edition" based on your computer environments.',
                             'Please note that the game may not run properly due to components, etc, even if your computer meets system requirements.',
                         ],
                         table_data: {
@@ -231,87 +231,174 @@ const en: BaseTranslation = {
                                 original: 'Requirements on Original Edition',
                                 hge: 'Requirements on High Grade Edition',
                             },
-                            column_name: {
-                                min: 'Minimum Requirements',
-                                rec: 'Recommended Requirements',
+                            original: {
+                                column_name: {
+                                    min: 'Minimum Requirements',
+                                    rec: 'Recommended Requirements',
+                                },
+                                row_data: {
+                                    resolution: {
+                                        name: 'Resolution',
+                                        data_min: '800×600',
+                                        data_rec: '1600×1200',
+                                    },
+                                    os: {
+                                        name: 'Operating System',
+                                        data_common: ['Windows 7, 8, 8.1, 10 (32bit/64bit)', '* 64-bit runs on WOW64 (Windows on Windows 64)'],
+                                    },
+                                    cpu: {
+                                        name: 'Processor',
+                                        data_min: ['Intel® Pentium® 4 2.0GHz or higher', 'AMD Athlon™64 3500+ or higher'],
+                                        data_rec: [
+                                            'Intel® Core™2 (Duo, Extreme, Quad) Series',
+                                            'Intel® Core™ (i3, i5, i7) Series',
+                                            'Intel® Core™ (i5-2000, i7-2000) Series',
+                                            'AMD Athlon™ X2 Dual-Core 4600+ or higher',
+                                            'AMD Phenom™ Series',
+                                            'AMD AthlonII™ Series',
+                                            'AMD PhenomII™ Series',
+                                            'AMD A-Series APU (A8-3850, A6-3650)',
+                                        ],
+                                        data_common: 'CPU with SSE Support',
+                                    },
+                                    memory: {
+                                        name: 'Memory',
+                                        data_min: '512MB or more',
+                                        data_rec: '1GB or more',
+                                    },
+                                    card: {
+                                        name: 'Graphics Card',
+                                        data_min: [
+                                            'NVIDIA® GeForce® FX 5700 Series or higher',
+                                            'NVIDIA® GeForce® 6600 Series or higher',
+                                            'NVIDIA® GeForce® 7600 Series or higher',
+                                            'ATi Radeon™ 9500 Series or higher',
+                                            'AMD Radeon™ HD 4350 Series or higher',
+                                            'AMD Radeon™ HD 5450 Series or higher',
+                                        ],
+                                        data_rec: [
+                                            'NVIDIA® GeForce® 8600 Series or higher',
+                                            'NVIDIA® GeForce® 9600 Series or higher',
+                                            'NVIDIA® GeForce® 200 Series or higher',
+                                            'AMD Radeon™ HD 2600 Series or higher',
+                                            'AMD Radeon™ HD 3650 Series or higher',
+                                            'AMD Radeon™ HD 4650 Series or higher',
+                                            'AMD Radeon™ HD 5550 Series or higher',
+                                            'AMD Radeon™ HD 6450 Series or higher',
+                                        ],
+                                    },
+                                    directx: {
+                                        data_common: 'DirectX 9.0c or higher',
+                                    },
+                                    sound: {
+                                        name: 'Sound Card',
+                                        data_common: ['DirectSound® compatible 16-bit stereo 44.1kHz', 'Or sound cards that can play 48kHz WAVE format'],
+                                    },
+                                    hdd: {
+                                        name: 'Hard Drive',
+                                        data_common: [
+                                            '20GB or more',
+                                            '* The above available space includes space for DirectX® installation and OS swap file space.',
+                                            '* It also includes the work space used temporarily by the installer. This work space is required in the root drive (usually C: drive) and is freed up after installation.',
+                                        ],
+                                    },
+                                    internet: {
+                                        name: 'Internet<br>Connection',
+                                        data_common: 'Broadband environment with ADSL 1.0Mbps or faster',
+                                    },
+                                },
                             },
-                            row_data: {
-                                resolution: {
-                                    name: 'Resolution',
-                                    data_min: '800×600',
-                                    data_rec: '1600×1200',
-                                },
-                                os: {
-                                    name: 'Operating System',
-                                    data_common: ['Windows 7, 8, 8.1, 10 (32bit/64bit)', '*64-bit runs on WOW64 (Windows on Windows 64)'],
-                                },
-                                cpu: {
-                                    name: 'Processor',
-                                    data_min: ['Intel® Pentium® 4 2.0GHz or higher', 'AMD Athlon™64 3500+ or higher'],
-                                    data_rec: [
-                                        'Intel® Core™2 (Duo, Extreme, Quad) Series',
-                                        'Intel® Core™ (i3, i5, i7) Series',
-                                        'Intel® Core™ (i5-2000, i7-2000) Series',
-                                        'AMD Athlon™ X2 Dual-Core 4600+ or higher',
-                                        'AMD Phenom™ Series',
-                                        'AMD AthlonII™ Series',
-                                        'AMD PhenomII™ Series',
-                                        'AMD A-Series APU (A8-3850, A6-3650)',
-                                    ],
-                                    data_common: 'CPU with SSE Support',
-                                },
-                                memory: {
-                                    name: 'Memory',
-                                    data_min: '512MB or higher',
-                                    data_rec: '1GB or higher',
-                                },
-                                card: {
-                                    name: 'Graphics Card',
-                                    data_min: [
-                                        'NVIDIA® GeForce® FX 5700 Series or higher',
-                                        'NVIDIA® GeForce® 6600 Series or higher',
-                                        'NVIDIA® GeForce® 7600 Series or higher',
-                                        'ATi Radeon™ 9500 Series or higher',
-                                        'AMD Radeon™ HD 4350 Series or higher',
-                                        'AMD Radeon™ HD 5450 Series or higher',
-                                    ],
-                                    data_rec: [
-                                        'NVIDIA® GeForce® 8600 Series or higher',
-                                        'NVIDIA® GeForce® 9600 Series or higher',
-                                        'NVIDIA® GeForce® 200 Series or higher',
-                                        'AMD Radeon™ HD 2600 Series or higher',
-                                        'AMD Radeon™ HD 3650 Series or higher',
-                                        'AMD Radeon™ HD 4650 Series or higher',
-                                        'AMD Radeon™ HD 5550 Series or higher',
-                                        'AMD Radeon™ HD 6450 Series or higher',
-                                    ],
-                                },
-                                directx: {
-                                    data_common: 'DirectX 9.0c or higher',
-                                },
-                                sound: {
-                                    name: 'Sound Card',
-                                    data_common: ['DirectSound® compatible 16-bit stereo 44.1kHz', 'Or sound cards that can play 48kHz WAVE format'],
-                                },
-                                hdd: {
-                                    name: 'Hard Drive',
-                                    data_common: [
-                                        '20 GB or more required',
-                                        '*The above available space includes space for DirectX® installation and OS swap file space.',
-                                        '*It also includes the work space used temporarily by the installer. This work space is required in the root drive (usually C: drive) and is freed up after installation.',
-                                    ],
-                                },
-                                internet: {
-                                    name: 'Internet<br>Connection',
-                                    data_common: 'Broadband environment with ADSL 1.0Mbps or faster',
+                            hge: {
+                                column_name: 'High Grade Edition Requirements',
+                                row_data: {
+                                    resolution: {
+                                        name: 'Resolution',
+                                        data_common: '1920×1080',
+                                    },
+                                    os: {
+                                        name: 'Operating System',
+                                        data_common: ['Windows 7, 8, 8.1, 10 (32bit/64bit)', '* 64-bit runs on WOW64 (Windows on Windows 64)'],
+                                    },
+                                    cpu: {
+                                        name: 'Processor',
+                                        data_common: 'Intel® Core™ i5 2.66GHz or higher',
+                                    },
+                                    memory: {
+                                        name: 'Memory',
+                                        data_common: '4GB or more',
+                                    },
+                                    card: {
+                                        name: 'Graphics Card',
+                                        data_common: ['NVIDIA® Geforce® GTX 660 (2GB) Series or higher', 'Or graphics cards of equivalent or higher performance'],
+                                    },
+                                    directx: {
+                                        data_common: [
+                                            'DirectX 9.0c or higher',
+                                            '* Even if DirectX is already installed on your computer, you will need to install "<a href="https://www.microsoft.com/en-us/download/details.aspx?id=8109" target="_blank" rel="noopener noreferrer" style="text-decoration:underline;">DirectX End-User Runtimes</a>" separately.',
+                                        ],
+                                    },
+                                    sound: {
+                                        name: 'Sound Card',
+                                        data_common: ['DirectSound® compatible 16-bit stereo 44.1kHz', 'Or sound cards that can play 48kHz WAVE format'],
+                                    },
+                                    hdd: {
+                                        name: 'Hard Drive',
+                                        data_common: '20GB or more',
+                                    },
+                                    internet: {
+                                        name: 'Internet<br>Connection',
+                                        data_common: 'Broadband environment with ADSL 1.0Mbps or faster',
+                                    },
                                 },
                             },
                         },
                         spec_notes: {
-                            1: '1',
-                            2: '2',
-                            3: '3',
+                            1: 'The game does not have native 64-bit support. So even if you run the game on 64-bit version, system performance will not be improved compared to 32-bit version.',
+                            2: 'Please use the latest driver provided by the manufacturer of your graphics card.',
                         },
+                    },
+                    2: {
+                        subtitle: 'Installation',
+                        contents: {
+                            1: {
+                                text: 'Click on "Game Download" button on the member site to download the setup installer "mhfSetup_ZZ_v○.exe."<br>* "v○" is the version of the installer (e.g., v1.2).',
+                                img: 'install_1',
+                            },
+                            2: {
+                                text: 'Run the installer and select your language.<br>The game title and game folder name to be installed depends on the language selected here.',
+                                img: 'install_2',
+                            },
+                            3: {
+                                text: 'Please be sure to read the important information displayed before installation.',
+                                img: 'install_3',
+                            },
+                            4: {
+                                text: 'The destination folder will be displayed. Basically, it would be no problem with the default folder. But you can also change the folder according to your environment.',
+                                img: 'install_4',
+                            },
+                            5: {
+                                text: 'Select the in-game language and button icons for gamepad to be installed.<br>Even if you do not use any gamepad, you need to select one of the icon types here.',
+                                img: 'install_5',
+                            },
+                            6: {
+                                text: 'Click on "Install" button to start the installation.',
+                                img: 'install_6',
+                            },
+                            7: {
+                                text: 'If you can see the following screen, installation is completed.',
+                                img: 'install_7',
+                            },
+                        },
+                    },
+                    3: {
+                        subtitle: 'Launcher Screen',
+                        intro_box: {
+                            text: 'The launcher screen is the screen that you can see after running "MHF." You can log in to the game, add or delete characters, update, configure settings, etc., from here.',
+                            img: 'launcher_0',
+                        },
+                        h3_title: 'Preferences on the Launcher',
+                        h3_text:
+                            'In preferences, you can configure settings on your computer side, such as the size of the game screen when it starts up and the sound, in addition to switching to High Grade Edition.',
                     },
                 },
             },
@@ -337,7 +424,7 @@ const en: BaseTranslation = {
         },
     },
     footer_note:
-        '*Due to the layout, the landscape mode is restricted in this website.<br><br>*Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.',
+        '* Due to the layout, the landscape mode is restricted in this website.<br><br>* Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.',
 
     // Bottom Navigation
     bottom_nav: {

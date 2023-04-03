@@ -2,7 +2,8 @@
     import LL from '$i18n/i18n-svelte';
 
     const articleData = $LL.articles['begin'].start;
-    const { column_name, row_data } = articleData.section[1].table_data;
+    const { 1: spec } = articleData.section;
+    const { column_name, row_data } = spec.table_data["original"];
 </script>
 
 <tr class="table_row">
@@ -93,7 +94,7 @@
     <th class="table_header" scope="row">{row_data.hdd['name']()}</th>
     <td class="table_data no_border_right" colspan="2">
         <ul style="padding-left: 1em;">
-            <li style="text-indent: -1em;">{row_data.hdd['data_common'][0]()}</li>
+            <li style="text-indent: -1em; text-align: center;">{row_data.hdd['data_common'][0]()}</li>
             <li style="text-indent: -1em; color: red;">{row_data.hdd['data_common'][1]()}</li>
             <li style="text-indent: -1em; color:red;">{row_data.hdd['data_common'][2]()}</li>
         </ul>

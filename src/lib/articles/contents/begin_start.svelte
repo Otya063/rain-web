@@ -6,7 +6,7 @@
     import LL, { locale } from '$i18n/i18n-svelte';
 
     const articleData = $LL.articles['begin'].start;
-    const { 1: spec } = articleData.section;
+    const { 1: spec, 2: install, 3: launcher } = articleData.section;
 
     let activedElement: HTMLElement;
     let nowTarget: HTMLElement;
@@ -63,7 +63,7 @@
     </div>
 
     <div class="table_tabs">
-        {#each Object.entries(spec.table_data["tab_name"]) as [arg, text]}
+        {#each Object.entries(spec.table_data['tab_name']) as [arg, text]}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <p class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler('tab', arg, e)}>{text()}</p>
         {/each}
@@ -85,77 +85,36 @@
     </div>
 </section>
 
-<section id="installation">
-    <h2>インストール</h2>
+<section id="install">
+    <h2>{install.subtitle()}</h2>
 
     <ul>
-        <li class="center_box">
-            <p class="center_box_text">
-                （1）メンバーサイトにある「ゲームダウンロード」ボタンをクリックし、セットアップインストーラー「mhfSetup_ZZ_v○.exe」をダウンロードします。<br
-                />※「v○」にはインストーラーのバージョン（例: v1.2）が表示されます。
-            </p>
-            <p class="center_box_img">
-                <img src="" alt="install_1" />
-            </p>
-        </li>
-        <li class="center_box">
-            <p class="center_box_text">
-                （2）インストーラーを実行し、言語を選択します。<br />インストールされるゲームタイトルおよびゲームフォルダー名はここで選択した言語に依存します。
-            </p>
-            <p class="center_box_img">
-                <img src="" alt="install_2" />
-            </p>
-        </li>
-        <li class="center_box">
-            <p class="center_box_text">（3）インストール前に表示される重要情報を必ずご確認ください。</p>
-            <p class="center_box_img">
-                <img src="" alt="install_3" />
-            </p>
-        </li>
-        <li class="center_box">
-            <p class="center_box_text">（4）インストール先フォルダが表示されます。基本的にはデフォルトのままで問題ありませんが、ご自身の環境に合わせて、フォルダを任意で変更することも可能です。</p>
-            <p class="center_box_img">
-                <img src="" alt="install_4" />
-            </p>
-        </li>
-        <li class="center_box">
-            <p class="center_box_text">
-                （5）インストールするゲーム内言語およびゲームパッドボタンアイコンを選択します。<br />ゲームパッドを使用しない場合であっても、アイコンタイプは必ずどちらかご選択いただく必要があります。
-            </p>
-            <p class="center_box_img">
-                <img src="" alt="install_5" />
-            </p>
-        </li>
-        <li class="center_box">
-            <p class="center_box_text">（6）「インストール」ボタンをクリックすると、インストールが開始されます。</p>
-            <p class="center_box_img">
-                <img src="" alt="install_6" />
-            </p>
-        </li>
-        <li class="center_box">
-            <p class="center_box_text">（7）以下画像が表示されれば、インストール完了です。</p>
-            <p class="center_box_img">
-                <img src="" alt="install_7" />
-            </p>
-        </li>
+        {#each Object.entries(install.contents) as [number, { text, img }]}
+            <li class="center_box">
+                <p class="center_box_text">
+                    （{number}）{@html text()}
+                </p>
+                <p class="center_box_img">
+                    <img src="/img/{$locale}/articles/begin/start/{img()}.png" alt={img()} />
+                </p>
+            </li>
+        {/each}
     </ul>
 </section>
 
 <section id="launcher">
-    <h2>ランチャー画面</h2>
+    <h2>{launcher.subtitle()}</h2>
 
     <ul>
         <li class="section_inrto_box">
-            <p class="intro_box_text">ランチャー画面とは、「MHF」起動後に表示される画面のことです。ここでは、ゲームへのログインやキャラクターの追加・削除、アップデート、環境設定等を行なえます。</p>
-            <p class="intro_box_img"><img src="/img/{$locale}/articles/begin/start/launcher_0.png" alt="launcher_0" /></p>
+            <p class="intro_box_text">{launcher.intro_box['text']()}</p>
+            <p class="intro_box_img"><img src="/img/{$locale}/articles/begin/start/{launcher.intro_box['img']()}.png" alt={launcher.intro_box['img']()} /></p>
         </li>
     </ul>
 
-    <h3>ランチャー画面の環境設定</h3>
+    <h3>{launcher.h3_title()}</h3>
     <div class="center_box_no_number">
-        <p style="font-weight: 500;" class="center_box_no_number_text">
-            ランチャー画面の環境設定では、ゲーム画面の起動時のサイズや音声など、パソコン側の設定を行うことができます。 <br />また、High Grade Editionへの切替もここで可能です。
-        </p>
+        <p style="font-weight: 500;" class="center_box_no_number_text">{launcher.h3_text()}</p>
     </div>
 
     <ul>

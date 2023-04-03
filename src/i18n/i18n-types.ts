@@ -495,7 +495,7 @@ type RootTranslation = {
 					/**
 					 * I​n​s​t​a​l​l​a​t​i​o​n
 					 */
-					installation: string
+					install: string
 					/**
 					 * L​a​u​n​c​h​e​r​ ​S​c​r​e​e​n
 					 */
@@ -510,7 +510,7 @@ type RootTranslation = {
 					hge_setting: string
 				}
 				/**
-				 * "​M​H​F​"​ ​h​a​s​ ​n​o​w​ ​t​w​o​ ​e​d​i​t​i​o​n​s​ ​a​s​ ​f​o​l​l​o​w​s​:​<​b​r​>​ ​ー​ ​O​r​i​g​i​n​a​l​ ​E​d​i​t​o​n​:​ ​Y​o​u​ ​c​a​n​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​w​i​t​h​ ​n​o​r​m​a​l​ ​q​u​a​l​i​t​y​ ​a​n​d​ ​i​n​ ​a​ ​c​a​s​u​a​l​ ​e​n​v​i​r​o​n​m​e​n​t​.​<​b​r​>​ ​ー​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​:​ ​Y​o​u​ ​w​i​l​l​ ​e​x​p​e​r​i​e​n​c​e​ ​p​o​w​e​r​f​u​l​ ​h​u​n​t​i​n​g​ ​i​n​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.​<​b​r​>​T​h​i​s​ ​a​r​t​i​c​l​e​ ​d​e​s​c​r​i​b​e​s​ ​b​a​s​i​c​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​g​a​m​e​,​ ​s​u​c​h​ ​a​s​ ​i​t​s​ ​s​y​s​t​e​m​ ​r​e​q​u​i​r​e​m​e​n​t​s​,​ ​h​o​w​ ​t​o​ ​i​n​s​t​a​l​l​,​ ​a​n​d​ ​l​o​g​ ​i​n​.
+				 * "​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​O​n​l​i​n​e​"​ ​h​a​s​ ​n​o​w​ ​t​w​o​ ​e​d​i​t​i​o​n​s​ ​a​s​ ​f​o​l​l​o​w​s​:​<​b​r​>​ ​ー​ ​O​r​i​g​i​n​a​l​ ​E​d​i​t​o​n​:​ ​Y​o​u​ ​c​a​n​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​w​i​t​h​ ​n​o​r​m​a​l​ ​q​u​a​l​i​t​y​ ​a​n​d​ ​i​n​ ​a​ ​c​a​s​u​a​l​ ​e​n​v​i​r​o​n​m​e​n​t​.​<​b​r​>​ ​ー​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​:​ ​Y​o​u​ ​w​i​l​l​ ​e​x​p​e​r​i​e​n​c​e​ ​p​o​w​e​r​f​u​l​ ​h​u​n​t​i​n​g​ ​i​n​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.​<​b​r​>​T​h​i​s​ ​a​r​t​i​c​l​e​ ​d​e​s​c​r​i​b​e​s​ ​b​a​s​i​c​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​g​a​m​e​,​ ​s​u​c​h​ ​a​s​ ​i​t​s​ ​s​y​s​t​e​m​ ​r​e​q​u​i​r​e​m​e​n​t​s​,​ ​h​o​w​ ​t​o​ ​i​n​s​t​a​l​l​,​ ​a​n​d​ ​l​o​g​ ​i​n​.
 				 */
 				article_memo: string
 				section: {
@@ -521,7 +521,7 @@ type RootTranslation = {
 						subtitle: string
 						check_contents: {
 							/**
-							 * Y​o​u​ ​c​a​n​ ​c​h​o​o​s​e​ ​t​o​ ​p​l​a​y​ ​M​H​F​ ​i​n​ ​e​i​t​h​e​r​ ​"​O​r​i​g​i​n​a​l​ ​E​d​i​t​i​o​n​"​ ​o​r​ ​"​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​b​a​s​e​d​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​e​n​v​i​r​o​n​m​e​n​t​s​.
+							 * Y​o​u​ ​c​a​n​ ​c​h​o​o​s​e​ ​t​o​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​i​n​ ​e​i​t​h​e​r​ ​"​O​r​i​g​i​n​a​l​ ​E​d​i​t​i​o​n​"​ ​o​r​ ​"​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​b​a​s​e​d​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​e​n​v​i​r​o​n​m​e​n​t​s​.
 							 */
 							'0': string
 							/**
@@ -540,249 +540,467 @@ type RootTranslation = {
 								 */
 								hge: string
 							}
-							column_name: {
-								/**
-								 * M​i​n​i​m​u​m​ ​R​e​q​u​i​r​e​m​e​n​t​s
-								 */
-								min: string
-								/**
-								 * R​e​c​o​m​m​e​n​d​e​d​ ​R​e​q​u​i​r​e​m​e​n​t​s
-								 */
-								rec: string
+							original: {
+								column_name: {
+									/**
+									 * M​i​n​i​m​u​m​ ​R​e​q​u​i​r​e​m​e​n​t​s
+									 */
+									min: string
+									/**
+									 * R​e​c​o​m​m​e​n​d​e​d​ ​R​e​q​u​i​r​e​m​e​n​t​s
+									 */
+									rec: string
+								}
+								row_data: {
+									resolution: {
+										/**
+										 * R​e​s​o​l​u​t​i​o​n
+										 */
+										name: string
+										/**
+										 * 8​0​0​×​6​0​0
+										 */
+										data_min: string
+										/**
+										 * 1​6​0​0​×​1​2​0​0
+										 */
+										data_rec: string
+									}
+									os: {
+										/**
+										 * O​p​e​r​a​t​i​n​g​ ​S​y​s​t​e​m
+										 */
+										name: string
+										data_common: {
+											/**
+											 * W​i​n​d​o​w​s​ ​7​,​ ​8​,​ ​8​.​1​,​ ​1​0​ ​(​3​2​b​i​t​/​6​4​b​i​t​)
+											 */
+											'0': string
+											/**
+											 * *​ ​6​4​-​b​i​t​ ​r​u​n​s​ ​o​n​ ​W​O​W​6​4​ ​(​W​i​n​d​o​w​s​ ​o​n​ ​W​i​n​d​o​w​s​ ​6​4​)
+											 */
+											'1': string
+										}
+									}
+									cpu: {
+										/**
+										 * P​r​o​c​e​s​s​o​r
+										 */
+										name: string
+										data_min: {
+											/**
+											 * I​n​t​e​l​®​ ​P​e​n​t​i​u​m​®​ ​4​ ​2​.​0​G​H​z​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'0': string
+											/**
+											 * A​M​D​ ​A​t​h​l​o​n​™​6​4​ ​3​5​0​0​+​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'1': string
+										}
+										data_rec: {
+											/**
+											 * I​n​t​e​l​®​ ​C​o​r​e​™​2​ ​(​D​u​o​,​ ​E​x​t​r​e​m​e​,​ ​Q​u​a​d​)​ ​S​e​r​i​e​s
+											 */
+											'0': string
+											/**
+											 * I​n​t​e​l​®​ ​C​o​r​e​™​ ​(​i​3​,​ ​i​5​,​ ​i​7​)​ ​S​e​r​i​e​s
+											 */
+											'1': string
+											/**
+											 * I​n​t​e​l​®​ ​C​o​r​e​™​ ​(​i​5​-​2​0​0​0​,​ ​i​7​-​2​0​0​0​)​ ​S​e​r​i​e​s
+											 */
+											'2': string
+											/**
+											 * A​M​D​ ​A​t​h​l​o​n​™​ ​X​2​ ​D​u​a​l​-​C​o​r​e​ ​4​6​0​0​+​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'3': string
+											/**
+											 * A​M​D​ ​P​h​e​n​o​m​™​ ​S​e​r​i​e​s
+											 */
+											'4': string
+											/**
+											 * A​M​D​ ​A​t​h​l​o​n​I​I​™​ ​S​e​r​i​e​s
+											 */
+											'5': string
+											/**
+											 * A​M​D​ ​P​h​e​n​o​m​I​I​™​ ​S​e​r​i​e​s
+											 */
+											'6': string
+											/**
+											 * A​M​D​ ​A​-​S​e​r​i​e​s​ ​A​P​U​ ​(​A​8​-​3​8​5​0​,​ ​A​6​-​3​6​5​0​)
+											 */
+											'7': string
+										}
+										/**
+										 * C​P​U​ ​w​i​t​h​ ​S​S​E​ ​S​u​p​p​o​r​t
+										 */
+										data_common: string
+									}
+									memory: {
+										/**
+										 * M​e​m​o​r​y
+										 */
+										name: string
+										/**
+										 * 5​1​2​M​B​ ​o​r​ ​m​o​r​e
+										 */
+										data_min: string
+										/**
+										 * 1​G​B​ ​o​r​ ​m​o​r​e
+										 */
+										data_rec: string
+									}
+									card: {
+										/**
+										 * G​r​a​p​h​i​c​s​ ​C​a​r​d
+										 */
+										name: string
+										data_min: {
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​F​X​ ​5​7​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'0': string
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​6​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'1': string
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​7​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'2': string
+											/**
+											 * A​T​i​ ​R​a​d​e​o​n​™​ ​9​5​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'3': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​4​3​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'4': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​5​4​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'5': string
+										}
+										data_rec: {
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​8​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'0': string
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​9​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'1': string
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​2​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'2': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​2​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'3': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​3​6​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'4': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​4​6​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'5': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​5​5​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'6': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​6​4​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'7': string
+										}
+									}
+									directx: {
+										/**
+										 * D​i​r​e​c​t​X​ ​9​.​0​c​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										data_common: string
+									}
+									sound: {
+										/**
+										 * S​o​u​n​d​ ​C​a​r​d
+										 */
+										name: string
+										data_common: {
+											/**
+											 * D​i​r​e​c​t​S​o​u​n​d​®​ ​c​o​m​p​a​t​i​b​l​e​ ​1​6​-​b​i​t​ ​s​t​e​r​e​o​ ​4​4​.​1​k​H​z
+											 */
+											'0': string
+											/**
+											 * O​r​ ​s​o​u​n​d​ ​c​a​r​d​s​ ​t​h​a​t​ ​c​a​n​ ​p​l​a​y​ ​4​8​k​H​z​ ​W​A​V​E​ ​f​o​r​m​a​t
+											 */
+											'1': string
+										}
+									}
+									hdd: {
+										/**
+										 * H​a​r​d​ ​D​r​i​v​e
+										 */
+										name: string
+										data_common: {
+											/**
+											 * 2​0​G​B​ ​o​r​ ​m​o​r​e
+											 */
+											'0': string
+											/**
+											 * *​ ​T​h​e​ ​a​b​o​v​e​ ​a​v​a​i​l​a​b​l​e​ ​s​p​a​c​e​ ​i​n​c​l​u​d​e​s​ ​s​p​a​c​e​ ​f​o​r​ ​D​i​r​e​c​t​X​®​ ​i​n​s​t​a​l​l​a​t​i​o​n​ ​a​n​d​ ​O​S​ ​s​w​a​p​ ​f​i​l​e​ ​s​p​a​c​e​.
+											 */
+											'1': string
+											/**
+											 * *​ ​I​t​ ​a​l​s​o​ ​i​n​c​l​u​d​e​s​ ​t​h​e​ ​w​o​r​k​ ​s​p​a​c​e​ ​u​s​e​d​ ​t​e​m​p​o​r​a​r​i​l​y​ ​b​y​ ​t​h​e​ ​i​n​s​t​a​l​l​e​r​.​ ​T​h​i​s​ ​w​o​r​k​ ​s​p​a​c​e​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​i​n​ ​t​h​e​ ​r​o​o​t​ ​d​r​i​v​e​ ​(​u​s​u​a​l​l​y​ ​C​:​ ​d​r​i​v​e​)​ ​a​n​d​ ​i​s​ ​f​r​e​e​d​ ​u​p​ ​a​f​t​e​r​ ​i​n​s​t​a​l​l​a​t​i​o​n​.
+											 */
+											'2': string
+										}
+									}
+									internet: {
+										/**
+										 * I​n​t​e​r​n​e​t​<​b​r​>​C​o​n​n​e​c​t​i​o​n
+										 */
+										name: string
+										/**
+										 * B​r​o​a​d​b​a​n​d​ ​e​n​v​i​r​o​n​m​e​n​t​ ​w​i​t​h​ ​A​D​S​L​ ​1​.​0​M​b​p​s​ ​o​r​ ​f​a​s​t​e​r
+										 */
+										data_common: string
+									}
+								}
 							}
-							row_data: {
-								resolution: {
-									/**
-									 * R​e​s​o​l​u​t​i​o​n
-									 */
-									name: string
-									/**
-									 * 8​0​0​×​6​0​0
-									 */
-									data_min: string
-									/**
-									 * 1​6​0​0​×​1​2​0​0
-									 */
-									data_rec: string
-								}
-								os: {
-									/**
-									 * O​p​e​r​a​t​i​n​g​ ​S​y​s​t​e​m
-									 */
-									name: string
-									data_common: {
+							hge: {
+								/**
+								 * H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​ ​R​e​q​u​i​r​e​m​e​n​t​s
+								 */
+								column_name: string
+								row_data: {
+									resolution: {
 										/**
-										 * W​i​n​d​o​w​s​ ​7​,​ ​8​,​ ​8​.​1​,​ ​1​0​ ​(​3​2​b​i​t​/​6​4​b​i​t​)
+										 * R​e​s​o​l​u​t​i​o​n
 										 */
-										'0': string
+										name: string
 										/**
-										 * *​6​4​-​b​i​t​ ​r​u​n​s​ ​o​n​ ​W​O​W​6​4​ ​(​W​i​n​d​o​w​s​ ​o​n​ ​W​i​n​d​o​w​s​ ​6​4​)
+										 * 1​9​2​0​×​1​0​8​0
 										 */
-										'1': string
+										data_common: string
 									}
-								}
-								cpu: {
-									/**
-									 * P​r​o​c​e​s​s​o​r
-									 */
-									name: string
-									data_min: {
+									os: {
 										/**
-										 * I​n​t​e​l​®​ ​P​e​n​t​i​u​m​®​ ​4​ ​2​.​0​G​H​z​ ​o​r​ ​h​i​g​h​e​r
+										 * O​p​e​r​a​t​i​n​g​ ​S​y​s​t​e​m
 										 */
-										'0': string
-										/**
-										 * A​M​D​ ​A​t​h​l​o​n​™​6​4​ ​3​5​0​0​+​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'1': string
+										name: string
+										data_common: {
+											/**
+											 * W​i​n​d​o​w​s​ ​7​,​ ​8​,​ ​8​.​1​,​ ​1​0​ ​(​3​2​b​i​t​/​6​4​b​i​t​)
+											 */
+											'0': string
+											/**
+											 * *​ ​6​4​-​b​i​t​ ​r​u​n​s​ ​o​n​ ​W​O​W​6​4​ ​(​W​i​n​d​o​w​s​ ​o​n​ ​W​i​n​d​o​w​s​ ​6​4​)
+											 */
+											'1': string
+										}
 									}
-									data_rec: {
+									cpu: {
 										/**
-										 * I​n​t​e​l​®​ ​C​o​r​e​™​2​ ​(​D​u​o​,​ ​E​x​t​r​e​m​e​,​ ​Q​u​a​d​)​ ​S​e​r​i​e​s
+										 * P​r​o​c​e​s​s​o​r
 										 */
-										'0': string
+										name: string
 										/**
-										 * I​n​t​e​l​®​ ​C​o​r​e​™​ ​(​i​3​,​ ​i​5​,​ ​i​7​)​ ​S​e​r​i​e​s
+										 * I​n​t​e​l​®​ ​C​o​r​e​™​ ​i​5​ ​2​.​6​6​G​H​z​ ​o​r​ ​h​i​g​h​e​r
 										 */
-										'1': string
-										/**
-										 * I​n​t​e​l​®​ ​C​o​r​e​™​ ​(​i​5​-​2​0​0​0​,​ ​i​7​-​2​0​0​0​)​ ​S​e​r​i​e​s
-										 */
-										'2': string
-										/**
-										 * A​M​D​ ​A​t​h​l​o​n​™​ ​X​2​ ​D​u​a​l​-​C​o​r​e​ ​4​6​0​0​+​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'3': string
-										/**
-										 * A​M​D​ ​P​h​e​n​o​m​™​ ​S​e​r​i​e​s
-										 */
-										'4': string
-										/**
-										 * A​M​D​ ​A​t​h​l​o​n​I​I​™​ ​S​e​r​i​e​s
-										 */
-										'5': string
-										/**
-										 * A​M​D​ ​P​h​e​n​o​m​I​I​™​ ​S​e​r​i​e​s
-										 */
-										'6': string
-										/**
-										 * A​M​D​ ​A​-​S​e​r​i​e​s​ ​A​P​U​ ​(​A​8​-​3​8​5​0​,​ ​A​6​-​3​6​5​0​)
-										 */
-										'7': string
+										data_common: string
 									}
-									/**
-									 * C​P​U​ ​w​i​t​h​ ​S​S​E​ ​S​u​p​p​o​r​t
-									 */
-									data_common: string
-								}
-								memory: {
-									/**
-									 * M​e​m​o​r​y
-									 */
-									name: string
-									/**
-									 * 5​1​2​M​B​ ​o​r​ ​h​i​g​h​e​r
-									 */
-									data_min: string
-									/**
-									 * 1​G​B​ ​o​r​ ​h​i​g​h​e​r
-									 */
-									data_rec: string
-								}
-								card: {
-									/**
-									 * G​r​a​p​h​i​c​s​ ​C​a​r​d
-									 */
-									name: string
-									data_min: {
+									memory: {
 										/**
-										 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​F​X​ ​5​7​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 * M​e​m​o​r​y
 										 */
-										'0': string
+										name: string
 										/**
-										 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​6​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 * 4​G​B​ ​o​r​ ​m​o​r​e
 										 */
-										'1': string
-										/**
-										 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​7​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'2': string
-										/**
-										 * A​T​i​ ​R​a​d​e​o​n​™​ ​9​5​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'3': string
-										/**
-										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​4​3​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'4': string
-										/**
-										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​5​4​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'5': string
+										data_common: string
 									}
-									data_rec: {
+									card: {
 										/**
-										 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​8​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+										 * G​r​a​p​h​i​c​s​ ​C​a​r​d
 										 */
-										'0': string
-										/**
-										 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​9​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'1': string
-										/**
-										 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​2​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'2': string
-										/**
-										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​2​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'3': string
-										/**
-										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​3​6​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'4': string
-										/**
-										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​4​6​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'5': string
-										/**
-										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​5​5​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'6': string
-										/**
-										 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​6​4​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
-										 */
-										'7': string
+										name: string
+										data_common: {
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​f​o​r​c​e​®​ ​G​T​X​ ​6​6​0​ ​(​2​G​B​)​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'0': string
+											/**
+											 * O​r​ ​g​r​a​p​h​i​c​s​ ​c​a​r​d​s​ ​o​f​ ​e​q​u​i​v​a​l​e​n​t​ ​o​r​ ​h​i​g​h​e​r​ ​p​e​r​f​o​r​m​a​n​c​e
+											 */
+											'1': string
+										}
 									}
-								}
-								directx: {
-									/**
-									 * D​i​r​e​c​t​X​ ​9​.​0​c​ ​o​r​ ​h​i​g​h​e​r
-									 */
-									data_common: string
-								}
-								sound: {
-									/**
-									 * S​o​u​n​d​ ​C​a​r​d
-									 */
-									name: string
-									data_common: {
-										/**
-										 * D​i​r​e​c​t​S​o​u​n​d​®​ ​c​o​m​p​a​t​i​b​l​e​ ​1​6​-​b​i​t​ ​s​t​e​r​e​o​ ​4​4​.​1​k​H​z
-										 */
-										'0': string
-										/**
-										 * O​r​ ​s​o​u​n​d​ ​c​a​r​d​s​ ​t​h​a​t​ ​c​a​n​ ​p​l​a​y​ ​4​8​k​H​z​ ​W​A​V​E​ ​f​o​r​m​a​t
-										 */
-										'1': string
+									directx: {
+										data_common: {
+											/**
+											 * D​i​r​e​c​t​X​ ​9​.​0​c​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'0': string
+											/**
+											 * *​ ​E​v​e​n​ ​i​f​ ​D​i​r​e​c​t​X​ ​i​s​ ​a​l​r​e​a​d​y​ ​i​n​s​t​a​l​l​e​d​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​,​ ​y​o​u​ ​w​i​l​l​ ​n​e​e​d​ ​t​o​ ​i​n​s​t​a​l​l​ ​"​<​a​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​w​w​w​.​m​i​c​r​o​s​o​f​t​.​c​o​m​/​e​n​-​u​s​/​d​o​w​n​l​o​a​d​/​d​e​t​a​i​l​s​.​a​s​p​x​?​i​d​=​8​1​0​9​"​ ​t​a​r​g​e​t​=​"​_​b​l​a​n​k​"​ ​r​e​l​=​"​n​o​o​p​e​n​e​r​ ​n​o​r​e​f​e​r​r​e​r​"​ ​s​t​y​l​e​=​"​t​e​x​t​-​d​e​c​o​r​a​t​i​o​n​:​u​n​d​e​r​l​i​n​e​;​"​>​D​i​r​e​c​t​X​ ​E​n​d​-​U​s​e​r​ ​R​u​n​t​i​m​e​s​<​/​a​>​"​ ​s​e​p​a​r​a​t​e​l​y​.
+											 */
+											'1': string
+										}
 									}
-								}
-								hdd: {
-									/**
-									 * H​a​r​d​ ​D​r​i​v​e
-									 */
-									name: string
-									data_common: {
+									sound: {
 										/**
-										 * 2​0​ ​G​B​ ​o​r​ ​m​o​r​e​ ​r​e​q​u​i​r​e​d
+										 * S​o​u​n​d​ ​C​a​r​d
 										 */
-										'0': string
-										/**
-										 * *​T​h​e​ ​a​b​o​v​e​ ​a​v​a​i​l​a​b​l​e​ ​s​p​a​c​e​ ​i​n​c​l​u​d​e​s​ ​s​p​a​c​e​ ​f​o​r​ ​D​i​r​e​c​t​X​®​ ​i​n​s​t​a​l​l​a​t​i​o​n​ ​a​n​d​ ​O​S​ ​s​w​a​p​ ​f​i​l​e​ ​s​p​a​c​e​.
-										 */
-										'1': string
-										/**
-										 * *​I​t​ ​a​l​s​o​ ​i​n​c​l​u​d​e​s​ ​t​h​e​ ​w​o​r​k​ ​s​p​a​c​e​ ​u​s​e​d​ ​t​e​m​p​o​r​a​r​i​l​y​ ​b​y​ ​t​h​e​ ​i​n​s​t​a​l​l​e​r​.​ ​T​h​i​s​ ​w​o​r​k​ ​s​p​a​c​e​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​i​n​ ​t​h​e​ ​r​o​o​t​ ​d​r​i​v​e​ ​(​u​s​u​a​l​l​y​ ​C​:​ ​d​r​i​v​e​)​ ​a​n​d​ ​i​s​ ​f​r​e​e​d​ ​u​p​ ​a​f​t​e​r​ ​i​n​s​t​a​l​l​a​t​i​o​n​.
-										 */
-										'2': string
+										name: string
+										data_common: {
+											/**
+											 * D​i​r​e​c​t​S​o​u​n​d​®​ ​c​o​m​p​a​t​i​b​l​e​ ​1​6​-​b​i​t​ ​s​t​e​r​e​o​ ​4​4​.​1​k​H​z
+											 */
+											'0': string
+											/**
+											 * O​r​ ​s​o​u​n​d​ ​c​a​r​d​s​ ​t​h​a​t​ ​c​a​n​ ​p​l​a​y​ ​4​8​k​H​z​ ​W​A​V​E​ ​f​o​r​m​a​t
+											 */
+											'1': string
+										}
 									}
-								}
-								internet: {
-									/**
-									 * I​n​t​e​r​n​e​t​<​b​r​>​C​o​n​n​e​c​t​i​o​n
-									 */
-									name: string
-									/**
-									 * B​r​o​a​d​b​a​n​d​ ​e​n​v​i​r​o​n​m​e​n​t​ ​w​i​t​h​ ​A​D​S​L​ ​1​.​0​M​b​p​s​ ​o​r​ ​f​a​s​t​e​r
-									 */
-									data_common: string
+									hdd: {
+										/**
+										 * H​a​r​d​ ​D​r​i​v​e
+										 */
+										name: string
+										/**
+										 * 2​0​G​B​ ​o​r​ ​m​o​r​e
+										 */
+										data_common: string
+									}
+									internet: {
+										/**
+										 * I​n​t​e​r​n​e​t​<​b​r​>​C​o​n​n​e​c​t​i​o​n
+										 */
+										name: string
+										/**
+										 * B​r​o​a​d​b​a​n​d​ ​e​n​v​i​r​o​n​m​e​n​t​ ​w​i​t​h​ ​A​D​S​L​ ​1​.​0​M​b​p​s​ ​o​r​ ​f​a​s​t​e​r
+										 */
+										data_common: string
+									}
 								}
 							}
 						}
 						spec_notes: {
 							/**
-							 * 1
+							 * T​h​e​ ​g​a​m​e​ ​d​o​e​s​ ​n​o​t​ ​h​a​v​e​ ​n​a​t​i​v​e​ ​6​4​-​b​i​t​ ​s​u​p​p​o​r​t​.​ ​S​o​ ​e​v​e​n​ ​i​f​ ​y​o​u​ ​r​u​n​ ​t​h​e​ ​g​a​m​e​ ​o​n​ ​6​4​-​b​i​t​ ​v​e​r​s​i​o​n​,​ ​s​y​s​t​e​m​ ​p​e​r​f​o​r​m​a​n​c​e​ ​w​i​l​l​ ​n​o​t​ ​b​e​ ​i​m​p​r​o​v​e​d​ ​c​o​m​p​a​r​e​d​ ​t​o​ ​3​2​-​b​i​t​ ​v​e​r​s​i​o​n​.
 							 */
 							'1': string
 							/**
-							 * 2
+							 * P​l​e​a​s​e​ ​u​s​e​ ​t​h​e​ ​l​a​t​e​s​t​ ​d​r​i​v​e​r​ ​p​r​o​v​i​d​e​d​ ​b​y​ ​t​h​e​ ​m​a​n​u​f​a​c​t​u​r​e​r​ ​o​f​ ​y​o​u​r​ ​g​r​a​p​h​i​c​s​ ​c​a​r​d​.
 							 */
 							'2': string
-							/**
-							 * 3
-							 */
-							'3': string
 						}
+					}
+					'2': {
+						/**
+						 * I​n​s​t​a​l​l​a​t​i​o​n
+						 */
+						subtitle: string
+						contents: {
+							'1': {
+								/**
+								 * C​l​i​c​k​ ​o​n​ ​"​G​a​m​e​ ​D​o​w​n​l​o​a​d​"​ ​b​u​t​t​o​n​ ​o​n​ ​t​h​e​ ​m​e​m​b​e​r​ ​s​i​t​e​ ​t​o​ ​d​o​w​n​l​o​a​d​ ​t​h​e​ ​s​e​t​u​p​ ​i​n​s​t​a​l​l​e​r​ ​"​m​h​f​S​e​t​u​p​_​Z​Z​_​v​○​.​e​x​e​.​"​<​b​r​>​*​ ​"​v​○​"​ ​i​s​ ​t​h​e​ ​v​e​r​s​i​o​n​ ​o​f​ ​t​h​e​ ​i​n​s​t​a​l​l​e​r​ ​(​e​.​g​.​,​ ​v​1​.​2​)​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​1
+								 */
+								img: string
+							}
+							'2': {
+								/**
+								 * R​u​n​ ​t​h​e​ ​i​n​s​t​a​l​l​e​r​ ​a​n​d​ ​s​e​l​e​c​t​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e​.​<​b​r​>​T​h​e​ ​g​a​m​e​ ​t​i​t​l​e​ ​a​n​d​ ​g​a​m​e​ ​f​o​l​d​e​r​ ​n​a​m​e​ ​t​o​ ​b​e​ ​i​n​s​t​a​l​l​e​d​ ​d​e​p​e​n​d​s​ ​o​n​ ​t​h​e​ ​l​a​n​g​u​a​g​e​ ​s​e​l​e​c​t​e​d​ ​h​e​r​e​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​2
+								 */
+								img: string
+							}
+							'3': {
+								/**
+								 * P​l​e​a​s​e​ ​b​e​ ​s​u​r​e​ ​t​o​ ​r​e​a​d​ ​t​h​e​ ​i​m​p​o​r​t​a​n​t​ ​i​n​f​o​r​m​a​t​i​o​n​ ​d​i​s​p​l​a​y​e​d​ ​b​e​f​o​r​e​ ​i​n​s​t​a​l​l​a​t​i​o​n​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​3
+								 */
+								img: string
+							}
+							'4': {
+								/**
+								 * T​h​e​ ​d​e​s​t​i​n​a​t​i​o​n​ ​f​o​l​d​e​r​ ​w​i​l​l​ ​b​e​ ​d​i​s​p​l​a​y​e​d​.​ ​B​a​s​i​c​a​l​l​y​,​ ​i​t​ ​w​o​u​l​d​ ​b​e​ ​n​o​ ​p​r​o​b​l​e​m​ ​w​i​t​h​ ​t​h​e​ ​d​e​f​a​u​l​t​ ​f​o​l​d​e​r​.​ ​B​u​t​ ​y​o​u​ ​c​a​n​ ​a​l​s​o​ ​c​h​a​n​g​e​ ​t​h​e​ ​f​o​l​d​e​r​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​y​o​u​r​ ​e​n​v​i​r​o​n​m​e​n​t​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​4
+								 */
+								img: string
+							}
+							'5': {
+								/**
+								 * S​e​l​e​c​t​ ​t​h​e​ ​i​n​-​g​a​m​e​ ​l​a​n​g​u​a​g​e​ ​a​n​d​ ​b​u​t​t​o​n​ ​i​c​o​n​s​ ​f​o​r​ ​g​a​m​e​p​a​d​ ​t​o​ ​b​e​ ​i​n​s​t​a​l​l​e​d​.​<​b​r​>​E​v​e​n​ ​i​f​ ​y​o​u​ ​d​o​ ​n​o​t​ ​u​s​e​ ​a​n​y​ ​g​a​m​e​p​a​d​,​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​s​e​l​e​c​t​ ​o​n​e​ ​o​f​ ​t​h​e​ ​i​c​o​n​ ​t​y​p​e​s​ ​h​e​r​e​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​5
+								 */
+								img: string
+							}
+							'6': {
+								/**
+								 * C​l​i​c​k​ ​o​n​ ​"​I​n​s​t​a​l​l​"​ ​b​u​t​t​o​n​ ​t​o​ ​s​t​a​r​t​ ​t​h​e​ ​i​n​s​t​a​l​l​a​t​i​o​n​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​6
+								 */
+								img: string
+							}
+							'7': {
+								/**
+								 * I​f​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​s​c​r​e​e​n​,​ ​i​n​s​t​a​l​l​a​t​i​o​n​ ​i​s​ ​c​o​m​p​l​e​t​e​d​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​7
+								 */
+								img: string
+							}
+						}
+					}
+					'3': {
+						/**
+						 * L​a​u​n​c​h​e​r​ ​S​c​r​e​e​n
+						 */
+						subtitle: string
+						intro_box: {
+							/**
+							 * T​h​e​ ​l​a​u​n​c​h​e​r​ ​s​c​r​e​e​n​ ​i​s​ ​t​h​e​ ​s​c​r​e​e​n​ ​t​h​a​t​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​a​f​t​e​r​ ​r​u​n​n​i​n​g​ ​"​M​H​F​.​"​ ​Y​o​u​ ​c​a​n​ ​l​o​g​ ​i​n​ ​t​o​ ​t​h​e​ ​g​a​m​e​,​ ​a​d​d​ ​o​r​ ​d​e​l​e​t​e​ ​c​h​a​r​a​c​t​e​r​s​,​ ​u​p​d​a​t​e​,​ ​c​o​n​f​i​g​u​r​e​ ​s​e​t​t​i​n​g​s​,​ ​e​t​c​.​,​ ​f​r​o​m​ ​h​e​r​e​.
+							 */
+							text: string
+							/**
+							 * l​a​u​n​c​h​e​r​_​0
+							 */
+							img: string
+						}
+						/**
+						 * P​r​e​f​e​r​e​n​c​e​s​ ​o​n​ ​t​h​e​ ​L​a​u​n​c​h​e​r
+						 */
+						h3_title: string
+						/**
+						 * I​n​ ​p​r​e​f​e​r​e​n​c​e​s​,​ ​y​o​u​ ​c​a​n​ ​c​o​n​f​i​g​u​r​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​s​i​d​e​,​ ​s​u​c​h​ ​a​s​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​t​h​e​ ​g​a​m​e​ ​s​c​r​e​e​n​ ​w​h​e​n​ ​i​t​ ​s​t​a​r​t​s​ ​u​p​ ​a​n​d​ ​t​h​e​ ​s​o​u​n​d​,​ ​i​n​ ​a​d​d​i​t​i​o​n​ ​t​o​ ​s​w​i​t​c​h​i​n​g​ ​t​o​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​.
+						 */
+						h3_text: string
 					}
 				}
 			}
@@ -830,7 +1048,7 @@ type RootTranslation = {
 		}
 	}
 	/**
-	 * *​D​u​e​ ​t​o​ ​t​h​e​ ​l​a​y​o​u​t​,​ ​t​h​e​ ​l​a​n​d​s​c​a​p​e​ ​m​o​d​e​ ​i​s​ ​r​e​s​t​r​i​c​t​e​d​ ​i​n​ ​t​h​i​s​ ​w​e​b​s​i​t​e​.​<​b​r​>​<​b​r​>​*​R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​T​h​i​s​ ​p​r​o​j​e​c​t​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​p​r​o​j​e​c​t​.
+	 * *​ ​D​u​e​ ​t​o​ ​t​h​e​ ​l​a​y​o​u​t​,​ ​t​h​e​ ​l​a​n​d​s​c​a​p​e​ ​m​o​d​e​ ​i​s​ ​r​e​s​t​r​i​c​t​e​d​ ​i​n​ ​t​h​i​s​ ​w​e​b​s​i​t​e​.​<​b​r​>​<​b​r​>​*​ ​R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​T​h​i​s​ ​p​r​o​j​e​c​t​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​p​r​o​j​e​c​t​.
 	 */
 	footer_note: string
 	bottom_nav: {
@@ -1339,7 +1557,7 @@ export type TranslationFunctions = {
 					/**
 					 * Installation
 					 */
-					installation: () => LocalizedString
+					install: () => LocalizedString
 					/**
 					 * Launcher Screen
 					 */
@@ -1354,7 +1572,7 @@ export type TranslationFunctions = {
 					hge_setting: () => LocalizedString
 				}
 				/**
-				 * "MHF" has now two editions as follows:<br> ー Original Editon: You can play the game with normal quality and in a casual environment.<br> ー High Grade Edition: You will experience powerful hunting in high quality.<br>This article describes basic information on the game, such as its system requirements, how to install, and log in.
+				 * "Monster Hunter Frontier Online" has now two editions as follows:<br> ー Original Editon: You can play the game with normal quality and in a casual environment.<br> ー High Grade Edition: You will experience powerful hunting in high quality.<br>This article describes basic information on the game, such as its system requirements, how to install, and log in.
 				 */
 				article_memo: () => LocalizedString
 				section: {
@@ -1365,7 +1583,7 @@ export type TranslationFunctions = {
 						subtitle: () => LocalizedString
 						check_contents: {
 							/**
-							 * You can choose to play MHF in either "Original Edition" or "High Grade Edition" based on your computer environments.
+							 * You can choose to play the game in either "Original Edition" or "High Grade Edition" based on your computer environments.
 							 */
 							'0': () => LocalizedString
 							/**
@@ -1384,249 +1602,467 @@ export type TranslationFunctions = {
 								 */
 								hge: () => LocalizedString
 							}
-							column_name: {
-								/**
-								 * Minimum Requirements
-								 */
-								min: () => LocalizedString
-								/**
-								 * Recommended Requirements
-								 */
-								rec: () => LocalizedString
+							original: {
+								column_name: {
+									/**
+									 * Minimum Requirements
+									 */
+									min: () => LocalizedString
+									/**
+									 * Recommended Requirements
+									 */
+									rec: () => LocalizedString
+								}
+								row_data: {
+									resolution: {
+										/**
+										 * Resolution
+										 */
+										name: () => LocalizedString
+										/**
+										 * 800×600
+										 */
+										data_min: () => LocalizedString
+										/**
+										 * 1600×1200
+										 */
+										data_rec: () => LocalizedString
+									}
+									os: {
+										/**
+										 * Operating System
+										 */
+										name: () => LocalizedString
+										data_common: {
+											/**
+											 * Windows 7, 8, 8.1, 10 (32bit/64bit)
+											 */
+											'0': () => LocalizedString
+											/**
+											 * * 64-bit runs on WOW64 (Windows on Windows 64)
+											 */
+											'1': () => LocalizedString
+										}
+									}
+									cpu: {
+										/**
+										 * Processor
+										 */
+										name: () => LocalizedString
+										data_min: {
+											/**
+											 * Intel® Pentium® 4 2.0GHz or higher
+											 */
+											'0': () => LocalizedString
+											/**
+											 * AMD Athlon™64 3500+ or higher
+											 */
+											'1': () => LocalizedString
+										}
+										data_rec: {
+											/**
+											 * Intel® Core™2 (Duo, Extreme, Quad) Series
+											 */
+											'0': () => LocalizedString
+											/**
+											 * Intel® Core™ (i3, i5, i7) Series
+											 */
+											'1': () => LocalizedString
+											/**
+											 * Intel® Core™ (i5-2000, i7-2000) Series
+											 */
+											'2': () => LocalizedString
+											/**
+											 * AMD Athlon™ X2 Dual-Core 4600+ or higher
+											 */
+											'3': () => LocalizedString
+											/**
+											 * AMD Phenom™ Series
+											 */
+											'4': () => LocalizedString
+											/**
+											 * AMD AthlonII™ Series
+											 */
+											'5': () => LocalizedString
+											/**
+											 * AMD PhenomII™ Series
+											 */
+											'6': () => LocalizedString
+											/**
+											 * AMD A-Series APU (A8-3850, A6-3650)
+											 */
+											'7': () => LocalizedString
+										}
+										/**
+										 * CPU with SSE Support
+										 */
+										data_common: () => LocalizedString
+									}
+									memory: {
+										/**
+										 * Memory
+										 */
+										name: () => LocalizedString
+										/**
+										 * 512MB or more
+										 */
+										data_min: () => LocalizedString
+										/**
+										 * 1GB or more
+										 */
+										data_rec: () => LocalizedString
+									}
+									card: {
+										/**
+										 * Graphics Card
+										 */
+										name: () => LocalizedString
+										data_min: {
+											/**
+											 * NVIDIA® GeForce® FX 5700 Series or higher
+											 */
+											'0': () => LocalizedString
+											/**
+											 * NVIDIA® GeForce® 6600 Series or higher
+											 */
+											'1': () => LocalizedString
+											/**
+											 * NVIDIA® GeForce® 7600 Series or higher
+											 */
+											'2': () => LocalizedString
+											/**
+											 * ATi Radeon™ 9500 Series or higher
+											 */
+											'3': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 4350 Series or higher
+											 */
+											'4': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 5450 Series or higher
+											 */
+											'5': () => LocalizedString
+										}
+										data_rec: {
+											/**
+											 * NVIDIA® GeForce® 8600 Series or higher
+											 */
+											'0': () => LocalizedString
+											/**
+											 * NVIDIA® GeForce® 9600 Series or higher
+											 */
+											'1': () => LocalizedString
+											/**
+											 * NVIDIA® GeForce® 200 Series or higher
+											 */
+											'2': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 2600 Series or higher
+											 */
+											'3': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 3650 Series or higher
+											 */
+											'4': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 4650 Series or higher
+											 */
+											'5': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 5550 Series or higher
+											 */
+											'6': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 6450 Series or higher
+											 */
+											'7': () => LocalizedString
+										}
+									}
+									directx: {
+										/**
+										 * DirectX 9.0c or higher
+										 */
+										data_common: () => LocalizedString
+									}
+									sound: {
+										/**
+										 * Sound Card
+										 */
+										name: () => LocalizedString
+										data_common: {
+											/**
+											 * DirectSound® compatible 16-bit stereo 44.1kHz
+											 */
+											'0': () => LocalizedString
+											/**
+											 * Or sound cards that can play 48kHz WAVE format
+											 */
+											'1': () => LocalizedString
+										}
+									}
+									hdd: {
+										/**
+										 * Hard Drive
+										 */
+										name: () => LocalizedString
+										data_common: {
+											/**
+											 * 20GB or more
+											 */
+											'0': () => LocalizedString
+											/**
+											 * * The above available space includes space for DirectX® installation and OS swap file space.
+											 */
+											'1': () => LocalizedString
+											/**
+											 * * It also includes the work space used temporarily by the installer. This work space is required in the root drive (usually C: drive) and is freed up after installation.
+											 */
+											'2': () => LocalizedString
+										}
+									}
+									internet: {
+										/**
+										 * Internet<br>Connection
+										 */
+										name: () => LocalizedString
+										/**
+										 * Broadband environment with ADSL 1.0Mbps or faster
+										 */
+										data_common: () => LocalizedString
+									}
+								}
 							}
-							row_data: {
-								resolution: {
-									/**
-									 * Resolution
-									 */
-									name: () => LocalizedString
-									/**
-									 * 800×600
-									 */
-									data_min: () => LocalizedString
-									/**
-									 * 1600×1200
-									 */
-									data_rec: () => LocalizedString
-								}
-								os: {
-									/**
-									 * Operating System
-									 */
-									name: () => LocalizedString
-									data_common: {
+							hge: {
+								/**
+								 * High Grade Edition Requirements
+								 */
+								column_name: () => LocalizedString
+								row_data: {
+									resolution: {
 										/**
-										 * Windows 7, 8, 8.1, 10 (32bit/64bit)
+										 * Resolution
 										 */
-										'0': () => LocalizedString
+										name: () => LocalizedString
 										/**
-										 * *64-bit runs on WOW64 (Windows on Windows 64)
+										 * 1920×1080
 										 */
-										'1': () => LocalizedString
+										data_common: () => LocalizedString
 									}
-								}
-								cpu: {
-									/**
-									 * Processor
-									 */
-									name: () => LocalizedString
-									data_min: {
+									os: {
 										/**
-										 * Intel® Pentium® 4 2.0GHz or higher
+										 * Operating System
 										 */
-										'0': () => LocalizedString
-										/**
-										 * AMD Athlon™64 3500+ or higher
-										 */
-										'1': () => LocalizedString
+										name: () => LocalizedString
+										data_common: {
+											/**
+											 * Windows 7, 8, 8.1, 10 (32bit/64bit)
+											 */
+											'0': () => LocalizedString
+											/**
+											 * * 64-bit runs on WOW64 (Windows on Windows 64)
+											 */
+											'1': () => LocalizedString
+										}
 									}
-									data_rec: {
+									cpu: {
 										/**
-										 * Intel® Core™2 (Duo, Extreme, Quad) Series
+										 * Processor
 										 */
-										'0': () => LocalizedString
+										name: () => LocalizedString
 										/**
-										 * Intel® Core™ (i3, i5, i7) Series
+										 * Intel® Core™ i5 2.66GHz or higher
 										 */
-										'1': () => LocalizedString
-										/**
-										 * Intel® Core™ (i5-2000, i7-2000) Series
-										 */
-										'2': () => LocalizedString
-										/**
-										 * AMD Athlon™ X2 Dual-Core 4600+ or higher
-										 */
-										'3': () => LocalizedString
-										/**
-										 * AMD Phenom™ Series
-										 */
-										'4': () => LocalizedString
-										/**
-										 * AMD AthlonII™ Series
-										 */
-										'5': () => LocalizedString
-										/**
-										 * AMD PhenomII™ Series
-										 */
-										'6': () => LocalizedString
-										/**
-										 * AMD A-Series APU (A8-3850, A6-3650)
-										 */
-										'7': () => LocalizedString
+										data_common: () => LocalizedString
 									}
-									/**
-									 * CPU with SSE Support
-									 */
-									data_common: () => LocalizedString
-								}
-								memory: {
-									/**
-									 * Memory
-									 */
-									name: () => LocalizedString
-									/**
-									 * 512MB or higher
-									 */
-									data_min: () => LocalizedString
-									/**
-									 * 1GB or higher
-									 */
-									data_rec: () => LocalizedString
-								}
-								card: {
-									/**
-									 * Graphics Card
-									 */
-									name: () => LocalizedString
-									data_min: {
+									memory: {
 										/**
-										 * NVIDIA® GeForce® FX 5700 Series or higher
+										 * Memory
 										 */
-										'0': () => LocalizedString
+										name: () => LocalizedString
 										/**
-										 * NVIDIA® GeForce® 6600 Series or higher
+										 * 4GB or more
 										 */
-										'1': () => LocalizedString
-										/**
-										 * NVIDIA® GeForce® 7600 Series or higher
-										 */
-										'2': () => LocalizedString
-										/**
-										 * ATi Radeon™ 9500 Series or higher
-										 */
-										'3': () => LocalizedString
-										/**
-										 * AMD Radeon™ HD 4350 Series or higher
-										 */
-										'4': () => LocalizedString
-										/**
-										 * AMD Radeon™ HD 5450 Series or higher
-										 */
-										'5': () => LocalizedString
+										data_common: () => LocalizedString
 									}
-									data_rec: {
+									card: {
 										/**
-										 * NVIDIA® GeForce® 8600 Series or higher
+										 * Graphics Card
 										 */
-										'0': () => LocalizedString
-										/**
-										 * NVIDIA® GeForce® 9600 Series or higher
-										 */
-										'1': () => LocalizedString
-										/**
-										 * NVIDIA® GeForce® 200 Series or higher
-										 */
-										'2': () => LocalizedString
-										/**
-										 * AMD Radeon™ HD 2600 Series or higher
-										 */
-										'3': () => LocalizedString
-										/**
-										 * AMD Radeon™ HD 3650 Series or higher
-										 */
-										'4': () => LocalizedString
-										/**
-										 * AMD Radeon™ HD 4650 Series or higher
-										 */
-										'5': () => LocalizedString
-										/**
-										 * AMD Radeon™ HD 5550 Series or higher
-										 */
-										'6': () => LocalizedString
-										/**
-										 * AMD Radeon™ HD 6450 Series or higher
-										 */
-										'7': () => LocalizedString
+										name: () => LocalizedString
+										data_common: {
+											/**
+											 * NVIDIA® Geforce® GTX 660 (2GB) Series or higher
+											 */
+											'0': () => LocalizedString
+											/**
+											 * Or graphics cards of equivalent or higher performance
+											 */
+											'1': () => LocalizedString
+										}
 									}
-								}
-								directx: {
-									/**
-									 * DirectX 9.0c or higher
-									 */
-									data_common: () => LocalizedString
-								}
-								sound: {
-									/**
-									 * Sound Card
-									 */
-									name: () => LocalizedString
-									data_common: {
-										/**
-										 * DirectSound® compatible 16-bit stereo 44.1kHz
-										 */
-										'0': () => LocalizedString
-										/**
-										 * Or sound cards that can play 48kHz WAVE format
-										 */
-										'1': () => LocalizedString
+									directx: {
+										data_common: {
+											/**
+											 * DirectX 9.0c or higher
+											 */
+											'0': () => LocalizedString
+											/**
+											 * * Even if DirectX is already installed on your computer, you will need to install "<a href="https://www.microsoft.com/en-us/download/details.aspx?id=8109" target="_blank" rel="noopener noreferrer" style="text-decoration:underline;">DirectX End-User Runtimes</a>" separately.
+											 */
+											'1': () => LocalizedString
+										}
 									}
-								}
-								hdd: {
-									/**
-									 * Hard Drive
-									 */
-									name: () => LocalizedString
-									data_common: {
+									sound: {
 										/**
-										 * 20 GB or more required
+										 * Sound Card
 										 */
-										'0': () => LocalizedString
-										/**
-										 * *The above available space includes space for DirectX® installation and OS swap file space.
-										 */
-										'1': () => LocalizedString
-										/**
-										 * *It also includes the work space used temporarily by the installer. This work space is required in the root drive (usually C: drive) and is freed up after installation.
-										 */
-										'2': () => LocalizedString
+										name: () => LocalizedString
+										data_common: {
+											/**
+											 * DirectSound® compatible 16-bit stereo 44.1kHz
+											 */
+											'0': () => LocalizedString
+											/**
+											 * Or sound cards that can play 48kHz WAVE format
+											 */
+											'1': () => LocalizedString
+										}
 									}
-								}
-								internet: {
-									/**
-									 * Internet<br>Connection
-									 */
-									name: () => LocalizedString
-									/**
-									 * Broadband environment with ADSL 1.0Mbps or faster
-									 */
-									data_common: () => LocalizedString
+									hdd: {
+										/**
+										 * Hard Drive
+										 */
+										name: () => LocalizedString
+										/**
+										 * 20GB or more
+										 */
+										data_common: () => LocalizedString
+									}
+									internet: {
+										/**
+										 * Internet<br>Connection
+										 */
+										name: () => LocalizedString
+										/**
+										 * Broadband environment with ADSL 1.0Mbps or faster
+										 */
+										data_common: () => LocalizedString
+									}
 								}
 							}
 						}
 						spec_notes: {
 							/**
-							 * 1
+							 * The game does not have native 64-bit support. So even if you run the game on 64-bit version, system performance will not be improved compared to 32-bit version.
 							 */
 							'1': () => LocalizedString
 							/**
-							 * 2
+							 * Please use the latest driver provided by the manufacturer of your graphics card.
 							 */
 							'2': () => LocalizedString
-							/**
-							 * 3
-							 */
-							'3': () => LocalizedString
 						}
+					}
+					'2': {
+						/**
+						 * Installation
+						 */
+						subtitle: () => LocalizedString
+						contents: {
+							'1': {
+								/**
+								 * Click on "Game Download" button on the member site to download the setup installer "mhfSetup_ZZ_v○.exe."<br>* "v○" is the version of the installer (e.g., v1.2).
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_1
+								 */
+								img: () => LocalizedString
+							}
+							'2': {
+								/**
+								 * Run the installer and select your language.<br>The game title and game folder name to be installed depends on the language selected here.
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_2
+								 */
+								img: () => LocalizedString
+							}
+							'3': {
+								/**
+								 * Please be sure to read the important information displayed before installation.
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_3
+								 */
+								img: () => LocalizedString
+							}
+							'4': {
+								/**
+								 * The destination folder will be displayed. Basically, it would be no problem with the default folder. But you can also change the folder according to your environment.
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_4
+								 */
+								img: () => LocalizedString
+							}
+							'5': {
+								/**
+								 * Select the in-game language and button icons for gamepad to be installed.<br>Even if you do not use any gamepad, you need to select one of the icon types here.
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_5
+								 */
+								img: () => LocalizedString
+							}
+							'6': {
+								/**
+								 * Click on "Install" button to start the installation.
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_6
+								 */
+								img: () => LocalizedString
+							}
+							'7': {
+								/**
+								 * If you can see the following screen, installation is completed.
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_7
+								 */
+								img: () => LocalizedString
+							}
+						}
+					}
+					'3': {
+						/**
+						 * Launcher Screen
+						 */
+						subtitle: () => LocalizedString
+						intro_box: {
+							/**
+							 * The launcher screen is the screen that you can see after running "MHF." You can log in to the game, add or delete characters, update, configure settings, etc., from here.
+							 */
+							text: () => LocalizedString
+							/**
+							 * launcher_0
+							 */
+							img: () => LocalizedString
+						}
+						/**
+						 * Preferences on the Launcher
+						 */
+						h3_title: () => LocalizedString
+						/**
+						 * In preferences, you can configure settings on your computer side, such as the size of the game screen when it starts up and the sound, in addition to switching to High Grade Edition.
+						 */
+						h3_text: () => LocalizedString
 					}
 				}
 			}
@@ -1674,7 +2110,7 @@ export type TranslationFunctions = {
 		}
 	}
 	/**
-	 * *Due to the layout, the landscape mode is restricted in this website.<br><br>*Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.
+	 * * Due to the layout, the landscape mode is restricted in this website.<br><br>* Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.
 	 */
 	footer_note: () => LocalizedString
 	bottom_nav: {
