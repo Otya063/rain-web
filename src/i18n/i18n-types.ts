@@ -419,7 +419,7 @@ type RootTranslation = {
 					/**
 					 * S​i​g​n​ ​U​p​ ​w​i​t​h​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d
 					 */
-					signup_discord: string
+					discord: string
 				}
 				/**
 				 * I​n​ ​o​r​d​e​r​ ​t​o​ ​p​l​a​y​ ​"​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​O​n​l​i​n​e​,​"​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​s​i​g​n​ ​u​p​ ​f​o​r​ ​t​h​e​ ​R​a​i​n​ ​S​e​r​v​e​r​ ​f​i​r​s​t​.​ ​Y​o​u​ ​c​a​n​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​b​y​ ​e​n​t​e​r​i​n​g​ ​t​h​e​ ​"​U​s​e​r​n​a​m​e​"​ ​a​n​d​ ​"​P​a​s​s​w​o​r​d​,​"​ ​w​h​i​c​h​ ​y​o​u​ ​s​e​t​ ​o​n​ ​t​h​e​ ​r​e​g​i​s​t​r​a​t​i​o​n​ ​s​c​r​e​e​n​,​ ​i​n​t​o​ ​t​h​e​ ​g​a​m​e​ ​l​a​u​n​c​h​e​r​ ​a​n​d​ ​l​o​g​g​i​n​g​ ​i​n​.​ ​<​b​r​>​T​h​i​s​ ​s​e​c​t​i​o​n​ ​d​e​s​c​r​i​b​e​s​ ​s​i​g​n​-​u​p​ ​p​r​o​c​e​d​u​r​e​ ​w​i​t​h​ ​o​f​f​i​c​i​a​l​ ​d​i​s​c​o​r​d​.
@@ -431,7 +431,7 @@ type RootTranslation = {
 						 * S​i​g​n​ ​U​p​ ​w​i​t​h​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d
 						 */
 						subtitle: string
-						contents: {
+						center_box: {
 							'1': {
 								/**
 								 * O​n​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​i​n​ ​t​h​e​ ​"​b​o​t​-​c​o​m​m​a​n​d​s​"​ ​c​h​a​n​n​e​l​,​ ​p​r​e​s​s​ ​"​R​e​g​i​s​t​e​r​"​ ​b​u​t​t​o​n​.
@@ -905,10 +905,10 @@ type RootTranslation = {
 						 * I​n​s​t​a​l​l​a​t​i​o​n
 						 */
 						subtitle: string
-						contents: {
+						center_box: {
 							'1': {
 								/**
-								 * C​l​i​c​k​ ​o​n​ ​"​G​a​m​e​ ​D​o​w​n​l​o​a​d​"​ ​b​u​t​t​o​n​ ​o​n​ ​t​h​e​ ​m​e​m​b​e​r​ ​s​i​t​e​ ​t​o​ ​d​o​w​n​l​o​a​d​ ​t​h​e​ ​s​e​t​u​p​ ​i​n​s​t​a​l​l​e​r​ ​"​m​h​f​S​e​t​u​p​_​Z​Z​_​v​○​.​e​x​e​.​"​<​b​r​>​*​ ​"​v​○​"​ ​i​s​ ​t​h​e​ ​v​e​r​s​i​o​n​ ​o​f​ ​t​h​e​ ​i​n​s​t​a​l​l​e​r​ ​(​e​.​g​.​,​ ​v​1​.​2​)​.
+								 * C​l​i​c​k​ ​"​G​a​m​e​ ​D​o​w​n​l​o​a​d​"​ ​b​u​t​t​o​n​ ​o​n​ ​t​h​e​ ​m​e​m​b​e​r​ ​s​i​t​e​ ​t​o​ ​d​o​w​n​l​o​a​d​ ​t​h​e​ ​s​e​t​u​p​ ​i​n​s​t​a​l​l​e​r​ ​"​m​h​f​S​e​t​u​p​_​Z​Z​_​v​○​.​e​x​e​.​"​<​b​r​>​<​s​p​a​n​ ​s​t​y​l​e​=​"​c​o​l​o​r​:​ ​r​e​d​;​"​>​*​ ​"​v​○​"​ ​i​s​ ​t​h​e​ ​v​e​r​s​i​o​n​ ​o​f​ ​t​h​e​ ​i​n​s​t​a​l​l​e​r​ ​(​e​.​g​.​,​ ​v​1​.​2​)​.​<​/​s​p​a​n​>
 								 */
 								text: string
 								/**
@@ -958,7 +958,7 @@ type RootTranslation = {
 							}
 							'6': {
 								/**
-								 * C​l​i​c​k​ ​o​n​ ​"​I​n​s​t​a​l​l​"​ ​b​u​t​t​o​n​ ​t​o​ ​s​t​a​r​t​ ​t​h​e​ ​i​n​s​t​a​l​l​a​t​i​o​n​.
+								 * C​l​i​c​k​ ​"​I​n​s​t​a​l​l​"​ ​b​u​t​t​o​n​ ​t​o​ ​s​t​a​r​t​ ​t​h​e​ ​i​n​s​t​a​l​l​a​t​i​o​n​.
 								 */
 								text: string
 								/**
@@ -985,7 +985,7 @@ type RootTranslation = {
 						subtitle: string
 						intro_box: {
 							/**
-							 * T​h​e​ ​l​a​u​n​c​h​e​r​ ​s​c​r​e​e​n​ ​i​s​ ​t​h​e​ ​s​c​r​e​e​n​ ​t​h​a​t​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​a​f​t​e​r​ ​r​u​n​n​i​n​g​ ​"​M​H​F​.​"​ ​Y​o​u​ ​c​a​n​ ​l​o​g​ ​i​n​ ​t​o​ ​t​h​e​ ​g​a​m​e​,​ ​a​d​d​ ​o​r​ ​d​e​l​e​t​e​ ​c​h​a​r​a​c​t​e​r​s​,​ ​u​p​d​a​t​e​,​ ​c​o​n​f​i​g​u​r​e​ ​s​e​t​t​i​n​g​s​,​ ​e​t​c​.​,​ ​f​r​o​m​ ​h​e​r​e​.
+							 * T​h​e​ ​l​a​u​n​c​h​e​r​ ​s​c​r​e​e​n​ ​i​s​ ​t​h​e​ ​s​c​r​e​e​n​ ​t​h​a​t​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​a​f​t​e​r​ ​r​u​n​n​i​n​g​ ​t​h​e​ ​g​a​m​e​.​ ​Y​o​u​ ​c​a​n​ ​l​o​g​ ​i​n​ ​t​o​ ​t​h​e​ ​g​a​m​e​,​ ​a​d​d​ ​o​r​ ​d​e​l​e​t​e​ ​c​h​a​r​a​c​t​e​r​s​,​ ​u​p​d​a​t​e​,​ ​c​o​n​f​i​g​u​r​e​ ​s​e​t​t​i​n​g​s​,​ ​e​t​c​.​,​ ​f​r​o​m​ ​h​e​r​e​.
 							 */
 							text: string
 							/**
@@ -1001,6 +1001,136 @@ type RootTranslation = {
 						 * I​n​ ​p​r​e​f​e​r​e​n​c​e​s​,​ ​y​o​u​ ​c​a​n​ ​c​o​n​f​i​g​u​r​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​s​i​d​e​,​ ​s​u​c​h​ ​a​s​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​t​h​e​ ​g​a​m​e​ ​s​c​r​e​e​n​ ​w​h​e​n​ ​i​t​ ​s​t​a​r​t​s​ ​u​p​ ​a​n​d​ ​t​h​e​ ​s​o​u​n​d​,​ ​i​n​ ​a​d​d​i​t​i​o​n​ ​t​o​ ​s​w​i​t​c​h​i​n​g​ ​t​o​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​.
 						 */
 						h3_text: string
+						center_box: {
+							'0': {
+								/**
+								 * [​G​r​a​p​h​i​c​s​]​ ​T​a​b
+								 */
+								text: string
+								/**
+								 * l​a​u​n​c​h​e​r​_​1
+								 */
+								img: string
+								img_desc: {
+									'0': {
+										/**
+										 * ①​G​r​a​p​h​i​c​s​ ​S​l​i​d​e​r
+										 */
+										item_title: string
+										/**
+										 * O​n​e​ ​o​f​ ​t​h​r​e​e​ ​p​r​e​s​e​t​s​ ​(​"​H​i​g​h​,​"​ ​"​M​o​d​e​r​a​t​e​,​"​ ​a​n​d​ ​"​L​o​w​"​)​ ​c​a​n​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​f​o​r​ ​t​h​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​[​D​i​s​p​l​a​y​]​ ​a​n​d​ ​[​S​o​u​n​d​]​ ​t​a​b​s​.​<​b​r​>​W​h​e​n​ ​"​A​d​v​a​n​c​e​d​"​ ​b​u​t​t​o​n​ ​i​s​ ​t​u​r​n​e​d​ ​o​n​,​ ​t​h​i​s​ ​s​l​i​d​e​r​ ​i​s​ ​n​o​t​ ​s​e​l​e​c​t​a​b​l​e​ ​a​n​d​ ​t​h​e​ ​p​r​e​s​e​t​ ​l​a​b​e​l​ ​i​s​ ​d​i​s​p​l​a​y​e​d​ ​a​s​ ​"​C​u​s​t​o​m​.​"
+										 */
+										item_text: string
+									}
+									'1': {
+										/**
+										 * ②​A​d​v​a​n​c​e​d​ ​B​u​t​t​o​n
+										 */
+										item_title: string
+										/**
+										 * W​h​e​n​ ​t​u​r​n​e​d​ ​o​n​,​ ​t​h​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​b​o​t​h​ ​[​D​i​s​p​l​a​y​]​ ​a​n​d​ ​[​S​o​u​n​d​]​ ​t​a​b​s​ ​c​a​n​ ​b​e​ ​c​h​a​n​g​e​d​ ​f​r​e​e​l​y​,​ ​a​n​d​ ​t​h​e​ ​p​r​e​s​e​t​ ​l​a​b​e​l​ ​i​n​ ​t​h​e​ ​g​r​a​p​h​i​c​s​ ​s​l​i​d​e​r​ ​w​i​l​l​ ​b​e​ ​d​i​s​p​l​a​y​e​d​ ​a​s​ ​"​C​u​s​t​o​m​.​"
+										 */
+										item_text: string
+									}
+									'2': {
+										/**
+										 * ③​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​ ​C​h​e​c​k​ ​B​o​x
+										 */
+										item_title: string
+										/**
+										 * I​f​ ​c​h​e​c​k​e​d​,​ ​"​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​i​s​ ​e​n​a​b​l​e​d​.
+										 */
+										item_text: string
+									}
+								}
+							}
+							'1': {
+								/**
+								 * [​D​i​s​p​l​a​y​]​ ​T​a​b
+								 */
+								text: string
+								/**
+								 * l​a​u​n​c​h​e​r​_​2
+								 */
+								img: string
+								img_desc: {
+									'0': {
+										/**
+										 * ①​D​i​s​p​l​a​y​ ​M​o​d​e​ ​a​n​d​ ​R​e​s​o​l​u​t​i​o​n​ ​S​e​t​t​i​n​g​s
+										 */
+										item_title: string
+										/**
+										 * I​n​ ​"​D​i​s​p​l​a​y​ ​M​o​d​e​"​ ​s​e​c​t​i​o​n​,​ ​y​o​u​ ​c​a​n​ ​s​e​l​e​c​t​ ​e​i​t​h​e​r​ ​"​W​i​n​d​o​w​e​d​ ​M​o​d​e​"​ ​o​r​ ​"​F​u​l​l​s​c​r​e​e​n​ ​M​o​d​e​"​ ​a​s​ ​t​h​e​ ​d​i​s​p​l​a​y​ ​m​o​d​e​s​ ​w​h​e​n​ ​t​h​e​ ​g​a​m​e​ ​s​t​a​r​t​s​,​ ​a​n​d​ ​i​n​ ​"​R​e​s​o​l​u​t​i​o​n​"​ ​s​e​c​t​i​o​n​,​ ​y​o​u​ ​c​a​n​ ​s​e​l​e​c​t​ ​t​h​e​ ​r​e​s​o​l​u​t​i​o​n​ ​f​o​r​ ​e​a​c​h​ ​s​c​r​e​e​n​ ​m​o​d​e​.
+										 */
+										item_text: string
+									}
+									'1': {
+										/**
+										 * ②​T​e​x​t​u​r​e​ ​C​o​m​p​r​e​s​s​i​o​n
+										 */
+										item_title: string
+										/**
+										 * E​n​a​b​l​e​ ​o​r​ ​d​i​s​a​b​l​e​ ​D​X​T​C​ ​(​T​e​x​t​u​r​e​ ​C​o​m​p​r​e​s​s​i​o​n​ ​A​l​g​o​r​i​t​h​m​s​)​.​<​u​l​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​E​n​a​b​l​e​:​<​/​s​p​a​n​>​<​s​p​a​n​>​I​m​a​g​e​ ​p​r​o​c​e​s​s​i​n​g​ ​i​s​ ​f​a​s​t​e​r​,​ ​b​u​t​ ​i​m​a​g​e​s​ ​a​r​e​ ​b​l​o​c​k​y​.​<​/​s​p​a​n​>​<​/​l​i​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​D​i​s​a​b​l​e​:​<​/​s​p​a​n​>​<​s​p​a​n​>​I​m​a​g​e​ ​p​r​o​c​e​s​s​i​n​g​ ​i​s​ ​s​l​o​w​e​r​,​ ​b​u​t​ ​i​m​a​g​e​s​ ​a​r​e​ ​m​o​r​e​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.​<​/​s​p​a​n​>
+										 */
+										item_text: string
+									}
+								}
+							}
+							'2': {
+								/**
+								 * [​S​o​u​n​d​]​ ​T​a​b
+								 */
+								text: string
+								/**
+								 * l​a​u​n​c​h​e​r​_​3
+								 */
+								img: string
+								img_desc: {
+									'0': {
+										/**
+										 * ①​S​o​u​n​d​ ​S​e​t​t​i​n​g​s
+										 */
+										item_title: string
+										/**
+										 * E​a​c​h​ ​v​o​l​u​m​e​ ​c​a​n​ ​b​e​ ​a​d​j​u​s​t​e​d​ ​w​i​t​h​ ​t​h​e​ ​s​l​i​d​e​r​ ​f​o​r​ ​e​a​c​h​ ​o​f​ ​t​h​e​ ​t​h​r​e​e​ ​t​y​p​e​s​ ​o​f​ ​t​h​e​ ​g​a​m​e​ ​w​i​n​d​o​w​s​ ​(​"​G​e​n​e​r​a​l​,​"​ ​"​U​n​f​o​c​u​s​e​d​,​"​ ​a​n​d​ ​"​M​i​n​i​m​i​z​e​d​"​)​.
+										 */
+										item_text: string
+									}
+									'1': {
+										/**
+										 * ②​S​a​m​p​l​e​ ​R​a​t​e
+										 */
+										item_title: string
+										/**
+										 * Y​o​u​ ​c​a​n​ ​s​e​t​ ​t​h​e​ ​s​a​m​p​l​i​n​g​ ​r​a​t​e​ ​a​n​d​ ​b​u​f​f​e​r​ ​s​i​z​e​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​y​o​u​r​ ​s​o​u​n​d​ ​c​a​r​d​.​<​u​l​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​S​a​m​p​l​e​ ​R​a​t​e​:​<​/​s​p​a​n​>​<​s​p​a​n​>​I​t​ ​r​e​f​e​r​s​ ​t​o​ ​t​h​e​ ​n​u​m​b​e​r​ ​o​f​ ​p​r​o​c​e​s​s​e​s​ ​p​e​r​ ​u​n​i​t​ ​o​f​ ​t​i​m​e​ ​t​o​ ​c​o​n​v​e​r​t​ ​a​n​ ​a​n​a​l​o​g​ ​s​i​g​n​a​l​,​ ​s​u​c​h​ ​a​s​ ​a​u​d​i​o​,​ ​i​n​t​o​ ​a​ ​d​i​g​i​t​a​l​ ​s​i​g​n​a​l​.​ ​I​n​ ​g​e​n​e​r​a​l​,​ ​a​s​ ​t​h​i​s​ ​v​a​l​u​e​ ​i​n​c​r​e​a​s​e​s​,​ ​t​h​e​ ​s​o​u​n​d​ ​q​u​a​l​i​t​y​ ​w​i​l​l​ ​b​e​ ​i​m​p​r​o​v​e​d​.​ ​B​u​t​ ​t​h​e​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​i​n​v​o​l​v​e​d​ ​w​i​l​l​ ​a​l​s​o​ ​i​n​c​r​e​a​s​e​,​ ​s​o​ ​i​t​ ​w​i​l​l​ ​l​e​a​d​ ​t​o​ ​a​f​f​e​c​t​i​n​g​ ​s​t​o​r​a​g​e​ ​a​n​d​ ​b​a​n​d​w​i​d​t​h​.​ ​O​n​ ​t​h​e​ ​o​t​h​e​r​ ​h​a​n​d​,​ ​e​x​t​r​e​m​e​l​y​ ​l​o​w​ ​v​a​l​u​e​s​ ​c​a​n​ ​l​e​a​d​ ​t​o​ ​l​o​w​-​q​u​a​l​i​t​y​ ​a​n​d​ ​u​n​n​a​t​u​r​a​l​ ​s​o​u​n​d​.​<​/​s​p​a​n​>​<​/​l​i​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​B​u​f​f​e​r​ ​S​i​z​e​:​<​/​s​p​a​n​>​<​s​p​a​n​>​I​t​ ​r​e​f​e​r​s​ ​t​o​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​t​h​e​ ​a​r​e​a​ ​i​n​ ​w​h​i​c​h​ ​a​ ​c​e​r​t​a​i​n​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​i​s​ ​t​e​m​p​o​r​a​r​i​l​y​ ​l​o​a​d​e​d​ ​i​n​ ​a​d​v​a​n​c​e​.​ ​I​f​ ​t​h​i​s​ ​v​a​l​u​e​ ​i​n​c​r​e​a​s​e​,​ ​t​h​e​ ​l​a​t​e​n​c​y​ ​f​o​r​ ​a​u​d​i​o​ ​p​l​a​y​b​a​c​k​ ​w​i​l​l​ ​b​e​ ​l​o​n​g​e​r​,​ ​b​u​t​ ​a​u​d​i​o​ ​d​r​o​p​o​u​t​s​ ​a​r​e​ ​l​e​s​s​ ​l​i​k​e​l​y​ ​t​o​ ​o​c​c​u​r​.​ ​O​n​ ​t​h​e​ ​o​t​h​e​r​ ​h​a​n​d​,​ ​i​f​ ​t​h​e​ ​v​a​l​u​e​ ​i​s​ ​d​e​c​r​e​a​s​e​,​ ​t​h​e​ ​l​a​t​e​n​c​y​ ​f​o​r​ ​a​u​d​i​o​ ​p​l​a​y​b​a​c​k​ ​w​i​l​l​ ​b​e​ ​s​h​o​r​t​e​r​,​ ​b​u​t​ ​a​u​d​i​o​ ​d​r​o​p​o​u​t​s​ ​a​r​e​ ​m​o​r​e​ ​l​i​k​e​l​y​ ​t​o​ ​o​c​c​u​r​.​<​/​s​p​a​n​>​<​/​l​i​>​<​/​u​l​>
+										 */
+										item_text: string
+									}
+								}
+							}
+							'3': {
+								/**
+								 * [​P​r​o​x​y​]​ ​T​a​b
+								 */
+								text: string
+								/**
+								 * l​a​u​n​c​h​e​r​_​4
+								 */
+								img: string
+								img_desc: {
+									'0': {
+										/**
+										 * ①​P​r​o​x​y​ ​S​e​t​t​i​n​g​s
+										 */
+										item_title: string
+										/**
+										 * I​f​ ​"​U​s​e​ ​D​o​w​n​l​o​a​d​ ​P​r​o​x​y​"​ ​i​s​ ​c​h​e​c​k​e​d​,​ ​y​o​u​ ​c​a​n​ ​c​o​n​n​e​c​t​ ​t​o​ ​t​h​e​ ​g​a​m​e​ ​v​i​a​ ​a​ ​p​r​o​x​y​ ​s​e​r​v​e​r​.​<​b​r​>​<​s​p​a​n​ ​s​t​y​l​e​=​"​t​e​x​t​-​d​e​c​o​r​a​t​i​o​n​:​ ​u​n​d​e​r​l​i​n​e​;​ ​c​o​l​o​r​:​ ​r​e​d​;​"​>​*​ ​C​u​r​r​e​n​t​l​y​ ​t​h​i​s​ ​i​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​i​n​ ​J​a​p​a​n​e​s​e​ ​v​e​r​s​i​o​n​,​ ​o​n​l​y​ ​a​v​a​i​l​a​b​l​e​ ​i​n​ ​E​n​g​l​i​s​h​ ​a​n​d​ ​F​r​e​n​c​h​ ​v​e​r​s​i​o​n​s​.​<​/​s​p​a​n​>
+										 */
+										item_text: string
+									}
+								}
+							}
+						}
 					}
 				}
 			}
@@ -1481,7 +1611,7 @@ export type TranslationFunctions = {
 					/**
 					 * Sign Up with Official Discord
 					 */
-					signup_discord: () => LocalizedString
+					discord: () => LocalizedString
 				}
 				/**
 				 * In order to play "Monster Hunter Frontier Online," you need to sign up for the Rain Server first. You can play the game by entering the "Username" and "Password," which you set on the registration screen, into the game launcher and logging in. <br>This section describes sign-up procedure with official discord.
@@ -1493,7 +1623,7 @@ export type TranslationFunctions = {
 						 * Sign Up with Official Discord
 						 */
 						subtitle: () => LocalizedString
-						contents: {
+						center_box: {
 							'1': {
 								/**
 								 * On the interface in the "bot-commands" channel, press "Register" button.
@@ -1967,10 +2097,10 @@ export type TranslationFunctions = {
 						 * Installation
 						 */
 						subtitle: () => LocalizedString
-						contents: {
+						center_box: {
 							'1': {
 								/**
-								 * Click on "Game Download" button on the member site to download the setup installer "mhfSetup_ZZ_v○.exe."<br>* "v○" is the version of the installer (e.g., v1.2).
+								 * Click "Game Download" button on the member site to download the setup installer "mhfSetup_ZZ_v○.exe."<br><span style="color: red;">* "v○" is the version of the installer (e.g., v1.2).</span>
 								 */
 								text: () => LocalizedString
 								/**
@@ -2020,7 +2150,7 @@ export type TranslationFunctions = {
 							}
 							'6': {
 								/**
-								 * Click on "Install" button to start the installation.
+								 * Click "Install" button to start the installation.
 								 */
 								text: () => LocalizedString
 								/**
@@ -2047,7 +2177,7 @@ export type TranslationFunctions = {
 						subtitle: () => LocalizedString
 						intro_box: {
 							/**
-							 * The launcher screen is the screen that you can see after running "MHF." You can log in to the game, add or delete characters, update, configure settings, etc., from here.
+							 * The launcher screen is the screen that you can see after running the game. You can log in to the game, add or delete characters, update, configure settings, etc., from here.
 							 */
 							text: () => LocalizedString
 							/**
@@ -2063,6 +2193,136 @@ export type TranslationFunctions = {
 						 * In preferences, you can configure settings on your computer side, such as the size of the game screen when it starts up and the sound, in addition to switching to High Grade Edition.
 						 */
 						h3_text: () => LocalizedString
+						center_box: {
+							'0': {
+								/**
+								 * [Graphics] Tab
+								 */
+								text: () => LocalizedString
+								/**
+								 * launcher_1
+								 */
+								img: () => LocalizedString
+								img_desc: {
+									'0': {
+										/**
+										 * ①Graphics Slider
+										 */
+										item_title: () => LocalizedString
+										/**
+										 * One of three presets ("High," "Moderate," and "Low") can be selected for the settings on [Display] and [Sound] tabs.<br>When "Advanced" button is turned on, this slider is not selectable and the preset label is displayed as "Custom."
+										 */
+										item_text: () => LocalizedString
+									}
+									'1': {
+										/**
+										 * ②Advanced Button
+										 */
+										item_title: () => LocalizedString
+										/**
+										 * When turned on, the settings on both [Display] and [Sound] tabs can be changed freely, and the preset label in the graphics slider will be displayed as "Custom."
+										 */
+										item_text: () => LocalizedString
+									}
+									'2': {
+										/**
+										 * ③High Grade Edition Check Box
+										 */
+										item_title: () => LocalizedString
+										/**
+										 * If checked, "High Grade Edition" is enabled.
+										 */
+										item_text: () => LocalizedString
+									}
+								}
+							}
+							'1': {
+								/**
+								 * [Display] Tab
+								 */
+								text: () => LocalizedString
+								/**
+								 * launcher_2
+								 */
+								img: () => LocalizedString
+								img_desc: {
+									'0': {
+										/**
+										 * ①Display Mode and Resolution Settings
+										 */
+										item_title: () => LocalizedString
+										/**
+										 * In "Display Mode" section, you can select either "Windowed Mode" or "Fullscreen Mode" as the display modes when the game starts, and in "Resolution" section, you can select the resolution for each screen mode.
+										 */
+										item_text: () => LocalizedString
+									}
+									'1': {
+										/**
+										 * ②Texture Compression
+										 */
+										item_title: () => LocalizedString
+										/**
+										 * Enable or disable DXTC (Texture Compression Algorithms).<ul><li class="img_desc_section_text_list"><span>Enable:</span><span>Image processing is faster, but images are blocky.</span></li><li class="img_desc_section_text_list"><span>Disable:</span><span>Image processing is slower, but images are more high quality.</span>
+										 */
+										item_text: () => LocalizedString
+									}
+								}
+							}
+							'2': {
+								/**
+								 * [Sound] Tab
+								 */
+								text: () => LocalizedString
+								/**
+								 * launcher_3
+								 */
+								img: () => LocalizedString
+								img_desc: {
+									'0': {
+										/**
+										 * ①Sound Settings
+										 */
+										item_title: () => LocalizedString
+										/**
+										 * Each volume can be adjusted with the slider for each of the three types of the game windows ("General," "Unfocused," and "Minimized").
+										 */
+										item_text: () => LocalizedString
+									}
+									'1': {
+										/**
+										 * ②Sample Rate
+										 */
+										item_title: () => LocalizedString
+										/**
+										 * You can set the sampling rate and buffer size according to your sound card.<ul><li class="img_desc_section_text_list"><span>Sample Rate:</span><span>It refers to the number of processes per unit of time to convert an analog signal, such as audio, into a digital signal. In general, as this value increases, the sound quality will be improved. But the amount of data involved will also increase, so it will lead to affecting storage and bandwidth. On the other hand, extremely low values can lead to low-quality and unnatural sound.</span></li><li class="img_desc_section_text_list"><span>Buffer Size:</span><span>It refers to the size of the area in which a certain amount of data is temporarily loaded in advance. If this value increase, the latency for audio playback will be longer, but audio dropouts are less likely to occur. On the other hand, if the value is decrease, the latency for audio playback will be shorter, but audio dropouts are more likely to occur.</span></li></ul>
+										 */
+										item_text: () => LocalizedString
+									}
+								}
+							}
+							'3': {
+								/**
+								 * [Proxy] Tab
+								 */
+								text: () => LocalizedString
+								/**
+								 * launcher_4
+								 */
+								img: () => LocalizedString
+								img_desc: {
+									'0': {
+										/**
+										 * ①Proxy Settings
+										 */
+										item_title: () => LocalizedString
+										/**
+										 * If "Use Download Proxy" is checked, you can connect to the game via a proxy server.<br><span style="text-decoration: underline; color: red;">* Currently this is not available in Japanese version, only available in English and French versions.</span>
+										 */
+										item_text: () => LocalizedString
+									}
+								}
+							}
+						}
 					}
 				}
 			}

@@ -89,7 +89,7 @@
     <h2>{install.subtitle()}</h2>
 
     <ul>
-        {#each Object.entries(install.contents) as [number, { text, img }]}
+        {#each Object.entries(install.center_box) as [number, { text, img }]}
             <li class="center_box">
                 <p class="center_box_text">
                     （{number}）{@html text()}
@@ -118,79 +118,20 @@
     </div>
 
     <ul>
-        <li class="center_box_no_number">
-            <p class="center_box_no_number_text">【設定】タブ</p>
-            <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/launcher_1.png" alt="launcher_1" /></p>
-            <ul class="img_desc_section">
-                <li class="img_desc_section_item">
-                    ①設定スライダ
-                    <p class="img_desc_section_text">
-                        表示タブおよび音声タブの設定に対してプリセット3種（「高」「中」「低」）から一つ選択できます。<br
-                        />詳細設定ボタンをオンにした際は選択不可となり、プリセット表記は「カスタム」と表示されます。
-                    </p>
-                </li>
-                <li class="img_desc_section_item">
-                    ②詳細設定ボタン
-                    <p class="img_desc_section_text">
-                        オンにすると、表示タブおよび音声タブにて設定を自由に変更することができます。<br />カスタム設定有効時には、設定スライダ内のプリセット表記が「カスタム」となります。
-                    </p>
-                </li>
-                <li class="img_desc_section_item">
-                    ③HGEチェックボックス
-                    <p class="img_desc_section_text">チェックを入れると、「High Grade Edition」が有効になります。</p>
-                </li>
-            </ul>
-        </li>
-        <li class="center_box_no_number">
-            <p class="center_box_no_number_text">【表示】タブ</p>
-            <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/launcher_2.png" alt="launcher_2" /></p>
-            <ul class="img_desc_section">
-                <li class="img_desc_section_item">
-                    ①画面サイズ設定
-                    <p class="img_desc_section_text">
-                        「起動モード」にてゲーム開始時の画面モードを、「ウィンドウモード」もしくは「フルスクリーンモード」から選択し、「画面サイズ」にて各画面モードでの画面サイズの指定ができます。
-                    </p>
-                </li>
-                <li class="img_desc_section_item">
-                    ②圧縮テクスチャ
-                    <p class="img_desc_section_text">
-                        DXTC（画像圧縮技術）の有効もしくは無効を選択します。<br />「有効」では、画像処理は速くなる一方、画像細部が粗くなります。<br
-                        />「無効」では、画像処理は遅くなる一方、画像細部が高精細になります。
-                    </p>
-                </li>
-            </ul>
-        </li>
-        <li class="center_box_no_number">
-            <p class="center_box_no_number_text">【音声】タブ</p>
-            <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/launcher_3.png" alt="launcher_3" /></p>
-            <ul class="img_desc_section">
-                <li class="img_desc_section_item">
-                    ①音量設定
-                    <p class="img_desc_section_text">3種のゲームウィンドウ（「通常（アクティブ時）」「非アクティブ時」「最小化時」）それぞれに応じて、各音量をスライダにより調節することができます。</p>
-                </li>
-                <li class="img_desc_section_item">
-                    ②サンプリングレート
-                    <p class="img_desc_section_text">
-                        ご使用のサウンドカードに合わせてサンプリングレートおよびバッファサイズを設定できます。<br
-                        />サンプリングレートとは、音声等のアナログ信号をデジタル信号へ変換するために必要となる標本化を実行する単位時間あたりの処理回数を表す値の事です。一般的に、この値が高くなるにつれ、音質の向上が見込まれるものの、その分データ量も増加するため、ストレージや帯域幅に影響を与えます。一方、値が極度に低くなれば、音質の低下や不自然な音を引き起こす可能性があります。<br
-                        />バッファサイズとは、一時的に先読みさせておいたデータを保存する領域の大きさの事を指します。値が大きいと、音声再生までの待ち時間が長くなる一方、音飛びが発生しづらくなります。値が小さいと、音声再生までの待ち時間が短くなる一方、音飛びが発生しやすくなります。
-                    </p>
-                </li>
-            </ul>
-        </li>
-        <li class="center_box_no_number">
-            <p class="center_box_no_number_text">【接続】タブ</p>
-            <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/launcher_4.png" alt="launcher_4" /></p>
-            <ul class="img_desc_section">
-                <li class="img_desc_section_item">
-                    ①プロキシ設定
-                    <p class="img_desc_section_text">
-                        「ダウンロードにプロキシを使用」にチェックを入れると、プロキシサーバーを経由してゲームへ接続することができます。<br
-                        />※現在、日本語版では利用不可、英語版およびフランス語版でのみ利用可能です。
-                    </p>
-                </li>
-            </ul>
-        </li>
+        {#each Object.values(launcher.center_box) as { text, img, img_desc }}
+            <li class="center_box_no_number">
+                <p class="center_box_no_number_text">{text()}</p>
+                <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/{img()}.png" alt={img()} /></p>
+                <ul class="img_desc_section">
+                    {#each Object.values(img_desc) as { item_title, item_text }}
+                        <li class="img_desc_section_item">
+                            {item_title()}
+                            <p class="img_desc_section_text">{@html item_text()}</p>
+                        </li>
+                    {/each}
+                </ul>
+            </li>
+        {/each}
     </ul>
 </section>
 

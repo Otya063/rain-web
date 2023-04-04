@@ -726,6 +726,30 @@
                 padding-left: 1em;
                 color: black;
 
+                // 表内テキストリスト化
+                .img_desc_section_text_list {
+                    display: flex;
+                    flex-wrap: nowrap;
+                    justify-content: space-around;
+                    padding-top: 2%;
+
+                    // リストタイトル
+                    span:nth-child(1) {
+                        width: 150px;
+                        white-space: nowrap;
+                        text-align: center;
+                    }
+
+                    // リストテキスト
+                    span:nth-child(2) {
+                        width: 450px;
+
+                        &:lang(en) {
+                            width: 500px;
+                        }
+                    }
+                }
+
                 // 表内テキスト下部仕切り
                 .img_desc_section_text_part {
                     position: relative;

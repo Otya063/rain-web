@@ -180,14 +180,14 @@ const en: BaseTranslation = {
             discord: {
                 title: 'Sign-up Procedure (Discord)',
                 outline_contents: {
-                    signup_discord: 'Sign Up with Official Discord',
+                    discord: 'Sign Up with Official Discord',
                 },
                 article_memo:
                     'In order to play "Monster Hunter Frontier Online," you need to sign up for the Rain Server first. You can play the game by entering the "Username" and "Password," which you set on the registration screen, into the game launcher and logging in. <br>This section describes sign-up procedure with official discord.',
                 section: {
                     1: {
                         subtitle: 'Sign Up with Official Discord',
-                        contents: {
+                        center_box: {
                             1: {
                                 text: 'On the interface in the "bot-commands" channel, press "Register" button.',
                                 img: ['discord_1'],
@@ -359,9 +359,9 @@ const en: BaseTranslation = {
                     },
                     2: {
                         subtitle: 'Installation',
-                        contents: {
+                        center_box: {
                             1: {
-                                text: 'Click on "Game Download" button on the member site to download the setup installer "mhfSetup_ZZ_v○.exe."<br>* "v○" is the version of the installer (e.g., v1.2).',
+                                text: 'Click "Game Download" button on the member site to download the setup installer "mhfSetup_ZZ_v○.exe."<br><span style="color: red;">* "v○" is the version of the installer (e.g., v1.2).</span>',
                                 img: 'install_1',
                             },
                             2: {
@@ -381,7 +381,7 @@ const en: BaseTranslation = {
                                 img: 'install_5',
                             },
                             6: {
-                                text: 'Click on "Install" button to start the installation.',
+                                text: 'Click "Install" button to start the installation.',
                                 img: 'install_6',
                             },
                             7: {
@@ -393,12 +393,76 @@ const en: BaseTranslation = {
                     3: {
                         subtitle: 'Launcher Screen',
                         intro_box: {
-                            text: 'The launcher screen is the screen that you can see after running "MHF." You can log in to the game, add or delete characters, update, configure settings, etc., from here.',
+                            text: 'The launcher screen is the screen that you can see after running the game. You can log in to the game, add or delete characters, update, configure settings, etc., from here.',
                             img: 'launcher_0',
                         },
                         h3_title: 'Preferences on the Launcher',
                         h3_text:
                             'In preferences, you can configure settings on your computer side, such as the size of the game screen when it starts up and the sound, in addition to switching to High Grade Edition.',
+                        center_box: [
+                            {
+                                text: '[Graphics] Tab',
+                                img: 'launcher_1',
+                                img_desc: [
+                                    {
+                                        item_title: '①Graphics Slider',
+                                        item_text:
+                                            'One of three presets ("High," "Moderate," and "Low") can be selected for the settings on [Display] and [Sound] tabs.<br>When "Advanced" button is turned on, this slider is not selectable and the preset label is displayed as "Custom."',
+                                    },
+                                    {
+                                        item_title: '②Advanced Button',
+                                        item_text:
+                                            'When turned on, the settings on both [Display] and [Sound] tabs can be changed freely, and the preset label in the graphics slider will be displayed as "Custom."',
+                                    },
+                                    {
+                                        item_title: '③High Grade Edition Check Box',
+                                        item_text: 'If checked, "High Grade Edition" is enabled.',
+                                    },
+                                ],
+                            },
+                            {
+                                text: '[Display] Tab',
+                                img: 'launcher_2',
+                                img_desc: [
+                                    {
+                                        item_title: '①Display Mode and Resolution Settings',
+                                        item_text:
+                                            'In "Display Mode" section, you can select either "Windowed Mode" or "Fullscreen Mode" as the display modes when the game starts, and in "Resolution" section, you can select the resolution for each screen mode.',
+                                    },
+                                    {
+                                        item_title: '②Texture Compression',
+                                        item_text:
+                                            'Enable or disable DXTC (Texture Compression Algorithms).<ul><li class="img_desc_section_text_list"><span>Enable:</span><span>Image processing is faster, but images are blocky.</span></li><li class="img_desc_section_text_list"><span>Disable:</span><span>Image processing is slower, but images are more high quality.</span>',
+                                    },
+                                ],
+                            },
+                            {
+                                text: '[Sound] Tab',
+                                img: 'launcher_3',
+                                img_desc: [
+                                    {
+                                        item_title: '①Sound Settings',
+                                        item_text: 'Each volume can be adjusted with the slider for each of the three types of the game windows ("General," "Unfocused," and "Minimized").',
+                                    },
+                                    {
+                                        item_title: '②Sample Rate',
+                                        item_text:
+                                            'You can set the sampling rate and buffer size according to your sound card.<ul><li class="img_desc_section_text_list"><span>Sample Rate:</span><span>It refers to the number of processes per unit of time to convert an analog signal, such as audio, into a digital signal. In general, as this value increases, the sound quality will be improved. But the amount of data involved will also increase, so it will lead to affecting storage and bandwidth. On the other hand, extremely low values can lead to low-quality and unnatural sound.</span></li><li class="img_desc_section_text_list"><span>Buffer Size:</span><span>It refers to the size of the area in which a certain amount of data is temporarily loaded in advance. If this value increase, the latency for audio playback will be longer, but audio dropouts are less likely to occur. On the other hand, if the value is decrease, the latency for audio playback will be shorter, but audio dropouts are more likely to occur.</span></li></ul>',
+                                    },
+                                ],
+                            },
+                            {
+                                text: '[Proxy] Tab',
+                                img: 'launcher_4',
+                                img_desc: [
+                                    {
+                                        item_title: '①Proxy Settings',
+                                        item_text:
+                                            'If "Use Download Proxy" is checked, you can connect to the game via a proxy server.<br><span style="text-decoration: underline; color: red;">* Currently this is not available in Japanese version, only available in English and French versions.</span>',
+                                    },
+                                ],
+                            },
+                        ],
                     },
                 },
             },
