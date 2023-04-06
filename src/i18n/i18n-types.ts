@@ -1070,7 +1070,7 @@ type RootTranslation = {
 										 */
 										item_title: string
 										/**
-										 * E​n​a​b​l​e​ ​o​r​ ​d​i​s​a​b​l​e​ ​D​X​T​C​ ​(​T​e​x​t​u​r​e​ ​C​o​m​p​r​e​s​s​i​o​n​ ​A​l​g​o​r​i​t​h​m​s​)​.​<​u​l​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​E​n​a​b​l​e​:​<​/​s​p​a​n​>​<​s​p​a​n​>​I​m​a​g​e​ ​p​r​o​c​e​s​s​i​n​g​ ​i​s​ ​f​a​s​t​e​r​,​ ​b​u​t​ ​i​m​a​g​e​s​ ​a​r​e​ ​b​l​o​c​k​y​.​<​/​s​p​a​n​>​<​/​l​i​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​D​i​s​a​b​l​e​:​<​/​s​p​a​n​>​<​s​p​a​n​>​I​m​a​g​e​ ​p​r​o​c​e​s​s​i​n​g​ ​i​s​ ​s​l​o​w​e​r​,​ ​b​u​t​ ​i​m​a​g​e​s​ ​a​r​e​ ​m​o​r​e​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.​<​/​s​p​a​n​>
+										 * S​e​l​e​c​t​ ​e​i​t​h​e​r​ ​t​o​ ​e​n​a​b​l​e​ ​o​r​ ​d​i​s​a​b​l​e​ ​D​X​T​C​ ​(​T​e​x​t​u​r​e​ ​C​o​m​p​r​e​s​s​i​o​n​ ​A​l​g​o​r​i​t​h​m​s​)​.​<​u​l​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​E​n​a​b​l​e​d​:​<​/​s​p​a​n​>​<​s​p​a​n​>​I​m​a​g​e​ ​p​r​o​c​e​s​s​i​n​g​ ​i​s​ ​f​a​s​t​e​r​,​ ​b​u​t​ ​i​m​a​g​e​s​ ​a​r​e​ ​b​l​o​c​k​y​.​<​/​s​p​a​n​>​<​/​l​i​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​D​i​s​a​b​l​e​d​:​<​/​s​p​a​n​>​<​s​p​a​n​>​I​m​a​g​e​ ​p​r​o​c​e​s​s​i​n​g​ ​i​s​ ​s​l​o​w​e​r​,​ ​b​u​t​ ​i​m​a​g​e​s​ ​a​r​e​ ​m​o​r​e​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.​<​/​s​p​a​n​>
 										 */
 										item_text: string
 									}
@@ -1092,7 +1092,7 @@ type RootTranslation = {
 										 */
 										item_title: string
 										/**
-										 * E​a​c​h​ ​v​o​l​u​m​e​ ​c​a​n​ ​b​e​ ​a​d​j​u​s​t​e​d​ ​w​i​t​h​ ​t​h​e​ ​s​l​i​d​e​r​ ​f​o​r​ ​e​a​c​h​ ​o​f​ ​t​h​e​ ​t​h​r​e​e​ ​t​y​p​e​s​ ​o​f​ ​t​h​e​ ​g​a​m​e​ ​w​i​n​d​o​w​s​ ​(​"​G​e​n​e​r​a​l​,​"​ ​"​U​n​f​o​c​u​s​e​d​,​"​ ​a​n​d​ ​"​M​i​n​i​m​i​z​e​d​"​)​.
+										 * E​a​c​h​ ​v​o​l​u​m​e​ ​c​a​n​ ​b​e​ ​a​d​j​u​s​t​e​d​ ​w​i​t​h​ ​t​h​e​ ​s​l​i​d​e​r​ ​f​o​r​ ​e​a​c​h​ ​o​f​ ​t​h​e​ ​t​h​r​e​e​ ​t​y​p​e​s​ ​o​f​ ​t​h​e​ ​g​a​m​e​ ​w​i​n​d​o​w​s​ ​(​"​G​e​n​e​r​a​l​,​"​ ​"​U​n​f​o​c​u​s​e​d​,​"​ ​a​n​d​ ​"​M​i​n​i​m​i​z​e​d​"​)​.​<​b​r​>​I​f​ ​"​D​i​s​a​b​l​e​ ​S​o​u​n​d​ ​O​u​t​p​u​t​"​ ​i​s​ ​c​h​e​c​k​e​d​,​ ​t​h​e​ ​g​a​m​e​ ​w​i​l​l​ ​b​e​ ​m​u​t​e​d​.
 										 */
 										item_text: string
 									}
@@ -1131,6 +1131,12 @@ type RootTranslation = {
 								}
 							}
 						}
+					}
+					'4': {
+						/**
+						 * L​o​g​ ​I​n​ ​a​n​d​ ​S​t​a​r​t​ ​t​h​e​ ​G​a​m​e
+						 */
+						subtitle: string
 					}
 				}
 			}
@@ -2262,7 +2268,7 @@ export type TranslationFunctions = {
 										 */
 										item_title: () => LocalizedString
 										/**
-										 * Enable or disable DXTC (Texture Compression Algorithms).<ul><li class="img_desc_section_text_list"><span>Enable:</span><span>Image processing is faster, but images are blocky.</span></li><li class="img_desc_section_text_list"><span>Disable:</span><span>Image processing is slower, but images are more high quality.</span>
+										 * Select either to enable or disable DXTC (Texture Compression Algorithms).<ul><li class="img_desc_section_text_list"><span>Enabled:</span><span>Image processing is faster, but images are blocky.</span></li><li class="img_desc_section_text_list"><span>Disabled:</span><span>Image processing is slower, but images are more high quality.</span>
 										 */
 										item_text: () => LocalizedString
 									}
@@ -2284,7 +2290,7 @@ export type TranslationFunctions = {
 										 */
 										item_title: () => LocalizedString
 										/**
-										 * Each volume can be adjusted with the slider for each of the three types of the game windows ("General," "Unfocused," and "Minimized").
+										 * Each volume can be adjusted with the slider for each of the three types of the game windows ("General," "Unfocused," and "Minimized").<br>If "Disable Sound Output" is checked, the game will be muted.
 										 */
 										item_text: () => LocalizedString
 									}
@@ -2323,6 +2329,12 @@ export type TranslationFunctions = {
 								}
 							}
 						}
+					}
+					'4': {
+						/**
+						 * Log In and Start the Game
+						 */
+						subtitle: () => LocalizedString
 					}
 				}
 			}

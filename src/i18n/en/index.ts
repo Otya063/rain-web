@@ -432,7 +432,7 @@ const en: BaseTranslation = {
                                     {
                                         item_title: '②Texture Compression',
                                         item_text:
-                                            'Enable or disable DXTC (Texture Compression Algorithms).<ul><li class="img_desc_section_text_list"><span>Enable:</span><span>Image processing is faster, but images are blocky.</span></li><li class="img_desc_section_text_list"><span>Disable:</span><span>Image processing is slower, but images are more high quality.</span>',
+                                            'Select either to enable or disable DXTC (Texture Compression Algorithms).<ul><li class="img_desc_section_text_list"><span>Enabled:</span><span>Image processing is faster, but images are blocky.</span></li><li class="img_desc_section_text_list"><span>Disabled:</span><span>Image processing is slower, but images are more high quality.</span>',
                                     },
                                 ],
                             },
@@ -442,7 +442,8 @@ const en: BaseTranslation = {
                                 img_desc: [
                                     {
                                         item_title: '①Sound Settings',
-                                        item_text: 'Each volume can be adjusted with the slider for each of the three types of the game windows ("General," "Unfocused," and "Minimized").',
+                                        item_text:
+                                            'Each volume can be adjusted with the slider for each of the three types of the game windows ("General," "Unfocused," and "Minimized").<br>If "Disable Sound Output" is checked, the game will be muted.',
                                     },
                                     {
                                         item_title: '②Sample Rate',
@@ -463,6 +464,9 @@ const en: BaseTranslation = {
                                 ],
                             },
                         ],
+                    },
+                    4: {
+                        subtitle: 'Log In and Start the Game',
                     },
                 },
             },

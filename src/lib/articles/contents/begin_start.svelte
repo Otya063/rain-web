@@ -6,7 +6,7 @@
     import LL, { locale } from '$i18n/i18n-svelte';
 
     const articleData = $LL.articles['begin'].start;
-    const { 1: spec, 2: install, 3: launcher } = articleData.section;
+    const { 1: spec, 2: install, 3: launcher, 4: start } = articleData.section;
 
     let activedElement: HTMLElement;
     let nowTarget: HTMLElement;
@@ -136,7 +136,7 @@
 </section>
 
 <section id="start">
-    <h2>ログイン・ゲーム開始</h2>
+    <h2>{start.subtitle()}</h2>
 
     <div class="check_contents_with_link">
         <ul class="check_contents_with_link_list">
