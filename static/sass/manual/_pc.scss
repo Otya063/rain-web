@@ -675,7 +675,6 @@
         // テキスト
         .center_box_no_number_text {
             text-align: start;
-            font-weight: 700;
             padding-bottom: 1%;
         }
 
@@ -689,6 +688,7 @@
     .half_box {
         display: flex;
         margin-bottom: 5%;
+        justify-content: space-around;
 
         // テキスト
         .half_box_text {
@@ -723,7 +723,7 @@
 
             // テキスト
             .img_desc_section_text {
-                padding-left: 1em;
+                padding: 0 2%;
                 color: black;
 
                 // 表内テキストリスト化
@@ -731,22 +731,29 @@
                     display: flex;
                     flex-wrap: nowrap;
                     justify-content: space-around;
-                    padding-top: 2%;
+                    margin-top: 1%;
+                    padding-top: 1%;
+                    border-top: 2px gray solid;
+
+                    &:first-child {
+                        border: none;
+                    }
 
                     // リストタイトル
                     span:nth-child(1) {
                         width: 150px;
                         white-space: nowrap;
                         text-align: center;
+                        font-weight: 700;
+
+                        &:lang(en) {
+                            width: 100px;
+                        }
                     }
 
                     // リストテキスト
                     span:nth-child(2) {
-                        width: 450px;
-
-                        &:lang(en) {
-                            width: 500px;
-                        }
+                        width: 420px;
                     }
                 }
 

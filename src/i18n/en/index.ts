@@ -23,7 +23,6 @@ const en: BaseTranslation = {
     // Sign Up Page
     signup: {
         signup_title: 'Rain Server Account Creation',
-        email_label: 'Email',
         username_label: 'Username',
         password_label: 'Password',
         signup_button: 'Sign Up',
@@ -137,7 +136,7 @@ const en: BaseTranslation = {
                     maindir: '',
                     subdir: '',
                     alt: '狩人祭',
-                    text: 'Work together as your team to achive the trials!<br />For more information on the "Hunting Festival," click here.',
+                    text: 'Work together as your team to achive the trials!<br>For more information on the "Hunting Festival," click here.',
                 },
                 road: {
                     maindir: '',
@@ -215,7 +214,7 @@ const en: BaseTranslation = {
                     install: 'Installation',
                     launcher: 'Launcher Screen',
                     start: 'Log In and Start the Game',
-                    hge_setting: 'High Grade Edition Settings',
+                    option: 'Option Settings',
                 },
                 article_memo:
                     '"Monster Hunter Frontier Online" has now two editions as follows:<br> ー Original Editon: You can play the game with normal quality and in a casual environment.<br> ー High Grade Edition: You will experience powerful hunting in high quality.<br>This article describes basic information on the game, such as its system requirements, how to install, and log in.',
@@ -361,7 +360,7 @@ const en: BaseTranslation = {
                         subtitle: 'Installation',
                         center_box: {
                             1: {
-                                text: 'Click "Game Download" button on the member site to download the setup installer "mhfSetup_ZZ_v○.exe."<br><span style="color: red;">* "v○" is the version of the installer (e.g., v1.2).</span>',
+                                text: 'Click the "Game Download" button on the member site to download the setup installer "mhfSetup_ZZ_v○.exe."<br><span style="color: red;">* "v○" is the version of the installer (e.g., v1.2).</span>',
                                 img: 'install_1',
                             },
                             2: {
@@ -381,7 +380,7 @@ const en: BaseTranslation = {
                                 img: 'install_5',
                             },
                             6: {
-                                text: 'Click "Install" button to start the installation.',
+                                text: 'Click Install to start the installation.',
                                 img: 'install_6',
                             },
                             7: {
@@ -396,77 +395,223 @@ const en: BaseTranslation = {
                             text: 'The launcher screen is the screen that you can see after running the game. You can log in to the game, add or delete characters, update, configure settings, etc., from here.',
                             img: 'launcher_0',
                         },
-                        h3_title: 'Preferences on the Launcher',
-                        h3_text:
-                            'In preferences, you can configure settings on your computer side, such as the size of the game screen when it starts up and the sound, in addition to switching to High Grade Edition.',
-                        center_box: [
-                            {
-                                text: '[Graphics] Tab',
-                                img: 'launcher_1',
-                                img_desc: [
+                        h3: {
+                            // login area
+                            1: {
+                                title: 'Log In Area',
+                                text: 'You can enter your account credentials and select your login server. For more information, please refer to the "<a href="#start" style="text-decoration:underline;">Log In and Start the Game</a>" section.',
+                                img: 'login_area',
+                                center_box: {
+                                    text1: '【Server Selection】',
+                                    img: 'server_desc',
+                                    text2: 'There are three Rain servers: Rain (JP) [Tokyo, Japan], Rain (US) [New York City, New York, United States], and Rain (EU) [Frankfurt, Hesse, Germany], but they are not independent. So basically, the login destination is the same no matter which server you connect from. However, depending on the distance between your country/region and the server location, your ping may be high (the game will lag) while you are playing, so you should select the server that is closest to your region.',
+                                },
+                            },
+
+                            // preferences
+                            2: {
+                                title: 'In-Game Preferences',
+                                text: 'In preferences, you can configure settings on your computer side, such as the size of the game screen when it starts up and the sound, in addition to switching to High Grade Edition.',
+                                img: 'preferences',
+                                center_box: [
                                     {
-                                        item_title: '①Graphics Slider',
-                                        item_text:
-                                            'One of three presets ("High," "Moderate," and "Low") can be selected for the settings on [Display] and [Sound] tabs.<br>When "Advanced" button is turned on, this slider is not selectable and the preset label is displayed as "Custom."',
+                                        text: '[Graphics] Tab',
+                                        img: 'launcher_1',
+                                        img_desc: [
+                                            {
+                                                item_title: '①Graphics Slider',
+                                                item_text:
+                                                    'One of three presets ("High," "Moderate," and "Low") can be selected for the settings on [Display] and [Sound] tabs.<br>When "Advanced" button is turned on, this slider is not selectable and the preset label is displayed as "Custom."',
+                                            },
+                                            {
+                                                item_title: '②Advanced Button',
+                                                item_text:
+                                                    'When turned on, the settings on both [Display] and [Sound] tabs can be changed freely, and the preset label in the graphics slider will be displayed as "Custom."',
+                                            },
+                                            {
+                                                item_title: '③High Grade Edition Check Box',
+                                                item_text: 'If checked, "High Grade Edition" is enabled.',
+                                            },
+                                        ],
                                     },
                                     {
-                                        item_title: '②Advanced Button',
-                                        item_text:
-                                            'When turned on, the settings on both [Display] and [Sound] tabs can be changed freely, and the preset label in the graphics slider will be displayed as "Custom."',
+                                        text: '[Display] Tab',
+                                        img: 'launcher_2',
+                                        img_desc: [
+                                            {
+                                                item_title: '①Display Mode and Resolution Settings',
+                                                item_text:
+                                                    'In "Display Mode" section, you can select either "Windowed Mode" or "Fullscreen Mode" as the display modes when the game starts, and in "Resolution" section, you can select the resolution for each screen mode.',
+                                            },
+                                            {
+                                                item_title: '②Texture Compression',
+                                                item_text:
+                                                    'Select either to enable or disable DXTC (Texture Compression Algorithms).<br>When enabled, image processing is faster, but images may be blocky.<br>When disabled, image processing is slower, but images are more high quality.',
+                                            },
+                                        ],
                                     },
                                     {
-                                        item_title: '③High Grade Edition Check Box',
-                                        item_text: 'If checked, "High Grade Edition" is enabled.',
+                                        text: '[Sound] Tab',
+                                        img: 'launcher_3',
+                                        img_desc: [
+                                            {
+                                                item_title: '①Sound Settings',
+                                                item_text:
+                                                    'Each volume can be adjusted with the slider for each of the three types of the game windows ("General," "Unfocused," and "Minimized").<br>If "Disable Sound Output" is checked, the game will be muted.',
+                                            },
+                                            {
+                                                item_title: '②Sample Rate',
+                                                item_text:
+                                                    'You can set the sampling rate and buffer size according to your sound card.<ul><li class="img_desc_section_text_list"><span>Sample Rate</span>：<span>It refers to the number of processes per unit of time to convert an analog signal, such as audio, into a digital signal. In general, as this value increases, the sound quality will be improved. But the amount of data involved will also increase, so it will lead to affecting storage and bandwidth. On the other hand, extremely low values can lead to low-quality and unnatural sound.</span></li><li class="img_desc_section_text_list"><span>Buffer Size</span>：<span>It refers to the size of the area in which a certain amount of data is temporarily loaded in advance. If this value increase, the latency for audio playback will be longer, but audio dropouts are less likely to occur. On the other hand, if the value is decrease, the latency for audio playback will be shorter, but audio dropouts are more likely to occur.</span></li></ul>',
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        text: '[Proxy] Tab',
+                                        img: 'launcher_4',
+                                        img_desc: [
+                                            {
+                                                item_title: '①Proxy Settings',
+                                                item_text:
+                                                    'If "Use Download Proxy" is checked, you can connect to the game via a proxy server.<br><span style="text-decoration: underline; color: red;">* Currently this is not available in Japanese version, only available in English and French versions.</span>',
+                                            },
+                                        ],
                                     },
                                 ],
                             },
-                            {
-                                text: '[Display] Tab',
-                                img: 'launcher_2',
-                                img_desc: [
-                                    {
-                                        item_title: '①Display Mode and Resolution Settings',
-                                        item_text:
-                                            'In "Display Mode" section, you can select either "Windowed Mode" or "Fullscreen Mode" as the display modes when the game starts, and in "Resolution" section, you can select the resolution for each screen mode.',
-                                    },
-                                    {
-                                        item_title: '②Texture Compression',
-                                        item_text:
-                                            'Select either to enable or disable DXTC (Texture Compression Algorithms).<ul><li class="img_desc_section_text_list"><span>Enabled:</span><span>Image processing is faster, but images are blocky.</span></li><li class="img_desc_section_text_list"><span>Disabled:</span><span>Image processing is slower, but images are more high quality.</span>',
-                                    },
-                                ],
+
+                            // side_contents
+                            3: {
+                                title: 'Side Contents',
+                                text: 'This is the area where event banners, announcements, and links to access web media, are posted. These can be accessed directly from the launcher without opening a browser to search for them.',
+                                img: 'side_contents',
                             },
-                            {
-                                text: '[Sound] Tab',
-                                img: 'launcher_3',
-                                img_desc: [
-                                    {
-                                        item_title: '①Sound Settings',
-                                        item_text:
-                                            'Each volume can be adjusted with the slider for each of the three types of the game windows ("General," "Unfocused," and "Minimized").<br>If "Disable Sound Output" is checked, the game will be muted.',
-                                    },
-                                    {
-                                        item_title: '②Sample Rate',
-                                        item_text:
-                                            'You can set the sampling rate and buffer size according to your sound card.<ul><li class="img_desc_section_text_list"><span>Sample Rate:</span><span>It refers to the number of processes per unit of time to convert an analog signal, such as audio, into a digital signal. In general, as this value increases, the sound quality will be improved. But the amount of data involved will also increase, so it will lead to affecting storage and bandwidth. On the other hand, extremely low values can lead to low-quality and unnatural sound.</span></li><li class="img_desc_section_text_list"><span>Buffer Size:</span><span>It refers to the size of the area in which a certain amount of data is temporarily loaded in advance. If this value increase, the latency for audio playback will be longer, but audio dropouts are less likely to occur. On the other hand, if the value is decrease, the latency for audio playback will be shorter, but audio dropouts are more likely to occur.</span></li></ul>',
-                                    },
-                                ],
-                            },
-                            {
-                                text: '[Proxy] Tab',
-                                img: 'launcher_4',
-                                img_desc: [
-                                    {
-                                        item_title: '①Proxy Settings',
-                                        item_text:
-                                            'If "Use Download Proxy" is checked, you can connect to the game via a proxy server.<br><span style="text-decoration: underline; color: red;">* Currently this is not available in Japanese version, only available in English and French versions.</span>',
-                                    },
-                                ],
-                            },
-                        ],
+                        },
                     },
                     4: {
                         subtitle: 'Log In and Start the Game',
+                        check_contents: {
+                            text: 'A computer with a multi-core processor can run two games on one computer.',
+                            link: 'Multiple Launch',
+                        },
+                        half_box: {
+                            text: '（1）Click the "Monster Hunter Frontier Online" icon on the desktop.',
+                            img: 'start_1',
+                        },
+                        center_box: {
+                            2: {
+                                text: 'The launcher screen will be displayed.<br>Enter your username and password, select the login server, and click the "Log In" button to log in to the server. Then file checking and updating will begin.',
+                                img: 'start_2',
+                            },
+                            3: {
+                                text: 'Select your character and click the "Start Game" to start the game.<br>At first, only "<span style="color: blue;">Ready to Hunt</span>" will be displayed as shown in the image below.',
+                                img: 'start_3',
+                            },
+                            4: {
+                                text: 'On the game title screen, press Enter or click on the screen to display the title menu.',
+                                img: 'start_4',
+                            },
+                        },
+                    },
+                    5: {
+                        subtitle: 'Option Settings',
+
+                        // hge settings
+                        1: {
+                            title: 'High Grade Edition Settings',
+                            center_box: {
+                                1: {
+                                    text: 'Click the "In-Game Preferences" on the launcher screen.',
+                                    img: 'hge_1',
+                                },
+                                2: {
+                                    text: 'The Settings screen will appear.<br>Check the "Enable High Grade Edition" checkbox in [Graphics] Tab and click OK.',
+                                    img: 'hge_2',
+                                },
+                                3: {
+                                    text: 'After logging in, if "High Grade Edition" is displayed on the title screen, the game can be played in High Grade Edition.',
+                                    img: 'hge_3',
+                                },
+                            },
+                        },
+
+                        // graphics settings
+                        2: {
+                            title: 'Graphics Settings',
+                            half_box: {
+                                text: 'Graphics can be adjusted by opening the menu and going to [Options] > [Display (High Grade)].',
+                                img: 'graphics_0',
+                            },
+                            center_box: {
+                                img: 'graphics_1',
+                                img_desc: [
+                                    {
+                                        item_title: '①Prisets',
+                                        item_text: [
+                                            {
+                                                head: 'Maximum',
+                                                content: 'Turn on all settings and set the game to the highest setting.',
+                                            },
+                                            {
+                                                head: 'Quality Priority',
+                                                content: 'Set to a high image quality setting, giving priority to graphics.',
+                                            },
+                                            {
+                                                head: 'Performance Priority',
+                                                content: 'Set to a low load processing setting, giving priority to operability.',
+                                            },
+                                            {
+                                                head: 'Custom',
+                                                content: 'Each setting can be customized at will.',
+                                            },
+                                        ],
+                                    },
+                                    {
+                                        item_title: '②Each Setting',
+                                        item_text: [
+                                            {
+                                                head: 'Realistic Shadows (Town)',
+                                                content: 'Realistic shoadow setting for hunters and NPCs in the town.',
+                                            },
+                                            {
+                                                head: 'Realistic Shadows (Quest)',
+                                                content: 'Realistic shoadow setting for hunters, monsters, etc. in quests.',
+                                            },
+                                            {
+                                                head: 'Depth of Field',
+                                                content:
+                                                    'An effect that applies blur to an object depending on the distance before and after the focus.<br>With ON, when the object is in focus, the area in front and behind it is blurred, giving a more natural sense of distance and immersive experience.<br>With OFF, the distance between the object and its surroundings is not so well represented, and the image is clearly displayed. But it appears different from the scenery you normally see in the real world, and you may feel some discomfort.',
+                                            },
+                                            {
+                                                head: 'High Dynamic Range',
+                                                content:
+                                                    'An effect in which light spreads from the light source to the surroundings.<br>With ON, a more realistic light expression is possible.<br>With OFF, the bloom effect is not expressed and may seem somewhat less realistic.',
+                                            },
+                                            {
+                                                head: 'SSAO',
+                                                content:
+                                                    'Shadows are created even in places where light does not penetrate easily, such as gaps between three-dimensional objects and around bends, to achieve a more realistic 3D representation. However, this requires high processing power on the PC side, so you should turn it off if the game is lagging.<br>With ON, you can enjoy graphics with more realistic shading and a three-dimensional feel.<br>With OFF, shading is not expressed and the screen looks simple.',
+                                            },
+                                            {
+                                                head: 'God Rays',
+                                                content:
+                                                    'An effect that allows light to shine back into the air by scattering, such as through trees. However, this requires high processing power on the PC side, so you should turn it off if the game is lagging.',
+                                            },
+                                            {
+                                                head: 'Anti-Aliasing',
+                                                content:
+                                                    'Smoothes object outlines for a more natural look. However, this requires high processing power on the PC side, so you should turn it off if the game is lagging.',
+                                            },
+                                            {
+                                                head: 'Soft Particles',
+                                                content:
+                                                    'Smoothes object outlines for a more natural look. However, this requires high processing power on the PC side, so you should turn it off if the game is lagging.',
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        },
                     },
                 },
             },
@@ -478,12 +623,12 @@ const en: BaseTranslation = {
         rain_officialsite: {
             title: 'Rain Server Official Site',
             href: '',
-            alt: 'official-site',
+            alt: 'official_site',
         },
         rain_discord: {
             title: 'Rain Server Official Discord',
             href: 'https://discord.gg/TcpkpUpeGw',
-            alt: 'official-discord',
+            alt: 'official_discord',
         },
         pewpewdojo_server: {
             title: 'PewPewDojo Official Discord<br>[Contributors]',

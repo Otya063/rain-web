@@ -1,5 +1,6 @@
 <script lang="ts">
     import LL, { locale } from '$i18n/i18n-svelte';
+    import { scrollToElm } from '$ts/main';
 
     const articleData = $LL.articles['signup'].discord;
     const { 1: discord } = articleData.section;
@@ -12,7 +13,8 @@
         {#each Object.entries(articleData.outline_contents) as [data_target, text]}
             <li>
                 <!-- svelte-ignore a11y-missing-attribute -->
-                <a class="scroll" data-target={data_target}>{text()}</a>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <a on:click={(e) => scrollToElm(e)} data-target={data_target}>{text()}</a>
             </li>
         {/each}
     </ul>

@@ -17,9 +17,8 @@ export const load: PageServerLoad = async ({ cookies }) => {
 const signup: Action = async ({ request, cookies }) => {
     const data = await request.formData();
     const username = data.get('username');
-    const email = data.get('email');
     const password = data.get('password');
-    const salt = await bcrypt.genSalt(10);
+    const salt = await bcrypt.genSalt(12);
     const hashedPass = await bcrypt.hash(String(password), salt);
     const preRegExp = cookies.get('SIDRegister');
     const emailVerifyCode = crypto.randomUUID();
@@ -30,10 +29,9 @@ const signup: Action = async ({ request, cookies }) => {
     });
 
     let errors = {};
-    const credentials = { email, username, password };
+    const credentials = { username, password };
 
     // error handling
-    (typeof email !== 'string' || !email) && (errors.invalidEmail = true);
     (typeof username !== 'string' || !username) && (errors.invalidUsername = true);
     (typeof password !== 'string' || !password) && (errors.invalidPassword = true);
     userExist && (errors.userExist = true);
@@ -41,29 +39,15 @@ const signup: Action = async ({ request, cookies }) => {
     if (Object.keys(errors).length > 0) {
         return { errors, credentials };
     } else {
-        /* try {
-            await db.temp_account.create({
+        try {
+            await db.users.create({
                 data: {
                     username: String(username),
                     password: hashedPass,
-                    email: String(email),
-                    email_verify_code: emailVerifyCode,
-                    pre_reg_exp: preRegExp,
                 },
             });
-        } catch (err) {
-            console.error(err);
-        } */
 
-        // the following code is for temporary
-        await db.users.create({
-            data: {
-                username: String(username),
-                password: hashedPass,
-            },
-        });
-
-        const registeredUser = await db.users.findUnique({
+            /* const registeredUser = await db.users.findUnique({
             where: {
                 username: String(username),
             },
@@ -73,7 +57,7 @@ const signup: Action = async ({ request, cookies }) => {
 
         const lastLoginTime = Math.floor(Date.now() / 1000);
 
-        /* await db.characters.create({
+        await db.characters.create({
             data: {
                 user_id: regUserId,
                 name: '',
@@ -83,7 +67,9 @@ const signup: Action = async ({ request, cookies }) => {
                 last_login: lastLoginTime,
             },
         }); */
-        // end
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     //throw redirect(303, './conf');

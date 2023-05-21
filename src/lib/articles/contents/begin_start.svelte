@@ -4,9 +4,10 @@
     import Original from '$lib/articles/contents/parts/Original.svelte';
     import HGE from '$lib/articles/contents/parts/HGE.svelte';
     import LL, { locale } from '$i18n/i18n-svelte';
+    import { loadArticle, scrollToElm } from '$ts/main';
 
     const articleData = $LL.articles['begin'].start;
-    const { 1: spec, 2: install, 3: launcher, 4: start } = articleData.section;
+    const { 1: spec, 2: install, 3: launcher, 4: start, 5: option } = articleData.section;
 
     let activedElement: HTMLElement;
     let nowTarget: HTMLElement;
@@ -41,7 +42,8 @@
         {#each Object.entries(articleData.outline_contents) as [data_target, text]}
             <li>
                 <!-- svelte-ignore a11y-missing-attribute -->
-                <a class="scroll" data-target={data_target}>{text()}</a>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <a on:click={(e) => scrollToElm(e)} data-target={data_target}>{text()}</a>
             </li>
         {/each}
     </ul>
@@ -105,22 +107,37 @@
 <section id="launcher">
     <h2>{launcher.subtitle()}</h2>
 
-    <ul>
-        <li class="section_inrto_box">
-            <p class="intro_box_text">{launcher.intro_box['text']()}</p>
-            <p class="intro_box_img"><img src="/img/{$locale}/articles/begin/start/{launcher.intro_box['img']()}.png" alt={launcher.intro_box['img']()} /></p>
-        </li>
-    </ul>
+    <div class="section_inrto_box">
+        <p class="intro_box_text">{launcher.intro_box['text']()}</p>
+        <p class="intro_box_img"><img src="/img/{$locale}/articles/begin/start/{launcher.intro_box['img']()}.png" alt={launcher.intro_box['img']()} /></p>
+    </div>
 
-    <h3>{launcher.h3_title()}</h3>
-    <div class="center_box_no_number">
-        <p style="font-weight: 500;" class="center_box_no_number_text">{launcher.h3_text()}</p>
+    <!-- login area -->
+    <h3>{launcher.h3[1].title()}</h3>
+    <div class="half_box">
+        <p class="half_box_text">{@html launcher.h3[1].text()}</p>
+        <p style="width: 250%;" class="half_box_img"><img src="/img/{$locale}/articles/begin/start/{launcher.h3[1].img()}.png" alt={launcher.h3[1].img()} /></p>
     </div>
 
     <ul>
-        {#each Object.values(launcher.center_box) as { text, img, img_desc }}
+        <li class="center_box_no_number">
+            <p style="font-weight: 700;" class="center_box_no_number_text">{launcher.h3[1].center_box['text1']()}</p>
+            <p class="center_box_no_number_img"><img src="/img/common/{launcher.h3[1].center_box['img']()}.webp" alt={launcher.h3[1].center_box['img']()} /></p>
+            <p style="padding-top: 1%;" class="center_box_no_number_text">{launcher.h3[1].center_box['text2']()}</p>
+        </li>
+    </ul>
+
+    <!-- preferences -->
+    <h3>{launcher.h3[2].title()}</h3>
+    <div class="half_box">
+        <p class="half_box_text">{launcher.h3[2].text()}</p>
+        <p style="width: 250%;" class="half_box_img"><img src="/img/{$locale}/articles/begin/start/{launcher.h3[2].img()}.png" alt={launcher.h3[2].img()} /></p>
+    </div>
+
+    <ul>
+        {#each Object.values(launcher.h3[2].center_box) as { text, img, img_desc }}
             <li class="center_box_no_number">
-                <p class="center_box_no_number_text">{text()}</p>
+                <p style="font-weight: 700;" class="center_box_no_number_text">{text()}</p>
                 <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/{img()}.png" alt={img()} /></p>
                 <ul class="img_desc_section">
                     {#each Object.values(img_desc) as { item_title, item_text }}
@@ -133,6 +150,13 @@
             </li>
         {/each}
     </ul>
+
+    <!-- side_contents -->
+    <h3>{launcher.h3[3].title()}</h3>
+    <div class="half_box">
+        <p class="half_box_text">{launcher.h3[3].text()}</p>
+        <p style="width: 250%;" class="half_box_img"><img src="/img/{$locale}/articles/begin/start/{launcher.h3[3].img()}.png" alt={launcher.h3[3].img()} /></p>
+    </div>
 </section>
 
 <section id="start">
@@ -141,125 +165,73 @@
     <div class="check_contents_with_link">
         <ul class="check_contents_with_link_list">
             <li class="check_contents_with_link_list_item">
-                <p class="check_contents_list_text">マルチコアプロセッサーを搭載したパソコンでは、1台のパソコンでゲームプログラムを2つ起動してプレイすることができます。</p>
+                <p class="check_contents_list_text">{start.check_contents['text']()}</p>
                 <!-- svelte-ignore a11y-missing-attribute -->
-                ＞＞<a class="check_contents_list_link">ゲームの多重起動</a>
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                ＞＞<a on:click={() => loadArticle($locale, 'begin/', 'multiple/')} class="check_contents_list_link">{start.check_contents['link']()}</a>
             </li>
         </ul>
     </div>
 
     <ul>
-        <li class="center_box">
-            <p class="center_box_text">（1）デスクトップ上にある「モンスターハンター フロンティア オンライン」のアイコンをクリックします。</p>
-        </li>
-        <li class="center_box">
-            <p class="center_box_text">
-                （2）ランチャー画面が起動します。<br />
-                赤枠内にユーザー名とパスワードを入力し、「ログイン」ボタンをクリックするとログインが行なわれ、アップデートが開始されます。
-            </p>
-            <p class="center_box_img">
-                <img src="/img/{$locale}/articles/begin/start/start_2.png" alt="start_2" />
+        <li class="half_box">
+            <p style="text-indent: -2.5em;" class="half_box_text">{start.half_box['text']()}</p>
+            <p style="max-width: 170px;" class="half_box_img">
+                <img src="/img/{$locale}/articles/begin/start/{start.half_box['img']()}.png" alt={start.half_box['img']()} />
             </p>
         </li>
-        <li class="center_box">
-            <p class="center_box_text">
-                （3）キャラクターを選択し、「ゲームスタート」を押すとMHFが起動します。<br />初期状態では下図のように「<span style="color: blue;">狩人申請可能</span>」のみが表示されます。
-            </p>
-            <p class="center_box_img">
-                <img src="/img/{$locale}/articles/begin/start/start_3.png" alt="start_3" />
-            </p>
-        </li>
-        <li class="center_box">
-            <p class="center_box_text">（4）ゲームのタイトル画面では、Enterキーを押す、もしくは画面をクリックすると、タイトルメニューが表示されます。</p>
-            <p class="center_box_img">
-                <img src="/img/{$locale}/articles/begin/start/start_4.png" alt="start_4" />
-            </p>
-        </li>
+
+        {#each Object.entries(start.center_box) as [number, { text, img }]}
+            <li class="center_box">
+                <p class="center_box_text">（{number}）{@html text()}</p>
+                <p class="center_box_img">
+                    <img src="/img/{$locale}/articles/begin/start/{img()}.png" alt={img()} />
+                </p>
+            </li>
+        {/each}
     </ul>
 </section>
 
-<section id="hge_setting">
-    <h2>High Grade Editionの設定方法</h2>
+<section id="option">
+    <h2>{option.subtitle()}</h2>
 
+    <h3 style="margin-top: 15%;">{option[1].title()}</h3>
     <ul>
-        <li class="center_box">
-            <p class="center_box_text">（1）ランチャー画面で「環境設定」をクリックします。</p>
-            <p class="center_box_img">
-                <img src="/img/{$locale}/articles/begin/start/hge_1.png" alt="hge_1" />
-            </p>
-        </li>
-        <li class="center_box">
-            <p class="center_box_text">
-                （2）設定画面が表示されます。<br />設定タブ内の「High Grade Editionを有効にする」にチェックを入れ、OKをクリックします。
-            </p>
-            <p class="center_box_img">
-                <img src="/img/{$locale}/articles/begin/start/hge_2.png" alt="hge_2" />
-            </p>
-        </li>
-        <li class="center_box">
-            <p class="center_box_text">（3）ログイン後、タイトル画面で「High Grade Edition」と表示されているとHigh Grade Editionでプレイ可能となります。</p>
-            <p class="center_box_img">
-                <img src="/img/{$locale}/articles/begin/start/hge_3.png" alt="hge_3" />
-            </p>
-        </li>
+        {#each Object.entries(option[1].center_box) as [number, { text, img }]}
+            <li class="center_box">
+                <p class="center_box_text">（{number}）{@html text()}</p>
+                <p class="center_box_img">
+                    <img src="/img/{$locale}/articles/begin/start/{img()}.png" alt={img()} />
+                </p>
+            </li>
+        {/each}
     </ul>
 
-    <h3 class="head_dia">オプション調整</h3>
+    <h3>{option[2].title()}</h3>
     <div class="half_box">
-        <p class="half_box_text">メニューを開き、［オプション］＞［表示（グラフィック）］でグラフィックの調整が可能です。ご自身のパソコン環境に合わせて調整してみましょう。</p>
+        <p class="half_box_text">{option[2].half_box['text']()}</p>
         <p class="half_box_img">
-            <img src="/img/{$locale}/articles/begin/start/hge_4.png" alt="hge_4" />
+            <img src="/img/{$locale}/articles/begin/start/{option[2].half_box['img']()}.png" alt={option[2].half_box['img']()} />
         </p>
     </div>
 
     <div class="center_box_no_number">
-        <p class="center_box_no_number_text">表示（グラフィック）</p>
-        <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/hge_5.png" alt="hge_5" /></p>
+        <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/{option[2].center_box['img']()}.png" alt={option[2].center_box['img']()} /></p>
         <ul class="img_desc_section">
-            <li class="img_desc_section_item">
-                ①プリセット
-                <ul class="img_desc_section_text">
-                    <li>最高画質：全ての項目をONにした、最高設定にします。<span class="img_desc_section_text_part" /></li>
-                    <li>グラフィック優先：グラフィックを優先した、高画質設定にします。<span class="img_desc_section_text_part" /></li>
-                    <li>パフォーマンス優先：操作性を優先した、不可処理の少ない設定にします。<span class="img_desc_section_text_part" /></li>
-                    <li>カスタム：各種項目を自由に設定することができます。<span class="img_desc_section_text_part" /></li>
-                </ul>
-            </li>
-            <li class="img_desc_section_item">
-                ②各種項目
-                <ul class="img_desc_section_text">
-                    <li>リアルシャドウ（ロビー）：ロビーでのハンター、NPCの影処理の実影表現のON/OFFを設定します。<span class="img_desc_section_text_part" /></li>
-                    <li>リアルシャドウ（クエスト）：クエストでのハンター、モンスター等に対する実影処理のON/OFFを設定します。<span class="img_desc_section_text_part" /></li>
-                    <li>
-                        被写界深度：カメラ等のレンズを通して対象物を撮影した際、ピントが合っている領域の前後にある範囲で、どれほどボケるかを表す指標の事です。ONでは、対象物にフォーカスが合った時に、その前後の範囲がボケるように描写され、より自然な距離感を感じることができます。OFFでは、対象物とその周囲の距離感があまり表現されず、映像がはっきりと表示されますが、現実世界で普段目にする風景とは異質に映り、多少の違和感を覚えるかもしれません。<span
-                            class="img_desc_section_text_part"
-                        />
-                    </li>
-                    <li>
-                        ブルーム：光源から光が周囲に広がっていくエフェクトの事です。ONでは、よりリアルな光の表現が可能となります。OFFでは、ブルーム効果は表現されず、ややリアリティに欠けると感じるかもしれません。<span
-                            class="img_desc_section_text_part"
-                        />
-                    </li>
-                    <li>
-                        SSAO：立体物の隙間や曲がり角等、実際に光が入り込みにくい場所にも陰影が生まれ、よりリアルな3D表現を実現できますが、高い処理能力が必要となるため、ゲームがカクついてしまう場合は、OFFにされることをお勧めいたします。ONでは、よりリアルな陰影が表現され、立体感のあるグラフィックスを楽しむことができます。OFFでは、陰影の表現は行われず、画面がよりシンプルな印象を受けます。<span
-                            class="img_desc_section_text_part"
-                        />
-                    </li>
-                    <li>
-                        ゴッドレイ：光の差し込み、木漏れ日等、光が散乱して空気中に照り返す現象を可能にしますが、高い処理能力が必要となるため、ゲームがカクついてしまう場合は、OFFにされることをお勧めいたします。<span
-                            class="img_desc_section_text_part"
-                        />
-                    </li>
-                    <li>
-                        アンチエイリアス：オブジェクトの輪郭線を滑らかにして、より自然な見た目を実現しますが、高い処理能力が必要となるため、ゲームがカクついてしまう場合は、OFFにされることをお勧めいたします。
-                    </li>
-                    <li>
-                        ソフトパーティクル：オブジェクトの輪郭線を滑らかにして、より自然な見た目を実現しますが、高い処理能力が必要となるため、ゲームがカクついてしまう場合は、OFFにされることをお勧めいたします。<span
-                            class="img_desc_section_text_part"
-                        />
-                    </li>
-                </ul>
-            </li>
+            {#each Object.values(option[2].center_box['img_desc']) as { item_title, item_text }}
+                <li class="img_desc_section_item">
+                    {item_title()}
+                    <ul class="img_desc_section_text">
+                        {#each Object.values(item_text) as { head, content }}
+                            <li class="img_desc_section_text_list">
+                                <span style="width: 200px;">{head()}</span>
+                                ：
+                                <span style="width: 370px;">{@html content()}</span>
+                            </li>
+                        {/each}
+                    </ul>
+                </li>
+            {/each}
         </ul>
     </div>
 </section>

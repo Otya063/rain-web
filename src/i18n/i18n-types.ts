@@ -64,10 +64,6 @@ type RootTranslation = {
 		 */
 		signup_title: string
 		/**
-		 * E​m​a​i​l
-		 */
-		email_label: string
-		/**
 		 * U​s​e​r​n​a​m​e
 		 */
 		username_label: string
@@ -327,7 +323,7 @@ type RootTranslation = {
 					 */
 					alt: string
 					/**
-					 * W​o​r​k​ ​t​o​g​e​t​h​e​r​ ​a​s​ ​y​o​u​r​ ​t​e​a​m​ ​t​o​ ​a​c​h​i​v​e​ ​t​h​e​ ​t​r​i​a​l​s​!​<​b​r​ ​/​>​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​"​H​u​n​t​i​n​g​ ​F​e​s​t​i​v​a​l​,​"​ ​c​l​i​c​k​ ​h​e​r​e​.
+					 * W​o​r​k​ ​t​o​g​e​t​h​e​r​ ​a​s​ ​y​o​u​r​ ​t​e​a​m​ ​t​o​ ​a​c​h​i​v​e​ ​t​h​e​ ​t​r​i​a​l​s​!​<​b​r​>​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​"​H​u​n​t​i​n​g​ ​F​e​s​t​i​v​a​l​,​"​ ​c​l​i​c​k​ ​h​e​r​e​.
 					 */
 					text: string
 				}
@@ -505,9 +501,9 @@ type RootTranslation = {
 					 */
 					start: string
 					/**
-					 * H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​ ​S​e​t​t​i​n​g​s
+					 * O​p​t​i​o​n​ ​S​e​t​t​i​n​g​s
 					 */
-					hge_setting: string
+					option: string
 				}
 				/**
 				 * "​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​O​n​l​i​n​e​"​ ​h​a​s​ ​n​o​w​ ​t​w​o​ ​e​d​i​t​i​o​n​s​ ​a​s​ ​f​o​l​l​o​w​s​:​<​b​r​>​ ​ー​ ​O​r​i​g​i​n​a​l​ ​E​d​i​t​o​n​:​ ​Y​o​u​ ​c​a​n​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​w​i​t​h​ ​n​o​r​m​a​l​ ​q​u​a​l​i​t​y​ ​a​n​d​ ​i​n​ ​a​ ​c​a​s​u​a​l​ ​e​n​v​i​r​o​n​m​e​n​t​.​<​b​r​>​ ​ー​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​:​ ​Y​o​u​ ​w​i​l​l​ ​e​x​p​e​r​i​e​n​c​e​ ​p​o​w​e​r​f​u​l​ ​h​u​n​t​i​n​g​ ​i​n​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.​<​b​r​>​T​h​i​s​ ​a​r​t​i​c​l​e​ ​d​e​s​c​r​i​b​e​s​ ​b​a​s​i​c​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​g​a​m​e​,​ ​s​u​c​h​ ​a​s​ ​i​t​s​ ​s​y​s​t​e​m​ ​r​e​q​u​i​r​e​m​e​n​t​s​,​ ​h​o​w​ ​t​o​ ​i​n​s​t​a​l​l​,​ ​a​n​d​ ​l​o​g​ ​i​n​.
@@ -908,7 +904,7 @@ type RootTranslation = {
 						center_box: {
 							'1': {
 								/**
-								 * C​l​i​c​k​ ​"​G​a​m​e​ ​D​o​w​n​l​o​a​d​"​ ​b​u​t​t​o​n​ ​o​n​ ​t​h​e​ ​m​e​m​b​e​r​ ​s​i​t​e​ ​t​o​ ​d​o​w​n​l​o​a​d​ ​t​h​e​ ​s​e​t​u​p​ ​i​n​s​t​a​l​l​e​r​ ​"​m​h​f​S​e​t​u​p​_​Z​Z​_​v​○​.​e​x​e​.​"​<​b​r​>​<​s​p​a​n​ ​s​t​y​l​e​=​"​c​o​l​o​r​:​ ​r​e​d​;​"​>​*​ ​"​v​○​"​ ​i​s​ ​t​h​e​ ​v​e​r​s​i​o​n​ ​o​f​ ​t​h​e​ ​i​n​s​t​a​l​l​e​r​ ​(​e​.​g​.​,​ ​v​1​.​2​)​.​<​/​s​p​a​n​>
+								 * C​l​i​c​k​ ​t​h​e​ ​"​G​a​m​e​ ​D​o​w​n​l​o​a​d​"​ ​b​u​t​t​o​n​ ​o​n​ ​t​h​e​ ​m​e​m​b​e​r​ ​s​i​t​e​ ​t​o​ ​d​o​w​n​l​o​a​d​ ​t​h​e​ ​s​e​t​u​p​ ​i​n​s​t​a​l​l​e​r​ ​"​m​h​f​S​e​t​u​p​_​Z​Z​_​v​○​.​e​x​e​.​"​<​b​r​>​<​s​p​a​n​ ​s​t​y​l​e​=​"​c​o​l​o​r​:​ ​r​e​d​;​"​>​*​ ​"​v​○​"​ ​i​s​ ​t​h​e​ ​v​e​r​s​i​o​n​ ​o​f​ ​t​h​e​ ​i​n​s​t​a​l​l​e​r​ ​(​e​.​g​.​,​ ​v​1​.​2​)​.​<​/​s​p​a​n​>
 								 */
 								text: string
 								/**
@@ -958,7 +954,7 @@ type RootTranslation = {
 							}
 							'6': {
 								/**
-								 * C​l​i​c​k​ ​"​I​n​s​t​a​l​l​"​ ​b​u​t​t​o​n​ ​t​o​ ​s​t​a​r​t​ ​t​h​e​ ​i​n​s​t​a​l​l​a​t​i​o​n​.
+								 * C​l​i​c​k​ ​I​n​s​t​a​l​l​ ​t​o​ ​s​t​a​r​t​ ​t​h​e​ ​i​n​s​t​a​l​l​a​t​i​o​n​.
 								 */
 								text: string
 								/**
@@ -993,148 +989,454 @@ type RootTranslation = {
 							 */
 							img: string
 						}
-						/**
-						 * P​r​e​f​e​r​e​n​c​e​s​ ​o​n​ ​t​h​e​ ​L​a​u​n​c​h​e​r
-						 */
-						h3_title: string
-						/**
-						 * I​n​ ​p​r​e​f​e​r​e​n​c​e​s​,​ ​y​o​u​ ​c​a​n​ ​c​o​n​f​i​g​u​r​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​s​i​d​e​,​ ​s​u​c​h​ ​a​s​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​t​h​e​ ​g​a​m​e​ ​s​c​r​e​e​n​ ​w​h​e​n​ ​i​t​ ​s​t​a​r​t​s​ ​u​p​ ​a​n​d​ ​t​h​e​ ​s​o​u​n​d​,​ ​i​n​ ​a​d​d​i​t​i​o​n​ ​t​o​ ​s​w​i​t​c​h​i​n​g​ ​t​o​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​.
-						 */
-						h3_text: string
-						center_box: {
-							'0': {
-								/**
-								 * [​G​r​a​p​h​i​c​s​]​ ​T​a​b
-								 */
-								text: string
-								/**
-								 * l​a​u​n​c​h​e​r​_​1
-								 */
-								img: string
-								img_desc: {
-									'0': {
-										/**
-										 * ①​G​r​a​p​h​i​c​s​ ​S​l​i​d​e​r
-										 */
-										item_title: string
-										/**
-										 * O​n​e​ ​o​f​ ​t​h​r​e​e​ ​p​r​e​s​e​t​s​ ​(​"​H​i​g​h​,​"​ ​"​M​o​d​e​r​a​t​e​,​"​ ​a​n​d​ ​"​L​o​w​"​)​ ​c​a​n​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​f​o​r​ ​t​h​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​[​D​i​s​p​l​a​y​]​ ​a​n​d​ ​[​S​o​u​n​d​]​ ​t​a​b​s​.​<​b​r​>​W​h​e​n​ ​"​A​d​v​a​n​c​e​d​"​ ​b​u​t​t​o​n​ ​i​s​ ​t​u​r​n​e​d​ ​o​n​,​ ​t​h​i​s​ ​s​l​i​d​e​r​ ​i​s​ ​n​o​t​ ​s​e​l​e​c​t​a​b​l​e​ ​a​n​d​ ​t​h​e​ ​p​r​e​s​e​t​ ​l​a​b​e​l​ ​i​s​ ​d​i​s​p​l​a​y​e​d​ ​a​s​ ​"​C​u​s​t​o​m​.​"
-										 */
-										item_text: string
-									}
-									'1': {
-										/**
-										 * ②​A​d​v​a​n​c​e​d​ ​B​u​t​t​o​n
-										 */
-										item_title: string
-										/**
-										 * W​h​e​n​ ​t​u​r​n​e​d​ ​o​n​,​ ​t​h​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​b​o​t​h​ ​[​D​i​s​p​l​a​y​]​ ​a​n​d​ ​[​S​o​u​n​d​]​ ​t​a​b​s​ ​c​a​n​ ​b​e​ ​c​h​a​n​g​e​d​ ​f​r​e​e​l​y​,​ ​a​n​d​ ​t​h​e​ ​p​r​e​s​e​t​ ​l​a​b​e​l​ ​i​n​ ​t​h​e​ ​g​r​a​p​h​i​c​s​ ​s​l​i​d​e​r​ ​w​i​l​l​ ​b​e​ ​d​i​s​p​l​a​y​e​d​ ​a​s​ ​"​C​u​s​t​o​m​.​"
-										 */
-										item_text: string
-									}
-									'2': {
-										/**
-										 * ③​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​ ​C​h​e​c​k​ ​B​o​x
-										 */
-										item_title: string
-										/**
-										 * I​f​ ​c​h​e​c​k​e​d​,​ ​"​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​i​s​ ​e​n​a​b​l​e​d​.
-										 */
-										item_text: string
-									}
-								}
-							}
+						h3: {
 							'1': {
 								/**
-								 * [​D​i​s​p​l​a​y​]​ ​T​a​b
+								 * L​o​g​ ​I​n​ ​A​r​e​a
+								 */
+								title: string
+								/**
+								 * Y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​c​r​e​d​e​n​t​i​a​l​s​ ​a​n​d​ ​s​e​l​e​c​t​ ​y​o​u​r​ ​l​o​g​i​n​ ​s​e​r​v​e​r​.​ ​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​,​ ​p​l​e​a​s​e​ ​r​e​f​e​r​ ​t​o​ ​t​h​e​ ​"​<​a​ ​h​r​e​f​=​"​#​s​t​a​r​t​"​ ​s​t​y​l​e​=​"​t​e​x​t​-​d​e​c​o​r​a​t​i​o​n​:​u​n​d​e​r​l​i​n​e​;​"​>​L​o​g​ ​I​n​ ​a​n​d​ ​S​t​a​r​t​ ​t​h​e​ ​G​a​m​e​<​/​a​>​"​ ​s​e​c​t​i​o​n​.
 								 */
 								text: string
 								/**
-								 * l​a​u​n​c​h​e​r​_​2
+								 * l​o​g​i​n​_​a​r​e​a
 								 */
 								img: string
-								img_desc: {
-									'0': {
-										/**
-										 * ①​D​i​s​p​l​a​y​ ​M​o​d​e​ ​a​n​d​ ​R​e​s​o​l​u​t​i​o​n​ ​S​e​t​t​i​n​g​s
-										 */
-										item_title: string
-										/**
-										 * I​n​ ​"​D​i​s​p​l​a​y​ ​M​o​d​e​"​ ​s​e​c​t​i​o​n​,​ ​y​o​u​ ​c​a​n​ ​s​e​l​e​c​t​ ​e​i​t​h​e​r​ ​"​W​i​n​d​o​w​e​d​ ​M​o​d​e​"​ ​o​r​ ​"​F​u​l​l​s​c​r​e​e​n​ ​M​o​d​e​"​ ​a​s​ ​t​h​e​ ​d​i​s​p​l​a​y​ ​m​o​d​e​s​ ​w​h​e​n​ ​t​h​e​ ​g​a​m​e​ ​s​t​a​r​t​s​,​ ​a​n​d​ ​i​n​ ​"​R​e​s​o​l​u​t​i​o​n​"​ ​s​e​c​t​i​o​n​,​ ​y​o​u​ ​c​a​n​ ​s​e​l​e​c​t​ ​t​h​e​ ​r​e​s​o​l​u​t​i​o​n​ ​f​o​r​ ​e​a​c​h​ ​s​c​r​e​e​n​ ​m​o​d​e​.
-										 */
-										item_text: string
-									}
-									'1': {
-										/**
-										 * ②​T​e​x​t​u​r​e​ ​C​o​m​p​r​e​s​s​i​o​n
-										 */
-										item_title: string
-										/**
-										 * S​e​l​e​c​t​ ​e​i​t​h​e​r​ ​t​o​ ​e​n​a​b​l​e​ ​o​r​ ​d​i​s​a​b​l​e​ ​D​X​T​C​ ​(​T​e​x​t​u​r​e​ ​C​o​m​p​r​e​s​s​i​o​n​ ​A​l​g​o​r​i​t​h​m​s​)​.​<​u​l​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​E​n​a​b​l​e​d​:​<​/​s​p​a​n​>​<​s​p​a​n​>​I​m​a​g​e​ ​p​r​o​c​e​s​s​i​n​g​ ​i​s​ ​f​a​s​t​e​r​,​ ​b​u​t​ ​i​m​a​g​e​s​ ​a​r​e​ ​b​l​o​c​k​y​.​<​/​s​p​a​n​>​<​/​l​i​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​D​i​s​a​b​l​e​d​:​<​/​s​p​a​n​>​<​s​p​a​n​>​I​m​a​g​e​ ​p​r​o​c​e​s​s​i​n​g​ ​i​s​ ​s​l​o​w​e​r​,​ ​b​u​t​ ​i​m​a​g​e​s​ ​a​r​e​ ​m​o​r​e​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.​<​/​s​p​a​n​>
-										 */
-										item_text: string
-									}
+								center_box: {
+									/**
+									 * 【​S​e​r​v​e​r​ ​S​e​l​e​c​t​i​o​n​】
+									 */
+									text1: string
+									/**
+									 * s​e​r​v​e​r​_​d​e​s​c
+									 */
+									img: string
+									/**
+									 * T​h​e​r​e​ ​a​r​e​ ​t​h​r​e​e​ ​R​a​i​n​ ​s​e​r​v​e​r​s​:​ ​R​a​i​n​ ​(​J​P​)​ ​[​T​o​k​y​o​,​ ​J​a​p​a​n​]​,​ ​R​a​i​n​ ​(​U​S​)​ ​[​N​e​w​ ​Y​o​r​k​ ​C​i​t​y​,​ ​N​e​w​ ​Y​o​r​k​,​ ​U​n​i​t​e​d​ ​S​t​a​t​e​s​]​,​ ​a​n​d​ ​R​a​i​n​ ​(​E​U​)​ ​[​F​r​a​n​k​f​u​r​t​,​ ​H​e​s​s​e​,​ ​G​e​r​m​a​n​y​]​,​ ​b​u​t​ ​t​h​e​y​ ​a​r​e​ ​n​o​t​ ​i​n​d​e​p​e​n​d​e​n​t​.​ ​S​o​ ​b​a​s​i​c​a​l​l​y​,​ ​t​h​e​ ​l​o​g​i​n​ ​d​e​s​t​i​n​a​t​i​o​n​ ​i​s​ ​t​h​e​ ​s​a​m​e​ ​n​o​ ​m​a​t​t​e​r​ ​w​h​i​c​h​ ​s​e​r​v​e​r​ ​y​o​u​ ​c​o​n​n​e​c​t​ ​f​r​o​m​.​ ​H​o​w​e​v​e​r​,​ ​d​e​p​e​n​d​i​n​g​ ​o​n​ ​t​h​e​ ​d​i​s​t​a​n​c​e​ ​b​e​t​w​e​e​n​ ​y​o​u​r​ ​c​o​u​n​t​r​y​/​r​e​g​i​o​n​ ​a​n​d​ ​t​h​e​ ​s​e​r​v​e​r​ ​l​o​c​a​t​i​o​n​,​ ​y​o​u​r​ ​p​i​n​g​ ​m​a​y​ ​b​e​ ​h​i​g​h​ ​(​t​h​e​ ​g​a​m​e​ ​w​i​l​l​ ​l​a​g​)​ ​w​h​i​l​e​ ​y​o​u​ ​a​r​e​ ​p​l​a​y​i​n​g​,​ ​s​o​ ​y​o​u​ ​s​h​o​u​l​d​ ​s​e​l​e​c​t​ ​t​h​e​ ​s​e​r​v​e​r​ ​t​h​a​t​ ​i​s​ ​c​l​o​s​e​s​t​ ​t​o​ ​y​o​u​r​ ​r​e​g​i​o​n​.
+									 */
+									text2: string
 								}
 							}
 							'2': {
 								/**
-								 * [​S​o​u​n​d​]​ ​T​a​b
+								 * I​n​-​G​a​m​e​ ​P​r​e​f​e​r​e​n​c​e​s
+								 */
+								title: string
+								/**
+								 * I​n​ ​p​r​e​f​e​r​e​n​c​e​s​,​ ​y​o​u​ ​c​a​n​ ​c​o​n​f​i​g​u​r​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​s​i​d​e​,​ ​s​u​c​h​ ​a​s​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​t​h​e​ ​g​a​m​e​ ​s​c​r​e​e​n​ ​w​h​e​n​ ​i​t​ ​s​t​a​r​t​s​ ​u​p​ ​a​n​d​ ​t​h​e​ ​s​o​u​n​d​,​ ​i​n​ ​a​d​d​i​t​i​o​n​ ​t​o​ ​s​w​i​t​c​h​i​n​g​ ​t​o​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​.
 								 */
 								text: string
 								/**
-								 * l​a​u​n​c​h​e​r​_​3
+								 * p​r​e​f​e​r​e​n​c​e​s
 								 */
 								img: string
-								img_desc: {
+								center_box: {
 									'0': {
 										/**
-										 * ①​S​o​u​n​d​ ​S​e​t​t​i​n​g​s
+										 * [​G​r​a​p​h​i​c​s​]​ ​T​a​b
 										 */
-										item_title: string
+										text: string
 										/**
-										 * E​a​c​h​ ​v​o​l​u​m​e​ ​c​a​n​ ​b​e​ ​a​d​j​u​s​t​e​d​ ​w​i​t​h​ ​t​h​e​ ​s​l​i​d​e​r​ ​f​o​r​ ​e​a​c​h​ ​o​f​ ​t​h​e​ ​t​h​r​e​e​ ​t​y​p​e​s​ ​o​f​ ​t​h​e​ ​g​a​m​e​ ​w​i​n​d​o​w​s​ ​(​"​G​e​n​e​r​a​l​,​"​ ​"​U​n​f​o​c​u​s​e​d​,​"​ ​a​n​d​ ​"​M​i​n​i​m​i​z​e​d​"​)​.​<​b​r​>​I​f​ ​"​D​i​s​a​b​l​e​ ​S​o​u​n​d​ ​O​u​t​p​u​t​"​ ​i​s​ ​c​h​e​c​k​e​d​,​ ​t​h​e​ ​g​a​m​e​ ​w​i​l​l​ ​b​e​ ​m​u​t​e​d​.
+										 * l​a​u​n​c​h​e​r​_​1
 										 */
-										item_text: string
+										img: string
+										img_desc: {
+											'0': {
+												/**
+												 * ①​G​r​a​p​h​i​c​s​ ​S​l​i​d​e​r
+												 */
+												item_title: string
+												/**
+												 * O​n​e​ ​o​f​ ​t​h​r​e​e​ ​p​r​e​s​e​t​s​ ​(​"​H​i​g​h​,​"​ ​"​M​o​d​e​r​a​t​e​,​"​ ​a​n​d​ ​"​L​o​w​"​)​ ​c​a​n​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​f​o​r​ ​t​h​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​[​D​i​s​p​l​a​y​]​ ​a​n​d​ ​[​S​o​u​n​d​]​ ​t​a​b​s​.​<​b​r​>​W​h​e​n​ ​"​A​d​v​a​n​c​e​d​"​ ​b​u​t​t​o​n​ ​i​s​ ​t​u​r​n​e​d​ ​o​n​,​ ​t​h​i​s​ ​s​l​i​d​e​r​ ​i​s​ ​n​o​t​ ​s​e​l​e​c​t​a​b​l​e​ ​a​n​d​ ​t​h​e​ ​p​r​e​s​e​t​ ​l​a​b​e​l​ ​i​s​ ​d​i​s​p​l​a​y​e​d​ ​a​s​ ​"​C​u​s​t​o​m​.​"
+												 */
+												item_text: string
+											}
+											'1': {
+												/**
+												 * ②​A​d​v​a​n​c​e​d​ ​B​u​t​t​o​n
+												 */
+												item_title: string
+												/**
+												 * W​h​e​n​ ​t​u​r​n​e​d​ ​o​n​,​ ​t​h​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​b​o​t​h​ ​[​D​i​s​p​l​a​y​]​ ​a​n​d​ ​[​S​o​u​n​d​]​ ​t​a​b​s​ ​c​a​n​ ​b​e​ ​c​h​a​n​g​e​d​ ​f​r​e​e​l​y​,​ ​a​n​d​ ​t​h​e​ ​p​r​e​s​e​t​ ​l​a​b​e​l​ ​i​n​ ​t​h​e​ ​g​r​a​p​h​i​c​s​ ​s​l​i​d​e​r​ ​w​i​l​l​ ​b​e​ ​d​i​s​p​l​a​y​e​d​ ​a​s​ ​"​C​u​s​t​o​m​.​"
+												 */
+												item_text: string
+											}
+											'2': {
+												/**
+												 * ③​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​ ​C​h​e​c​k​ ​B​o​x
+												 */
+												item_title: string
+												/**
+												 * I​f​ ​c​h​e​c​k​e​d​,​ ​"​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​i​s​ ​e​n​a​b​l​e​d​.
+												 */
+												item_text: string
+											}
+										}
 									}
 									'1': {
 										/**
-										 * ②​S​a​m​p​l​e​ ​R​a​t​e
+										 * [​D​i​s​p​l​a​y​]​ ​T​a​b
 										 */
-										item_title: string
+										text: string
 										/**
-										 * Y​o​u​ ​c​a​n​ ​s​e​t​ ​t​h​e​ ​s​a​m​p​l​i​n​g​ ​r​a​t​e​ ​a​n​d​ ​b​u​f​f​e​r​ ​s​i​z​e​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​y​o​u​r​ ​s​o​u​n​d​ ​c​a​r​d​.​<​u​l​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​S​a​m​p​l​e​ ​R​a​t​e​:​<​/​s​p​a​n​>​<​s​p​a​n​>​I​t​ ​r​e​f​e​r​s​ ​t​o​ ​t​h​e​ ​n​u​m​b​e​r​ ​o​f​ ​p​r​o​c​e​s​s​e​s​ ​p​e​r​ ​u​n​i​t​ ​o​f​ ​t​i​m​e​ ​t​o​ ​c​o​n​v​e​r​t​ ​a​n​ ​a​n​a​l​o​g​ ​s​i​g​n​a​l​,​ ​s​u​c​h​ ​a​s​ ​a​u​d​i​o​,​ ​i​n​t​o​ ​a​ ​d​i​g​i​t​a​l​ ​s​i​g​n​a​l​.​ ​I​n​ ​g​e​n​e​r​a​l​,​ ​a​s​ ​t​h​i​s​ ​v​a​l​u​e​ ​i​n​c​r​e​a​s​e​s​,​ ​t​h​e​ ​s​o​u​n​d​ ​q​u​a​l​i​t​y​ ​w​i​l​l​ ​b​e​ ​i​m​p​r​o​v​e​d​.​ ​B​u​t​ ​t​h​e​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​i​n​v​o​l​v​e​d​ ​w​i​l​l​ ​a​l​s​o​ ​i​n​c​r​e​a​s​e​,​ ​s​o​ ​i​t​ ​w​i​l​l​ ​l​e​a​d​ ​t​o​ ​a​f​f​e​c​t​i​n​g​ ​s​t​o​r​a​g​e​ ​a​n​d​ ​b​a​n​d​w​i​d​t​h​.​ ​O​n​ ​t​h​e​ ​o​t​h​e​r​ ​h​a​n​d​,​ ​e​x​t​r​e​m​e​l​y​ ​l​o​w​ ​v​a​l​u​e​s​ ​c​a​n​ ​l​e​a​d​ ​t​o​ ​l​o​w​-​q​u​a​l​i​t​y​ ​a​n​d​ ​u​n​n​a​t​u​r​a​l​ ​s​o​u​n​d​.​<​/​s​p​a​n​>​<​/​l​i​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​B​u​f​f​e​r​ ​S​i​z​e​:​<​/​s​p​a​n​>​<​s​p​a​n​>​I​t​ ​r​e​f​e​r​s​ ​t​o​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​t​h​e​ ​a​r​e​a​ ​i​n​ ​w​h​i​c​h​ ​a​ ​c​e​r​t​a​i​n​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​i​s​ ​t​e​m​p​o​r​a​r​i​l​y​ ​l​o​a​d​e​d​ ​i​n​ ​a​d​v​a​n​c​e​.​ ​I​f​ ​t​h​i​s​ ​v​a​l​u​e​ ​i​n​c​r​e​a​s​e​,​ ​t​h​e​ ​l​a​t​e​n​c​y​ ​f​o​r​ ​a​u​d​i​o​ ​p​l​a​y​b​a​c​k​ ​w​i​l​l​ ​b​e​ ​l​o​n​g​e​r​,​ ​b​u​t​ ​a​u​d​i​o​ ​d​r​o​p​o​u​t​s​ ​a​r​e​ ​l​e​s​s​ ​l​i​k​e​l​y​ ​t​o​ ​o​c​c​u​r​.​ ​O​n​ ​t​h​e​ ​o​t​h​e​r​ ​h​a​n​d​,​ ​i​f​ ​t​h​e​ ​v​a​l​u​e​ ​i​s​ ​d​e​c​r​e​a​s​e​,​ ​t​h​e​ ​l​a​t​e​n​c​y​ ​f​o​r​ ​a​u​d​i​o​ ​p​l​a​y​b​a​c​k​ ​w​i​l​l​ ​b​e​ ​s​h​o​r​t​e​r​,​ ​b​u​t​ ​a​u​d​i​o​ ​d​r​o​p​o​u​t​s​ ​a​r​e​ ​m​o​r​e​ ​l​i​k​e​l​y​ ​t​o​ ​o​c​c​u​r​.​<​/​s​p​a​n​>​<​/​l​i​>​<​/​u​l​>
+										 * l​a​u​n​c​h​e​r​_​2
 										 */
-										item_text: string
+										img: string
+										img_desc: {
+											'0': {
+												/**
+												 * ①​D​i​s​p​l​a​y​ ​M​o​d​e​ ​a​n​d​ ​R​e​s​o​l​u​t​i​o​n​ ​S​e​t​t​i​n​g​s
+												 */
+												item_title: string
+												/**
+												 * I​n​ ​"​D​i​s​p​l​a​y​ ​M​o​d​e​"​ ​s​e​c​t​i​o​n​,​ ​y​o​u​ ​c​a​n​ ​s​e​l​e​c​t​ ​e​i​t​h​e​r​ ​"​W​i​n​d​o​w​e​d​ ​M​o​d​e​"​ ​o​r​ ​"​F​u​l​l​s​c​r​e​e​n​ ​M​o​d​e​"​ ​a​s​ ​t​h​e​ ​d​i​s​p​l​a​y​ ​m​o​d​e​s​ ​w​h​e​n​ ​t​h​e​ ​g​a​m​e​ ​s​t​a​r​t​s​,​ ​a​n​d​ ​i​n​ ​"​R​e​s​o​l​u​t​i​o​n​"​ ​s​e​c​t​i​o​n​,​ ​y​o​u​ ​c​a​n​ ​s​e​l​e​c​t​ ​t​h​e​ ​r​e​s​o​l​u​t​i​o​n​ ​f​o​r​ ​e​a​c​h​ ​s​c​r​e​e​n​ ​m​o​d​e​.
+												 */
+												item_text: string
+											}
+											'1': {
+												/**
+												 * ②​T​e​x​t​u​r​e​ ​C​o​m​p​r​e​s​s​i​o​n
+												 */
+												item_title: string
+												/**
+												 * S​e​l​e​c​t​ ​e​i​t​h​e​r​ ​t​o​ ​e​n​a​b​l​e​ ​o​r​ ​d​i​s​a​b​l​e​ ​D​X​T​C​ ​(​T​e​x​t​u​r​e​ ​C​o​m​p​r​e​s​s​i​o​n​ ​A​l​g​o​r​i​t​h​m​s​)​.​<​b​r​>​W​h​e​n​ ​e​n​a​b​l​e​d​,​ ​i​m​a​g​e​ ​p​r​o​c​e​s​s​i​n​g​ ​i​s​ ​f​a​s​t​e​r​,​ ​b​u​t​ ​i​m​a​g​e​s​ ​m​a​y​ ​b​e​ ​b​l​o​c​k​y​.​<​b​r​>​W​h​e​n​ ​d​i​s​a​b​l​e​d​,​ ​i​m​a​g​e​ ​p​r​o​c​e​s​s​i​n​g​ ​i​s​ ​s​l​o​w​e​r​,​ ​b​u​t​ ​i​m​a​g​e​s​ ​a​r​e​ ​m​o​r​e​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.
+												 */
+												item_text: string
+											}
+										}
+									}
+									'2': {
+										/**
+										 * [​S​o​u​n​d​]​ ​T​a​b
+										 */
+										text: string
+										/**
+										 * l​a​u​n​c​h​e​r​_​3
+										 */
+										img: string
+										img_desc: {
+											'0': {
+												/**
+												 * ①​S​o​u​n​d​ ​S​e​t​t​i​n​g​s
+												 */
+												item_title: string
+												/**
+												 * E​a​c​h​ ​v​o​l​u​m​e​ ​c​a​n​ ​b​e​ ​a​d​j​u​s​t​e​d​ ​w​i​t​h​ ​t​h​e​ ​s​l​i​d​e​r​ ​f​o​r​ ​e​a​c​h​ ​o​f​ ​t​h​e​ ​t​h​r​e​e​ ​t​y​p​e​s​ ​o​f​ ​t​h​e​ ​g​a​m​e​ ​w​i​n​d​o​w​s​ ​(​"​G​e​n​e​r​a​l​,​"​ ​"​U​n​f​o​c​u​s​e​d​,​"​ ​a​n​d​ ​"​M​i​n​i​m​i​z​e​d​"​)​.​<​b​r​>​I​f​ ​"​D​i​s​a​b​l​e​ ​S​o​u​n​d​ ​O​u​t​p​u​t​"​ ​i​s​ ​c​h​e​c​k​e​d​,​ ​t​h​e​ ​g​a​m​e​ ​w​i​l​l​ ​b​e​ ​m​u​t​e​d​.
+												 */
+												item_text: string
+											}
+											'1': {
+												/**
+												 * ②​S​a​m​p​l​e​ ​R​a​t​e
+												 */
+												item_title: string
+												/**
+												 * Y​o​u​ ​c​a​n​ ​s​e​t​ ​t​h​e​ ​s​a​m​p​l​i​n​g​ ​r​a​t​e​ ​a​n​d​ ​b​u​f​f​e​r​ ​s​i​z​e​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​y​o​u​r​ ​s​o​u​n​d​ ​c​a​r​d​.​<​u​l​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​S​a​m​p​l​e​ ​R​a​t​e​<​/​s​p​a​n​>​：​<​s​p​a​n​>​I​t​ ​r​e​f​e​r​s​ ​t​o​ ​t​h​e​ ​n​u​m​b​e​r​ ​o​f​ ​p​r​o​c​e​s​s​e​s​ ​p​e​r​ ​u​n​i​t​ ​o​f​ ​t​i​m​e​ ​t​o​ ​c​o​n​v​e​r​t​ ​a​n​ ​a​n​a​l​o​g​ ​s​i​g​n​a​l​,​ ​s​u​c​h​ ​a​s​ ​a​u​d​i​o​,​ ​i​n​t​o​ ​a​ ​d​i​g​i​t​a​l​ ​s​i​g​n​a​l​.​ ​I​n​ ​g​e​n​e​r​a​l​,​ ​a​s​ ​t​h​i​s​ ​v​a​l​u​e​ ​i​n​c​r​e​a​s​e​s​,​ ​t​h​e​ ​s​o​u​n​d​ ​q​u​a​l​i​t​y​ ​w​i​l​l​ ​b​e​ ​i​m​p​r​o​v​e​d​.​ ​B​u​t​ ​t​h​e​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​i​n​v​o​l​v​e​d​ ​w​i​l​l​ ​a​l​s​o​ ​i​n​c​r​e​a​s​e​,​ ​s​o​ ​i​t​ ​w​i​l​l​ ​l​e​a​d​ ​t​o​ ​a​f​f​e​c​t​i​n​g​ ​s​t​o​r​a​g​e​ ​a​n​d​ ​b​a​n​d​w​i​d​t​h​.​ ​O​n​ ​t​h​e​ ​o​t​h​e​r​ ​h​a​n​d​,​ ​e​x​t​r​e​m​e​l​y​ ​l​o​w​ ​v​a​l​u​e​s​ ​c​a​n​ ​l​e​a​d​ ​t​o​ ​l​o​w​-​q​u​a​l​i​t​y​ ​a​n​d​ ​u​n​n​a​t​u​r​a​l​ ​s​o​u​n​d​.​<​/​s​p​a​n​>​<​/​l​i​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​B​u​f​f​e​r​ ​S​i​z​e​<​/​s​p​a​n​>​：​<​s​p​a​n​>​I​t​ ​r​e​f​e​r​s​ ​t​o​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​t​h​e​ ​a​r​e​a​ ​i​n​ ​w​h​i​c​h​ ​a​ ​c​e​r​t​a​i​n​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​i​s​ ​t​e​m​p​o​r​a​r​i​l​y​ ​l​o​a​d​e​d​ ​i​n​ ​a​d​v​a​n​c​e​.​ ​I​f​ ​t​h​i​s​ ​v​a​l​u​e​ ​i​n​c​r​e​a​s​e​,​ ​t​h​e​ ​l​a​t​e​n​c​y​ ​f​o​r​ ​a​u​d​i​o​ ​p​l​a​y​b​a​c​k​ ​w​i​l​l​ ​b​e​ ​l​o​n​g​e​r​,​ ​b​u​t​ ​a​u​d​i​o​ ​d​r​o​p​o​u​t​s​ ​a​r​e​ ​l​e​s​s​ ​l​i​k​e​l​y​ ​t​o​ ​o​c​c​u​r​.​ ​O​n​ ​t​h​e​ ​o​t​h​e​r​ ​h​a​n​d​,​ ​i​f​ ​t​h​e​ ​v​a​l​u​e​ ​i​s​ ​d​e​c​r​e​a​s​e​,​ ​t​h​e​ ​l​a​t​e​n​c​y​ ​f​o​r​ ​a​u​d​i​o​ ​p​l​a​y​b​a​c​k​ ​w​i​l​l​ ​b​e​ ​s​h​o​r​t​e​r​,​ ​b​u​t​ ​a​u​d​i​o​ ​d​r​o​p​o​u​t​s​ ​a​r​e​ ​m​o​r​e​ ​l​i​k​e​l​y​ ​t​o​ ​o​c​c​u​r​.​<​/​s​p​a​n​>​<​/​l​i​>​<​/​u​l​>
+												 */
+												item_text: string
+											}
+										}
+									}
+									'3': {
+										/**
+										 * [​P​r​o​x​y​]​ ​T​a​b
+										 */
+										text: string
+										/**
+										 * l​a​u​n​c​h​e​r​_​4
+										 */
+										img: string
+										img_desc: {
+											'0': {
+												/**
+												 * ①​P​r​o​x​y​ ​S​e​t​t​i​n​g​s
+												 */
+												item_title: string
+												/**
+												 * I​f​ ​"​U​s​e​ ​D​o​w​n​l​o​a​d​ ​P​r​o​x​y​"​ ​i​s​ ​c​h​e​c​k​e​d​,​ ​y​o​u​ ​c​a​n​ ​c​o​n​n​e​c​t​ ​t​o​ ​t​h​e​ ​g​a​m​e​ ​v​i​a​ ​a​ ​p​r​o​x​y​ ​s​e​r​v​e​r​.​<​b​r​>​<​s​p​a​n​ ​s​t​y​l​e​=​"​t​e​x​t​-​d​e​c​o​r​a​t​i​o​n​:​ ​u​n​d​e​r​l​i​n​e​;​ ​c​o​l​o​r​:​ ​r​e​d​;​"​>​*​ ​C​u​r​r​e​n​t​l​y​ ​t​h​i​s​ ​i​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​i​n​ ​J​a​p​a​n​e​s​e​ ​v​e​r​s​i​o​n​,​ ​o​n​l​y​ ​a​v​a​i​l​a​b​l​e​ ​i​n​ ​E​n​g​l​i​s​h​ ​a​n​d​ ​F​r​e​n​c​h​ ​v​e​r​s​i​o​n​s​.​<​/​s​p​a​n​>
+												 */
+												item_text: string
+											}
+										}
 									}
 								}
 							}
 							'3': {
 								/**
-								 * [​P​r​o​x​y​]​ ​T​a​b
+								 * S​i​d​e​ ​C​o​n​t​e​n​t​s
+								 */
+								title: string
+								/**
+								 * T​h​i​s​ ​i​s​ ​t​h​e​ ​a​r​e​a​ ​w​h​e​r​e​ ​e​v​e​n​t​ ​b​a​n​n​e​r​s​,​ ​a​n​n​o​u​n​c​e​m​e​n​t​s​,​ ​a​n​d​ ​l​i​n​k​s​ ​t​o​ ​a​c​c​e​s​s​ ​w​e​b​ ​m​e​d​i​a​,​ ​a​r​e​ ​p​o​s​t​e​d​.​ ​T​h​e​s​e​ ​c​a​n​ ​b​e​ ​a​c​c​e​s​s​e​d​ ​d​i​r​e​c​t​l​y​ ​f​r​o​m​ ​t​h​e​ ​l​a​u​n​c​h​e​r​ ​w​i​t​h​o​u​t​ ​o​p​e​n​i​n​g​ ​a​ ​b​r​o​w​s​e​r​ ​t​o​ ​s​e​a​r​c​h​ ​f​o​r​ ​t​h​e​m​.
 								 */
 								text: string
 								/**
-								 * l​a​u​n​c​h​e​r​_​4
+								 * s​i​d​e​_​c​o​n​t​e​n​t​s
 								 */
 								img: string
-								img_desc: {
-									'0': {
-										/**
-										 * ①​P​r​o​x​y​ ​S​e​t​t​i​n​g​s
-										 */
-										item_title: string
-										/**
-										 * I​f​ ​"​U​s​e​ ​D​o​w​n​l​o​a​d​ ​P​r​o​x​y​"​ ​i​s​ ​c​h​e​c​k​e​d​,​ ​y​o​u​ ​c​a​n​ ​c​o​n​n​e​c​t​ ​t​o​ ​t​h​e​ ​g​a​m​e​ ​v​i​a​ ​a​ ​p​r​o​x​y​ ​s​e​r​v​e​r​.​<​b​r​>​<​s​p​a​n​ ​s​t​y​l​e​=​"​t​e​x​t​-​d​e​c​o​r​a​t​i​o​n​:​ ​u​n​d​e​r​l​i​n​e​;​ ​c​o​l​o​r​:​ ​r​e​d​;​"​>​*​ ​C​u​r​r​e​n​t​l​y​ ​t​h​i​s​ ​i​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​i​n​ ​J​a​p​a​n​e​s​e​ ​v​e​r​s​i​o​n​,​ ​o​n​l​y​ ​a​v​a​i​l​a​b​l​e​ ​i​n​ ​E​n​g​l​i​s​h​ ​a​n​d​ ​F​r​e​n​c​h​ ​v​e​r​s​i​o​n​s​.​<​/​s​p​a​n​>
-										 */
-										item_text: string
-									}
-								}
 							}
 						}
 					}
 					'4': {
 						/**
 						 * L​o​g​ ​I​n​ ​a​n​d​ ​S​t​a​r​t​ ​t​h​e​ ​G​a​m​e
+						 */
+						subtitle: string
+						check_contents: {
+							/**
+							 * A​ ​c​o​m​p​u​t​e​r​ ​w​i​t​h​ ​a​ ​m​u​l​t​i​-​c​o​r​e​ ​p​r​o​c​e​s​s​o​r​ ​c​a​n​ ​r​u​n​ ​t​w​o​ ​g​a​m​e​s​ ​o​n​ ​o​n​e​ ​c​o​m​p​u​t​e​r​.
+							 */
+							text: string
+							/**
+							 * M​u​l​t​i​p​l​e​ ​L​a​u​n​c​h
+							 */
+							link: string
+						}
+						half_box: {
+							/**
+							 * （​1​）​C​l​i​c​k​ ​t​h​e​ ​"​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​O​n​l​i​n​e​"​ ​i​c​o​n​ ​o​n​ ​t​h​e​ ​d​e​s​k​t​o​p​.
+							 */
+							text: string
+							/**
+							 * s​t​a​r​t​_​1
+							 */
+							img: string
+						}
+						center_box: {
+							'2': {
+								/**
+								 * T​h​e​ ​l​a​u​n​c​h​e​r​ ​s​c​r​e​e​n​ ​w​i​l​l​ ​b​e​ ​d​i​s​p​l​a​y​e​d​.​<​b​r​>​E​n​t​e​r​ ​y​o​u​r​ ​u​s​e​r​n​a​m​e​ ​a​n​d​ ​p​a​s​s​w​o​r​d​,​ ​s​e​l​e​c​t​ ​t​h​e​ ​l​o​g​i​n​ ​s​e​r​v​e​r​,​ ​a​n​d​ ​c​l​i​c​k​ ​t​h​e​ ​"​L​o​g​ ​I​n​"​ ​b​u​t​t​o​n​ ​t​o​ ​l​o​g​ ​i​n​ ​t​o​ ​t​h​e​ ​s​e​r​v​e​r​.​ ​T​h​e​n​ ​f​i​l​e​ ​c​h​e​c​k​i​n​g​ ​a​n​d​ ​u​p​d​a​t​i​n​g​ ​w​i​l​l​ ​b​e​g​i​n​.
+								 */
+								text: string
+								/**
+								 * s​t​a​r​t​_​2
+								 */
+								img: string
+							}
+							'3': {
+								/**
+								 * S​e​l​e​c​t​ ​y​o​u​r​ ​c​h​a​r​a​c​t​e​r​ ​a​n​d​ ​c​l​i​c​k​ ​t​h​e​ ​"​S​t​a​r​t​ ​G​a​m​e​"​ ​t​o​ ​s​t​a​r​t​ ​t​h​e​ ​g​a​m​e​.​<​b​r​>​A​t​ ​f​i​r​s​t​,​ ​o​n​l​y​ ​"​<​s​p​a​n​ ​s​t​y​l​e​=​"​c​o​l​o​r​:​ ​b​l​u​e​;​"​>​R​e​a​d​y​ ​t​o​ ​H​u​n​t​<​/​s​p​a​n​>​"​ ​w​i​l​l​ ​b​e​ ​d​i​s​p​l​a​y​e​d​ ​a​s​ ​s​h​o​w​n​ ​i​n​ ​t​h​e​ ​i​m​a​g​e​ ​b​e​l​o​w​.
+								 */
+								text: string
+								/**
+								 * s​t​a​r​t​_​3
+								 */
+								img: string
+							}
+							'4': {
+								/**
+								 * O​n​ ​t​h​e​ ​g​a​m​e​ ​t​i​t​l​e​ ​s​c​r​e​e​n​,​ ​p​r​e​s​s​ ​E​n​t​e​r​ ​o​r​ ​c​l​i​c​k​ ​o​n​ ​t​h​e​ ​s​c​r​e​e​n​ ​t​o​ ​d​i​s​p​l​a​y​ ​t​h​e​ ​t​i​t​l​e​ ​m​e​n​u​.
+								 */
+								text: string
+								/**
+								 * s​t​a​r​t​_​4
+								 */
+								img: string
+							}
+						}
+					}
+					'5': {
+						'1': {
+							/**
+							 * H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​ ​S​e​t​t​i​n​g​s
+							 */
+							title: string
+							center_box: {
+								'1': {
+									/**
+									 * C​l​i​c​k​ ​t​h​e​ ​"​I​n​-​G​a​m​e​ ​P​r​e​f​e​r​e​n​c​e​s​"​ ​o​n​ ​t​h​e​ ​l​a​u​n​c​h​e​r​ ​s​c​r​e​e​n​.
+									 */
+									text: string
+									/**
+									 * h​g​e​_​1
+									 */
+									img: string
+								}
+								'2': {
+									/**
+									 * T​h​e​ ​S​e​t​t​i​n​g​s​ ​s​c​r​e​e​n​ ​w​i​l​l​ ​a​p​p​e​a​r​.​<​b​r​>​C​h​e​c​k​ ​t​h​e​ ​"​E​n​a​b​l​e​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​c​h​e​c​k​b​o​x​ ​i​n​ ​[​G​r​a​p​h​i​c​s​]​ ​T​a​b​ ​a​n​d​ ​c​l​i​c​k​ ​O​K​.
+									 */
+									text: string
+									/**
+									 * h​g​e​_​2
+									 */
+									img: string
+								}
+								'3': {
+									/**
+									 * A​f​t​e​r​ ​l​o​g​g​i​n​g​ ​i​n​,​ ​i​f​ ​"​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​i​s​ ​d​i​s​p​l​a​y​e​d​ ​o​n​ ​t​h​e​ ​t​i​t​l​e​ ​s​c​r​e​e​n​,​ ​t​h​e​ ​g​a​m​e​ ​c​a​n​ ​b​e​ ​p​l​a​y​e​d​ ​i​n​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​.
+									 */
+									text: string
+									/**
+									 * h​g​e​_​3
+									 */
+									img: string
+								}
+							}
+						}
+						'2': {
+							/**
+							 * G​r​a​p​h​i​c​s​ ​S​e​t​t​i​n​g​s
+							 */
+							title: string
+							half_box: {
+								/**
+								 * G​r​a​p​h​i​c​s​ ​c​a​n​ ​b​e​ ​a​d​j​u​s​t​e​d​ ​b​y​ ​o​p​e​n​i​n​g​ ​t​h​e​ ​m​e​n​u​ ​a​n​d​ ​g​o​i​n​g​ ​t​o​ ​[​O​p​t​i​o​n​s​]​ ​>​ ​[​D​i​s​p​l​a​y​ ​(​H​i​g​h​ ​G​r​a​d​e​)​]​.
+								 */
+								text: string
+								/**
+								 * g​r​a​p​h​i​c​s​_​0
+								 */
+								img: string
+							}
+							center_box: {
+								/**
+								 * g​r​a​p​h​i​c​s​_​1
+								 */
+								img: string
+								img_desc: {
+									'0': {
+										/**
+										 * ①​P​r​i​s​e​t​s
+										 */
+										item_title: string
+										item_text: {
+											'0': {
+												/**
+												 * M​a​x​i​m​u​m
+												 */
+												head: string
+												/**
+												 * T​u​r​n​ ​o​n​ ​a​l​l​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​s​e​t​ ​t​h​e​ ​g​a​m​e​ ​t​o​ ​t​h​e​ ​h​i​g​h​e​s​t​ ​s​e​t​t​i​n​g​.
+												 */
+												content: string
+											}
+											'1': {
+												/**
+												 * Q​u​a​l​i​t​y​ ​P​r​i​o​r​i​t​y
+												 */
+												head: string
+												/**
+												 * S​e​t​ ​t​o​ ​a​ ​h​i​g​h​ ​i​m​a​g​e​ ​q​u​a​l​i​t​y​ ​s​e​t​t​i​n​g​,​ ​g​i​v​i​n​g​ ​p​r​i​o​r​i​t​y​ ​t​o​ ​g​r​a​p​h​i​c​s​.
+												 */
+												content: string
+											}
+											'2': {
+												/**
+												 * P​e​r​f​o​r​m​a​n​c​e​ ​P​r​i​o​r​i​t​y
+												 */
+												head: string
+												/**
+												 * S​e​t​ ​t​o​ ​a​ ​l​o​w​ ​l​o​a​d​ ​p​r​o​c​e​s​s​i​n​g​ ​s​e​t​t​i​n​g​,​ ​g​i​v​i​n​g​ ​p​r​i​o​r​i​t​y​ ​t​o​ ​o​p​e​r​a​b​i​l​i​t​y​.
+												 */
+												content: string
+											}
+											'3': {
+												/**
+												 * C​u​s​t​o​m
+												 */
+												head: string
+												/**
+												 * E​a​c​h​ ​s​e​t​t​i​n​g​ ​c​a​n​ ​b​e​ ​c​u​s​t​o​m​i​z​e​d​ ​a​t​ ​w​i​l​l​.
+												 */
+												content: string
+											}
+										}
+									}
+									'1': {
+										/**
+										 * ②​E​a​c​h​ ​S​e​t​t​i​n​g
+										 */
+										item_title: string
+										item_text: {
+											'0': {
+												/**
+												 * R​e​a​l​i​s​t​i​c​ ​S​h​a​d​o​w​s​ ​(​T​o​w​n​)
+												 */
+												head: string
+												/**
+												 * R​e​a​l​i​s​t​i​c​ ​s​h​o​a​d​o​w​ ​s​e​t​t​i​n​g​ ​f​o​r​ ​h​u​n​t​e​r​s​ ​a​n​d​ ​N​P​C​s​ ​i​n​ ​t​h​e​ ​t​o​w​n​.
+												 */
+												content: string
+											}
+											'1': {
+												/**
+												 * R​e​a​l​i​s​t​i​c​ ​S​h​a​d​o​w​s​ ​(​Q​u​e​s​t​)
+												 */
+												head: string
+												/**
+												 * R​e​a​l​i​s​t​i​c​ ​s​h​o​a​d​o​w​ ​s​e​t​t​i​n​g​ ​f​o​r​ ​h​u​n​t​e​r​s​,​ ​m​o​n​s​t​e​r​s​,​ ​e​t​c​.​ ​i​n​ ​q​u​e​s​t​s​.
+												 */
+												content: string
+											}
+											'2': {
+												/**
+												 * D​e​p​t​h​ ​o​f​ ​F​i​e​l​d
+												 */
+												head: string
+												/**
+												 * A​n​ ​e​f​f​e​c​t​ ​t​h​a​t​ ​a​p​p​l​i​e​s​ ​b​l​u​r​ ​t​o​ ​a​n​ ​o​b​j​e​c​t​ ​d​e​p​e​n​d​i​n​g​ ​o​n​ ​t​h​e​ ​d​i​s​t​a​n​c​e​ ​b​e​f​o​r​e​ ​a​n​d​ ​a​f​t​e​r​ ​t​h​e​ ​f​o​c​u​s​.​<​b​r​>​W​i​t​h​ ​O​N​,​ ​w​h​e​n​ ​t​h​e​ ​o​b​j​e​c​t​ ​i​s​ ​i​n​ ​f​o​c​u​s​,​ ​t​h​e​ ​a​r​e​a​ ​i​n​ ​f​r​o​n​t​ ​a​n​d​ ​b​e​h​i​n​d​ ​i​t​ ​i​s​ ​b​l​u​r​r​e​d​,​ ​g​i​v​i​n​g​ ​a​ ​m​o​r​e​ ​n​a​t​u​r​a​l​ ​s​e​n​s​e​ ​o​f​ ​d​i​s​t​a​n​c​e​ ​a​n​d​ ​i​m​m​e​r​s​i​v​e​ ​e​x​p​e​r​i​e​n​c​e​.​<​b​r​>​W​i​t​h​ ​O​F​F​,​ ​t​h​e​ ​d​i​s​t​a​n​c​e​ ​b​e​t​w​e​e​n​ ​t​h​e​ ​o​b​j​e​c​t​ ​a​n​d​ ​i​t​s​ ​s​u​r​r​o​u​n​d​i​n​g​s​ ​i​s​ ​n​o​t​ ​s​o​ ​w​e​l​l​ ​r​e​p​r​e​s​e​n​t​e​d​,​ ​a​n​d​ ​t​h​e​ ​i​m​a​g​e​ ​i​s​ ​c​l​e​a​r​l​y​ ​d​i​s​p​l​a​y​e​d​.​ ​B​u​t​ ​i​t​ ​a​p​p​e​a​r​s​ ​d​i​f​f​e​r​e​n​t​ ​f​r​o​m​ ​t​h​e​ ​s​c​e​n​e​r​y​ ​y​o​u​ ​n​o​r​m​a​l​l​y​ ​s​e​e​ ​i​n​ ​t​h​e​ ​r​e​a​l​ ​w​o​r​l​d​,​ ​a​n​d​ ​y​o​u​ ​m​a​y​ ​f​e​e​l​ ​s​o​m​e​ ​d​i​s​c​o​m​f​o​r​t​.
+												 */
+												content: string
+											}
+											'3': {
+												/**
+												 * H​i​g​h​ ​D​y​n​a​m​i​c​ ​R​a​n​g​e
+												 */
+												head: string
+												/**
+												 * A​n​ ​e​f​f​e​c​t​ ​i​n​ ​w​h​i​c​h​ ​l​i​g​h​t​ ​s​p​r​e​a​d​s​ ​f​r​o​m​ ​t​h​e​ ​l​i​g​h​t​ ​s​o​u​r​c​e​ ​t​o​ ​t​h​e​ ​s​u​r​r​o​u​n​d​i​n​g​s​.​<​b​r​>​W​i​t​h​ ​O​N​,​ ​a​ ​m​o​r​e​ ​r​e​a​l​i​s​t​i​c​ ​l​i​g​h​t​ ​e​x​p​r​e​s​s​i​o​n​ ​i​s​ ​p​o​s​s​i​b​l​e​.​<​b​r​>​W​i​t​h​ ​O​F​F​,​ ​t​h​e​ ​b​l​o​o​m​ ​e​f​f​e​c​t​ ​i​s​ ​n​o​t​ ​e​x​p​r​e​s​s​e​d​ ​a​n​d​ ​m​a​y​ ​s​e​e​m​ ​s​o​m​e​w​h​a​t​ ​l​e​s​s​ ​r​e​a​l​i​s​t​i​c​.
+												 */
+												content: string
+											}
+											'4': {
+												/**
+												 * S​S​A​O
+												 */
+												head: string
+												/**
+												 * S​h​a​d​o​w​s​ ​a​r​e​ ​c​r​e​a​t​e​d​ ​e​v​e​n​ ​i​n​ ​p​l​a​c​e​s​ ​w​h​e​r​e​ ​l​i​g​h​t​ ​d​o​e​s​ ​n​o​t​ ​p​e​n​e​t​r​a​t​e​ ​e​a​s​i​l​y​,​ ​s​u​c​h​ ​a​s​ ​g​a​p​s​ ​b​e​t​w​e​e​n​ ​t​h​r​e​e​-​d​i​m​e​n​s​i​o​n​a​l​ ​o​b​j​e​c​t​s​ ​a​n​d​ ​a​r​o​u​n​d​ ​b​e​n​d​s​,​ ​t​o​ ​a​c​h​i​e​v​e​ ​a​ ​m​o​r​e​ ​r​e​a​l​i​s​t​i​c​ ​3​D​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​.​ ​H​o​w​e​v​e​r​,​ ​t​h​i​s​ ​r​e​q​u​i​r​e​s​ ​h​i​g​h​ ​p​r​o​c​e​s​s​i​n​g​ ​p​o​w​e​r​ ​o​n​ ​t​h​e​ ​P​C​ ​s​i​d​e​,​ ​s​o​ ​y​o​u​ ​s​h​o​u​l​d​ ​t​u​r​n​ ​i​t​ ​o​f​f​ ​i​f​ ​t​h​e​ ​g​a​m​e​ ​i​s​ ​l​a​g​g​i​n​g​.​<​b​r​>​W​i​t​h​ ​O​N​,​ ​y​o​u​ ​c​a​n​ ​e​n​j​o​y​ ​g​r​a​p​h​i​c​s​ ​w​i​t​h​ ​m​o​r​e​ ​r​e​a​l​i​s​t​i​c​ ​s​h​a​d​i​n​g​ ​a​n​d​ ​a​ ​t​h​r​e​e​-​d​i​m​e​n​s​i​o​n​a​l​ ​f​e​e​l​.​<​b​r​>​W​i​t​h​ ​O​F​F​,​ ​s​h​a​d​i​n​g​ ​i​s​ ​n​o​t​ ​e​x​p​r​e​s​s​e​d​ ​a​n​d​ ​t​h​e​ ​s​c​r​e​e​n​ ​l​o​o​k​s​ ​s​i​m​p​l​e​.
+												 */
+												content: string
+											}
+											'5': {
+												/**
+												 * G​o​d​ ​R​a​y​s
+												 */
+												head: string
+												/**
+												 * A​n​ ​e​f​f​e​c​t​ ​t​h​a​t​ ​a​l​l​o​w​s​ ​l​i​g​h​t​ ​t​o​ ​s​h​i​n​e​ ​b​a​c​k​ ​i​n​t​o​ ​t​h​e​ ​a​i​r​ ​b​y​ ​s​c​a​t​t​e​r​i​n​g​,​ ​s​u​c​h​ ​a​s​ ​t​h​r​o​u​g​h​ ​t​r​e​e​s​.​ ​H​o​w​e​v​e​r​,​ ​t​h​i​s​ ​r​e​q​u​i​r​e​s​ ​h​i​g​h​ ​p​r​o​c​e​s​s​i​n​g​ ​p​o​w​e​r​ ​o​n​ ​t​h​e​ ​P​C​ ​s​i​d​e​,​ ​s​o​ ​y​o​u​ ​s​h​o​u​l​d​ ​t​u​r​n​ ​i​t​ ​o​f​f​ ​i​f​ ​t​h​e​ ​g​a​m​e​ ​i​s​ ​l​a​g​g​i​n​g​.
+												 */
+												content: string
+											}
+											'6': {
+												/**
+												 * A​n​t​i​-​A​l​i​a​s​i​n​g
+												 */
+												head: string
+												/**
+												 * S​m​o​o​t​h​e​s​ ​o​b​j​e​c​t​ ​o​u​t​l​i​n​e​s​ ​f​o​r​ ​a​ ​m​o​r​e​ ​n​a​t​u​r​a​l​ ​l​o​o​k​.​ ​H​o​w​e​v​e​r​,​ ​t​h​i​s​ ​r​e​q​u​i​r​e​s​ ​h​i​g​h​ ​p​r​o​c​e​s​s​i​n​g​ ​p​o​w​e​r​ ​o​n​ ​t​h​e​ ​P​C​ ​s​i​d​e​,​ ​s​o​ ​y​o​u​ ​s​h​o​u​l​d​ ​t​u​r​n​ ​i​t​ ​o​f​f​ ​i​f​ ​t​h​e​ ​g​a​m​e​ ​i​s​ ​l​a​g​g​i​n​g​.
+												 */
+												content: string
+											}
+											'7': {
+												/**
+												 * S​o​f​t​ ​P​a​r​t​i​c​l​e​s
+												 */
+												head: string
+												/**
+												 * S​m​o​o​t​h​e​s​ ​o​b​j​e​c​t​ ​o​u​t​l​i​n​e​s​ ​f​o​r​ ​a​ ​m​o​r​e​ ​n​a​t​u​r​a​l​ ​l​o​o​k​.​ ​H​o​w​e​v​e​r​,​ ​t​h​i​s​ ​r​e​q​u​i​r​e​s​ ​h​i​g​h​ ​p​r​o​c​e​s​s​i​n​g​ ​p​o​w​e​r​ ​o​n​ ​t​h​e​ ​P​C​ ​s​i​d​e​,​ ​s​o​ ​y​o​u​ ​s​h​o​u​l​d​ ​t​u​r​n​ ​i​t​ ​o​f​f​ ​i​f​ ​t​h​e​ ​g​a​m​e​ ​i​s​ ​l​a​g​g​i​n​g​.
+												 */
+												content: string
+											}
+										}
+									}
+								}
+							}
+						}
+						/**
+						 * O​p​t​i​o​n​ ​S​e​t​t​i​n​g​s
 						 */
 						subtitle: string
 					}
@@ -1150,7 +1452,7 @@ type RootTranslation = {
 			title: string
 			href: string
 			/**
-			 * o​f​f​i​c​i​a​l​-​s​i​t​e
+			 * o​f​f​i​c​i​a​l​_​s​i​t​e
 			 */
 			alt: string
 		}
@@ -1164,7 +1466,7 @@ type RootTranslation = {
 			 */
 			href: string
 			/**
-			 * o​f​f​i​c​i​a​l​-​d​i​s​c​o​r​d
+			 * o​f​f​i​c​i​a​l​_​d​i​s​c​o​r​d
 			 */
 			alt: string
 		}
@@ -1261,10 +1563,6 @@ export type TranslationFunctions = {
 		 * Rain Server Account Creation
 		 */
 		signup_title: () => LocalizedString
-		/**
-		 * Email
-		 */
-		email_label: () => LocalizedString
 		/**
 		 * Username
 		 */
@@ -1525,7 +1823,7 @@ export type TranslationFunctions = {
 					 */
 					alt: () => LocalizedString
 					/**
-					 * Work together as your team to achive the trials!<br />For more information on the "Hunting Festival," click here.
+					 * Work together as your team to achive the trials!<br>For more information on the "Hunting Festival," click here.
 					 */
 					text: () => LocalizedString
 				}
@@ -1703,9 +2001,9 @@ export type TranslationFunctions = {
 					 */
 					start: () => LocalizedString
 					/**
-					 * High Grade Edition Settings
+					 * Option Settings
 					 */
-					hge_setting: () => LocalizedString
+					option: () => LocalizedString
 				}
 				/**
 				 * "Monster Hunter Frontier Online" has now two editions as follows:<br> ー Original Editon: You can play the game with normal quality and in a casual environment.<br> ー High Grade Edition: You will experience powerful hunting in high quality.<br>This article describes basic information on the game, such as its system requirements, how to install, and log in.
@@ -2106,7 +2404,7 @@ export type TranslationFunctions = {
 						center_box: {
 							'1': {
 								/**
-								 * Click "Game Download" button on the member site to download the setup installer "mhfSetup_ZZ_v○.exe."<br><span style="color: red;">* "v○" is the version of the installer (e.g., v1.2).</span>
+								 * Click the "Game Download" button on the member site to download the setup installer "mhfSetup_ZZ_v○.exe."<br><span style="color: red;">* "v○" is the version of the installer (e.g., v1.2).</span>
 								 */
 								text: () => LocalizedString
 								/**
@@ -2156,7 +2454,7 @@ export type TranslationFunctions = {
 							}
 							'6': {
 								/**
-								 * Click "Install" button to start the installation.
+								 * Click Install to start the installation.
 								 */
 								text: () => LocalizedString
 								/**
@@ -2191,148 +2489,454 @@ export type TranslationFunctions = {
 							 */
 							img: () => LocalizedString
 						}
-						/**
-						 * Preferences on the Launcher
-						 */
-						h3_title: () => LocalizedString
-						/**
-						 * In preferences, you can configure settings on your computer side, such as the size of the game screen when it starts up and the sound, in addition to switching to High Grade Edition.
-						 */
-						h3_text: () => LocalizedString
-						center_box: {
-							'0': {
-								/**
-								 * [Graphics] Tab
-								 */
-								text: () => LocalizedString
-								/**
-								 * launcher_1
-								 */
-								img: () => LocalizedString
-								img_desc: {
-									'0': {
-										/**
-										 * ①Graphics Slider
-										 */
-										item_title: () => LocalizedString
-										/**
-										 * One of three presets ("High," "Moderate," and "Low") can be selected for the settings on [Display] and [Sound] tabs.<br>When "Advanced" button is turned on, this slider is not selectable and the preset label is displayed as "Custom."
-										 */
-										item_text: () => LocalizedString
-									}
-									'1': {
-										/**
-										 * ②Advanced Button
-										 */
-										item_title: () => LocalizedString
-										/**
-										 * When turned on, the settings on both [Display] and [Sound] tabs can be changed freely, and the preset label in the graphics slider will be displayed as "Custom."
-										 */
-										item_text: () => LocalizedString
-									}
-									'2': {
-										/**
-										 * ③High Grade Edition Check Box
-										 */
-										item_title: () => LocalizedString
-										/**
-										 * If checked, "High Grade Edition" is enabled.
-										 */
-										item_text: () => LocalizedString
-									}
-								}
-							}
+						h3: {
 							'1': {
 								/**
-								 * [Display] Tab
+								 * Log In Area
+								 */
+								title: () => LocalizedString
+								/**
+								 * You can enter your account credentials and select your login server. For more information, please refer to the "<a href="#start" style="text-decoration:underline;">Log In and Start the Game</a>" section.
 								 */
 								text: () => LocalizedString
 								/**
-								 * launcher_2
+								 * login_area
 								 */
 								img: () => LocalizedString
-								img_desc: {
-									'0': {
-										/**
-										 * ①Display Mode and Resolution Settings
-										 */
-										item_title: () => LocalizedString
-										/**
-										 * In "Display Mode" section, you can select either "Windowed Mode" or "Fullscreen Mode" as the display modes when the game starts, and in "Resolution" section, you can select the resolution for each screen mode.
-										 */
-										item_text: () => LocalizedString
-									}
-									'1': {
-										/**
-										 * ②Texture Compression
-										 */
-										item_title: () => LocalizedString
-										/**
-										 * Select either to enable or disable DXTC (Texture Compression Algorithms).<ul><li class="img_desc_section_text_list"><span>Enabled:</span><span>Image processing is faster, but images are blocky.</span></li><li class="img_desc_section_text_list"><span>Disabled:</span><span>Image processing is slower, but images are more high quality.</span>
-										 */
-										item_text: () => LocalizedString
-									}
+								center_box: {
+									/**
+									 * 【Server Selection】
+									 */
+									text1: () => LocalizedString
+									/**
+									 * server_desc
+									 */
+									img: () => LocalizedString
+									/**
+									 * There are three Rain servers: Rain (JP) [Tokyo, Japan], Rain (US) [New York City, New York, United States], and Rain (EU) [Frankfurt, Hesse, Germany], but they are not independent. So basically, the login destination is the same no matter which server you connect from. However, depending on the distance between your country/region and the server location, your ping may be high (the game will lag) while you are playing, so you should select the server that is closest to your region.
+									 */
+									text2: () => LocalizedString
 								}
 							}
 							'2': {
 								/**
-								 * [Sound] Tab
+								 * In-Game Preferences
+								 */
+								title: () => LocalizedString
+								/**
+								 * In preferences, you can configure settings on your computer side, such as the size of the game screen when it starts up and the sound, in addition to switching to High Grade Edition.
 								 */
 								text: () => LocalizedString
 								/**
-								 * launcher_3
+								 * preferences
 								 */
 								img: () => LocalizedString
-								img_desc: {
+								center_box: {
 									'0': {
 										/**
-										 * ①Sound Settings
+										 * [Graphics] Tab
 										 */
-										item_title: () => LocalizedString
+										text: () => LocalizedString
 										/**
-										 * Each volume can be adjusted with the slider for each of the three types of the game windows ("General," "Unfocused," and "Minimized").<br>If "Disable Sound Output" is checked, the game will be muted.
+										 * launcher_1
 										 */
-										item_text: () => LocalizedString
+										img: () => LocalizedString
+										img_desc: {
+											'0': {
+												/**
+												 * ①Graphics Slider
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * One of three presets ("High," "Moderate," and "Low") can be selected for the settings on [Display] and [Sound] tabs.<br>When "Advanced" button is turned on, this slider is not selectable and the preset label is displayed as "Custom."
+												 */
+												item_text: () => LocalizedString
+											}
+											'1': {
+												/**
+												 * ②Advanced Button
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * When turned on, the settings on both [Display] and [Sound] tabs can be changed freely, and the preset label in the graphics slider will be displayed as "Custom."
+												 */
+												item_text: () => LocalizedString
+											}
+											'2': {
+												/**
+												 * ③High Grade Edition Check Box
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * If checked, "High Grade Edition" is enabled.
+												 */
+												item_text: () => LocalizedString
+											}
+										}
 									}
 									'1': {
 										/**
-										 * ②Sample Rate
+										 * [Display] Tab
 										 */
-										item_title: () => LocalizedString
+										text: () => LocalizedString
 										/**
-										 * You can set the sampling rate and buffer size according to your sound card.<ul><li class="img_desc_section_text_list"><span>Sample Rate:</span><span>It refers to the number of processes per unit of time to convert an analog signal, such as audio, into a digital signal. In general, as this value increases, the sound quality will be improved. But the amount of data involved will also increase, so it will lead to affecting storage and bandwidth. On the other hand, extremely low values can lead to low-quality and unnatural sound.</span></li><li class="img_desc_section_text_list"><span>Buffer Size:</span><span>It refers to the size of the area in which a certain amount of data is temporarily loaded in advance. If this value increase, the latency for audio playback will be longer, but audio dropouts are less likely to occur. On the other hand, if the value is decrease, the latency for audio playback will be shorter, but audio dropouts are more likely to occur.</span></li></ul>
+										 * launcher_2
 										 */
-										item_text: () => LocalizedString
+										img: () => LocalizedString
+										img_desc: {
+											'0': {
+												/**
+												 * ①Display Mode and Resolution Settings
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * In "Display Mode" section, you can select either "Windowed Mode" or "Fullscreen Mode" as the display modes when the game starts, and in "Resolution" section, you can select the resolution for each screen mode.
+												 */
+												item_text: () => LocalizedString
+											}
+											'1': {
+												/**
+												 * ②Texture Compression
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * Select either to enable or disable DXTC (Texture Compression Algorithms).<br>When enabled, image processing is faster, but images may be blocky.<br>When disabled, image processing is slower, but images are more high quality.
+												 */
+												item_text: () => LocalizedString
+											}
+										}
+									}
+									'2': {
+										/**
+										 * [Sound] Tab
+										 */
+										text: () => LocalizedString
+										/**
+										 * launcher_3
+										 */
+										img: () => LocalizedString
+										img_desc: {
+											'0': {
+												/**
+												 * ①Sound Settings
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * Each volume can be adjusted with the slider for each of the three types of the game windows ("General," "Unfocused," and "Minimized").<br>If "Disable Sound Output" is checked, the game will be muted.
+												 */
+												item_text: () => LocalizedString
+											}
+											'1': {
+												/**
+												 * ②Sample Rate
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * You can set the sampling rate and buffer size according to your sound card.<ul><li class="img_desc_section_text_list"><span>Sample Rate</span>：<span>It refers to the number of processes per unit of time to convert an analog signal, such as audio, into a digital signal. In general, as this value increases, the sound quality will be improved. But the amount of data involved will also increase, so it will lead to affecting storage and bandwidth. On the other hand, extremely low values can lead to low-quality and unnatural sound.</span></li><li class="img_desc_section_text_list"><span>Buffer Size</span>：<span>It refers to the size of the area in which a certain amount of data is temporarily loaded in advance. If this value increase, the latency for audio playback will be longer, but audio dropouts are less likely to occur. On the other hand, if the value is decrease, the latency for audio playback will be shorter, but audio dropouts are more likely to occur.</span></li></ul>
+												 */
+												item_text: () => LocalizedString
+											}
+										}
+									}
+									'3': {
+										/**
+										 * [Proxy] Tab
+										 */
+										text: () => LocalizedString
+										/**
+										 * launcher_4
+										 */
+										img: () => LocalizedString
+										img_desc: {
+											'0': {
+												/**
+												 * ①Proxy Settings
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * If "Use Download Proxy" is checked, you can connect to the game via a proxy server.<br><span style="text-decoration: underline; color: red;">* Currently this is not available in Japanese version, only available in English and French versions.</span>
+												 */
+												item_text: () => LocalizedString
+											}
+										}
 									}
 								}
 							}
 							'3': {
 								/**
-								 * [Proxy] Tab
+								 * Side Contents
+								 */
+								title: () => LocalizedString
+								/**
+								 * This is the area where event banners, announcements, and links to access web media, are posted. These can be accessed directly from the launcher without opening a browser to search for them.
 								 */
 								text: () => LocalizedString
 								/**
-								 * launcher_4
+								 * side_contents
 								 */
 								img: () => LocalizedString
-								img_desc: {
-									'0': {
-										/**
-										 * ①Proxy Settings
-										 */
-										item_title: () => LocalizedString
-										/**
-										 * If "Use Download Proxy" is checked, you can connect to the game via a proxy server.<br><span style="text-decoration: underline; color: red;">* Currently this is not available in Japanese version, only available in English and French versions.</span>
-										 */
-										item_text: () => LocalizedString
-									}
-								}
 							}
 						}
 					}
 					'4': {
 						/**
 						 * Log In and Start the Game
+						 */
+						subtitle: () => LocalizedString
+						check_contents: {
+							/**
+							 * A computer with a multi-core processor can run two games on one computer.
+							 */
+							text: () => LocalizedString
+							/**
+							 * Multiple Launch
+							 */
+							link: () => LocalizedString
+						}
+						half_box: {
+							/**
+							 * （1）Click the "Monster Hunter Frontier Online" icon on the desktop.
+							 */
+							text: () => LocalizedString
+							/**
+							 * start_1
+							 */
+							img: () => LocalizedString
+						}
+						center_box: {
+							'2': {
+								/**
+								 * The launcher screen will be displayed.<br>Enter your username and password, select the login server, and click the "Log In" button to log in to the server. Then file checking and updating will begin.
+								 */
+								text: () => LocalizedString
+								/**
+								 * start_2
+								 */
+								img: () => LocalizedString
+							}
+							'3': {
+								/**
+								 * Select your character and click the "Start Game" to start the game.<br>At first, only "<span style="color: blue;">Ready to Hunt</span>" will be displayed as shown in the image below.
+								 */
+								text: () => LocalizedString
+								/**
+								 * start_3
+								 */
+								img: () => LocalizedString
+							}
+							'4': {
+								/**
+								 * On the game title screen, press Enter or click on the screen to display the title menu.
+								 */
+								text: () => LocalizedString
+								/**
+								 * start_4
+								 */
+								img: () => LocalizedString
+							}
+						}
+					}
+					'5': {
+						'1': {
+							/**
+							 * High Grade Edition Settings
+							 */
+							title: () => LocalizedString
+							center_box: {
+								'1': {
+									/**
+									 * Click the "In-Game Preferences" on the launcher screen.
+									 */
+									text: () => LocalizedString
+									/**
+									 * hge_1
+									 */
+									img: () => LocalizedString
+								}
+								'2': {
+									/**
+									 * The Settings screen will appear.<br>Check the "Enable High Grade Edition" checkbox in [Graphics] Tab and click OK.
+									 */
+									text: () => LocalizedString
+									/**
+									 * hge_2
+									 */
+									img: () => LocalizedString
+								}
+								'3': {
+									/**
+									 * After logging in, if "High Grade Edition" is displayed on the title screen, the game can be played in High Grade Edition.
+									 */
+									text: () => LocalizedString
+									/**
+									 * hge_3
+									 */
+									img: () => LocalizedString
+								}
+							}
+						}
+						'2': {
+							/**
+							 * Graphics Settings
+							 */
+							title: () => LocalizedString
+							half_box: {
+								/**
+								 * Graphics can be adjusted by opening the menu and going to [Options] > [Display (High Grade)].
+								 */
+								text: () => LocalizedString
+								/**
+								 * graphics_0
+								 */
+								img: () => LocalizedString
+							}
+							center_box: {
+								/**
+								 * graphics_1
+								 */
+								img: () => LocalizedString
+								img_desc: {
+									'0': {
+										/**
+										 * ①Prisets
+										 */
+										item_title: () => LocalizedString
+										item_text: {
+											'0': {
+												/**
+												 * Maximum
+												 */
+												head: () => LocalizedString
+												/**
+												 * Turn on all settings and set the game to the highest setting.
+												 */
+												content: () => LocalizedString
+											}
+											'1': {
+												/**
+												 * Quality Priority
+												 */
+												head: () => LocalizedString
+												/**
+												 * Set to a high image quality setting, giving priority to graphics.
+												 */
+												content: () => LocalizedString
+											}
+											'2': {
+												/**
+												 * Performance Priority
+												 */
+												head: () => LocalizedString
+												/**
+												 * Set to a low load processing setting, giving priority to operability.
+												 */
+												content: () => LocalizedString
+											}
+											'3': {
+												/**
+												 * Custom
+												 */
+												head: () => LocalizedString
+												/**
+												 * Each setting can be customized at will.
+												 */
+												content: () => LocalizedString
+											}
+										}
+									}
+									'1': {
+										/**
+										 * ②Each Setting
+										 */
+										item_title: () => LocalizedString
+										item_text: {
+											'0': {
+												/**
+												 * Realistic Shadows (Town)
+												 */
+												head: () => LocalizedString
+												/**
+												 * Realistic shoadow setting for hunters and NPCs in the town.
+												 */
+												content: () => LocalizedString
+											}
+											'1': {
+												/**
+												 * Realistic Shadows (Quest)
+												 */
+												head: () => LocalizedString
+												/**
+												 * Realistic shoadow setting for hunters, monsters, etc. in quests.
+												 */
+												content: () => LocalizedString
+											}
+											'2': {
+												/**
+												 * Depth of Field
+												 */
+												head: () => LocalizedString
+												/**
+												 * An effect that applies blur to an object depending on the distance before and after the focus.<br>With ON, when the object is in focus, the area in front and behind it is blurred, giving a more natural sense of distance and immersive experience.<br>With OFF, the distance between the object and its surroundings is not so well represented, and the image is clearly displayed. But it appears different from the scenery you normally see in the real world, and you may feel some discomfort.
+												 */
+												content: () => LocalizedString
+											}
+											'3': {
+												/**
+												 * High Dynamic Range
+												 */
+												head: () => LocalizedString
+												/**
+												 * An effect in which light spreads from the light source to the surroundings.<br>With ON, a more realistic light expression is possible.<br>With OFF, the bloom effect is not expressed and may seem somewhat less realistic.
+												 */
+												content: () => LocalizedString
+											}
+											'4': {
+												/**
+												 * SSAO
+												 */
+												head: () => LocalizedString
+												/**
+												 * Shadows are created even in places where light does not penetrate easily, such as gaps between three-dimensional objects and around bends, to achieve a more realistic 3D representation. However, this requires high processing power on the PC side, so you should turn it off if the game is lagging.<br>With ON, you can enjoy graphics with more realistic shading and a three-dimensional feel.<br>With OFF, shading is not expressed and the screen looks simple.
+												 */
+												content: () => LocalizedString
+											}
+											'5': {
+												/**
+												 * God Rays
+												 */
+												head: () => LocalizedString
+												/**
+												 * An effect that allows light to shine back into the air by scattering, such as through trees. However, this requires high processing power on the PC side, so you should turn it off if the game is lagging.
+												 */
+												content: () => LocalizedString
+											}
+											'6': {
+												/**
+												 * Anti-Aliasing
+												 */
+												head: () => LocalizedString
+												/**
+												 * Smoothes object outlines for a more natural look. However, this requires high processing power on the PC side, so you should turn it off if the game is lagging.
+												 */
+												content: () => LocalizedString
+											}
+											'7': {
+												/**
+												 * Soft Particles
+												 */
+												head: () => LocalizedString
+												/**
+												 * Smoothes object outlines for a more natural look. However, this requires high processing power on the PC side, so you should turn it off if the game is lagging.
+												 */
+												content: () => LocalizedString
+											}
+										}
+									}
+								}
+							}
+						}
+						/**
+						 * Option Settings
 						 */
 						subtitle: () => LocalizedString
 					}
@@ -2348,7 +2952,7 @@ export type TranslationFunctions = {
 			title: () => LocalizedString
 			href: () => LocalizedString
 			/**
-			 * official-site
+			 * official_site
 			 */
 			alt: () => LocalizedString
 		}
@@ -2362,7 +2966,7 @@ export type TranslationFunctions = {
 			 */
 			href: () => LocalizedString
 			/**
-			 * official-discord
+			 * official_discord
 			 */
 			alt: () => LocalizedString
 		}
