@@ -127,7 +127,7 @@ type RootTranslation = {
 		}
 		begin: {
 			/**
-			 * S​t​a​r​t​i​n​g​ ​t​h​e​ ​G​a​m​e
+			 * G​e​t​t​i​n​g​ ​S​t​a​r​t​e​d
 			 */
 			title: string
 			contents: {
@@ -506,7 +506,7 @@ type RootTranslation = {
 					option: string
 				}
 				/**
-				 * "​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​O​n​l​i​n​e​"​ ​h​a​s​ ​n​o​w​ ​t​w​o​ ​e​d​i​t​i​o​n​s​ ​a​s​ ​f​o​l​l​o​w​s​:​<​b​r​>​ ​ー​ ​O​r​i​g​i​n​a​l​ ​E​d​i​t​o​n​:​ ​Y​o​u​ ​c​a​n​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​w​i​t​h​ ​n​o​r​m​a​l​ ​q​u​a​l​i​t​y​ ​a​n​d​ ​i​n​ ​a​ ​c​a​s​u​a​l​ ​e​n​v​i​r​o​n​m​e​n​t​.​<​b​r​>​ ​ー​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​:​ ​Y​o​u​ ​w​i​l​l​ ​e​x​p​e​r​i​e​n​c​e​ ​p​o​w​e​r​f​u​l​ ​h​u​n​t​i​n​g​ ​i​n​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.​<​b​r​>​T​h​i​s​ ​a​r​t​i​c​l​e​ ​d​e​s​c​r​i​b​e​s​ ​b​a​s​i​c​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​g​a​m​e​,​ ​s​u​c​h​ ​a​s​ ​i​t​s​ ​s​y​s​t​e​m​ ​r​e​q​u​i​r​e​m​e​n​t​s​,​ ​h​o​w​ ​t​o​ ​i​n​s​t​a​l​l​,​ ​a​n​d​ ​l​o​g​ ​i​n​.
+				 * "​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​O​n​l​i​n​e​"​ ​h​a​s​ ​n​o​w​ ​t​w​o​ ​e​d​i​t​i​o​n​s​ ​a​s​ ​f​o​l​l​o​w​s​:​<​b​r​>​<​s​p​a​n​ ​s​t​y​l​e​=​"​f​o​n​t​-​w​e​i​g​h​t​:​ ​7​0​0​;​"​>​[​1​]​ ​O​r​i​g​i​n​a​l​ ​E​d​i​t​o​n​<​/​s​p​a​n​>​<​b​r​>​Y​o​u​ ​c​a​n​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​w​i​t​h​ ​n​o​r​m​a​l​ ​q​u​a​l​i​t​y​ ​a​n​d​ ​i​n​ ​a​ ​c​a​s​u​a​l​ ​e​n​v​i​r​o​n​m​e​n​t​.​<​b​r​>​<​s​p​a​n​ ​s​t​y​l​e​=​"​f​o​n​t​-​w​e​i​g​h​t​:​ ​7​0​0​;​"​>​[​2​]​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​<​/​s​p​a​n​>​<​b​r​>​Y​o​u​ ​w​i​l​l​ ​e​x​p​e​r​i​e​n​c​e​ ​p​o​w​e​r​f​u​l​ ​h​u​n​t​i​n​g​ ​i​n​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.​<​b​r​>​<​h​r​>​T​h​i​s​ ​a​r​t​i​c​l​e​ ​d​e​s​c​r​i​b​e​s​ ​b​a​s​i​c​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​g​a​m​e​,​ ​s​u​c​h​ ​a​s​ ​t​h​e​i​r​ ​s​y​s​t​e​m​ ​r​e​q​u​i​r​e​m​e​n​t​s​,​ ​h​o​w​ ​t​o​ ​i​n​s​t​a​l​l​,​ ​a​n​d​ ​l​o​g​ ​i​n​.
 				 */
 				article_memo: string
 				section: {
@@ -517,22 +517,22 @@ type RootTranslation = {
 						subtitle: string
 						check_contents: {
 							/**
-							 * Y​o​u​ ​c​a​n​ ​c​h​o​o​s​e​ ​t​o​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​i​n​ ​e​i​t​h​e​r​ ​"​O​r​i​g​i​n​a​l​ ​E​d​i​t​i​o​n​"​ ​o​r​ ​"​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​b​a​s​e​d​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​e​n​v​i​r​o​n​m​e​n​t​s​.
+							 * -​ ​Y​o​u​ ​c​a​n​ ​c​h​o​o​s​e​ ​t​o​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​i​n​ ​e​i​t​h​e​r​ ​"​O​r​i​g​i​n​a​l​ ​E​d​i​t​i​o​n​"​ ​o​r​ ​"​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​b​a​s​e​d​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​e​n​v​i​r​o​n​m​e​n​t​s​.
 							 */
 							'0': string
 							/**
-							 * P​l​e​a​s​e​ ​n​o​t​e​ ​t​h​a​t​ ​t​h​e​ ​g​a​m​e​ ​m​a​y​ ​n​o​t​ ​r​u​n​ ​p​r​o​p​e​r​l​y​ ​d​u​e​ ​t​o​ ​c​o​m​p​o​n​e​n​t​s​,​ ​e​t​c​,​ ​e​v​e​n​ ​i​f​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​m​e​e​t​s​ ​s​y​s​t​e​m​ ​r​e​q​u​i​r​e​m​e​n​t​s​.
+							 * -​ ​P​l​e​a​s​e​ ​n​o​t​e​ ​t​h​a​t​ ​e​v​e​n​ ​i​f​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​m​e​e​t​s​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​s​y​s​t​e​m​ ​r​e​q​u​i​r​e​m​e​n​t​s​,​ ​t​h​e​ ​g​a​m​e​ ​m​a​y​ ​n​o​t​ ​r​u​n​ ​p​r​o​p​e​r​l​y​ ​d​u​e​ ​t​o​ ​c​o​m​p​o​n​e​n​t​s​ ​o​r​ ​o​t​h​e​r​ ​r​e​a​s​o​n​s​.
 							 */
 							'1': string
 						}
 						table_data: {
 							tab_name: {
 								/**
-								 * R​e​q​u​i​r​e​m​e​n​t​s​ ​o​n​ ​O​r​i​g​i​n​a​l​ ​E​d​i​t​i​o​n
+								 * O​r​i​g​i​n​a​l​ ​E​d​i​t​i​o​n
 								 */
 								original: string
 								/**
-								 * R​e​q​u​i​r​e​m​e​n​t​s​ ​o​n​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n
+								 * H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n
 								 */
 								hge: string
 							}
@@ -1013,7 +1013,7 @@ type RootTranslation = {
 									 */
 									img: string
 									/**
-									 * T​h​e​r​e​ ​a​r​e​ ​t​h​r​e​e​ ​R​a​i​n​ ​s​e​r​v​e​r​s​:​ ​R​a​i​n​ ​(​J​P​)​ ​[​T​o​k​y​o​,​ ​J​a​p​a​n​]​,​ ​R​a​i​n​ ​(​U​S​)​ ​[​N​e​w​ ​Y​o​r​k​ ​C​i​t​y​,​ ​N​e​w​ ​Y​o​r​k​,​ ​U​n​i​t​e​d​ ​S​t​a​t​e​s​]​,​ ​a​n​d​ ​R​a​i​n​ ​(​E​U​)​ ​[​F​r​a​n​k​f​u​r​t​,​ ​H​e​s​s​e​,​ ​G​e​r​m​a​n​y​]​,​ ​b​u​t​ ​t​h​e​y​ ​a​r​e​ ​n​o​t​ ​i​n​d​e​p​e​n​d​e​n​t​.​ ​S​o​ ​b​a​s​i​c​a​l​l​y​,​ ​t​h​e​ ​l​o​g​i​n​ ​d​e​s​t​i​n​a​t​i​o​n​ ​i​s​ ​t​h​e​ ​s​a​m​e​ ​n​o​ ​m​a​t​t​e​r​ ​w​h​i​c​h​ ​s​e​r​v​e​r​ ​y​o​u​ ​c​o​n​n​e​c​t​ ​f​r​o​m​.​ ​H​o​w​e​v​e​r​,​ ​d​e​p​e​n​d​i​n​g​ ​o​n​ ​t​h​e​ ​d​i​s​t​a​n​c​e​ ​b​e​t​w​e​e​n​ ​y​o​u​r​ ​c​o​u​n​t​r​y​/​r​e​g​i​o​n​ ​a​n​d​ ​t​h​e​ ​s​e​r​v​e​r​ ​l​o​c​a​t​i​o​n​,​ ​y​o​u​r​ ​p​i​n​g​ ​m​a​y​ ​b​e​ ​h​i​g​h​ ​(​t​h​e​ ​g​a​m​e​ ​w​i​l​l​ ​l​a​g​)​ ​w​h​i​l​e​ ​y​o​u​ ​a​r​e​ ​p​l​a​y​i​n​g​,​ ​s​o​ ​y​o​u​ ​s​h​o​u​l​d​ ​s​e​l​e​c​t​ ​t​h​e​ ​s​e​r​v​e​r​ ​t​h​a​t​ ​i​s​ ​c​l​o​s​e​s​t​ ​t​o​ ​y​o​u​r​ ​r​e​g​i​o​n​.
+									 * T​h​e​r​e​ ​a​r​e​ ​t​h​r​e​e​ ​R​a​i​n​ ​s​e​r​v​e​r​s​:​ ​R​a​i​n​ ​(​J​P​)​ ​[​T​o​k​y​o​,​ ​J​a​p​a​n​]​,​ ​R​a​i​n​ ​(​U​S​)​ ​[​N​e​w​ ​Y​o​r​k​ ​C​i​t​y​,​ ​N​e​w​ ​Y​o​r​k​,​ ​U​n​i​t​e​d​ ​S​t​a​t​e​s​]​,​ ​a​n​d​ ​R​a​i​n​ ​(​E​U​)​ ​[​F​r​a​n​k​f​u​r​t​,​ ​H​e​s​s​e​,​ ​G​e​r​m​a​n​y​]​,​ ​b​u​t​ ​t​h​e​y​ ​a​r​e​ ​n​o​t​ ​i​n​d​e​p​e​n​d​e​n​t​.​ ​S​o​ ​b​a​s​i​c​a​l​l​y​,​ ​t​h​e​ ​l​o​g​i​n​ ​d​e​s​t​i​n​a​t​i​o​n​ ​[​J​a​k​a​r​t​a​,​ ​I​n​d​o​n​e​s​i​a​]​ ​i​s​ ​t​h​e​ ​s​a​m​e​ ​n​o​ ​m​a​t​t​e​r​ ​w​h​i​c​h​ ​s​e​r​v​e​r​ ​y​o​u​ ​c​o​n​n​e​c​t​ ​f​r​o​m​.​ ​H​o​w​e​v​e​r​,​ ​d​e​p​e​n​d​i​n​g​ ​o​n​ ​t​h​e​ ​d​i​s​t​a​n​c​e​ ​b​e​t​w​e​e​n​ ​y​o​u​r​ ​c​o​u​n​t​r​y​/​r​e​g​i​o​n​ ​a​n​d​ ​t​h​e​ ​s​e​r​v​e​r​ ​l​o​c​a​t​i​o​n​,​ ​y​o​u​r​ ​p​i​n​g​ ​m​a​y​ ​b​e​ ​h​i​g​h​ ​(​t​h​e​ ​g​a​m​e​ ​w​i​l​l​ ​l​a​g​)​ ​w​h​i​l​e​ ​y​o​u​ ​a​r​e​ ​p​l​a​y​i​n​g​,​ ​s​o​ ​y​o​u​ ​s​h​o​u​l​d​ ​s​e​l​e​c​t​ ​t​h​e​ ​s​e​r​v​e​r​ ​t​h​a​t​ ​i​s​ ​c​l​o​s​e​s​t​ ​t​o​ ​y​o​u​r​ ​r​e​g​i​o​n​.
 									 */
 									text2: string
 								}
@@ -1132,7 +1132,7 @@ type RootTranslation = {
 												 */
 												item_title: string
 												/**
-												 * Y​o​u​ ​c​a​n​ ​s​e​t​ ​t​h​e​ ​s​a​m​p​l​i​n​g​ ​r​a​t​e​ ​a​n​d​ ​b​u​f​f​e​r​ ​s​i​z​e​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​y​o​u​r​ ​s​o​u​n​d​ ​c​a​r​d​.​<​u​l​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​S​a​m​p​l​e​ ​R​a​t​e​<​/​s​p​a​n​>​：​<​s​p​a​n​>​I​t​ ​r​e​f​e​r​s​ ​t​o​ ​t​h​e​ ​n​u​m​b​e​r​ ​o​f​ ​p​r​o​c​e​s​s​e​s​ ​p​e​r​ ​u​n​i​t​ ​o​f​ ​t​i​m​e​ ​t​o​ ​c​o​n​v​e​r​t​ ​a​n​ ​a​n​a​l​o​g​ ​s​i​g​n​a​l​,​ ​s​u​c​h​ ​a​s​ ​a​u​d​i​o​,​ ​i​n​t​o​ ​a​ ​d​i​g​i​t​a​l​ ​s​i​g​n​a​l​.​ ​I​n​ ​g​e​n​e​r​a​l​,​ ​a​s​ ​t​h​i​s​ ​v​a​l​u​e​ ​i​n​c​r​e​a​s​e​s​,​ ​t​h​e​ ​s​o​u​n​d​ ​q​u​a​l​i​t​y​ ​w​i​l​l​ ​b​e​ ​i​m​p​r​o​v​e​d​.​ ​B​u​t​ ​t​h​e​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​i​n​v​o​l​v​e​d​ ​w​i​l​l​ ​a​l​s​o​ ​i​n​c​r​e​a​s​e​,​ ​s​o​ ​i​t​ ​w​i​l​l​ ​l​e​a​d​ ​t​o​ ​a​f​f​e​c​t​i​n​g​ ​s​t​o​r​a​g​e​ ​a​n​d​ ​b​a​n​d​w​i​d​t​h​.​ ​O​n​ ​t​h​e​ ​o​t​h​e​r​ ​h​a​n​d​,​ ​e​x​t​r​e​m​e​l​y​ ​l​o​w​ ​v​a​l​u​e​s​ ​c​a​n​ ​l​e​a​d​ ​t​o​ ​l​o​w​-​q​u​a​l​i​t​y​ ​a​n​d​ ​u​n​n​a​t​u​r​a​l​ ​s​o​u​n​d​.​<​/​s​p​a​n​>​<​/​l​i​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​>​B​u​f​f​e​r​ ​S​i​z​e​<​/​s​p​a​n​>​：​<​s​p​a​n​>​I​t​ ​r​e​f​e​r​s​ ​t​o​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​t​h​e​ ​a​r​e​a​ ​i​n​ ​w​h​i​c​h​ ​a​ ​c​e​r​t​a​i​n​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​i​s​ ​t​e​m​p​o​r​a​r​i​l​y​ ​l​o​a​d​e​d​ ​i​n​ ​a​d​v​a​n​c​e​.​ ​I​f​ ​t​h​i​s​ ​v​a​l​u​e​ ​i​n​c​r​e​a​s​e​,​ ​t​h​e​ ​l​a​t​e​n​c​y​ ​f​o​r​ ​a​u​d​i​o​ ​p​l​a​y​b​a​c​k​ ​w​i​l​l​ ​b​e​ ​l​o​n​g​e​r​,​ ​b​u​t​ ​a​u​d​i​o​ ​d​r​o​p​o​u​t​s​ ​a​r​e​ ​l​e​s​s​ ​l​i​k​e​l​y​ ​t​o​ ​o​c​c​u​r​.​ ​O​n​ ​t​h​e​ ​o​t​h​e​r​ ​h​a​n​d​,​ ​i​f​ ​t​h​e​ ​v​a​l​u​e​ ​i​s​ ​d​e​c​r​e​a​s​e​,​ ​t​h​e​ ​l​a​t​e​n​c​y​ ​f​o​r​ ​a​u​d​i​o​ ​p​l​a​y​b​a​c​k​ ​w​i​l​l​ ​b​e​ ​s​h​o​r​t​e​r​,​ ​b​u​t​ ​a​u​d​i​o​ ​d​r​o​p​o​u​t​s​ ​a​r​e​ ​m​o​r​e​ ​l​i​k​e​l​y​ ​t​o​ ​o​c​c​u​r​.​<​/​s​p​a​n​>​<​/​l​i​>​<​/​u​l​>
+												 * Y​o​u​ ​c​a​n​ ​s​e​t​ ​t​h​e​ ​s​a​m​p​l​i​n​g​ ​r​a​t​e​ ​a​n​d​ ​b​u​f​f​e​r​ ​s​i​z​e​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​y​o​u​r​ ​s​o​u​n​d​ ​c​a​r​d​.​<​u​l​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​_​t​i​t​l​e​"​>​S​a​m​p​l​e​ ​R​a​t​e​<​/​s​p​a​n​>​<​s​p​a​n​>​T​h​i​s​ ​r​e​f​e​r​s​ ​t​o​ ​t​h​e​ ​n​u​m​b​e​r​ ​o​f​ ​p​r​o​c​e​s​s​e​s​ ​p​e​r​ ​u​n​i​t​ ​o​f​ ​t​i​m​e​ ​t​o​ ​c​o​n​v​e​r​t​ ​a​n​ ​a​n​a​l​o​g​ ​s​i​g​n​a​l​,​ ​s​u​c​h​ ​a​s​ ​a​u​d​i​o​,​ ​i​n​t​o​ ​a​ ​d​i​g​i​t​a​l​ ​s​i​g​n​a​l​.​ ​I​n​ ​g​e​n​e​r​a​l​,​ ​a​s​ ​t​h​i​s​ ​v​a​l​u​e​ ​i​n​c​r​e​a​s​e​s​,​ ​t​h​e​ ​s​o​u​n​d​ ​q​u​a​l​i​t​y​ ​w​i​l​l​ ​b​e​ ​i​m​p​r​o​v​e​d​.​ ​B​u​t​ ​t​h​e​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​i​n​v​o​l​v​e​d​ ​w​i​l​l​ ​a​l​s​o​ ​i​n​c​r​e​a​s​e​,​ ​s​o​ ​i​t​ ​w​i​l​l​ ​l​e​a​d​ ​t​o​ ​a​f​f​e​c​t​i​n​g​ ​s​t​o​r​a​g​e​ ​a​n​d​ ​b​a​n​d​w​i​d​t​h​.​ ​O​n​ ​t​h​e​ ​o​t​h​e​r​ ​h​a​n​d​,​ ​e​x​t​r​e​m​e​l​y​ ​l​o​w​ ​v​a​l​u​e​s​ ​c​a​n​ ​l​e​a​d​ ​t​o​ ​l​o​w​-​q​u​a​l​i​t​y​ ​a​n​d​ ​u​n​n​a​t​u​r​a​l​ ​s​o​u​n​d​.​<​/​s​p​a​n​>​<​/​l​i​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​_​t​i​t​l​e​"​>​B​u​f​f​e​r​ ​S​i​z​e​<​/​s​p​a​n​>​<​s​p​a​n​>​T​h​i​s​ ​r​e​f​e​r​s​ ​t​o​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​t​h​e​ ​a​r​e​a​ ​i​n​ ​w​h​i​c​h​ ​a​ ​c​e​r​t​a​i​n​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​i​s​ ​t​e​m​p​o​r​a​r​i​l​y​ ​l​o​a​d​e​d​ ​i​n​ ​a​d​v​a​n​c​e​.​ ​I​f​ ​t​h​i​s​ ​v​a​l​u​e​ ​i​n​c​r​e​a​s​e​,​ ​t​h​e​ ​l​a​t​e​n​c​y​ ​f​o​r​ ​a​u​d​i​o​ ​p​l​a​y​b​a​c​k​ ​w​i​l​l​ ​b​e​ ​l​o​n​g​e​r​,​ ​b​u​t​ ​a​u​d​i​o​ ​d​r​o​p​o​u​t​s​ ​a​r​e​ ​l​e​s​s​ ​l​i​k​e​l​y​ ​t​o​ ​o​c​c​u​r​.​ ​O​n​ ​t​h​e​ ​o​t​h​e​r​ ​h​a​n​d​,​ ​i​f​ ​t​h​e​ ​v​a​l​u​e​ ​i​s​ ​d​e​c​r​e​a​s​e​,​ ​t​h​e​ ​l​a​t​e​n​c​y​ ​f​o​r​ ​a​u​d​i​o​ ​p​l​a​y​b​a​c​k​ ​w​i​l​l​ ​b​e​ ​s​h​o​r​t​e​r​,​ ​b​u​t​ ​a​u​d​i​o​ ​d​r​o​p​o​u​t​s​ ​a​r​e​ ​m​o​r​e​ ​l​i​k​e​l​y​ ​t​o​ ​o​c​c​u​r​.​<​/​s​p​a​n​>​<​/​l​i​>​<​/​u​l​>
 												 */
 												item_text: string
 											}
@@ -1627,7 +1627,7 @@ export type TranslationFunctions = {
 		}
 		begin: {
 			/**
-			 * Starting the Game
+			 * Getting Started
 			 */
 			title: () => LocalizedString
 			contents: {
@@ -2006,7 +2006,7 @@ export type TranslationFunctions = {
 					option: () => LocalizedString
 				}
 				/**
-				 * "Monster Hunter Frontier Online" has now two editions as follows:<br> ー Original Editon: You can play the game with normal quality and in a casual environment.<br> ー High Grade Edition: You will experience powerful hunting in high quality.<br>This article describes basic information on the game, such as its system requirements, how to install, and log in.
+				 * "Monster Hunter Frontier Online" has now two editions as follows:<br><span style="font-weight: 700;">[1] Original Editon</span><br>You can play the game with normal quality and in a casual environment.<br><span style="font-weight: 700;">[2] High Grade Edition</span><br>You will experience powerful hunting in high quality.<br><hr>This article describes basic information on the game, such as their system requirements, how to install, and log in.
 				 */
 				article_memo: () => LocalizedString
 				section: {
@@ -2017,22 +2017,22 @@ export type TranslationFunctions = {
 						subtitle: () => LocalizedString
 						check_contents: {
 							/**
-							 * You can choose to play the game in either "Original Edition" or "High Grade Edition" based on your computer environments.
+							 * - You can choose to play the game in either "Original Edition" or "High Grade Edition" based on your computer environments.
 							 */
 							'0': () => LocalizedString
 							/**
-							 * Please note that the game may not run properly due to components, etc, even if your computer meets system requirements.
+							 * - Please note that even if your computer meets the following system requirements, the game may not run properly due to components or other reasons.
 							 */
 							'1': () => LocalizedString
 						}
 						table_data: {
 							tab_name: {
 								/**
-								 * Requirements on Original Edition
+								 * Original Edition
 								 */
 								original: () => LocalizedString
 								/**
-								 * Requirements on High Grade Edition
+								 * High Grade Edition
 								 */
 								hge: () => LocalizedString
 							}
@@ -2513,7 +2513,7 @@ export type TranslationFunctions = {
 									 */
 									img: () => LocalizedString
 									/**
-									 * There are three Rain servers: Rain (JP) [Tokyo, Japan], Rain (US) [New York City, New York, United States], and Rain (EU) [Frankfurt, Hesse, Germany], but they are not independent. So basically, the login destination is the same no matter which server you connect from. However, depending on the distance between your country/region and the server location, your ping may be high (the game will lag) while you are playing, so you should select the server that is closest to your region.
+									 * There are three Rain servers: Rain (JP) [Tokyo, Japan], Rain (US) [New York City, New York, United States], and Rain (EU) [Frankfurt, Hesse, Germany], but they are not independent. So basically, the login destination [Jakarta, Indonesia] is the same no matter which server you connect from. However, depending on the distance between your country/region and the server location, your ping may be high (the game will lag) while you are playing, so you should select the server that is closest to your region.
 									 */
 									text2: () => LocalizedString
 								}
@@ -2632,7 +2632,7 @@ export type TranslationFunctions = {
 												 */
 												item_title: () => LocalizedString
 												/**
-												 * You can set the sampling rate and buffer size according to your sound card.<ul><li class="img_desc_section_text_list"><span>Sample Rate</span>：<span>It refers to the number of processes per unit of time to convert an analog signal, such as audio, into a digital signal. In general, as this value increases, the sound quality will be improved. But the amount of data involved will also increase, so it will lead to affecting storage and bandwidth. On the other hand, extremely low values can lead to low-quality and unnatural sound.</span></li><li class="img_desc_section_text_list"><span>Buffer Size</span>：<span>It refers to the size of the area in which a certain amount of data is temporarily loaded in advance. If this value increase, the latency for audio playback will be longer, but audio dropouts are less likely to occur. On the other hand, if the value is decrease, the latency for audio playback will be shorter, but audio dropouts are more likely to occur.</span></li></ul>
+												 * You can set the sampling rate and buffer size according to your sound card.<ul><li class="img_desc_section_text_list"><span class="img_desc_section_text_list_title">Sample Rate</span><span>This refers to the number of processes per unit of time to convert an analog signal, such as audio, into a digital signal. In general, as this value increases, the sound quality will be improved. But the amount of data involved will also increase, so it will lead to affecting storage and bandwidth. On the other hand, extremely low values can lead to low-quality and unnatural sound.</span></li><li class="img_desc_section_text_list"><span class="img_desc_section_text_list_title">Buffer Size</span><span>This refers to the size of the area in which a certain amount of data is temporarily loaded in advance. If this value increase, the latency for audio playback will be longer, but audio dropouts are less likely to occur. On the other hand, if the value is decrease, the latency for audio playback will be shorter, but audio dropouts are more likely to occur.</span></li></ul>
 												 */
 												item_text: () => LocalizedString
 											}

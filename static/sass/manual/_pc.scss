@@ -687,8 +687,9 @@
     // 画像右、テキスト左レイアウト
     .half_box {
         display: flex;
+        justify-content: space-between;
+        align-items: center;
         margin-bottom: 5%;
-        justify-content: space-around;
 
         // テキスト
         .half_box_text {
@@ -723,38 +724,49 @@
 
             // テキスト
             .img_desc_section_text {
-                padding: 0 2%;
+                padding: 0 3%;
                 color: black;
 
                 // 表内テキストリスト化
                 .img_desc_section_text_list {
                     display: flex;
                     flex-wrap: nowrap;
+                    flex-direction: column;
                     justify-content: space-around;
-                    margin-top: 1%;
-                    padding-top: 1%;
+                    margin-top: 2%;
+                    padding-top: 2%;
                     border-top: 2px gray solid;
 
                     &:first-child {
                         border: none;
+                        margin: auto;
                     }
 
                     // リストタイトル
-                    span:nth-child(1) {
-                        width: 150px;
+                    .img_desc_section_text_list_title {
                         white-space: nowrap;
                         text-align: center;
                         font-weight: 700;
+                        border-left: solid 8px orange;
+                        background: #f7f4f4;
+                        text-align: center;
+                        border-radius: 0 15px 15px 0;
+                        padding: 1% 0;
+                        margin-bottom: 1%;
+                        width: 40%;
+                        border-top: solid 3px #dadada;
+                        border-bottom: solid 3px #dadada;
+                        border-right: solid 3px #dadada;
 
-                        &:lang(en) {
+                        /* &:lang(en) {
                             width: 100px;
-                        }
+                        } */
                     }
 
                     // リストテキスト
-                    span:nth-child(2) {
+                    /* span:nth-child(2) {
                         width: 420px;
-                    }
+                    } */
                 }
 
                 // 表内テキスト下部仕切り
@@ -887,6 +899,15 @@
             // テキスト
             .check_contents_list_text {
                 text-indent: -1em;
+                padding-bottom: 3%;
+
+                &:lang(en) {
+                    text-indent: -0.5em;
+                }
+
+                &:last-child {
+                    padding: 0;
+                }
             }
         }
     }
@@ -1015,6 +1036,14 @@
         animation: loaderAni1 1.7s infinite ease, loaderAni2 1.7s infinite ease;
     }
 
+    // SPボトムメニュー非表示
+    .bottom_navigations {
+        display: none;
+    }
+
+    /* 動作環境
+====================================================*/
+
     // 表タブ位置調整
     .table_tabs {
         position: relative;
@@ -1026,8 +1055,10 @@
         .table_tabs_item {
             background: DeepSkyBlue;
             padding: 2%;
+            width: 40%;
             font-weight: 700;
             font-size: 1.8rem;
+            text-align: center;
             margin-bottom: 2%;
             border-radius: 20px;
             filter: drop-shadow(0px 0px 6px rgb(50, 50, 50));
@@ -1041,14 +1072,6 @@
             }
         }
     }
-
-    // SPボトムメニュー非表示
-    .bottom_navigations {
-        display: none;
-    }
-
-    /* 動作環境
-====================================================*/
 
     // 表本体
     .table_contents {
@@ -1064,7 +1087,6 @@
             .table_header {
                 color: white;
                 border-top: white solid 2px;
-                //border-right: white solid 5px;
                 background: linear-gradient(rgb(0 101 201 / 70%), rgb(0 93 188 / 90%) 50%);
             }
 
@@ -1481,15 +1503,12 @@
             // リンクリスト
             .footer_link_list {
                 @include flex_center;
-                align-items: flex-start;
-                flex-wrap: wrap;
+                justify-content: space-evenly;
 
                 // リスト間隔調整
                 li {
                     position: relative;
-                    width: calc(30% - 30px);
-                    height: 40%;
-                    margin: 0 20px;
+                    width: 30%;
 
                     // リストアイテム内部調整
                     .footer_list_items {
@@ -1500,32 +1519,22 @@
                         background-color: #000;
                         border: 2px solid #fff;
                         color: #fff;
+                        padding-right: 12%;
 
                         // アイテム画像
                         .footer_list_img {
                             @include flex_center;
                             position: relative;
-                            width: 91px;
-                            height: 100%;
-                            //background: rgba(255, 255, 255, 0.9);
-                        }
-
-                        // 画像ーテキスト間の仕切り
-                        .footer_list_img::after {
-                            content: '';
-                            width: 2px;
-                            height: 102%;
-                            background-color: #fff;
-                            @include up_down;
-                            left: 100%;
+                            max-width: 90px;
+                            margin: 0px 5%;
+                            aspect-ratio: 1 / 1;
                         }
 
                         // アイテムタイトル
                         .footer_list_title {
-                            font-size: 2rem;
+                            font-size: 1.5rem;
                             font-weight: bold;
                             color: #fff;
-                            padding: 5% 10% 5% 5%;
                         }
 
                         // アイテム矢印
@@ -1548,7 +1557,7 @@
                 padding: 3% 0 2%;
                 text-align: center;
                 color: #fff;
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
         }
     }

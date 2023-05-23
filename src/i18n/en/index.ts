@@ -54,7 +54,7 @@ const en: BaseTranslation = {
             },
         },
         begin: {
-            title: 'Starting the Game',
+            title: 'Getting Started',
             contents: {
                 start: 'How to Start the Game',
                 menu: 'Title Menu',
@@ -217,18 +217,18 @@ const en: BaseTranslation = {
                     option: 'Option Settings',
                 },
                 article_memo:
-                    '"Monster Hunter Frontier Online" has now two editions as follows:<br> ー Original Editon: You can play the game with normal quality and in a casual environment.<br> ー High Grade Edition: You will experience powerful hunting in high quality.<br>This article describes basic information on the game, such as its system requirements, how to install, and log in.',
+                    '"Monster Hunter Frontier Online" has now two editions as follows:<br><span style="font-weight: 700;">[1] Original Editon</span><br>You can play the game with normal quality and in a casual environment.<br><span style="font-weight: 700;">[2] High Grade Edition</span><br>You will experience powerful hunting in high quality.<br><hr>This article describes basic information on the game, such as their system requirements, how to install, and log in.',
                 section: {
                     1: {
                         subtitle: 'System Requirements',
                         check_contents: [
-                            'You can choose to play the game in either "Original Edition" or "High Grade Edition" based on your computer environments.',
-                            'Please note that the game may not run properly due to components, etc, even if your computer meets system requirements.',
+                            '- You can choose to play the game in either "Original Edition" or "High Grade Edition" based on your computer environments.',
+                            '- Please note that even if your computer meets the following system requirements, the game may not run properly due to components or other reasons.',
                         ],
                         table_data: {
                             tab_name: {
-                                original: 'Requirements on Original Edition',
-                                hge: 'Requirements on High Grade Edition',
+                                original: 'Original Edition',
+                                hge: 'High Grade Edition',
                             },
                             original: {
                                 column_name: {
@@ -404,7 +404,7 @@ const en: BaseTranslation = {
                                 center_box: {
                                     text1: '【Server Selection】',
                                     img: 'server_desc',
-                                    text2: 'There are three Rain servers: Rain (JP) [Tokyo, Japan], Rain (US) [New York City, New York, United States], and Rain (EU) [Frankfurt, Hesse, Germany], but they are not independent. So basically, the login destination is the same no matter which server you connect from. However, depending on the distance between your country/region and the server location, your ping may be high (the game will lag) while you are playing, so you should select the server that is closest to your region.',
+                                    text2: 'There are three Rain servers: Rain (JP) [Tokyo, Japan], Rain (US) [New York City, New York, United States], and Rain (EU) [Frankfurt, Hesse, Germany], but they are not independent. So basically, the login destination [Jakarta, Indonesia] is the same no matter which server you connect from. However, depending on the distance between your country/region and the server location, your ping may be high (the game will lag) while you are playing, so you should select the server that is closest to your region.',
                                 },
                             },
 
@@ -462,7 +462,7 @@ const en: BaseTranslation = {
                                             {
                                                 item_title: '②Sample Rate',
                                                 item_text:
-                                                    'You can set the sampling rate and buffer size according to your sound card.<ul><li class="img_desc_section_text_list"><span>Sample Rate</span>：<span>It refers to the number of processes per unit of time to convert an analog signal, such as audio, into a digital signal. In general, as this value increases, the sound quality will be improved. But the amount of data involved will also increase, so it will lead to affecting storage and bandwidth. On the other hand, extremely low values can lead to low-quality and unnatural sound.</span></li><li class="img_desc_section_text_list"><span>Buffer Size</span>：<span>It refers to the size of the area in which a certain amount of data is temporarily loaded in advance. If this value increase, the latency for audio playback will be longer, but audio dropouts are less likely to occur. On the other hand, if the value is decrease, the latency for audio playback will be shorter, but audio dropouts are more likely to occur.</span></li></ul>',
+                                                    'You can set the sampling rate and buffer size according to your sound card.<ul><li class="img_desc_section_text_list"><span class="img_desc_section_text_list_title">Sample Rate</span><span>This refers to the number of processes per unit of time to convert an analog signal, such as audio, into a digital signal. In general, as this value increases, the sound quality will be improved. But the amount of data involved will also increase, so it will lead to affecting storage and bandwidth. On the other hand, extremely low values can lead to low-quality and unnatural sound.</span></li><li class="img_desc_section_text_list"><span class="img_desc_section_text_list_title">Buffer Size</span><span>This refers to the size of the area in which a certain amount of data is temporarily loaded in advance. If this value increase, the latency for audio playback will be longer, but audio dropouts are less likely to occur. On the other hand, if the value is decrease, the latency for audio playback will be shorter, but audio dropouts are more likely to occur.</span></li></ul>',
                                             },
                                         ],
                                     },

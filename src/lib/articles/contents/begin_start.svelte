@@ -11,7 +11,7 @@
 
     let activedElement: HTMLElement;
     let nowTarget: HTMLElement;
-    let isDefault = true;
+    let isDefault: boolean = true;
     const tabInfoHandler = (key: string, value: string, e: MouseEvent) => {
         // tab handling
         const currentURL = $page.url;
@@ -59,7 +59,7 @@
     <div class="check_contents">
         <ul class="check_contents_list">
             {#each Object.values(spec.check_contents) as text}
-                <li class="check_contents_list_text">・{text()}</li>
+                <li class="check_contents_list_text">{text()}</li>
             {/each}
         </ul>
     </div>
@@ -137,7 +137,7 @@
     <ul>
         {#each Object.values(launcher.h3[2].center_box) as { text, img, img_desc }}
             <li class="center_box_no_number">
-                <p style="font-weight: 700;" class="center_box_no_number_text">{text()}</p>
+                <p style="font-weight: 700; font-size: 1.6rem;" class="center_box_no_number_text">{text()}</p>
                 <p class="center_box_no_number_img"><img src="/img/{$locale}/articles/begin/start/{img()}.png" alt={img()} /></p>
                 <ul class="img_desc_section">
                     {#each Object.values(img_desc) as { item_title, item_text }}
@@ -166,17 +166,21 @@
         <ul class="check_contents_with_link_list">
             <li class="check_contents_with_link_list_item">
                 <p class="check_contents_list_text">{start.check_contents['text']()}</p>
+                <div class="check_contents_list_arrow_group">
+                    <span class="check_contents_list_arrow">＞</span>
+                    <span class="check_contents_list_arrow">＞</span>
+                </div>
                 <!-- svelte-ignore a11y-missing-attribute -->
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                ＞＞<a on:click={() => loadArticle($locale, 'begin/', 'multiple/')} class="check_contents_list_link">{start.check_contents['link']()}</a>
+                <a on:click={() => loadArticle($locale, 'begin/', 'multiple/')} class="check_contents_list_link">{start.check_contents['link']()}</a>
             </li>
         </ul>
     </div>
 
     <ul>
         <li class="half_box">
-            <p style="text-indent: -2.5em;" class="half_box_text">{start.half_box['text']()}</p>
-            <p style="max-width: 170px;" class="half_box_img">
+            <p style="text-indent: -2.5em;" class="half_box_text half_box_text_adj">{start.half_box['text']()}</p>
+            <p style="max-width: 120px;" class="half_box_img">
                 <img src="/img/{$locale}/articles/begin/start/{start.half_box['img']()}.png" alt={start.half_box['img']()} />
             </p>
         </li>
@@ -224,9 +228,8 @@
                     <ul class="img_desc_section_text">
                         {#each Object.values(item_text) as { head, content }}
                             <li class="img_desc_section_text_list">
-                                <span style="width: 200px;">{head()}</span>
-                                ：
-                                <span style="width: 370px;">{@html content()}</span>
+                                <span class="img_desc_section_text_list_title">{head()}</span>
+                                <span>{@html content()}</span>
                             </li>
                         {/each}
                     </ul>
