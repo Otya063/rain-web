@@ -86,26 +86,21 @@ export const scrollToTop = () => {
 
 /* Scroll to Target Element
 ====================================================*/
-if (browser) {
-    const contents = document.querySelectorAll('.scroll') as NodeListOf<HTMLAnchorElement>;
-    contents.forEach((content: HTMLAnchorElement) => {
-        content.addEventListener('click', (e: MouseEvent) => {
-            const data_target: string = e.currentTarget.getAttribute('data-target');
-            const target_element = document.getElementById(data_target) as HTMLElement;
-            target_element.scrollIntoView({
-                block: 'start',
-                behavior: 'smooth',
-            });
-        });
+export const scrollToElm = (e: MouseEvent) => {
+    const data_target: string = e.currentTarget.getAttribute('data-target');
+    const target_element = document.getElementById(data_target) as HTMLElement;
+    target_element.scrollIntoView({
+        block: 'start',
+        behavior: 'smooth',
     });
-}
+};
 
 /* Load Article
 ====================================================*/
 export const loadArticle = (lang_code: string = '', maindir: string = '', subdir: string = '') => {
     const href_path: string = `${lang_code}/manual/${maindir}${subdir}`;
     const url = new URL(href_path, location.origin);
-    // remove query params if they are
+    // remove unnecessary things
     url.search = '';
     location.href = url.toString();
 };

@@ -5,19 +5,11 @@
     export let form: ActionData;
 </script>
 
-<h1>{$LL.register['register_title']()}</h1>
+<h1>{$LL.signup['signup_title']()}</h1>
 
 <form action="?/signup" method="POST">
     <div>
-        <label for="email">{$LL.register['email_label']()}</label>
-        <input id="email" name="email" type="text" value={form?.credentials?.email ?? ''} autocomplete="off" />
-        {#if form?.errors?.invalidEmail}
-            <span style="color: red;">メールアドレスは正しく入力してください</span>
-        {/if}
-    </div>
-
-    <div>
-        <label for="username">{$LL.register['username_label']()}</label>
+        <label for="username">{$LL.signup['username_label']()}</label>
         <input id="username" name="username" type="text" value={form?.credentials?.username ?? ''} autocomplete="off" />
         {#if form?.errors?.invalidUsername}
             <span style="color: red;">ユーザー名は正しく入力してください</span>
@@ -25,7 +17,7 @@
     </div>
 
     <div>
-        <label for="password">{$LL.register['password_label']()}</label>
+        <label for="password">{$LL.signup['password_label']()}</label>
         <input id="password" name="password" type="password" value={form?.credentials?.password ?? ''} autocomplete="off" />
         {#if form?.errors?.invalidPassword}
             <span style="color: red;">パスワードは正しく入力してください</span>
@@ -33,8 +25,8 @@
     </div>
 
     {#if form?.errors?.userExist}
-        <p style="color: red;">{$LL.register['already']()}</p>
+        <p style="color: red;">{$LL.signup['already']()}</p>
     {/if}
 
-    <button type="submit">{$LL.register['register_button']()}</button>
+    <button type="submit">{$LL.signup['signup_button']()}</button>
 </form>

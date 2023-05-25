@@ -597,6 +597,27 @@
         }
     }
 
+    // サブタイトルh3
+    h3 {
+        position: relative;
+        font-size: 2.5rem;
+        font-weight: 600;
+        padding-left: 3%;
+        margin: 8% 0;
+        color: rgb(21, 199, 190);
+
+        &::before {
+            content: '';
+            position: absolute;
+            background: url(#{$path_img}/common/h3_frame.webp) center center no-repeat;
+            background-size: 100%;
+            width: 80%;
+            aspect-ratio: 75 / 15;
+            bottom: -45px;
+            left: -10px;
+        }
+    }
+
     // 記事コンテンツ領域
     .contents {
         background: rgba(255, 255, 255, 0.6);
@@ -621,21 +642,162 @@
 
         // テキスト
         .center_box_text {
-            font-size: 1.8rem;
             text-align: start;
             text-indent: -2.5em;
             padding-bottom: 2%;
+            padding-left: 3%;
         }
 
         // 画像
         .center_box_img {
             display: inline-block;
-            width: 85%;
+            //width: 85%;
+        }
+    }
+
+    // セクション内紹介ボックス
+    .section_inrto_box {
+        margin-bottom: 10%;
+
+        // テキスト
+        .intro_box_text {
+            text-align: start;
+            padding-bottom: 2%;
+        }
+    }
+
+    // 番号なし中央レイアウト
+    .center_box_no_number {
+        margin: 0;
+        margin-bottom: 5%;
+        text-align: center;
+
+        // テキスト
+        .center_box_no_number_text {
+            text-align: start;
+            padding-bottom: 1%;
+        }
+
+        // 画像設定
+        .center_box_no_number_img {
+            display: inline-block;
+        }
+    }
+
+    // 画像右、テキスト左レイアウト
+    .half_box {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5%;
+
+        // テキスト
+        .half_box_text {
+            padding: 0 3%;
+        }
+
+        // 画像
+        .half_box_img {
+            display: inline-block;
+            width: 100%;
+        }
+    }
+
+    // 画像に対する説明表
+    .img_desc_section {
+        --x-gradient: linear-gradient(90deg, #6bec9c 0 25px, transparent 0 calc(100% - 25px), #6bec9c calc(100% - 25px));
+        --y-gradient: linear-gradient(#6bec9c 0 25px, transparent 0 calc(100% - 25px), #6bec9c calc(100% - 25px));
+        outline: rgb(160, 160, 160) 2px solid;
+        outline-offset: -5px;
+        background-image: var(--x-gradient), var(--y-gradient), var(--x-gradient), var(--y-gradient);
+        background-repeat: no-repeat;
+        background-size: 100% 3px, 3px 100%, 100% 3px, 3px 100%;
+        background-position: top, right, bottom, left;
+        margin: 1% 0;
+        text-align: start;
+
+        // 個別アイテム
+        .img_desc_section_item {
+            padding: 1% 2%;
+            border-top: black solid 2px;
+            color: red;
+
+            // テキスト
+            .img_desc_section_text {
+                padding: 0 3%;
+                color: black;
+
+                // 表内テキストリスト化
+                .img_desc_section_text_list {
+                    display: flex;
+                    flex-wrap: nowrap;
+                    flex-direction: column;
+                    justify-content: space-around;
+                    margin-top: 2%;
+                    padding-top: 2%;
+                    border-top: 2px gray solid;
+
+                    &:first-child {
+                        border: none;
+                        margin: auto;
+                    }
+
+                    // リストタイトル
+                    .img_desc_section_text_list_title {
+                        white-space: nowrap;
+                        text-align: center;
+                        font-weight: 700;
+                        border-left: solid 8px orange;
+                        background: #f7f4f4;
+                        text-align: center;
+                        border-radius: 0 15px 15px 0;
+                        padding: 1% 0;
+                        margin-bottom: 1%;
+                        width: 40%;
+                        border-top: solid 3px #dadada;
+                        border-bottom: solid 3px #dadada;
+                        border-right: solid 3px #dadada;
+
+                        /* &:lang(en) {
+                            width: 100px;
+                        } */
+                    }
+
+                    // リストテキスト
+                    /* span:nth-child(2) {
+                        width: 420px;
+                    } */
+                }
+
+                // 表内テキスト下部仕切り
+                .img_desc_section_text_part {
+                    position: relative;
+                    display: block;
+                    height: 2px;
+
+                    &::before {
+                        content: '';
+                        background-image: linear-gradient(to right, gray, gray 5px, transparent 5px, transparent 12px);
+                        background-size: 9px 2px;
+                        background-repeat: repeat-x;
+                        position: absolute;
+                        top: 0;
+                        bottom: 0;
+                        left: 0;
+                        right: 0;
+                    }
+                }
+            }
+
+            // アイテム一番目トップボーダーなし
+            &:nth-child(1) {
+                border-top: 0;
+            }
         }
     }
 
     // 目次欄
-    .table_contents {
+    .outline_contents {
         position: relative;
         padding: 3% 1%;
         margin: 10%;
@@ -647,8 +809,8 @@
         // 目次タイトル
         &::before {
             position: absolute;
-            top: -11%;
-            left: -1%;
+            top: -11px;
+            left: -7px;
             padding: 1% 2%;
             border-radius: 30px;
             border: 2px solid white;
@@ -686,7 +848,7 @@
         background-color: #f1f1f1;
         outline: 2px solid #333;
         outline-offset: -0.5rem;
-        margin: 0 7.5% 15%;
+        margin: 15% 7.5%;
 
         &::before {
             position: absolute;
@@ -709,12 +871,12 @@
     // 記事内Check
     .check_contents {
         position: relative;
-        padding: 4% 3%;
-        margin: 10%;
+        padding: 4% 7%;
+        margin: 15% 0;
         border-top: 2px solid white;
         border-bottom: 2px solid white;
         box-shadow: 0 0 0 2rem #fdb979;
-        background-color:#f19b4a;
+        background-color: #f19b4a;
 
         // 目次タイトル
         &::before {
@@ -733,9 +895,77 @@
         .check_contents_list {
             color: white;
             line-height: 2;
-            
+
+            // テキスト
             .check_contents_list_text {
                 text-indent: -1em;
+                padding-bottom: 3%;
+
+                &:lang(en) {
+                    text-indent: -0.5em;
+                }
+
+                &:last-child {
+                    padding: 0;
+                }
+            }
+        }
+    }
+
+    // 記事内Check（リンク付き）
+    .check_contents_with_link {
+        position: relative;
+        padding: 4% 7%;
+        margin: 15% 0;
+        border-top: 2px solid white;
+        border-bottom: 2px solid white;
+        box-shadow: 0 0 0 2rem #fdb979;
+        background-color: #f19b4a;
+
+        // 目次タイトル
+        &::before {
+            content: '';
+            position: absolute;
+            top: -35%;
+            left: -10%;
+            width: 16%;
+            aspect-ratio: 1 / 1;
+            background: url(#{$path_img}/common/check_mark.webp) center center no-repeat;
+            background-size: 100%;
+            font-size: 1.8rem;
+        }
+
+        // 目次リスト
+        .check_contents_with_link_list {
+            color: white;
+            line-height: 2;
+
+            // リストアイテム
+            .check_contents_with_link_list_item {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-items: center;
+                padding-top: 3%;
+
+                // テキスト
+                .check_contents_list_text {
+                    text-align: start;
+                    margin-right: 5%;
+                    width: 700px;
+                }
+
+                // リンク
+                .check_contents_list_link {
+                    text-decoration: underline;
+                    margin-left: 5%;
+                    white-space: nowrap;
+                }
+
+                // アイテム一番目上部余白なし
+                &:nth-child(1) {
+                    padding-top: 0;
+                }
             }
         }
     }
@@ -809,6 +1039,138 @@
     // SPボトムメニュー非表示
     .bottom_navigations {
         display: none;
+    }
+
+    /* 動作環境
+====================================================*/
+
+    // 表タブ位置調整
+    .table_tabs {
+        position: relative;
+        display: flex;
+        justify-content: space-around;
+        z-index: 20;
+
+        // 表タブ本体
+        .table_tabs_item {
+            background: DeepSkyBlue;
+            padding: 2%;
+            width: 40%;
+            font-weight: 700;
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 2%;
+            border-radius: 20px;
+            filter: drop-shadow(0px 0px 6px rgb(50, 50, 50));
+
+            // 押したとき
+            &.active {
+                margin-bottom: 0;
+                background: rgb(0, 225, 255);
+                border-radius: 20px 20px 0 0;
+                filter: drop-shadow(0px -3px 2px rgb(50, 50, 50));
+            }
+        }
+    }
+
+    // 表本体
+    .table_contents {
+        border-spacing: 0;
+        background: white;
+        border: 5px solid rgb(0, 225, 255);
+        box-sizing: content-box;
+        filter: drop-shadow(0px 0px 4px rgb(50, 50, 50));
+
+        // 表内容
+        .table_row {
+            // 表ヘッダー
+            .table_header {
+                color: white;
+                border-top: white solid 2px;
+                background: linear-gradient(rgb(0 101 201 / 70%), rgb(0 93 188 / 90%) 50%);
+            }
+
+            // 表データ
+            .table_data {
+                padding: 1%;
+                border-top: black solid 2px;
+                border-right: black solid 2px;
+
+                // 中央揃え用
+                &.table_data_center {
+                    text-align: center;
+                }
+
+                // オリジナル版用
+                &.table_header_original {
+                    color: white;
+                    width: 39%;
+                    font-weight: 700;
+                    background: linear-gradient(rgb(0 101 201 / 70%), rgb(0 93 188 / 90%) 50%);
+                }
+
+                // HGE版用
+                &.table_header_hge {
+                    color: white;
+                    width: 70%;
+                    font-weight: 700;
+                    background: linear-gradient(rgb(0 101 201 / 70%), rgb(0 93 188 / 90%) 50%);
+                }
+
+                // 表データリスト用
+                .table_data_list {
+                    font-size: 1.3rem;
+
+                    .table_data_list_item {
+                        width: fit-content;
+
+                        .table_data_list_item_part {
+                            position: relative;
+                            display: block;
+                            height: 2px;
+
+                            &::before {
+                                content: '';
+                                background-image: linear-gradient(to right, gray, gray 5px, transparent 5px, transparent 12px);
+                                background-size: 9px 2px;
+                                background-repeat: repeat-x;
+                                position: absolute;
+                                top: 0;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                            }
+                        }
+                    }
+                }
+            }
+
+            // 表ヘッダー一番目列ボーダー調整
+            &:nth-child(1) {
+                .table_header {
+                    border-top: 0px;
+                }
+
+                .table_data {
+                    border-top: 0px;
+                }
+            }
+
+            // 表ヘッダー二番目列ボーダー調整
+            &:nth-child(2) {
+                .table_data {
+                    border-top: 0px;
+                }
+            }
+        }
+    }
+
+    .spec_notes {
+        padding: 2% 2% 0;
+
+        p {
+            text-indent: -1em;
+        }
     }
 
     /* 更新履歴
@@ -1141,15 +1503,12 @@
             // リンクリスト
             .footer_link_list {
                 @include flex_center;
-                align-items: flex-start;
-                flex-wrap: wrap;
+                justify-content: space-evenly;
 
                 // リスト間隔調整
                 li {
                     position: relative;
-                    width: calc(30% - 30px);
-                    height: 40%;
-                    margin: 0 20px;
+                    width: 30%;
 
                     // リストアイテム内部調整
                     .footer_list_items {
@@ -1160,32 +1519,22 @@
                         background-color: #000;
                         border: 2px solid #fff;
                         color: #fff;
+                        padding-right: 12%;
 
                         // アイテム画像
                         .footer_list_img {
                             @include flex_center;
                             position: relative;
-                            width: 91px;
-                            height: 100%;
-                            //background: rgba(255, 255, 255, 0.9);
-                        }
-
-                        // 画像ーテキスト間の仕切り
-                        .footer_list_img::after {
-                            content: '';
-                            width: 2px;
-                            height: 102%;
-                            background-color: #fff;
-                            @include up_down;
-                            left: 100%;
+                            max-width: 90px;
+                            margin: 0px 5%;
+                            aspect-ratio: 1 / 1;
                         }
 
                         // アイテムタイトル
                         .footer_list_title {
-                            font-size: 2rem;
+                            font-size: 1.5rem;
                             font-weight: bold;
                             color: #fff;
-                            padding: 5% 10% 5% 5%;
                         }
 
                         // アイテム矢印
@@ -1208,7 +1557,7 @@
                 padding: 3% 0 2%;
                 text-align: center;
                 color: #fff;
-                font-size: 1.5rem;
+                font-size: 1.3rem;
             }
         }
     }
