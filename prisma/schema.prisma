@@ -110,6 +110,10 @@ model characters {
   pact_id                                                        Int?
   stampcard                                                      Int                  @default(0)
   mezfes                                                         Bytes?
+  guild_applications_guild_applications_actor_idTocharacters     guild_applications[] @relation("guild_applications_actor_idTocharacters")
+  guild_applications_guild_applications_character_idTocharacters guild_applications[] @relation("guild_applications_character_idTocharacters")
+  mail_mail_recipient_idTocharacters                             mail[]               @relation("mail_recipient_idTocharacters")
+  mail_mail_sender_idTocharacters                                mail[]               @relation("mail_sender_idTocharacters")
 }
 
 model distribution {
@@ -283,6 +287,12 @@ model guild_applications {
   actor_id                                               Int
   application_type                                       guild_application_type
   created_at                                             DateTime               @default(now()) @db.Timestamptz(6)
+  characters_guild_applications_actor_idTocharacters     characters             @relation("guild_applications_actor_idTocharacters", fields: [actor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  characters_guild_applications_character_idTocharacters characters             @relation("guild_applications_character_idTocharacters", fields: [character_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  guilds                                                 guilds                 @relation(fields: [guild_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([guild_id, character_id], map: "guild_application_character_id")
+  @@index([application_type], map: "guild_application_type_index")
 }
 
 model guild_characters {
@@ -353,6 +363,7 @@ model guilds {
   pugi_outfit_2      Int                  @default(0)
   pugi_outfit_3      Int                  @default(0)
   pugi_outfits       Int                  @default(0)
+  guild_applications guild_applications[]
 }
 
 model launcher_system {
@@ -360,6 +371,7 @@ model launcher_system {
   maint_jp Boolean
   maint_us Boolean
   maint_eu Boolean
+  update   Boolean
 }
 
 model mail {
@@ -376,6 +388,10 @@ model mail {
   created_at                               DateTime   @default(now()) @db.Timestamptz(6)
   deleted                                  Boolean    @default(false)
   locked                                   Boolean    @default(false)
+  characters_mail_recipient_idTocharacters characters @relation("mail_recipient_idTocharacters", fields: [recipient_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  characters_mail_sender_idTocharacters    characters @relation("mail_sender_idTocharacters", fields: [sender_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([recipient_id, deleted, created_at(sort: Desc), id(sort: Desc)], map: "mail_recipient_deleted_created_id_index")
 }
 
 model rengoku_score {
@@ -486,6 +502,57 @@ model warehouse {
   equip7name   String?
   equip8name   String?
   equip9name   String?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model login_boost {
+  char_id    Int?
+  week_req   Int?
+  expiration DateTime? @db.Timestamptz(6)
+  reset      DateTime? @db.Timestamptz(6)
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model servers {
+  server_id         Int
+  season            Int
+  current_players   Int
+  world_name        String?
+  world_description String?
+  land              Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model shop_items_bought {
+  character_id Int?
+  shop_item_id Int?
+  bought       Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model sign_sessions {
+  user_id   Int
+  char_id   Int?
+  token     String @db.VarChar(16)
+  server_id Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model titles {
+  id          Int
+  char_id     Int
+  unlocked_at DateTime? @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+
+  @@ignore
 }
 
 enum event_type {
