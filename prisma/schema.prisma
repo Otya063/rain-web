@@ -66,8 +66,8 @@ model characters {
   user_id                                                        BigInt?
   is_female                                                      Boolean?
   is_new_character                                               Boolean?
-  name                                                           String?              @db.VarChar(15)
-  unk_desc_string                                                String?              @db.VarChar(31)
+  name                                                           String?              @default("") @db.VarChar(15)
+  unk_desc_string                                                String?              @default("") @db.VarChar(31)
   gr                                                             Int?
   hrp                                                            Int?
   weapon_type                                                    Int?
@@ -296,16 +296,16 @@ model guild_applications {
 }
 
 model guild_characters {
-  id               Int       @id @default(autoincrement())
+  id               Int         @id @default(autoincrement())
   guild_id         BigInt?
-  character_id     BigInt?   @unique(map: "guild_character_unique_index")
-  joined_at        DateTime? @default(now()) @db.Timestamptz(6)
-  avoid_leadership Boolean   @default(false)
-  order_index      Int       @default(1)
-  recruiter        Boolean   @default(false)
-  souls            Int?      @default(0)
-  rp_today         Int?      @default(0)
-  rp_yesterday     Int?      @default(0)
+  character_id     BigInt?     @unique(map: "guild_character_unique_index")
+  joined_at        DateTime?   @default(now()) @db.Timestamptz(6)
+  avoid_leadership Boolean     @default(false)
+  order_index      Int         @default(1)
+  recruiter        Boolean     @default(false)
+  souls            Int?        @default(0)
+  rp_today         Int?        @default(0)
+  rp_yesterday     Int?        @default(0)
 }
 
 model guild_hunts {
@@ -445,14 +445,14 @@ model user_binary {
 }
 
 model users {
-  id              Int       @id @default(autoincrement())
-  username        String    @unique
+  id              Int          @id @default(autoincrement())
+  username        String       @unique
   password        String
   item_box        Bytes?
-  rights          Int       @default(12)
-  last_character  Int?      @default(0)
-  last_login      DateTime? @db.Timestamptz(6)
-  return_expires  DateTime? @db.Timestamptz(6)
+  rights          Int          @default(12)
+  last_character  Int?         @default(0)
+  last_login      DateTime?    @db.Timestamptz(6)
+  return_expires  DateTime?    @db.Timestamptz(6)
   gacha_premium   Int?
   gacha_trial     Int?
   frontier_points Int?

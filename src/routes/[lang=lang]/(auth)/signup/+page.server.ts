@@ -59,8 +59,6 @@ const signup: Action = async ({ request, cookies }) => {
             await db.characters.create({
                 data: {
                     user_id: reg_userId,
-                    name: '',
-                    unk_desc_string: '',
                     is_female: false,
                     is_new_character: true,
                     last_login: lastLoginTime,
