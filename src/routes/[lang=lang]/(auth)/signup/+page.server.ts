@@ -19,12 +19,11 @@ const signup: Action = async ({ request, cookies }) => {
     const username = data.get('username');
     const password = data.get('password');
     const salt = await bcrypt.genSalt(12);
-    const hashedPass = await bcrypt.hash(String(password), salt);
-    const preRegExp = cookies.get('SIDRegister');
-    const emailVerifyCode = crypto.randomUUID();
+    const hashed_pass = await bcrypt.hash(String(password), salt);
+    const pre_reg_exp = cookies.get('SIDRegister');
 
     // username existing check
-    const userExist = await db.users.findUnique({
+    const user_exist = await db.users.findUnique({
         where: { username },
     });
 
@@ -34,7 +33,7 @@ const signup: Action = async ({ request, cookies }) => {
     // error handling
     (typeof username !== 'string' || !username) && (errors.invalidUsername = true);
     (typeof password !== 'string' || !password) && (errors.invalidPassword = true);
-    userExist && (errors.userExist = true);
+    user_exist && (errors.userExist = true);
 
     if (Object.keys(errors).length > 0) {
         return { errors, credentials };
@@ -43,30 +42,30 @@ const signup: Action = async ({ request, cookies }) => {
             await db.users.create({
                 data: {
                     username: String(username),
-                    password: hashedPass,
+                    password: hashed_pass,
                 },
             });
 
-            /* const registeredUser = await db.users.findUnique({
-            where: {
-                username: String(username),
-            },
-        });
+            const registered_user = await db.users.findUnique({
+                where: {
+                    username: String(username),
+                },
+            });
 
-        const regUserId = registeredUser.id;
+            const reg_userId = registered_user.id;
 
-        const lastLoginTime = Math.floor(Date.now() / 1000);
+            const lastLoginTime = Math.floor(Date.now() / 1000);
 
-        await db.characters.create({
-            data: {
-                user_id: regUserId,
-                name: '',
-                unk_desc_string: '',
-                is_female: false,
-                is_new_character: true,
-                last_login: lastLoginTime,
-            },
-        }); */
+            await db.characters.create({
+                data: {
+                    user_id: reg_userId,
+                    name: '',
+                    unk_desc_string: '',
+                    is_female: false,
+                    is_new_character: true,
+                    last_login: lastLoginTime,
+                },
+            });
         } catch (err) {
             console.error(err);
         }

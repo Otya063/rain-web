@@ -68,9 +68,9 @@ model characters {
   is_new_character                                               Boolean?
   name                                                           String?              @db.VarChar(15)
   unk_desc_string                                                String?              @db.VarChar(31)
-  gr                                                             Int?
-  hrp                                                            Int?
-  weapon_type                                                    Int?
+  gr                                                             Int                  @default(0)
+  hrp                                                            Int                  @default(0)
+  weapon_type                                                    Int                  @default(0)
   last_login                                                     Int?
   savedata                                                       Bytes?
   decomyset                                                      Bytes?

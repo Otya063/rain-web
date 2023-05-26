@@ -3,13 +3,17 @@ import type { Action, Actions, PageServerLoad } from './$types';
 import { db } from '$lib/database';
 
 export const load: PageServerLoad = async () => {
-    const launcher_system = await db.launcher_system.findUnique({
-        where: {
-            id: 1,
-        },
-    });
+    try {
+        const launcher_system = await db.launcher_system.findUnique({
+            where: {
+                id: 1,
+            },
+        });
 
-    return { launcher_system };
+        return { launcher_system };
+    } catch (err) {
+        console.error(err);
+    }
 };
 
 const storeData: Action = async ({ request }) => {
@@ -21,12 +25,6 @@ const storeData: Action = async ({ request }) => {
 
     let maintenance = {};
     let update_mode: boolean;
-
-    const db_test = await db.launcher_system.findUnique({
-        where: {
-            id: 1,
-        },
-    });
 
     rain_jp === 'on' ? (maintenance.rain_jp = true) : (maintenance.rain_jp = false);
     rain_us === 'on' ? (maintenance.rain_us = true) : (maintenance.rain_us = false);
