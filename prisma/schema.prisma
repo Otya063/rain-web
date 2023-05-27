@@ -3,9 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("VITE_DATABASE_URL")
-  directUrl = env("VITE_DIRECT_URL")
+  provider = "postgresql"
+  url      = env("VITE_DATABASE_URL")
 }
 
 model characters {
@@ -15,9 +14,9 @@ model characters {
   is_new_character     Boolean?
   name                 String?   @default("") @db.VarChar(15)
   unk_desc_string      String?   @default("") @db.VarChar(31)
-  gr                   Int?
-  hrp                  Int?
-  weapon_type          Int?
+  gr                   Int?      @default(0)
+  hrp                  Int?      @default(0)
+  weapon_type          Int?      @default(0)
   last_login           Int?
   savedata             Bytes?
   decomyset            Bytes?

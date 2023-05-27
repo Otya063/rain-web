@@ -3,17 +3,13 @@ import type { Action, Actions, PageServerLoad } from './$types';
 import { db } from '$lib/database';
 
 export const load: PageServerLoad = async () => {
-    try {
-        const launcher_system = await db.launcher_system.findUnique({
-            where: {
-                id: 1,
-            },
-        });
+    const launcher_system = await db.launcher_system.findUnique({
+        where: {
+            id: 1,
+        },
+    });
 
-        return { launcher_system };
-    } catch (err) {
-        console.error(err);
-    }
+    return { launcher_system };
 };
 
 const storeData: Action = async ({ request }) => {
@@ -31,21 +27,17 @@ const storeData: Action = async ({ request }) => {
     rain_eu === 'on' ? (maintenance.rain_eu = true) : (maintenance.rain_eu = false);
     update === 'on' ? (update_mode = true) : (update_mode = false);
 
-    try {
-        await db.launcher_system.update({
-            where: {
-                id: 1,
-            },
-            data: {
-                maint_jp: maintenance.rain_jp,
-                maint_us: maintenance.rain_us,
-                maint_eu: maintenance.rain_eu,
-                update: update_mode,
-            },
-        });
-    } catch (err) {
-        console.error(err);
-    }
+    await db.launcher_system.update({
+        where: {
+            id: 1,
+        },
+        data: {
+            maint_jp: maintenance.rain_jp,
+            maint_us: maintenance.rain_us,
+            maint_eu: maintenance.rain_eu,
+            update: update_mode,
+        },
+    });
 
     throw redirect(303, '/admin');
 };

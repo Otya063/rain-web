@@ -38,7 +38,7 @@ const signup: Action = async ({ request, cookies }) => {
     if (Object.keys(errors).length > 0) {
         return { errors, credentials };
     } else {
-        try {
+        
             await db.users.create({
                 data: {
                     username: String(username),
@@ -64,9 +64,6 @@ const signup: Action = async ({ request, cookies }) => {
                     last_login: lastLoginTime,
                 },
             }); */
-        } catch (err) {
-            console.error(err);
-        }
     }
 
     //throw redirect(303, './conf');
