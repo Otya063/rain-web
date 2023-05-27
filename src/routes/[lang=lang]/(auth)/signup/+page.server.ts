@@ -46,7 +46,7 @@ const signup: Action = async ({ request, cookies }) => {
                 },
             });
 
-            /* const registered_user = await db.users.findUnique({
+            const registered_user = await db.users.findUnique({
                 where: {
                     username: String(username),
                 },
@@ -63,7 +63,7 @@ const signup: Action = async ({ request, cookies }) => {
                     is_new_character: true,
                     last_login: lastLoginTime,
                 },
-            }); */
+            });
     }
 
     //throw redirect(303, './conf');
