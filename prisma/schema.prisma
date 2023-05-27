@@ -7,6 +7,14 @@ datasource db {
   url      = env("VITE_DATABASE_URL")
 }
 
+model launcher_system {
+  id       Int     @id
+  maint_jp Boolean
+  maint_us Boolean
+  maint_eu Boolean
+  update   Boolean
+}
+
 model characters {
   id                   Int       @id @default(autoincrement())
   user_id              BigInt?
