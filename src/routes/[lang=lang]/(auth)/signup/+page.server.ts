@@ -66,7 +66,6 @@ const signup: Action = async ({ request, cookies }) => {
             });
     }
 
-    //throw redirect(303, './conf');
     throw redirect(303, '/');
 };
 
