@@ -12,7 +12,7 @@ export const load: PageServerLoad = async () => {
     return { launcher_system };
 };
 
-const storeData: Action = async ({ request }) => {
+const maintUpdateData: Action = async ({ request }) => {
     const data = await request.formData();
     const rain_jp = data.get('rain_jp');
     const rain_us = data.get('rain_us');
@@ -42,4 +42,11 @@ const storeData: Action = async ({ request }) => {
     throw redirect(303, '/admin');
 };
 
-export const actions: Actions = { storeData };
+const infoData: Action = async ({ request }) => {
+    const data = await request.formData();
+    const info = data.get('info');
+
+    console.log(info);
+};
+
+export const actions: Actions = { maintUpdateData, infoData };
