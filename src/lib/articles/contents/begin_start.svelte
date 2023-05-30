@@ -12,10 +12,10 @@
     let activedElement: HTMLElement;
     let nowTarget: HTMLElement;
     let isDefault: boolean = true;
-    const tabInfoHandler = (key: string, value: string, e: MouseEvent) => {
+    const tabInfoHandler = (value: string, e: MouseEvent) => {
         // tab handling
         const currentURL = $page.url;
-        currentURL.searchParams.set(key, value);
+        currentURL.searchParams.set('tab', value);
         window.history.pushState({ path: currentURL.href }, '', currentURL.href);
         const param = currentURL.searchParams.get('tab');
         isDefault = param === 'original';
@@ -67,7 +67,7 @@
     <div class="table_tabs">
         {#each Object.entries(spec.table_data['tab_name']) as [arg, text]}
             <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <p class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler('tab', arg, e)}>{text()}</p>
+            <p class="table_tabs_item pointer no_select" on:click={(e) => tabInfoHandler(arg, e)}>{text()}</p>
         {/each}
     </div>
 

@@ -105,7 +105,8 @@ export const loadArticle = (lang_code: string = '', maindir: string = '', subdir
     location.href = url.toString();
 };
 
-// bottom navigetion toggle
+/* Bottom Navigation Toggle
+====================================================*/
 if (browser) {
     // remember which menu is now selected by index
     let menuNow: number | null = null;

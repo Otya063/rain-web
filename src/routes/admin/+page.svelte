@@ -1,6 +1,17 @@
 <script lang="ts">
+    import { page } from '$app/stores';
     import LauncherSystem from '$lib/common/LauncherSystem.svelte';
     import LauncherInfo from '$lib/common/LauncherInfo.svelte';
+    import '$scss/style_admin.scss';
+
+    let tabParam: string = '';
+    const tabInfoHandler = (value: string) => {
+        // tab handling
+        const currentURL = $page.url;
+        currentURL.searchParams.set('tab', value);
+        window.history.pushState({ path: currentURL.href }, '', currentURL.href);
+        tabParam = currentURL.searchParams.get('tab')!;
+    };
 
     export let data;
     const { maint_jp, maint_us, maint_eu, update } = data.launcher_system!;
@@ -8,6 +19,36 @@
 
 <h1>Admin Only</h1>
 
-<LauncherSystem {maint_jp} {maint_us} {maint_eu} {update} />
+<section class="console_contents">
+    <ul class="console_menu_list">
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <li class="console_menu_list_item" on:click={() => tabInfoHandler('system')}>Launcher System</li>
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <li class="console_menu_list_item" on:click={() => tabInfoHandler('info')}>Launcher Information</li>
+    </ul>
 
-<LauncherInfo />
+    {#if tabParam === '' || tabParam === 'system'}
+        <LauncherSystem {maint_jp} {maint_us} {maint_eu} {update} />
+    {:else if tabParam === 'info'}
+        <LauncherInfo />
+    {/if}
+</section>
+
+<svelte:head>
+    <title>Admin Console</title>
+    <meta name="description" content="Console page for administrators only." />
+    <!-- favicon -->
+    <link rel="icon" href="/img/common/rain_favicon.ico?v=1" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/common/rain_apple_icon.png?v=1" />
+    <link rel="manifest" href="/manifest.webmanifest?v=1" />
+    <!-- mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" />
+</svelte:head>

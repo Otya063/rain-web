@@ -6,19 +6,19 @@
     };
 </script>
 
-<form action="?/infoData" method="POST">
+<form class="console_form" action="?/infoData" method="POST">
     {#if editing === false}
         <dl class="information">
             <dt>Test</dt>
             <dd>Test</dd>
         </dl>
-        <button on:click={() => setEditing(true)}>Edit</button>
+        <button on:click={() => setEditing(true)}>[Edit]</button>
     {:else}
     <div>
         <label for="info">Information</label>
         <input id="info" type="text" name="info" />
     </div>
-        <button type="submit">Save</button>
-        <button on:click={() => setEditing(false)}>Cancel</button>
+        <button type="submit">[Save]</button>
+        <button on:click={() => setEditing(false)}>[Cancel]</button>
     {/if}
 </form>

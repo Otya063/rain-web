@@ -1,0 +1,18 @@
+@charset "UTF-8";
+
+@use 'pc' as *;
+@use 'sp' as *;
+@use '../global' as *;
+
+/*==================================
+　　　　　初期設定
+==================================*/
+body {
+    height: auto;
+    -webkit-text-size-adjust: 100%;
+}
+
+.wrapper {
+    width: 100%;
+    overflow: hidden;
+}
