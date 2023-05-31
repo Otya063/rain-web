@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import LauncherSystem from '$lib/common/LauncherSystem.svelte';
-    import LauncherInfo from '$lib/common/LauncherInfo.svelte';
+    import LauncherInformation from '$lib/common/LauncherInformation.svelte';
     import '$scss/style_admin.scss';
 
     let tabParam: string = '';
@@ -14,7 +14,8 @@
     };
 
     export let data;
-    const { maint_jp, maint_us, maint_eu, update } = data.launcher_system!;
+    const system = data.launcher_system!;
+    const info = data.launcher_info!;
 </script>
 
 <h1>Admin Only</h1>
@@ -28,9 +29,9 @@
     </ul>
 
     {#if tabParam === '' || tabParam === 'system'}
-        <LauncherSystem {maint_jp} {maint_us} {maint_eu} {update} />
+        <LauncherSystem {system} />
     {:else if tabParam === 'info'}
-        <LauncherInfo />
+        <LauncherInformation {info} />
     {/if}
 </section>
 

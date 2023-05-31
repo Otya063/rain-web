@@ -9,7 +9,9 @@ export const load: PageServerLoad = async () => {
         },
     });
 
-    return { launcher_system };
+    const launcher_info = await db.launcher_info.findMany();
+
+    return { launcher_system, launcher_info };
 };
 
 const maintUpdateData: Action = async ({ request }) => {
@@ -44,9 +46,17 @@ const maintUpdateData: Action = async ({ request }) => {
 
 const infoData: Action = async ({ request }) => {
     const data = await request.formData();
-    const info = data.get('info');
+    const title = data.get('info_title');
+    const url = data.get('info_url');
+    const info_type = data.get('info_type');
 
-    console.log(info);
+    await db.launcher_info.create({
+        data: {
+            title,
+            url,
+            info_type,
+        },
+    });
 };
 
 export const actions: Actions = { maintUpdateData, infoData };

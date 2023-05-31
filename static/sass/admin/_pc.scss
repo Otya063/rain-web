@@ -32,13 +32,13 @@
             height: 400px;
 
             // 各設定グループ
-            .setting_list_group {
+            .system_list_group {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
 
                 // 設定項目
-                .setting_list_group_item {
+                .system_list_group_item {
                     display: flex;
                     justify-content: space-between;
                     width: 100%;
