@@ -2,7 +2,7 @@
     export let info: LauncherInfo[];
 
     interface LauncherInfo {
-        id: number;
+        id: string;
         title: string;
         url: string;
         info_type: string;
@@ -13,6 +13,11 @@
     const addInfoMode = (isAddingMode: boolean) => {
         adding = isAddingMode;
     };
+
+    let edit_id: string;
+    const editInfoMode = (id: string = '') => {
+        edit_id = id;
+    };
 </script>
 
 <form class="console_form" action="?/infoData" method="POST">
@@ -20,14 +25,55 @@
         <ul class="info_list_group">
             <p>Launcher Information</p>
             {#each info as info_data}
-                <li class="setting_list_group_item">
-                    <p>[Launcher Info Data]</p>
-                    <p>{info_data.title}</p>
-                    <p>{info_data.url}</p>
-                    <p>{info_data.info_type}</p>
-                    <p>{info_data.created_at}</p>
+                <li class="info_list_group_item">
+                    {#if edit_id !== info_data.id}
+                        <p>[{info_data.info_type}]</p>
+                        <p>{info_data.title}</p>
+                        <p>{info_data.url}</p>
+                        <p>{info_data.created_at}</p>
+                        <button on:click={() => editInfoMode(info_data.id)}>[Edit]</button>
+                    {:else}
+                        <label for="info_title">Title</label>
+                        <input id="info_title" type="text" name="info_title" value={info_data.title} autocomplete="off" />
 
-                    <button>[Edit]</button>
+                        <label for="info_url">URL</label>
+                        <input id="info_url" type="text" name="info_url" value={info_data.url} autocomplete="off" />
+
+                        <div class="info_type_group">
+                            <label for="info_type">Info Type</label>
+
+                            <label for="Important">
+                                <input id="Important" type="radio" name="info_type" value="Important" checked={info_data.info_type === 'Important'} />
+                                Important
+                            </label>
+
+                            <label for="Defects and Troubles">
+                                <input id="Defects and Troubles" type="radio" name="info_type" value="Defects and Troubles" checked={info_data.info_type === 'Defects and Troubles'} />
+                                Defects and Troubles
+                            </label>
+
+                            <label for="Management and Service">
+                                <input id="Management and Service" type="radio" name="info_type" value="Management and Service" checked={info_data.info_type === 'Management and Service'} />
+
+                                Management and Service
+                            </label>
+
+                            <label for="In-Game Events">
+                                <input id="In-Game Events" type="radio" name="info_type" value="In-Game Events" checked={info_data.info_type === 'In-Game Events'} />
+                                In-Game Events
+                            </label>
+
+                            <label for="Updates and Maintenance">
+                                <input id="Updates and Maintenance" type="radio" name="info_type" value="Updates and Maintenance" checked={info_data.info_type === 'Updates and Maintenance'} />
+                                Updates and Maintenance
+                            </label>
+                        </div>
+
+                        <div>
+                            <button type="submit">[Save]</button>
+                            <button on:click={() => editInfoMode()}>[Cancel]</button>
+                        </div>
+                    {/if}
                 </li>
             {/each}
         </ul>
@@ -36,29 +82,40 @@
     {:else}
         <ul class="info_list_group">
             <p>Launcher Information</p>
-            <li class="system_list_group_item">
+            <li class="info_list_group_item">
                 <label for="info_title">Title</label>
                 <input id="info_title" type="text" name="info_title" />
 
                 <label for="info_url">URL</label>
                 <input id="info_url" type="text" name="info_url" />
 
-                <div>
+                <div class="info_type_group">
                     <label for="info_type">Info Type</label>
-                    <input id="Important" type="radio" name="info_type" value="Important" />
-                    <label for="Important">Important</label>
 
-                    <input id="Defects and Troubles" type="radio" name="info_type" value="Defects and Troubles" />
-                    <label for="Defects and Troubles">Defects and Troubles</label>
+                    <label for="Important">
+                        <input id="Important" type="radio" name="info_type" value="Important" />
+                        Important
+                    </label>
 
-                    <input id="Management and Service" type="radio" name="info_type" value="Management and Service" />
-                    <label for="Management and Service">Management and Service</label>
+                    <label for="Defects and Troubles">
+                        <input id="Defects and Troubles" type="radio" name="info_type" value="Defects and Troubles" />
+                        Defects and Troubles
+                    </label>
 
-                    <input id="In-Game Events" type="radio" name="info_type" value="In-Game Events" />
-                    <label for="In-Game Events">In-Game Events</label>
+                    <label for="Management and Service">
+                        <input id="Management and Service" type="radio" name="info_type" value="Management and Service" />
+                        Management and Service
+                    </label>
 
-                    <input id="Updates and Maintenance" type="radio" name="info_type" value="Updates and Maintenance" />
-                    <label for="Updates and Maintenance">Updates and Maintenance</label>
+                    <label for="In-Game Events">
+                        <input id="In-Game Events" type="radio" name="info_type" value="In-Game Events" />
+                        In-Game Events
+                    </label>
+
+                    <label for="Updates and Maintenance">
+                        <input id="Updates and Maintenance" type="radio" name="info_type" value="Updates and Maintenance" />
+                        Updates and Maintenance
+                    </label>
                 </div>
             </li>
         </ul>

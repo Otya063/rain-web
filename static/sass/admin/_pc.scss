@@ -31,7 +31,7 @@
             width: 900px;
             height: 400px;
 
-            // 各設定グループ
+            // ランチャーシステム
             .system_list_group {
                 display: flex;
                 flex-direction: column;
@@ -47,6 +47,16 @@
                     span {
                         font-size: 1.5rem;
                         line-height: 24px;
+                    }
+                }
+            }
+
+            // ランチャーインフォ
+            .info_list_group {
+                .info_list_group_item {
+                    .info_type_group {
+                        display: flex;
+                        flex-direction: column;
                     }
                 }
             }

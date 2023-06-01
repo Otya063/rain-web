@@ -3,7 +3,7 @@
     const { maint_jp, maint_us, maint_eu, update } = system;
 
     let editing: boolean = false;
-    const setEditing = (isEditing: boolean) => {
+    const editSystemMode = (isEditing: boolean) => {
         editing = isEditing;
     };
 </script>
@@ -44,7 +44,7 @@
             </li>
         </ul>
 
-        <button on:click={() => setEditing(true)}>[Edit]</button>
+        <button on:click={() => editSystemMode(true)}>[Edit]</button>
     {:else}
         <ul class="system_list_group">
             <p>Launcher Maintenance Status</p>
@@ -74,7 +74,7 @@
 
         <div>
             <button type="submit">[Save]</button>
-            <button on:click={() => setEditing(false)}>[Cancel]</button>
+            <button on:click={() => editSystemMode(false)}>[Cancel]</button>
         </div>
     {/if}
 </form>
