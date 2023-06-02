@@ -136,3 +136,45 @@ if (browser) {
         });
     });
 }
+
+/*=========================================================
+　　　　　Misc
+=======================================================*/
+/* Convert Unixtimestamp to Date
+====================================================*/
+export const convUnixToDate = (timestamp: number, isText: boolean) => {
+    const date = new Date(timestamp * 1000);
+
+    // for nomal expression
+    const formattedDate1 = date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+
+    // for input date value
+    const formattedDate2 = date
+        .toLocaleDateString('ja-JP', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        })
+        .replace(/\//g, '-');
+
+    return isText ? formattedDate1 : formattedDate2;
+};
+
+/* Convert Date to Unixtimestamp
+====================================================*/
+export const convDateToUnix = (date_value: string) => {
+    const split_date = date_value.split('-');
+    const year = parseInt(split_date[0]);
+    const month = parseInt(split_date[1]) - 1;
+    const day = parseInt(split_date[2]);
+
+    const date = new Date(Date.UTC(year, month, day));
+
+    const timestamp = Math.floor(date.getTime() / 1000);
+
+    return timestamp;
+};

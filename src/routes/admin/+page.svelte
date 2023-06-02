@@ -3,6 +3,7 @@
     import LauncherSystem from '$lib/common/LauncherSystem.svelte';
     import LauncherInformation from '$lib/common/LauncherInformation.svelte';
     import '$scss/style_admin.scss';
+    import { onMount } from 'svelte';
 
     let tabParam: string = '';
     const tabInfoHandler = (value: string) => {
@@ -13,9 +14,16 @@
         tabParam = currentURL.searchParams.get('tab')!;
     };
 
+    // enable display switching even when pages are loading
+    onMount(() => {
+        const currentURL = $page.url;
+        window.history.pushState({ path: currentURL.href }, '', currentURL.href);
+        tabParam = currentURL.searchParams.get('tab')!;
+    });
+
     export let data;
-    const system = data.launcher_system!;
-    const info = data.launcher_info!;
+    const system = data.launcher_system;
+    const info = data.launcher_info;
 </script>
 
 <h1>Admin Only</h1>

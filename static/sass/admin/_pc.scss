@@ -13,9 +13,8 @@
 
         // コンソールメニュー
         .console_menu_list {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-evenly;
+            min-width: 180px;
+            height: 100%;
 
             .console_menu_list_item {
                 cursor: pointer;
@@ -25,11 +24,9 @@
         // コンソールフォーム
         .console_form {
             display: flex;
-            justify-content: space-evenly;
             align-items: center;
             flex-direction: column;
             width: 900px;
-            height: 400px;
 
             // ランチャーシステム
             .system_list_group {
@@ -50,16 +47,109 @@
                     }
                 }
             }
+        }
 
-            // ランチャーインフォ
-            .info_list_group {
-                .info_list_group_item {
-                    .info_type_group {
-                        display: flex;
-                        flex-direction: column;
+        // ランチャーインフォ通常
+        .info_list_group {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .info_list_group_item {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: 460px;
+                height: 350px;
+
+                // ランチャーインフォ更新
+                .update_info_form {
+                    height: 350px;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: space-around;
+
+                    label {
+                        input {
+                            padding-left: 1%;
+                            margin-left: 1%;
+                            float: right;
+
+                            &#info_title,
+                            &#info_url {
+                                width: 85%;
+                            }
+                        }
                     }
                 }
+
+                ul {
+                    width: 460px;
+
+                    li {
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 2% 0;
+                    }
+                }
+
+                .info_type_group {
+                    display: flex;
+                    flex-direction: column;
+                }
             }
+        }
+
+        // ランチャーインフォ追加
+        div.info_list_group {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 100%;
+            height: 350px;
+
+            .create_info_form {
+                width: 450px;
+                height: 350px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+
+                p {
+                    text-align: center;
+                }
+
+                label {
+                    input {
+                        padding-left: 1%;
+                        margin-left: 1%;
+                        float: right;
+
+                        &#info_title,
+                        &#info_url {
+                            width: 85%;
+                        }
+                    }
+                }
+
+                .info_type_group {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+        }
+
+        // インフォ保存。キャンセルボタン
+        .save_cancel_btn {
+            text-align: center;
+        }
+
+        // インフォ追加ボタン
+        .add_info_btn {
+            position: absolute;
+            top: 7%;
+            right: 20%;
         }
     }
 }
