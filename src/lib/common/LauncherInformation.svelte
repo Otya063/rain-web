@@ -1,7 +1,11 @@
 <script lang="ts">
     import { convUnixToDate } from '$ts/main';
 
-    export let info: LauncherInfo[];
+    export let important_info_data: LauncherInfo[];
+    export let defects_and_troubles_info_data: LauncherInfo[];
+    export let management_and_service_info_data: LauncherInfo[];
+    export let ingame_events_info_data: LauncherInfo[];
+    export let updates_and_maintenance_info_data: LauncherInfo[];
 
     interface LauncherInfo {
         id: number;
@@ -10,6 +14,14 @@
         type: string;
         created_at: number;
     }
+
+    const info_type_data = {
+        Important: important_info_data,
+        'Defects and Troubles': defects_and_troubles_info_data,
+        'Management and Service': management_and_service_info_data,
+        'In-Game Events': ingame_events_info_data,
+        'Updates and Maintenance': updates_and_maintenance_info_data,
+    };
 
     let adding: boolean = false;
     const addInfoMode = (isAddingMode: boolean) => {
@@ -23,132 +35,102 @@
 </script>
 
 {#if adding}
-    <div class="info_list_group">
-        <form class="create_info_form" action="?/createInfoData" method="POST">
-            <p>Launcher Info Addition Form</p>
-            <label for="info_title">
-                Title:
-                <input id="info_title" type="text" name="info_title" />
-            </label>
-
-            <label for="info_url">
-                URL:
-                <input id="info_url" type="text" name="info_url" />
-            </label>
-
-            <div class="info_type_group">
-                <label for="info_type">Info Type</label>
-
-                <label for="Important">
-                    <input id="Important" type="radio" name="info_type" value="Important" />
-                    Important
+    <ul class="console_contents">
+        <li class="console_contents_list_item">
+            <form class="console_form_section" action="?/createInfoData" method="POST">
+                <p class="console_head">Launcher Info Addition Form</p>
+                <label for="info_title">
+                    Title:
+                    <input id="info_title" type="text" name="info_title" />
                 </label>
 
-                <label for="Defects and Troubles">
-                    <input id="Defects and Troubles" type="radio" name="info_type" value="Defects and Troubles" />
-                    Defects and Troubles
+                <label for="info_url">
+                    URL:
+                    <input id="info_url" type="text" name="info_url" />
                 </label>
 
-                <label for="Management and Service">
-                    <input id="Management and Service" type="radio" name="info_type" value="Management and Service" />
-                    Management and Service
-                </label>
+                <div class="info_type_group">
+                    <label for="info_type">Info Type</label>
 
-                <label for="In-Game Events">
-                    <input id="In-Game Events" type="radio" name="info_type" value="In-Game Events" />
-                    In-Game Events
-                </label>
+                    {#each Object.keys(info_type_data) as key}
+                        <label for={key}>
+                            <input id={key} type="radio" name="info_type" value={key} />
+                            {key}
+                        </label>
+                    {/each}
+                </div>
 
-                <label for="Updates and Maintenance">
-                    <input id="Updates and Maintenance" type="radio" name="info_type" value="Updates and Maintenance" />
-                    Updates and Maintenance
-                </label>
-            </div>
-
-            <div class="save_cancel_btn">
-                <button type="submit">[Save]</button>
-                <button on:click={() => addInfoMode(false)}>[Cancel]</button>
-            </div>
-        </form>
-    </div>
+                <div class="save_cancel_btn">
+                    <button type="submit">[Save]</button>
+                    <button on:click={() => addInfoMode(false)}>[Cancel]</button>
+                </div>
+            </form>
+        </li>
+    </ul>
 {:else}
-    <ul class="info_list_group">
-        <p>Launcher Information</p>
-        {#each info as info_data}
-            <li class="info_list_group_item">
-                {#if edit_id === info_data.id}
-                    <form class="update_info_form" action="?/updateInfoData" method="POST">
-                        <p>[{info_data.type}]</p>
+    <ul class="console_contents">
+        {#each Object.entries(info_type_data) as [typename, data]}
+            <li class="console_contents_list_item">
+                <p class="console_head">[{typename}]</p>
+                {#each data || [] as data_item}
+                    {#if edit_id === data_item.id}
+                        <form class="console_form_section" action="?/updateInfoData" method="POST">
+                            <input type="hidden" name="info_id" value={edit_id} />
 
-                        <input type="hidden" name="info_id" value={edit_id} />
-
-                        <label for="info_title">
-                            Title:
-                            <input id="info_title" type="text" name="info_title" value={info_data.title} autocomplete="off" />
-                        </label>
-
-                        <label for="info_url">
-                            URL:
-                            <input id="info_url" type="text" name="info_url" value={info_data.url} autocomplete="off" />
-                        </label>
-
-                        <div class="info_type_group">
-                            <label for="info_type">Info Type</label>
-
-                            <label for="Important">
-                                <input id="Important" type="radio" name="info_type" value="Important" checked={info_data.type === 'Important'} />
-                                Important
+                            <label for="info_title">
+                                Title:
+                                <input id="info_title" type="text" name="info_title" value={data_item.title} autocomplete="off" />
                             </label>
 
-                            <label for="Defects and Troubles">
-                                <input id="Defects and Troubles" type="radio" name="info_type" value="Defects and Troubles" checked={info_data.type === 'Defects and Troubles'} />
-                                Defects and Troubles
+                            <label for="info_url">
+                                URL:
+                                <input id="info_url" type="text" name="info_url" value={data_item.url} autocomplete="off" />
                             </label>
 
-                            <label for="Management and Service">
-                                <input id="Management and Service" type="radio" name="info_type" value="Management and Service" checked={info_data.type === 'Management and Service'} />
-                                Management and Service
+                            <div class="info_type_group">
+                                <label for="info_type">Info Type</label>
+
+                                {#each Object.keys(info_type_data) as key}
+                                    <label for={key}>
+                                        <input id={key} type="radio" name="info_type" value={key} checked={data_item.type === key} />
+                                        {key}
+                                    </label>
+                                {/each}
+                            </div>
+
+                            <label for="info_date">
+                                Date:
+                                <input id="info_date" name="info_date" type="date" value={convUnixToDate(data_item.created_at, false)} />
                             </label>
 
-                            <label for="In-Game Events">
-                                <input id="In-Game Events" type="radio" name="info_type" value="In-Game Events" checked={info_data.type === 'In-Game Events'} />
-                                In-Game Events
-                            </label>
+                            <div class="save_cancel_btn">
+                                <button type="submit">[Save]</button>
+                                <button on:click={() => editInfoMode(0)}>[Cancel]</button>
+                            </div>
+                        </form>
+                    {:else}
+                        <ul class="each_item_contents_list">
+                            <li class="each_item_contents">
+                                <p>Title:</p>
+                                <span>{data_item.title}</span>
+                            </li>
 
-                            <label for="Updates and Maintenance">
-                                <input id="Updates and Maintenance" type="radio" name="info_type" value="Updates and Maintenance" checked={info_data.type === 'Updates and Maintenance'} />
-                                Updates and Maintenance
-                            </label>
-                        </div>
+                            <li class="each_item_contents">
+                                <p>URL:</p>
+                                <span>{data_item.url}</span>
+                            </li>
 
-                        <label for="info_date">
-                            Date:
-                            <input id="info_date" name="info_date" type="date" value={convUnixToDate(info_data.created_at, false)} />
-                        </label>
+                            <li class="each_item_contents">
+                                <p>Date:</p>
+                                <span>{convUnixToDate(data_item.created_at, true)}</span>
+                                <p>Unix Time:</p>
+                                <span>{data_item.created_at}</span>
+                            </li>
 
-                        <div class="save_cancel_btn">
-                            <button type="submit">[Save]</button>
-                            <button on:click={() => editInfoMode(0)}>[Cancel]</button>
-                        </div>
-                    </form>
-                {:else}
-                    <ul>
-                        <p>[{info_data.type}]</p>
-                        <li>
-                            <p>Title:</p>
-                            <span>{info_data.title}</span>
-                        </li>
-                        <li>
-                            <p>URL:</p>
-                            <span>{info_data.url}</span>
-                        </li>
-                        <li>
-                            <p>Date:</p>
-                            <span>{convUnixToDate(info_data.created_at, true)}</span>
-                        </li>
-                    </ul>
-                    <button on:click={() => editInfoMode(info_data.id)}>[Edit]</button>
-                {/if}
+                            <button class="edit_btn" on:click={() => editInfoMode(data_item.id)}>[Edit]</button>
+                        </ul>
+                    {/if}
+                {/each}
             </li>
         {/each}
     </ul>

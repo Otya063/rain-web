@@ -10,9 +10,37 @@ export const load: PageServerLoad = async () => {
         },
     });
 
-    const launcher_info = await db.launcher_info.findMany();
+    const important = await db.launcher_info.findMany({
+        where: {
+            type: 'Important',
+        },
+    });
 
-    return { launcher_system, launcher_info };
+    const defects_and_troubles = await db.launcher_info.findMany({
+        where: {
+            type: 'Defects and Troubles',
+        },
+    });
+
+    const management_and_service = await db.launcher_info.findMany({
+        where: {
+            type: 'Management and Service',
+        },
+    });
+
+    const ingame_events = await db.launcher_info.findMany({
+        where: {
+            type: 'In-Game Events',
+        },
+    });
+
+    const updates_and_maintenance = await db.launcher_info.findMany({
+        where: {
+            type: 'Updates and Maintenance',
+        },
+    });
+
+    return { launcher_system, important, defects_and_troubles, management_and_service, ingame_events, updates_and_maintenance };
 };
 
 const maintUpdateData: Action = async ({ request }) => {

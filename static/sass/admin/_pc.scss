@@ -4,72 +4,69 @@
 @include pc() {
     /* 管理者コンソール
 ====================================================*/
-    .console_contents {
+    .console_body {
         display: flex;
         justify-content: space-between;
         max-width: 1220px;
         margin: auto;
         padding-left: 10%;
 
-        // コンソールメニュー
+        // コンソールメニュー側
         .console_menu_list {
             min-width: 180px;
             height: 100%;
 
+            // メニュー各項目
             .console_menu_list_item {
                 cursor: pointer;
             }
         }
 
-        // コンソールフォーム
-        .console_form {
-            display: flex;
-            align-items: center;
-            flex-direction: column;
-            width: 900px;
-
-            // ランチャーシステム
-            .system_list_group {
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-
-                // 設定項目
-                .system_list_group_item {
-                    display: flex;
-                    justify-content: space-between;
-                    width: 100%;
-                    padding: 3% 5%;
-
-                    span {
-                        font-size: 1.5rem;
-                        line-height: 24px;
-                    }
-                }
-            }
-        }
-
-        // ランチャーインフォ通常
-        .info_list_group {
+        // コンソールコンテンツ側
+        .console_contents {
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
 
-            .info_list_group_item {
+            // コンソールコンテンツ各項目
+            .console_contents_list_item {
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                width: 460px;
-                height: 350px;
+                align-items: center;
+                width: 60%;
+                padding: 5% 0;
 
-                // ランチャーインフォ更新
-                .update_info_form {
+                // 見出しタイトル表示
+                .console_head {
+                    font-weight: 700;
+                    font-size: 1.8rem;
+                    text-align: center;
+                }
+
+                // 各項目リスト
+                .each_item_contents_list {
+                    width: 100%;
+                    text-align: center;
+
+                    // 各項目内容
+                    .each_item_contents {
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 2% 0;
+                    }
+                }
+
+                // フォームエリア
+                .console_form_section {
+                    width: 100%;
                     height: 350px;
                     display: flex;
                     flex-direction: column;
                     justify-content: space-around;
 
+                    // インプットエリア調整
                     label {
                         input {
                             padding-left: 1%;
@@ -84,16 +81,7 @@
                     }
                 }
 
-                ul {
-                    width: 460px;
-
-                    li {
-                        display: flex;
-                        justify-content: space-between;
-                        padding: 2% 0;
-                    }
-                }
-
+                // インフォタイプ
                 .info_type_group {
                     display: flex;
                     flex-direction: column;
@@ -101,55 +89,21 @@
             }
         }
 
-        // ランチャーインフォ追加
-        div.info_list_group {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            width: 100%;
-            height: 350px;
-
-            .create_info_form {
-                width: 450px;
-                height: 350px;
-                display: flex;
-                flex-direction: column;
-                justify-content: space-around;
-
-                p {
-                    text-align: center;
-                }
-
-                label {
-                    input {
-                        padding-left: 1%;
-                        margin-left: 1%;
-                        float: right;
-
-                        &#info_title,
-                        &#info_url {
-                            width: 85%;
-                        }
-                    }
-                }
-
-                .info_type_group {
-                    display: flex;
-                    flex-direction: column;
-                }
-            }
-        }
-
-        // インフォ保存。キャンセルボタン
+        // 保存/キャンセルボタン
         .save_cancel_btn {
             text-align: center;
         }
 
-        // インフォ追加ボタン
+        // 追加ボタン
         .add_info_btn {
             position: absolute;
             top: 7%;
             right: 20%;
+        }
+
+        // 編集ボタン
+        .edit_btn {
+            width: 10%;
         }
     }
 }

@@ -5,7 +5,7 @@
     import '$scss/style_admin.scss';
     import { onMount } from 'svelte';
 
-    let tabParam: string = '';
+    let tabParam: string;
     const tabInfoHandler = (value: string) => {
         // tab handling
         const currentURL = $page.url;
@@ -16,19 +16,21 @@
 
     // enable display switching even when pages are loading
     onMount(() => {
-        const currentURL = $page.url;
-        window.history.pushState({ path: currentURL.href }, '', currentURL.href);
-        tabParam = currentURL.searchParams.get('tab')!;
+        tabParam = 'system';
     });
 
     export let data;
     const system = data.launcher_system;
-    const info = data.launcher_info;
+    const important_info_data = data.important;
+    const defects_and_troubles_info_data = data.defects_and_troubles;
+    const management_and_service_info_data = data.management_and_service;
+    const ingame_events_info_data = data.ingame_events;
+    const updates_and_maintenance_info_data = data.updates_and_maintenance;
 </script>
 
 <h1>Admin Only</h1>
 
-<section class="console_contents">
+<section class="console_body">
     <ul class="console_menu_list">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <li class="console_menu_list_item" on:click={() => tabInfoHandler('system')}>Launcher System</li>
@@ -39,7 +41,7 @@
     {#if tabParam === '' || tabParam === 'system'}
         <LauncherSystem {system} />
     {:else if tabParam === 'info'}
-        <LauncherInformation {info} />
+        <LauncherInformation {important_info_data} {defects_and_troubles_info_data} {management_and_service_info_data} {ingame_events_info_data} {updates_and_maintenance_info_data} />
     {/if}
 </section>
 
