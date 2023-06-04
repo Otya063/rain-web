@@ -9,82 +9,82 @@ datasource db {
 }
 
 model launcher_system {
-  id       Int     @id
-  maint_jp Boolean
-  maint_us Boolean
-  maint_eu Boolean
-  update   Boolean
+  id     Int     @id
+  RainJP Boolean
+  RainUS Boolean
+  RainEU Boolean
+  update Boolean
 }
 
 model characters {
-  id                                                             Int                  @id @default(autoincrement())
-  user_id                                                        BigInt?
-  is_female                                                      Boolean?
-  is_new_character                                               Boolean?
-  name                                                           String?              @default("") @db.VarChar(15)
-  unk_desc_string                                                String?              @default("") @db.VarChar(31)
-  gr                                                             Int                  @default(0)
-  hrp                                                            Int                  @default(0)
-  weapon_type                                                    Int                  @default(0)
-  last_login                                                     Int?
-  savedata                                                       Bytes?
-  decomyset                                                      Bytes?
-  hunternavi                                                     Bytes?
-  otomoairou                                                     Bytes?
-  partner                                                        Bytes?
-  platebox                                                       Bytes?
-  platedata                                                      Bytes?
-  platemyset                                                     Bytes?
-  rengokudata                                                    Bytes?
-  savemercenary                                                  Bytes?
-  restrict_guild_scout                                           Boolean              @default(false)
-  minidata                                                       Bytes?
-  gacha_items                                                    Bytes?
-  daily_time                                                     DateTime?            @db.Timestamptz(6)
-  house_info                                                     Bytes?
-  login_boost                                                    Bytes?
-  skin_hist                                                      Bytes?
-  kouryou_point                                                  Int?
-  gcp                                                            Int?
-  guild_post_checked                                             DateTime             @default(now()) @db.Timestamptz(6)
-  time_played                                                    Int                  @default(0)
-  weapon_id                                                      Int                  @default(0)
-  scenariodata                                                   Bytes?
-  savefavoritequest                                              Bytes?
-  friends                                                        String               @default("")
-  blocked                                                        String               @default("")
-  deleted                                                        Boolean              @default(false)
-  cafe_time                                                      Int?                 @default(0)
-  netcafe_points                                                 Int?                 @default(0)
-  boost_time                                                     DateTime?            @db.Timestamptz(6)
-  cafe_reset                                                     DateTime?            @db.Timestamptz(6)
-  bonus_quests                                                   Int                  @default(0)
-  daily_quests                                                   Int                  @default(0)
-  promo_points                                                   Int                  @default(0)
-  rasta_id                                                       Int?
-  pact_id                                                        Int?
-  stampcard                                                      Int                  @default(0)
-  mezfes                                                         Bytes?
+  id                   Int       @id @default(autoincrement())
+  user_id              BigInt?
+  is_female            Boolean?
+  is_new_character     Boolean?
+  name                 String?   @default("") @db.VarChar(15)
+  unk_desc_string      String?   @default("") @db.VarChar(31)
+  gr                   Int       @default(0)
+  hrp                  Int       @default(0)
+  weapon_type          Int       @default(0)
+  last_login           Int?
+  savedata             Bytes?
+  decomyset            Bytes?
+  hunternavi           Bytes?
+  otomoairou           Bytes?
+  partner              Bytes?
+  platebox             Bytes?
+  platedata            Bytes?
+  platemyset           Bytes?
+  rengokudata          Bytes?
+  savemercenary        Bytes?
+  restrict_guild_scout Boolean   @default(false)
+  minidata             Bytes?
+  gacha_items          Bytes?
+  daily_time           DateTime? @db.Timestamptz(6)
+  house_info           Bytes?
+  login_boost          Bytes?
+  skin_hist            Bytes?
+  kouryou_point        Int?
+  gcp                  Int?
+  guild_post_checked   DateTime  @default(now()) @db.Timestamptz(6)
+  time_played          Int       @default(0)
+  weapon_id            Int       @default(0)
+  scenariodata         Bytes?
+  savefavoritequest    Bytes?
+  friends              String    @default("")
+  blocked              String    @default("")
+  deleted              Boolean   @default(false)
+  cafe_time            Int?      @default(0)
+  netcafe_points       Int?      @default(0)
+  boost_time           DateTime? @db.Timestamptz(6)
+  cafe_reset           DateTime? @db.Timestamptz(6)
+  bonus_quests         Int       @default(0)
+  daily_quests         Int       @default(0)
+  promo_points         Int       @default(0)
+  rasta_id             Int?
+  pact_id              Int?
+  stampcard            Int       @default(0)
+  mezfes               Bytes?
 }
 
 model users {
-  id              Int          @id @default(autoincrement())
-  username        String       @unique
+  id              Int       @id @default(autoincrement())
+  username        String    @unique
   password        String
   item_box        Bytes?
-  rights          Int          @default(12)
-  last_character  Int?         @default(0)
-  last_login      DateTime?    @db.Timestamptz(6)
-  return_expires  DateTime?    @db.Timestamptz(6)
+  rights          Int       @default(12)
+  last_character  Int?      @default(0)
+  last_login      DateTime? @db.Timestamptz(6)
+  return_expires  DateTime? @db.Timestamptz(6)
   gacha_premium   Int?
   gacha_trial     Int?
   frontier_points Int?
 }
 
 model launcher_info {
-  id         Int      @id @default(autoincrement())
-  title      String   @db.VarChar(255)
-  url        String   @db.VarChar(255)
-  type  String
+  id         Int    @id @default(autoincrement())
+  title      String @db.VarChar(255)
+  url        String @db.VarChar(255)
+  type       String
   created_at Int
 }

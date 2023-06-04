@@ -72,6 +72,9 @@
         {#each Object.entries(info_type_data) as [typename, data]}
             <li class="console_contents_list_item">
                 <p class="console_head">[{typename}]</p>
+                {#if data.length === 0}
+                    <p style="color: red;">Not Applicable.</p>
+                {/if}
                 {#each data || [] as data_item}
                     {#if edit_id === data_item.id}
                         <form class="console_form_section" action="?/updateInfoData" method="POST">
@@ -109,7 +112,7 @@
                             </div>
                         </form>
                     {:else}
-                        <ul class="each_item_contents_list">
+                        <ul class="each_item_contents_list info">
                             <li class="each_item_contents">
                                 <p>Title:</p>
                                 <span>{data_item.title}</span>

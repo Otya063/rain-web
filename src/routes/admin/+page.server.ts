@@ -1,5 +1,5 @@
 import { convDateToUnix } from '$ts/main';
-import { fail, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 import { db } from '$lib/database';
 
@@ -63,14 +63,14 @@ const maintUpdateData: Action = async ({ request }) => {
             id: 1,
         },
         data: {
-            maint_jp: maintenance.rain_jp,
-            maint_us: maintenance.rain_us,
-            maint_eu: maintenance.rain_eu,
+            RainJP: maintenance.rain_jp,
+            RainUS: maintenance.rain_us,
+            RainEU: maintenance.rain_eu,
             update: update_mode,
         },
     });
 
-    throw redirect(303, '/admin');
+    throw redirect(303, '/admin?status=success');
 };
 
 const createInfoData: Action = async ({ request }) => {

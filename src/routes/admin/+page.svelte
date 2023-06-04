@@ -5,7 +5,7 @@
     import '$scss/style_admin.scss';
     import { onMount } from 'svelte';
 
-    let tabParam: string;
+    let tabParam: string = '';
     const tabInfoHandler = (value: string) => {
         // tab handling
         const currentURL = $page.url;
@@ -14,9 +14,10 @@
         tabParam = currentURL.searchParams.get('tab')!;
     };
 
-    // enable display switching even when pages are loading
     onMount(() => {
-        tabParam = 'system';
+        const currentURL = $page.url;
+        const statusParam = currentURL.searchParams.get('status');
+        console.log(statusParam)
     });
 
     export let data;
@@ -29,6 +30,8 @@
 </script>
 
 <h1>Admin Only</h1>
+
+<div class="saving_overlay">Saving...</div>
 
 <section class="console_body">
     <ul class="console_menu_list">

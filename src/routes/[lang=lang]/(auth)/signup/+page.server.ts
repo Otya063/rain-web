@@ -1,4 +1,4 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { redirect } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 import bcrypt from 'bcryptjs';
 import { db } from '$lib/database';
@@ -38,32 +38,31 @@ const signup: Action = async ({ request, cookies }) => {
     if (Object.keys(errors).length > 0) {
         return { errors, credentials };
     } else {
-        
-            await db.users.create({
-                data: {
-                    username: String(username),
-                    password: hashed_pass,
-                },
-            });
+        await db.users.create({
+            data: {
+                username: String(username),
+                password: hashed_pass,
+            },
+        });
 
-            const registered_user = await db.users.findUnique({
-                where: {
-                    username: String(username),
-                },
-            });
+        const registered_user = await db.users.findUnique({
+            where: {
+                username: String(username),
+            },
+        });
 
-            const reg_userId = registered_user.id;
+        const reg_userId = registered_user.id;
 
-            const lastLoginTime = Math.floor(Date.now() / 1000);
+        const lastLoginTime = Math.floor(Date.now() / 1000);
 
-            await db.characters.create({
-                data: {
-                    user_id: reg_userId,
-                    is_female: false,
-                    is_new_character: true,
-                    last_login: lastLoginTime,
-                },
-            });
+        await db.characters.create({
+            data: {
+                user_id: reg_userId,
+                is_female: false,
+                is_new_character: true,
+                last_login: lastLoginTime,
+            },
+        });
     }
 
     throw redirect(303, '/');
