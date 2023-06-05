@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { page } from '$app/stores';
     import LauncherSystem from '$lib/common/LauncherSystem.svelte';
     import LauncherInformation from '$lib/common/LauncherInformation.svelte';
-    import '$scss/style_admin.scss';
+    import { page } from '$app/stores';
     import { onMount } from 'svelte';
+    import type { ActionData } from './$types';
+    import '$scss/style_admin.scss';
 
     let tabParam: string = '';
     const tabInfoHandler = (value: string) => {
@@ -15,10 +16,13 @@
     };
 
     onMount(() => {
-        const currentURL = $page.url;
-        const statusParam = currentURL.searchParams.get('status');
-        console.log(statusParam)
+        form?.success &&
+            window.setTimeout(function () {
+                form!.success = false;
+            }, 5000);
     });
+
+    export let form: ActionData;
 
     export let data;
     const system = data.launcher_system;
@@ -31,7 +35,12 @@
 
 <h1>Admin Only</h1>
 
-<div class="saving_overlay">Saving...</div>
+{#if form?.success}
+    <span class="save_success">Data has been successfully saved.</span>
+{/if}
+{#if form?.error}
+    <span class="saving_overlay">{form?.error_data}</span>
+{/if}
 
 <section class="console_body">
     <ul class="console_menu_list">

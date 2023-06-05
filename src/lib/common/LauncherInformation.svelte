@@ -73,7 +73,7 @@
             <li class="console_contents_list_item">
                 <p class="console_head">[{typename}]</p>
                 {#if data.length === 0}
-                    <p style="color: red;">Not Applicable.</p>
+                    <p style="color: red;">No Information Found</p>
                 {/if}
                 {#each data || [] as data_item}
                     {#if edit_id === data_item.id}

@@ -4,18 +4,18 @@
 @include pc() {
     /* 管理者コンソール
 ====================================================*/
-    // 保存中オーバーレイ
-    .saving_overlay {
-        position: fixed;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        color: white;
+    // 保存成功表示
+    .save_success {
+        position: absolute;
+        top: 1%;
+        left: 48%;
+        color: #393842;
         font-size: 2rem;
-        background: rgba(0, 0, 0, 0.4);
-        display: none;
-        z-index: 100;
+        font-weight: 700;
+        background: #c2e5e7;
+        border: 2px #90bbbd solid;
+        border-radius: 30px;
+        padding: 1%;
     }
 
     .console_body {

@@ -58,19 +58,23 @@ const maintUpdateData: Action = async ({ request }) => {
     rain_eu === 'on' ? (maintenance.rain_eu = true) : (maintenance.rain_eu = false);
     update === 'on' ? (update_mode = true) : (update_mode = false);
 
-    await db.launcher_system.update({
-        where: {
-            id: 1,
-        },
-        data: {
-            RainJP: maintenance.rain_jp,
-            RainUS: maintenance.rain_us,
-            RainEU: maintenance.rain_eu,
-            update: update_mode,
-        },
-    });
+    try {
+        await db.launcher_system.update({
+            where: {
+                id: 1,
+            },
+            data: {
+                RainJP: maintenance.rain_jp,
+                RainUS: maintenance.rain_us,
+                RainEU: maintenance.rain_eu,
+                update: update_mode,
+            },
+        });
 
-    throw redirect(303, '/admin?status=success');
+        return { success: true };
+    } catch (err) {
+        return { error: true, error_data: err };
+    }
 };
 
 const createInfoData: Action = async ({ request }) => {
@@ -80,14 +84,20 @@ const createInfoData: Action = async ({ request }) => {
     const type = data.get('info_type');
     const created_at = Math.floor(Date.now() / 1000);
 
-    await db.launcher_info.create({
-        data: {
-            title,
-            url,
-            type,
-            created_at,
-        },
-    });
+    try {
+        await db.launcher_info.create({
+            data: {
+                title,
+                url,
+                type,
+                created_at,
+            },
+        });
+
+        return { success: true };
+    } catch (err) {
+        return { error: true, error_data: err };
+    }
 };
 
 const updateInfoData: Action = async ({ request }) => {
@@ -98,17 +108,23 @@ const updateInfoData: Action = async ({ request }) => {
     const type = data.get('info_type');
     const date_value = data.get('info_date');
 
-    await db.launcher_info.update({
-        where: {
-            id,
-        },
-        data: {
-            title,
-            url,
-            type,
-            created_at: convDateToUnix(date_value),
-        },
-    });
+    try {
+        await db.launcher_info.update({
+            where: {
+                id,
+            },
+            data: {
+                title,
+                url,
+                type,
+                created_at: convDateToUnix(date_value),
+            },
+        });
+
+        return { success: true };
+    } catch (err) {
+        return { error: true, error_data: err };
+    }
 };
 
 export const actions: Actions = { maintUpdateData, createInfoData, updateInfoData };
