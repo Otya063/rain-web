@@ -5,25 +5,25 @@
     /* 管理者コンソール
 ====================================================*/
     // 保存成功表示
-    .save_success {
+    .status_display {
         position: absolute;
         top: 1%;
         left: 48%;
         color: #393842;
-        font-size: 2rem;
+        font-size: 1.8rem;
         font-weight: 700;
         background: #c2e5e7;
         border: 2px #90bbbd solid;
         border-radius: 30px;
-        padding: 1%;
+        padding: 0.4% 1%;
     }
 
+    // コンソール画面本体
     .console_body {
         display: flex;
         justify-content: space-between;
-        max-width: 1220px;
-        margin: auto;
-        padding-left: 10%;
+        margin: 0 100px;
+        padding-left: 140px;
 
         // コンソールメニュー側
         .console_menu_list {
@@ -49,7 +49,7 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                width: 60%;
+                width: 40%;
                 padding: 5% 0;
 
                 // 見出しタイトル表示
@@ -63,17 +63,32 @@
                 .each_item_contents_list {
                     width: 100%;
                     text-align: center;
+                    padding-bottom: 10%;
 
                     // 各項目内容
                     .each_item_contents {
                         display: flex;
                         justify-content: space-between;
                         padding: 2% 0;
+
+                        p {
+                            padding-right: 1%;
+                        }
+                    }
+
+                    // 編集ボタン
+                    .edit_btn {
+                        width: 10%;
+                    }
+
+                    &:last-child {
+                        padding: 0;
                     }
                 }
 
                 // フォームエリア
                 .console_form_section {
+                    position: relative;
                     width: 100%;
                     height: 350px;
                     display: flex;
@@ -93,6 +108,19 @@
                             }
                         }
                     }
+
+                    // 保存/キャンセルボタン
+                    .save_cancel_btn {
+                        text-align: center;
+                    }
+
+                    // 削除ボタン
+                    .del_info_btn {
+                        position: absolute;
+                        top: -6%;
+                        right: 0;
+                        color: red;
+                    }
                 }
 
                 // インフォタイプ
@@ -101,23 +129,13 @@
                     flex-direction: column;
                 }
             }
-        }
 
-        // 保存/キャンセルボタン
-        .save_cancel_btn {
-            text-align: center;
-        }
-
-        // 追加ボタン
-        .add_info_btn {
-            position: absolute;
-            top: 7%;
-            right: 20%;
-        }
-
-        // 編集ボタン
-        .edit_btn {
-            width: 10%;
+            // 追加ボタン
+            .add_info_btn {
+                position: absolute;
+                top: 7%;
+                right: 20%;
+            }
         }
     }
 }

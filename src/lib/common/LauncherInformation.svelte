@@ -34,8 +34,8 @@
     };
 </script>
 
-{#if adding}
-    <ul class="console_contents">
+<ul class="console_contents">
+    {#if adding}
         <li class="console_contents_list_item">
             <form class="console_form_section" action="?/createInfoData" method="POST">
                 <p class="console_head">Launcher Info Addition Form</p>
@@ -66,9 +66,7 @@
                 </div>
             </form>
         </li>
-    </ul>
-{:else}
-    <ul class="console_contents">
+    {:else}
         {#each Object.entries(info_type_data) as [typename, data]}
             <li class="console_contents_list_item">
                 <p class="console_head">[{typename}]</p>
@@ -110,9 +108,11 @@
                                 <button type="submit">[Save]</button>
                                 <button on:click={() => editInfoMode(0)}>[Cancel]</button>
                             </div>
+
+                            <button class="del_info_btn" type="submit" formaction="?/deleteInfoData" formmethod="POST">[Delete This Info]</button>
                         </form>
                     {:else}
-                        <ul class="each_item_contents_list info">
+                        <ul class="each_item_contents_list">
                             <li class="each_item_contents">
                                 <p>Title:</p>
                                 <span>{data_item.title}</span>
@@ -136,7 +136,7 @@
                 {/each}
             </li>
         {/each}
-    </ul>
 
-    <button class="add_info_btn" on:click={() => addInfoMode(true)}>[Add]</button>
-{/if}
+        <button class="add_info_btn" on:click={() => addInfoMode(true)}>[Add]</button>
+    {/if}
+</ul>

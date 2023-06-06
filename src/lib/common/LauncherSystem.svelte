@@ -1,6 +1,6 @@
 <script lang="ts">
-    export let system;
-    const { RainJP, RainUS, RainEU, update } = system;
+    export let system_data;
+    const { RainJP, RainUS, RainEU, update } = system_data;
 
     let editing: boolean = false;
     const editSystemMode = (isEditing: boolean) => {
@@ -10,7 +10,7 @@
 
 <ul class="console_contents">
     <li class="console_contents_list_item">
-        <form class="console_form_section" style="align-items: center;" action="?/maintUpdateData" method="POST">
+        <form class="console_form_section" style="align-items: center;" action="?/updateSystemData" method="POST">
             {#if editing}
                 <ul class="each_item_contents_list">
                     <p class="console_head">Launcher Maintenance Status</p>

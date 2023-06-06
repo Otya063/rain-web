@@ -23,9 +23,9 @@ model characters {
   is_new_character     Boolean?
   name                 String?   @default("") @db.VarChar(15)
   unk_desc_string      String?   @default("") @db.VarChar(31)
-  gr                   Int       @default(0)
-  hrp                  Int       @default(0)
-  weapon_type          Int       @default(0)
+  gr                   Int?
+  hrp                  Int?
+  weapon_type          Int?
   last_login           Int?
   savedata             Bytes?
   decomyset            Bytes?
@@ -87,4 +87,11 @@ model launcher_info {
   url        String @db.VarChar(255)
   type       String
   created_at Int
+}
+
+model account_ban {
+  user_id  Int    @id
+  username String
+  reason   String
+  date     Int
 }

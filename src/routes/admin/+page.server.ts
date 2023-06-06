@@ -40,10 +40,12 @@ export const load: PageServerLoad = async () => {
         },
     });
 
-    return { launcher_system, important, defects_and_troubles, management_and_service, ingame_events, updates_and_maintenance };
+    const users = await db.users.findMany();
+
+    return { launcher_system, important, defects_and_troubles, management_and_service, ingame_events, updates_and_maintenance, users };
 };
 
-const maintUpdateData: Action = async ({ request }) => {
+const updateSystemData: Action = async ({ request }) => {
     const data = await request.formData();
     const rain_jp = data.get('rain_jp');
     const rain_us = data.get('rain_us');
@@ -71,9 +73,15 @@ const maintUpdateData: Action = async ({ request }) => {
             },
         });
 
-        return { success: true };
+        return { success: true, status: 'system_updated' };
     } catch (err) {
-        return { error: true, error_data: err };
+        if (err instanceof Error) {
+            return { error: true, error_data: err.message };
+        } else if (typeof err === 'string') {
+            return { error: true, error_data: err };
+        } else {
+            return { error: true, error_data: 'Unexpected Error.' };
+        }
     }
 };
 
@@ -94,9 +102,15 @@ const createInfoData: Action = async ({ request }) => {
             },
         });
 
-        return { success: true };
+        return { success: true, status: 'info_created' };
     } catch (err) {
-        return { error: true, error_data: err };
+        if (err instanceof Error) {
+            return { error: true, error_data: err.message };
+        } else if (typeof err === 'string') {
+            return { error: true, error_data: err };
+        } else {
+            return { error: true, error_data: 'Unexpected Error.' };
+        }
     }
 };
 
@@ -121,10 +135,87 @@ const updateInfoData: Action = async ({ request }) => {
             },
         });
 
-        return { success: true };
+        return { success: true, status: 'info_updated' };
     } catch (err) {
-        return { error: true, error_data: err };
+        if (err instanceof Error) {
+            return { error: true, error_data: err.message };
+        } else if (typeof err === 'string') {
+            return { error: true, error_data: err };
+        } else {
+            return { error: true, error_data: 'Unexpected Error.' };
+        }
     }
 };
 
-export const actions: Actions = { maintUpdateData, createInfoData, updateInfoData };
+const deleteInfoData: Action = async ({ request }) => {
+    const data = await request.formData();
+    const id = Number(data.get('info_id'));
+
+    try {
+        await db.launcher_info.delete({
+            where: {
+                id,
+            },
+        });
+
+        return { success: true, status: 'info_deleted' };
+    } catch (err) {
+        if (err instanceof Error) {
+            return { error: true, error_data: err.message };
+        } else if (typeof err === 'string') {
+            return { error: true, error_data: err };
+        } else {
+            return { error: true, error_data: 'Unexpected Error.' };
+        }
+    }
+};
+
+const updateUserData: Action = async ({ request }) => {
+    const data = await request.formData();
+    const id = Number(data.get('user_id'));
+    const username = data.get('user_username');
+    const last_character = Number(data.get('user_last_character'));
+
+    try {
+        await db.users.update({
+            where: {
+                id,
+            },
+            data: {
+                username,
+                last_character,
+            },
+        });
+
+        return { success: true, status: 'user_updated' };
+    } catch (err) {
+        if (err instanceof Error) {
+            return { error: true, error_data: err.message };
+        } else if (typeof err === 'string') {
+            return { error: true, error_data: err };
+        } else {
+            return { error: true, error_data: 'Unexpected Error.' };
+        }
+    }
+};
+
+const banUser: Action = async ({ request }) => {
+    const data = await request.formData();
+    const id = Number(data.get('user_id'));
+
+    try {
+        console.log(id);
+
+        return { success: true, status: 'user_banned' };
+    } catch (err) {
+        if (err instanceof Error) {
+            return { error: true, error_data: err.message };
+        } else if (typeof err === 'string') {
+            return { error: true, error_data: err };
+        } else {
+            return { error: true, error_data: 'Unexpected Error.' };
+        }
+    }
+};
+
+export const actions: Actions = { updateSystemData, createInfoData, updateInfoData, deleteInfoData, updateUserData, banUser };
