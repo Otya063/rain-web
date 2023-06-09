@@ -42,7 +42,10 @@ export const load: PageServerLoad = async () => {
 
     const users = await db.users.findMany();
 
-    return { launcher_system, important, defects_and_troubles, management_and_service, ingame_events, updates_and_maintenance, users };
+    const characters = await db.characters.findMany();
+    const charactersWithoutBytes = characters.map(({ savedata, hunternavi, partner, minidata, scenariodata, savefavoritequest, mezfes, ...rest }) => rest);
+
+    return { launcher_system, important, defects_and_troubles, management_and_service, ingame_events, updates_and_maintenance, users, charactersWithoutBytes };
 };
 
 const updateSystemData: Action = async ({ request }) => {
@@ -201,10 +204,18 @@ const updateUserData: Action = async ({ request }) => {
 
 const banUser: Action = async ({ request }) => {
     const data = await request.formData();
-    const id = Number(data.get('user_id'));
+    const user_id = Number(data.get('user_id'));
+    const last_character = Number(data.get('user_last_character'));
 
     try {
-        console.log(id);
+        await db.characters.update({
+            where: {
+                id: last_character,
+            },
+            data: {
+                deleted: true,
+            },
+        });
 
         return { success: true, status: 'user_banned' };
     } catch (err) {

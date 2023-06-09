@@ -37,6 +37,7 @@
     export let form: ActionData;
     const status: keyof StatusMsg = form?.status;
     let success: boolean = form?.success;
+    let error: boolean = form?.error;
 
     export let data;
     const system_data = data.launcher_system;
@@ -46,11 +47,12 @@
     const ingame_events_info_data = data.ingame_events;
     const updates_and_maintenance_info_data = data.updates_and_maintenance;
     const users_data = data.users;
+    const characters_data = data.charactersWithoutBytes ;
 
     onMount(() => {
-        success &&
+        (success || error) &&
             window.setTimeout(function () {
-                success = false;
+                success = error = false;
             }, 5000);
     });
 </script>
@@ -62,7 +64,7 @@
 {/if}
 
 {#if form?.error}
-    <span class="saving_overlay">{form?.error_data}</span>
+    <span transition:slide class="status_display">{form?.error_data}</span>
 {/if}
 
 <section class="console_body">
@@ -80,7 +82,7 @@
     {:else if tabParam === 'info'}
         <LauncherInformation {important_info_data} {defects_and_troubles_info_data} {management_and_service_info_data} {ingame_events_info_data} {updates_and_maintenance_info_data} />
     {:else if tabParam === 'users'}
-        <Users {users_data} />
+        <Users {users_data} {characters_data} />
     {/if}
 </section>
 

@@ -109,15 +109,95 @@
                         }
                     }
 
+                    // モーダルウィンドウ
+                    .modal {
+                        display: none;
+                        position: fixed;
+                        z-index: 1;
+                        left: 0;
+                        top: 0;
+                        height: 100%;
+                        width: 100%;
+                        overflow: auto;
+                        background-color: rgba(0, 0, 0, 0.5);
+
+                        // モーダルコンテンツ
+                        .modal_content {
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            width: 50%;
+                            background-color: #f4f4f4;
+                            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+
+                            // ヘッダー
+                            .modal_header {
+                                background: lightblue;
+                                padding: 3px 15px;
+                                display: flex;
+                                justify-content: space-between;
+
+                                h1 {
+                                    font-size: 3rem;
+                                    margin: 1% 0;
+                                }
+                            }
+
+                            // 内容
+                            .modal_body {
+                                padding: 10px 20px;
+                                color: black;
+
+                                // モーダルリスト
+                                .modal_list {
+                                    display: flex;
+                                    flex-direction: row;
+                                    justify-content: space-evenly;
+                                    padding: 2%;
+
+                                    // リストアイテム
+                                    .modal_list_item {
+                                        text-align: center;
+
+                                        // アイテム見出し用
+                                        p {
+                                            font-size: 1.7rem;
+                                            font-weight: 700;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
                     // 保存/キャンセルボタン
                     .save_cancel_btn {
                         text-align: center;
+                    }
+
+                    // Ban/キャンセルボタン
+                    .ban_cancel_btn {
+                        text-align: center;
+                        padding: 1%;
+
+                        :first-child {
+                            color: red;
+                        }
                     }
 
                     // 削除ボタン
                     .del_info_btn {
                         position: absolute;
                         top: -6%;
+                        right: 0;
+                        color: red;
+                    }
+
+                    // ユーザーBanボタン
+                    .ban_user_btn {
+                        position: absolute;
+                        top: -8%;
                         right: 0;
                         color: red;
                     }
