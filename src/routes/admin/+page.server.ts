@@ -43,7 +43,29 @@ export const load: PageServerLoad = async () => {
     const users = await db.users.findMany();
 
     const characters = await db.characters.findMany();
-    const charactersWithoutBytes = characters.map(({ savedata, hunternavi, partner, minidata, scenariodata, savefavoritequest, mezfes, ...rest }) => rest);
+    const charactersWithoutBytes = characters.map(
+        ({
+            savedata,
+            decomyset,
+            hunternavi,
+            otomoairou,
+            partner,
+            platebox,
+            platedata,
+            platemyset,
+            rengokudata,
+            savemercenary,
+            minidata,
+            gacha_items,
+            house_info,
+            login_boost,
+            skin_hist,
+            scenariodata,
+            savefavoritequest,
+            mezfes,
+            ...rest
+        }) => rest
+    );
 
     return { launcher_system, important, defects_and_troubles, management_and_service, ingame_events, updates_and_maintenance, users, charactersWithoutBytes };
 };
