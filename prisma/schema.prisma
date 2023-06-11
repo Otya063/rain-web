@@ -18,7 +18,7 @@ model launcher_system {
 
 model characters {
   id                   Int       @id @default(autoincrement())
-  user_id              BigInt?
+  user_id              Int?
   is_female            Boolean?
   is_new_character     Boolean?
   name                 String?   @default("") @db.VarChar(15)

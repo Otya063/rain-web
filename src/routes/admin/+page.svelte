@@ -5,7 +5,7 @@
     import { slide } from 'svelte/transition';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
-    import type { ActionData } from './$types';
+    import type { ActionData, PageData } from './$types';
     import '$scss/style_admin.scss';
 
     let tabParam: string = '';
@@ -24,6 +24,7 @@
         system_updated: string;
         user_updated: string;
         user_banned: string;
+        removed_ban: string;
     }
     const status_msg: StatusMsg = {
         info_created: 'The information has been successfully created.',
@@ -32,6 +33,7 @@
         system_updated: 'The system mode has been successfully updated.',
         user_updated: 'The user data has been successfully updated.',
         user_banned: 'The user has been banned.',
+        removed_ban: 'The ban against the user has been removed.',
     };
 
     export let form: ActionData;
@@ -39,7 +41,7 @@
     let success: boolean = form?.success;
     let error: boolean = form?.error;
 
-    export let data;
+    export let data: PageData;
     const system_data = data.launcher_system;
     const important_info_data = data.important;
     const defects_and_troubles_info_data = data.defects_and_troubles;
@@ -47,7 +49,8 @@
     const ingame_events_info_data = data.ingame_events;
     const updates_and_maintenance_info_data = data.updates_and_maintenance;
     const users_data = data.users;
-    const characters_data = data.charactersWithoutBytes ;
+    const characters_data = data.charactersWithoutBytes;
+    const banned_users_data = data.banned_users;
 
     onMount(() => {
         (success || error) &&
@@ -82,7 +85,7 @@
     {:else if tabParam === 'info'}
         <LauncherInformation {important_info_data} {defects_and_troubles_info_data} {management_and_service_info_data} {ingame_events_info_data} {updates_and_maintenance_info_data} />
     {:else if tabParam === 'users'}
-        <Users {users_data} {characters_data} />
+        <Users {users_data} {characters_data} {banned_users_data} />
     {/if}
 </section>
 

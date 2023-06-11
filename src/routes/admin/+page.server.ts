@@ -67,7 +67,9 @@ export const load: PageServerLoad = async () => {
         }) => rest
     );
 
-    return { launcher_system, important, defects_and_troubles, management_and_service, ingame_events, updates_and_maintenance, users, charactersWithoutBytes };
+    const banned_users = await db.account_ban.findMany();
+
+    return { launcher_system, important, defects_and_troubles, management_and_service, ingame_events, updates_and_maintenance, users, charactersWithoutBytes, banned_users };
 };
 
 const updateSystemData: Action = async ({ request }) => {
@@ -226,16 +228,29 @@ const updateUserData: Action = async ({ request }) => {
 
 const banUser: Action = async ({ request }) => {
     const data = await request.formData();
+    const character_id = data.getAll('character_id');
     const user_id = Number(data.get('user_id'));
-    const last_character = Number(data.get('user_last_character'));
+    const username = data.get('user_username');
+    const date = Math.floor(Date.now() / 1000);
 
     try {
-        await db.characters.update({
-            where: {
-                id: last_character,
-            },
+        for (const char_id of character_id) {
+            await db.characters.update({
+                where: {
+                    id: Number(char_id),
+                },
+                data: {
+                    deleted: true,
+                },
+            });
+        }
+
+        await db.account_ban.create({
             data: {
-                deleted: true,
+                user_id,
+                username,
+                reason: 'test reason.',
+                date,
             },
         });
 
@@ -251,4 +266,39 @@ const banUser: Action = async ({ request }) => {
     }
 };
 
-export const actions: Actions = { updateSystemData, createInfoData, updateInfoData, deleteInfoData, updateUserData, banUser };
+const removeBanUser: Action = async ({ request }) => {
+    const data = await request.formData();
+    const character_id = data.getAll('character_id');
+    const user_id = Number(data.get('user_id'));
+
+    try {
+        for (const char_id of character_id) {
+            await db.characters.update({
+                where: {
+                    id: Number(char_id),
+                },
+                data: {
+                    deleted: false,
+                },
+            });
+        }
+
+        await db.account_ban.delete({
+            where: {
+                user_id,
+            },
+        });
+
+        return { success: true, status: 'removed_ban' };
+    } catch (err) {
+        if (err instanceof Error) {
+            return { error: true, error_data: err.message };
+        } else if (typeof err === 'string') {
+            return { error: true, error_data: err };
+        } else {
+            return { error: true, error_data: 'Unexpected Error.' };
+        }
+    }
+};
+
+export const actions: Actions = { updateSystemData, createInfoData, updateInfoData, deleteInfoData, updateUserData, banUser, removeBanUser };
