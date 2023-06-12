@@ -62,31 +62,103 @@
 
 <h1>Admin Only</h1>
 
-{#if success}
-    <span transition:slide class="status_display">{status_msg[status]}</span>
-{/if}
-
-{#if form?.error}
-    <span transition:slide class="status_display">{form?.error_data}</span>
-{/if}
-
 <section class="console_body">
     <ul class="console_menu_list">
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <li class="console_menu_list_item" on:click={() => tabInfoHandler('system')}>Launcher System</li>
+        <li class="console_menu_list_item" on:click={() => tabInfoHandler('system')}>
+            <p class="console_menu_list_link">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-adjustments-alt"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M4 8h4v4h-4z" />
+                    <path d="M6 4l0 4" />
+                    <path d="M6 12l0 8" />
+                    <path d="M10 14h4v4h-4z" />
+                    <path d="M12 4l0 10" />
+                    <path d="M12 18l0 2" />
+                    <path d="M16 5h4v4h-4z" />
+                    <path d="M18 4l0 1" />
+                    <path d="M18 9l0 11" />
+                </svg>
+                <span class="console_menu_list_text">Launcher System</span>
+            </p>
+        </li>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <li class="console_menu_list_item" on:click={() => tabInfoHandler('info')}>Launcher Information</li>
+        <li class="console_menu_list_item" on:click={() => tabInfoHandler('info')}>
+            <p class="console_menu_list_link">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-file-info"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" />
+                    <path d="M11 14h1v4h1" />
+                    <path d="M12 11h.01" />
+                </svg>
+                <span class="console_menu_list_text">Launcher Information</span>
+            </p>
+        </li>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <li class="console_menu_list_item" on:click={() => tabInfoHandler('users')}>Users</li>
+        <li class="console_menu_list_item" on:click={() => tabInfoHandler('users')}>
+            <p class="console_menu_list_link">
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="icon icon-tabler icon-tabler-users"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+                    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
+                </svg>
+                <span class="console_menu_list_text">Users</span>
+            </p>
+        </li>
     </ul>
 
-    {#if tabParam === '' || tabParam === 'system'}
-        <LauncherSystem {system_data} />
-    {:else if tabParam === 'info'}
-        <LauncherInformation {important_info_data} {defects_and_troubles_info_data} {management_and_service_info_data} {ingame_events_info_data} {updates_and_maintenance_info_data} />
-    {:else if tabParam === 'users'}
-        <Users {users_data} {characters_data} {banned_users_data} />
-    {/if}
+    <ul class="console_contents">
+        {#if success}
+            <span transition:slide class="status_display">{status_msg[status]}</span>
+        {/if}
+
+        {#if form?.error}
+            <span transition:slide class="status_display">{form?.error_data}</span>
+        {/if}
+        {#if tabParam === '' || tabParam === 'system'}
+            <LauncherSystem {system_data} />
+        {:else if tabParam === 'info'}
+            <LauncherInformation {important_info_data} {defects_and_troubles_info_data} {management_and_service_info_data} {ingame_events_info_data} {updates_and_maintenance_info_data} />
+        {:else if tabParam === 'users'}
+            <Users {users_data} {characters_data} {banned_users_data} />
+        {/if}
+    </ul>
 </section>
 
 <svelte:head>

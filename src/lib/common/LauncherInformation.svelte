@@ -34,46 +34,46 @@
     };
 </script>
 
-<ul class="console_contents">
-    {#if adding}
+{#if adding}
+    <li class="console_contents_list_item">
+        <form class="console_form_section" action="?/createInfoData" method="POST">
+            <p class="console_head">Launcher Information Adding Form</p>
+            <label for="info_title">
+                Title:
+                <input id="info_title" type="text" name="info_title" />
+            </label>
+
+            <label for="info_url">
+                URL:
+                <input id="info_url" type="text" name="info_url" />
+            </label>
+
+            <div class="info_type_group">
+                <label for="info_type">Info Type</label>
+
+                {#each Object.keys(info_type_data) as key}
+                    <label for={key}>
+                        <input id={key} type="radio" name="info_type" value={key} />
+                        {key}
+                    </label>
+                {/each}
+            </div>
+
+            <div class="save_cancel_btn">
+                <button type="submit">[Save]</button>
+                <button on:click={() => addInfoMode(false)}>[Cancel]</button>
+            </div>
+        </form>
+    </li>
+{:else}
+    {#each Object.entries(info_type_data) as [typename, data]}
         <li class="console_contents_list_item">
-            <form class="console_form_section" action="?/createInfoData" method="POST">
-                <p class="console_head">Launcher Info Addition Form</p>
-                <label for="info_title">
-                    Title:
-                    <input id="info_title" type="text" name="info_title" />
-                </label>
-
-                <label for="info_url">
-                    URL:
-                    <input id="info_url" type="text" name="info_url" />
-                </label>
-
-                <div class="info_type_group">
-                    <label for="info_type">Info Type</label>
-
-                    {#each Object.keys(info_type_data) as key}
-                        <label for={key}>
-                            <input id={key} type="radio" name="info_type" value={key} />
-                            {key}
-                        </label>
-                    {/each}
-                </div>
-
-                <div class="save_cancel_btn">
-                    <button type="submit">[Save]</button>
-                    <button on:click={() => addInfoMode(false)}>[Cancel]</button>
-                </div>
-            </form>
-        </li>
-    {:else}
-        {#each Object.entries(info_type_data) as [typename, data]}
-            <li class="console_contents_list_item">
-                <p class="console_head">[{typename}]</p>
-                {#if data.length === 0}
-                    <p style="color: red;">No Information Found</p>
-                {/if}
-                {#each data || [] as data_item}
+            <p class="console_head">[{typename}]</p>
+            {#if data.length === 0}
+                <p style="color: red;">No Information Found</p>
+            {/if}
+            {#each data || [] as data_item}
+                <ul class="each_item_contents_list">
                     {#if edit_id === data_item.id}
                         <form class="console_form_section" action="?/updateInfoData" method="POST">
                             <input type="hidden" name="info_id" value={edit_id} />
@@ -101,7 +101,7 @@
 
                             <label for="info_date">
                                 Date:
-                                <input id="info_date" name="info_date" type="date" value={convUnixToDate(data_item.created_at, false)} />
+                                <input id="info_date" name="info_date" type="date" value={convUnixToDate(data_item.created_at, true)} />
                             </label>
 
                             <div class="save_cancel_btn">
@@ -112,31 +112,29 @@
                             <button class="del_info_btn" type="submit" formaction="?/deleteInfoData" formmethod="POST">[Delete This Info]</button>
                         </form>
                     {:else}
-                        <ul class="each_item_contents_list">
-                            <li class="each_item_contents">
-                                <p>Title:</p>
-                                <span>{data_item.title}</span>
-                            </li>
+                        <li class="each_item_contents">
+                            <p>Title:</p>
+                            <span>{data_item.title}</span>
+                        </li>
 
-                            <li class="each_item_contents">
-                                <p>URL:</p>
-                                <span>{data_item.url}</span>
-                            </li>
+                        <li class="each_item_contents">
+                            <p>URL:</p>
+                            <span>{data_item.url}</span>
+                        </li>
 
-                            <li class="each_item_contents">
-                                <p>Date:</p>
-                                <span>{convUnixToDate(data_item.created_at, true)}</span>
-                                <p>Unix Time:</p>
-                                <span>{data_item.created_at}</span>
-                            </li>
+                        <li class="each_item_contents">
+                            <p>Date:</p>
+                            <span>{convUnixToDate(data_item.created_at, false)}</span>
+                            <p>Unix Time:</p>
+                            <span>{data_item.created_at}</span>
+                        </li>
 
-                            <button class="edit_btn" on:click={() => editInfoMode(data_item.id)}>[Edit]</button>
-                        </ul>
+                        <button class="edit_btn" on:click={() => editInfoMode(data_item.id)}>[Edit]</button>
                     {/if}
-                {/each}
-            </li>
-        {/each}
+                </ul>
+            {/each}
+        </li>
+    {/each}
 
-        <button class="add_info_btn" on:click={() => addInfoMode(true)}>[Add]</button>
-    {/if}
-</ul>
+    <button class="add_info_btn" on:click={() => addInfoMode(true)}>[Add]</button>
+{/if}

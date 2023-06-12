@@ -142,7 +142,7 @@ if (browser) {
 =======================================================*/
 /* Convert Unixtimestamp to Date
 ====================================================*/
-export const convUnixToDate = (timestamp: number, isText: boolean) => {
+export const convUnixToDate = (timestamp: number | null, ISO8601: boolean) => {
     const date = new Date(timestamp * 1000);
 
     // for nomal expression
@@ -152,7 +152,7 @@ export const convUnixToDate = (timestamp: number, isText: boolean) => {
         day: 'numeric',
     });
 
-    // for input date value
+    // for ISO 8601 expression
     const formattedDate2 = date
         .toLocaleDateString('ja-JP', {
             year: 'numeric',
@@ -161,7 +161,7 @@ export const convUnixToDate = (timestamp: number, isText: boolean) => {
         })
         .replace(/\//g, '-');
 
-    return isText ? formattedDate1 : formattedDate2;
+    return ISO8601 ? formattedDate2 : formattedDate1;
 };
 
 /* Convert Date to Unixtimestamp

@@ -6,16 +6,14 @@
 ====================================================*/
     // 保存成功表示
     .status_display {
-        position: absolute;
-        top: 1%;
-        left: 48%;
         color: #393842;
         font-size: 1.8rem;
         font-weight: 700;
         background: #c2e5e7;
         border: 2px #90bbbd solid;
         border-radius: 30px;
-        padding: 0.4% 1%;
+        padding: 0.4% 2%;
+        max-width: 40%;
     }
 
     // コンソール画面本体
@@ -27,12 +25,52 @@
 
         // コンソールメニュー側
         .console_menu_list {
-            min-width: 180px;
+            min-width: 80px;
             height: 100%;
 
             // メニュー各項目
             .console_menu_list_item {
+                width: 40px;
+                height: 40px;
+                margin: 0 auto 32px;
                 cursor: pointer;
+
+                .console_menu_list_link {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+
+                    .console_menu_list_text {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        color: #333333;
+                        font-size: 1.2rem;
+                        width: 150px;
+                        height: 40px;
+                        border-radius: 10px;
+                        background: #e9eced;
+                        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+                        transition: all 0.2s;
+                        transform: translateX(30px);
+                        opacity: 0;
+                        pointer-events: none;
+                        user-select: none;
+                    }
+
+                    &:hover {
+                        .console_menu_list_text {
+                            transform: translateX(60px);
+                            opacity: 1;
+                        }
+                    }
+                }
             }
         }
 
@@ -50,7 +88,7 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                width: 40%;
+                width: 50%;
                 padding: 5% 0;
 
                 // 見出しタイトル表示
@@ -64,7 +102,7 @@
                 .each_item_contents_list {
                     width: 100%;
                     text-align: center;
-                    padding-bottom: 10%;
+                    padding-top: 10%;
 
                     // 各項目内容
                     .each_item_contents {
@@ -73,7 +111,15 @@
                         padding: 2% 0;
 
                         p {
-                            padding-right: 1%;
+                            padding-right: 3%;
+                        }
+
+                        // ユーザー情報各項目
+                        .user_info_item {
+                            width: 40%;
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: center;
                         }
                     }
 
@@ -81,23 +127,21 @@
                     .edit_btn {
                         width: 10%;
                     }
-
-                    &:last-child {
-                        padding: 0;
-                    }
                 }
 
                 // フォームエリア
                 .console_form_section {
                     position: relative;
                     width: 100%;
-                    height: 350px;
                     display: flex;
                     flex-direction: column;
                     justify-content: space-around;
 
                     // インプットエリア調整
                     label {
+                        display: flex;
+                        justify-content: space-between;
+
                         input {
                             padding-left: 1%;
                             margin-left: 1%;
@@ -118,7 +162,7 @@
                     // 削除ボタン
                     .del_info_btn {
                         position: absolute;
-                        top: -6%;
+                        top: -10%;
                         right: 0;
                         color: red;
                     }
@@ -126,7 +170,7 @@
                     // ユーザーBanボタン
                     .ban_user_btn {
                         position: absolute;
-                        top: -8%;
+                        top: -10%;
                         right: 0;
                         color: red;
                     }
@@ -136,6 +180,7 @@
                 .info_type_group {
                     display: flex;
                     flex-direction: column;
+                    padding: 5% 0%;
                 }
 
                 // Banユーザー表示
@@ -149,6 +194,7 @@
                     width: 110%;
                     height: 70%;
 
+                    // テキスト
                     .banned_text {
                         color: whitesmoke;
                         font-size: 2rem;
@@ -156,6 +202,7 @@
                         text-shadow: 3px 3px 5px black;
                     }
 
+                    // Ban解除ボタン
                     .remove_ban_btn {
                         color: red;
                         font-weight: 700;
@@ -174,75 +221,96 @@
             }
         }
     }
-}
 
-/* モーダルウィンドウ
+    /* ユーザーコンポーネント内キャラクター概要リスト
 ====================================================*/
-.modal {
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    // キャラクターなし
+    .no_character_msg {
+        text-align: center;
+        color: #ff8100;
+    }
 
-    // モーダルコンテンツ
-    .modal_content {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 50%;
-        background-color: #f4f4f4;
-        box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+    // リスト本体
+    .character_list {
+        width: 100%;
 
-        // ヘッダー
-        .modal_header {
-            background: lightblue;
-            padding: 3px 15px;
+        //　各キャラクター
+        .character_list_item {
             display: flex;
+            flex-direction: row;
             justify-content: space-between;
-
-            h1 {
-                font-size: 3rem;
-                margin: 1% 0;
-            }
+            margin: 0 5%;
         }
+    }
 
-        // 内容
-        .modal_body {
-            padding: 10px 20px;
-            color: black;
+    /* モーダルウィンドウ
+====================================================*/
+    .modal {
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
 
-            // モーダルリスト
-            .modal_list {
+        // モーダルコンテンツ
+        .modal_content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            background-color: #f4f4f4;
+            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+
+            // ヘッダー
+            .modal_header {
+                background: lightblue;
+                padding: 3px 15px;
                 display: flex;
-                flex-direction: row;
-                justify-content: space-evenly;
-                padding: 2%;
+                justify-content: space-between;
 
-                // リストアイテム
-                .modal_list_item {
-                    text-align: center;
+                h1 {
+                    font-size: 3rem;
+                    margin: 1% 0;
+                }
+            }
 
-                    // アイテム見出し用
-                    p {
-                        font-size: 1.7rem;
-                        font-weight: 700;
+            // 内容
+            .modal_body {
+                padding: 10px 20px;
+                color: black;
+
+                // モーダルリスト
+                .modal_list {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                    padding: 2%;
+
+                    // リストアイテム
+                    .modal_list_item {
+                        text-align: center;
+
+                        // アイテム見出し用
+                        p {
+                            font-size: 1.7rem;
+                            font-weight: 700;
+                        }
                     }
                 }
             }
-        }
 
-        // Ban/キャンセルボタン
-        .ban_btn_group {
-            text-align: center;
-            padding: 1%;
+            // Ban/キャンセルボタン
+            .ban_btn_group {
+                text-align: center;
+                padding: 1%;
 
-            :first-child {
-                color: red;
+                :first-child {
+                    color: red;
+                }
             }
         }
     }
