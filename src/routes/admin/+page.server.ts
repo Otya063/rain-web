@@ -103,11 +103,11 @@ const updateSystemData: Action = async ({ request }) => {
         return { success: true, status: 'system_updated' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, error_data: err.message };
+            return { error: true, error_msg: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, error_data: err };
+            return { error: true, error_msg: err };
         } else {
-            return { error: true, error_data: 'Unexpected Error.' };
+            return { error: true, error_msg: 'Unexpected Error.' };
         }
     }
 };
@@ -132,11 +132,11 @@ const createInfoData: Action = async ({ request }) => {
         return { success: true, status: 'info_created' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, error_data: err.message };
+            return { error: true, error_msg: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, error_data: err };
+            return { error: true, error_msg: err };
         } else {
-            return { error: true, error_data: 'Unexpected Error.' };
+            return { error: true, error_msg: 'Unexpected Error.' };
         }
     }
 };
@@ -165,11 +165,11 @@ const updateInfoData: Action = async ({ request }) => {
         return { success: true, status: 'info_updated' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, error_data: err.message };
+            return { error: true, error_msg: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, error_data: err };
+            return { error: true, error_msg: err };
         } else {
-            return { error: true, error_data: 'Unexpected Error.' };
+            return { error: true, error_msg: 'Unexpected Error.' };
         }
     }
 };
@@ -188,11 +188,11 @@ const deleteInfoData: Action = async ({ request }) => {
         return { success: true, status: 'info_deleted' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, error_data: err.message };
+            return { error: true, error_msg: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, error_data: err };
+            return { error: true, error_msg: err };
         } else {
-            return { error: true, error_data: 'Unexpected Error.' };
+            return { error: true, error_msg: 'Unexpected Error.' };
         }
     }
 };
@@ -217,11 +217,11 @@ const updateUserData: Action = async ({ request }) => {
         return { success: true, status: 'user_updated' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, error_data: err.message };
+            return { error: true, error_msg: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, error_data: err };
+            return { error: true, error_msg: err };
         } else {
-            return { error: true, error_data: 'Unexpected Error.' };
+            return { error: true, error_msg: 'Unexpected Error.' };
         }
     }
 };
@@ -257,11 +257,11 @@ const banUser: Action = async ({ request }) => {
         return { success: true, status: 'user_banned' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, error_data: err.message };
+            return { error: true, error_msg: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, error_data: err };
+            return { error: true, error_msg: err };
         } else {
-            return { error: true, error_data: 'Unexpected Error.' };
+            return { error: true, error_msg: 'Unexpected Error.' };
         }
     }
 };
@@ -292,11 +292,11 @@ const removeBanUser: Action = async ({ request }) => {
         return { success: true, status: 'removed_ban' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, error_data: err.message };
+            return { error: true, error_msg: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, error_data: err };
+            return { error: true, error_msg: err };
         } else {
-            return { error: true, error_data: 'Unexpected Error.' };
+            return { error: true, error_msg: 'Unexpected Error.' };
         }
     }
 };

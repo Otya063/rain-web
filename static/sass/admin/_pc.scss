@@ -2,18 +2,112 @@
 @use '../global/' as *;
 
 @include pc() {
+    /* ヘッダー
+====================================================*/
+    header {
+        background: #000;
+        width: 100%;
+        height: 70px;
+        position: relative;
+
+        // ヘッダー帯下部装飾
+        &::after {
+            display: block;
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 0.2vw;
+            background: rgb(190, 193, 195);
+        }
+
+        // ヘッダー内部
+        .header_inner {
+            width: 100%;
+            height: 67px;
+            @include flex_center;
+            justify-content: space-between;
+
+            // プラットフォーム
+            .header_platform {
+                position: relative;
+                width: 70px;
+                height: 70px;
+                cursor: auto;
+
+                // プラットフォーム画像
+                &::before {
+                    display: block;
+                    position: absolute;
+                    top: 0;
+                    left: 10%;
+                    content: '';
+                    width: 70px;
+                    aspect-ratio: 1 / 1;
+                    background: url(#{$path_img}/common/platform_pc.webp) no-repeat center center;
+                    background-size: auto 75%;
+                }
+            }
+        }
+    }
+
     /* 管理者コンソール
 ====================================================*/
     // 保存成功表示
-    .status_display {
-        color: #393842;
+    .msg_display {
+        position: relative;
+        color: white;
         font-size: 1.8rem;
         font-weight: 700;
-        background: #c2e5e7;
-        border: 2px #90bbbd solid;
-        border-radius: 30px;
-        padding: 0.4% 2%;
-        max-width: 40%;
+        background: #1b8c00;
+        padding: 1% 2%;
+        margin: 1% 20%;
+        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+
+        // 閉じるボタン
+        .msg_close_btn {
+            display: block;
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            top: 50%;
+            right: 2%;
+            transform: translateY(-50%);
+            user-select: none;
+            cursor: pointer;
+
+            &::before,
+            &::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 5px;
+                height: 30px;
+                background: #dae0e0;
+            }
+
+            &::before {
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+
+            &::after {
+                transform: translate(-50%, -50%) rotate(-45deg);
+            }
+        }
+
+        // エラー詳細表示ボタン
+        .error_view_btn {
+            position: absolute;
+            top: 0;
+            right: 6%;
+            font-size: 1.5rem;
+            padding: 1% 1.5% 0.5%;
+            border: 2px gray solid;
+            background: white;
+            color: #333333;
+            transform: translateY(25%);
+        }
     }
 
     // コンソール画面本体
@@ -21,7 +115,7 @@
         display: flex;
         justify-content: space-between;
         margin: 0 100px;
-        padding-left: 140px;
+        padding: 50px 0 0 140px;
 
         // コンソールメニュー側
         .console_menu_list {

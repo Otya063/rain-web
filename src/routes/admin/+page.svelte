@@ -2,6 +2,7 @@
     import LauncherSystem from '$lib/common/LauncherSystem.svelte';
     import LauncherInformation from '$lib/common/LauncherInformation.svelte';
     import Users from '$lib/common/Users.svelte';
+    import { tweened } from 'svelte/motion';
     import { slide } from 'svelte/transition';
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
@@ -26,7 +27,7 @@
         user_banned: string;
         removed_ban: string;
     }
-    const status_msg: StatusMsg = {
+    const success_msg: StatusMsg = {
         info_created: 'The information has been successfully created.',
         info_updated: 'The information has been successfully updated.',
         info_deleted: 'The information has been successfully deleted.',
@@ -35,11 +36,6 @@
         user_banned: 'The user has been banned.',
         removed_ban: 'The ban against the user has been removed.',
     };
-
-    export let form: ActionData;
-    const status: keyof StatusMsg = form?.status;
-    let success: boolean = form?.success;
-    let error: boolean = form?.error;
 
     export let data: PageData;
     const system_data = data.launcher_system;
@@ -52,6 +48,20 @@
     const characters_data = data.charactersWithoutBytes;
     const banned_users_data = data.banned_users;
 
+    export let form: ActionData;
+    const status: keyof StatusMsg = form?.status;
+    let success: boolean = form?.success;
+    let error: boolean = form?.error;
+    const error_msg: string = form?.error_msg;
+
+    // close the message display manually
+    const closeMsgDisplay = () => {
+        success = error = false;
+    };
+
+    // message display timer bar
+    const width = tweened(100);
+    width.set(0, { duration: 5000 });
     onMount(() => {
         (success || error) &&
             window.setTimeout(function () {
@@ -60,7 +70,34 @@
     });
 </script>
 
-<h1>Admin Only</h1>
+<header>
+    <div class="header_inner">
+        <!-- svelte-ignore a11y-label-has-associated-control -->
+        <label class="header_platform" />
+    </div>
+</header>
+
+<div transition:slide class="msg_display">
+    An error occurred.
+    <button class="error_view_btn">View Details</button>
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <span on:click={() => closeMsgDisplay()} class="msg_close_btn" />
+    <div class="bar" style={`width: ${$width}%; background: red; height: 5px; position: absolute; left: 0; bottom: 0;`} />
+</div>
+
+{#if success || error}
+    <div transition:slide class="msg_display">
+        {#if success}
+            {success_msg[status]}
+        {:else if error}
+            An error occurred.
+            <button class="error_view_btn">View Details</button>
+        {/if}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <span on:click={() => closeMsgDisplay()} class="msg_close_btn" />
+        <div class="bar" style={`width: ${$width}%; background: red; height: 5px; position: absolute; left: 0; bottom: 0;`} />
+    </div>
+{/if}
 
 <section class="console_body">
     <ul class="console_menu_list">
@@ -144,13 +181,6 @@
     </ul>
 
     <ul class="console_contents">
-        {#if success}
-            <span transition:slide class="status_display">{status_msg[status]}</span>
-        {/if}
-
-        {#if form?.error}
-            <span transition:slide class="status_display">{form?.error_data}</span>
-        {/if}
         {#if tabParam === '' || tabParam === 'system'}
             <LauncherSystem {system_data} />
         {:else if tabParam === 'info'}
