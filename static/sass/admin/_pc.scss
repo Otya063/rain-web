@@ -63,6 +63,7 @@
         padding: 1% 2%;
         margin: 1% 20%;
         box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+        z-index: 1;
 
         // 閉じるボタン
         .msg_close_btn {
@@ -107,6 +108,33 @@
             background: white;
             color: #333333;
             transform: translateY(25%);
+        }
+
+        // 残り時間表示バー
+        .timer_bar {
+            background: #90d3ab;
+            height: 5px;
+            position: absolute;
+            left: 0;
+            bottom: -8%;
+        }
+    }
+
+    // メッセージ詳細表示
+    .msg_detail {
+        position: fixed;
+        left: 20%;
+        top: 16%;
+        width: 60%;
+        padding: 1%;
+        font-size: 1.8rem;
+        color: #333333;
+        background: whitesmoke;
+        border: 2px silver solid;
+
+        p {
+            font-size: 1.5rem;
+            margin: 1%;
         }
     }
 

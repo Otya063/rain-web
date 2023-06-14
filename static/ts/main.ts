@@ -178,3 +178,35 @@ export const convDateToUnix = (date_value: string) => {
 
     return timestamp;
 };
+
+/* Pause and Resume on setTimeout Function
+====================================================*/
+export class Timeout {
+    time: number;
+    callback: () => void;
+    startedTime: number;
+    timeout: NodeJS.Timeout;
+    
+    constructor(callbackFunction: () => void, time: number) {
+        this.time = time;
+        this.callback = callbackFunction;
+        this.run();
+    }
+
+    run() {
+        this.startedTime = new Date().getTime();
+        if (this.time > 0) {
+            this.timeout = setTimeout(this.callback, this.time);
+        }
+    }
+
+    pause() {
+        let currentTime = new Date().getTime();
+        this.time = this.time - (currentTime - this.startedTime);
+        clearTimeout(this.timeout);
+    }
+
+    getRestTime() {
+        return this.time
+    }
+}

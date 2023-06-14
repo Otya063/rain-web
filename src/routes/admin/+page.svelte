@@ -7,6 +7,7 @@
     import { page } from '$app/stores';
     import { onMount } from 'svelte';
     import type { ActionData, PageData } from './$types';
+    import { Timeout } from '$ts/main';
     import '$scss/style_admin.scss';
 
     let tabParam: string = '';
@@ -49,10 +50,10 @@
     const banned_users_data = data.banned_users;
 
     export let form: ActionData;
-    const status: keyof StatusMsg = form?.status;
     let success: boolean = form?.success;
     let error: boolean = form?.error;
-    const error_msg: string = form?.error_msg;
+    const status: keyof StatusMsg = form?.status;
+    const msg_details: string = form?.msg_details;
 
     // close the message display manually
     const closeMsgDisplay = () => {
@@ -60,14 +61,32 @@
     };
 
     // message display timer bar
+    let t: Timeout | null = null;
+    let timerPause: boolean = false;
+    let msg_details_status: boolean = false;
     const width = tweened(100);
-    width.set(0, { duration: 5000 });
-    onMount(() => {
-        (success || error) &&
-            window.setTimeout(function () {
-                success = error = false;
-            }, 5000);
-    });
+    if (success || error) {
+        width.set(0, { duration: 5000 });
+        t = new Timeout(() => {
+            success = error = false;
+        }, 5000);
+    }
+
+    const toggleErrorMsg = () => {
+        if (t) {
+            if (timerPause) {
+                msg_details_status = false;
+                timerPause = false;
+                t.run();
+                width.set(0, { duration: t.getRestTime() });
+            } else {
+                msg_details_status = true;
+                timerPause = true;
+                t.pause();
+                width.set($width, { duration: 0 });
+            }
+        }
+    };
 </script>
 
 <header>
@@ -77,26 +96,24 @@
     </div>
 </header>
 
-<div transition:slide class="msg_display">
-    An error occurred.
-    <button class="error_view_btn">View Details</button>
-    <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <span on:click={() => closeMsgDisplay()} class="msg_close_btn" />
-    <div class="bar" style={`width: ${$width}%; background: red; height: 5px; position: absolute; left: 0; bottom: 0;`} />
-</div>
-
 {#if success || error}
     <div transition:slide class="msg_display">
         {#if success}
             {success_msg[status]}
         {:else if error}
             An error occurred.
-            <button class="error_view_btn">View Details</button>
         {/if}
+        <button on:click={() => toggleErrorMsg()} class="error_view_btn">View Details</button>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <span on:click={() => closeMsgDisplay()} class="msg_close_btn" />
         <div class="bar" style={`width: ${$width}%; background: red; height: 5px; position: absolute; left: 0; bottom: 0;`} />
     </div>
+    {#if msg_details_status}
+        <div transition:slide class="msg_detail">
+            Message Details:
+            <p>{msg_details}</p>
+        </div>
+    {/if}
 {/if}
 
 <section class="console_body">
