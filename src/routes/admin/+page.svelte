@@ -5,7 +5,6 @@
     import { tweened } from 'svelte/motion';
     import { slide } from 'svelte/transition';
     import { page } from '$app/stores';
-    import { onMount } from 'svelte';
     import type { ActionData, PageData } from './$types';
     import { Timeout } from '$ts/main';
     import '$scss/style_admin.scss';
@@ -102,8 +101,8 @@
             {success_msg[status]}
         {:else if error}
             An error occurred.
+            <button on:click={() => toggleErrorMsg()} class="error_view_btn">View Details</button>
         {/if}
-        <button on:click={() => toggleErrorMsg()} class="error_view_btn">View Details</button>
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <span on:click={() => closeMsgDisplay()} class="msg_close_btn" />
         <div class="bar" style={`width: ${$width}%; background: red; height: 5px; position: absolute; left: 0; bottom: 0;`} />
@@ -207,6 +206,15 @@
         {/if}
     </ul>
 </section>
+
+<footer>
+    <div class="footer_note">
+        <p>
+            * Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated
+            through this project.
+        </p>
+    </div>
+</footer>
 
 <svelte:head>
     <title>Admin Console</title>

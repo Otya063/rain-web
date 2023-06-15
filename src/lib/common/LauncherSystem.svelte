@@ -1,6 +1,6 @@
 <script lang="ts">
     export let system_data;
-    const { RainJP, RainUS, RainEU, update } = system_data;
+    const { RainJP, RainUS, RainEU, update }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean } = system_data;
 
     let editing: boolean = false;
     const editSystemMode = (isEditing: boolean) => {
@@ -8,7 +8,7 @@
     };
 </script>
 
-<li class="console_contents_list_item">
+<li class="console_contents_list_item" style="padding: 0;">
     <form class="console_form_section" style="align-items: center;" action="?/updateSystemData" method="POST">
         {#if editing}
             <ul class="each_item_contents_list">

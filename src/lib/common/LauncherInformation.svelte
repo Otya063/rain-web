@@ -136,5 +136,5 @@
         </li>
     {/each}
 
-    <button class="add_info_btn" on:click={() => addInfoMode(true)}>[Add]</button>
+    <button class="add_info_btn" on:click={() => addInfoMode(true)}>[Add Info]</button>
 {/if}

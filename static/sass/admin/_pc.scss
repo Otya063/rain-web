@@ -63,7 +63,7 @@
         padding: 1% 2%;
         margin: 1% 20%;
         box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
-        z-index: 1;
+        z-index: 3;
 
         // 閉じるボタン
         .msg_close_btn {
@@ -131,6 +131,7 @@
         color: #333333;
         background: whitesmoke;
         border: 2px silver solid;
+        z-index: 2;
 
         p {
             font-size: 1.5rem;
@@ -141,14 +142,19 @@
     // コンソール画面本体
     .console_body {
         display: flex;
+        margin: 0px 500px;
+        padding: 4% 0;
+        width: 900px;
         justify-content: space-between;
-        margin: 0 100px;
-        padding: 50px 0 0 140px;
 
         // コンソールメニュー側
         .console_menu_list {
-            min-width: 80px;
+            width: 80px;
             height: 100%;
+            padding: 40px 0;
+            background: #fff;
+            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+            z-index: 1;
 
             // メニュー各項目
             .console_menu_list_item {
@@ -193,15 +199,25 @@
                         }
                     }
                 }
+
+                // メニュー最後、下部余白なし
+                &:last-child {
+                    margin: 0 auto;
+                }
             }
         }
 
         // コンソールコンテンツ側
         .console_contents {
-            width: 100%;
+            position: relative;
+            width: 800px;
+            min-height: 700px;
             display: flex;
             flex-direction: column;
+            justify-content: center;
             align-items: center;
+            background: #fff;
+            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
 
             // コンソールコンテンツ各項目
             .console_contents_list_item {
@@ -211,7 +227,7 @@
                 justify-content: center;
                 align-items: center;
                 width: 50%;
-                padding: 5% 0;
+                padding: 3% 0;
 
                 // 見出しタイトル表示
                 .console_head {
@@ -224,7 +240,7 @@
                 .each_item_contents_list {
                     width: 100%;
                     text-align: center;
-                    padding-top: 10%;
+                    padding-top: 5%;
 
                     // 各項目内容
                     .each_item_contents {
@@ -263,9 +279,11 @@
                     label {
                         display: flex;
                         justify-content: space-between;
+                        align-items: center;
+                        padding-bottom: 1%;
 
                         input {
-                            padding-left: 1%;
+                            padding: 0 1%;
                             margin-left: 1%;
                             float: right;
 
@@ -338,8 +356,8 @@
             // 追加ボタン
             .add_info_btn {
                 position: absolute;
-                top: 7%;
-                right: 20%;
+                top: 1%;
+                right: 2%;
             }
         }
     }
@@ -434,6 +452,20 @@
                     color: red;
                 }
             }
+        }
+    }
+
+    /* フッター
+====================================================*/
+    footer {
+        background: #000;
+
+        // フッターテキスト領域
+        .footer_note {
+            padding: 2% 0;
+            text-align: center;
+            color: #fff;
+            font-size: 1.3rem;
         }
     }
 }

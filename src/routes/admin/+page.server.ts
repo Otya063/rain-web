@@ -100,7 +100,7 @@ const updateSystemData: Action = async ({ request }) => {
             },
         });
 
-        return { success: true, status: 'system_updated', msg_details: "launcher_system" };
+        return { success: true, status: 'system_updated' };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, msg_details: err.message };
