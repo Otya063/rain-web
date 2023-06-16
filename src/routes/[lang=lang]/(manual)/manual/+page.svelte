@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import Menu from '$lib/common/Menu.svelte';
+    import Menu from '$lib/common/ManualMenu.svelte';
     import Home from '$lib/articles/Home.svelte';
     import LL from '$i18n/i18n-svelte';
 

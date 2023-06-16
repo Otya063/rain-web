@@ -9,6 +9,7 @@
         width: 100%;
         height: 70px;
         position: relative;
+        z-index: 1;
 
         // ヘッダー帯下部装飾
         &::after {
@@ -133,6 +134,7 @@
         border: 2px silver solid;
         z-index: 2;
 
+        // 内部テキスト
         p {
             font-size: 1.5rem;
             margin: 1%;
@@ -142,82 +144,50 @@
     // コンソール画面本体
     .console_body {
         display: flex;
-        margin: 0px 500px;
+        margin: 0px 400px;
         padding: 4% 0;
-        width: 900px;
+        width: 1100px;
         justify-content: space-between;
 
-        // コンソールメニュー側
-        .console_menu_list {
-            width: 80px;
-            height: 100%;
-            padding: 40px 0;
-            background: #fff;
-            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
-            z-index: 1;
-
-            // メニュー各項目
-            .console_menu_list_item {
-                width: 40px;
-                height: 40px;
-                margin: 0 auto 32px;
-                cursor: pointer;
-
-                .console_menu_list_link {
-                    position: relative;
-                    width: 100%;
-                    height: 100%;
-                    display: flex;
-                    justify-content: center;
-
-                    .console_menu_list_text {
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        bottom: 0;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        color: #333333;
-                        font-size: 1.2rem;
-                        width: 150px;
-                        height: 40px;
-                        border-radius: 10px;
-                        background: #e9eced;
-                        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
-                        transition: all 0.2s;
-                        transform: translateX(30px);
-                        opacity: 0;
-                        pointer-events: none;
-                        user-select: none;
-                    }
-
-                    &:hover {
-                        .console_menu_list_text {
-                            transform: translateX(60px);
-                            opacity: 1;
-                        }
-                    }
-                }
-
-                // メニュー最後、下部余白なし
-                &:last-child {
-                    margin: 0 auto;
-                }
-            }
-        }
-
         // コンソールコンテンツ側
-        .console_contents {
+        .console_article {
             position: relative;
-            width: 800px;
+            width: 1000px;
             min-height: 700px;
-            display: flex;
+            padding-top: 2%;
+            /* display: flex;
             flex-direction: column;
             justify-content: center;
-            align-items: center;
-            background: #fff;
+            align-items: center; */
+            background: #f5f6f7;
             box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+
+            // 管理者コンソールタイトル
+            h1 {
+                margin: 0 30px;
+                border-bottom: solid 3px #65696a;
+                font-size: 4rem;
+                font-weight: 700;
+            }
+
+            // 各項目タイトル表示
+            h2 {
+                position: relative;
+                padding-left: 5%;
+                font-size: 2.5rem;
+                margin: 4% 0 0 3%;
+
+                .material-icons {
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    font-size: 48px;
+                }
+            }
+
+            .console_contents {
+                margin: 0 3%;
+            }
 
             // コンソールコンテンツ各項目
             .console_contents_list_item {
@@ -226,15 +196,15 @@
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                width: 50%;
-                padding: 3% 0;
+                /* width: 50%;
+                padding: 3% 0; */
 
                 // 見出しタイトル表示
-                .console_head {
+                /* .console_head {
                     font-weight: 700;
                     font-size: 1.8rem;
                     text-align: center;
-                }
+                } */
 
                 // 各項目リスト
                 .each_item_contents_list {
@@ -362,6 +332,75 @@
         }
     }
 
+    /* コンソールメニュー
+====================================================*/
+    .console_menu {
+        width: 80px;
+        height: 100%;
+        margin: 40px 0;
+        z-index: 1;
+
+        // メニューリスト
+        .console_menu_list {
+            padding: 40px 0;
+            background: #fff;
+            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+
+            // メニュー各項目
+            .console_menu_list_item {
+                width: 40px;
+                height: 40px;
+                margin: 0 auto 32px;
+                cursor: pointer;
+
+                // リンクアイコン
+                .console_menu_list_link {
+                    position: relative;
+                    width: 100%;
+                    height: 100%;
+                    display: flex;
+                    justify-content: center;
+
+                    // リンクテキスト（ホバー時に出現）
+                    .console_menu_list_text {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        bottom: 0;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        color: #333333;
+                        font-size: 1.2rem;
+                        width: 150px;
+                        height: 40px;
+                        border-radius: 10px;
+                        background: #e9eced;
+                        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+                        transition: all 0.2s;
+                        transform: translateX(30px);
+                        opacity: 0;
+                        pointer-events: none;
+                        user-select: none;
+                    }
+
+                    // リンクアイコンホバー時
+                    &:hover {
+                        .console_menu_list_text {
+                            transform: translateX(50px);
+                            opacity: 1;
+                        }
+                    }
+                }
+
+                // メニュー最後、下部余白なし
+                &:last-child {
+                    margin: 0 auto;
+                }
+            }
+        }
+    }
+
     /* ユーザーコンポーネント内キャラクター概要リスト
 ====================================================*/
     // キャラクターなし
@@ -459,6 +498,7 @@
 ====================================================*/
     footer {
         background: #000;
+        z-index: 1;
 
         // フッターテキスト領域
         .footer_note {

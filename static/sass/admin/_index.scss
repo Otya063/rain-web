@@ -8,7 +8,7 @@
 　　　　　初期設定
 ==================================*/
 body {
-    background: linear-gradient(#99999961,1%, #ffffff94);
+    background: linear-gradient(rgb(153, 153, 153), 1px, rgb(250 250 255));
     color: #333333;
     height: auto;
     -webkit-text-size-adjust: 100%;
@@ -17,4 +17,12 @@ body {
 .wrapper {
     width: 100%;
     overflow: hidden;
+}
+
+.background_img {
+    position: fixed;
+    background: url(/img/common/admin_background.webp) center center / cover no-repeat;
+    top: 0;
+    width: 100%;
+    height: 100%;
 }
