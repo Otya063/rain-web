@@ -144,15 +144,15 @@
     // コンソール画面本体
     .console_body {
         display: flex;
-        margin: 0px 400px;
+        margin: 0px auto;
         padding: 4% 0;
-        width: 1100px;
-        justify-content: space-between;
+        width: 1000px;
+        justify-content: center;
 
         // コンソールコンテンツ側
         .console_article {
             position: relative;
-            width: 1000px;
+            width: 900px;
             min-height: 700px;
             padding-top: 2%;
             /* display: flex;
@@ -164,10 +164,19 @@
 
             // 管理者コンソールタイトル
             h1 {
+                position: relative;
+                padding-left: 7%;
                 margin: 0 30px;
                 border-bottom: solid 3px #65696a;
                 font-size: 4rem;
                 font-weight: 700;
+
+                .material-symbols-outlined {
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    font-size: 5.5rem;
+                }
             }
 
             // 各項目タイトル表示
@@ -175,18 +184,50 @@
                 position: relative;
                 padding-left: 5%;
                 font-size: 2.5rem;
-                margin: 4% 0 0 3%;
+                margin: 4% 0 0 5%;
 
                 .material-icons {
                     position: absolute;
                     left: 0;
                     bottom: 0;
-                    font-size: 48px;
+                    font-size: 4.8rem;
                 }
             }
 
             .console_contents {
-                margin: 0 3%;
+                margin: 0 5%;
+                background: #fff;
+                padding: 3%;
+
+                .console_contents_form {
+                    display: flex;
+                    flex-wrap: wrap;
+
+                    .contents_term {
+                        width: 25%;
+                    }
+
+                    .contents_desc {
+                        width: 75%;
+
+                        .edit_area {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-around;
+                            background-color: #f0f1f2;
+                            padding: 4% 2%;
+
+                            .edit_area_title {
+                                font-weight: 700;
+                                font-size: 1.8rem;
+                            }
+
+                            /* .edit_form {
+                                display: flex;
+                            } */
+                        }
+                    }
+                }
             }
 
             // コンソールコンテンツ各項目
@@ -335,59 +376,67 @@
     /* コンソールメニュー
 ====================================================*/
     .console_menu {
-        width: 80px;
-        height: 100%;
-        margin: 40px 0;
+        position: fixed;
+        left: 15%;
+        top: 50%;
+        width: 100px;
+        border-radius: 20px;
+        background: rgba(248, 248, 248, 1);
+        transform: translateY(-50%);
+        user-select: none;
         z-index: 1;
 
         // メニューリスト
         .console_menu_list {
             padding: 40px 0;
-            background: #fff;
             box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
 
             // メニュー各項目
             .console_menu_list_item {
                 width: 40px;
                 height: 40px;
-                margin: 0 auto 32px;
+                margin: 0 auto 40px;
+                border-bottom: 1px solid gray;
                 cursor: pointer;
 
-                // リンクアイコン
                 .console_menu_list_link {
                     position: relative;
                     width: 100%;
-                    height: 100%;
                     display: flex;
                     justify-content: center;
 
                     // リンクテキスト（ホバー時に出現）
                     .console_menu_list_text {
                         position: absolute;
-                        top: 0;
+                        top: 50%;
                         left: 0;
-                        bottom: 0;
                         display: flex;
                         justify-content: center;
                         align-items: center;
                         color: #333333;
-                        font-size: 1.2rem;
-                        width: 150px;
-                        height: 40px;
+                        font-weight: 700;
+                        font-size: 1.4rem;
+                        width: 200px;
+                        height: 50px;
                         border-radius: 10px;
-                        background: #e9eced;
+                        background: #f9f9f9;
                         box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
                         transition: all 0.2s;
-                        transform: translateX(30px);
+                        transform: translate(20%, -50%);
                         opacity: 0;
                         pointer-events: none;
                         user-select: none;
                     }
 
+                    // リンクアイコン
+                    .material-symbols-outlined {
+                        font-size: 3.5rem;
+                    }
+
                     // リンクアイコンホバー時
                     &:hover {
                         .console_menu_list_text {
-                            transform: translateX(50px);
+                            transform: translate(40%, -50%);
                             opacity: 1;
                         }
                     }
@@ -396,6 +445,16 @@
                 // メニュー最後、下部余白なし
                 &:last-child {
                     margin: 0 auto;
+                }
+
+                &.active {
+                    .material-symbols-outlined {
+                        color: #0aa0d2;
+                    }
+
+                    .console_menu_list_text {
+                        color: #0a61d2;
+                    }
                 }
             }
         }
@@ -497,6 +556,7 @@
     /* フッター
 ====================================================*/
     footer {
+        position: relative;
         background: #000;
         z-index: 1;
 

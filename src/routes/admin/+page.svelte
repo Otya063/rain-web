@@ -105,7 +105,10 @@
     </nav>
 
     <article class="console_article">
-        <h1>Admin Console</h1>
+        <h1>
+            <span class="material-symbols-outlined">admin_panel_settings </span>
+            Admin Console
+        </h1>
         <AdminContents {data} />
     </article>
 </main>
@@ -138,4 +141,5 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" />
     <!-- icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 </svelte:head>

@@ -47,26 +47,34 @@
         Launcher Maintenance Status
     </h2>
     <div class="console_contents">
-        <li class="each_item_contents">
-            <p>Rain (JP)</p>
-            <span>
-                {RainJP}
-            </span>
-        </li>
+        <dl class="console_contents_form">
+            <dt class="contents_term">Rain (JP)</dt>
+            <dd class="contents_desc">
+                <div class="edit_area">
+                    <p class="edit_area_title">Change Settings</p>
+                    <ul class="edit_form">
+                        <li>
+                            <label for="rain_jp_enable">
+                                <input type="radio" name="rain_jp" id="rain_jp_enable" />
+                                Enable
+                            </label>
+                        </li>
+                        <li>
+                            <label for="rain_jp_disable">
+                                <input type="radio" name="rain_jp" id="rain_jp_disable" />
+                                Disable
+                            </label>
+                        </li>
+                    </ul>
+                </div>
+            </dd>
 
-        <li class="each_item_contents">
-            <p>Rain (US)</p>
-            <span>
-                {RainUS}
-            </span>
-        </li>
+            <dt class="contents_term">Rain (US)</dt>
+            <dd class="contents_desc">{RainUS}</dd>
 
-        <li class="each_item_contents">
-            <p>Rain (EU)</p>
-            <span>
-                {RainEU}
-            </span>
-        </li>
+            <dt class="contents_term">Rain (EU)</dt>
+            <dd class="contents_desc">{RainEU}</dd>
+        </dl>
     </div>
 
     <h2>
