@@ -106,7 +106,7 @@
 
     <article class="console_article">
         <h1>
-            <span class="material-symbols-outlined">admin_panel_settings </span>
+            <span class="material-symbols-outlined">admin_panel_settings</span>
             Admin Console
         </h1>
         <AdminContents {data} />

@@ -301,4 +301,38 @@ const removeBanUser: Action = async ({ request }) => {
     }
 };
 
-export const actions: Actions = { updateSystemData, createInfoData, updateInfoData, deleteInfoData, updateUserData, banUser, removeBanUser };
+const updateMaintenanceMode: Action = async ({ request }) => {
+    const data = await request.formData();
+    const obj = Object.fromEntries(data);
+    let column: string;
+    let value: string;
+
+    Object.keys(obj).forEach((key) => {
+        obj[key] === 'true' ? (obj[key] = true) : (obj[key] = false);
+        column = key;
+        value = obj[key];
+    });
+
+    try {
+        await db.launcher_system.update({
+            where: {
+                id: 1,
+            },
+            data: {
+                [column]: value
+            },
+        });
+
+        return { success: true, status: 'system_updated' };
+    } catch (err) {
+        if (err instanceof Error) {
+            return { error: true, msg_details: err.message };
+        } else if (typeof err === 'string') {
+            return { error: true, msg_details: err };
+        } else {
+            return { error: true, msg_details: 'Unexpected Error.' };
+        }
+    }
+};
+
+export const actions: Actions = { updateSystemData, createInfoData, updateInfoData, deleteInfoData, updateUserData, banUser, removeBanUser, updateMaintenanceMode };

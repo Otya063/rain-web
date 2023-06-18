@@ -145,7 +145,7 @@
     .console_body {
         display: flex;
         margin: 0px auto;
-        padding: 4% 0;
+        padding: 10% 0;
         width: 1000px;
         justify-content: center;
 
@@ -205,10 +205,62 @@
 
                     .contents_term {
                         width: 25%;
+                        font-weight: 700;
+                        padding: 1% 0;
+                        border-bottom: 1px gray dashed;
                     }
 
                     .contents_desc {
                         width: 75%;
+                        padding: 1% 0;
+                        border-bottom: 1px gray dashed;
+
+                        .edit_btn {
+                            position: absolute;
+                            left: 80%;
+                            color: darkslategray;
+                            background: #fff;
+                            border: 1px solid darkslategray;
+                            font-size: 1.6rem;
+                            width: 12%;
+                            padding: 0.3% 3% 0 0;
+                            text-align: right;
+
+                            .material-icons {
+                                position: absolute;
+                                left: 14%;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                font-size: 2.2rem;
+                            }
+                        }
+
+                        .cancel_btn {
+                            position: absolute;
+                            left: 80%;
+                            color: #f56044;
+                            background: #fff;
+                            border: 1px solid #f56044;
+                            font-weight: 700;
+                            font-size: 1.6rem;
+                            width: 12%;
+                            padding: 0.3% 1.5% 0 0;
+                            text-align: right;
+                            transition: all 0.3s;
+
+                            .material-icons {
+                                position: absolute;
+                                left: 10%;
+                                top: 52%;
+                                transform: translateY(-50%);
+                            }
+
+                            &:hover {
+                                color: #fff;
+                                background: #f58c7a;
+                                border: 1px solid #f58c7a;
+                            }
+                        }
 
                         .edit_area {
                             display: flex;
@@ -216,15 +268,39 @@
                             justify-content: space-around;
                             background-color: #f0f1f2;
                             padding: 4% 2%;
+                            margin-top: 3%;
 
                             .edit_area_title {
                                 font-weight: 700;
                                 font-size: 1.8rem;
                             }
 
-                            /* .edit_form {
-                                display: flex;
-                            } */
+                            .save_btn {
+                                position: relative;
+                                color: #0aa0d2;
+                                background: #fff;
+                                border: 1px solid #0aa0d2;
+                                text-align: right;
+                                font-weight: 700;
+                                font-size: 1.6rem;
+                                width: 19%;
+                                padding: 1% 3% 0.5% 0;
+                                border-radius: 4px;
+                                transition: all 0.3s;
+
+                                .material-icons {
+                                    position: absolute;
+                                    left: 14%;
+                                    top: 50%;
+                                    transform: translateY(-50%);
+                                }
+
+                                &:hover {
+                                    color: #fff;
+                                    background: #2abcec;
+                                    border: 1px solid #2abcec;
+                                }
+                            }
                         }
                     }
                 }

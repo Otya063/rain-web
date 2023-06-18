@@ -2,93 +2,202 @@
     export let system_data;
     const { RainJP, RainUS, RainEU, update }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean } = system_data;
 
+    let forms: Record<string, boolean> = {
+        form1: false,
+        form2: false,
+        form3: false,
+    };
     let editing: boolean = false;
-    const editSystemMode = (isEditing: boolean) => {
-        editing = isEditing;
+    let active_form: string | '' = '';
+    const editMode = (index: number) => {
+        if (!editing) {
+            // when editing
+            editing = true;
+            const form_key = `form${index}`;
+
+            if (active_form !== '') {
+                forms[active_form] = false;
+            }
+
+            forms[form_key] = true;
+            active_form = form_key;
+        } else {
+            // when finished editing
+            const form_key = `form${index}`;
+
+            if (active_form !== '' && active_form !== form_key) {
+                forms[active_form] = false;
+                forms[form_key] = true;
+                active_form = form_key;
+            } else {
+                forms[form_key] = !forms[form_key];
+                if (forms[form_key] === false) {
+                    active_form = '';
+                    editing = false;
+                }
+            }
+        }
     };
 </script>
 
-{#if editing}
-    <form class="console_form_section" style="align-items: center;" action="?/updateSystemData" method="POST">
-        <ul class="each_item_contents_list">
-            <p class="console_head">Launcher Maintenance Status</p>
-            <li class="each_item_contents">
-                <label for="rain_jp">Rain (JP)</label>
-                <input id="rain_jp" type="checkbox" name="rain_jp" checked={RainJP} />
-            </li>
+<h2>
+    <span class="material-icons">engineering</span>
+    Launcher Maintenance Mode
+</h2>
+<div class="console_contents">
+    <dl class="console_contents_form">
+        <!-- Rain (JP) Maintenance Setting -->
+        <dt class="contents_term">Rain (JP)</dt>
+        <dd class="contents_desc">
+            {#if RainJP}
+                Enable
+            {:else}
+                Disable
+            {/if}
 
-            <li class="each_item_contents">
-                <label for="rain_us">Rain (US)</label>
-                <input id="rain_us" type="checkbox" name="rain_us" checked={RainUS} />
-            </li>
+            {#if forms['form1']}
+                <button class="cancel_btn" on:click={() => editMode(1)}>
+                    <span class="material-icons">close</span>
+                    Cancel
+                </button>
 
-            <li class="each_item_contents">
-                <label for="rain_eu">Rain (EU)</label>
-                <input id="rain_eu" type="checkbox" name="rain_eu" checked={RainEU} />
-            </li>
-        </ul>
+                <form action="?/updateMaintenanceMode" method="POST">
+                    <div class="edit_area">
+                        <p class="edit_area_title">Change Settings</p>
+                        <ul class="edit_area_form">
+                            <li>
+                                <label for="rain_jp_enable">
+                                    <input type="radio" name="RainJP" id="rain_jp_enable" value="true" checked={RainJP} />
+                                    Enable
+                                </label>
+                            </li>
+                            <li>
+                                <label for="rain_jp_disable">
+                                    <input type="radio" name="RainJP" id="rain_jp_disable" value="false" checked={!RainJP} />
+                                    Disable
+                                </label>
+                            </li>
+                        </ul>
 
-        <ul class="each_item_contents_list">
-            <p class="console_head">Launcher Update Mode Status</p>
-            <li class="each_item_contents">
-                <label for="update_mode">Update Mode</label>
-                <input id="update_mode" type="checkbox" name="update_mode" checked={update} />
-            </li>
-        </ul>
+                        <button class="save_btn" type="submit">
+                            <span class="material-icons">check</span>
+                            Save
+                        </button>
+                    </div>
+                </form>
+            {:else}
+                <button class="edit_btn" on:click={() => editMode(1)}>
+                    <span class="material-icons">mode_edit</span>
+                    Edit
+                </button>
+            {/if}
+        </dd>
 
-        <div class="save_cancel_btn">
-            <button type="submit">[Save]</button>
-            <button on:click={() => editSystemMode(false)}>[Cancel]</button>
-        </div>
-    </form>
-{:else}
-    <h2>
-        <span class="material-icons">engineering</span>
-        Launcher Maintenance Status
-    </h2>
-    <div class="console_contents">
-        <dl class="console_contents_form">
-            <dt class="contents_term">Rain (JP)</dt>
-            <dd class="contents_desc">
-                <div class="edit_area">
-                    <p class="edit_area_title">Change Settings</p>
-                    <ul class="edit_form">
-                        <li>
-                            <label for="rain_jp_enable">
-                                <input type="radio" name="rain_jp" id="rain_jp_enable" />
-                                Enable
-                            </label>
-                        </li>
-                        <li>
-                            <label for="rain_jp_disable">
-                                <input type="radio" name="rain_jp" id="rain_jp_disable" />
-                                Disable
-                            </label>
-                        </li>
-                    </ul>
-                </div>
-            </dd>
+        <!-- Rain (US) Maintenance Setting -->
+        <dt class="contents_term">Rain (US)</dt>
+        <dd class="contents_desc">
+            {#if RainUS}
+                Enable
+            {:else}
+                Disable
+            {/if}
 
-            <dt class="contents_term">Rain (US)</dt>
-            <dd class="contents_desc">{RainUS}</dd>
+            {#if forms['form2']}
+                <button class="cancel_btn" on:click={() => editMode(2)}>
+                    <span class="material-icons">close</span>
+                    Cancel
+                </button>
 
-            <dt class="contents_term">Rain (EU)</dt>
-            <dd class="contents_desc">{RainEU}</dd>
-        </dl>
-    </div>
+                <form action="?/updateMaintenanceMode" method="POST">
+                    <div class="edit_area">
+                        <p class="edit_area_title">Change Settings</p>
+                        <ul class="edit_area_form">
+                            <li>
+                                <label for="rain_us_enable">
+                                    <input type="radio" name="RainUS" id="rain_us_enable" value="true" checked={RainUS} />
+                                    Enable
+                                </label>
+                            </li>
+                            <li>
+                                <label for="rain_us_disable">
+                                    <input type="radio" name="RainUS" id="rain_us_disable" value="false" checked={!RainUS} />
+                                    Disable
+                                </label>
+                            </li>
+                        </ul>
 
-    <h2>
-        <span class="material-icons">update</span>
-        Launcher Update Mode Status
-    </h2>
-    <div class="console_contents">
-        <li class="each_item_contents">
-            <p>Update Mode</p>
-            <span>
-                {update}
-            </span>
-        </li>
-    </div>
+                        <button class="save_btn" type="submit">
+                            <span class="material-icons">check</span>
+                            Save
+                        </button>
+                    </div>
+                </form>
+            {:else}
+                <button class="edit_btn" on:click={() => editMode(2)}>
+                    <span class="material-icons">mode_edit</span>
+                    Edit
+                </button>
+            {/if}
+        </dd>
 
-    <button class="edit_btn" on:click={() => editSystemMode(true)}>[Edit]</button>
-{/if}
+        <!-- Rain (EU) Maintenance Setting -->
+        <dt class="contents_term">Rain (EU)</dt>
+        <dd class="contents_desc">
+            {#if RainEU}
+                Enable
+            {:else}
+                Disable
+            {/if}
+
+            {#if forms['form3']}
+                <button class="cancel_btn" on:click={() => editMode(3)}>
+                    <span class="material-icons">close</span>
+                    Cancel
+                </button>
+
+                <form action="?/updateMaintenanceMode" method="POST">
+                    <div class="edit_area">
+                        <p class="edit_area_title">Change Settings</p>
+                        <ul class="edit_area_form">
+                            <li>
+                                <label for="rain_eu_enable">
+                                    <input type="radio" name="RainEU" id="rain_eu_enable" value="true" checked={RainEU} />
+                                    Enable
+                                </label>
+                            </li>
+                            <li>
+                                <label for="rain_eu_disable">
+                                    <input type="radio" name="RainEU" id="rain_eu_disable" value="false" checked={!RainEU} />
+                                    Disable
+                                </label>
+                            </li>
+                        </ul>
+
+                        <button class="save_btn" type="submit">
+                            <span class="material-icons">check</span>
+                            Save
+                        </button>
+                    </div>
+                </form>
+            {:else}
+                <button class="edit_btn" on:click={() => editMode(3)}>
+                    <span class="material-icons">mode_edit</span>
+                    Edit
+                </button>
+            {/if}
+        </dd>
+    </dl>
+</div>
+
+<h2>
+    <span class="material-icons">update</span>
+    Launcher Update Mode Status
+</h2>
+<div class="console_contents">
+    <li class="each_item_contents">
+        <p>Update Mode</p>
+        <span>
+            {update}
+        </span>
+    </li>
+</div>
