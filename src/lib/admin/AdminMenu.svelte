@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from '$app/stores';
-    import { tabParam } from '$ts/main';
+    import { tab_param, system_edit_mode, error, err_details } from '$ts/main';
     import { onMount } from 'svelte';
 
     // added "active" class to the first list item when first loaded
@@ -9,37 +9,47 @@
         first_list_item.classList.add('active');
     });
 
+    interface ItemStuff {
+        text: string;
+        icon: string;
+    }
     // menu list items for looping
-    const menu_list_item = {
+    const menu_list_item: Record<string, ItemStuff> = {
         system: {
             text: 'Launcher System',
-            svg: 'tune',
+            icon: 'tune',
         },
         info: {
             text: 'Launcher Information',
-            svg: 'info',
+            icon: 'info',
         },
         users: {
             text: 'Users',
-            svg: 'group',
+            icon: 'group',
         },
     };
 
     // switch the display content according to the query param
     const queryParamsHandler = (value: string) => {
+        if ($system_edit_mode) {
+            error.set(true);
+            err_details.set('Edit mode still remains active. Page transitions can only be made after all editing has been completed.');
+            return false;
+        }
+
         const currentURL = $page.url;
         currentURL.searchParams.set('tab', value);
         window.history.pushState({ path: currentURL.href }, '', currentURL.href);
-        tabParam.set(currentURL.searchParams.get('tab')!);
+        tab_param.set(currentURL.searchParams.get('tab')!);
     };
 </script>
 
 <ul class="console_menu_list">
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    {#each Object.entries(menu_list_item) as [type, { text, svg }]}
-        <li class="console_menu_list_item" class:active={type === $tabParam} on:click={() => queryParamsHandler(type)}>
+    {#each Object.entries(menu_list_item) as [type, { text, icon }]}
+        <li class="console_menu_list_item" class:active={type === $tab_param} on:click={() => queryParamsHandler(type)}>
             <p class="console_menu_list_link">
-                <span class="material-symbols-outlined">{svg}</span>
+                <span class="material-symbols-outlined">{icon}</span>
                 <span class="console_menu_list_text">{text}</span>
             </p>
         </li>

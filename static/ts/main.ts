@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { writable } from 'svelte/store'
+import { writable } from 'svelte/store';
 
 /*=========================================================
 　　　　　Slide Functions
@@ -141,7 +141,11 @@ if (browser) {
 /*=========================================================
 　　　　　Admin Console
 =======================================================*/
-export const tabParam = writable('')
+export const tab_param = writable('');
+export const system_edit_mode = writable(false);
+export const error = writable(false);
+export const err_details = writable('');
+export const clicked_submit = writable(false);
 
 /*=========================================================
 　　　　　Misc
@@ -192,7 +196,7 @@ export class Timeout {
     callback: () => void;
     startedTime: number;
     timeout: NodeJS.Timeout;
-    
+
     constructor(callbackFunction: () => void, time: number) {
         this.time = time;
         this.callback = callbackFunction;
@@ -213,6 +217,21 @@ export class Timeout {
     }
 
     getRestTime() {
-        return this.time
+        return this.time;
     }
 }
+
+/* Convert Boolean FormData Into Objects
+====================================================*/
+export const convBoolFormToObj = (data: FormData) => {
+    let column: string;
+    let value: string;
+    const obj = Object.fromEntries(data);
+    Object.keys(obj).forEach((key) => {
+        obj[key] === 'true' ? (obj[key] = true) : (obj[key] = false);
+        column = key;
+        value = obj[key];
+    });
+
+    return { column, value };
+};

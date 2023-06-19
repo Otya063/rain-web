@@ -4,7 +4,7 @@
     import { tweened } from 'svelte/motion';
     import { slide } from 'svelte/transition';
     import type { ActionData, PageData } from './$types';
-    import { Timeout } from '$ts/main';
+    import { Timeout, error, err_details, clicked_submit } from '$ts/main';
     import '$scss/style_admin.scss';
 
     // status messages
@@ -13,6 +13,7 @@
         info_updated: string;
         info_deleted: string;
         system_updated: string;
+        maint_all_updated: string;
         user_updated: string;
         user_banned: string;
         removed_ban: string;
@@ -22,6 +23,7 @@
         info_updated: 'The information has been successfully updated.',
         info_deleted: 'The information has been successfully deleted.',
         system_updated: 'The system mode has been successfully updated.',
+        maint_all_updated: 'All maintenance modes have been successfully updated.',
         user_updated: 'The user data has been successfully updated.',
         user_banned: 'The user has been banned.',
         removed_ban: 'The ban against the user has been removed.',
@@ -31,24 +33,28 @@
     export let data: PageData;
     export let form: ActionData;
     let success: boolean = form?.success;
-    let error: boolean = form?.error;
     const status: keyof StatusMsg = form?.status;
-    const msg_details: string = form?.msg_details;
+    error.set(form?.error);
+    err_details.set(form?.err_details);
 
     // close the message display manually
     const closeMsgDisplay = () => {
-        success = error = false;
+        success = false;
+        error.set(false);
     };
 
     // message display timer bar
     let t: Timeout | null = null;
     let timerPause: boolean = false;
-    let msg_details_status: boolean = false;
+    let err_details_status: boolean = false;
     const width = tweened(100);
-    if (success || error) {
-        width.set(0, { duration: 5000 });
+    $: if (success || $error) {
+        width.set(-1, { duration: 5000 });
         t = new Timeout(() => {
-            success = error = false;
+            success = false;
+            error.set(false);
+            err_details.set('');
+            width.set(100, { duration: 1 });
         }, 5000);
     }
 
@@ -56,18 +62,20 @@
     const toggleErrDetail = () => {
         if (t) {
             if (timerPause) {
-                msg_details_status = false;
+                err_details_status = false;
                 timerPause = false;
                 t.run();
                 width.set(0, { duration: t.getRestTime() });
             } else {
-                msg_details_status = true;
+                err_details_status = true;
                 timerPause = true;
                 t.pause();
                 width.set($width, { duration: 0 });
             }
         }
     };
+
+    clicked_submit.set(false);
 </script>
 
 <header>
@@ -77,13 +85,20 @@
     </div>
 </header>
 
+{#if $clicked_submit}
+    <div class="saving_overlay">
+        <div class="loader" />
+        <p class="saving_overlay_text">Saving...</p>
+    </div>
+{/if}
+
 <div class="background_img" />
 
-{#if success || error}
+{#if success || $error}
     <div transition:slide class="msg_display">
         {#if success}
             {success_msg[status]}
-        {:else if error}
+        {:else if $error}
             An error occurred.
             <button on:click={() => toggleErrDetail()} class="error_view_btn">View Details</button>
         {/if}
@@ -91,10 +106,10 @@
         <span on:click={() => closeMsgDisplay()} class="msg_close_btn" />
         <div class="bar" style={`width: ${$width}%; background: red; height: 5px; position: absolute; left: 0; bottom: 0;`} />
     </div>
-    {#if msg_details_status}
+    {#if err_details_status}
         <div transition:slide class="msg_detail">
             Message Details:
-            <p>{msg_details}</p>
+            <p>{$err_details}</p>
         </div>
     {/if}
 {/if}

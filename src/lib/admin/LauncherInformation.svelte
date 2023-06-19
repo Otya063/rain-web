@@ -1,11 +1,11 @@
 <script lang="ts">
     import { convUnixToDate } from '$ts/main';
 
-    export let important_info_data: LauncherInfo[];
-    export let defects_and_troubles_info_data: LauncherInfo[];
-    export let management_and_service_info_data: LauncherInfo[];
-    export let ingame_events_info_data: LauncherInfo[];
-    export let updates_and_maintenance_info_data: LauncherInfo[];
+    export let important_info_data;
+    export let defects_and_troubles_info_data;
+    export let management_and_service_info_data;
+    export let ingame_events_info_data;
+    export let updates_and_maintenance_info_data;
 
     interface LauncherInfo {
         id: number;
@@ -15,7 +15,7 @@
         created_at: number;
     }
 
-    const info_type_data = {
+    const info_type_data: Record<string, LauncherInfo[]> = {
         Important: important_info_data,
         'Defects and Troubles': defects_and_troubles_info_data,
         'Management and Service': management_and_service_info_data,

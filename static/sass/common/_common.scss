@@ -29,6 +29,12 @@ body {
     }
 }
 
+// Google Font アイコン用
+.material-icons,
+.material-symbols-outlined {
+    user-select: none;
+}
+
 // 画像初期設定
 img {
     width: 100%;

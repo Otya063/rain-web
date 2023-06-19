@@ -1,4 +1,4 @@
-import { convDateToUnix } from '$ts/main';
+import { convDateToUnix, convBoolFormToObj } from '$ts/main';
 import { redirect } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 import { db } from '$lib/database';
@@ -72,42 +72,57 @@ export const load: PageServerLoad = async () => {
     return { launcher_system, important, defects_and_troubles, management_and_service, ingame_events, updates_and_maintenance, users, charactersWithoutBytes, banned_users };
 };
 
-const updateSystemData: Action = async ({ request }) => {
+const updateSystemMode: Action = async ({ request }) => {
     const data = await request.formData();
-    const rain_jp = data.get('rain_jp');
-    const rain_us = data.get('rain_us');
-    const rain_eu = data.get('rain_eu');
-    const update = data.get('update_mode');
-
-    let maintenance = {};
-    let update_mode: boolean;
-
-    rain_jp === 'on' ? (maintenance.rain_jp = true) : (maintenance.rain_jp = false);
-    rain_us === 'on' ? (maintenance.rain_us = true) : (maintenance.rain_us = false);
-    rain_eu === 'on' ? (maintenance.rain_eu = true) : (maintenance.rain_eu = false);
-    update === 'on' ? (update_mode = true) : (update_mode = false);
+    const { column, value } = convBoolFormToObj(data);
 
     try {
+        // when updating the system mode one by one (success)
         await db.launcher_system.update({
             where: {
                 id: 1,
             },
             data: {
-                RainJP: maintenance.rain_jp,
-                RainUS: maintenance.rain_us,
-                RainEU: maintenance.rain_eu,
-                update: update_mode,
+                [column]: value,
             },
         });
 
         return { success: true, status: 'system_updated' };
     } catch (err) {
-        if (err instanceof Error) {
-            return { error: true, msg_details: err.message };
-        } else if (typeof err === 'string') {
-            return { error: true, msg_details: err };
-        } else {
-            return { error: true, msg_details: 'Unexpected Error.' };
+        // when updating the system mode one by one (error)
+        if (column !== 'maint_all') {
+            if (err instanceof Error) {
+                return { error: true, err_details: err.message };
+            } else if (typeof err === 'string') {
+                return { error: true, err_details: err };
+            } else {
+                return { error: true, err_details: 'Unexpected Error.' };
+            }
+        }
+
+        try {
+            // when updating all maintenance modes (success)
+            await db.launcher_system.update({
+                where: {
+                    id: 1,
+                },
+                data: {
+                    RainJP: value,
+                    RainEU: value,
+                    RainUS: value,
+                },
+            });
+
+            return { success: true, status: 'maint_all_updated' };
+        } catch (err) {
+            // when updating all maintenance modes (error)
+            if (err instanceof Error) {
+                return { error: true, err_details: err.message };
+            } else if (typeof err === 'string') {
+                return { error: true, err_details: err };
+            } else {
+                return { error: true, err_details: 'Unexpected Error.' };
+            }
         }
     }
 };
@@ -132,11 +147,11 @@ const createInfoData: Action = async ({ request }) => {
         return { success: true, status: 'info_created' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, msg_details: err.message };
+            return { error: true, err_details: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, msg_details: err };
+            return { error: true, err_details: err };
         } else {
-            return { error: true, msg_details: 'Unexpected Error.' };
+            return { error: true, err_details: 'Unexpected Error.' };
         }
     }
 };
@@ -165,11 +180,11 @@ const updateInfoData: Action = async ({ request }) => {
         return { success: true, status: 'info_updated' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, msg_details: err.message };
+            return { error: true, err_details: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, msg_details: err };
+            return { error: true, err_details: err };
         } else {
-            return { error: true, msg_details: 'Unexpected Error.' };
+            return { error: true, err_details: 'Unexpected Error.' };
         }
     }
 };
@@ -188,11 +203,11 @@ const deleteInfoData: Action = async ({ request }) => {
         return { success: true, status: 'info_deleted' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, msg_details: err.message };
+            return { error: true, err_details: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, msg_details: err };
+            return { error: true, err_details: err };
         } else {
-            return { error: true, msg_details: 'Unexpected Error.' };
+            return { error: true, err_details: 'Unexpected Error.' };
         }
     }
 };
@@ -217,11 +232,11 @@ const updateUserData: Action = async ({ request }) => {
         return { success: true, status: 'user_updated' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, msg_details: err.message };
+            return { error: true, err_details: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, msg_details: err };
+            return { error: true, err_details: err };
         } else {
-            return { error: true, msg_details: 'Unexpected Error.' };
+            return { error: true, err_details: 'Unexpected Error.' };
         }
     }
 };
@@ -257,11 +272,11 @@ const banUser: Action = async ({ request }) => {
         return { success: true, status: 'user_banned' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, msg_details: err.message };
+            return { error: true, err_details: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, msg_details: err };
+            return { error: true, err_details: err };
         } else {
-            return { error: true, msg_details: 'Unexpected Error.' };
+            return { error: true, err_details: 'Unexpected Error.' };
         }
     }
 };
@@ -292,47 +307,13 @@ const removeBanUser: Action = async ({ request }) => {
         return { success: true, status: 'removed_ban' };
     } catch (err) {
         if (err instanceof Error) {
-            return { error: true, msg_details: err.message };
+            return { error: true, err_details: err.message };
         } else if (typeof err === 'string') {
-            return { error: true, msg_details: err };
+            return { error: true, err_details: err };
         } else {
-            return { error: true, msg_details: 'Unexpected Error.' };
+            return { error: true, err_details: 'Unexpected Error.' };
         }
     }
 };
 
-const updateMaintenanceMode: Action = async ({ request }) => {
-    const data = await request.formData();
-    const obj = Object.fromEntries(data);
-    let column: string;
-    let value: string;
-
-    Object.keys(obj).forEach((key) => {
-        obj[key] === 'true' ? (obj[key] = true) : (obj[key] = false);
-        column = key;
-        value = obj[key];
-    });
-
-    try {
-        await db.launcher_system.update({
-            where: {
-                id: 1,
-            },
-            data: {
-                [column]: value
-            },
-        });
-
-        return { success: true, status: 'system_updated' };
-    } catch (err) {
-        if (err instanceof Error) {
-            return { error: true, msg_details: err.message };
-        } else if (typeof err === 'string') {
-            return { error: true, msg_details: err };
-        } else {
-            return { error: true, msg_details: 'Unexpected Error.' };
-        }
-    }
-};
-
-export const actions: Actions = { updateSystemData, createInfoData, updateInfoData, deleteInfoData, updateUserData, banUser, removeBanUser, updateMaintenanceMode };
+export const actions: Actions = { updateSystemMode, createInfoData, updateInfoData, deleteInfoData, updateUserData, banUser, removeBanUser };
