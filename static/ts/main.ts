@@ -143,8 +143,10 @@ if (browser) {
 =======================================================*/
 export const tab_param = writable('');
 export const system_edit_mode = writable(false);
+export const success = writable(false);
 export const error = writable(false);
 export const err_details = writable('');
+export const notice = writable(false);
 export const clicked_submit = writable(false);
 
 /*=========================================================

@@ -4,7 +4,7 @@
     import { tweened } from 'svelte/motion';
     import { slide } from 'svelte/transition';
     import type { ActionData, PageData } from './$types';
-    import { Timeout, error, err_details, clicked_submit } from '$ts/main';
+    import { Timeout, success, error, err_details, notice, clicked_submit } from '$ts/main';
     import '$scss/style_admin.scss';
 
     // status messages
@@ -32,15 +32,17 @@
     // data from the server
     export let data: PageData;
     export let form: ActionData;
-    let success: boolean = form?.success;
     const status: keyof StatusMsg = form?.status;
-    error.set(form?.error);
-    err_details.set(form?.err_details);
+    form?.success ? success.set(form!.success) : success.set(false);
+    form?.error ? (error.set(form!.error), err_details.set(form!.err_details)) : (error.set(false), err_details.set(''));
+    clicked_submit.set(false);
+    notice.set(false);
 
     // close the message display manually
     const closeMsgDisplay = () => {
-        success = false;
+        success.set(false);
         error.set(false);
+        notice.set(false)
     };
 
     // message display timer bar
@@ -48,11 +50,12 @@
     let timerPause: boolean = false;
     let err_details_status: boolean = false;
     const width = tweened(100);
-    $: if (success || $error) {
+    $: if ($success || $error || $notice) {
         width.set(-1, { duration: 5000 });
         t = new Timeout(() => {
-            success = false;
+            success.set(false);
             error.set(false);
+            notice.set(false);
             err_details.set('');
             width.set(100, { duration: 1 });
         }, 5000);
@@ -75,7 +78,7 @@
         }
     };
 
-    clicked_submit.set(false);
+    $: console.log(`success: ${$success}, error: ${$error}, notice: ${$notice}`);
 </script>
 
 <header>
@@ -94,17 +97,24 @@
 
 <div class="background_img" />
 
-{#if success || $error}
-    <div transition:slide class="msg_display">
-        {#if success}
-            {success_msg[status]}
+{#if $success || $error || $notice}
+    <div transition:slide class="msg_display" class:success={$success} class:error={$error} class:notice={$notice}>
+        <span class="left_side_bar" />
+        {#if $success}
+            <span class="material-icons-outlined">check_circle</span>
+            <p style="padding-top: 0.3%;">{success_msg[status]}</p>
         {:else if $error}
-            An error occurred.
+            <span class="material-icons-outlined">warning</span>
+            <p style="padding-top: 0.3%;">An error occurred.</p>
+            <button on:click={() => toggleErrDetail()} class="error_view_btn">View Details</button>
+        {:else if $notice}
+            <span class="material-icons-outlined">notification_important</span>
+            <p style="padding-top: 0.3%;">Unauthorized operation detected.</p>
             <button on:click={() => toggleErrDetail()} class="error_view_btn">View Details</button>
         {/if}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <span on:click={() => closeMsgDisplay()} class="msg_close_btn" />
-        <div class="bar" style={`width: ${$width}%; background: red; height: 5px; position: absolute; left: 0; bottom: 0;`} />
+        <div class="timer_bar" style={`width: ${$width}%;`} />
     </div>
     {#if err_details_status}
         <div transition:slide class="msg_detail">
@@ -156,5 +166,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" />
     <!-- icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons%7CMaterial+Icons+Outlined" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 </svelte:head>

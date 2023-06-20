@@ -49,6 +49,7 @@
     Servers Maintenance Status
 </h2>
 <div class="console_contents">
+    <p class="console_contents_note">* This data will be fetched when users click the login button on the launcher.</p>
     <dl class="console_contents_list">
         <!-- Rain (JP) Maintenance Setting -->
         <dt class="contents_term">Rain (JP)</dt>
@@ -229,6 +230,7 @@
     Launcher Update Status
 </h2>
 <div class="console_contents">
+    <p class="console_contents_note">* This data will be fetched when users start the game.</p>
     <dl class="console_contents_list">
         <!-- Update Setting -->
         <dt class="contents_term">Update Mode</dt>

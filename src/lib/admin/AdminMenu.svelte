@@ -1,6 +1,6 @@
 <script lang="ts">
     import { page } from '$app/stores';
-    import { tab_param, system_edit_mode, error, err_details } from '$ts/main';
+    import { tab_param, system_edit_mode, err_details, notice } from '$ts/main';
     import { onMount } from 'svelte';
 
     // added "active" class to the first list item when first loaded
@@ -32,7 +32,7 @@
     // switch the display content according to the query param
     const queryParamsHandler = (value: string) => {
         if ($system_edit_mode) {
-            error.set(true);
+            notice.set(true);
             err_details.set('Edit mode still remains active. Page transitions can only be made after all editing has been completed.');
             return false;
         }
