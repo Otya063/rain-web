@@ -2,7 +2,7 @@
     import AdminMenu from '$lib/admin/AdminMenu.svelte';
     import AdminContents from '$lib/admin/AdminContents.svelte';
     import { tweened } from 'svelte/motion';
-    import { slide } from 'svelte/transition';
+    import { slide, fade } from 'svelte/transition';
     import type { ActionData, PageData } from './$types';
     import { Timeout, success, error, err_details, notice, clicked_submit } from '$ts/main';
     import '$scss/style_admin.scss';
@@ -57,7 +57,7 @@
             error.set(false);
             notice.set(false);
             err_details.set('');
-            width.set(100, { duration: 1 });
+            width.set(100, { duration: 0 });
         }, 5000);
     }
 
@@ -98,7 +98,7 @@
 <div class="background_img" />
 
 {#if $success || $error || $notice}
-    <div transition:slide class="msg_display" class:success={$success} class:error={$error} class:notice={$notice}>
+    <div transition:fade class="msg_display" class:success={$success} class:error={$error} class:notice={$notice}>
         <span class="left_side_bar" />
         {#if $success}
             <span class="material-icons-outlined">check_circle</span>

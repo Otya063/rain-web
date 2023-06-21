@@ -341,19 +341,20 @@
     .msg_display {
         position: fixed;
         top: 3%;
+        left: 20%;
+        display: flex;
+        align-items: center;
         width: 60%;
         font-size: 1.8rem;
         font-weight: 700;
         background: #fff;
         padding: 0.7% 1%;
-        margin: 1% 20%;
         box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
         z-index: 3;
         border-top: 5px solid #e6e6e9;
         border-bottom: 5px solid #e6e6e9;
-        display: flex;
-        align-items: center;
 
+        // 成功通知
         &.success {
             color: #5ab052;
 
@@ -366,6 +367,7 @@
             }
         }
 
+        // エラー通知
         &.error {
             color: #c93a3a;
 
@@ -378,6 +380,7 @@
             }
         }
 
+        // 不正操作通知
         &.notice {
             color: #5997db;
 
@@ -386,7 +389,7 @@
             }
 
             .timer_bar {
-                background: #70aff1;
+                background: #9ec6ef;
             }
         }
 
@@ -443,7 +446,7 @@
         // エラー詳細表示ボタン
         .error_view_btn {
             position: absolute;
-            top: 0;
+            top: -3%;
             right: 6%;
             font-size: 1.5rem;
             padding: 1% 1.5% 0.5%;
@@ -467,7 +470,7 @@
     .msg_detail {
         position: fixed;
         left: 20%;
-        top: 11%;
+        top: 10%;
         width: 60%;
         padding: 1%;
         font-size: 1.8rem;
@@ -595,6 +598,8 @@
 
             // フォーム部品
             .edit_area_form_parts {
+                user-select: none;
+
                 label {
                     display: flex;
                     align-items: center;
