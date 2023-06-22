@@ -113,6 +113,13 @@
                 background: #fff;
                 padding: 3%;
 
+                // コンテンツ内リストタイトル
+                .console_contents_list_title {
+                    font-size: 2rem;
+                    padding-top: 2%;
+                    color: #df9e27;
+                }
+
                 // コンテンツ内リスト
                 .console_contents_list {
                     display: flex;
@@ -187,7 +194,6 @@
                 // コンテンツ注意事項
                 .console_contents_note {
                     color: red;
-                    padding-left: 1%;
                 }
             }
 

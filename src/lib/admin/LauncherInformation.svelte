@@ -67,13 +67,17 @@
     </li>
 {:else}
     {#each Object.entries(info_type_data) as [typename, data]}
-        <li class="console_contents_list_item">
-            <p class="console_head">[{typename}]</p>
-            {#if data.length === 0}
-                <p style="color: red;">No Information Found</p>
-            {/if}
+        <h2>
+            <span class="material-icons">looks_one</span>
+            {typename} Information
+        </h2>
+        {#if data.length === 0}
+            <p style="color: red;">No Information Found</p>
+        {/if}
+        <div class="console_contents">
             {#each data || [] as data_item}
-                <ul class="each_item_contents_list">
+                <p class="console_contents_list_title">[ Information ID: {data_item.id} ]</p>
+                <dl class="console_contents_list">
                     {#if edit_id === data_item.id}
                         <form class="console_form_section" action="?/updateInfoData" method="POST">
                             <input type="hidden" name="info_id" value={edit_id} />
@@ -112,28 +116,26 @@
                             <button class="del_info_btn" type="submit" formaction="?/deleteInfoData" formmethod="POST">[Delete This Info]</button>
                         </form>
                     {:else}
-                        <li class="each_item_contents">
-                            <p>Title:</p>
-                            <span>{data_item.title}</span>
-                        </li>
+                        <dt class="contents_term">Title</dt>
+                        <dd class="contents_desc">{data_item.title}</dd>
 
-                        <li class="each_item_contents">
-                            <p>URL:</p>
-                            <span>{data_item.url}</span>
-                        </li>
+                        <dt class="contents_term">URL</dt>
+                        <dd class="contents_desc">{data_item.url}</dd>
 
-                        <li class="each_item_contents">
-                            <p>Date:</p>
-                            <span>{convUnixToDate(data_item.created_at, false)}</span>
-                            <p>Unix Time:</p>
-                            <span>{data_item.created_at}</span>
-                        </li>
+                        <dt class="contents_term">
+                            Date<br />
+                            Unix Time
+                        </dt>
+                        <dd class="contents_desc">
+                            {convUnixToDate(data_item.created_at, false)}<br />
+                            {data_item.created_at}
+                        </dd>
 
-                        <button class="edit_btn" on:click={() => editInfoMode(data_item.id)}>[Edit]</button>
+                        <!-- <button class="edit_btn" on:click={() => editInfoMode(data_item.id)}>[Edit]</button> -->
                     {/if}
-                </ul>
+                </dl>
             {/each}
-        </li>
+        </div>
     {/each}
 
     <button class="add_info_btn" on:click={() => addInfoMode(true)}>[Add Info]</button>

@@ -42,7 +42,7 @@
     const closeMsgDisplay = () => {
         success.set(false);
         error.set(false);
-        notice.set(false)
+        notice.set(false);
     };
 
     // message display timer bar
@@ -77,8 +77,6 @@
             }
         }
     };
-
-    $: console.log(`success: ${$success}, error: ${$error}, notice: ${$notice}`);
 </script>
 
 <header>
@@ -149,6 +147,7 @@
 
 <svelte:head>
     <title>Admin Console</title>
+    <meta name="robots" content="noindex,nofollow,noarchive" />
     <meta name="description" content="Console page for administrators only." />
     <!-- favicon -->
     <link rel="icon" href="/img/common/rain_favicon.ico?v=1" />
