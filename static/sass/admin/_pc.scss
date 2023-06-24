@@ -105,6 +105,13 @@
                     bottom: 0;
                     font-size: 4.8rem;
                 }
+
+                // ランチャーインフォ用h2タイトル装飾
+                @each $infotype, $color in $infoColorMap {
+                    &.#{$infotype} {
+                        color: $color;
+                    }
+                }
             }
 
             // 各コンテンツ
@@ -125,15 +132,15 @@
                     display: flex;
                     flex-wrap: wrap;
 
-                    // コンテンツタイトル
+                    // コンテンツアイテムタイトル
                     .contents_term {
                         width: 25%;
                         font-weight: 700;
-                        padding: 2.5% 0 2%;
+                        padding: 2.5% 0 2% 1%;
                         border-bottom: 1px gray dashed;
                     }
 
-                    // コンテンツ説明
+                    // コンテンツアイテム説明
                     .contents_desc {
                         position: relative;
                         width: 75%;

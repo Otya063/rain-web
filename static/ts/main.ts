@@ -237,3 +237,15 @@ export const convBoolFormToObj = (data: FormData) => {
 
     return { column, value };
 };
+
+/* Generate Underscore and Lowercase Strings
+====================================================*/
+export const underscoreAndLowercase = (string: string) => {
+    // convert uppercase to lowercase
+    const lowercaseString = string.toLowerCase();
+
+    // underscore
+    const underscoreLowercaseString = lowercaseString.replace(/\s/g, '_');
+
+    return underscoreLowercaseString;
+};
