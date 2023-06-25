@@ -142,7 +142,7 @@ if (browser) {
 　　　　　Admin Console
 =======================================================*/
 export const tab_param = writable('');
-export const system_edit_mode = writable(false);
+export const edit_mode = writable(false);
 export const success = writable(false);
 export const error = writable(false);
 export const err_details = writable('');
@@ -218,6 +218,11 @@ export class Timeout {
         clearTimeout(this.timeout);
     }
 
+    stop() {
+        clearTimeout(this.timeout);
+        this.time = 0;
+    }
+
     getRestTime() {
         return this.time;
     }
@@ -249,3 +254,4 @@ export const underscoreAndLowercase = (string: string) => {
 
     return underscoreLowercaseString;
 };
+

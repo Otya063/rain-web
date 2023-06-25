@@ -1,6 +1,6 @@
 <script lang="ts">
     import { slide } from 'svelte/transition';
-    import { convUnixToDate, underscoreAndLowercase, clicked_submit, system_edit_mode } from '$ts/main';
+    import { convUnixToDate, underscoreAndLowercase, clicked_submit, edit_mode, notice, err_details } from '$ts/main';
 
     export let important_info_data;
     export let defects_and_troubles_info_data; // manually
@@ -25,59 +25,37 @@
     };
 
     let adding: boolean = false;
-    const addInfoMode = (isAddingMode: boolean) => {
-        adding = isAddingMode;
+    const addInfoMode = (cancel: boolean) => {
+        // check if editing is in progress
+        if ($edit_mode && !cancel) {
+            notice.set(true);
+            err_details.set('Edit mode still remains active. Page transitions can only be made after all editing has been completed.');
+            return false;
+        }
+
+        if (!cancel) {
+            // when editing
+            edit_mode.set(true);
+            adding = true;
+        } else {
+            // when finished editing
+            edit_mode.set(false);
+            adding = false;
+        }
     };
 
     let edit_id: number;
-    const editInfoMode = (id: number) => {
-        if (!$system_edit_mode) {
-            system_edit_mode.set(true);
-            edit_id = id;
-        } else {
-            system_edit_mode.set(false);
-            edit_id = id;
-        }
-    };
-
-    /* let forms: Record<string, boolean> = {
-        form1: false,
-        form2: false,
-        form3: false,
-        form4: false,
-    };
-    let active_form: string | '' = '';
-    const editMode = (index: number, id: number) => {
-        if (!$system_edit_mode) {
+    const editMode = (id: number) => {
+        if (!$edit_mode) {
             // when editing
-            system_edit_mode.set(true);
+            edit_mode.set(true);
             edit_id = id;
-            const form_key = `form${index}`;
-
-            if (active_form !== '') {
-                forms[active_form] = false;
-            }
-
-            forms[form_key] = true;
-            active_form = form_key;
         } else {
             // when finished editing
-            const form_key = `form${index}`;
-
-            if (active_form !== '' && active_form !== form_key) {
-                forms[active_form] = false;
-                forms[form_key] = true;
-                active_form = form_key;
-            } else {
-                forms[form_key] = !forms[form_key];
-                if (forms[form_key] === false) {
-                    active_form = '';
-                    system_edit_mode.set(false);
-                    edit_id = 0;
-                }
-            }
+            edit_mode.set(false);
+            edit_id = id;
         }
-    }; */
+    };
 </script>
 
 {#if adding}
@@ -107,11 +85,16 @@
 
             <div class="save_cancel_btn">
                 <button type="submit">[Save]</button>
-                <button on:click={() => addInfoMode(false)}>[Cancel]</button>
+                <button type="button" on:click={() => addInfoMode(true)}>[Cancel]</button>
             </div>
         </form>
     </li>
 {:else}
+    <button class="add_info_btn" on:click={() => addInfoMode(false)}>
+        <span class="material-icons">add</span>
+        Add Info
+    </button>
+
     {#each Object.entries(info_type_data) as [typename, data]}
         <h2 class={underscoreAndLowercase(typename)}>
             <span class="material-icons">info</span>
@@ -124,54 +107,17 @@
             {#each data || [] as data_item}
                 <p class="console_contents_list_title">[ Information ID: {data_item.id} ]</p>
                 <dl class="console_contents_list">
-                    <!-- <form class="console_form_section" action="?/updateInfoData" method="POST">
-                            <input type="hidden" name="info_id" value={edit_id} />
-
-                            <label for="info_title">
-                                Title:
-                                <input id="info_title" type="text" name="info_title" value={data_item.title} autocomplete="off" />
-                            </label>
-
-                            <label for="info_url">
-                                URL:
-                                <input id="info_url" type="text" name="info_url" value={data_item.url} autocomplete="off" />
-                            </label>
-
-                            <div class="info_type_group">
-                                <label for="info_type">Info Type</label>
-
-                                {#each Object.keys(info_type_data) as key}
-                                    <label for={key}>
-                                        <input id={key} type="radio" name="info_type" value={key} checked={data_item.type === key} />
-                                        {key}
-                                    </label>
-                                {/each}
-                            </div>
-
-                            <label for="info_date">
-                                Date:
-                                <input id="info_date" name="info_date" type="date" value={convUnixToDate(data_item.created_at, true)} />
-                            </label>
-
-                            <div class="save_cancel_btn">
-                                <button type="submit">[Save]</button>
-                                <button on:click={() => editInfoMode(0)}>[Cancel]</button>
-                            </div>
-
-                            <button class="del_info_btn" type="submit" formaction="?/deleteInfoData" formmethod="POST">[Delete This Info]</button>
-                        </form> -->
-
                     <dt class="contents_term">Title</dt>
                     <dd class="contents_desc">
                         {data_item.title}
 
                         {#if edit_id === data_item.id}
-                            <button class="cancel_btn" on:click={() => editInfoMode(0)}>
+                            <button class="cancel_btn" on:click={() => editMode(0)}>
                                 <span class="material-icons">close</span>
                                 Cancel
                             </button>
                         {:else}
-                            <button class="edit_btn" on:click={() => editInfoMode(data_item.id)}>
+                            <button class="edit_btn" on:click={() => editMode(data_item.id)}>
                                 <span class="material-icons">mode_edit</span>
                                 Edit
                             </button>
@@ -179,15 +125,14 @@
 
                         {#if edit_id === data_item.id}
                             <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
-                                <div class="edit_area">
-                                    <p class="edit_area_title">Change Setting</p>
-                                    <ul class="edit_area_form_parts">
-                                        <li>
-                                            <label for="rain_eu_enable">
-                                                <input id="info_title" type="text" name="info_title" value={data_item.title} autocomplete="off" />
-                                            </label>
-                                        </li>
-                                    </ul>
+                                <div class="edit_area enter">
+                                    <p class="edit_area_title">Change Title</p>
+                                    <dl class="edit_area_form_parts text">
+                                        <dt>New Title</dt>
+                                        <dd>
+                                            <input type="text" name="info_title" value={data_item.title} autocomplete="off" />
+                                        </dd>
+                                    </dl>
 
                                     <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
                                         <span class="material-icons">check</span>
@@ -209,12 +154,8 @@
                         {convUnixToDate(data_item.created_at, false)}<br />
                         {data_item.created_at}
                     </dd>
-
-                    <!-- <button class="edit_btn" on:click={() => editInfoMode(data_item.id)}>[Edit]</button> -->
                 </dl>
             {/each}
         </div>
     {/each}
-
-    <button class="add_info_btn" on:click={() => addInfoMode(true)}>[Add Info]</button>
 {/if}

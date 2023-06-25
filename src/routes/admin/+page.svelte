@@ -1,7 +1,7 @@
 <script lang="ts">
     import AdminMenu from '$lib/admin/AdminMenu.svelte';
     import AdminContents from '$lib/admin/AdminContents.svelte';
-    import { tweened } from 'svelte/motion';
+    import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
     import type { ActionData, PageData } from './$types';
     import { Timeout, success, error, err_details, notice, clicked_submit } from '$ts/main';
@@ -38,19 +38,13 @@
     clicked_submit.set(false);
     notice.set(false);
 
-    // close the message display manually
-    const closeMsgDisplay = () => {
-        success.set(false);
-        error.set(false);
-        notice.set(false);
-    };
-
     // message display timer bar
     let t: Timeout | null = null;
     let timerPause: boolean = false;
     let err_details_status: boolean = false;
-    const width = tweened(100);
+    let width: Tweened<number>;
     $: if ($success || $error || $notice) {
+        width = tweened(100);
         width.set(-1, { duration: 5000 });
         t = new Timeout(() => {
             success.set(false);
@@ -76,6 +70,16 @@
                 width.set($width, { duration: 0 });
             }
         }
+    };
+
+    // close the message display manually
+    const closeMsgDisplay = () => {
+        err_details_status = false;
+        success.set(false);
+        error.set(false);
+        notice.set(false);
+        width.set(0, { duration: 0 });
+        t!.stop();
     };
 </script>
 

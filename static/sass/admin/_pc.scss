@@ -6,10 +6,10 @@
 ====================================================*/
 
     header {
+        position: relative;
         background: #000;
         width: 100%;
         height: 70px;
-        position: relative;
         z-index: 1;
 
         // ヘッダー帯下部装飾
@@ -72,6 +72,7 @@
             padding-top: 2%;
             background: #f5f6f7;
             box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+            z-index: 1;
 
             // 管理者コンソールタイトル
             h1 {
@@ -156,12 +157,12 @@
                             border: 1px solid darkslategray;
                             font-size: 1.6rem;
                             width: 18%;
-                            padding: 0.3% 3% 0 0;
+                            padding: 0.3% 4% 0 0;
                             text-align: right;
 
                             .material-icons {
                                 position: absolute;
-                                left: 14%;
+                                left: 20%;
                                 top: 50%;
                                 transform: translateY(-50%);
                                 font-size: 2.2rem;
@@ -178,13 +179,13 @@
                             font-weight: 700;
                             font-size: 1.6rem;
                             width: 18%;
-                            padding: 0.3% 1.5% 0 0;
+                            padding: 0.3% 2.3% 0% 0;
                             transition: all 0.3s;
                             text-align: right;
 
                             .material-icons {
                                 position: absolute;
-                                left: 8%;
+                                left: 11%;
                                 top: 51%;
                                 transform: translateY(-50%);
                             }
@@ -203,6 +204,39 @@
                     color: red;
                 }
             }
+
+            // 追加ボタン
+            .add_info_btn {
+                position: relative;
+                color: #0ad275;
+                background: #fff;
+                border: 1px solid #0ad275;
+                text-align: right;
+                font-weight: 700;
+                font-size: 1.6rem;
+                width: 13%;
+                float: right;
+                padding: 0.8% 1.5% 0.5% 0;
+                border-radius: 4px;
+                margin: 5%;
+                transition: all 0.3s;
+                z-index: 1;
+
+                .material-icons {
+                    position: absolute;
+                    left: 10%;
+                    top: 50%;
+                    transform: translateY(-50%);
+                }
+
+                &:hover {
+                    color: #fff;
+                    background: #24e182;
+                    border: 1px solid #24e182;
+                }
+            }
+
+            // ===　以下要修正 ===
 
             // コンソールコンテンツ各項目
             .console_contents_list_item {
@@ -337,13 +371,6 @@
                     }
                 }
             }
-
-            // 追加ボタン
-            .add_info_btn {
-                position: absolute;
-                top: 1%;
-                right: 2%;
-            }
         }
     }
 
@@ -363,7 +390,7 @@
         background: #fff;
         padding: 0.7% 1%;
         box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
-        z-index: 3;
+        z-index: 101;
         border-top: 5px solid #e6e6e9;
         border-bottom: 5px solid #e6e6e9;
 
@@ -412,7 +439,7 @@
             padding-right: 2%;
         }
 
-        // 左側装飾バー（成功）
+        // 左側装飾バー
         .left_side_bar {
             display: block;
             position: absolute;
@@ -421,7 +448,7 @@
             top: -8%;
             left: 0;
             border-radius: 0 20px 20px 0;
-            z-index: 5;
+            z-index: 103;
         }
 
         // 閉じるボタン
@@ -475,7 +502,7 @@
             position: absolute;
             left: 0%;
             bottom: -8%;
-            z-index: 4;
+            z-index: 102;
         }
     }
 
@@ -490,7 +517,7 @@
         color: #333333;
         background: whitesmoke;
         border: 2px silver solid;
-        z-index: 2;
+        z-index: 100;
 
         // 内部テキスト
         p {
@@ -512,7 +539,7 @@
         background: rgba(248, 248, 248, 1);
         transform: translateY(-50%);
         user-select: none;
-        z-index: 1;
+        z-index: 2;
 
         // メニューリスト
         .console_menu_list {
@@ -598,10 +625,29 @@
         // フォームdivタグ
         .edit_area {
             display: flex;
-            align-items: center;
             justify-content: space-around;
             background-color: #f0f1f2;
-            padding: 4% 2%;
+
+            &.select {
+                align-items: center;
+                padding: 4% 2%;
+            }
+
+            &.enter {
+                flex-direction: column;
+                padding: 2% 5%;
+
+                .edit_area_title {
+                    border-bottom: #333333 1px solid;
+                    padding-bottom: 2%;
+                    margin-bottom: 3%;
+                    font-size: 2.2rem;
+                }
+
+                .save_btn {
+                    margin: 4% auto 0;
+                }
+            }
 
             // フォームタイトル
             .edit_area_title {
@@ -613,15 +659,40 @@
             .edit_area_form_parts {
                 user-select: none;
 
-                label {
+                &.radio {
+                    label {
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
+                        width: 80px;
+
+                        input {
+                            margin-right: 5%;
+                            cursor: pointer;
+                        }
+                    }
+                }
+
+                &.text {
                     display: flex;
-                    align-items: center;
-                    justify-content: flex-start;
-                    width: 80px;
+                    flex-wrap: wrap;
+
+                    dt {
+                        width: 30%;
+                    }
+
+                    dd {
+                        width: 70%;
+                    }
+
+                    label {
+                        display: block;
+                        width: 230px;
+                    }
 
                     input {
-                        margin-right: 5%;
-                        cursor: pointer;
+                        width: 100%;
+                        padding: 0 2%;
                     }
                 }
             }
@@ -681,7 +752,7 @@
 ====================================================*/
     .modal {
         position: fixed;
-        z-index: 1;
+        z-index: 998;
         left: 0;
         top: 0;
         height: 100%;
@@ -776,7 +847,7 @@
         width: 100%;
         height: 100%;
         background: rgba(0, 0, 0, 0.4);
-        z-index: 1002;
+        z-index: 999;
         user-select: none;
 
         .loader {

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { slide } from 'svelte/transition';
-    import { clicked_submit, system_edit_mode } from '$ts/main';
+    import { clicked_submit, edit_mode } from '$ts/main';
 
     export let system_data;
     const { RainJP, RainUS, RainEU, update }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean } = system_data;
@@ -14,9 +14,9 @@
 
     let active_form: string | '' = '';
     const editMode = (index: number) => {
-        if (!$system_edit_mode) {
+        if (!$edit_mode) {
             // when editing
-            system_edit_mode.set(true);
+            edit_mode.set(true);
             const form_key = `form${index}`;
 
             if (active_form !== '') {
@@ -37,7 +37,7 @@
                 forms[form_key] = !forms[form_key];
                 if (forms[form_key] === false) {
                     active_form = '';
-                    system_edit_mode.set(false);
+                    edit_mode.set(false);
                 }
             }
         }
@@ -74,9 +74,9 @@
 
             {#if forms['form1']}
                 <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
-                    <div class="edit_area">
+                    <div class="edit_area select">
                         <p class="edit_area_title">Change Setting</p>
-                        <ul class="edit_area_form_parts">
+                        <ul class="edit_area_form_parts radio">
                             <li>
                                 <label for="rain_jp_enable">
                                     <input type="radio" name="RainJP" id="rain_jp_enable" value="true" checked={RainJP} />
@@ -123,9 +123,9 @@
 
             {#if forms['form2']}
                 <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
-                    <div class="edit_area">
+                    <div class="edit_area select">
                         <p class="edit_area_title">Change Setting</p>
-                        <ul class="edit_area_form_parts">
+                        <ul class="edit_area_form_parts radio">
                             <li>
                                 <label for="rain_us_enable">
                                     <input type="radio" name="RainUS" id="rain_us_enable" value="true" checked={RainUS} />
@@ -172,9 +172,9 @@
 
             {#if forms['form3']}
                 <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
-                    <div class="edit_area">
+                    <div class="edit_area select">
                         <p class="edit_area_title">Change Setting</p>
-                        <ul class="edit_area_form_parts">
+                        <ul class="edit_area_form_parts radio">
                             <li>
                                 <label for="rain_eu_enable">
                                     <input type="radio" name="RainEU" id="rain_eu_enable" value="true" checked={RainEU} />
@@ -200,9 +200,9 @@
     </dl>
 
     <form class="edit_area_form" action="?/updateSystemMode" method="POST">
-        <div class="edit_area">
+        <div class="edit_area select">
             <p class="edit_area_title">Change All Settings</p>
-            <ul class="edit_area_form_parts">
+            <ul class="edit_area_form_parts radio">
                 <li>
                     <label style="width: 110px;" for="enable_all">
                         <input type="radio" name="maint_all" id="enable_all" value="true" />
@@ -255,9 +255,9 @@
 
             {#if forms['form4']}
                 <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
-                    <div class="edit_area">
+                    <div class="edit_area select">
                         <p class="edit_area_title">Change Setting</p>
-                        <ul class="edit_area_form_parts">
+                        <ul class="edit_area_form_parts radio">
                             <li>
                                 <label for="update_enable">
                                     <input type="radio" name="update" id="update_enable" value="true" checked={update} />
