@@ -126,6 +126,7 @@
                     font-size: 2rem;
                     padding-top: 2%;
                     color: #df9e27;
+                    user-select: none;
                 }
 
                 // コンテンツ内リスト
@@ -139,18 +140,21 @@
                         font-weight: 700;
                         padding: 2.5% 0 2% 1%;
                         border-bottom: 1px gray dashed;
+                        user-select: none;
                     }
 
                     // コンテンツアイテム説明
                     .contents_desc {
                         position: relative;
+                        display: flex;
+                        flex-direction: column;
                         width: 75%;
                         padding: 2.5% 0 2%;
                         border-bottom: 1px gray dashed;
 
                         // 編集モード切り替えボタン
                         .edit_btn {
-                            position: absolute;
+                            position: relative;
                             right: 0;
                             color: darkslategray;
                             background: #fff;
@@ -171,7 +175,7 @@
 
                         // 編集モードキャンセルボタン
                         .cancel_btn {
-                            position: absolute;
+                            position: relative;
                             right: 0;
                             color: #f56044;
                             background: #fff;
@@ -653,6 +657,7 @@
             .edit_area_title {
                 font-weight: 700;
                 font-size: 1.8rem;
+                user-select: none;
             }
 
             // フォーム部品

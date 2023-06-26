@@ -45,15 +45,40 @@
     };
 
     let edit_id: number;
-    const editMode = (id: number) => {
+    interface CategoryType {
+        [key: string]: boolean;
+    }
+    const cat_types: CategoryType = {
+        title: false,
+        url: false,
+        date: false,
+    };
+    const editMode = (id: number, type: keyof CategoryType) => {
+        // check if another category type is already in edit mode
+        const active_editing = Object.values(cat_types).some((boolean) => boolean === true);
+
+        // when another edit_btn is pressed while editing, the editing target is switched
+        if (active_editing && id !== 0) {
+            Object.keys(cat_types).forEach((key) => {
+                cat_types[key] = false;
+            });
+
+            cat_types[type] = true;
+            edit_id = id;
+
+            return false;
+        }
+
         if (!$edit_mode) {
             // when editing
             edit_mode.set(true);
             edit_id = id;
+            cat_types[type] = true;
         } else {
             // when finished editing
             edit_mode.set(false);
             edit_id = id;
+            cat_types[type] = false;
         }
     };
 </script>
@@ -111,26 +136,27 @@
                     <dd class="contents_desc">
                         {data_item.title}
 
-                        {#if edit_id === data_item.id}
-                            <button class="cancel_btn" on:click={() => editMode(0)}>
+                        {#if edit_id === data_item.id && cat_types['title']}
+                            <button class="cancel_btn" on:click={() => editMode(0, 'title')}>
                                 <span class="material-icons">close</span>
                                 Cancel
                             </button>
                         {:else}
-                            <button class="edit_btn" on:click={() => editMode(data_item.id)}>
+                            <button class="edit_btn" on:click={() => editMode(data_item.id, 'title')}>
                                 <span class="material-icons">mode_edit</span>
                                 Edit
                             </button>
                         {/if}
 
-                        {#if edit_id === data_item.id}
-                            <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
+                        {#if edit_id === data_item.id && cat_types['title']}
+                            <form transition:slide class="edit_area_form" action="?/updateInfoData" method="POST">
+                                <input type="hidden" name="info_id" value={edit_id} />
                                 <div class="edit_area enter">
                                     <p class="edit_area_title">Change Title</p>
                                     <dl class="edit_area_form_parts text">
                                         <dt>New Title</dt>
                                         <dd>
-                                            <input type="text" name="info_title" value={data_item.title} autocomplete="off" />
+                                            <input type="text" name="title" value={data_item.title} autocomplete="off" />
                                         </dd>
                                     </dl>
 
@@ -144,15 +170,82 @@
                     </dd>
 
                     <dt class="contents_term">URL</dt>
-                    <dd class="contents_desc">{data_item.url}</dd>
+                    <dd class="contents_desc">
+                        {data_item.url}
+
+                        {#if edit_id === data_item.id && cat_types['url']}
+                            <button class="cancel_btn" on:click={() => editMode(0, 'url')}>
+                                <span class="material-icons">close</span>
+                                Cancel
+                            </button>
+                        {:else}
+                            <button class="edit_btn" on:click={() => editMode(data_item.id, 'url')}>
+                                <span class="material-icons">mode_edit</span>
+                                Edit
+                            </button>
+                        {/if}
+
+                        {#if edit_id === data_item.id && cat_types['url']}
+                            <form transition:slide class="edit_area_form" action="?/updateInfoData" method="POST">
+                                <input type="hidden" name="info_id" value={edit_id} />
+                                <div class="edit_area enter">
+                                    <p class="edit_area_title">Change URL</p>
+                                    <dl class="edit_area_form_parts text">
+                                        <dt>New URL</dt>
+                                        <dd>
+                                            <input type="text" name="url" value={data_item.url} autocomplete="off" />
+                                        </dd>
+                                    </dl>
+
+                                    <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                        <span class="material-icons">check</span>
+                                        Save
+                                    </button>
+                                </div>
+                            </form>
+                        {/if}
+                    </dd>
 
                     <dt class="contents_term">
                         Date<br />
                         Unix Time
                     </dt>
                     <dd class="contents_desc">
-                        {convUnixToDate(data_item.created_at, false)}<br />
+                        {convUnixToDate(data_item.created_at, false)}
+                        <br />
                         {data_item.created_at}
+
+                        {#if edit_id === data_item.id && cat_types['date']}
+                            <button class="cancel_btn" on:click={() => editMode(0, 'date')}>
+                                <span class="material-icons">close</span>
+                                Cancel
+                            </button>
+                        {:else}
+                            <button class="edit_btn" on:click={() => editMode(data_item.id, 'date')}>
+                                <span class="material-icons">mode_edit</span>
+                                Edit
+                            </button>
+                        {/if}
+
+                        {#if edit_id === data_item.id && cat_types['date']}
+                            <form transition:slide class="edit_area_form" action="?/updateInfoData" method="POST">
+                                <input type="hidden" name="info_id" value={edit_id} />
+                                <div class="edit_area enter">
+                                    <p class="edit_area_title">Change Date</p>
+                                    <dl class="edit_area_form_parts text">
+                                        <dt>New Date</dt>
+                                        <dd>
+                                            <input type="text" name="info_date" value={data_item.created_at} autocomplete="off" />
+                                        </dd>
+                                    </dl>
+
+                                    <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                        <span class="material-icons">check</span>
+                                        Save
+                                    </button>
+                                </div>
+                            </form>
+                        {/if}
                     </dd>
                 </dl>
             {/each}

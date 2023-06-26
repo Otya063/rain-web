@@ -1,4 +1,4 @@
-import { convDateToUnix, convBoolFormToObj } from '$ts/main';
+import { convDateToUnix, convFormDataToObj } from '$ts/main';
 import { redirect } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 import { db } from '$lib/database';
@@ -74,7 +74,9 @@ export const load: PageServerLoad = async () => {
 
 const updateSystemMode: Action = async ({ request }) => {
     const data = await request.formData();
-    const { column, value } = convBoolFormToObj(data);
+    const data_obj = convFormDataToObj(data);
+    const column: string = Object.keys(data_obj)[0];
+    const value: boolean = Object.values(data_obj)[0];
 
     try {
         // when updating the system mode one by one (success)
@@ -158,11 +160,10 @@ const createInfoData: Action = async ({ request }) => {
 
 const updateInfoData: Action = async ({ request }) => {
     const data = await request.formData();
-    const id = Number(data.get('info_id'));
-    const title = data.get('info_title');
-    const url = data.get('info_url');
-    const type = data.get('info_type');
-    const date_value = data.get('info_date');
+    const data_obj = convFormDataToObj(data);
+    const id: number = Number(data_obj['info_id']);
+    const title: string = data_obj['title'];
+    console.log(id, title);
 
     try {
         await db.launcher_info.update({
@@ -171,9 +172,6 @@ const updateInfoData: Action = async ({ request }) => {
             },
             data: {
                 title,
-                url,
-                type,
-                created_at: convDateToUnix(date_value),
             },
         });
 

@@ -9,14 +9,7 @@
 
     // status messages
     interface StatusMsg {
-        info_created: string;
-        info_updated: string;
-        info_deleted: string;
-        system_updated: string;
-        maint_all_updated: string;
-        user_updated: string;
-        user_banned: string;
-        removed_ban: string;
+        [key: string]: string;
     }
     const success_msg: StatusMsg = {
         info_created: 'The information has been successfully created.',

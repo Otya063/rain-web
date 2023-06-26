@@ -230,17 +230,20 @@ export class Timeout {
 
 /* Convert Boolean FormData Into Objects
 ====================================================*/
-export const convBoolFormToObj = (data: FormData) => {
-    let column: string;
-    let value: string;
-    const obj = Object.fromEntries(data);
-    Object.keys(obj).forEach((key) => {
-        obj[key] === 'true' ? (obj[key] = true) : (obj[key] = false);
-        column = key;
-        value = obj[key];
-    });
+export const convFormDataToObj = (data: FormData) => {
+    const obj: Record<string, string | boolean> = {};
 
-    return { column, value };
+    for (const [key, value] of data.entries()) {
+      if (value === 'true') {
+        obj[key] = true;
+      } else if (value === 'false') {
+        obj[key] = false;
+      } else {
+        obj[key] = value;
+      }
+    }
+  
+    return obj;
 };
 
 /* Generate Underscore and Lowercase Strings
@@ -254,4 +257,3 @@ export const underscoreAndLowercase = (string: string) => {
 
     return underscoreLowercaseString;
 };
-
