@@ -1,4 +1,5 @@
 <script lang="ts">
+    import _ from 'lodash';
     import { slide } from 'svelte/transition';
     import { convUnixToDate, underscoreAndLowercase, clicked_submit, edit_mode, notice, err_details } from '$ts/main';
 
@@ -52,6 +53,7 @@
         title: false,
         url: false,
         date: false,
+        info_type: false,
     };
     const editMode = (id: number, type: keyof CategoryType) => {
         // check if another category type is already in edit mode
@@ -129,7 +131,7 @@
             <p style="color: red;">No Information Found</p>
         {/if}
         <div class="console_contents">
-            {#each data || [] as data_item}
+            {#each _.sortBy(data, 'id') || [] as data_item}
                 <p class="console_contents_list_title">[ Information ID: {data_item.id} ]</p>
                 <dl class="console_contents_list">
                     <dt class="contents_term">Title</dt>
@@ -154,7 +156,7 @@
                                 <div class="edit_area enter">
                                     <p class="edit_area_title">Change Title</p>
                                     <dl class="edit_area_form_parts text">
-                                        <dt>New Title</dt>
+                                        <dt>Enter new title</dt>
                                         <dd>
                                             <input type="text" name="title" value={data_item.title} autocomplete="off" />
                                         </dd>
@@ -191,7 +193,7 @@
                                 <div class="edit_area enter">
                                     <p class="edit_area_title">Change URL</p>
                                     <dl class="edit_area_form_parts text">
-                                        <dt>New URL</dt>
+                                        <dt>Enter new URL</dt>
                                         <dd>
                                             <input type="text" name="url" value={data_item.url} autocomplete="off" />
                                         </dd>
@@ -233,9 +235,50 @@
                                 <div class="edit_area enter">
                                     <p class="edit_area_title">Change Date</p>
                                     <dl class="edit_area_form_parts text">
-                                        <dt>New Date</dt>
+                                        <dt>Set new date</dt>
                                         <dd>
-                                            <input type="text" name="info_date" value={data_item.created_at} autocomplete="off" />
+                                            <input type="date" name="created_at" value={convUnixToDate(data_item.created_at, true)} />
+                                        </dd>
+                                    </dl>
+
+                                    <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                        <span class="material-icons">check</span>
+                                        Save
+                                    </button>
+                                </div>
+                            </form>
+                        {/if}
+                    </dd>
+
+                    <dt class="contents_term">Info Type</dt>
+                    <dd class="contents_desc">
+                        {typename}
+
+                        {#if edit_id === data_item.id && cat_types['info_type']}
+                            <button class="cancel_btn" on:click={() => editMode(0, 'info_type')}>
+                                <span class="material-icons">close</span>
+                                Cancel
+                            </button>
+                        {:else}
+                            <button class="edit_btn" on:click={() => editMode(data_item.id, 'info_type')}>
+                                <span class="material-icons">mode_edit</span>
+                                Edit
+                            </button>
+                        {/if}
+
+                        {#if edit_id === data_item.id && cat_types['info_type']}
+                            <form transition:slide class="edit_area_form" action="?/updateInfoData" method="POST">
+                                <input type="hidden" name="info_id" value={edit_id} />
+                                <div class="edit_area enter">
+                                    <p class="edit_area_title">Change Information Type</p>
+                                    <dl class="edit_area_form_parts text">
+                                        <dt>Select new info type</dt>
+                                        <dd>
+                                            <select name="type">
+                                                {#each Object.keys(info_type_data) as key}
+                                                    <option value={key} selected={key === typename}>{key}</option>
+                                                {/each}
+                                            </select>
                                         </dd>
                                     </dl>
 

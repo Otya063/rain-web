@@ -162,8 +162,9 @@ const updateInfoData: Action = async ({ request }) => {
     const data = await request.formData();
     const data_obj = convFormDataToObj(data);
     const id: number = Number(data_obj['info_id']);
-    const title: string = data_obj['title'];
-    console.log(id, title);
+    const column: string = Object.keys(data_obj)[1];
+    let value: string = Object.values(data_obj)[1];
+    column === 'created_at' && (value = convDateToUnix(value));
 
     try {
         await db.launcher_info.update({
@@ -171,7 +172,7 @@ const updateInfoData: Action = async ({ request }) => {
                 id,
             },
             data: {
-                title,
+                [column]: value,
             },
         });
 

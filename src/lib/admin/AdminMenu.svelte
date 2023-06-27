@@ -10,8 +10,7 @@
     });
 
     interface ItemStuff {
-        text: string;
-        icon: string;
+        [key: string]: string;
     }
     // menu list items for looping
     const menu_list_item: Record<string, ItemStuff> = {
