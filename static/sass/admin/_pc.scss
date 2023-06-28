@@ -133,6 +133,7 @@
                 .console_contents_list {
                     display: flex;
                     flex-wrap: wrap;
+                    margin-bottom: 3%;
 
                     // コンテンツアイテムタイトル
                     .contents_term {
@@ -149,7 +150,7 @@
                         display: flex;
                         flex-direction: column;
                         width: 75%;
-                        padding: 2.5% 0 2%;
+                        padding: 2.5% 0 1%;
                         border-bottom: 1px gray dashed;
 
                         // 編集モード切り替えボタン
@@ -162,6 +163,7 @@
                             font-size: 1.6rem;
                             width: 18%;
                             padding: 0.3% 4% 0 0;
+                            margin-bottom: 3%;
                             text-align: right;
 
                             .material-icons {
@@ -184,6 +186,7 @@
                             font-size: 1.6rem;
                             width: 18%;
                             padding: 0.3% 2.3% 0% 0;
+                            margin-bottom: 3%;
                             transition: all 0.3s;
                             text-align: right;
 
@@ -206,6 +209,69 @@
                 // コンテンツ注意事項
                 .console_contents_note {
                     color: red;
+                }
+
+                // ボタングループ化
+                .group_btns {
+                    display: flex;
+                    justify-content: space-evenly;
+
+                    // セーブボタン
+                    .save_btn {
+                        position: relative;
+                        color: #0aa0d2;
+                        background: #fff;
+                        border: 1px solid #0aa0d2;
+                        text-align: right;
+                        font-weight: 700;
+                        font-size: 1.6rem;
+                        width: 15%;
+                        padding: 1% 3% 0.5% 0;
+                        border-radius: 4px;
+                        transition: all 0.3s;
+
+                        .material-icons {
+                            position: absolute;
+                            left: 14%;
+                            top: 50%;
+                            transform: translateY(-50%);
+                        }
+
+                        &:hover {
+                            color: #fff;
+                            background: #2abcec;
+                            border: 1px solid #2abcec;
+                        }
+                    }
+
+                    // キャンセルボタン
+                    .cancel_btn {
+                        position: relative;
+                        right: 0;
+                        color: #f56044;
+                        background: #fff;
+                        border: 1px solid #f56044;
+                        font-weight: 700;
+                        font-size: 1.6rem;
+                        width: 15%;
+                        padding: 0.3% 2.3% 0% 0;
+                        border-radius: 4px;
+                        text-align: right;
+                        transition: all 0.3s;
+
+                        .material-icons {
+                            position: absolute;
+                            left: 11%;
+                            top: 51%;
+                            transform: translateY(-50%);
+                        }
+
+                        &:hover {
+                            color: #fff;
+                            background: #f58c7a;
+                            border: 1px solid #f58c7a;
+                        }
+                    }
                 }
             }
 
@@ -283,11 +349,6 @@
                             justify-content: center;
                         }
                     }
-
-                    // 編集ボタン
-                    .edit_btn {
-                        width: 10%;
-                    }
                 }
 
                 // フォームエリア
@@ -306,7 +367,6 @@
                         padding-bottom: 1%;
 
                         input {
-                            padding: 0 1%;
                             margin-left: 1%;
                             float: right;
 
@@ -619,13 +679,11 @@
         }
     }
 
-    /* 編集モード中フォーム表示
+    /* フォームスタイル
 ====================================================*/
 
-    // フォーム本体
+    // 編集フォーム本体
     .edit_area_form {
-        margin-top: 3%;
-
         // フォームdivタグ
         .edit_area {
             display: flex;
@@ -688,20 +746,14 @@
 
                     dd {
                         width: 70%;
-                    }
 
-                    label {
-                        display: block;
-                        width: 230px;
-                    }
+                        input {
+                            width: 100%;
+                        }
 
-                    input {
-                        width: 100%;
-                        padding: 0 2%;
-                    }
-
-                    select {
-                        width: 90%;
+                        select {
+                            width: 90%;
+                        }
                     }
                 }
             }

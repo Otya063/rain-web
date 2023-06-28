@@ -131,10 +131,11 @@ const updateSystemMode: Action = async ({ request }) => {
 
 const createInfoData: Action = async ({ request }) => {
     const data = await request.formData();
-    const title = data.get('info_title');
-    const url = data.get('info_url');
-    const type = data.get('info_type');
-    const created_at = Math.floor(Date.now() / 1000);
+    const data_obj = convFormDataToObj(data);
+    const title: string = data_obj['title'];
+    const url: string = data_obj['url'];
+    const type: string = data_obj['type'];
+    const created_at: number = Math.floor(Date.now() / 1000);
 
     try {
         await db.launcher_info.create({
@@ -163,7 +164,7 @@ const updateInfoData: Action = async ({ request }) => {
     const data_obj = convFormDataToObj(data);
     const id: number = Number(data_obj['info_id']);
     const column: string = Object.keys(data_obj)[1];
-    let value: string = Object.values(data_obj)[1];
+    let value: string | number = Object.values(data_obj)[1];
     column === 'created_at' && (value = convDateToUnix(value));
 
     try {

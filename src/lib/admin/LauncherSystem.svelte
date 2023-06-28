@@ -5,14 +5,15 @@
     export let system_data;
     const { RainJP, RainUS, RainEU, update }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean } = system_data;
 
-    let forms: Record<string, boolean> = {
+    /* Below is the edit mode script
+    ====================================================*/
+    let active_form: string | '' = '';
+    const forms: Record<string, boolean> = {
         form1: false,
         form2: false,
         form3: false,
         form4: false,
     };
-
-    let active_form: string | '' = '';
     const editMode = (index: number) => {
         if (!$edit_mode) {
             // when editing

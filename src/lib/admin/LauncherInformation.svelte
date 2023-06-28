@@ -25,6 +25,8 @@
         'Updates and Maintenance': updates_and_maintenance_info_data,
     };
 
+    /* Below is the add mode script
+    ====================================================*/
     let adding: boolean = false;
     const addInfoMode = (cancel: boolean) => {
         // check if editing is in progress
@@ -45,6 +47,8 @@
         }
     };
 
+    /* Below is the edit mode script
+    ====================================================*/
     let edit_id: number;
     interface CategoryType {
         [key: string]: boolean;
@@ -86,36 +90,50 @@
 </script>
 
 {#if adding}
-    <li class="console_contents_list_item">
-        <form class="console_form_section" action="?/createInfoData" method="POST">
-            <p class="console_head">Launcher Information Adding Form</p>
-            <label for="info_title">
-                Title:
-                <input id="info_title" type="text" name="info_title" />
-            </label>
+    <h2>
+        <span class="material-icons">post_add</span>
+        Add New Information Form
+    </h2>
+    <div class="console_contents">
+        <form class="info_add_form" action="?/createInfoData" method="POST">
+            <dl class="console_contents_list">
+                <dt class="contents_term">Title</dt>
+                <dd class="contents_desc">
+                    <input type="text" name="title" autocomplete="off" />
+                </dd>
 
-            <label for="info_url">
-                URL:
-                <input id="info_url" type="text" name="info_url" />
-            </label>
+                <dt class="contents_term">URL</dt>
+                <dd class="contents_desc">
+                    <input type="text" name="url" autocomplete="off" />
+                </dd>
 
-            <div class="info_type_group">
-                <label for="info_type">Info Type</label>
+                <dt class="contents_term">Info Type</dt>
+                <dd class="contents_desc">
+                    <select name="type">
+                        {#each Object.keys(info_type_data) as key}
+                            <option hidden>Select the type of information here.</option>
+                            <option value={key}>{key}</option>
+                        {/each}
+                    </select>
+                </dd>
 
-                {#each Object.keys(info_type_data) as key}
-                    <label for={key}>
-                        <input id={key} type="radio" name="info_type" value={key} />
-                        {key}
-                    </label>
-                {/each}
-            </div>
+                <dt class="contents_term">Date</dt>
+                <dd class="contents_desc">This is set with the current date automatically.</dd>
+            </dl>
 
-            <div class="save_cancel_btn">
-                <button type="submit">[Save]</button>
-                <button type="button" on:click={() => addInfoMode(true)}>[Cancel]</button>
+            <div class="group_btns">
+                <button class="save_btn" on:click={() => clicked_submit.set(true)} type="submit">
+                    <span class="material-icons">check</span>
+                    Save
+                </button>
+
+                <button class="cancel_btn" type="button" on:click={() => addInfoMode(true)}>
+                    <span class="material-icons">close</span>
+                    Cancel
+                </button>
             </div>
         </form>
-    </li>
+    </div>
 {:else}
     <button class="add_info_btn" on:click={() => addInfoMode(false)}>
         <span class="material-icons">add</span>
@@ -127,6 +145,7 @@
             <span class="material-icons">info</span>
             {typename} Information
         </h2>
+
         {#if data.length === 0}
             <p style="color: red;">No Information Found</p>
         {/if}
