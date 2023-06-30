@@ -7,43 +7,52 @@
     import { Timeout, success, error, err_details, notice, clicked_submit } from '$ts/main';
     import '$scss/style_admin.scss';
 
+    // data from the server
+    export let data: PageData;
+    export let form: ActionData;
+    let status: keyof StatusMsg;
+    let info_id: number;
+    let dup_title: string;
+    let dup_url: string;
+    form?.status ? (status = form?.status) : (status = '');
+    form?.info_id ? (info_id = form?.info_id) : (info_id = 0);
+    form?.success ? success.set(form!.success) : success.set(false);
+    form?.error ? (error.set(form!.error), err_details.set(form!.err_details)) : (error.set(false), err_details.set(''));
+    /* form?.dup_errors ? err_details.set(form.dup_errors['dup_title']) : (dup_title = '');
+    form?.dup_errors ? err_details.set(form.dup_errors['dup_url']) : (dup_url = ''); */
+    clicked_submit.set(false);
+    notice.set(false);
+
     // status messages
     interface StatusMsg {
         [key: string]: string;
     }
     const success_msg: StatusMsg = {
-        info_created: 'The information has been successfully created.',
-        info_updated: 'The information has been successfully updated.',
-        info_deleted: 'The information has been successfully deleted.',
         system_updated: 'The system mode has been successfully updated.',
         maint_all_updated: 'All maintenance modes have been successfully updated.',
+        info_created: 'The information has been successfully created.',
+        info_updated: `The information (ID: ${info_id}) has been successfully updated.`,
+        info_deleted: `The information (ID: ${info_id}) has been successfully deleted.`,
         user_updated: 'The user data has been successfully updated.',
         user_banned: 'The user has been banned.',
         removed_ban: 'The ban against the user has been removed.',
     };
 
-    // data from the server
-    export let data: PageData;
-    export let form: ActionData;
-    const status: keyof StatusMsg = form?.status;
-    form?.success ? success.set(form!.success) : success.set(false);
-    form?.error ? (error.set(form!.error), err_details.set(form!.err_details)) : (error.set(false), err_details.set(''));
-    clicked_submit.set(false);
-    notice.set(false);
-
     // message display timer bar
     let t: Timeout | null = null;
     let timerPause: boolean = false;
-    let err_details_status: boolean = false;
+    let active_err_details: boolean = false;
     let width: Tweened<number>;
     $: if ($success || $error || $notice) {
         width = tweened(100);
         width.set(-1, { duration: 5000 });
         t = new Timeout(() => {
+            status = '';
             success.set(false);
             error.set(false);
             notice.set(false);
             err_details.set('');
+            info_id;
             width.set(100, { duration: 0 });
         }, 5000);
     }
@@ -52,12 +61,12 @@
     const toggleErrDetail = () => {
         if (t) {
             if (timerPause) {
-                err_details_status = false;
+                active_err_details = false;
                 timerPause = false;
                 t.run();
                 width.set(0, { duration: t.getRestTime() });
             } else {
-                err_details_status = true;
+                active_err_details = true;
                 timerPause = true;
                 t.pause();
                 width.set($width, { duration: 0 });
@@ -67,7 +76,8 @@
 
     // close the message display manually
     const closeMsgDisplay = () => {
-        err_details_status = false;
+        status = '';
+        active_err_details = false;
         success.set(false);
         error.set(false);
         notice.set(false);
@@ -111,7 +121,7 @@
         <span on:click={() => closeMsgDisplay()} class="msg_close_btn" />
         <div class="timer_bar" style={`width: ${$width}%;`} />
     </div>
-    {#if err_details_status}
+    {#if active_err_details}
         <div transition:slide class="msg_detail">
             Message Details:
             <p>{$err_details}</p>

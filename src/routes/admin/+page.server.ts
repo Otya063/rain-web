@@ -166,25 +166,44 @@ const updateInfoData: Action = async ({ request }) => {
     const column: string = Object.keys(data_obj)[1];
     let value: string | number = Object.values(data_obj)[1];
     column === 'created_at' && (value = convDateToUnix(value));
+    let dup_errors = {};
 
-    try {
-        await db.launcher_info.update({
-            where: {
-                id,
-            },
-            data: {
-                [column]: value,
-            },
-        });
+    const title_exist = await db.launcher_info.findMany({
+        where: {
+            title: data_obj['title'],
+        },
+    });
+    const url_exist = await db.launcher_info.findMany({
+        where: {
+            url: data_obj['url'],
+        },
+    });
 
-        return { success: true, status: 'info_updated' };
-    } catch (err) {
-        if (err instanceof Error) {
-            return { error: true, err_details: err.message };
-        } else if (typeof err === 'string') {
-            return { error: true, err_details: err };
-        } else {
-            return { error: true, err_details: 'Unexpected Error.' };
+    title_exist && (dup_errors['dup_title'] = `The title you set (${title_exist}) is a duplicate of another title.`);
+    url_exist && (dup_errors['dup_url'] = `The title you set (${url_exist}) is a duplicate of another title.`);
+
+    if (Object.keys(dup_errors).length > 0) {
+        return { error: true, dup_errors };
+    } else {
+        try {
+            await db.launcher_info.update({
+                where: {
+                    id,
+                },
+                data: {
+                    [column]: value,
+                },
+            });
+
+            return { success: true, status: 'info_updated', info_id: id };
+        } catch (err) {
+            if (err instanceof Error) {
+                return { error: true, err_details: err.message };
+            } else if (typeof err === 'string') {
+                return { error: true, err_details: err };
+            } else {
+                return { error: true, err_details: 'Unexpected Error.' };
+            }
         }
     }
 };
@@ -192,6 +211,7 @@ const updateInfoData: Action = async ({ request }) => {
 const deleteInfoData: Action = async ({ request }) => {
     const data = await request.formData();
     const id = Number(data.get('info_id'));
+    console.log(id);
 
     try {
         await db.launcher_info.delete({
@@ -200,7 +220,7 @@ const deleteInfoData: Action = async ({ request }) => {
             },
         });
 
-        return { success: true, status: 'info_deleted' };
+        return { success: true, status: 'info_deleted', info_id: id };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };

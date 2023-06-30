@@ -123,6 +123,7 @@
 
                 // コンテンツ内リストタイトル
                 .console_contents_list_title {
+                    position: relative;
                     font-size: 2rem;
                     padding-top: 2%;
                     color: #df9e27;
@@ -209,6 +210,35 @@
                 // コンテンツ注意事項
                 .console_contents_note {
                     color: red;
+                }
+
+                // 削除ボタン
+                .del_btn {
+                    position: absolute;
+                    right: 0;
+                    background: #fff;
+                    color: #de6161;
+                    border: 1px solid #de6161;
+                    text-align: right;
+                    font-weight: 700;
+                    font-size: 1.6rem;
+                    width: 13%;
+                    padding: 1% 1.5% 0.5% 0;
+                    border-radius: 4px;
+                    transition: all 0.3s;
+
+                    .material-icons {
+                        position: absolute;
+                        left: 10%;
+                        top: 50%;
+                        transform: translateY(-50%);
+                    }
+
+                    &:hover {
+                        color: #fff;
+                        background: #de6161;
+                        border: 1px solid #de6161;
+                    }
                 }
 
                 // ボタングループ化
@@ -909,6 +939,7 @@
         height: 100%;
         background: rgba(0, 0, 0, 0.4);
         z-index: 999;
+        backdrop-filter: blur(4px);
         user-select: none;
 
         .loader {
