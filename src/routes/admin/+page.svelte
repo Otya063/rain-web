@@ -12,14 +12,10 @@
     export let form: ActionData;
     let status: keyof StatusMsg;
     let info_id: number;
-    let dup_title: string;
-    let dup_url: string;
     form?.status ? (status = form?.status) : (status = '');
     form?.info_id ? (info_id = form?.info_id) : (info_id = 0);
     form?.success ? success.set(form!.success) : success.set(false);
     form?.error ? (error.set(form!.error), err_details.set(form!.err_details)) : (error.set(false), err_details.set(''));
-    /* form?.dup_errors ? err_details.set(form.dup_errors['dup_title']) : (dup_title = '');
-    form?.dup_errors ? err_details.set(form.dup_errors['dup_url']) : (dup_url = ''); */
     clicked_submit.set(false);
     notice.set(false);
 

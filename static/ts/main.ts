@@ -145,7 +145,7 @@ export const tab_param = writable('');
 export const edit_mode = writable(false);
 export const success = writable(false);
 export const error = writable(false);
-export const err_details = writable();
+export const err_details = writable('');
 export const notice = writable(false);
 export const clicked_submit = writable(false);
 
@@ -234,15 +234,15 @@ export const convFormDataToObj = (data: FormData) => {
     const obj: Record<string, string | number | boolean> = {};
 
     for (const [key, value] of data.entries()) {
-      if (value === 'true') {
-        obj[key] = true;
-      } else if (value === 'false') {
-        obj[key] = false;
-      } else {
-        obj[key] = value;
-      }
+        if (value === 'true') {
+            obj[key] = true;
+        } else if (value === 'false') {
+            obj[key] = false;
+        } else {
+            obj[key] = value;
+        }
     }
-  
+
     return obj;
 };
 
