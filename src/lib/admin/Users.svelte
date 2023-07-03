@@ -1,5 +1,6 @@
 <script lang="ts">
-    import { convUnixToDate } from '$ts/main';
+    import _ from 'lodash';
+    import { convUnixToDate, edit_mode, clicked_submit } from '$ts/main';
 
     export let users_data: Users[];
     export let characters_data: Characters[];
@@ -59,80 +60,102 @@
         date: number;
     }
 
-    let edit_id: number;
-    const editUserMode = (id: number) => {
-        edit_id = id;
-    };
-
     let ban_id: number;
     const modalHandler = (id: number) => {
         ban_id = id;
     };
+
+    /* Below is the edit mode script
+    ====================================================*/
+    let edit_id: number;
+    interface CategoryType {
+        [key: string]: boolean;
+    }
+    const cat_types: CategoryType = {
+        title: false,
+        url: false,
+        date: false,
+        info_type: false,
+    };
+    const editMode = (id: number, type: keyof CategoryType) => {
+        // check if another category type is already in edit mode
+        const active_editing = Object.values(cat_types).some((boolean) => boolean === true);
+
+        // when another edit_btn is pressed while editing, the editing target is switched
+        if (active_editing && id !== 0) {
+            Object.keys(cat_types).forEach((key) => {
+                cat_types[key] = false;
+            });
+
+            cat_types[type] = true;
+            edit_id = id;
+
+            return false;
+        }
+
+        if (!$edit_mode) {
+            // when editing
+            edit_mode.set(true);
+            edit_id = id;
+            cat_types[type] = true;
+        } else {
+            // when finished editing
+            edit_mode.set(false);
+            edit_id = id;
+            cat_types[type] = false;
+        }
+    };
 </script>
 
-{#each users_data as user}
-    <li class="console_contents_list_item">
-        {#if edit_id === user.id}
-            <form class="console_form_section" style="height: 180px;" action="?/updateUserData" method="POST">
-                <input type="hidden" name="user_id" value={edit_id} />
+<h2>
+    <span class="material-icons">person</span>
+    User List
+</h2>
 
-                {#each characters_data as character}
-                    {#if user.id === character.user_id}
-                        <input type="hidden" name="character_id" value={character.id} />
-                    {/if}
-                {/each}
+<div class="console_contents">
+    {#each _.sortBy(users_data, 'id') as user}
+        <p class="console_contents_list_title">
+            [ User ID: {user.id} ]
+            <button style="width: 20%;" class="del_btn" on:click={() => clicked_submit.set(true)}>
+                <span style="left: 6%;" class="material-icons">delete</span>
+                <span>Ban This User</span>
+            </button>
+        </p>
+        
+        <dl class="console_contents_list">
+            {#if ban_id === user.id}
+                <div id="user_ban" class="modal">
+                    <div class="modal_content">
+                        <div class="modal_header">
+                            <h1>User Ban Form</h1>
+                        </div>
+                        <div class="modal_body">
+                            <p>Are you sure you want to ban the following user?</p>
+                            <ul class="modal_list">
+                                <li class="modal_list_item">
+                                    <p>User ID</p>
+                                    <span>{user.id}</span>
+                                </li>
 
-                <label for="user_username">
-                    Username:
-                    <input id="user_username" type="text" name="user_username" value={user.username} autocomplete="off" />
-                </label>
+                                <li class="modal_list_item">
+                                    <p>Username</p>
+                                    <span>{user.username}</span>
+                                </li>
 
-                <label for="user_last_character">
-                    Character ID (Last Played):
-                    <input id="user_last_character" type="text" name="user_last_character" value={user.last_character} autocomplete="off" />
-                </label>
-
-                <div class="save_cancel_btn">
-                    <button type="submit">[Save]</button>
-                    <button on:click={() => editUserMode(0)}>[Cancel]</button>
-                </div>
-
-                {#if ban_id === user.id}
-                    <div id="user_ban" class="modal">
-                        <div class="modal_content">
-                            <div class="modal_header">
-                                <h1>User Ban Form</h1>
-                            </div>
-                            <div class="modal_body">
-                                <p>Are you sure you want to ban the following user?</p>
-                                <ul class="modal_list">
-                                    <li class="modal_list_item">
-                                        <p>User ID</p>
-                                        <span>{user.id}</span>
-                                    </li>
-
-                                    <li class="modal_list_item">
-                                        <p>Username</p>
-                                        <span>{user.username}</span>
-                                    </li>
-
-                                    <li class="modal_list_item">
-                                        <p>Character ID (Last Played)</p>
-                                        <span>{user.last_character}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="ban_btn_group">
-                                <button type="submit" formaction="?/banUser" formmethod="POST">[Ban]</button>
-                                <button type="button" on:click={() => modalHandler(0)}>[Cancel]</button>
-                            </div>
+                                <li class="modal_list_item">
+                                    <p>Character ID (Last Played)</p>
+                                    <span>{user.last_character}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="ban_btn_group">
+                            <button type="submit" formaction="?/banUser" formmethod="POST">[Ban]</button>
+                            <button type="button" on:click={() => modalHandler(0)}>[Cancel]</button>
                         </div>
                     </div>
-                {/if}
+                </div>
+            {/if}
 
-                <button type="button" class="ban_user_btn" on:click={() => modalHandler(user.id)}>[Ban This User]</button>
-            </form>
-        {:else}
             {#each banned_users_data as banned_user}
                 {#if user.id === banned_user.user_id}
                     <div class="banned_user_container">
@@ -184,71 +207,48 @@
                 </div>
             {/if}
 
-            <ul style="padding: 0;" class="each_item_contents_list">
-                <li class="each_item_contents">
-                    <div class="user_info_item">
-                        <p>User ID:</p>
-                        <span>{user.id}</span>
-                    </div>
+            <dt class="contents_term">User ID</dt>
+            <dd class="contents_desc">{user.id}</dd>
 
-                    <div class="user_info_item">
-                        <p>Username:</p>
-                        <span>{user.username}</span>
-                    </div>
+            <dt class="contents_term">Username</dt>
+            <dd class="contents_desc">{user.username}</dd>
 
-                    <div class="user_info_item">
-                        <p>Character ID (Last Played):</p>
-                        <span>{user.last_character}</span>
-                    </div>
-                </li>
+            <dt class="contents_term">Character ID<br />(Last Played)</dt>
+            <dd class="contents_desc">{user.last_character}</dd>
 
-                {#if characters_data.every((character) => character.user_id !== user.id)}
+            <!-- {#if characters_data.every((character) => character.user_id !== user.id)}
                     <p class="no_character_msg">This user doesn't have any characters.</p>
                 {:else}
-                    <li class="each_item_contents">
-                        {#each characters_data as character}
-                            <ul class="character_list">
-                                {#if user.id === character.user_id && !character.is_new_character}
-                                    <li class="character_list_item">
-                                        <p>Character ID:</p>
-                                        <span>{character.id}</span>
-                                    </li>
-                                    <li class="character_list_item">
-                                        <p>Gender:</p>
-                                        <span>
-                                            {#if !character.is_female}
-                                                Male
-                                            {:else}
-                                                Female
-                                            {/if}
-                                        </span>
-                                    </li>
-                                    <li class="character_list_item">
-                                        <p>Character Name:</p>
-                                        <span>{character.name}</span>
-                                    </li>
-                                    <li class="character_list_item">
-                                        <p>HR:</p>
-                                        <span>{character.hrp}</span>
-                                    </li>
-                                    <li class="character_list_item">
-                                        <p>GR:</p>
-                                        <span>{character.gr}</span>
-                                    </li>
-                                    <li class="character_list_item">
-                                        <p>Last Login Date:</p>
-                                        <span>{convUnixToDate(character.last_login, false)}</span>
-                                    </li>
-                                {:else}
-                                    <p>New Hunter</p>
-                                {/if}
-                            </ul>
-                        {/each}
-                    </li>
-                {/if}
+                    {#each characters_data as character}
+                        {#if user.id === character.user_id && !character.is_new_character}
+                            <dt class="contents_term">Character ID</dt>
+                            <dd class="contents_desc">{character.id}</dd>
 
-                <button class="edit_btn" on:click={() => editUserMode(user.id)}>[Edit]</button>
-            </ul>
-        {/if}
-    </li>
-{/each}
+                            <dt class="contents_term">Gender</dt>
+                            <dd class="contents_desc">
+                                {#if !character.is_female}
+                                    Male
+                                {:else}
+                                    Female
+                                {/if}
+                            </dd>
+
+                            <dt class="contents_term">Character Name</dt>
+                            <dd class="contents_desc">{character.name}</dd>
+
+                            <dt class="contents_term">HR</dt>
+                            <dd class="contents_desc">{character.hrp}</dd>
+
+                            <dt class="contents_term">GR</dt>
+                            <dd class="contents_desc">{character.gr}</dd>
+
+                            <dt class="contents_term">Last Login Date</dt>
+                            <dd class="contents_desc">{convUnixToDate(character.last_login, false)}</dd>
+                        {:else}
+                            <p>New Hunter</p>
+                        {/if}
+                    {/each}
+                {/if} -->
+        </dl>
+    {/each}
+</div>

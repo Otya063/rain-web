@@ -27,23 +27,23 @@
 
     /* Below is the add mode script
     ====================================================*/
-    let adding: boolean = false;
+    let add_mode: boolean = false;
     const addInfoMode = (cancel: boolean) => {
         // check if editing is in progress
         if ($edit_mode && !cancel) {
             notice.set(true);
-            err_details.set('Edit mode still remains active. Page transitions can only be made after all editing has been completed.');
+            err_details.set('Edit mode remains active. Page transitions can be made after all editing is completed.');
             return false;
         }
 
         if (!cancel) {
             // when editing
             edit_mode.set(true);
-            adding = true;
+            add_mode = true;
         } else {
             // when finished editing
             edit_mode.set(false);
-            adding = false;
+            add_mode = false;
         }
     };
 
@@ -89,7 +89,7 @@
     };
 </script>
 
-{#if adding}
+{#if add_mode}
     <h2>
         <span class="material-icons">post_add</span>
         Add New Information Form

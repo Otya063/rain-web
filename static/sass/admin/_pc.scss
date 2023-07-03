@@ -226,6 +226,7 @@
                     padding: 1% 1.5% 0.5% 0;
                     border-radius: 4px;
                     transition: all 0.3s;
+                    z-index: 1;
 
                     .material-icons {
                         position: absolute;
@@ -410,14 +411,6 @@
                     // 保存/キャンセルボタン
                     .save_cancel_btn {
                         text-align: center;
-                    }
-
-                    // 削除ボタン
-                    .del_info_btn {
-                        position: absolute;
-                        top: -10%;
-                        right: 0;
-                        color: red;
                     }
 
                     // ユーザーBanボタン
