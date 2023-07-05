@@ -116,45 +116,46 @@
     {#each _.sortBy(users_data, 'id') as user}
         <p class="console_contents_list_title">
             [ User ID: {user.id} ]
-            <button style="width: 20%;" class="del_btn" on:click={() => clicked_submit.set(true)}>
+            <button style="width: 20%;" class="del_btn" on:click={() => modalHandler(user.id)}>
                 <span style="left: 6%;" class="material-icons">delete</span>
                 <span>Ban This User</span>
             </button>
         </p>
-        
-        <dl class="console_contents_list">
-            {#if ban_id === user.id}
-                <div id="user_ban" class="modal">
-                    <div class="modal_content">
-                        <div class="modal_header">
-                            <h1>User Ban Form</h1>
-                        </div>
-                        <div class="modal_body">
-                            <p>Are you sure you want to ban the following user?</p>
-                            <ul class="modal_list">
-                                <li class="modal_list_item">
-                                    <p>User ID</p>
-                                    <span>{user.id}</span>
-                                </li>
 
-                                <li class="modal_list_item">
-                                    <p>Username</p>
-                                    <span>{user.username}</span>
-                                </li>
+        {#if ban_id === user.id}
+            <div id="user_ban" class="modal">
+                <div class="modal_content">
+                    <div class="modal_header">
+                        <h1>User Ban Form</h1>
+                    </div>
+                    <div class="modal_body">
+                        <p>Are you sure you want to ban the following user?</p>
+                        <ul class="modal_list">
+                            <li class="modal_list_item">
+                                <p>User ID</p>
+                                <span>{user.id}</span>
+                            </li>
 
-                                <li class="modal_list_item">
-                                    <p>Character ID (Last Played)</p>
-                                    <span>{user.last_character}</span>
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="ban_btn_group">
-                            <button type="submit" formaction="?/banUser" formmethod="POST">[Ban]</button>
-                            <button type="button" on:click={() => modalHandler(0)}>[Cancel]</button>
-                        </div>
+                            <li class="modal_list_item">
+                                <p>Username</p>
+                                <span>{user.username}</span>
+                            </li>
+
+                            <li class="modal_list_item">
+                                <p>Character ID (Last Played)</p>
+                                <span>{user.last_character}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="ban_btn_group">
+                        <button type="submit" formaction="?/banUser" formmethod="POST">[Ban]</button>
+                        <button type="button" on:click={() => modalHandler(0)}>[Cancel]</button>
                     </div>
                 </div>
-            {/if}
+            </div>
+        {/if}
+        
+        <dl class="console_contents_list">
 
             {#each banned_users_data as banned_user}
                 {#if user.id === banned_user.user_id}
@@ -165,7 +166,7 @@
                 {/if}
             {/each}
 
-            {#if ban_id === user.id}
+            <!-- {#if ban_id === user.id}
                 <div id="remove_ban" class="modal">
                     <form action="?/removeBanUser" method="POST">
                         <div class="modal_content">
@@ -205,7 +206,7 @@
                         </div>
                     </form>
                 </div>
-            {/if}
+            {/if} -->
 
             <dt class="contents_term">User ID</dt>
             <dd class="contents_desc">{user.id}</dd>
