@@ -4,7 +4,7 @@
     // Function to initiate the file download
     function downloadFile() {
         const downloadLink = document.createElement('a');
-        downloadLink.href = '/static/install/setup.exe';
+        downloadLink.href = '/install/setup.exe';
         downloadLink.download = 'mhfSetup_ZZ_v1.3.1.exe';
         downloadLink.click();
     }
