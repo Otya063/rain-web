@@ -4,7 +4,7 @@
     import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
     import type { ActionData, PageData } from './$types';
-    import { Timeout, success, error, err_details, notice, clicked_submit } from '$ts/main';
+    import { Timeout, success, error, err_details, notice, clicked_submit, ban_modal_title, ban_modal_formAction, cancelUserBan, user_ban, user_ban_uid, user_ban_name, user_ban_cid } from '$ts/main';
     import '$scss/style_admin.scss';
 
     // data from the server
@@ -123,6 +123,52 @@
             <p>{$err_details}</p>
         </div>
     {/if}
+{/if}
+
+{#if $user_ban}
+    <div id="user_ban" class="modal">
+        <div class="modal_content">
+            <form method="POST">
+                <div class="modal_header">
+                    <h1>User Ban Form</h1>
+                </div>
+                <div class="modal_body">
+                    <p>{$ban_modal_title}</p>
+                    <ul class="modal_list">
+                        <li class="modal_list_item">
+                            <p>User ID</p>
+                            <span>{$user_ban_uid}</span>
+                            <input type="hidden" name="user_id" value={$user_ban_uid} />
+                        </li>
+
+                        <li class="modal_list_item">
+                            <p>Username</p>
+                            <span>{$user_ban_name}</span>
+                            <input type="hidden" name="user_username" value={$user_ban_name} />
+                        </li>
+
+                        <li class="modal_list_item">
+                            <p>Character ID (Last Played)</p>
+                            <span>{$user_ban_cid}</span>
+                            {#each data.charactersWithoutBytes as character}
+                                <input type="hidden" name="character_id" value={character.id} />
+                            {/each}
+                        </li>
+                    </ul>
+                </div>
+                <div class="ban_btn_group">
+                    <button class="confirm_btn" formaction="?/{$ban_modal_formAction}" type="submit">
+                        <span class="material-icons">check</span>
+                        Confirm
+                    </button>
+                    <button class="cancel_btn" type="button" on:click={() => cancelUserBan()}>
+                        <span class="material-icons">close</span>
+                        Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 {/if}
 
 <main class="console_body">

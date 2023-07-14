@@ -192,7 +192,6 @@ const updateInfoData: Action = async ({ request }) => {
 const deleteInfoData: Action = async ({ request }) => {
     const data = await request.formData();
     const id = Number(data.get('info_id'));
-    console.log(id);
 
     try {
         await db.launcher_info.delete({
@@ -246,8 +245,10 @@ const banUser: Action = async ({ request }) => {
     const data = await request.formData();
     const character_id = data.getAll('character_id');
     const user_id = Number(data.get('user_id'));
-    const username = data.get('user_username');
+    const username = String(data.get('user_username'));
     const date = Math.floor(Date.now() / 1000);
+
+    console.log(user_id, username, character_id)
 
     try {
         for (const char_id of character_id) {

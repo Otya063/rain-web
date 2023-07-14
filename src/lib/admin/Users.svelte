@@ -1,6 +1,6 @@
 <script lang="ts">
     import _ from 'lodash';
-    import { convUnixToDate, edit_mode, clicked_submit } from '$ts/main';
+    import { convUnixToDate, edit_mode, clicked_submit, user_ban, prepareUserBan } from '$ts/main';
 
     export let users_data: Users[];
     export let characters_data: Characters[];
@@ -60,11 +60,6 @@
         date: number;
     }
 
-    let ban_id: number;
-    const modalHandler = (id: number) => {
-        ban_id = id;
-    };
-
     /* Below is the edit mode script
     ====================================================*/
     let edit_id: number;
@@ -116,52 +111,28 @@
     {#each _.sortBy(users_data, 'id') as user}
         <p class="console_contents_list_title">
             [ User ID: {user.id} ]
-            <button style="width: 20%;" class="del_btn" on:click={() => modalHandler(user.id)}>
+            <button style="width: 20%;" class="del_btn" on:click={() => prepareUserBan('Are you sure you want to ban the following user?', 'banUser', user.id, user.username, user.last_character)}>
                 <span style="left: 6%;" class="material-icons">delete</span>
                 <span>Ban This User</span>
             </button>
         </p>
 
-        {#if ban_id === user.id}
-            <div id="user_ban" class="modal">
-                <div class="modal_content">
-                    <div class="modal_header">
-                        <h1>User Ban Form</h1>
-                    </div>
-                    <div class="modal_body">
-                        <p>Are you sure you want to ban the following user?</p>
-                        <ul class="modal_list">
-                            <li class="modal_list_item">
-                                <p>User ID</p>
-                                <span>{user.id}</span>
-                            </li>
-
-                            <li class="modal_list_item">
-                                <p>Username</p>
-                                <span>{user.username}</span>
-                            </li>
-
-                            <li class="modal_list_item">
-                                <p>Character ID (Last Played)</p>
-                                <span>{user.last_character}</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="ban_btn_group">
-                        <button type="submit" formaction="?/banUser" formmethod="POST">[Ban]</button>
-                        <button type="button" on:click={() => modalHandler(0)}>[Cancel]</button>
-                    </div>
-                </div>
-            </div>
-        {/if}
-        
         <dl class="console_contents_list">
-
             {#each banned_users_data as banned_user}
                 {#if user.id === banned_user.user_id}
                     <div class="banned_user_container">
+                        <input type="hidden" name="user_id" value={user.id} />
+                        {#each characters_data as character}
+                            <input type="hidden" name="character_id" value={character.id} />
+                        {/each}
+
                         <p class="banned_text">This user has been banned.</p>
-                        <button type="button" class="remove_ban_btn" on:click={() => modalHandler(user.id)}>[Revome the Ban]</button>
+                        <button
+                            type="submit"
+                            class="remove_ban_btn"
+                            on:click={() => prepareUserBan('Are you sure you want to remove the ban of the following user?', 'removeBanUser', user.id, user.username, user.last_character)}
+                            >[Revome the Ban]</button
+                        >
                     </div>
                 {/if}
             {/each}

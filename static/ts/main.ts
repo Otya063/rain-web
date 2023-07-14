@@ -148,6 +148,30 @@ export const error = writable(false);
 export const err_details = writable('');
 export const notice = writable(false);
 export const clicked_submit = writable(false);
+export const ban_modal_title = writable('');
+export const ban_modal_formAction = writable('');
+export const user_ban = writable(false);
+export const user_ban_uid = writable(0);
+export const user_ban_name = writable('');
+export const user_ban_cid = writable(0);
+
+export const prepareUserBan = (title: string, action: string = '', user_id: number, username: string, character_id: number | null) => {
+    user_ban.set(true);
+    ban_modal_title.set(title);
+    ban_modal_formAction.set(action);
+    user_ban_uid.set(user_id);
+    user_ban_name.set(username);
+    user_ban_cid.set(character_id);
+};
+
+export const cancelUserBan = () => {
+    user_ban.set(false);
+    ban_modal_title.set('');
+    ban_modal_formAction.set('');
+    user_ban_uid.set(0);
+    user_ban_name.set('');
+    user_ban_cid.set(0);
+};
 
 /*=========================================================
 　　　　　Misc

@@ -132,6 +132,7 @@
 
                 // コンテンツ内リスト
                 .console_contents_list {
+                    position: relative;
                     display: flex;
                     flex-wrap: wrap;
                     margin-bottom: 3%;
@@ -334,128 +335,6 @@
                     color: #fff;
                     background: #24e182;
                     border: 1px solid #24e182;
-                }
-            }
-
-            // ===　以下要修正 ===
-
-            // コンソールコンテンツ各項目
-            .console_contents_list_item {
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                /* width: 50%;
-                padding: 3% 0; */
-
-                // 見出しタイトル表示
-                /* .console_head {
-                    font-weight: 700;
-                    font-size: 1.8rem;
-                    text-align: center;
-                } */
-
-                // 各項目リスト
-                .each_item_contents_list {
-                    width: 100%;
-                    text-align: center;
-                    padding-top: 5%;
-
-                    // 各項目内容
-                    .each_item_contents {
-                        display: flex;
-                        justify-content: space-between;
-                        padding: 2% 0;
-
-                        p {
-                            padding-right: 3%;
-                        }
-
-                        // ユーザー情報各項目
-                        .user_info_item {
-                            width: 40%;
-                            display: flex;
-                            flex-direction: row;
-                            justify-content: center;
-                        }
-                    }
-                }
-
-                // フォームエリア
-                .console_form_section {
-                    position: relative;
-                    width: 100%;
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: space-around;
-
-                    // インプットエリア調整
-                    label {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        padding-bottom: 1%;
-
-                        input {
-                            margin-left: 1%;
-                            float: right;
-
-                            &#info_title,
-                            &#info_url {
-                                width: 85%;
-                            }
-                        }
-                    }
-
-                    // 保存/キャンセルボタン
-                    .save_cancel_btn {
-                        text-align: center;
-                    }
-
-                    // ユーザーBanボタン
-                    .ban_user_btn {
-                        position: absolute;
-                        top: -10%;
-                        right: 0;
-                        color: red;
-                    }
-                }
-
-                // インフォタイプ
-                .info_type_group {
-                    display: flex;
-                    flex-direction: column;
-                    padding: 5% 0%;
-                }
-
-                // Banユーザー表示
-                .banned_user_container {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    justify-content: flex-end;
-                    position: absolute;
-                    background: rgba(0, 0, 0, 0.5);
-                    width: 110%;
-                    height: 70%;
-
-                    // テキスト
-                    .banned_text {
-                        color: whitesmoke;
-                        font-size: 2rem;
-                        font-weight: 700;
-                        text-shadow: 3px 3px 5px black;
-                    }
-
-                    // Ban解除ボタン
-                    .remove_ban_btn {
-                        color: red;
-                        font-weight: 700;
-                        font-size: 1.8rem;
-                        text-shadow: 3px 3px 5px black;
-                        margin: 5% 0 10% 0;
-                    }
                 }
             }
         }
@@ -713,15 +592,18 @@
             justify-content: space-around;
             background-color: #f0f1f2;
 
+            // 選択式
             &.select {
                 align-items: center;
                 padding: 4% 2%;
             }
 
+            // 入力式
             &.enter {
                 flex-direction: column;
                 padding: 2% 5%;
 
+                // フォーム内タイトル
                 .edit_area_title {
                     border-bottom: #333333 1px solid;
                     padding-bottom: 2%;
@@ -729,6 +611,7 @@
                     font-size: 2.2rem;
                 }
 
+                // セーブボタン
                 .save_btn {
                     margin: 4% auto 0;
                 }
@@ -745,6 +628,7 @@
             .edit_area_form_parts {
                 user-select: none;
 
+                // ラジオ
                 &.radio {
                     label {
                         display: flex;
@@ -759,6 +643,7 @@
                     }
                 }
 
+                // テキスト
                 &.text {
                     display: flex;
                     flex-wrap: wrap;
@@ -807,6 +692,104 @@
                     background: #2abcec;
                     border: 1px solid #2abcec;
                 }
+            }
+        }
+    }
+
+    /* Ban関連
+====================================================*/
+    // Ban済ユーザー表示
+    .banned_user_container {
+        position: absolute;
+        width: 102%;
+        height: 125%;
+        top: -20%;
+        left: -1%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+        background: rgba(127, 127, 127, 0.5);
+        z-index: 1;
+
+        // テキスト
+        .banned_text {
+            color: whitesmoke;
+            font-size: 2rem;
+            font-weight: 700;
+            text-shadow: 3px 3px 5px black;
+        }
+
+        // Ban解除ボタン
+        .remove_ban_btn {
+            color: red;
+            font-weight: 700;
+            font-size: 1.8rem;
+            text-shadow: 3px 3px 5px black;
+            margin: 5% 0 10% 0;
+        }
+    }
+
+    // Ban 確認/キャンセルボタン
+    .ban_btn_group {
+        display: flex;
+        justify-content: space-evenly;
+        padding: 2% 0;
+
+        // 確認ボタン
+        .confirm_btn {
+            position: relative;
+            color: #0aa0d2;
+            background: #fff;
+            border: 1px solid #0aa0d2;
+            text-align: right;
+            font-weight: 700;
+            font-size: 1.6rem;
+            width: 11.5%;
+            border-radius: 4px;
+            padding: 1% 1.5% 0.5% 0;
+            transition: all 0.3s;
+
+            .material-icons {
+                position: absolute;
+                left: 7%;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            &:hover {
+                color: #fff;
+                background: #2abcec;
+                border: 1px solid #2abcec;
+            }
+        }
+
+        // キャンセルボタン
+        .cancel_btn {
+            position: relative;
+            right: 0;
+            color: #f56044;
+            background: #fff;
+            border: 1px solid #f56044;
+            font-weight: 700;
+            font-size: 1.6rem;
+            width: 11.5%;
+            padding: 1% 1.5% 0.5% 0;
+            border-radius: 4px;
+            text-align: right;
+            transition: all 0.3s;
+
+            .material-icons {
+                position: absolute;
+                left: 11%;
+                top: 51%;
+                transform: translateY(-50%);
+            }
+
+            &:hover {
+                color: #fff;
+                background: #f58c7a;
+                border: 1px solid #f58c7a;
             }
         }
     }
@@ -889,16 +872,6 @@
                             font-weight: 700;
                         }
                     }
-                }
-            }
-
-            // Ban/キャンセルボタン
-            .ban_btn_group {
-                text-align: center;
-                padding: 1%;
-
-                :first-child {
-                    color: red;
                 }
             }
         }
