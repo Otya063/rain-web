@@ -173,48 +173,6 @@ export const cancelUserBan = () => {
     user_ban_cid.set(0);
 };
 
-/*=========================================================
-　　　　　Misc
-=======================================================*/
-/* Convert Unixtimestamp to Date
-====================================================*/
-export const convUnixToDate = (timestamp: number | null, ISO8601: boolean) => {
-    const date = new Date(timestamp * 1000);
-
-    // for nomal expression
-    const formattedDate1 = date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-    });
-
-    // for ISO 8601 expression
-    const formattedDate2 = date
-        .toLocaleDateString('ja-JP', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        })
-        .replace(/\//g, '-');
-
-    return ISO8601 ? formattedDate2 : formattedDate1;
-};
-
-/* Convert Date to Unixtimestamp
-====================================================*/
-export const convDateToUnix = (date_value: string) => {
-    const split_date = date_value.split('-');
-    const year = parseInt(split_date[0]);
-    const month = parseInt(split_date[1]) - 1;
-    const day = parseInt(split_date[2]);
-
-    const date = new Date(Date.UTC(year, month, day));
-
-    const timestamp = Math.floor(date.getTime() / 1000);
-
-    return timestamp;
-};
-
 /* Pause and Resume on setTimeout Function
 ====================================================*/
 export class Timeout {
@@ -252,7 +210,65 @@ export class Timeout {
     }
 }
 
-/* Convert Boolean FormData Into Objects
+/*=========================================================
+　　　　　Conversion Functions
+=======================================================*/
+/* Convert Normal Date to Unixtimestamp
+====================================================*/
+export const convDateToUnix = (date_value: string) => {
+    const split_date = date_value.split('-');
+    const year = parseInt(split_date[0]);
+    const month = parseInt(split_date[1]) - 1;
+    const day = parseInt(split_date[2]);
+
+    const date = new Date(Date.UTC(year, month, day));
+
+    const timestamp = Math.floor(date.getTime() / 1000);
+
+    return timestamp;
+};
+
+/* Convert Unixtimestamp to Date
+====================================================*/
+export const convUnixToDate = (timestamp: number | null, ISO8601: boolean) => {
+    const date = new Date(timestamp * 1000);
+
+    // for nomal expression
+    const formattedDate1 = date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+
+    // for ISO 8601 expression
+    const formattedDate2 = date
+        .toLocaleDateString('ja-JP', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        })
+        .replace(/\//g, '-');
+
+    return ISO8601 ? formattedDate2 : formattedDate1;
+};
+
+/* Convert RFC 2822 Time to ISO 8601 with Time
+====================================================*/
+export const convRFCToISOWithTime = (rfc: Date | null) => {
+    // parse the RFC2822 string into a Date object
+    const date = new Date(rfc);
+
+    // set seconds and milliseconds to zero
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+
+    // format the Date object as an ISO 8601 string with seconds and milliseconds removed
+    const iso8601 = date.toISOString().replace(/:00\.000Z$/, '');
+
+    return iso8601;
+};
+
+/* Convert FormData Into Objects
 ====================================================*/
 export const convFormDataToObj = (data: FormData) => {
     const obj: Record<string, string | number | boolean> = {};
@@ -280,4 +296,125 @@ export const underscoreAndLowercase = (string: string) => {
     const underscoreLowercaseString = lowercaseString.replace(/\s/g, '_');
 
     return underscoreLowercaseString;
+};
+
+/* Get Course by Decimal
+====================================================*/
+export const getCourseByDecimal = (dec: number) => {
+    let bin: string[] = dec.toString(2).padStart(30, '0').split('');
+    bin = bin.reverse();
+
+    type CourseData = Record<
+        string,
+        {
+            id: number;
+            enabled: boolean;
+            code: string;
+        }
+    >;
+    const courseData: CourseData = {
+        /* 'Trial Course': {
+            id: 1,
+            enabled: bin[1] === '1',
+            code: 'trc',
+        }, */ // automatically enabled (= 1) on the server side
+        'Hunter Life Course': {
+            id: 2,
+            enabled: bin[2] === '1',
+            code: 'hlc',
+        },
+        'Extra Course': {
+            id: 3,
+            enabled: bin[3] === '1',
+            code: 'exc',
+        },
+        /* 'Extra B Course': {
+            id: 4,
+            enabled: bin[4] === '1',
+            code: 'exbc',
+        }, */ // leftover
+        'Mobile Course': {
+            id: 5,
+            enabled: bin[5] === '1',
+            code: 'mbc',
+        },
+        'Premium Course': {
+            id: 6,
+            enabled: bin[6] === '1',
+            code: 'prc',
+        },
+        /* 'Pallone Course (ExtraC)': {
+            id: 7,
+            enabled: bin[7] === '1',
+            code: 'plc',
+        }, */ // leftover
+        'Assist Course': {
+            id: 8,
+            enabled: bin[8] === '1',
+            code: 'asc',
+        },
+        'N Course': {
+            id: 9,
+            enabled: bin[9] === '1',
+            code: 'nc',
+        },
+        'Hiden Course': {
+            id: 10,
+            enabled: bin[10] === '1',
+            code: 'hdc',
+        },
+        'Hunter Support Course': {
+            id: 11,
+            enabled: bin[11] === '1',
+            code: 'hsc',
+        },
+        'N Boost Course': {
+            id: 12,
+            enabled: bin[12] === '1',
+            code: 'nbc',
+        },
+        // [13]-[25] are nothing
+        'Official NetCafe': {
+            id: 26,
+            enabled: bin[26] === '1',
+            code: 'onc',
+        },
+        'Hunter Life Continuation Course': {
+            id: 27,
+            enabled: bin[27] === '1',
+            code: 'hlcc',
+        }, // override HL Course
+        'Extra Continuation Course': {
+            id: 28,
+            enabled: bin[28] === '1',
+            code: 'excc',
+        }, // override EX Course
+        'Free Course': {
+            id: 29,
+            enabled: bin[29] === '1',
+            code: 'frc',
+        }, // override HL Course
+    };
+
+    return courseData;
+};
+
+/* Get Course (decimal) by FormData
+====================================================*/
+export const getCourseByFormData = (data: Record<string, string | number | boolean>) => {
+    delete data.user_id;
+
+    // change the values to boolean
+    Object.keys(data).forEach((key) => {
+        data[key] === 'on' && (data[key] = true);
+    });
+
+    const bin = `${data['hl'] === 'frc' ? 1 : 0}${data['ex'] === 'excc' ? 1 : 0}${data['hl'] === 'hlcc' ? 1 : 0}${data['onc'] ? 1 : 0}0000000000000${data['nbc'] ? 1 : 0}${data['hsc'] ? 1 : 0}${
+        data['hdc'] ? 1 : 0
+    }${data['nc'] ? 1 : 0}${data['asc'] ? 1 : 0}${data['plc'] ? 1 : 0}${data['prc'] ? 1 : 0}${data['mbc'] ? 1 : 0}${data['exbc'] ? 1 : 0}${data['ex'] === 'exc' ? 1 : 0}${
+        data['hl'] === 'hlc' ? 1 : 0
+    }${data['trc'] ? 1 : 0}0`;
+    const dec = parseInt(bin, 2);
+
+    return dec;
 };

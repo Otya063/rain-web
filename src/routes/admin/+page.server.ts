@@ -1,4 +1,4 @@
-import { convDateToUnix, convFormDataToObj } from '$ts/main';
+import { convDateToUnix, convFormDataToObj, getCourseByFormData } from '$ts/main';
 import { redirect } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 import { db } from '$lib/database';
@@ -213,10 +213,20 @@ const deleteInfoData: Action = async ({ request }) => {
 };
 
 const updateUserData: Action = async ({ request }) => {
-    const data = await request.formData();
+    /* const data = await request.formData();
     const id = Number(data.get('user_id'));
     const username = data.get('user_username');
-    const last_character = Number(data.get('user_last_character'));
+    const last_character = Number(data.get('user_last_character')); */
+
+    const data = await request.formData();
+    const data_obj = convFormDataToObj(data);
+    const id: number = Number(data_obj['user_id']);
+    let column: string;
+    let value: string;
+    Object.values(data_obj).some((value) => value === 'on')
+        ? ((column = 'rights'), (value = getCourseByFormData(data_obj)))
+        : ((column = Object.keys(data_obj)[1]), (value = Object.values(data_obj)[1]));
+    console.log(id, column, value);
 
     try {
         await db.users.update({
@@ -224,8 +234,7 @@ const updateUserData: Action = async ({ request }) => {
                 id,
             },
             data: {
-                username,
-                last_character,
+                [column]: value,
             },
         });
 
@@ -248,7 +257,7 @@ const banUser: Action = async ({ request }) => {
     const username = String(data.get('user_username'));
     const date = Math.floor(Date.now() / 1000);
 
-    console.log(user_id, username, character_id)
+    console.log(user_id, username, character_id);
 
     try {
         for (const char_id of character_id) {

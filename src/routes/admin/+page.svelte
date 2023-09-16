@@ -5,6 +5,7 @@
     import { slide, fade } from 'svelte/transition';
     import type { ActionData, PageData } from './$types';
     import { Timeout, success, error, err_details, notice, clicked_submit, ban_modal_title, ban_modal_formAction, cancelUserBan, user_ban, user_ban_uid, user_ban_name, user_ban_cid } from '$ts/main';
+    import _ from 'lodash';
     import '$scss/style_admin.scss';
 
     // data from the server
@@ -150,14 +151,16 @@
                         <li class="modal_list_item">
                             <p>Character ID (Last Played)</p>
                             <span>{$user_ban_cid}</span>
-                            {#each data.charactersWithoutBytes as character}
+                            {#each _.filter(data.charactersWithoutBytes, (each_data) => {
+                                return each_data.user_id === $user_ban_uid;
+                            }) as character}
                                 <input type="hidden" name="character_id" value={character.id} />
                             {/each}
                         </li>
                     </ul>
                 </div>
                 <div class="ban_btn_group">
-                    <button class="confirm_btn" formaction="?/{$ban_modal_formAction}" type="submit">
+                    <button class="confirm_btn" formaction="?/{$ban_modal_formAction}" type="submit" on:click={() => clicked_submit.set(true)}>
                         <span class="material-icons">check</span>
                         Confirm
                     </button>

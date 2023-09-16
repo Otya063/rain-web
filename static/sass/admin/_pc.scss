@@ -165,7 +165,7 @@
                             font-size: 1.6rem;
                             width: 18%;
                             padding: 0.3% 4% 0 0;
-                            margin-bottom: 3%;
+                            margin: 1% 0;
                             text-align: right;
 
                             .material-icons {
@@ -188,7 +188,7 @@
                             font-size: 1.6rem;
                             width: 18%;
                             padding: 0.3% 2.3% 0% 0;
-                            margin-bottom: 3%;
+                            margin: 1% 0;
                             transition: all 0.3s;
                             text-align: right;
 
@@ -641,6 +641,18 @@
                             cursor: pointer;
                         }
                     }
+
+                    // 利用権選択リスト
+                    .course_list {
+                        display: flex;
+                        flex-wrap: wrap;
+
+                        // 利用権各項目
+                        .course_item {
+                            width: calc(50% - 30px);
+                            margin: 0 15px 6%;
+                        }
+                    }
                 }
 
                 // テキスト
@@ -711,6 +723,7 @@
         justify-content: flex-end;
         background: rgba(127, 127, 127, 0.5);
         z-index: 1;
+        user-select: none;
 
         // テキスト
         .banned_text {

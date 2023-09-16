@@ -1,6 +1,7 @@
 <script lang="ts">
     import _ from 'lodash';
-    import { convUnixToDate, edit_mode, clicked_submit, user_ban, prepareUserBan } from '$ts/main';
+    import { slide } from 'svelte/transition';
+    import { convUnixToDate, edit_mode, prepareUserBan, clicked_submit, getCourseByDecimal, convRFCToISOWithTime } from '$ts/main';
 
     export let users_data: Users[];
     export let characters_data: Characters[];
@@ -67,10 +68,9 @@
         [key: string]: boolean;
     }
     const cat_types: CategoryType = {
-        title: false,
-        url: false,
-        date: false,
-        info_type: false,
+        user_name: false,
+        rights: false,
+        return_expires: false,
     };
     const editMode = (id: number, type: keyof CategoryType) => {
         // check if another category type is already in edit mode
@@ -100,6 +100,9 @@
             cat_types[type] = false;
         }
     };
+
+    const currentDate = new Date();
+    const isoString = currentDate.toISOString();
 </script>
 
 <h2>
@@ -108,87 +111,189 @@
 </h2>
 
 <div class="console_contents">
-    {#each _.sortBy(users_data, 'id') as user}
-        <p class="console_contents_list_title">
-            [ User ID: {user.id} ]
-            <button style="width: 20%;" class="del_btn" on:click={() => prepareUserBan('Are you sure you want to ban the following user?', 'banUser', user.id, user.username, user.last_character)}>
-                <span style="left: 6%;" class="material-icons">delete</span>
-                <span>Ban This User</span>
-            </button>
-        </p>
+    {#if users_data.length === 0}
+        <p class="console_contents_note">No User Found.</p>
+    {:else}
+        {#each _.sortBy(users_data, 'id') as user, i}
+            <p class="console_contents_list_title">
+                User Data [ {i + 1} ]
+                <button style="width: 20%;" class="del_btn" on:click={() => prepareUserBan('Are you sure you want to ban the following user?', 'banUser', user.id, user.username, user.last_character)}>
+                    <span style="left: 6%;" class="material-icons">delete</span>
+                    <span>Ban This User</span>
+                </button>
+            </p>
 
-        <dl class="console_contents_list">
-            {#each banned_users_data as banned_user}
-                {#if user.id === banned_user.user_id}
-                    <div class="banned_user_container">
-                        <input type="hidden" name="user_id" value={user.id} />
-                        {#each characters_data as character}
-                            <input type="hidden" name="character_id" value={character.id} />
-                        {/each}
+            <dl class="console_contents_list">
+                {#each banned_users_data as banned_user}
+                    {#if user.id === banned_user.user_id}
+                        <div class="banned_user_container">
+                            <input type="hidden" name="user_id" value={user.id} />
+                            {#each _.filter(characters_data, (each_data) => {
+                                return each_data.user_id === user.id;
+                            }) as character}
+                                <input type="hidden" name="character_id" value={character.id} />
+                            {/each}
 
-                        <p class="banned_text">This user has been banned.</p>
-                        <button
-                            type="submit"
-                            class="remove_ban_btn"
-                            on:click={() => prepareUserBan('Are you sure you want to remove the ban of the following user?', 'removeBanUser', user.id, user.username, user.last_character)}
-                            >[Revome the Ban]</button
-                        >
-                    </div>
-                {/if}
-            {/each}
-
-            <!-- {#if ban_id === user.id}
-                <div id="remove_ban" class="modal">
-                    <form action="?/removeBanUser" method="POST">
-                        <div class="modal_content">
-                            <div class="modal_header">
-                                <h1>Ban Removal Form</h1>
-                            </div>
-                            <div class="modal_body">
-                                <p>Are you sure you want to remove the ban of the following user?</p>
-                                <ul class="modal_list">
-                                    <input type="hidden" name="user_id" value={user.id} />
-                                    {#each characters_data as character}
-                                        {#if user.id === character.user_id}
-                                            <input type="hidden" name="character_id" value={character.id} />
-                                        {/if}
-                                    {/each}
-
-                                    <li class="modal_list_item">
-                                        <p>User ID</p>
-                                        <span>{user.id}</span>
-                                    </li>
-
-                                    <li class="modal_list_item">
-                                        <p>Username</p>
-                                        <span>{user.username}</span>
-                                    </li>
-
-                                    <li class="modal_list_item">
-                                        <p>Character ID (Last Played)</p>
-                                        <span>{user.last_character}</span>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="ban_btn_group">
-                                <button type="submit">[Remove the Ban]</button>
-                                <button type="button" on:click={() => modalHandler(0)}>[Cancel]</button>
-                            </div>
+                            <p class="banned_text">This user has been banned.</p>
+                            <button
+                                type="submit"
+                                class="remove_ban_btn"
+                                on:click={() => prepareUserBan('Are you sure you want to remove the ban of the following user?', 'removeBanUser', user.id, user.username, user.last_character)}
+                                >Revome the Ban
+                            </button>
                         </div>
-                    </form>
-                </div>
-            {/if} -->
+                    {/if}
+                {/each}
 
-            <dt class="contents_term">User ID</dt>
-            <dd class="contents_desc">{user.id}</dd>
+                <dt class="contents_term">User ID</dt>
+                <dd class="contents_desc">{user.id}</dd>
 
-            <dt class="contents_term">Username</dt>
-            <dd class="contents_desc">{user.username}</dd>
+                <dt class="contents_term">Username</dt>
+                <dd class="contents_desc">
+                    {user.username}
 
-            <dt class="contents_term">Character ID<br />(Last Played)</dt>
-            <dd class="contents_desc">{user.last_character}</dd>
+                    {#if edit_id === user.id && cat_types['user_name']}
+                        <button class="cancel_btn" on:click={() => editMode(0, 'user_name')}>
+                            <span class="material-icons">close</span>
+                            Cancel
+                        </button>
+                    {:else}
+                        <button class="edit_btn" on:click={() => editMode(user.id, 'user_name')}>
+                            <span class="material-icons">mode_edit</span>
+                            Edit
+                        </button>
+                    {/if}
 
-            <!-- {#if characters_data.every((character) => character.user_id !== user.id)}
+                    {#if edit_id === user.id && cat_types['user_name']}
+                        <form transition:slide class="edit_area_form" action="?/updateUserData" method="POST">
+                            <input type="hidden" name="user_id" value={edit_id} />
+                            <div class="edit_area enter">
+                                <p class="edit_area_title">Change Username</p>
+                                <dl class="edit_area_form_parts text">
+                                    <dt>Enter new username</dt>
+                                    <dd>
+                                        <input type="text" name="username" value={user.username} autocomplete="off" />
+                                    </dd>
+                                </dl>
+
+                                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                    <span class="material-icons">check</span>
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    {/if}
+                </dd>
+
+                <dt class="contents_term">Course</dt>
+                <dd class="contents_desc">
+                    <ul>
+                        {#each Object.entries(getCourseByDecimal(user.rights)) as [course, { enabled }]}
+                            {#if enabled}
+                                <li>{course}</li>
+                            {/if}
+                        {/each}
+                    </ul>
+
+                    {#if edit_id === user.id && cat_types['rights']}
+                        <button class="cancel_btn" on:click={() => editMode(0, 'rights')}>
+                            <span class="material-icons">close</span>
+                            Cancel
+                        </button>
+                    {:else}
+                        <button class="edit_btn" on:click={() => editMode(user.id, 'rights')}>
+                            <span class="material-icons">mode_edit</span>
+                            Edit
+                        </button>
+                    {/if}
+
+                    {#if edit_id === user.id && cat_types['rights']}
+                        <form transition:slide class="edit_area_form" action="?/updateUserData" method="POST">
+                            <input type="hidden" name="user_id" value={edit_id} />
+                            <div class="edit_area enter">
+                                <p class="edit_area_title">Change Courses</p>
+                                <dl class="edit_area_form_parts radio">
+                                    <dt>HL (Single Select)</dt>
+                                    <dd class="course_list">
+                                        {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights)), "id") as [courseName, { enabled, code }]}
+                                            {#if courseName === 'Hunter Life Course' || courseName === 'Hunter Life Continuation Course' || courseName === 'Free Course'}
+                                                <label class="course_item"><input type="radio" name="hl" value={code} checked={enabled} />{courseName}</label>
+                                            {/if}
+                                        {/each}
+                                    </dd>
+
+                                    <dt>EX (Single Select)</dt>
+                                    <dd class="course_list">
+                                        {#each  _.sortBy(Object.entries(getCourseByDecimal(user.rights)), "id") as [courseName, { enabled, code }]}
+                                            {#if courseName === 'Extra Course' || courseName === 'Extra Continuation Course'}
+                                                <label class="course_item"><input type="radio" name="ex" value={code} checked={enabled} />{courseName}</label>
+                                            {/if}
+                                        {/each}
+                                    </dd>
+
+                                    <dt>Others (Multiple Select)</dt>
+                                    <dd class="course_list">
+                                        {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights)), "id") as [courseName, { enabled, code }]}
+                                            {#if courseName !== 'Hunter Life Course' && courseName !== 'Hunter Life Continuation Course' && courseName !== 'Free Course' && courseName !== 'Extra Course' && courseName !== 'Extra Continuation Course'}
+                                                <label class="course_item"><input type="checkbox" name={code} checked={enabled} />{courseName}</label>
+                                            {/if}
+                                        {/each}
+                                    </dd>
+                                </dl>
+
+                                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                    <span class="material-icons">check</span>
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    {/if}
+                </dd>
+
+                <dt class="contents_term">Character ID<br />(Last Played)</dt>
+                <dd class="contents_desc">{user.last_character}</dd>
+
+                <dt class="contents_term">Last Login Time (Zulu)</dt>
+                <dd class="contents_desc">{convRFCToISOWithTime(user.last_login)}</dd>
+
+                <dt class="contents_term">Expiration Date for Return Ward (Zulu)</dt>
+                <dd class="contents_desc">
+                    {convRFCToISOWithTime(user.return_expires)}
+
+                    {#if edit_id === user.id && cat_types['return_expires']}
+                        <button class="cancel_btn" on:click={() => editMode(0, 'return_expires')}>
+                            <span class="material-icons">close</span>
+                            Cancel
+                        </button>
+                    {:else}
+                        <button class="edit_btn" on:click={() => editMode(user.id, 'return_expires')}>
+                            <span class="material-icons">mode_edit</span>
+                            Edit
+                        </button>
+                    {/if}
+
+                    {#if edit_id === user.id && cat_types['return_expires']}
+                        <form transition:slide class="edit_area_form" action="?/updateUserData" method="POST">
+                            <input type="hidden" name="user_id" value={edit_id} />
+                            <div class="edit_area enter">
+                                <p class="edit_area_title">Change Date</p>
+                                <dl class="edit_area_form_parts text">
+                                    <dt>Set new date</dt>
+                                    <dd>
+                                        <input type="datetime-local" name="return_expires" value={convRFCToISOWithTime(user.return_expires)} />
+                                    </dd>
+                                </dl>
+
+                                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                    <span class="material-icons">check</span>
+                                    Save
+                                </button>
+                            </div>
+                        </form>
+                    {/if}
+                </dd>
+
+                <!-- {#if characters_data.every((character) => character.user_id !== user.id)}
                     <p class="no_character_msg">This user doesn't have any characters.</p>
                 {:else}
                     {#each characters_data as character}
@@ -221,6 +326,7 @@
                         {/if}
                     {/each}
                 {/if} -->
-        </dl>
-    {/each}
+            </dl>
+        {/each}
+    {/if}
 </div>

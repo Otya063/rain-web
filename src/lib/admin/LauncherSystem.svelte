@@ -8,7 +8,10 @@
     /* Below is the edit mode script
     ====================================================*/
     let active_form: string | '' = '';
-    const forms: Record<string, boolean> = {
+    interface FormType {
+        [key: string]: boolean;
+    }
+    const forms: FormType = {
         form1: false,
         form2: false,
         form3: false,
@@ -212,7 +215,7 @@
                 </li>
                 <li>
                     <label style="width: 110px;" for="disable_all">
-                        <input type="radio" name="maint_all" id="disable_all" value="false" />
+                        <input type="radio" name="maint_all" id="disable_all" value="false" checked />
                         Disable All
                     </label>
                 </li>
