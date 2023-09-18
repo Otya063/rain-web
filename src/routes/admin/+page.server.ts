@@ -213,19 +213,33 @@ const deleteInfoData: Action = async ({ request }) => {
 };
 
 const updateUserData: Action = async ({ request }) => {
-    /* const data = await request.formData();
-    const id = Number(data.get('user_id'));
-    const username = data.get('user_username');
-    const last_character = Number(data.get('user_last_character')); */
-
     const data = await request.formData();
     const data_obj = convFormDataToObj(data);
     const id: number = Number(data_obj['user_id']);
     let column: string;
-    let value: string;
-    Object.values(data_obj).some((value) => value === 'on')
-        ? ((column = 'rights'), (value = getCourseByFormData(data_obj)))
-        : ((column = Object.keys(data_obj)[1]), (value = Object.values(data_obj)[1]));
+    let value: string | number;
+    if (Object.values(data_obj).some((value) => value === 'on')) {
+        // course
+        column = 'rights';
+        value = getCourseByFormData(data_obj);
+    } else {
+        // the others
+        column = Object.keys(data_obj)[1];
+        value = Object.values(data_obj)[1];
+
+        // switch between string or number depending on column
+        switch (column) {
+            case 'gacha_premium':
+            case 'gacha_trial':
+            case 'frontier_points':
+                value = Number(value);
+                value === 0 && (value = null);
+                break;
+
+            default:
+                value = String(value);
+        }
+    }
     console.log(id, column, value);
 
     try {

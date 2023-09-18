@@ -83,7 +83,8 @@ select {
 
 // inputテキスト余白調整
 input[type='text'],
-input[type='password'] {
+input[type='password'],
+input[type='number'] {
     padding: 0 6px;
 }
 

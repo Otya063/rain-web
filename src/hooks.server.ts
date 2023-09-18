@@ -7,7 +7,7 @@ loadAllLocales();
 const L = i18n();
 const securityHeaders = {
     'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Allow-Origin': 'http://192.168.11.9',
+    'Access-Control-Allow-Origin': 'http://192.168.11.10',
     'Access-Control-Allow-Methods': 'GET',
     'Access-Control-Allow-Headers': 'Content-Type',
 };

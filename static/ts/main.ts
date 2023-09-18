@@ -142,7 +142,7 @@ if (browser) {
 　　　　　Admin Console
 =======================================================*/
 export const tab_param = writable('');
-export const edit_mode = writable(false);
+export const editMode = writable(false);
 export const success = writable(false);
 export const error = writable(false);
 export const err_details = writable('');

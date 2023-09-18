@@ -1,6 +1,6 @@
 <script lang="ts">
     import { slide } from 'svelte/transition';
-    import { clicked_submit, edit_mode } from '$ts/main';
+    import { clicked_submit, editMode } from '$ts/main';
 
     export let system_data;
     const { RainJP, RainUS, RainEU, update }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean } = system_data;
@@ -17,10 +17,10 @@
         form3: false,
         form4: false,
     };
-    const editMode = (index: number) => {
-        if (!$edit_mode) {
+    const editModeHandle = (index: number) => {
+        if (!$editMode) {
             // when editing
-            edit_mode.set(true);
+            editMode.set(true);
             const form_key = `form${index}`;
 
             if (active_form !== '') {
@@ -41,7 +41,7 @@
                 forms[form_key] = !forms[form_key];
                 if (forms[form_key] === false) {
                     active_form = '';
-                    edit_mode.set(false);
+                    editMode.set(false);
                 }
             }
         }
@@ -65,12 +65,12 @@
             {/if}
 
             {#if forms['form1']}
-                <button class="cancel_btn" on:click={() => editMode(1)}>
+                <button class="cancel_btn" on:click={() => editModeHandle(1)}>
                     <span class="material-icons">close</span>
                     Cancel
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editMode(1)}>
+                <button class="edit_btn" on:click={() => editModeHandle(1)}>
                     <span class="material-icons">mode_edit</span>
                     Edit
                 </button>
@@ -114,12 +114,12 @@
             {/if}
 
             {#if forms['form2']}
-                <button class="cancel_btn" on:click={() => editMode(2)}>
+                <button class="cancel_btn" on:click={() => editModeHandle(2)}>
                     <span class="material-icons">close</span>
                     Cancel
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editMode(2)}>
+                <button class="edit_btn" on:click={() => editModeHandle(2)}>
                     <span class="material-icons">mode_edit</span>
                     Edit
                 </button>
@@ -163,12 +163,12 @@
             {/if}
 
             {#if forms['form3']}
-                <button class="cancel_btn" on:click={() => editMode(3)}>
+                <button class="cancel_btn" on:click={() => editModeHandle(3)}>
                     <span class="material-icons">close</span>
                     Cancel
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editMode(3)}>
+                <button class="edit_btn" on:click={() => editModeHandle(3)}>
                     <span class="material-icons">mode_edit</span>
                     Edit
                 </button>
@@ -246,12 +246,12 @@
             {/if}
 
             {#if forms['form4']}
-                <button class="cancel_btn" on:click={() => editMode(4)}>
+                <button class="cancel_btn" on:click={() => editModeHandle(4)}>
                     <span class="material-icons">close</span>
                     Cancel
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editMode(4)}>
+                <button class="edit_btn" on:click={() => editModeHandle(4)}>
                     <span class="material-icons">mode_edit</span>
                     Edit
                 </button>

@@ -1,7 +1,7 @@
 <script lang="ts">
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
-    import { convUnixToDate, underscoreAndLowercase, clicked_submit, edit_mode, notice, err_details } from '$ts/main';
+    import { convUnixToDate, underscoreAndLowercase, clicked_submit, editMode, notice, err_details } from '$ts/main';
 
     export let important_info_data;
     export let defects_and_troubles_info_data; // manually
@@ -30,7 +30,7 @@
     let add_mode: boolean = false;
     const addInfoMode = (cancel: boolean) => {
         // check if editing is in progress
-        if ($edit_mode && !cancel) {
+        if ($editMode && !cancel) {
             notice.set(true);
             err_details.set('Edit mode remains active. Page transitions can be made after all editing is completed.');
             return false;
@@ -38,11 +38,11 @@
 
         if (!cancel) {
             // when editing
-            edit_mode.set(true);
+            editMode.set(true);
             add_mode = true;
         } else {
             // when finished editing
-            edit_mode.set(false);
+            editMode.set(false);
             add_mode = false;
         }
     };
@@ -59,7 +59,7 @@
         date: false,
         info_type: false,
     };
-    const editMode = (id: number, type: keyof CategoryType) => {
+    const editModeHandle = (id: number, type: keyof CategoryType) => {
         // check if another category type is already in edit mode
         const active_editing = Object.values(cat_types).some((boolean) => boolean === true);
 
@@ -75,14 +75,14 @@
             return false;
         }
 
-        if (!$edit_mode) {
+        if (!$editMode) {
             // when editing
-            edit_mode.set(true);
+            editMode.set(true);
             edit_id = id;
             cat_types[type] = true;
         } else {
             // when finished editing
-            edit_mode.set(false);
+            editMode.set(false);
             edit_id = id;
             cat_types[type] = false;
         }
@@ -167,12 +167,12 @@
                             {data_item.title}
 
                             {#if edit_id === data_item.id && cat_types['title']}
-                                <button class="cancel_btn" on:click={() => editMode(0, 'title')}>
+                                <button class="cancel_btn" on:click={() => editModeHandle(0, 'title')}>
                                     <span class="material-icons">close</span>
                                     Cancel
                                 </button>
                             {:else}
-                                <button class="edit_btn" on:click={() => editMode(data_item.id, 'title')}>
+                                <button class="edit_btn" on:click={() => editModeHandle(data_item.id, 'title')}>
                                     <span class="material-icons">mode_edit</span>
                                     Edit
                                 </button>
@@ -204,12 +204,12 @@
                             {data_item.url}
 
                             {#if edit_id === data_item.id && cat_types['url']}
-                                <button class="cancel_btn" on:click={() => editMode(0, 'url')}>
+                                <button class="cancel_btn" on:click={() => editModeHandle(0, 'url')}>
                                     <span class="material-icons">close</span>
                                     Cancel
                                 </button>
                             {:else}
-                                <button class="edit_btn" on:click={() => editMode(data_item.id, 'url')}>
+                                <button class="edit_btn" on:click={() => editModeHandle(data_item.id, 'url')}>
                                     <span class="material-icons">mode_edit</span>
                                     Edit
                                 </button>
@@ -246,12 +246,12 @@
                             {data_item.created_at}
 
                             {#if edit_id === data_item.id && cat_types['date']}
-                                <button class="cancel_btn" on:click={() => editMode(0, 'date')}>
+                                <button class="cancel_btn" on:click={() => editModeHandle(0, 'date')}>
                                     <span class="material-icons">close</span>
                                     Cancel
                                 </button>
                             {:else}
-                                <button class="edit_btn" on:click={() => editMode(data_item.id, 'date')}>
+                                <button class="edit_btn" on:click={() => editModeHandle(data_item.id, 'date')}>
                                     <span class="material-icons">mode_edit</span>
                                     Edit
                                 </button>
@@ -283,12 +283,12 @@
                             {typename}
 
                             {#if edit_id === data_item.id && cat_types['info_type']}
-                                <button class="cancel_btn" on:click={() => editMode(0, 'info_type')}>
+                                <button class="cancel_btn" on:click={() => editModeHandle(0, 'info_type')}>
                                     <span class="material-icons">close</span>
                                     Cancel
                                 </button>
                             {:else}
-                                <button class="edit_btn" on:click={() => editMode(data_item.id, 'info_type')}>
+                                <button class="edit_btn" on:click={() => editModeHandle(data_item.id, 'info_type')}>
                                     <span class="material-icons">mode_edit</span>
                                     Edit
                                 </button>
