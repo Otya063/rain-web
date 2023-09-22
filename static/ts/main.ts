@@ -1,5 +1,6 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
+import { db } from '$lib/database';
 
 /*=========================================================
 　　　　　Slide Functions
@@ -154,6 +155,81 @@ export const user_ban = writable(false);
 export const user_ban_uid = writable(0);
 export const user_ban_name = writable('');
 export const user_ban_cid = writable(0);
+
+export const getServerData = (mainData: string, subData: string | number = undefined) => {
+    let data;
+
+    switch (mainData) {
+        case 'launcherSystem':
+            data = db.launcher_system.findUnique({
+                where: {
+                    id: 1,
+                },
+            });
+            break;
+
+        case 'information':
+            switch (subData) {
+                case 1:
+                    data = db.launcher_info.findMany({
+                        where: {
+                            type: 'Important',
+                        },
+                    });
+                    break;
+
+                case 2:
+                    data = db.launcher_info.findMany({
+                        where: {
+                            type: 'Defects and Troubles',
+                        },
+                    });
+                    break;
+
+                case 3:
+                    data = db.launcher_info.findMany({
+                        where: {
+                            type: 'Management and Service',
+                        },
+                    });
+                    break;
+
+                case 4:
+                    data = db.launcher_info.findMany({
+                        where: {
+                            type: 'In-Game Events',
+                        },
+                    });
+                    break;
+
+                case 5:
+                    data = db.launcher_info.findMany({
+                        where: {
+                            type: 'Updates and Maintenance',
+                        },
+                    });
+                    break;
+            }
+            break;
+
+        case 'users':
+            data = db.users.findMany();
+            break;
+
+        case 'characters':
+            data = db.characters.findMany();
+            break;
+
+        case 'bannedUsers':
+            data = db.account_ban.findMany();
+            break;
+
+        default:
+            data = 'Nothing';
+    }
+
+    return data;
+};
 
 export const prepareUserBan = (title: string, action: string = '', user_id: number, username: string, character_id: number | null) => {
     user_ban.set(true);

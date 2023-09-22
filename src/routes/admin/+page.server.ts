@@ -1,48 +1,24 @@
-import { convDateToUnix, convFormDataToObj, getCourseByFormData } from '$ts/main';
+import { getServerData, convDateToUnix, convFormDataToObj, getCourseByFormData } from '$ts/main';
 import { redirect } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 import { db } from '$lib/database';
 
 export const load: PageServerLoad = async () => {
-    const launcher_system = await db.launcher_system.findUnique({
-        where: {
-            id: 1,
-        },
-    });
+    const launcher_system = await getServerData('launcherSystem');
 
-    const important = await db.launcher_info.findMany({
-        where: {
-            type: 'Important',
-        },
-    });
+    const important = await getServerData('information', 1);
 
-    const defects_and_troubles = await db.launcher_info.findMany({
-        where: {
-            type: 'Defects and Troubles',
-        },
-    });
+    const defects_and_troubles = await getServerData('information', 2);
 
-    const management_and_service = await db.launcher_info.findMany({
-        where: {
-            type: 'Management and Service',
-        },
-    });
+    const management_and_service = await getServerData('information', 3);
 
-    const ingame_events = await db.launcher_info.findMany({
-        where: {
-            type: 'In-Game Events',
-        },
-    });
+    const ingame_events = await getServerData('information', 4);
 
-    const updates_and_maintenance = await db.launcher_info.findMany({
-        where: {
-            type: 'Updates and Maintenance',
-        },
-    });
+    const updates_and_maintenance = await getServerData('information', 5);
 
-    const users = await db.users.findMany();
+    const users = await getServerData('users');
 
-    const characters = await db.characters.findMany();
+    const characters = await getServerData('characters');
     const charactersWithoutBytes = characters.map(
         ({
             savedata,
@@ -67,7 +43,7 @@ export const load: PageServerLoad = async () => {
         }) => rest
     );
 
-    const banned_users = await db.account_ban.findMany();
+    const banned_users = await getServerData('bannedUsers');
 
     return { launcher_system, important, defects_and_troubles, management_and_service, ingame_events, updates_and_maintenance, users, charactersWithoutBytes, banned_users };
 };

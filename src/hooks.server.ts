@@ -8,7 +8,7 @@ const L = i18n();
 const securityHeaders = {
     'Access-Control-Allow-Credentials': 'true',
     'Access-Control-Allow-Origin': 'http://192.168.11.10',
-    'Access-Control-Allow-Methods': 'GET',
+    'Access-Control-Allow-Methods': ['GET', 'POST', 'OPTIONS'],
     'Access-Control-Allow-Headers': 'Content-Type',
 };
 
@@ -39,8 +39,13 @@ export const handle: Handle = async ({ event, resolve }) => {
         });
 
         Object.entries(securityHeaders).forEach(([header, value]) => response.headers.set(header, value));
+        const newResponse = new Response(response.body, {
+            status: 200,
+            headers: response.headers,
+        });
+
         console.log('[Allowed CORS]');
-        return response;
+        return newResponse;
     } else if (origin !== securityHeaders['Access-Control-Allow-Origin'] && pathname === '/admin') {
         console.log('[Admins Normal Browsing.]');
         return resolve(event, {

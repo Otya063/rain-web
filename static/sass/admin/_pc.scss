@@ -157,6 +157,7 @@
                         padding: 2.5% 0 2% 1%;
                         border-bottom: 1px gray dashed;
                         user-select: none;
+                        overflow-wrap: break-word;
                     }
 
                     // コンテンツアイテム説明
@@ -167,6 +168,7 @@
                         width: 75%;
                         padding: 2.5% 0 1%;
                         border-bottom: 1px gray dashed;
+                        overflow-wrap: break-word;
 
                         // 編集モード切り替えボタン
                         .edit_btn {
@@ -828,17 +830,14 @@
         color: #ff8100;
     }
 
-    // リスト本体
-    .character_list {
-        width: 100%;
-
-        //　各キャラクター
-        .character_list_item {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-            margin: 0 5%;
-        }
+    //　各キャラクター
+    .character_item {
+        width: 520px;
+        height: 143px;
+        margin-bottom: 1%;
+        background: url(#{$path_img}/common/char_background/tonfa.png) no-repeat center center;
+        user-select: none;
+        cursor: pointer;
     }
 
     /* モーダルウィンドウ
