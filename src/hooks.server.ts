@@ -7,9 +7,9 @@ loadAllLocales();
 const L = i18n();
 const securityHeaders = {
     'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Allow-Origin': 'http://192.168.11.10',
-    'Access-Control-Allow-Methods': ['GET', 'POST', 'OPTIONS'],
-    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Origin': import.meta.env.VITE_ORIGIN,
+    'Access-Control-Allow-Methods': import.meta.env.VITE_METHODS,
+    'Access-Control-Allow-Headers': import.meta.env.VITE_HEADERS,
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
