@@ -832,12 +832,62 @@
 
     //　各キャラクター
     .character_item {
+        position: relative;
         width: 520px;
         height: 143px;
         margin-bottom: 1%;
         background: url(#{$path_img}/common/char_background/tonfa.png) no-repeat center center;
         user-select: none;
         cursor: pointer;
+
+        .name {
+            position: absolute;
+            font-size: 3rem;
+            text-align: center;
+            font-weight: 700;
+            top: 10%;
+            width: 100%;
+        }
+
+        .wpn_icon {
+            position: absolute;
+            background: url(#{$path_img}/common/char_wpn_icon/tonfa.png);
+            width: 48px;
+            height: 47px;
+            top: 48%;
+            left: 6%;
+        }
+
+        .wpn_text {
+            position: absolute;
+            font-weight: 700;
+            width: 160px;
+            left: 18%;
+            top: 50%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &.wpn_name_hover {
+                overflow: visible;
+            }
+
+            .little_endian {
+                position: absolute;
+                top: 4%;
+                left: 28%;
+                font-size: 1.3rem;
+                color: #a55353;
+            }
+
+            .wpn_name {
+                transition: all 0.3s;
+
+                &:hover {
+                    text-shadow: 0px 4px 3px #ffffff;
+                }
+            }
+        }
     }
 
     /* モーダルウィンドウ

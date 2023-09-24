@@ -1,5 +1,7 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
+import { melee_ja } from '$i18n/ja/melee';
+import { melee_en } from '$i18n/en/melee';
 
 /*=========================================================
 　　　　　Slide Functions
@@ -211,93 +213,8 @@ export class Timeout {
 }
 
 /*=========================================================
-　　　　　Conversion Functions
+　　　　　User Functions
 =======================================================*/
-/* Convert Normal Date to Unixtimestamp
-====================================================*/
-export const convDateToUnix = (date_value: string) => {
-    const split_date = date_value.split('-');
-    const year = parseInt(split_date[0]);
-    const month = parseInt(split_date[1]) - 1;
-    const day = parseInt(split_date[2]);
-
-    const date = new Date(Date.UTC(year, month, day));
-
-    const timestamp = Math.floor(date.getTime() / 1000);
-
-    return timestamp;
-};
-
-/* Convert Unixtimestamp to Date
-====================================================*/
-export const convUnixToDate = (timestamp: number | null, ISO8601: boolean) => {
-    const date = new Date(timestamp * 1000);
-
-    // for nomal expression
-    const formattedDate1 = date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-    });
-
-    // for ISO 8601 expression
-    const formattedDate2 = date
-        .toLocaleDateString('ja-JP', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        })
-        .replace(/\//g, '-');
-
-    return ISO8601 ? formattedDate2 : formattedDate1;
-};
-
-/* Convert RFC 2822 Time to ISO 8601 with Time
-====================================================*/
-export const convRFCToISOWithTime = (rfc: Date | null) => {
-    // parse the RFC2822 string into a Date object
-    const date = new Date(rfc);
-
-    // set seconds and milliseconds to zero
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-
-    // format the Date object as an ISO 8601 string with seconds and milliseconds removed
-    const iso8601 = date.toISOString().replace(/:00\.000Z$/, '');
-
-    return iso8601;
-};
-
-/* Convert FormData Into Objects
-====================================================*/
-export const convFormDataToObj = (data: FormData) => {
-    const obj: Record<string, string | number | boolean> = {};
-
-    for (const [key, value] of data.entries()) {
-        if (value === 'true') {
-            obj[key] = true;
-        } else if (value === 'false') {
-            obj[key] = false;
-        } else {
-            obj[key] = value;
-        }
-    }
-
-    return obj;
-};
-
-/* Generate Underscore and Lowercase Strings
-====================================================*/
-export const underscoreAndLowercase = (string: string) => {
-    // convert uppercase to lowercase
-    const lowercaseString = string.toLowerCase();
-
-    // underscore
-    const underscoreLowercaseString = lowercaseString.replace(/\s/g, '_');
-
-    return underscoreLowercaseString;
-};
-
 /* Get Course by Decimal
 ====================================================*/
 export const getCourseByDecimal = (dec: number) => {
@@ -417,4 +334,197 @@ export const getCourseByFormData = (data: Record<string, string | number | boole
     const dec = parseInt(bin, 2);
 
     return dec;
+};
+
+/* Get Weapon Type by Dec
+====================================================*/
+export const getWpnTypeByDec = (dec: number) => {
+    let wpnType: string;
+    switch (dec) {
+        case 0:
+            wpnType = 'Great Sword';
+            break;
+
+        case 1:
+            wpnType = 'Heavy Bowgun';
+            break;
+
+        case 4:
+            wpnType = 'Sword and Shield';
+            break;
+
+        case 5:
+            wpnType = 'Light Bowgun';
+            break;
+
+        case 7:
+            wpnType = 'Long Sword';
+            break;
+
+        case 10:
+            wpnType = 'Bow';
+            break;
+
+        case 11:
+            wpnType = 'Tonfa';
+            break;
+
+        case 13:
+            wpnType = 'Magnet Spike';
+            break;
+    }
+};
+
+/* Get Weapon Name by Dec
+====================================================*/
+export const getWpnNameByDec = (dec: number, wpnType: number, lang: string = 'en') => {
+    const hex: string = decToLittleEndian(dec);
+    let dataObject: Record<string, string>;
+
+    // melee or ranged
+    switch (wpnType) {
+        case 1:
+        case 5:
+        case 10:
+            // language select
+            switch (lang) {
+                case 'ja':
+                    //dataObject = ranged_ja;
+                    break;
+
+                case 'en':
+                    //dataObject = ranged_en;
+                    break;
+            }
+            break;
+
+        default:
+            // language select
+            switch (lang) {
+                case 'ja':
+                    dataObject = melee_ja;
+                    break;
+
+                case 'en':
+                    dataObject = melee_en;
+                    break;
+            }
+            break;
+    }
+
+    if (dataObject.hasOwnProperty(hex)) {
+        return dataObject[hex];
+    } else {
+        throw new Error('Invalid input');
+    }
+};
+
+/*=========================================================
+　　　　　Conversion Functions
+=======================================================*/
+/* Convert Normal Date to Unixtimestamp
+====================================================*/
+export const convDateToUnix = (dateValue: string) => {
+    const split_date = dateValue.split('-');
+    const year = parseInt(split_date[0]);
+    const month = parseInt(split_date[1]) - 1;
+    const day = parseInt(split_date[2]);
+
+    const date = new Date(Date.UTC(year, month, day));
+
+    const timeStamp = Math.floor(date.getTime() / 1000);
+
+    return timeStamp;
+};
+
+/* Convert Unixtimestamp to Date
+====================================================*/
+export const convUnixToDate = (timestamp: number | null, ISO8601: boolean) => {
+    const date = new Date(timestamp * 1000);
+
+    // for nomal expression
+    const formattedDate1 = date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
+    });
+
+    // for ISO 8601 expression
+    const formattedDate2 = date
+        .toLocaleDateString('ja-JP', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+        })
+        .replace(/\//g, '-');
+
+    return ISO8601 ? formattedDate2 : formattedDate1;
+};
+
+/* Convert RFC 2822 Time to ISO 8601 with Time
+====================================================*/
+export const convRFCToISOWithTime = (rfc: Date | null) => {
+    // parse the RFC2822 string into a Date object
+    const date = new Date(rfc);
+
+    // set seconds and milliseconds to zero
+    date.setSeconds(0);
+    date.setMilliseconds(0);
+
+    // format the Date object as an ISO 8601 string with seconds and milliseconds removed
+    const iso8601 = date.toISOString().replace(/:00\.000Z$/, '');
+
+    return iso8601;
+};
+
+/* Convert FormData Into Objects
+====================================================*/
+export const convFormDataToObj = (data: FormData) => {
+    const obj: Record<string, string | number | boolean> = {};
+
+    for (const [key, value] of data.entries()) {
+        if (value === 'true') {
+            obj[key] = true;
+        } else if (value === 'false') {
+            obj[key] = false;
+        } else {
+            obj[key] = value;
+        }
+    }
+
+    return obj;
+};
+
+/* Generate Underscore and Lowercase Strings
+====================================================*/
+export const underscoreAndLowercase = (string: string) => {
+    // convert uppercase to lowercase
+    const lowercaseString = string.toLowerCase();
+
+    // underscore
+    const underscoreLowercaseString = lowercaseString.replace(/\s/g, '_');
+
+    return underscoreLowercaseString;
+};
+
+/* Endian Conversion
+====================================================*/
+export const decToLittleEndian = (dec: number) => {
+    // convert decimal to hexadecimal as a big-endian string with a minimum width of 4 digits
+    const bigEndianHex: string = dec.toString(16).padStart(4, '0');
+
+    // split the big-endian hex string into pairs of two characters
+    const pairs = bigEndianHex.match(/.{1,2}/g);
+
+    if (pairs) {
+        // reverse the order of the pairs to get little-endian representation
+        const littleEndianHex: string = pairs.reverse().join('');
+
+        // convert alphabetic characters to uppercase
+        const uppercaseLittleEndianHex: string = littleEndianHex.replace(/[a-f]/g, (match) => match.toUpperCase());
+
+        return uppercaseLittleEndianHex;
+    } else {
+        throw new Error('Invalid input');
+    }
 };

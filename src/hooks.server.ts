@@ -1,3 +1,4 @@
+import { VITE_ORIGIN, VITE_METHODS, VITE_HEADERS } from '$env/static/private';
 import { detectLocale, i18n, isLocale } from '$i18n/i18n-util';
 import { loadAllLocales } from '$i18n/i18n-util.sync';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
@@ -7,9 +8,9 @@ loadAllLocales();
 const L = i18n();
 const securityHeaders = {
     'Access-Control-Allow-Credentials': 'true',
-    'Access-Control-Allow-Origin': import.meta.env.VITE_ORIGIN,
-    'Access-Control-Allow-Methods': import.meta.env.VITE_METHODS,
-    'Access-Control-Allow-Headers': import.meta.env.VITE_HEADERS,
+    'Access-Control-Allow-Origin': VITE_ORIGIN,
+    'Access-Control-Allow-Methods': VITE_METHODS,
+    'Access-Control-Allow-Headers': VITE_HEADERS,
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
