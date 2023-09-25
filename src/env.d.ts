@@ -2,9 +2,9 @@
 
 interface ImportMetaEnv {
     readonly VITE_DATABASE_URL: string;
-    readonly VITE_ORIGIN: string;
-    readonly VITE_METHODS: string[];
-    readonly VITE_HEADERS: string;
+    readonly VITE_ALLOW_ORIGIN: string;
+    readonly VITE_ALLOW_METHODS: string;
+    readonly VITE_ALLOW_HEADERS: string;
 }
 
 interface ImportMeta {

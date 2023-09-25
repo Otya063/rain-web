@@ -338,7 +338,7 @@ export const getCourseByFormData = (data: Record<string, string | number | boole
 
 /* Get Weapon Type by Dec
 ====================================================*/
-export const getWpnTypeByDec = (dec: number) => {
+export const getWpnTypeByDec = (dec: number | null) => {
     let wpnType: string;
     switch (dec) {
         case 0:
@@ -373,11 +373,13 @@ export const getWpnTypeByDec = (dec: number) => {
             wpnType = 'Magnet Spike';
             break;
     }
+
+    return wpnType;
 };
 
 /* Get Weapon Name by Dec
 ====================================================*/
-export const getWpnNameByDec = (dec: number, wpnType: number, lang: string = 'en') => {
+export const getWpnNameByDec = (dec: number, wpnType: number | null, lang: string = 'en') => {
     const hex: string = decToLittleEndian(dec);
     let dataObject: Record<string, string>;
 
@@ -390,10 +392,12 @@ export const getWpnNameByDec = (dec: number, wpnType: number, lang: string = 'en
             switch (lang) {
                 case 'ja':
                     //dataObject = ranged_ja;
+                    dataObject = melee_ja;
                     break;
 
                 case 'en':
                     //dataObject = ranged_en;
+                    dataObject = melee_en;
                     break;
             }
             break;
@@ -413,6 +417,9 @@ export const getWpnNameByDec = (dec: number, wpnType: number, lang: string = 'en
     }
 
     if (dataObject.hasOwnProperty(hex)) {
+        if (dataObject[hex] === '') {
+            return melee_ja[hex];
+        }
         return dataObject[hex];
     } else {
         throw new Error('Invalid input');

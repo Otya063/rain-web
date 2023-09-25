@@ -1,38 +1,32 @@
-# create-svelte
+![Rain Server](https://raw.githubusercontent.com/Otya063/rain-web/development/static/img/common/rainserver_logo.webp)
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+The Rain Server website repository.
 
-## Creating a project
+## Get Started
 
-If you're seeing this, you've probably already done this step. Congrats!
-
+Install dependencies.
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+npm install
 ```
 
-## Developing
+Generate prisma client with data proxy.
+```bash
+npx prisma generate --data-proxy
+```
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
+Start local server.
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+### Deploy the website.
+ - Development Site: Push or merge to the development branch.
+ - Production Site: Push or merge to the main branch.
 
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Documentation
+ - [Sveltekit](https://kit.svelte.dev/docs/introduction)
+ - [Typescript](https://www.typescriptlang.org/docs/)
+ - [Prisma](https://www.prisma.io/docs)
+ - [Sass](https://sass-lang.com/documentation/)
+ - [Typesafe-i18n](https://github.com/ivanhofer/typesafe-i18n/tree/main/packages/adapter-svelte)
+ - [Cloudflare Workers](https://developers.cloudflare.com/workers/)

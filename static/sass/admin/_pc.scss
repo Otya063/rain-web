@@ -822,7 +822,7 @@
         }
     }
 
-    /* ユーザーコンポーネント内キャラクター概要リスト
+    /* ユーザーコンポーネント内キャラクターリスト
 ====================================================*/
     // キャラクターなし
     .no_character_msg {
@@ -840,6 +840,7 @@
         user-select: none;
         cursor: pointer;
 
+        // キャラクター名
         .name {
             position: absolute;
             font-size: 3rem;
@@ -849,20 +850,23 @@
             width: 100%;
         }
 
+
+        // 武器アイコン
         .wpn_icon {
             position: absolute;
-            background: url(#{$path_img}/common/char_wpn_icon/tonfa.png);
+            background: url(#{$path_img}/common/char_wpn_icon/tonfa.png); // placeholder
             width: 48px;
             height: 47px;
             top: 48%;
             left: 6%;
         }
 
+        // 武器名
         .wpn_text {
             position: absolute;
             font-weight: 700;
-            width: 160px;
-            left: 18%;
+            width: 140px;
+            left: 17%;
             top: 50%;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -872,21 +876,61 @@
                 overflow: visible;
             }
 
-            .little_endian {
-                position: absolute;
-                top: 4%;
-                left: 28%;
-                font-size: 1.3rem;
-                color: #a55353;
-            }
-
             .wpn_name {
                 transition: all 0.3s;
 
                 &:hover {
-                    text-shadow: 0px 4px 3px #ffffff;
+                    color: #ffffff;
                 }
             }
+        }
+
+        // 武器詳細
+        .little_endian {
+            position: absolute;
+            bottom: -15%;
+            left: 6%;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #fb3737;
+            background: #fffbf7;
+            padding: 1% 2%;
+            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            text-shadow: 0px 2px 8px #a7a7a7;
+            transition: all 0.2s;
+            transform: translate(0, 50%);
+            opacity: 0;
+            z-index: 1;
+
+            &.wpn_name_hover {
+                transform: translate(0, -48%);
+                opacity: 1;
+            }
+        }
+
+        // プレイヤーHR/GR
+        .rank {
+            position: absolute;
+            top: 44%;
+            left: 50%;
+            font-weight: 700;
+        }
+        
+        // キャラクターID
+        .char_id {
+            position: absolute;
+            top: 57.5%;
+            left: 50%;
+            font-weight: 700;
+        }
+
+        // 最終ログイン日時（UTC）
+        .last_login {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            font-weight: 700;
         }
     }
 
