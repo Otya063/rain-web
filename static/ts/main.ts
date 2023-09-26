@@ -291,10 +291,10 @@ export const getCourseByDecimal = (dec: number) => {
             code: 'nbc',
         },
         // [13]-[25] are nothing
-        'Official NetCafe': {
+        'Certified NetCafe': {
             id: 26,
             enabled: bin[26] === '1',
-            code: 'onc',
+            code: 'cnc',
         },
         'Hunter Life Continuation Course': {
             id: 27,
@@ -326,7 +326,7 @@ export const getCourseByFormData = (data: Record<string, string | number | boole
         data[key] === 'on' && (data[key] = true);
     });
 
-    const bin = `${data['hl'] === 'frc' ? 1 : 0}${data['ex'] === 'excc' ? 1 : 0}${data['hl'] === 'hlcc' ? 1 : 0}${data['onc'] ? 1 : 0}0000000000000${data['nbc'] ? 1 : 0}${data['hsc'] ? 1 : 0}${
+    const bin = `${data['hl'] === 'frc' ? 1 : 0}${data['ex'] === 'excc' ? 1 : 0}${data['hl'] === 'hlcc' ? 1 : 0}${data['cnc'] ? 1 : 0}1000000000000${data['nbc'] ? 1 : 0}${data['hsc'] ? 1 : 0}${
         data['hdc'] ? 1 : 0
     }${data['nc'] ? 1 : 0}${data['asc'] ? 1 : 0}${data['plc'] ? 1 : 0}${data['prc'] ? 1 : 0}${data['mbc'] ? 1 : 0}${data['exbc'] ? 1 : 0}${data['ex'] === 'exc' ? 1 : 0}${
         data['hl'] === 'hlc' ? 1 : 0
@@ -349,16 +349,36 @@ export const getWpnTypeByDec = (dec: number | null) => {
             wpnType = 'Heavy Bowgun';
             break;
 
+        case 2:
+            wpnType = 'Hammer';
+            break;
+
+        case 3:
+            wpnType = 'Lance';
+            break;
+
         case 4:
-            wpnType = 'Sword and Shield';
+            wpnType = 'Sword & Shield';
             break;
 
         case 5:
             wpnType = 'Light Bowgun';
             break;
 
+        case 6:
+            wpnType = 'Dual Blades';
+            break;
+
         case 7:
             wpnType = 'Long Sword';
+            break;
+
+        case 8:
+            wpnType = 'Hunting Horn';
+            break;
+
+        case 9:
+            wpnType = 'Gunlance';
             break;
 
         case 10:
@@ -367,6 +387,10 @@ export const getWpnTypeByDec = (dec: number | null) => {
 
         case 11:
             wpnType = 'Tonfa';
+            break;
+
+        case 12:
+            wpnType = 'Switch Axe F';
             break;
 
         case 13:
