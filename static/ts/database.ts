@@ -1,4 +1,12 @@
-import { db } from '$lib/database';
+import { PrismaClient } from '@prisma/client/edge';
+
+export const db = new PrismaClient({
+    datasources: {
+        db: {
+            url: import.meta.env.VITE_DATABASE_URL,
+        },
+    },
+});
 
 export const getServerData = (mainData: string, subData: string | number = undefined) => {
     let data;

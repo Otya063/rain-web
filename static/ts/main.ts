@@ -1,7 +1,5 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
-import { melee_ja } from '$i18n/ja/melee';
-import { melee_en } from '$i18n/en/melee';
 
 /*=========================================================
 　　　　　Slide Functions
@@ -233,7 +231,7 @@ export const getCourseByDecimal = (dec: number) => {
         /* 'Trial Course': {
             id: 1,
             enabled: bin[1] === '1',
-            code: 'trc',
+            code: 'tlc',
         }, */ // automatically enabled (= 1) on the server side
         'Hunter Life Course': {
             id: 2,
@@ -290,18 +288,48 @@ export const getCourseByDecimal = (dec: number) => {
             enabled: bin[12] === '1',
             code: 'nbc',
         },
-        // [13]-[25] are nothing
+        // [13]-[19] nothing
+        /* 'Debug': {
+            id: 20,
+            enabled: bin[20] === '1',
+            code: 'dbg',
+        }, */
+        /* 'COG Link Expired': {
+            id: 21,
+            enabled: bin[21] === '1',
+            code: 'cle',
+        }, */
+        /* 'Xbox Gold Membership': {
+            id: 22,
+            enabled: bin[22] === '1',
+            code: 'xgm',
+        }, */
+        /* 'PS3/Vita Trophy Reqs': {
+            id: 23,
+            enabled: bin[23] === '1',
+            code: 'trq',
+        }, */
+        /* 'COG Link Check': {
+            id: 24,
+            enabled: bin[24] === '1',
+            code: 'clc',
+        }, */
+        /* 'NetCafe': {
+            id: 25,
+            enabled: bin[25] === '1',
+            code: 'nc',
+        }, */
         'Certified NetCafe': {
             id: 26,
             enabled: bin[26] === '1',
             code: 'cnc',
         },
-        'Hunter Life Continuation Course': {
+        'Hunter Life Continued Course': {
             id: 27,
             enabled: bin[27] === '1',
             code: 'hlcc',
         }, // override HL Course
-        'Extra Continuation Course': {
+        'Extra Continued Course': {
             id: 28,
             enabled: bin[28] === '1',
             code: 'excc',
@@ -310,7 +338,7 @@ export const getCourseByDecimal = (dec: number) => {
             id: 29,
             enabled: bin[29] === '1',
             code: 'frc',
-        }, // override HL Course
+        }, // override HL / HLC Course
     };
 
     return courseData;
@@ -318,19 +346,41 @@ export const getCourseByDecimal = (dec: number) => {
 
 /* Get Course (decimal) by FormData
 ====================================================*/
-export const getCourseByFormData = (data: Record<string, string | number | boolean>) => {
-    delete data.user_id;
+export const getCourseByFormData = (courseData: Record<string, string | number | boolean>) => {
+    delete courseData.user_id;
 
     // change the values to boolean
-    Object.keys(data).forEach((key) => {
-        data[key] === 'on' && (data[key] = true);
+    Object.keys(courseData).forEach((name) => {
+        courseData[name] === 'on' && (courseData[name] = true);
     });
 
-    const bin = `${data['hl'] === 'frc' ? 1 : 0}${data['ex'] === 'excc' ? 1 : 0}${data['hl'] === 'hlcc' ? 1 : 0}${data['cnc'] ? 1 : 0}1000000000000${data['nbc'] ? 1 : 0}${data['hsc'] ? 1 : 0}${
-        data['hdc'] ? 1 : 0
-    }${data['nc'] ? 1 : 0}${data['asc'] ? 1 : 0}${data['plc'] ? 1 : 0}${data['prc'] ? 1 : 0}${data['mbc'] ? 1 : 0}${data['exbc'] ? 1 : 0}${data['ex'] === 'exc' ? 1 : 0}${
-        data['hl'] === 'hlc' ? 1 : 0
-    }${data['trc'] ? 1 : 0}0`;
+    const bin = `
+    ${courseData['hl'] === 'frc' ? 1 : 0}
+    ${courseData['ex'] === 'excc' ? 1 : 0}
+    ${courseData['hl'] === 'hlcc' ? 1 : 0}
+    ${courseData['cnc'] ? 1 : 0}
+    ${courseData['nc'] ? 1 : 0}
+    ${courseData['clc'] ? 1 : 0}
+    ${courseData['trq'] ? 1 : 0}
+    ${courseData['xgm'] ? 1 : 0}
+    ${courseData['cle'] ? 1 : 0}
+    ${courseData['dbg'] ? 1 : 0}
+    0000000
+    ${courseData['nbc'] ? 1 : 0}
+    ${courseData['hsc'] ? 1 : 0}
+    ${courseData['hdc'] ? 1 : 0}
+    ${courseData['nc'] ? 1 : 0}
+    ${courseData['asc'] ? 1 : 0}
+    ${courseData['plc'] ? 1 : 0}
+    ${courseData['prc'] ? 1 : 0}
+    ${courseData['mbc'] ? 1 : 0}
+    ${courseData['exbc'] ? 1 : 0}
+    ${courseData['ex'] === 'exc' ? 1 : 0}
+    ${courseData['hl'] === 'hlc' ? 1 : 0}
+    ${courseData['tlc'] ? 1 : 0}
+    0`
+        .replace(/\n/g, '')
+        .replace(/\s+/g, '');
     const dec = parseInt(bin, 2);
 
     return dec;
@@ -403,50 +453,41 @@ export const getWpnTypeByDec = (dec: number | null) => {
 
 /* Get Weapon Name by Dec
 ====================================================*/
-export const getWpnNameByDec = (dec: number, wpnType: number | null, lang: string = 'en') => {
+export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang: string = 'en') => {
     const hex: string = decToLittleEndian(dec);
-    let dataObject: Record<string, string>;
 
-    // melee or ranged
     switch (wpnType) {
+        // ranged
         case 1:
         case 5:
         case 10:
             // language select
             switch (lang) {
                 case 'ja':
-                    //dataObject = ranged_ja;
-                    dataObject = melee_ja;
-                    break;
+                    //const { ranged_ja } = await import('$i18n/ja/ranged');
+                    //return ranged_ja[hex];
+                    return 'No Data';
 
                 case 'en':
-                    //dataObject = ranged_en;
-                    dataObject = melee_en;
-                    break;
+                    //const { ranged_en } = await import('$i18n/en/ranged');
+                    //return ranged_en[hex];
+                    return 'No Data';
             }
             break;
 
+        // melee
         default:
             // language select
             switch (lang) {
                 case 'ja':
-                    dataObject = melee_ja;
-                    break;
+                    const { melee_ja } = await import('$i18n/ja/melee');
+                    return melee_ja[hex];
 
                 case 'en':
-                    dataObject = melee_en;
-                    break;
+                    const { melee_en } = await import('$i18n/en/melee');
+                    return melee_en[hex];
             }
             break;
-    }
-
-    if (dataObject.hasOwnProperty(hex)) {
-        if (dataObject[hex] === '') {
-            return melee_ja[hex];
-        }
-        return dataObject[hex];
-    } else {
-        throw new Error('Invalid input');
     }
 };
 

@@ -1,4 +1,4 @@
-![Rain Server](https://raw.githubusercontent.com/Otya063/rain-web/development/static/img/common/rainserver_logo.webp)
+<img src="{https://raw.githubusercontent.com/Otya063/rain-web/development/static/img/common/rainserver_logo.webp}" width="50%" />
 
 The Rain Server website repository.
 
