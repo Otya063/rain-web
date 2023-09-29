@@ -132,15 +132,36 @@
                 background: #fff;
                 padding: 3%;
 
+                .pagination_btn_list {
+                    text-align: center;
+
+                    .pagination_btn_item {
+                        padding: 0.5% 1%;
+                        margin: 0 1%;
+                        border: #272727 solid 1px;
+                        background: #f7f6f6;
+                        color: #272727;
+                        transition: all 0.3s;
+
+                        &.active,
+                        &:hover {
+                            border: #f7f6f6 solid 1px;
+                            background: #272727;
+                            color: #f7f6f6;
+                        }
+                    }
+                }
+
                 /* .console_contents_list_button {} */
 
                 // コンテンツ内リストタイトル
                 .console_contents_list_title {
-                    position: relative;
+                    width: 100%;
                     font-size: 2rem;
-                    padding-top: 2%;
+                    padding: 2% 0 0 1%;
                     color: #df9e27;
                     user-select: none;
+                    border-bottom: #df9e27 2px solid;
                 }
 
                 // コンテンツ内リスト
@@ -238,7 +259,7 @@
                     text-align: right;
                     font-weight: 700;
                     font-size: 1.6rem;
-                    width: 13%;
+                    width: 20%;
                     padding: 1% 1.5% 0.5% 0;
                     border-radius: 4px;
                     transition: all 0.3s;

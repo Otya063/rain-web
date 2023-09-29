@@ -2,7 +2,7 @@ interface MeleeData {
     [key: string]: string;
 }
 
-export const melee_ja: MeleeData = {
+export const meleeJA: MeleeData = {
     '0000': '無し',
     '0100': 'アイアンソード',
     '0200': 'アイアンソード改',

@@ -1,5 +1,7 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
+import { courseJA } from '$i18n/ja/courseData.ts';
+import { courseEN } from '$i18n/en/courseData.ts';
 
 /*=========================================================
 　　　　　Slide Functions
@@ -148,29 +150,53 @@ export const error = writable(false);
 export const err_details = writable('');
 export const notice = writable(false);
 export const clicked_submit = writable(false);
-export const ban_modal_title = writable('');
-export const ban_modal_formAction = writable('');
-export const user_ban = writable(false);
-export const user_ban_uid = writable(0);
-export const user_ban_name = writable('');
-export const user_ban_cid = writable(0);
+export const modalTitle = writable('');
+export const modalFormAction = writable('');
+export const banUser = writable(false);
+export const banUid = writable(0);
+export const banUsername = writable('');
+export const banCid = writable(0);
+export const deleteInfo = writable(false);
+export const infoTitle = writable('');
+export const infoURL = writable('');
+export const infoType = writable('');
 
-export const prepareUserBan = (title: string, action: string = '', user_id: number, username: string, character_id: number | null) => {
-    user_ban.set(true);
-    ban_modal_title.set(title);
-    ban_modal_formAction.set(action);
-    user_ban_uid.set(user_id);
-    user_ban_name.set(username);
-    user_ban_cid.set(character_id);
+export const prepareModal = (type: string, title: string, action: string, data1: string | number, data2: string, data3: string | number | null) => {
+    switch (type) {
+        case 'banUser':
+            banUser.set(true);
+            modalTitle.set(title);
+            modalFormAction.set(action);
+            banUid.set(data1);
+            banUsername.set(data2);
+            banCid.set(data3);
+            break;
+
+        case 'deleteInfo':
+            deleteInfo.set(true);
+            modalTitle.set(title);
+            modalFormAction.set(action);
+            infoTitle.set(data1);
+            infoURL.set(data2);
+            infoType.set(data3);
+            break;
+
+        default:
+            throw new Error('Invalid input.');
+    }
 };
 
-export const cancelUserBan = () => {
-    user_ban.set(false);
-    ban_modal_title.set('');
-    ban_modal_formAction.set('');
-    user_ban_uid.set(0);
-    user_ban_name.set('');
-    user_ban_cid.set(0);
+export const cancelModal = () => {
+    deleteInfo.set(false);
+    banUser.set(false);
+    modalTitle.set('');
+    modalFormAction.set('');
+    banUid.set(0);
+    banUsername.set('');
+    banCid.set(0);
+    infoTitle.set('');
+    infoURL.set('');
+    infoType.set('');
 };
 
 /* Pause and Resume on setTimeout Function
@@ -215,133 +241,20 @@ export class Timeout {
 =======================================================*/
 /* Get Course by Decimal
 ====================================================*/
-export const getCourseByDecimal = (dec: number) => {
+export const getCourseByDecimal = (dec: number, lang: string) => {
     let bin: string[] = dec.toString(2).padStart(30, '0').split('');
     bin = bin.reverse();
 
-    type CourseData = Record<
-        string,
-        {
-            id: number;
-            enabled: boolean;
-            code: string;
-        }
-    >;
-    const courseData: CourseData = {
-        /* 'Trial Course': {
-            id: 1,
-            enabled: bin[1] === '1',
-            code: 'tlc',
-        }, */ // automatically enabled (= 1) on the server side
-        'Hunter Life Course': {
-            id: 2,
-            enabled: bin[2] === '1',
-            code: 'hlc',
-        },
-        'Extra Course': {
-            id: 3,
-            enabled: bin[3] === '1',
-            code: 'exc',
-        },
-        /* 'Extra B Course': {
-            id: 4,
-            enabled: bin[4] === '1',
-            code: 'exbc',
-        }, */ // leftover
-        'Mobile Course': {
-            id: 5,
-            enabled: bin[5] === '1',
-            code: 'mbc',
-        },
-        'Premium Course': {
-            id: 6,
-            enabled: bin[6] === '1',
-            code: 'prc',
-        },
-        /* 'Pallone Course (ExtraC)': {
-            id: 7,
-            enabled: bin[7] === '1',
-            code: 'plc',
-        }, */ // leftover
-        'Assist Course': {
-            id: 8,
-            enabled: bin[8] === '1',
-            code: 'asc',
-        },
-        'N Course': {
-            id: 9,
-            enabled: bin[9] === '1',
-            code: 'nc',
-        },
-        'Hiden Course': {
-            id: 10,
-            enabled: bin[10] === '1',
-            code: 'hdc',
-        },
-        'Hunter Support Course': {
-            id: 11,
-            enabled: bin[11] === '1',
-            code: 'hsc',
-        },
-        'N Boost Course': {
-            id: 12,
-            enabled: bin[12] === '1',
-            code: 'nbc',
-        },
-        // [13]-[19] nothing
-        /* 'Debug': {
-            id: 20,
-            enabled: bin[20] === '1',
-            code: 'dbg',
-        }, */
-        /* 'COG Link Expired': {
-            id: 21,
-            enabled: bin[21] === '1',
-            code: 'cle',
-        }, */
-        /* 'Xbox Gold Membership': {
-            id: 22,
-            enabled: bin[22] === '1',
-            code: 'xgm',
-        }, */
-        /* 'PS3/Vita Trophy Reqs': {
-            id: 23,
-            enabled: bin[23] === '1',
-            code: 'trq',
-        }, */
-        /* 'COG Link Check': {
-            id: 24,
-            enabled: bin[24] === '1',
-            code: 'clc',
-        }, */
-        /* 'NetCafe': {
-            id: 25,
-            enabled: bin[25] === '1',
-            code: 'nc',
-        }, */
-        'Certified NetCafe': {
-            id: 26,
-            enabled: bin[26] === '1',
-            code: 'cnc',
-        },
-        'Hunter Life Continued Course': {
-            id: 27,
-            enabled: bin[27] === '1',
-            code: 'hlcc',
-        }, // override HL Course
-        'Extra Continued Course': {
-            id: 28,
-            enabled: bin[28] === '1',
-            code: 'excc',
-        }, // override EX Course
-        'Free Course': {
-            id: 29,
-            enabled: bin[29] === '1',
-            code: 'frc',
-        }, // override HL / HLC Course
-    };
+    switch (lang) {
+        case 'ja':
+            return courseJA(bin);
 
-    return courseData;
+        case 'en':
+            return courseEN(bin);
+
+        default:
+            return 'No Data';
+    }
 };
 
 /* Get Course (decimal) by FormData
@@ -480,12 +393,12 @@ export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang:
             // language select
             switch (lang) {
                 case 'ja':
-                    const { melee_ja } = await import('$i18n/ja/melee');
-                    return melee_ja[hex];
+                    const { meleeJA } = await import('$i18n/ja/meleeData');
+                    return meleeJA[hex];
 
                 case 'en':
-                    const { melee_en } = await import('$i18n/en/melee');
-                    return melee_en[hex];
+                    const { meleeEN } = await import('$i18n/en/meleeData');
+                    return meleeEN[hex];
             }
             break;
     }
