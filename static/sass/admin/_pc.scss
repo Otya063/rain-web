@@ -132,9 +132,15 @@
                 background: #fff;
                 padding: 3%;
 
+                // ペジネーションボタングループ
                 .pagination_btn_list {
                     text-align: center;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    margin: 2% 0;
 
+                    // 各ボタン
                     .pagination_btn_item {
                         padding: 0.5% 1%;
                         margin: 0 1%;
@@ -143,6 +149,7 @@
                         color: #272727;
                         transition: all 0.3s;
 
+                        // ホバーもしくはアクティブ時
                         &.active,
                         &:hover {
                             border: #f7f6f6 solid 1px;
@@ -650,6 +657,21 @@
                 // セーブボタン
                 .save_btn {
                     margin: 4% auto 0;
+                }
+            }
+
+            &.control {
+                flex-direction: column;
+                padding: 4%;
+                
+                .admin_ctrl_btn_list{
+                    display: flex;
+                    justify-content: center;
+                }
+
+                #filter_input {
+                    margin-right: 2%;
+                    width: 150px;
                 }
             }
 

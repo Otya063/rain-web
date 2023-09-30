@@ -78,7 +78,8 @@ button {
 
 // selectタグ余白調整
 select {
-    padding: 0 6px;
+    padding: 0 19px 0 6px;
+    outline: 0;
 }
 
 // inputテキスト余白調整
@@ -86,6 +87,7 @@ input[type='text'],
 input[type='password'],
 input[type='number'] {
     padding: 0 6px;
+    outline: 0;
 }
 
 // input日付余白/クリック範囲調整
