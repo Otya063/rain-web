@@ -148,6 +148,7 @@ export const editMode = writable(false);
 export const success = writable(false);
 export const error = writable(false);
 export const err_details = writable('');
+export const errDetailMode = writable(false);
 export const notice = writable(false);
 export const clicked_submit = writable(false);
 export const modalTitle = writable('');
@@ -239,6 +240,21 @@ export class Timeout {
 /*=========================================================
 　　　　　User Functions
 =======================================================*/
+/* Show Tooltip When Hovering Weapon Name
+====================================================*/
+export const showTipHoverWpn = (c_id: number) => {
+    const toolTipElm = document.getElementById(c_id);
+
+    // for on:mouseleave
+    if (toolTipElm?.classList.contains('wpn_name_hover')) {
+        toolTipElm?.classList.remove('wpn_name_hover');
+
+        return false;
+    }
+
+    toolTipElm?.classList.add('wpn_name_hover');
+};
+
 /* Get Course by Decimal
 ====================================================*/
 export const getCourseByDecimal = (dec: number, lang: string) => {

@@ -122,9 +122,9 @@
             </dl>
 
             <div class="group_btns">
-                <button class="save_btn" on:click={() => clicked_submit.set(true)} type="submit">
-                    <span class="material-icons">check</span>
-                    Save
+                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                    <span class="btn_icon material-icons">check</span>
+                    <span class="btn_text">Save</span>
                 </button>
 
                 <button class="cancel_btn" type="button" on:click={() => addInfoMode(true)}>
@@ -153,7 +153,7 @@
                 {#each _.sortBy(info_data, 'id') || [] as info}
                     <dl class="console_contents_list">
                         <p class="console_contents_list_title">
-                            [ Information ID: {info.id} ]
+                            Information Data
                             <input type="hidden" name="info_id" value={info.id} />
                         </p>
                         <button
@@ -194,8 +194,8 @@
                                         </dl>
 
                                         <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                                            <span class="material-icons">check</span>
-                                            Save
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
                                         </button>
                                     </div>
                                 </form>
@@ -231,8 +231,8 @@
                                         </dl>
 
                                         <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                                            <span class="material-icons">check</span>
-                                            Save
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
                                         </button>
                                     </div>
                                 </form>
@@ -273,8 +273,8 @@
                                         </dl>
 
                                         <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                                            <span class="material-icons">check</span>
-                                            Save
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
                                         </button>
                                     </div>
                                 </form>
@@ -314,8 +314,8 @@
                                         </dl>
 
                                         <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                                            <span class="material-icons">check</span>
-                                            Save
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
                                         </button>
                                     </div>
                                 </form>

@@ -10,6 +10,7 @@
         success,
         error,
         err_details,
+        errDetailMode,
         notice,
         clicked_submit,
         modalTitle,
@@ -56,7 +57,6 @@
     // message display timer bar
     let t: Timeout | null = null;
     let timerPause: boolean = false;
-    let active_err_details: boolean = false;
     let width: Tweened<number>;
     $: if ($success || $error || $notice) {
         width = tweened(100);
@@ -73,15 +73,23 @@
     }
 
     // toggle error details message
-    const toggleErrDetail = () => {
+    const toggleErrDetail = (e: Event) => {
+        // prevent repeatedly pressing btn
+        const target = e.target as HTMLButtonElement;
+        target.disabled = true;
+        setTimeout(() => {
+            // after 2s, enable btn
+            target.disabled = false;
+        }, 2000);
+
         if (t) {
             if (timerPause) {
-                active_err_details = false;
+                errDetailMode.set(false);
                 timerPause = false;
                 t.run();
                 width.set(0, { duration: t.getRestTime() });
             } else {
-                active_err_details = true;
+                errDetailMode.set(true);
                 timerPause = true;
                 t.pause();
                 width.set($width, { duration: 0 });
@@ -91,8 +99,8 @@
 
     // close the message display manually
     const closeMsgDisplay = () => {
+        errDetailMode.set(false);
         status = '';
-        active_err_details = false;
         success.set(false);
         error.set(false);
         notice.set(false);
@@ -126,18 +134,18 @@
         {:else if $error}
             <span class="material-icons-outlined">warning</span>
             <p style="padding-top: 0.3%;">An error occurred.</p>
-            <button on:click={() => toggleErrDetail()} class="error_view_btn">View Details</button>
+            <button on:click={(e) => toggleErrDetail(e)} class="error_view_btn">View Details</button>
         {:else if $notice}
             <span class="material-icons-outlined">notification_important</span>
             <p style="padding-top: 0.3%;">Unauthorized operation detected.</p>
-            <button on:click={() => toggleErrDetail()} class="error_view_btn">View Details</button>
+            <button on:click={(e) => toggleErrDetail(e)} class="error_view_btn">View Details</button>
         {/if}
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <span on:click={() => closeMsgDisplay()} class="msg_close_btn" />
         <div class="timer_bar" style={`width: ${$width}%;`} />
     </div>
-    {#if active_err_details}
+    {#if $errDetailMode}
         <div transition:slide class="msg_detail">
             Message Details:
             <p>{$err_details}</p>
@@ -146,7 +154,7 @@
 {/if}
 
 {#if $banUser}
-    <div id="user_ban" class="modal">
+    <div class="modal">
         <div class="modal_content">
             <form method="POST">
                 <div class="modal_header">
@@ -194,7 +202,7 @@
 {/if}
 
 {#if $deleteInfo}
-    <div id="user_ban" class="modal">
+    <div class="modal">
         <div class="modal_content">
             <form method="POST">
                 <div class="modal_header">

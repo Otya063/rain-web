@@ -96,8 +96,8 @@
                         </ul>
 
                         <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                            <span class="material-icons">check</span>
-                            Save
+                            <span class="btn_icon material-icons">check</span>
+                            <span class="btn_text">Save</span>
                         </button>
                     </div>
                 </form>
@@ -145,8 +145,8 @@
                         </ul>
 
                         <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                            <span class="material-icons">check</span>
-                            Save
+                            <span class="btn_icon material-icons">check</span>
+                            <span class="btn_text">Save</span>
                         </button>
                     </div>
                 </form>
@@ -194,8 +194,8 @@
                         </ul>
 
                         <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                            <span class="material-icons">check</span>
-                            Save
+                            <span class="btn_icon material-icons">check</span>
+                            <span class="btn_text">Save</span>
                         </button>
                     </div>
                 </form>
@@ -221,9 +221,9 @@
                 </li>
             </ul>
 
-            <button style="width: 15%;" on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                <span class="material-icons">check</span>
-                Save
+            <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                <span class="btn_icon material-icons">check</span>
+                <span class="btn_text">Save</span>
             </button>
         </div>
     </form>
@@ -277,8 +277,8 @@
                         </ul>
 
                         <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                            <span class="material-icons">check</span>
-                            Save
+                            <span class="btn_icon material-icons">check</span>
+                            <span class="btn_text">Save</span>
                         </button>
                     </div>
                 </form>

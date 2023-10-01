@@ -2,7 +2,7 @@
     import { page } from '$app/stores';
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
-    import { convUnixToDate, editMode, prepareModal, clicked_submit, getCourseByDecimal, convRFCToISOWithTime, decToLittleEndian, getWpnTypeByDec, getWpnNameByDec } from '$ts/main';
+    import { convUnixToDate, editMode, prepareModal, clicked_submit, getCourseByDecimal, convRFCToISOWithTime, decToLittleEndian, getWpnTypeByDec, getWpnNameByDec, showTipHoverWpn } from '$ts/main';
 
     export let usersData: Users[];
     export let charactersData: Characters[];
@@ -20,7 +20,6 @@
         gacha_trial: number | null;
         frontier_points: number | null;
     }
-
     interface Characters {
         id: number;
         user_id: number | null;
@@ -53,7 +52,6 @@
         pact_id: number | null;
         stampcard: number;
     }
-
     interface BannedUser {
         user_id: number;
         username: string;
@@ -61,8 +59,8 @@
         date: number;
     }
 
-    /* Below is the edit mode script
-    ====================================================*/
+    /* Related to Edit Mode
+====================================================*/
     let editId: number;
     interface CategoryType {
         [key: string]: boolean;
@@ -77,11 +75,11 @@
     };
     const adminCtrlTypes: CategoryType = {
         filter: false,
-        allRights: false,
+        courseCtrl: false,
     };
 
     // switch edit contents
-    const editModeHandle = (id: number, type: keyof CategoryType) => {
+    const editModeSwitch = (id: number, type: keyof CategoryType) => {
         // check if another cat type is already open
         const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
 
@@ -122,7 +120,7 @@
         if (adminCtrlTypes[type]) {
             adminCtrlTypes[type] = false;
 
-            return false
+            return false;
         }
 
         // if there is an open cat and a different category is cliked (try to open it)
@@ -142,8 +140,8 @@
         adminCtrlTypes[type] = !adminCtrlTypes[type];
     };
 
-    let wpnNameHover: boolean;
-
+    /* Related to Pagination
+====================================================*/
     const itemsPerPage = 5;
     let filterParam = '';
     $: filterValue = '';
@@ -208,6 +206,8 @@
     // initialize
     let currentUsers = paginatedUsers();
     let filteredUsers = calculateFilter();
+
+    let specifiedText = true;
 </script>
 
 <h2>
@@ -217,21 +217,36 @@
 
 <div class="console_contents">
     <form class="edit_area_form" action="" method="POST">
-        <div class="edit_area control">
-            <div class="admin_ctrl_btn_list">
-                <button style="width: 14%; margin: 0 1%;" on:click={() => adminCtrlSwitch('filter')} class="save_btn" type="button">
-                    <span class="material-symbols-outlined">search</span>
-                    Filter
+        <div class="edit_area enter">
+            <div class="group_btns" style="margin-bottom: 3%;">
+                <button
+                    on:click={() => {
+                        adminCtrlSwitch('filter'), resetPagination(), clearFilterInput(), (filterParam = '');
+                    }}
+                    class="save_btn"
+                    class:active={adminCtrlTypes['filter']}
+                    type="button"
+                >
+                    <span class="btn_icon material-symbols-outlined">search</span>
+                    <span class="btn_text">Filter</span>
                 </button>
 
-                <button style="width: 18%; margin: 0 1%;" on:click={() => adminCtrlSwitch('allRights')} class="save_btn" type="button">
-                    <span class="material-symbols-outlined">confirmation_number</span>
-                    All Rights
+                <button
+                    on:click={() => {
+                        adminCtrlSwitch('courseCtrl'), (specifiedText = true);
+                    }}
+                    class="save_btn"
+                    class:active={adminCtrlTypes['courseCtrl']}
+                    type="button"
+                >
+                    <span class="btn_icon material-symbols-outlined">confirmation_number</span>
+                    <span class="btn_text">Course Control</span>
                 </button>
             </div>
+            <p class="edit_area_title">Admin Control Panel</p>
 
             {#if adminCtrlTypes['filter']}
-                <div transition:slide>
+                <div transition:slide class="edit_area_form_parts text">
                     <input
                         id="filter_input"
                         type="text"
@@ -241,18 +256,65 @@
                         disabled={filterParam === ''}
                     />
                     By
-                    <select bind:value={filterParam} on:change={() => resetPagination()} on:change={() => clearFilterInput()}>
+                    <select
+                    class="filter_select"
+                        bind:value={filterParam}
+                        on:change={() => {
+                            resetPagination(), clearFilterInput();
+                        }}
+                    >
                         <option value="">Unselected (Default)</option>
                         <option value="id">ID</option>
                         <option value="username">Username</option>
                     </select>
+                    <p class="console_contents_note" style="margin-top: 3%;">* Once this tab is closed, the filter input is cleared and the select box returns to default.</p>
                 </div>
             {/if}
 
-            {#if adminCtrlTypes['allRights']}
-                <div transition:slide>
-                    <p>All Rights</p>
-                </div>
+            {#if adminCtrlTypes['courseCtrl']}
+                <dl transition:slide class="edit_area_form_parts radio">
+                    <dt class="course_list_title">Target Users (Single Select)</dt>
+                    <dd class="course_list">
+                        <label class="course_item"><input type="radio" name="target_u_radio" on:change={() => (specifiedText = true)} />All Users</label>
+
+                        <div style="width: calc(50% - 20px); margin: 0 10px 6%;">
+                            <label style="cursor: pointer;"><input type="radio" name="target_u_radio" on:change={() => (specifiedText = false)} />Specify the User(s)</label>
+                            <input style="margin-left: 7%; width: 95%;" type="text" name="specified_u_text" disabled={specifiedText} />
+                        </div>
+                    </dd>
+
+                    <dt class="course_list_title">HL (Single Select)</dt>
+                    <dd class="course_list">
+                        {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
+                            {#if courseName === 'Hunter Life Course' || courseName === 'Hunter Life Continued Course' || courseName === 'Free Course'}
+                                <label class="course_item"><input type="radio" name="hl" value={code} />{courseName}</label>
+                            {/if}
+                        {/each}
+                    </dd>
+
+                    <dt class="course_list_title">EX (Single Select)</dt>
+                    <dd class="course_list">
+                        {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
+                            {#if courseName === 'Extra Course' || courseName === 'Extra Continued Course'}
+                                <label class="course_item"><input type="radio" name="ex" value={code} />{courseName}</label>
+                            {/if}
+                        {/each}
+                    </dd>
+
+                    <dt class="course_list_title">The Others (Multiple Select)</dt>
+                    <dd class="course_list">
+                        {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
+                            {#if courseName !== 'Hunter Life Course' && courseName !== 'Hunter Life Continued Course' && courseName !== 'Free Course' && courseName !== 'Extra Course' && courseName !== 'Extra Continued Course'}
+                                <label class="course_item"><input type="checkbox" name={code} />{courseName}</label>
+                            {/if}
+                        {/each}
+                    </dd>
+
+                    <button style="margin-top: 0;" on:click={() => clicked_submit.set(true)} class="save_btn" type="button">
+                        <span class="btn_icon material-icons">check</span>
+                        <span class="btn_text">Save</span>
+                    </button>
+                </dl>
             {/if}
         </div>
     </form>
@@ -307,12 +369,12 @@
                     {user.username}
 
                     {#if editId === user.id && catTypes['username']}
-                        <button class="cancel_btn" on:click={() => editModeHandle(0, 'username')}>
+                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'username')}>
                             <span class="material-icons">close</span>
                             Cancel
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeHandle(user.id, 'username')}>
+                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'username')}>
                             <span class="material-icons">mode_edit</span>
                             Edit
                         </button>
@@ -331,8 +393,8 @@
                                 </dl>
 
                                 <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                                    <span class="material-icons">check</span>
-                                    Save
+                                    <span class="btn_icon material-icons">check</span>
+                                    <span class="btn_text">Save</span>
                                 </button>
                             </div>
                         </form>
@@ -350,12 +412,12 @@
                     </ul>
 
                     {#if editId === user.id && catTypes['rights']}
-                        <button class="cancel_btn" on:click={() => editModeHandle(0, 'rights')}>
+                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'rights')}>
                             <span class="material-icons">close</span>
                             Cancel
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeHandle(user.id, 'rights')}>
+                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'rights')}>
                             <span class="material-icons">mode_edit</span>
                             Edit
                         </button>
@@ -367,7 +429,7 @@
                             <div class="edit_area enter">
                                 <p class="edit_area_title">Change Courses</p>
                                 <dl class="edit_area_form_parts radio">
-                                    <dt>HL (Single Select)</dt>
+                                    <dt class="course_list_title">HL (Single Select)</dt>
                                     <dd class="course_list">
                                         {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
                                             {#if courseName === 'Hunter Life Course' || courseName === 'Hunter Life Continued Course' || courseName === 'Free Course'}
@@ -376,7 +438,7 @@
                                         {/each}
                                     </dd>
 
-                                    <dt>EX (Single Select)</dt>
+                                    <dt class="course_list_title">EX (Single Select)</dt>
                                     <dd class="course_list">
                                         {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
                                             {#if courseName === 'Extra Course' || courseName === 'Extra Continued Course'}
@@ -385,7 +447,7 @@
                                         {/each}
                                     </dd>
 
-                                    <dt>Others (Multiple Select)</dt>
+                                    <dt class="course_list_title">The Others (Multiple Select)</dt>
                                     <dd class="course_list">
                                         {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
                                             {#if courseName !== 'Hunter Life Course' && courseName !== 'Hunter Life Continued Course' && courseName !== 'Free Course' && courseName !== 'Extra Course' && courseName !== 'Extra Continued Course'}
@@ -396,8 +458,8 @@
                                 </dl>
 
                                 <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                                    <span class="material-icons">check</span>
-                                    Save
+                                    <span class="btn_icon material-icons">check</span>
+                                    <span class="btn_text">Save</span>
                                 </button>
                             </div>
                         </form>
@@ -415,12 +477,12 @@
                     {convRFCToISOWithTime(user.return_expires)}
 
                     {#if editId === user.id && catTypes['return_expires']}
-                        <button class="cancel_btn" on:click={() => editModeHandle(0, 'return_expires')}>
+                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'return_expires')}>
                             <span class="material-icons">close</span>
                             Cancel
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeHandle(user.id, 'return_expires')}>
+                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'return_expires')}>
                             <span class="material-icons">mode_edit</span>
                             Edit
                         </button>
@@ -439,8 +501,8 @@
                                 </dl>
 
                                 <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                                    <span class="material-icons">check</span>
-                                    Save
+                                    <span class="btn_icon material-icons">check</span>
+                                    <span class="btn_text">Save</span>
                                 </button>
                             </div>
                         </form>
@@ -456,12 +518,12 @@
                     {/if}
 
                     {#if editId === user.id && catTypes['gacha_premium']}
-                        <button class="cancel_btn" on:click={() => editModeHandle(0, 'gacha_premium')}>
+                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'gacha_premium')}>
                             <span class="material-icons">close</span>
                             Cancel
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeHandle(user.id, 'gacha_premium')}>
+                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'gacha_premium')}>
                             <span class="material-icons">mode_edit</span>
                             Edit
                         </button>
@@ -487,8 +549,8 @@
                                 </dl>
 
                                 <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                                    <span class="material-icons">check</span>
-                                    Save
+                                    <span class="btn_icon material-icons">check</span>
+                                    <span class="btn_text">Save</span>
                                 </button>
                             </div>
                         </form>
@@ -504,12 +566,12 @@
                     {/if}
 
                     {#if editId === user.id && catTypes['gacha_trial']}
-                        <button class="cancel_btn" on:click={() => editModeHandle(0, 'gacha_trial')}>
+                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'gacha_trial')}>
                             <span class="material-icons">close</span>
                             Cancel
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeHandle(user.id, 'gacha_trial')}>
+                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'gacha_trial')}>
                             <span class="material-icons">mode_edit</span>
                             Edit
                         </button>
@@ -535,8 +597,8 @@
                                 </dl>
 
                                 <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                                    <span class="material-icons">check</span>
-                                    Save
+                                    <span class="btn_icon material-icons">check</span>
+                                    <span class="btn_text">Save</span>
                                 </button>
                             </div>
                         </form>
@@ -552,12 +614,12 @@
                     {/if}
 
                     {#if editId === user.id && catTypes['frontier_points']}
-                        <button class="cancel_btn" on:click={() => editModeHandle(0, 'frontier_points')}>
+                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'frontier_points')}>
                             <span class="material-icons">close</span>
                             Cancel
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeHandle(user.id, 'frontier_points')}>
+                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'frontier_points')}>
                             <span class="material-icons">mode_edit</span>
                             Edit
                         </button>
@@ -583,8 +645,8 @@
                                 </dl>
 
                                 <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
-                                    <span class="material-icons">check</span>
-                                    Save
+                                    <span class="btn_icon material-icons">check</span>
+                                    <span class="btn_text">Save</span>
                                 </button>
                             </div>
                         </form>
@@ -607,15 +669,7 @@
                                         {getWpnTypeByDec(character.weapon_type)}
                                         <br />
                                         <!-- svelte-ignore a11y-no-static-element-interactions -->
-                                        <span
-                                            class="wpn_name"
-                                            on:mouseenter={() => {
-                                                wpnNameHover = true;
-                                            }}
-                                            on:mouseleave={() => {
-                                                wpnNameHover = false;
-                                            }}
-                                        >
+                                        <span class="wpn_name" on:mouseenter={() => showTipHoverWpn(character.id)} on:mouseleave={() => showTipHoverWpn(character.id)}>
                                             {#await getWpnNameByDec(character.weapon_id, character.weapon_type, 'en')}
                                                 Loading...
                                             {:then wpnName}
@@ -623,8 +677,8 @@
                                             {/await}
                                         </span>
                                     </p>
-                                    <span class="little_endian {decToLittleEndian(character.weapon_id)}" class:wpn_name_hover={wpnNameHover}>
-                                        [ LE ID: {decToLittleEndian(character.weapon_id)} ]
+                                    <span id={String(character.id)} class="little_endian {decToLittleEndian(character.weapon_id)}">
+                                        [ Little Endian: {decToLittleEndian(character.weapon_id)} ]
                                         {#await getWpnNameByDec(character.weapon_id, character.weapon_type, 'en')}
                                             <p>Loading...</p>
                                         {:then wpnName}

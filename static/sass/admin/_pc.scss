@@ -256,68 +256,10 @@
                     color: red;
                 }
 
-                // 削除ボタン
-                .del_btn {
-                    position: absolute;
-                    right: 0;
-                    background: #fff;
-                    color: #de6161;
-                    border: 1px solid #de6161;
-                    text-align: right;
-                    font-weight: 700;
-                    font-size: 1.6rem;
-                    width: 20%;
-                    padding: 1% 1.5% 0.5% 0;
-                    border-radius: 4px;
-                    transition: all 0.3s;
-                    z-index: 1;
-
-                    .material-icons {
-                        position: absolute;
-                        left: 10%;
-                        top: 50%;
-                        transform: translateY(-50%);
-                    }
-
-                    &:hover {
-                        color: #fff;
-                        background: #de6161;
-                        border: 1px solid #de6161;
-                    }
-                }
-
                 // ボタングループ化
                 .group_btns {
                     display: flex;
                     justify-content: space-evenly;
-
-                    // セーブボタン
-                    .save_btn {
-                        position: relative;
-                        color: #0aa0d2;
-                        background: #fff;
-                        border: 1px solid #0aa0d2;
-                        text-align: right;
-                        font-weight: 700;
-                        font-size: 1.6rem;
-                        width: 15%;
-                        padding: 1% 3% 0.5% 0;
-                        border-radius: 4px;
-                        transition: all 0.3s;
-
-                        .material-icons {
-                            position: absolute;
-                            left: 14%;
-                            top: 50%;
-                            transform: translateY(-50%);
-                        }
-
-                        &:hover {
-                            color: #fff;
-                            background: #2abcec;
-                            border: 1px solid #2abcec;
-                        }
-                    }
 
                     // キャンセルボタン
                     .cancel_btn {
@@ -639,6 +581,11 @@
             &.select {
                 align-items: center;
                 padding: 4% 2%;
+
+                // フォーム内タイトル
+                .edit_area_title {
+                    font-size: 1.8rem;
+                }
             }
 
             // 入力式
@@ -649,9 +596,20 @@
                 // フォーム内タイトル
                 .edit_area_title {
                     border-bottom: #333333 1px solid;
-                    padding-bottom: 2%;
+                    padding-left: 2%;
                     margin-bottom: 3%;
                     font-size: 2.2rem;
+                }
+
+                // フィルター入力エリア
+                #filter_input {
+                    margin-right: 2%;
+                    width: 150px;
+                }
+
+                // フィルター選択ボックス
+                .filter_select {
+                    margin-left: 1%;
                 }
 
                 // セーブボタン
@@ -660,25 +618,9 @@
                 }
             }
 
-            &.control {
-                flex-direction: column;
-                padding: 4%;
-                
-                .admin_ctrl_btn_list{
-                    display: flex;
-                    justify-content: center;
-                }
-
-                #filter_input {
-                    margin-right: 2%;
-                    width: 150px;
-                }
-            }
-
             // フォームタイトル
             .edit_area_title {
                 font-weight: 700;
-                font-size: 1.8rem;
                 user-select: none;
             }
 
@@ -686,18 +628,27 @@
             .edit_area_form_parts {
                 user-select: none;
 
-                // ラジオ
+                // ラジオボタン
                 &.radio {
                     label {
                         display: flex;
-                        align-items: center;
+                        align-items: baseline;
                         justify-content: flex-start;
-                        width: 80px;
 
-                        input {
-                            margin-right: 5%;
+                        // space between text and btn
+                        input[type='radio'],
+                        input[type='checkbox'] {
+                            margin-right: 10px;
                             cursor: pointer;
                         }
+                    }
+
+                    //利用権リストタイトル
+                    .course_list_title {
+                        border-left: 3px solid #808080;
+                        padding: 0 0 0.5% 2%;
+                        border-bottom: 1px dotted;
+                        margin: 0 0 2% 2%;
                     }
 
                     // 利用権選択リスト
@@ -707,8 +658,8 @@
 
                         // 利用権各項目
                         .course_item {
-                            width: calc(50% - 30px);
-                            margin: 0 15px 6%;
+                            width: calc(50% - 20px);
+                            margin: 0 10px 6%;
                         }
                     }
                 }
@@ -717,6 +668,8 @@
                 &.text {
                     display: flex;
                     flex-wrap: wrap;
+                    align-items: center;
+                    justify-content: center;
 
                     dt {
                         width: 30%;
@@ -735,34 +688,72 @@
                     }
                 }
             }
+        }
+    }
 
-            // セーブボタン
-            .save_btn {
-                position: relative;
-                color: #0aa0d2;
-                background: #fff;
-                border: 1px solid #0aa0d2;
-                text-align: right;
-                font-weight: 700;
-                font-size: 1.6rem;
-                width: 19%;
-                padding: 1% 3% 0.5% 0;
-                border-radius: 4px;
-                transition: all 0.3s;
+    /* ボタン関連
+====================================================*/
+    // セーブボタン
+    .save_btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        color: #0aa0d2;
+        width: fit-content;
+        margin: 0 1%;
+        background: #fff;
+        border: 1px solid #0aa0d2;
+        font-weight: 700;
+        font-size: 1.6rem;
+        border-radius: 4px;
+        transition: all 0.3s;
 
-                .material-icons {
-                    position: absolute;
-                    left: 14%;
-                    top: 50%;
-                    transform: translateY(-50%);
-                }
+        // ボタンアイコン
+        .btn_icon {
+            padding: 5px 5px 5px 10px;
+        }
 
-                &:hover {
-                    color: #fff;
-                    background: #2abcec;
-                    border: 1px solid #2abcec;
-                }
-            }
+        // ボタンテキスト
+        .btn_text {
+            line-height: 23px;
+            padding-right: 13px;
+        }
+
+        &.active,
+        &:hover {
+            color: #fff;
+            background: #2abcec;
+            border: 1px solid #2abcec;
+        }
+    }
+
+    // 削除ボタン
+    .del_btn {
+        position: absolute;
+        right: 0;
+        background: #fff;
+        color: #de6161;
+        border: 1px solid #de6161;
+        text-align: right;
+        font-weight: 700;
+        font-size: 1.6rem;
+        width: 20%;
+        padding: 1% 1.5% 0.5% 0;
+        border-radius: 4px;
+        transition: all 0.3s;
+        z-index: 1;
+
+        .material-icons {
+            position: absolute;
+            left: 10%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        &:hover {
+            color: #fff;
+            background: #de6161;
+            border: 1px solid #de6161;
         }
     }
 
