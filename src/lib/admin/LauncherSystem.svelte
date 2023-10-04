@@ -3,54 +3,53 @@
     import { clicked_submit, editMode } from '$ts/main';
 
     export let systemData;
-    const { RainJP, RainUS, RainEU, update }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean } = systemData;
+    const { RainJP, RainUS, RainEU, update, debug }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean; debug: boolean } = systemData;
 
     /* Below is the edit mode script
     ====================================================*/
-    let active_form: string | '' = '';
-    interface FormType {
+    interface CategoryType {
         [key: string]: boolean;
     }
-    const forms: FormType = {
-        form1: false,
-        form2: false,
-        form3: false,
-        form4: false,
+    const catTypes: CategoryType = {
+        rainJP: false,
+        rainUS: false,
+        rainEU: false,
+        update: false,
+        debug: false,
     };
-    const editModeHandle = (index: number) => {
-        if (!$editMode) {
-            // when editing
-            editMode.set(true);
-            const form_key = `form${index}`;
 
-            if (active_form !== '') {
-                forms[active_form] = false;
-            }
+    const editModeSwitch = (type: keyof CategoryType) => {
+        // check if another cat type is already open
+        const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
 
-            forms[form_key] = true;
-            active_form = form_key;
-        } else {
-            // when finished editing
-            const form_key = `form${index}`;
+        // if an open cat is clicked (try to close it), close it
+        if (catTypes[type]) {
+            catTypes[type] = false;
 
-            if (active_form !== '' && active_form !== form_key) {
-                forms[active_form] = false;
-                forms[form_key] = true;
-                active_form = form_key;
-            } else {
-                forms[form_key] = !forms[form_key];
-                if (forms[form_key] === false) {
-                    active_form = '';
-                    editMode.set(false);
-                }
-            }
+            return false;
         }
+
+        // if there is an open cat and a different category is cliked (try to open it)
+        if (activeCat) {
+            // set everything to false (close) in a loop.
+            Object.keys(catTypes).forEach((key) => {
+                catTypes[key] = false;
+            });
+
+            // set the category clicked to true (open)
+            catTypes[type] = true;
+
+            return false;
+        }
+
+        // toggle true <-> false
+        catTypes[type] = !catTypes[type];
     };
 </script>
 
 <h2>
     <span class="material-icons">engineering</span>
-    Servers Maintenance Status
+    Servers Maintenance Settings
 </h2>
 <div class="console_contents">
     <p class="console_contents_note">* This data will be fetched when users click the login button on the launcher.</p>
@@ -64,19 +63,19 @@
                 Disable
             {/if}
 
-            {#if forms['form1']}
-                <button class="cancel_btn" on:click={() => editModeHandle(1)}>
+            {#if catTypes['rainJP']}
+                <button class="cancel_btn" on:click={() => editModeSwitch("rainJP")}>
                     <span class="material-icons">close</span>
                     Cancel
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editModeHandle(1)}>
+                <button class="edit_btn" on:click={() => editModeSwitch("rainJP")}>
                     <span class="material-icons">mode_edit</span>
                     Edit
                 </button>
             {/if}
 
-            {#if forms['form1']}
+            {#if catTypes['rainJP']}
                 <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
                     <div class="edit_area select">
                         <p class="edit_area_title">Change Setting</p>
@@ -113,19 +112,19 @@
                 Disable
             {/if}
 
-            {#if forms['form2']}
-                <button class="cancel_btn" on:click={() => editModeHandle(2)}>
+            {#if catTypes['rainUS']}
+                <button class="cancel_btn" on:click={() => editModeSwitch("rainUS")}>
                     <span class="material-icons">close</span>
                     Cancel
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editModeHandle(2)}>
+                <button class="edit_btn" on:click={() => editModeSwitch("rainUS")}>
                     <span class="material-icons">mode_edit</span>
                     Edit
                 </button>
             {/if}
 
-            {#if forms['form2']}
+            {#if catTypes['rainUS']}
                 <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
                     <div class="edit_area select">
                         <p class="edit_area_title">Change Setting</p>
@@ -162,19 +161,19 @@
                 Disable
             {/if}
 
-            {#if forms['form3']}
-                <button class="cancel_btn" on:click={() => editModeHandle(3)}>
+            {#if catTypes['rainEU']}
+                <button class="cancel_btn" on:click={() => editModeSwitch("rainEU")}>
                     <span class="material-icons">close</span>
                     Cancel
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editModeHandle(3)}>
+                <button class="edit_btn" on:click={() => editModeSwitch("rainEU")}>
                     <span class="material-icons">mode_edit</span>
                     Edit
                 </button>
             {/if}
 
-            {#if forms['form3']}
+            {#if catTypes['rainEU']}
                 <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
                     <div class="edit_area select">
                         <p class="edit_area_title">Change Setting</p>
@@ -231,12 +230,12 @@
 
 <h2>
     <span class="material-icons">update</span>
-    Launcher Update Status
+    Launcher Update & Debug Settings
 </h2>
 <div class="console_contents">
     <p class="console_contents_note">* This data will be fetched when users start the game.</p>
     <dl class="console_contents_list">
-        <!-- Update Setting -->
+        <!-- Update Mode Setting -->
         <dt class="contents_term">Update Mode</dt>
         <dd class="contents_desc">
             {#if update}
@@ -245,19 +244,19 @@
                 Disable
             {/if}
 
-            {#if forms['form4']}
-                <button class="cancel_btn" on:click={() => editModeHandle(4)}>
+            {#if catTypes['update']}
+                <button class="cancel_btn" on:click={() => editModeSwitch("update")}>
                     <span class="material-icons">close</span>
                     Cancel
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editModeHandle(4)}>
+                <button class="edit_btn" on:click={() => editModeSwitch("update")}>
                     <span class="material-icons">mode_edit</span>
                     Edit
                 </button>
             {/if}
 
-            {#if forms['form4']}
+            {#if catTypes['update']}
                 <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
                     <div class="edit_area select">
                         <p class="edit_area_title">Change Setting</p>
@@ -271,6 +270,55 @@
                             <li>
                                 <label for="update_disable">
                                     <input type="radio" name="update" id="update_disable" value="false" checked={!update} />
+                                    Disable
+                                </label>
+                            </li>
+                        </ul>
+
+                        <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                            <span class="btn_icon material-icons">check</span>
+                            <span class="btn_text">Save</span>
+                        </button>
+                    </div>
+                </form>
+            {/if}
+        </dd>
+
+        <!-- Debug Mode Setting -->
+        <dt class="contents_term">Debug Mode</dt>
+        <dd class="contents_desc">
+            {#if debug}
+                Enable
+            {:else}
+                Disable
+            {/if}
+
+            {#if catTypes['debug']}
+                <button class="cancel_btn" on:click={() => editModeSwitch("debug")}>
+                    <span class="material-icons">close</span>
+                    Cancel
+                </button>
+            {:else}
+                <button class="edit_btn" on:click={() => editModeSwitch("debug")}>
+                    <span class="material-icons">mode_edit</span>
+                    Edit
+                </button>
+            {/if}
+
+            {#if catTypes['debug']}
+                <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
+                    <div class="edit_area select">
+                        <p class="edit_area_title">Change Setting</p>
+                        <ul class="edit_area_form_parts radio">
+                            <li>
+                                <label for="debug_enable">
+                                    <input type="radio" name="debug" id="debug_enable" value="true" checked={debug} />
+                                    Enable
+                                </label>
+                            </li>
+                            <li>
+                                <label for="debug_disable">
+                                    <input type="radio" name="debug" id="debug_disable" value="false" checked={!update} />
                                     Disable
                                 </label>
                             </li>

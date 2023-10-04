@@ -99,7 +99,11 @@
 
     // close the message display manually
     const closeMsgDisplay = () => {
-        errDetailMode.set(false);
+        // the message is not closed when the error details are open.
+        if ($errDetailMode) {
+            return false;
+        }
+
         status = '';
         success.set(false);
         error.set(false);

@@ -67,6 +67,7 @@
     }
     const catTypes: CategoryType = {
         username: false,
+        password: false,
         rights: false,
         return_expires: false,
         gacha_premium: false,
@@ -216,7 +217,7 @@
 </h2>
 
 <div class="console_contents">
-    <form class="edit_area_form" action="" method="POST">
+    <form class="edit_area_form" method="POST">
         <div class="edit_area enter">
             <div class="group_btns" style="margin-bottom: 3%;">
                 <button
@@ -257,7 +258,7 @@
                     />
                     By
                     <select
-                    class="filter_select"
+                        class="filter_select"
                         bind:value={filterParam}
                         on:change={() => {
                             resetPagination(), clearFilterInput();
@@ -275,12 +276,15 @@
                 <dl transition:slide class="edit_area_form_parts radio">
                     <dt class="course_list_title">Target Users (Single Select)</dt>
                     <dd class="course_list">
-                        <label class="course_item"><input type="radio" name="target_u_radio" on:change={() => (specifiedText = true)} />All Users</label>
+                        <label class="course_item"><input type="radio" name="target_u_radio" value="all" on:change={() => (specifiedText = true)} />All Users</label>
 
                         <div style="width: calc(50% - 20px); margin: 0 10px 6%;">
-                            <label style="cursor: pointer;"><input type="radio" name="target_u_radio" on:change={() => (specifiedText = false)} />Specify the User(s)</label>
-                            <input style="margin-left: 7%; width: 95%;" type="text" name="specified_u_text" disabled={specifiedText} />
+                            <label style="cursor: pointer;"><input type="radio" name="target_u_radio" value="specified" on:change={() => (specifiedText = false)} />Specify User(s)</label>
+                            <input style="margin-left: 7%; width: 95%;" type="text" name="specified_u_text" placeholder="Ex) 1364+1489+ ..." disabled={specifiedText} />
                         </div>
+                        <p class="console_contents_note" style="margin: 0px 0px 3% 4%; text-indent: -1.2rem;">
+                            * When specifying multiple users in the "Specify Users" text box, be sure to join the User IDs with "+".
+                        </p>
                     </dd>
 
                     <dt class="course_list_title">HL (Single Select)</dt>
@@ -310,7 +314,7 @@
                         {/each}
                     </dd>
 
-                    <button style="margin-top: 0;" on:click={() => clicked_submit.set(true)} class="save_btn" type="button">
+                    <button formaction="?/updateUserData" style="margin-top: 0;" on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
                         <span class="btn_icon material-icons">check</span>
                         <span class="btn_text">Save</span>
                     </button>
@@ -386,10 +390,56 @@
                             <div class="edit_area enter">
                                 <p class="edit_area_title">Change Username</p>
                                 <dl class="edit_area_form_parts text">
+                                    <p class="console_contents_note">Editing without the user's permission is strictly prohibited.</p>
                                     <dt>Enter new username</dt>
                                     <dd>
                                         <input type="text" name="username" value={user.username} autocomplete="off" />
                                     </dd>
+                                </dl>
+
+                                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                    <span class="btn_icon material-icons">check</span>
+                                    <span class="btn_text">Save</span>
+                                </button>
+                            </div>
+                        </form>
+                    {/if}
+                </dd>
+
+                <dt class="contents_term">Hashed Password</dt>
+                <dd class="contents_desc">
+                    {user.password}
+
+                    {#if editId === user.id && catTypes['password']}
+                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'password')}>
+                            <span class="material-icons">close</span>
+                            Cancel
+                        </button>
+                    {:else}
+                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'password')}>
+                            <span class="material-icons">mode_edit</span>
+                            Edit
+                        </button>
+                    {/if}
+
+                    {#if editId === user.id && catTypes['password']}
+                        <form transition:slide class="edit_area_form" action="?/updateUserData" method="POST">
+                            <input type="hidden" name="password" value={editId} />
+                            <div class="edit_area enter">
+                                <p class="edit_area_title">Change Password</p>
+                                <dl class="edit_area_form_parts text">
+                                    <p class="console_contents_note">Editing without the user's permission is strictly prohibited.</p>
+                                    <dt>Enter new<br />hashed password</dt>
+                                    <dd>
+                                        <input type="text" name="password" value={user.password} autocomplete="off" />
+                                    </dd>
+                                    <p style="margin: 2% 0 0 2%; padding: 1%; user-select: text; border: 2px solid #c7a1a1;">
+                                        <span style="font-weight: 700;">Editing Procedure:</span><br />
+                                        [1] Tell the user the following.<br />
+                                        "Go to the following site, enter the new password in the String field and press Encrypt. Then send the generated password to me. (https://bcrypt-generator.com/)"<br />
+                                        [2] Receive the generated hashed password from the user via DM.<br />
+                                        [3] Enter the hashed password in the text box above and press Save.
+                                    </p>
                                 </dl>
 
                                 <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
