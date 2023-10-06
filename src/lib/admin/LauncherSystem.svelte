@@ -1,6 +1,6 @@
 <script lang="ts">
     import { slide } from 'svelte/transition';
-    import { clicked_submit, editMode } from '$ts/main';
+    import { clicked_submit } from '$ts/main';
 
     export let systemData;
     const { RainJP, RainUS, RainEU, update, debug }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean; debug: boolean } = systemData;
@@ -318,7 +318,7 @@
                             </li>
                             <li>
                                 <label for="debug_disable">
-                                    <input type="radio" name="debug" id="debug_disable" value="false" checked={!update} />
+                                    <input type="radio" name="debug" id="debug_disable" value="false" checked={!debug} />
                                     Disable
                                 </label>
                             </li>

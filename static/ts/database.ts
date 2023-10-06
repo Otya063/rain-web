@@ -68,6 +68,18 @@ export const getServerData = (mainData: string, subData: string | number = undef
             data = db.users.findMany();
             break;
 
+        case 'checkExistingUser':
+            if (subData === undefined) {
+                data = 'Invalid Input';
+            } else {
+                data = db.users.findUnique({
+                    where: {
+                        username: subData,
+                    },
+                });
+            }
+            break;
+
         case 'characters':
             data = db.characters.findMany();
             break;
