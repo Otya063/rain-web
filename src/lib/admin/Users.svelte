@@ -712,11 +712,11 @@
                             {#if character.deleted}
                                 <p style="color: #f56044;">This user's character has been deleted.</p>
                             {:else if !character.is_new_character}
-                                <div class="character_item {getWpnTypeByDec(character.weapon_type).replace(/\s+/g, '')}">
+                                <div class="character_item {getWpnTypeByDec(character.weapon_type, "en").replace(/\s+/g, '')}">
                                     <span class="name">{character.name}</span>
-                                    <div class="wpn_icon {getWpnTypeByDec(character.weapon_type).replace(/\s+/g, '')}" />
+                                    <div class="wpn_icon {getWpnTypeByDec(character.weapon_type, "en").replace(/\s+/g, '')}" />
                                     <p class="wpn_text">
-                                        {getWpnTypeByDec(character.weapon_type)}
+                                        {getWpnTypeByDec(character.weapon_type, "en")}
                                         <br />
                                         <!-- svelte-ignore a11y-no-static-element-interactions -->
                                         <span class="wpn_name" on:mouseenter={() => showTipHoverWpn(character.id)} on:mouseleave={() => showTipHoverWpn(character.id)}>

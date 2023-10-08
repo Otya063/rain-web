@@ -317,63 +317,127 @@ export const getCourseByFormData = (courseData: Record<string, string | number |
 
 /* Get Weapon Type by Dec
 ====================================================*/
-export const getWpnTypeByDec = (dec: number | null) => {
+export const getWpnTypeByDec = (dec: number | null, lang: string) => {
     let wpnType: string;
-    switch (dec) {
-        case 0:
-            wpnType = 'Great Sword';
+    switch (lang) {
+        case 'ja':
+            switch (dec) {
+                case 0:
+                    wpnType = '大剣';
+                    break;
+
+                case 1:
+                    wpnType = 'ヘビィボウガン';
+                    break;
+
+                case 2:
+                    wpnType = 'ハンマー';
+                    break;
+
+                case 3:
+                    wpnType = 'ランス';
+                    break;
+
+                case 4:
+                    wpnType = '片手剣';
+                    break;
+
+                case 5:
+                    wpnType = 'ライトボウガン';
+                    break;
+
+                case 6:
+                    wpnType = '双剣';
+                    break;
+
+                case 7:
+                    wpnType = '太刀';
+                    break;
+
+                case 8:
+                    wpnType = '狩猟笛';
+                    break;
+
+                case 9:
+                    wpnType = 'ガンランス';
+                    break;
+
+                case 10:
+                    wpnType = '弓';
+                    break;
+
+                case 11:
+                    wpnType = '穿龍棍';
+                    break;
+
+                case 12:
+                    wpnType = 'スラッシュアックスF';
+                    break;
+
+                case 13:
+                    wpnType = 'マグネットスパイク';
+                    break;
+            }
             break;
 
-        case 1:
-            wpnType = 'Heavy Bowgun';
-            break;
+        case 'en':
+            switch (dec) {
+                case 0:
+                    wpnType = 'Great Sword';
+                    break;
 
-        case 2:
-            wpnType = 'Hammer';
-            break;
+                case 1:
+                    wpnType = 'Heavy Bowgun';
+                    break;
 
-        case 3:
-            wpnType = 'Lance';
-            break;
+                case 2:
+                    wpnType = 'Hammer';
+                    break;
 
-        case 4:
-            wpnType = 'Sword & Shield';
-            break;
+                case 3:
+                    wpnType = 'Lance';
+                    break;
 
-        case 5:
-            wpnType = 'Light Bowgun';
-            break;
+                case 4:
+                    wpnType = 'Sword & Shield';
+                    break;
 
-        case 6:
-            wpnType = 'Dual Swords';
-            break;
+                case 5:
+                    wpnType = 'Light Bowgun';
+                    break;
 
-        case 7:
-            wpnType = 'Long Sword';
-            break;
+                case 6:
+                    wpnType = 'Dual Swords';
+                    break;
 
-        case 8:
-            wpnType = 'Hunting Horn';
-            break;
+                case 7:
+                    wpnType = 'Long Sword';
+                    break;
 
-        case 9:
-            wpnType = 'Gunlance';
-            break;
+                case 8:
+                    wpnType = 'Hunting Horn';
+                    break;
 
-        case 10:
-            wpnType = 'Bow';
-            break;
+                case 9:
+                    wpnType = 'Gunlance';
+                    break;
 
-        case 11:
-            wpnType = 'Tonfa';
-            break;
+                case 10:
+                    wpnType = 'Bow';
+                    break;
 
-        case 12:
-            wpnType = 'Switch Axe F';
-            break;
+                case 11:
+                    wpnType = 'Tonfa';
+                    break;
 
-        case 13:
-            wpnType = 'Magnet Spike';
+                case 12:
+                    wpnType = 'Switch Axe F';
+                    break;
+
+                case 13:
+                    wpnType = 'Magnet Spike';
+                    break;
+            }
             break;
     }
 
@@ -382,7 +446,7 @@ export const getWpnTypeByDec = (dec: number | null) => {
 
 /* Get Weapon Name by Dec
 ====================================================*/
-export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang: string = 'en') => {
+export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang: string) => {
     const hex: string = decToLittleEndian(dec);
 
     switch (wpnType) {

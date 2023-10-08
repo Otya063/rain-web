@@ -10,10 +10,10 @@ export const db = new PrismaClient({
     },
 }).$extends(withAccelerate());
 
-export const getServerData = (mainData: string, subData: string | number = undefined) => {
-    let data;
+export const getServerData = (data1: string, data2: string | number = undefined) => {
+    let data: [];
 
-    switch (mainData) {
+    switch (data1) {
         case 'launcherSystem':
             data = db.launcher_system.findUnique({
                 where: {
@@ -23,7 +23,7 @@ export const getServerData = (mainData: string, subData: string | number = undef
             break;
 
         case 'information':
-            switch (subData) {
+            switch (data2) {
                 case 1:
                     data = db.launcher_info.findMany({
                         where: {
@@ -71,24 +71,24 @@ export const getServerData = (mainData: string, subData: string | number = undef
             break;
 
         case 'getExtgUserByUserName':
-            if (subData === undefined) {
+            if (data2 === undefined) {
                 data = 'Invalid Input';
             } else {
                 data = db.users.findUnique({
                     where: {
-                        username: subData,
+                        username: data2,
                     },
                 });
             }
             break;
 
         case 'getLinkedAccByUId':
-            if (subData === undefined) {
+            if (data2 === undefined) {
                 data = 'Invalid Input';
             } else {
                 data = db.discord_register.findFirst({
                     where: {
-                        user_id: subData,
+                        user_id: data2,
                     },
                 });
             }
@@ -101,7 +101,7 @@ export const getServerData = (mainData: string, subData: string | number = undef
         case 'getCharactersByUId':
             data = db.characters.findMany({
                 where: {
-                    user_id: subData,
+                    user_id: data2,
                 },
             });
             break;
