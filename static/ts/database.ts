@@ -1,4 +1,6 @@
+import _ from 'lodash';
 import { PrismaClient } from '@prisma/client/edge';
+import { withAccelerate } from '@prisma/extension-accelerate';
 
 export const db = new PrismaClient({
     datasources: {
@@ -6,7 +8,7 @@ export const db = new PrismaClient({
             url: import.meta.env.VITE_DATABASE_URL,
         },
     },
-});
+}).$extends(withAccelerate());
 
 export const getServerData = (mainData: string, subData: string | number = undefined) => {
     let data;
@@ -68,7 +70,7 @@ export const getServerData = (mainData: string, subData: string | number = undef
             data = db.users.findMany();
             break;
 
-        case 'checkExistingUser':
+        case 'getExtgUserByUserName':
             if (subData === undefined) {
                 data = 'Invalid Input';
             } else {
@@ -80,8 +82,28 @@ export const getServerData = (mainData: string, subData: string | number = undef
             }
             break;
 
+        case 'getLinkedAccByUId':
+            if (subData === undefined) {
+                data = 'Invalid Input';
+            } else {
+                data = db.discord_register.findFirst({
+                    where: {
+                        user_id: subData,
+                    },
+                });
+            }
+            break;
+
         case 'characters':
             data = db.characters.findMany();
+            break;
+
+        case 'getCharactersByUId':
+            data = db.characters.findMany({
+                where: {
+                    user_id: subData,
+                },
+            });
             break;
 
         case 'bannedUsers':

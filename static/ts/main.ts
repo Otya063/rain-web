@@ -345,7 +345,7 @@ export const getWpnTypeByDec = (dec: number | null) => {
             break;
 
         case 6:
-            wpnType = 'Dual Blades';
+            wpnType = 'Dual Swords';
             break;
 
         case 7:

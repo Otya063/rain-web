@@ -11,7 +11,7 @@ npm install
 
 Generate prisma client with data proxy.
 ```bash
-npx prisma generate --data-proxy
+npx prisma generate --no-engine
 ```
 
 Start local server.
