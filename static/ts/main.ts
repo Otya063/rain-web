@@ -2,7 +2,6 @@ import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
 import { courseJA } from '$i18n/ja/courseData.ts';
 import { courseEN } from '$i18n/en/courseData.ts';
-import { db } from '$ts/database';
 
 /*=========================================================
 　　　　　Slide Functions
