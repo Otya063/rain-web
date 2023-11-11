@@ -7,6 +7,7 @@
     export let usersData: Users[];
     export let charactersData: Characters[];
     export let bannedUsersData: BannedUser[];
+    export let linkedCharacters: LinkedCharacters[];
 
     interface Users {
         id: number;
@@ -57,6 +58,29 @@
         username: string;
         reason: string;
         date: number;
+    }
+    interface LinkedCharacters {
+        id: number;
+        char_id: number;
+        discord_id: string;
+        is_male: boolean | null;
+        bounty: number;
+        road_champion: boolean;
+        rain_demolizer: boolean;
+        bounty_champion: boolean;
+        bounty_master: boolean;
+        bounty_expert: boolean;
+        gacha: number;
+        pity: number;
+        boostcd: bigint;
+        newbie: boolean;
+        latest_bounty: string;
+        latest_bounty_time: bigint;
+        transfercd: bigint | null;
+        title: number | null;
+        gold: number | null;
+        silver: number | null;
+        bronze: number | null;
     }
 
     /* Related to Edit Mode
@@ -219,12 +243,13 @@
 <div class="console_contents">
     <form class="edit_area_form" method="POST">
         <div class="edit_area enter">
+            <p class="edit_area_title" style="margin: 0;">Admin Control Panel</p>
             <div class="group_btns" style="margin-bottom: 3%;">
                 <button
                     on:click={() => {
                         adminCtrlSwitch('filter'), resetPagination(), clearFilterInput(), (filterParam = '');
                     }}
-                    class="save_btn"
+                    class="blue_btn"
                     class:active={adminCtrlTypes['filter']}
                     type="button"
                 >
@@ -236,7 +261,7 @@
                     on:click={() => {
                         adminCtrlSwitch('courseCtrl'), (specifiedText = true);
                     }}
-                    class="save_btn"
+                    class="blue_btn"
                     class:active={adminCtrlTypes['courseCtrl']}
                     type="button"
                 >
@@ -244,7 +269,6 @@
                     <span class="btn_text">Course Control</span>
                 </button>
             </div>
-            <p class="edit_area_title">Admin Control Panel</p>
 
             {#if adminCtrlTypes['filter']}
                 <div transition:slide class="edit_area_form_parts text">
@@ -314,7 +338,7 @@
                         {/each}
                     </dd>
 
-                    <button formaction="?/updateUserData" style="margin-top: 0;" on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                    <button formaction="?/updateUserData" style="margin-top: 0;" on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                         <span class="btn_icon material-icons">check</span>
                         <span class="btn_text">Save</span>
                     </button>
@@ -340,11 +364,13 @@
 
         {#each currentUsers as user}
             <dl class="console_contents_list">
-                <p class="console_contents_list_title">User Data</p>
-                <button class="del_btn" on:click={() => prepareModal('banUser', 'Are you sure you want to ban the following user?', 'banUser', user.id, user.username, user.last_character)}>
-                    <span style="left: 6%;" class="material-icons">delete</span>
-                    <span>Ban This User</span>
-                </button>
+                <p class="console_contents_list_title">
+                    <button class="red_btn" on:click={() => prepareModal('banUser', 'Are you sure you want to suspend the following user?', 'banUser', user.id, user.username, user.last_character)}>
+                        <span class="btn_icon material-icons">delete</span>
+                        <span class="btn_text">Suspend</span>
+                    </button>
+                    User Data
+                </p>
 
                 {#each bannedUsersData as banned_user}
                     {#if user.id === banned_user.user_id}
@@ -354,12 +380,13 @@
                                 <input type="hidden" name="character_id" value={character.id} />
                             {/each}
 
-                            <p class="banned_text">This user has been banned.</p>
+                            <p class="banned_text">This user account has been suspended.</p>
                             <button
-                                type="submit"
-                                class="remove_ban_btn"
-                                on:click={() => prepareModal('banUser', 'Are you sure you want to remove the ban of the following user?', 'removeBanUser', user.id, user.username, user.last_character)}
-                                >Revome the Ban
+                                class="red_btn"
+                                on:click={() => prepareModal('banUser', 'Are you sure you want to unsuspend the following users?', 'removeBanUser', user.id, user.username, user.last_character)}
+                            >
+                                <span style="font-size: 2.8rem;" class="btn_icon material-icons">restore_from_trash</span>
+                                <span style="font-size: 2rem; padding-top: 2px;" class="btn_text">Unsuspend</span>
                             </button>
                         </div>
                     {/if}
@@ -373,14 +400,14 @@
                     {user.username}
 
                     {#if editId === user.id && catTypes['username']}
-                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'username')}>
-                            <span class="material-icons">close</span>
-                            Cancel
+                        <button class="red_btn" on:click={() => editModeSwitch(0, 'username')}>
+                            <span class="btn_icon material-icons">close</span>
+                            <span class="btn_text">Cancel</span>
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'username')}>
-                            <span class="material-icons">mode_edit</span>
-                            Edit
+                        <button class="normal_btn" on:click={() => editModeSwitch(user.id, 'username')}>
+                            <span class="btn_icon material-icons">mode_edit</span>
+                            <span class="btn_text">Edit</span>
                         </button>
                     {/if}
 
@@ -397,7 +424,7 @@
                                     </dd>
                                 </dl>
 
-                                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                                     <span class="btn_icon material-icons">check</span>
                                     <span class="btn_text">Save</span>
                                 </button>
@@ -411,14 +438,14 @@
                     {user.password}
 
                     {#if editId === user.id && catTypes['password']}
-                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'password')}>
-                            <span class="material-icons">close</span>
-                            Cancel
+                        <button class="red_btn" on:click={() => editModeSwitch(0, 'password')}>
+                            <span class="btn_icon material-icons">close</span>
+                            <span class="btn_text">Cancel</span>
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'password')}>
-                            <span class="material-icons">mode_edit</span>
-                            Edit
+                        <button class="normal_btn" on:click={() => editModeSwitch(user.id, 'password')}>
+                            <span class="btn_icon material-icons">mode_edit</span>
+                            <span class="btn_text">Edit</span>
                         </button>
                     {/if}
 
@@ -436,13 +463,14 @@
                                     <p style="margin: 2% 0 0 2%; padding: 1%; user-select: text; border: 2px solid #c7a1a1;">
                                         <span style="font-weight: 700;">Editing Procedure:</span><br />
                                         [1] Tell the user the following.<br />
-                                        "Go to the following site, enter the new password in the String field and press Encrypt. Then send the generated password to me. (https://bcrypt-generator.com/)"<br />
+                                        "Go to the following site, enter the new password in the String field and press Encrypt. Then send the generated password to me. (https://bcrypt-generator.com/)"<br
+                                        />
                                         [2] Receive the generated hashed password from the user via DM.<br />
                                         [3] Enter the hashed password in the text box above and press Save.
                                     </p>
                                 </dl>
 
-                                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                                     <span class="btn_icon material-icons">check</span>
                                     <span class="btn_text">Save</span>
                                 </button>
@@ -462,14 +490,14 @@
                     </ul>
 
                     {#if editId === user.id && catTypes['rights']}
-                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'rights')}>
-                            <span class="material-icons">close</span>
-                            Cancel
+                        <button class="red_btn" on:click={() => editModeSwitch(0, 'rights')}>
+                            <span class="btn_icon material-icons">close</span>
+                            <span class="btn_text">Cancel</span>
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'rights')}>
-                            <span class="material-icons">mode_edit</span>
-                            Edit
+                        <button class="normal_btn" on:click={() => editModeSwitch(user.id, 'rights')}>
+                            <span class="btn_icon material-icons">mode_edit</span>
+                            <span class="btn_text">Edit</span>
                         </button>
                     {/if}
 
@@ -507,7 +535,7 @@
                                     </dd>
                                 </dl>
 
-                                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                                     <span class="btn_icon material-icons">check</span>
                                     <span class="btn_text">Save</span>
                                 </button>
@@ -527,14 +555,14 @@
                     {convRFCToISOWithTime(user.return_expires)}
 
                     {#if editId === user.id && catTypes['return_expires']}
-                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'return_expires')}>
-                            <span class="material-icons">close</span>
-                            Cancel
+                        <button class="red_btn" on:click={() => editModeSwitch(0, 'return_expires')}>
+                            <span class="btn_icon material-icons">close</span>
+                            <span class="btn_text">Cancel</span>
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'return_expires')}>
-                            <span class="material-icons">mode_edit</span>
-                            Edit
+                        <button class="normal_btn" on:click={() => editModeSwitch(user.id, 'return_expires')}>
+                            <span class="btn_icon material-icons">mode_edit</span>
+                            <span class="btn_text">Edit</span>
                         </button>
                     {/if}
 
@@ -550,7 +578,7 @@
                                     </dd>
                                 </dl>
 
-                                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                                     <span class="btn_icon material-icons">check</span>
                                     <span class="btn_text">Save</span>
                                 </button>
@@ -568,14 +596,14 @@
                     {/if}
 
                     {#if editId === user.id && catTypes['gacha_premium']}
-                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'gacha_premium')}>
-                            <span class="material-icons">close</span>
-                            Cancel
+                        <button class="red_btn" on:click={() => editModeSwitch(0, 'gacha_premium')}>
+                            <span style="margin: 1% 0%;" class="btn_icon material-icons">close</span>
+                            <span class="btn_text">Cancel</span>
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'gacha_premium')}>
-                            <span class="material-icons">mode_edit</span>
-                            Edit
+                        <button class="normal_btn" on:click={() => editModeSwitch(user.id, 'gacha_premium')}>
+                            <span class="btn_icon material-icons">mode_edit</span>
+                            <span class="btn_text">Edit</span>
                         </button>
                     {/if}
 
@@ -583,9 +611,9 @@
                         <form transition:slide class="edit_area_form" action="?/updateUserData" method="POST">
                             <input type="hidden" name="user_id" value={editId} />
                             <div class="edit_area enter">
-                                <p class="edit_area_title">Change the Number of Coins</p>
+                                <p class="edit_area_title">Change the Quantity of Coins</p>
                                 <dl class="edit_area_form_parts text">
-                                    <dt>Enter the number</dt>
+                                    <dt>Enter the quantity</dt>
                                     <dd>
                                         <input
                                             type="text"
@@ -593,12 +621,12 @@
                                             inputmode="numeric"
                                             pattern="\d*"
                                             value={user.gacha_premium === 0 ? null : user.gacha_premium}
-                                            placeholder="Enter the number"
+                                            placeholder="Enter the quantity"
                                         />
                                     </dd>
                                 </dl>
 
-                                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                                     <span class="btn_icon material-icons">check</span>
                                     <span class="btn_text">Save</span>
                                 </button>
@@ -616,14 +644,14 @@
                     {/if}
 
                     {#if editId === user.id && catTypes['gacha_trial']}
-                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'gacha_trial')}>
-                            <span class="material-icons">close</span>
-                            Cancel
+                        <button class="red_btn" on:click={() => editModeSwitch(0, 'gacha_trial')}>
+                            <span class="btn_icon material-icons">close</span>
+                            <span class="btn_text">Cancel</span>
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'gacha_trial')}>
-                            <span class="material-icons">mode_edit</span>
-                            Edit
+                        <button class="normal_btn" on:click={() => editModeSwitch(user.id, 'gacha_trial')}>
+                            <span class="btn_icon material-icons">mode_edit</span>
+                            <span class="btn_text">Edit</span>
                         </button>
                     {/if}
 
@@ -631,9 +659,9 @@
                         <form transition:slide class="edit_area_form" action="?/updateUserData" method="POST">
                             <input type="hidden" name="user_id" value={editId} />
                             <div class="edit_area enter">
-                                <p class="edit_area_title">Change the Number of Coins</p>
+                                <p class="edit_area_title">Change the Quantity of Coins</p>
                                 <dl class="edit_area_form_parts text">
-                                    <dt>Enter the number</dt>
+                                    <dt>Enter the quantity</dt>
                                     <dd>
                                         <input
                                             type="text"
@@ -641,12 +669,12 @@
                                             inputmode="numeric"
                                             pattern="\d*"
                                             value={user.gacha_trial === 0 ? null : user.gacha_trial}
-                                            placeholder="Enter the number"
+                                            placeholder="Enter the quantity"
                                         />
                                     </dd>
                                 </dl>
 
-                                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                                     <span class="btn_icon material-icons">check</span>
                                     <span class="btn_text">Save</span>
                                 </button>
@@ -664,14 +692,14 @@
                     {/if}
 
                     {#if editId === user.id && catTypes['frontier_points']}
-                        <button class="cancel_btn" on:click={() => editModeSwitch(0, 'frontier_points')}>
-                            <span class="material-icons">close</span>
-                            Cancel
+                        <button class="red_btn" on:click={() => editModeSwitch(0, 'frontier_points')}>
+                            <span class="btn_icon material-icons">close</span>
+                            <span class="btn_text">Cancel</span>
                         </button>
                     {:else}
-                        <button class="edit_btn" on:click={() => editModeSwitch(user.id, 'frontier_points')}>
-                            <span class="material-icons">mode_edit</span>
-                            Edit
+                        <button class="normal_btn" on:click={() => editModeSwitch(user.id, 'frontier_points')}>
+                            <span class="btn_icon material-icons">mode_edit</span>
+                            <span class="btn_text">Edit</span>
                         </button>
                     {/if}
 
@@ -679,9 +707,9 @@
                         <form transition:slide class="edit_area_form" action="?/updateUserData" method="POST">
                             <input type="hidden" name="user_id" value={editId} />
                             <div class="edit_area enter">
-                                <p class="edit_area_title">Change the Number of Points</p>
+                                <p class="edit_area_title">Change the Quantity of Points</p>
                                 <dl class="edit_area_form_parts text">
-                                    <dt>Enter the number</dt>
+                                    <dt>Enter the quantity</dt>
                                     <dd>
                                         <input
                                             type="text"
@@ -689,12 +717,12 @@
                                             inputmode="numeric"
                                             pattern="\d*"
                                             value={user.frontier_points === 0 ? null : user.frontier_points}
-                                            placeholder="Enter the number"
+                                            placeholder="Enter the quantity"
                                         />
                                     </dd>
                                 </dl>
 
-                                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                                     <span class="btn_icon material-icons">check</span>
                                     <span class="btn_text">Save</span>
                                 </button>
@@ -712,11 +740,39 @@
                             {#if character.deleted}
                                 <p style="color: #f56044;">This user's character has been deleted.</p>
                             {:else if !character.is_new_character}
-                                <div class="character_item {getWpnTypeByDec(character.weapon_type, "en").replace(/\s+/g, '')}">
-                                    <span class="name">{character.name}</span>
-                                    <div class="wpn_icon {getWpnTypeByDec(character.weapon_type, "en").replace(/\s+/g, '')}" />
+                                <div class="character_item {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '')}">
+                                    <span class="name">
+                                        {character.name}
+                                    </span>
+
+                                    {#if _.sortBy( _.filter(linkedCharacters, (l_data) => l_data.char_id === character.id), 'id' ).map(function (val) {
+                                        return val['char_id'];
+                                    })[0] === character.id}
+                                        <button class="green_btn linked_acc">
+                                            <span class="btn_icon material-icons">link</span>
+                                            <span class="btn_text">Linked</span>
+                                        </button>
+                                    {:else}
+                                        <button
+                                            class="green_btn link_acc"
+                                            on:click={() =>
+                                                prepareModal(
+                                                    'linkCharacter',
+                                                    'Execute the linking process with the following user and character. Please confirm the target ID and Username, and enter the ID (18-digit) of Discord to be linked.',
+                                                    'linkCharacter',
+                                                    user.id,
+                                                    user.username,
+                                                    character.id
+                                                )}
+                                        >
+                                            <span class="btn_icon material-icons">link</span>
+                                            <span class="btn_text">Link</span>
+                                        </button>
+                                    {/if}
+
+                                    <div class="wpn_icon {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '')}" />
                                     <p class="wpn_text">
-                                        {getWpnTypeByDec(character.weapon_type, "en")}
+                                        {getWpnTypeByDec(character.weapon_type, 'en')}
                                         <br />
                                         <!-- svelte-ignore a11y-no-static-element-interactions -->
                                         <span class="wpn_name" on:mouseenter={() => showTipHoverWpn(character.id)} on:mouseleave={() => showTipHoverWpn(character.id)}>

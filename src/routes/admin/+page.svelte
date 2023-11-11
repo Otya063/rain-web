@@ -21,9 +21,19 @@
         banUsername,
         banCid,
         deleteInfo,
+        infoId,
         infoTitle,
         infoURL,
         infoType,
+        deleteBnr,
+        bnrId,
+        bnrURL,
+        bnrName,
+        deleteFileViaApi,
+        linkCharacter,
+        linkUId,
+        linkUsername,
+        linkCId,
     } from '$ts/main';
     import '$scss/style_admin.scss';
 
@@ -31,9 +41,9 @@
     export let data: PageData;
     export let form: ActionData;
     let status: keyof StatusMsg;
-    let info_id: number;
+    let targetId: number;
     form?.status ? (status = form?.status) : (status = '');
-    form?.info_id ? (info_id = form?.info_id) : (info_id = 0);
+    form?.targetId ? (targetId = form?.targetId) : (targetId = 0);
     form?.success ? success.set(form!.success) : success.set(false);
     form?.error ? (error.set(form!.error), err_details.set(form!.err_details)) : (error.set(false), err_details.set(''));
     clicked_submit.set(false);
@@ -46,12 +56,15 @@
     const success_msg: StatusMsg = {
         system_updated: 'The system mode has been successfully updated.',
         maint_all_updated: 'All maintenance modes have been successfully updated.',
-        info_created: 'The information has been successfully created.',
-        info_updated: `The information (ID: ${info_id}) has been successfully updated.`,
-        info_deleted: `The information (ID: ${info_id}) has been successfully deleted.`,
+        info_created: 'The information data has been successfully created.',
+        info_updated: `The information data (ID: ${targetId}) has been successfully updated.`,
+        info_deleted: `The information data (ID: ${targetId}) has been successfully deleted.`,
         user_updated: 'The user data has been successfully updated.',
-        user_banned: 'The user has been banned.',
-        removed_ban: 'The ban against the user has been removed.',
+        suspend_user: 'The user account was successfully suspended.',
+        unsuspend_user: 'The user account was successfully unsuspended.',
+        bnr_created: 'The banner data was successfully created.',
+        bnr_updated: `The banner data (ID: ${targetId}) has been successfully updated.`,
+        bnr_deleted: `The banner data (ID: ${targetId}) has been successfully deleted.`,
     };
 
     // message display timer bar
@@ -67,7 +80,7 @@
             error.set(false);
             notice.set(false);
             err_details.set('');
-            info_id;
+            targetId;
             width.set(100, { duration: 0 });
         }, 5000);
     }
@@ -110,6 +123,17 @@
         notice.set(false);
         width.set(0, { duration: 0 });
         t!.stop();
+    };
+
+    /* delete file function
+    ====================================================*/
+    const deleteAllBnrFiles = () => {
+        if ($bnrName === '') {
+            return false;
+        }
+
+        deleteFileViaApi('ja', `${$bnrName}_ja`);
+        deleteFileViaApi('en', `${$bnrName}_en`);
     };
 </script>
 
@@ -162,7 +186,7 @@
         <div class="modal_content">
             <form method="POST">
                 <div class="modal_header">
-                    <h1>User Ban Form</h1>
+                    <h1>Suspend / Unsuspend User</h1>
                 </div>
                 <div class="modal_body">
                     <p>{$modalTitle}</p>
@@ -191,13 +215,13 @@
                     </ul>
                 </div>
                 <div class="ban_btn_group">
-                    <button class="confirm_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => clicked_submit.set(true)}>
-                        <span class="material-icons">check</span>
-                        Confirm
+                    <button class="blue_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => clicked_submit.set(true)}>
+                        <span class="btn_icon material-icons">check</span>
+                        <span class="btn_text">Yes</span>
                     </button>
-                    <button class="cancel_btn" type="button" on:click={() => cancelModal()}>
-                        <span class="material-icons">close</span>
-                        Cancel
+                    <button class="red_btn" type="button" on:click={() => cancelModal()}>
+                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_text">No</span>
                     </button>
                 </div>
             </form>
@@ -209,6 +233,7 @@
     <div class="modal">
         <div class="modal_content">
             <form method="POST">
+                <input type="hidden" name="info_id" value={$infoId} />
                 <div class="modal_header">
                     <h1>Delete Information</h1>
                 </div>
@@ -218,30 +243,114 @@
                         <li class="modal_list_item">
                             <p>Information Title</p>
                             <span>{$infoTitle}</span>
-                            <input type="hidden" name="user_id" value={$infoTitle} />
                         </li>
 
                         <li class="modal_list_item">
                             <p>Information URL</p>
                             <span>{$infoURL}</span>
-                            <input type="hidden" name="user_username" value={$infoURL} />
                         </li>
 
                         <li class="modal_list_item">
                             <p>Information Type</p>
                             <span>{$infoType}</span>
-                            <input type="hidden" name="character_id" value={$infoType} />
                         </li>
                     </ul>
                 </div>
                 <div class="ban_btn_group">
-                    <button class="confirm_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => clicked_submit.set(true)}>
-                        <span class="material-icons">check</span>
-                        Confirm
+                    <button class="blue_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => clicked_submit.set(true)}>
+                        <span class="btn_icon material-icons">check</span>
+                        <span class="btn_text">Yes</span>
                     </button>
-                    <button class="cancel_btn" type="button" on:click={() => cancelModal()}>
-                        <span class="material-icons">close</span>
-                        Cancel
+                    <button class="red_btn" type="button" on:click={() => cancelModal()}>
+                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_text">No</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{/if}
+
+{#if $deleteBnr}
+    <div class="modal">
+        <div class="modal_content">
+            <form method="POST">
+                <input type="hidden" name="bnr_id" value={$bnrId} />
+                <input type="hidden" name="bnr_name" value={$bnrName} />
+                <div class="modal_header">
+                    <h1>Delete Banner Data</h1>
+                </div>
+                <div class="modal_body">
+                    <p>{$modalTitle}</p>
+                    <ul class="modal_list">
+                        <li class="modal_list_item">
+                            <p>Banner Preview</p>
+                            <img src={$bnrURL} alt={String($bnrName)} />
+                        </li>
+
+                        <li class="modal_list_item">
+                            <p>Banner Name</p>
+                            <span>{$bnrName}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="ban_btn_group">
+                    <button class="blue_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => (clicked_submit.set(true), deleteAllBnrFiles())}>
+                        <span class="btn_icon material-icons">check</span>
+                        <span class="btn_text">Yes</span>
+                    </button>
+                    <button class="red_btn" type="button" on:click={() => cancelModal()}>
+                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_text">No</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{/if}
+
+{#if $linkCharacter}
+    <div class="modal">
+        <div class="modal_content">
+            <form method="POST">
+                <input type="hidden" name="user_id" value={$linkUId} />
+                <input type="hidden" name="char_id" value={$linkCId} />
+                <div class="modal_header">
+                    <h1>Link Account</h1>
+                </div>
+                <div class="modal_body">
+                    <p>{$modalTitle}</p>
+                    <ul class="modal_list">
+                        <li class="modal_list_item">
+                            <p>User ID</p>
+                            <span>{$linkUId}</span>
+                        </li>
+
+                        <li class="modal_list_item">
+                            <p>Username</p>
+                            <span>{$linkUsername}</span>
+                        </li>
+
+                        <li class="modal_list_item">
+                            <p>Character ID</p>
+                            <span>{$linkCId}</span>
+                        </li>
+
+                        <li class="modal_list_item">
+                            <p>Discord ID</p>
+                            <input type="text" name="discord_id" />
+                        </li>
+                    </ul>
+                    <p class="modal_note">* If Discord ID you entered is already linked to another account, the internal data (bounty coins, bounty progress, etc.) of that account will be transferred and re-linked to the target account.</p>
+                </div>
+                <div class="ban_btn_group">
+                    <button class="blue_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => clicked_submit.set(true)}>
+                        <span class="btn_icon material-icons">check</span>
+                        <span class="btn_text">Yes</span>
+                    </button>
+                    <button class="red_btn" type="button" on:click={() => cancelModal()}>
+                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_text">No</span>
                     </button>
                 </div>
             </form>

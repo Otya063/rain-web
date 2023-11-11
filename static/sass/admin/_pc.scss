@@ -169,6 +169,19 @@
                     color: #df9e27;
                     user-select: none;
                     border-bottom: #df9e27 2px solid;
+
+                    // 赤ボタン調整
+                    .red_btn {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                    }
+
+                    // 緑ボタン調整
+                    .green_btn {
+                        top: 0;
+                        right: 125px;
+                    }
                 }
 
                 // コンテンツ内リスト
@@ -220,8 +233,18 @@
                             }
                         }
 
+                        // ノーマルボタン調整
+                        .normal_btn {
+                            margin: 1% 0;
+                        }
+
+                        // 赤ボタン調整
+                        .red_btn {
+                            margin: 1% 0;
+                        }
+
                         // 編集モードキャンセルボタン
-                        .cancel_btn {
+                        /* .cancel_btn {
                             position: relative;
                             right: 0;
                             color: #f56044;
@@ -247,7 +270,7 @@
                                 background: #f58c7a;
                                 border: 1px solid #f58c7a;
                             }
-                        }
+                        } */
                     }
                 }
 
@@ -262,7 +285,7 @@
                     justify-content: space-evenly;
 
                     // キャンセルボタン
-                    .cancel_btn {
+                    /* .cancel_btn {
                         position: relative;
                         right: 0;
                         color: #f56044;
@@ -288,39 +311,16 @@
                             background: #f58c7a;
                             border: 1px solid #f58c7a;
                         }
-                    }
+                    } */
                 }
             }
 
-            // 追加ボタン
-            .add_info_btn {
+            // 緑ボタン調整
+            .green_btn {
                 position: absolute;
-                color: #0ad275;
-                background: #fff;
-                border: 1px solid #0ad275;
-                text-align: right;
-                font-weight: 700;
-                font-size: 1.6rem;
-                width: 13%;
-                right: 0;
-                padding: 0.8% 1.5% 0.5% 0;
-                border-radius: 4px;
-                margin: 5%;
-                transition: all 0.3s;
+                top: 115px;
+                right: 45px;
                 z-index: 1;
-
-                .material-icons {
-                    position: absolute;
-                    left: 10%;
-                    top: 50%;
-                    transform: translateY(-50%);
-                }
-
-                &:hover {
-                    color: #fff;
-                    background: #24e182;
-                    border: 1px solid #24e182;
-                }
             }
         }
     }
@@ -472,7 +472,7 @@
 
         // 内部テキスト
         p {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             margin: 1%;
         }
     }
@@ -612,8 +612,8 @@
                     margin-left: 1%;
                 }
 
-                // セーブボタン
-                .save_btn {
+                // 青ボタン調整
+                .blue_btn {
                     margin: 4% auto 0;
                 }
             }
@@ -693,14 +693,47 @@
 
     /* ボタン関連
 ====================================================*/
-    // セーブボタン
-    .save_btn {
+
+    // ノーマルボタンデフォルト
+    .normal_btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        color: darkslategray;
+        width: fit-content;
+        background: #fff;
+        border: 1px solid darkslategray;
+        font-weight: 700;
+        font-size: 1.6rem;
+        border-radius: 4px;
+        transition: all 0.3s;
+
+        // ボタンアイコン
+        .btn_icon {
+            padding: 5px 5px 5px 10px;
+        }
+
+        // ボタンテキスト
+        .btn_text {
+            padding-right: 13px;
+            padding-top: 3px;
+        }
+
+        &.active,
+        &:hover {
+            color: #fff;
+            background: darkslategray;
+            border: 1px solid darkslategray;
+        }
+    }
+
+    // 青ボタンデフォルト
+    .blue_btn {
         position: relative;
         display: flex;
         align-items: center;
         color: #0aa0d2;
         width: fit-content;
-        margin: 0 1%;
         background: #fff;
         border: 1px solid #0aa0d2;
         font-weight: 700;
@@ -727,33 +760,69 @@
         }
     }
 
-    // 削除ボタン
-    .del_btn {
-        position: absolute;
-        right: 0;
-        background: #fff;
+    // 赤ボタンデフォルト
+    .red_btn {
+        position: relative;
+        display: flex;
+        align-items: center;
         color: #de6161;
+        width: fit-content;
+        background: #fff;
         border: 1px solid #de6161;
-        text-align: right;
         font-weight: 700;
         font-size: 1.6rem;
-        width: 20%;
-        padding: 1% 1.5% 0.5% 0;
         border-radius: 4px;
         transition: all 0.3s;
-        z-index: 1;
 
-        .material-icons {
-            position: absolute;
-            left: 10%;
-            top: 50%;
-            transform: translateY(-50%);
+        // ボタンアイコン
+        .btn_icon {
+            padding: 5px 5px 5px 10px;
         }
 
+        // ボタンテキスト
+        .btn_text {
+            padding-right: 13px;
+            padding-top: 3px;
+        }
+
+        &.active,
         &:hover {
             color: #fff;
             background: #de6161;
             border: 1px solid #de6161;
+        }
+    }
+
+    // 緑ボタンデフォルト
+    .green_btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        color: #0ad275;
+        width: fit-content;
+        background: #fff;
+        border: 1px solid #0ad275;
+        font-weight: 700;
+        font-size: 1.6rem;
+        border-radius: 4px;
+        transition: all 0.3s;
+
+        // ボタンアイコン
+        .btn_icon {
+            padding: 5px 5px 5px 10px;
+        }
+
+        // ボタンテキスト
+        .btn_text {
+            padding-right: 13px;
+            padding-top: 3px;
+        }
+
+        &.active,
+        &:hover {
+            color: #fff;
+            background: #0ad275;
+            border: 1px solid #0ad275;
         }
     }
 
@@ -763,21 +832,23 @@
     .banned_user_container {
         position: absolute;
         width: 102%;
-        height: 125%;
-        top: -20%;
+        height: 102%;
+        top: -1%;
         left: -1%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: space-evenly;
         background: rgba(127, 127, 127, 0.5);
         z-index: 1;
         user-select: none;
+        box-shadow: 0 0 20px black;
+        border-radius: 20px;
 
         // テキスト
         .banned_text {
             color: whitesmoke;
-            font-size: 2rem;
+            font-size: 3rem;
             font-weight: 700;
             text-shadow: 3px 3px 5px black;
         }
@@ -827,7 +898,7 @@
         }
 
         // キャンセルボタン
-        .cancel_btn {
+        /* .cancel_btn {
             position: relative;
             right: 0;
             color: #f56044;
@@ -853,7 +924,7 @@
                 background: #f58c7a;
                 border: 1px solid #f58c7a;
             }
-        }
+        } */
     }
 
     /* ユーザーコンポーネント内キャラクターリスト
@@ -889,6 +960,22 @@
             font-weight: 700;
             top: 10%;
             width: 100%;
+        }
+
+        // 連携済みアカウント表示
+        .linked_acc {
+            top: 12% !important;
+            right: 4% !important;
+            color: #fff;
+            background: #0ad275;
+            border: 1px solid #0ad275;
+            pointer-events: none;
+        }
+
+        // アカウント連携表示
+        .link_acc {
+            top: 12% !important;
+            right: 4% !important;
         }
 
         // 武器アイコン
@@ -948,7 +1035,7 @@
             transition: all 0.2s;
             transform: translate(0, 100%);
             opacity: 0;
-            z-index: 1;
+            z-index: 2;
 
             &.wpn_name_hover {
                 transform: translate(0, 20%);
@@ -1038,6 +1125,14 @@
                             font-weight: 700;
                         }
                     }
+                }
+
+                // モーダル注意文
+                .modal_note {
+                    text-align: center;
+                    color: red;
+                    font-weight: 700;
+                    font-size: 1.7rem;
                 }
             }
         }

@@ -26,6 +26,10 @@
             text: 'Users',
             icon: 'group',
         },
+        bnr: {
+            text: 'Launcher Banner',
+            icon: 'ad_group',
+        },
     };
 
     // switch the display content according to the query param

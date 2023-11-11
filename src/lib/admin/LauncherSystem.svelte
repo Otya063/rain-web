@@ -3,7 +3,7 @@
     import { clicked_submit } from '$ts/main';
 
     export let systemData;
-    const { RainJP, RainUS, RainEU, update, debug }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean; debug: boolean } = systemData;
+    const { RainJP, RainUS, RainEU, update, debug, launcher_ver }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean; debug: boolean; launcher_ver: string } = systemData;
 
     /* Below is the edit mode script
     ====================================================*/
@@ -16,6 +16,7 @@
         rainEU: false,
         update: false,
         debug: false,
+        launcher_ver: false,
     };
 
     const editModeSwitch = (type: keyof CategoryType) => {
@@ -52,7 +53,7 @@
     Servers Maintenance Settings
 </h2>
 <div class="console_contents">
-    <p class="console_contents_note">* This data will be fetched when users click the login button on the launcher.</p>
+    <p class="console_contents_note">* These data will be fetched when users click the login button on the launcher.</p>
     <dl class="console_contents_list">
         <!-- Rain (JP) Maintenance Setting -->
         <dt class="contents_term">Rain (JP)</dt>
@@ -64,14 +65,14 @@
             {/if}
 
             {#if catTypes['rainJP']}
-                <button class="cancel_btn" on:click={() => editModeSwitch("rainJP")}>
-                    <span class="material-icons">close</span>
-                    Cancel
+                <button class="red_btn" on:click={() => editModeSwitch('rainJP')}>
+                    <span class="btn_icon material-icons">close</span>
+                    <span class="btn_text">Cancel</span>
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editModeSwitch("rainJP")}>
-                    <span class="material-icons">mode_edit</span>
-                    Edit
+                <button class="normal_btn" on:click={() => editModeSwitch('rainJP')}>
+                    <span class="btn_icon material-icons">mode_edit</span>
+                    <span class="btn_text">Edit</span>
                 </button>
             {/if}
 
@@ -94,7 +95,7 @@
                             </li>
                         </ul>
 
-                        <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                        <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                             <span class="btn_icon material-icons">check</span>
                             <span class="btn_text">Save</span>
                         </button>
@@ -113,14 +114,14 @@
             {/if}
 
             {#if catTypes['rainUS']}
-                <button class="cancel_btn" on:click={() => editModeSwitch("rainUS")}>
-                    <span class="material-icons">close</span>
-                    Cancel
+                <button class="red_btn" on:click={() => editModeSwitch('rainUS')}>
+                    <span class="btn_icon material-icons">close</span>
+                    <span class="btn_text">Cancel</span>
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editModeSwitch("rainUS")}>
-                    <span class="material-icons">mode_edit</span>
-                    Edit
+                <button class="normal_btn" on:click={() => editModeSwitch('rainUS')}>
+                    <span class="btn_icon material-icons">mode_edit</span>
+                    <span class="btn_text">Edit</span>
                 </button>
             {/if}
 
@@ -143,7 +144,7 @@
                             </li>
                         </ul>
 
-                        <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                        <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                             <span class="btn_icon material-icons">check</span>
                             <span class="btn_text">Save</span>
                         </button>
@@ -162,14 +163,14 @@
             {/if}
 
             {#if catTypes['rainEU']}
-                <button class="cancel_btn" on:click={() => editModeSwitch("rainEU")}>
-                    <span class="material-icons">close</span>
-                    Cancel
+                <button class="red_btn" on:click={() => editModeSwitch('rainEU')}>
+                    <span class="btn_icon material-icons">close</span>
+                    <span class="btn_text">Cancel</span>
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editModeSwitch("rainEU")}>
-                    <span class="material-icons">mode_edit</span>
-                    Edit
+                <button class="normal_btn" on:click={() => editModeSwitch('rainEU')}>
+                    <span class="btn_icon material-icons">mode_edit</span>
+                    <span class="btn_text">Edit</span>
                 </button>
             {/if}
 
@@ -192,7 +193,7 @@
                             </li>
                         </ul>
 
-                        <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                        <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                             <span class="btn_icon material-icons">check</span>
                             <span class="btn_text">Save</span>
                         </button>
@@ -220,7 +221,7 @@
                 </li>
             </ul>
 
-            <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+            <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                 <span class="btn_icon material-icons">check</span>
                 <span class="btn_text">Save</span>
             </button>
@@ -230,10 +231,9 @@
 
 <h2>
     <span class="material-icons">update</span>
-    Launcher Update & Debug Settings
+    Launcher Update & Other Settings
 </h2>
 <div class="console_contents">
-    <p class="console_contents_note">* This data will be fetched when users start the game.</p>
     <dl class="console_contents_list">
         <!-- Update Mode Setting -->
         <dt class="contents_term">Update Mode</dt>
@@ -243,16 +243,17 @@
             {:else}
                 Disable
             {/if}
-
+            <p class="console_contents_note">* This data will be fetched when users start the game.</p>
+            
             {#if catTypes['update']}
-                <button class="cancel_btn" on:click={() => editModeSwitch("update")}>
-                    <span class="material-icons">close</span>
-                    Cancel
+                <button class="red_btn" on:click={() => editModeSwitch('update')}>
+                    <span class="btn_icon material-icons">close</span>
+                    <span class="btn_text">Cancel</span>
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editModeSwitch("update")}>
-                    <span class="material-icons">mode_edit</span>
-                    Edit
+                <button class="normal_btn" on:click={() => editModeSwitch('update')}>
+                    <span class="btn_icon material-icons">mode_edit</span>
+                    <span class="btn_text">Edit</span>
                 </button>
             {/if}
 
@@ -274,8 +275,8 @@
                                 </label>
                             </li>
                         </ul>
-
-                        <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                        
+                        <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                             <span class="btn_icon material-icons">check</span>
                             <span class="btn_text">Save</span>
                         </button>
@@ -292,16 +293,17 @@
             {:else}
                 Disable
             {/if}
+            <p class="console_contents_note">* This data will be fetched when the users run the Rain launcher.</p>
 
             {#if catTypes['debug']}
-                <button class="cancel_btn" on:click={() => editModeSwitch("debug")}>
-                    <span class="material-icons">close</span>
-                    Cancel
+                <button class="red_btn" on:click={() => editModeSwitch('debug')}>
+                    <span class="btn_icon material-icons">close</span>
+                    <span class="btn_text">Cancel</span>
                 </button>
             {:else}
-                <button class="edit_btn" on:click={() => editModeSwitch("debug")}>
-                    <span class="material-icons">mode_edit</span>
-                    Edit
+                <button class="normal_btn" on:click={() => editModeSwitch('debug')}>
+                    <span class="btn_icon material-icons">mode_edit</span>
+                    <span class="btn_text">Edit</span>
                 </button>
             {/if}
 
@@ -324,7 +326,44 @@
                             </li>
                         </ul>
 
-                        <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                        <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
+                            <span class="btn_icon material-icons">check</span>
+                            <span class="btn_text">Save</span>
+                        </button>
+                    </div>
+                </form>
+            {/if}
+        </dd>
+
+        <!-- Launcher Version -->
+        <dt class="contents_term">Launcher Version</dt>
+        <dd class="contents_desc">
+            {launcher_ver}
+
+            {#if catTypes['launcher_ver']}
+                <button class="red_btn" on:click={() => editModeSwitch('launcher_ver')}>
+                    <span class="btn_icon material-icons">close</span>
+                    <span class="btn_text">Cancel</span>
+                </button>
+            {:else}
+                <button class="normal_btn" on:click={() => editModeSwitch('launcher_ver')}>
+                    <span class="btn_icon material-icons">mode_edit</span>
+                    <span class="btn_text">Edit</span>
+                </button>
+            {/if}
+
+            {#if catTypes['launcher_ver']}
+                <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
+                    <div class="edit_area enter">
+                        <p class="edit_area_title">Change the Version of Rain Launcher</p>
+                        <dl class="edit_area_form_parts text">
+                            <dt>Enter the version</dt>
+                            <dd>
+                                <input type="number" name="launcher_ver" step="0.1" inputmode="decimal" pattern="\d*" value={launcher_ver} placeholder="Enter the version" />
+                            </dd>
+                        </dl>
+
+                        <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                             <span class="btn_icon material-icons">check</span>
                             <span class="btn_text">Save</span>
                         </button>

@@ -63,7 +63,7 @@
         // check if another category type is already in edit mode
         const active_editing = Object.values(cat_types).some((boolean) => boolean === true);
 
-        // when another edit_btn is pressed while editing, the editing target is switched
+        // when another normal_btn is pressed while editing, the editing target is switched
         if (active_editing && id !== 0) {
             Object.keys(cat_types).forEach((key) => {
                 cat_types[key] = false;
@@ -122,22 +122,22 @@
             </dl>
 
             <div class="group_btns">
-                <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                     <span class="btn_icon material-icons">check</span>
                     <span class="btn_text">Save</span>
                 </button>
 
-                <button class="cancel_btn" type="button" on:click={() => addInfoMode(true)}>
-                    <span class="material-icons">close</span>
-                    Cancel
+                <button class="red_btn" type="button" on:click={() => addInfoMode(true)}>
+                    <span class="btn_icon material-icons">close</span>
+                    <span class="btn_text">Cancel</span>
                 </button>
             </div>
         </form>
     </div>
 {:else}
-    <button class="add_info_btn" on:click={() => addInfoMode(false)}>
-        <span class="material-icons">add</span>
-        Add Info
+    <button class="green_btn" on:click={() => addInfoMode(false)}>
+        <span class="btn_icon material-icons">add</span>
+        <span class="btn_text">Add Information</span>
     </button>
 
     {#each Object.entries(info_type_data) as [typename, info_data]}
@@ -148,36 +148,35 @@
 
         <div class="console_contents">
             {#if info_data.length === 0}
-                <p class="console_contents_note">No Information Found.</p>
+                <p class="console_contents_note">No Information Data Found</p>
             {:else}
                 {#each _.sortBy(info_data, 'id') || [] as info}
                     <dl class="console_contents_list">
                         <p class="console_contents_list_title">
+                            <button
+                                class="red_btn"
+                                on:click={() => prepareModal('deleteInfo', 'Are you sure you want to delete the following information?', 'deleteInfoData', info.id, info.title, info.url, info.type)}
+                            >
+                                <span class="btn_icon material-icons">delete</span>
+                                <span class="btn_text">Delete</span>
+                            </button>
                             Information Data
                             <input type="hidden" name="info_id" value={info.id} />
                         </p>
-                        <button
-                            style="width: 13%;"
-                            class="del_btn"
-                            on:click={() => prepareModal('deleteInfo', 'Are you sure you want to delete the following information?', 'deleteInfoData', info.title, info.url, info.type)}
-                        >
-                            <span class="material-icons">delete</span>
-                            Delete
-                        </button>
 
                         <dt class="contents_term">Title</dt>
                         <dd class="contents_desc">
                             {info.title}
 
                             {#if edit_id === info.id && cat_types['title']}
-                                <button class="cancel_btn" on:click={() => editModeHandle(0, 'title')}>
-                                    <span class="material-icons">close</span>
-                                    Cancel
+                                <button class="red_btn" on:click={() => editModeHandle(0, 'title')}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
-                                <button class="edit_btn" on:click={() => editModeHandle(info.id, 'title')}>
-                                    <span class="material-icons">mode_edit</span>
-                                    Edit
+                                <button class="normal_btn" on:click={() => editModeHandle(info.id, 'title')}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
 
@@ -193,7 +192,7 @@
                                             </dd>
                                         </dl>
 
-                                        <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                        <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                                             <span class="btn_icon material-icons">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
@@ -207,14 +206,14 @@
                             {info.url}
 
                             {#if edit_id === info.id && cat_types['url']}
-                                <button class="cancel_btn" on:click={() => editModeHandle(0, 'url')}>
-                                    <span class="material-icons">close</span>
-                                    Cancel
+                                <button class="red_btn" on:click={() => editModeHandle(0, 'url')}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
-                                <button class="edit_btn" on:click={() => editModeHandle(info.id, 'url')}>
-                                    <span class="material-icons">mode_edit</span>
-                                    Edit
+                                <button class="normal_btn" on:click={() => editModeHandle(info.id, 'url')}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
 
@@ -230,7 +229,7 @@
                                             </dd>
                                         </dl>
 
-                                        <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                        <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                                             <span class="btn_icon material-icons">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
@@ -249,14 +248,14 @@
                             {info.created_at}
 
                             {#if edit_id === info.id && cat_types['date']}
-                                <button class="cancel_btn" on:click={() => editModeHandle(0, 'date')}>
-                                    <span class="material-icons">close</span>
-                                    Cancel
+                                <button class="red_btn" on:click={() => editModeHandle(0, 'date')}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
-                                <button class="edit_btn" on:click={() => editModeHandle(info.id, 'date')}>
-                                    <span class="material-icons">mode_edit</span>
-                                    Edit
+                                <button class="normal_btn" on:click={() => editModeHandle(info.id, 'date')}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
 
@@ -272,7 +271,7 @@
                                             </dd>
                                         </dl>
 
-                                        <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                        <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                                             <span class="btn_icon material-icons">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
@@ -286,14 +285,14 @@
                             {typename}
 
                             {#if edit_id === info.id && cat_types['info_type']}
-                                <button class="cancel_btn" on:click={() => editModeHandle(0, 'info_type')}>
-                                    <span class="material-icons">close</span>
-                                    Cancel
+                                <button class="red_btn" on:click={() => editModeHandle(0, 'info_type')}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
-                                <button class="edit_btn" on:click={() => editModeHandle(info.id, 'info_type')}>
-                                    <span class="material-icons">mode_edit</span>
-                                    Edit
+                                <button class="normal_btn" on:click={() => editModeHandle(info.id, 'info_type')}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
 
@@ -313,7 +312,7 @@
                                             </dd>
                                         </dl>
 
-                                        <button on:click={() => clicked_submit.set(true)} class="save_btn" type="submit">
+                                        <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                                             <span class="btn_icon material-icons">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>

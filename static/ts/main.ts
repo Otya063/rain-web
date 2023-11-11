@@ -2,6 +2,7 @@ import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
 import { courseJA } from '$i18n/ja/courseData.ts';
 import { courseEN } from '$i18n/en/courseData.ts';
+import { db } from '$ts/database';
 
 /*=========================================================
 　　　　　Slide Functions
@@ -158,11 +159,30 @@ export const banUid = writable(0);
 export const banUsername = writable('');
 export const banCid = writable(0);
 export const deleteInfo = writable(false);
+export const infoId = writable('');
 export const infoTitle = writable('');
 export const infoURL = writable('');
 export const infoType = writable('');
+export const deleteBnr = writable(false);
+export const bnrId = writable('');
+export const bnrURL = writable('');
+export const bnrName = writable('');
+export const linkCharacter = writable(false);
+export const linkUId = writable('');
+export const linkUsername = writable('');
+export const linkCId = writable('');
 
-export const prepareModal = (type: string, title: string, action: string, data1: string | number, data2: string, data3: string | number | null) => {
+/* prepare modal window data
+====================================================*/
+export const prepareModal = (
+    type: string,
+    title: string,
+    action: string,
+    data1: string | number | null = '',
+    data2: string | null = '',
+    data3: string | number | null = '',
+    data4: string | null = ''
+) => {
     switch (type) {
         case 'banUser':
             banUser.set(true);
@@ -177,9 +197,28 @@ export const prepareModal = (type: string, title: string, action: string, data1:
             deleteInfo.set(true);
             modalTitle.set(title);
             modalFormAction.set(action);
-            infoTitle.set(data1);
-            infoURL.set(data2);
-            infoType.set(data3);
+            infoId.set(data1);
+            infoTitle.set(data2);
+            infoURL.set(data3);
+            infoType.set(data4);
+            break;
+
+        case 'deleteBnr':
+            deleteBnr.set(true);
+            modalTitle.set(title);
+            modalFormAction.set(action);
+            bnrId.set(data1);
+            bnrURL.set(data2);
+            bnrName.set(data3);
+            break;
+
+        case 'linkCharacter':
+            linkCharacter.set(true);
+            modalTitle.set(title);
+            modalFormAction.set(action);
+            linkUId.set(data1);
+            linkUsername.set(data2);
+            linkCId.set(data3);
             break;
 
         default:
@@ -187,9 +226,13 @@ export const prepareModal = (type: string, title: string, action: string, data1:
     }
 };
 
+/* close modal window
+====================================================*/
 export const cancelModal = () => {
     deleteInfo.set(false);
     banUser.set(false);
+    deleteBnr.set(false);
+    linkCharacter.set(false);
     modalTitle.set('');
     modalFormAction.set('');
     banUid.set(0);
@@ -198,6 +241,12 @@ export const cancelModal = () => {
     infoTitle.set('');
     infoURL.set('');
     infoType.set('');
+    bnrId.set('');
+    bnrURL.set('');
+    bnrName.set('');
+    linkUId.set('');
+    linkUsername.set('');
+    linkCId.set('');
 };
 
 /* Pause and Resume on setTimeout Function
@@ -236,6 +285,69 @@ export class Timeout {
         return this.time;
     }
 }
+
+/* upload file
+====================================================*/
+export const uploadFileViaApi = async (file: File | undefined, lang: string) => {
+    const getPresignedUrlResponse = await fetch(`/api/upload/${lang}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            fileName: file.name,
+            fileType: file.type,
+        }),
+    });
+
+    const { presignedUrl, objectKey } = await getPresignedUrlResponse.json();
+    console.log(`Presigned URL: ${presignedUrl}, Key: ${objectKey}`);
+    if (getPresignedUrlResponse.ok) {
+        console.log('Presigned URL successfully retrieved.');
+    } else {
+        console.error('Failed to get presigned URL.');
+    }
+
+    const uploadToR2Response = await fetch(presignedUrl, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': file.type,
+        },
+        body: file,
+    });
+
+    if (uploadToR2Response.ok) {
+        console.log('Succeeded in uploading file to R2.');
+    } else {
+        console.error('Failed to upload file to R2.');
+    }
+};
+
+/* delete file
+====================================================*/
+export const deleteFileViaApi = async (lang: string, bnrName: string) => {
+    const getPresignedUrlResponse = await fetch(`/api/delete/${lang}/${bnrName}`, {
+        method: 'DELETE',
+    });
+
+    const { presignedUrl, objectKey } = await getPresignedUrlResponse.json();
+    console.log(`Presigned URL: ${presignedUrl}, Key: ${objectKey}`);
+    if (getPresignedUrlResponse.ok) {
+        console.log('Presigned URL successfully retrieved.');
+    } else {
+        console.error('Failed to get presigned URL.');
+    }
+
+    const deleteToR2Response = await fetch(presignedUrl, {
+        method: 'DELETE',
+    });
+
+    if (deleteToR2Response.ok) {
+        console.log('The file was successfully deleted.');
+    } else {
+        console.error('Failed to delete file.');
+    }
+};
 
 /*=========================================================
 　　　　　User Functions
