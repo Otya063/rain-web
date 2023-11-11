@@ -1,7 +1,7 @@
 import { redirect } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 import bcrypt from 'bcryptjs';
-import { db } from '$lib/database';
+import { db } from '$ts/database';
 
 export const load: PageServerLoad = async ({ cookies }) => {
     const SIDRegister = crypto.randomUUID();
