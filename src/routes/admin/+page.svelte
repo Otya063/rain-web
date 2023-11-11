@@ -30,10 +30,12 @@
         bnrURL,
         bnrName,
         deleteFileViaApi,
-        linkCharacter,
+        linkDiscord,
         linkUId,
         linkUsername,
         linkCId,
+        linkCName,
+        linkDiscordId,
     } from '$ts/main';
     import '$scss/style_admin.scss';
 
@@ -65,6 +67,8 @@
         bnr_created: 'The banner data was successfully created.',
         bnr_updated: `The banner data (ID: ${targetId}) has been successfully updated.`,
         bnr_deleted: `The banner data (ID: ${targetId}) has been successfully deleted.`,
+        link_discord: 'The linking process has been successfully completed.',
+        unlink_discord: 'The unlinking process has been successfully completed.',
     };
 
     // message display timer bar
@@ -186,7 +190,7 @@
         <div class="modal_content">
             <form method="POST">
                 <div class="modal_header">
-                    <h1>Suspend / Unsuspend User</h1>
+                    <h1>Suspend / Unsuspend User Account</h1>
                 </div>
                 <div class="modal_body">
                     <p>{$modalTitle}</p>
@@ -309,23 +313,18 @@
     </div>
 {/if}
 
-{#if $linkCharacter}
+{#if $linkDiscord}
     <div class="modal">
         <div class="modal_content">
             <form method="POST">
                 <input type="hidden" name="user_id" value={$linkUId} />
                 <input type="hidden" name="char_id" value={$linkCId} />
                 <div class="modal_header">
-                    <h1>Link Account</h1>
+                    <h1>Link / Unlink Discord</h1>
                 </div>
                 <div class="modal_body">
                     <p>{$modalTitle}</p>
                     <ul class="modal_list">
-                        <li class="modal_list_item">
-                            <p>User ID</p>
-                            <span>{$linkUId}</span>
-                        </li>
-
                         <li class="modal_list_item">
                             <p>Username</p>
                             <span>{$linkUsername}</span>
@@ -337,11 +336,35 @@
                         </li>
 
                         <li class="modal_list_item">
-                            <p>Discord ID</p>
-                            <input type="text" name="discord_id" />
+                            <p>Character Name</p>
+                            <span>{$linkCName}</span>
                         </li>
+
+                        {#if $modalFormAction === 'linkDiscord'}
+                            <li class="modal_list_item">
+                                <p>Discord ID</p>
+                                <input type="text" name="discord_id" />
+                            </li>
+                        {:else if $modalFormAction === 'unlinkDiscord'}
+                            <input type="hidden" name="discord_id" value={$linkDiscordId} />
+                            <li class="modal_list_item">
+                                <p>Discord ID</p>
+                                <span>{$linkDiscordId}</span>
+                            </li>
+                        {/if}
                     </ul>
-                    <p class="modal_note">* If Discord ID you entered is already linked to another account, the internal data (bounty coins, bounty progress, etc.) of that account will be transferred and re-linked to the target account.</p>
+
+                    {#if $modalFormAction === 'linkDiscord'}
+                        <p class="modal_note">
+                            * If Discord ID you entered is already linked to another character or account, the internal data (bounty coins, bounty progress, etc.) will be transferred and re-linked to
+                            the target character or account.
+                        </p>
+                    {:else if $modalFormAction === 'unlinkDiscord'}
+                        <p class="modal_note">
+                            * Once the account is unlinked, all internal data (bounty coins, bounty progress, etc.) will be deleted completely. If you want to re-link another character or account,
+                            please execute the process from the "Link" button.
+                        </p>
+                    {/if}
                 </div>
                 <div class="ban_btn_group">
                     <button class="blue_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => clicked_submit.set(true)}>

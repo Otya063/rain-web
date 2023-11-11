@@ -11,8 +11,6 @@ node_modules
 !.env.example
 .cloudflare
 robots.txt
-src/routes/admin/*.ts
-signup/
 changelog.txt
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*

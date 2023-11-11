@@ -737,32 +737,58 @@
                         <p style="color: #ff8100;">This user doesn't have any characters.</p>
                     {:else}
                         {#each _.sortBy( _.filter(charactersData, (c_data) => c_data.user_id === user.id), 'id' ) as character}
-                            {#if character.deleted}
-                                <p style="color: #f56044;">This user's character has been deleted.</p>
-                            {:else if !character.is_new_character}
+                            {#if !character.is_new_character}
                                 <div class="character_item {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '')}">
                                     <span class="name">
                                         {character.name}
                                     </span>
 
+                                    {#if character.deleted}
+                                        <button class="red_btn deleted_character">
+                                            <span class="btn_icon material-icons">delete</span>
+                                            <span class="btn_text">Deleted</span>
+                                        </button>
+                                    {:else}
+                                        <button class="red_btn delete_character">
+                                            <span class="btn_icon material-icons">delete</span>
+                                            <span class="btn_text">Delete</span>
+                                        </button>
+                                    {/if}
+
                                     {#if _.sortBy( _.filter(linkedCharacters, (l_data) => l_data.char_id === character.id), 'id' ).map(function (val) {
                                         return val['char_id'];
                                     })[0] === character.id}
-                                        <button class="green_btn linked_acc">
-                                            <span class="btn_icon material-icons">link</span>
-                                            <span class="btn_text">Linked</span>
-                                        </button>
+                                        {#each _.sortBy( _.filter(linkedCharacters, (l_data) => l_data.char_id === character.id), 'id' ) as linkedCharacter}
+                                            <button
+                                                class="green_btn linked_character"
+                                                on:click={() =>
+                                                    prepareModal(
+                                                        'linkDiscord',
+                                                        'Are you sure you want to unlink the following characters?',
+                                                        'unlinkDiscord',
+                                                        user.id,
+                                                        user.username,
+                                                        character.id,
+                                                        character.name,
+                                                        linkedCharacter.discord_id
+                                                    )}
+                                            >
+                                                <span class="btn_icon material-icons">link</span>
+                                                <span class="btn_text">Linked</span>
+                                            </button>
+                                        {/each}
                                     {:else}
                                         <button
-                                            class="green_btn link_acc"
+                                            class="green_btn link_character"
                                             on:click={() =>
                                                 prepareModal(
-                                                    'linkCharacter',
+                                                    'linkDiscord',
                                                     'Execute the linking process with the following user and character. Please confirm the target ID and Username, and enter the ID (18-digit) of Discord to be linked.',
-                                                    'linkCharacter',
+                                                    'linkDiscord',
                                                     user.id,
                                                     user.username,
-                                                    character.id
+                                                    character.id,
+                                                    character.name
                                                 )}
                                         >
                                             <span class="btn_icon material-icons">link</span>

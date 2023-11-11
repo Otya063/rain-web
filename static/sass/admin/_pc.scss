@@ -840,7 +840,7 @@
         align-items: center;
         justify-content: space-evenly;
         background: rgba(127, 127, 127, 0.5);
-        z-index: 1;
+        z-index: 2;
         user-select: none;
         box-shadow: 0 0 20px black;
         border-radius: 20px;
@@ -962,18 +962,44 @@
             width: 100%;
         }
 
+        // 削除済みアカウント表示
+        .deleted_character {
+            top: 9% !important;
+            left: 4% !important;
+            color: #fff;
+            background: #de6161;
+            border: 1px solid #de6161;
+            z-index: 1;
+
+            &:hover {
+                background: #f57e7e;
+                border: 1px solid #f57e7e;
+            }
+        }
+
+        // キャラクター削除表示
+        .delete_character {
+            top: 9% !important;
+            left: 4% !important;
+            z-index: 1;
+        }
+
         // 連携済みアカウント表示
-        .linked_acc {
+        .linked_character {
             top: 12% !important;
             right: 4% !important;
             color: #fff;
             background: #0ad275;
             border: 1px solid #0ad275;
-            pointer-events: none;
+
+            &:hover {
+                background: #5ae3a3;
+                border: 1px solid #5ae3a3;
+            }
         }
 
         // アカウント連携表示
-        .link_acc {
+        .link_character {
             top: 12% !important;
             right: 4% !important;
         }
@@ -1022,8 +1048,8 @@
         // 武器詳細
         .little_endian {
             position: absolute;
-            bottom: -15%;
-            left: 6%;
+            top: 8%;
+            left: -50%;
             font-weight: 800;
             font-size: 1.5rem;
             color: #fb3737;
@@ -1035,10 +1061,9 @@
             transition: all 0.2s;
             transform: translate(0, 100%);
             opacity: 0;
-            z-index: 2;
 
             &.wpn_name_hover {
-                transform: translate(0, 20%);
+                transform: translate(55%, 100%);
                 opacity: 1;
             }
         }

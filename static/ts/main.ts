@@ -167,10 +167,12 @@ export const deleteBnr = writable(false);
 export const bnrId = writable('');
 export const bnrURL = writable('');
 export const bnrName = writable('');
-export const linkCharacter = writable(false);
+export const linkDiscord = writable(false);
 export const linkUId = writable('');
 export const linkUsername = writable('');
 export const linkCId = writable('');
+export const linkCName = writable('');
+export const linkDiscordId = writable('');
 
 /* prepare modal window data
 ====================================================*/
@@ -181,7 +183,8 @@ export const prepareModal = (
     data1: string | number | null = '',
     data2: string | null = '',
     data3: string | number | null = '',
-    data4: string | null = ''
+    data4: string | null = '',
+    data5: string | null = ''
 ) => {
     switch (type) {
         case 'banUser':
@@ -212,13 +215,15 @@ export const prepareModal = (
             bnrName.set(data3);
             break;
 
-        case 'linkCharacter':
-            linkCharacter.set(true);
+        case 'linkDiscord':
+            linkDiscord.set(true);
             modalTitle.set(title);
             modalFormAction.set(action);
             linkUId.set(data1);
             linkUsername.set(data2);
             linkCId.set(data3);
+            linkCName.set(data4);
+            linkDiscordId.set(data5);
             break;
 
         default:
@@ -232,7 +237,7 @@ export const cancelModal = () => {
     deleteInfo.set(false);
     banUser.set(false);
     deleteBnr.set(false);
-    linkCharacter.set(false);
+    linkDiscord.set(false);
     modalTitle.set('');
     modalFormAction.set('');
     banUid.set(0);
@@ -247,6 +252,7 @@ export const cancelModal = () => {
     linkUId.set('');
     linkUsername.set('');
     linkCId.set('');
+    linkCName.set('');
 };
 
 /* Pause and Resume on setTimeout Function
