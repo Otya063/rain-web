@@ -3,11 +3,11 @@
     import { setLocale } from '$i18n/i18n-svelte';
     import { scrollToTop } from '$ts/main';
     import LL from '$i18n/i18n-svelte';
-    import Alternate from '$lib/common/Alternate.svelte';
-    import ManualHeader from '$lib/common/ManualHeader.svelte';
-    import BottomNav from '$lib/common/BottomNav.svelte';
-    import LandscapeMode from '$lib/common/LandscapeMode.svelte';
-    import ManualFooter from '$lib/common/ManualFooter.svelte';
+    import Alternate from '$lib/manual/Alternate.svelte';
+    import ManualHeader from '$lib/manual/ManualHeader.svelte';
+    import BottomNav from '$lib/manual/BottomNav.svelte';
+    import LandscapeMode from '$lib/manual/LandscapeMode.svelte';
+    import ManualFooter from '$lib/manual/ManualFooter.svelte';
     import '$scss/style_manual.scss';
 
     export let data: LayoutData;

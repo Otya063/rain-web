@@ -1,72 +1,406 @@
 <script lang="ts">
-    export let data;
-    const { maint_jp, maint_us, maint_eu, update } = data.launcher_system!;
+    import _ from 'lodash';
+    import AdminMenu from '$lib/admin/AdminMenu.svelte';
+    import AdminContents from '$lib/admin/AdminContents.svelte';
+    import { tweened, type Tweened } from 'svelte/motion';
+    import { slide, fade } from 'svelte/transition';
+    import type { ActionData, PageData } from './$types';
+    import {
+        Timeout,
+        success,
+        error,
+        err_details,
+        errDetailMode,
+        notice,
+        clicked_submit,
+        modalTitle,
+        modalFormAction,
+        cancelModal,
+        banUser,
+        banUid,
+        banUsername,
+        banCid,
+        deleteInfo,
+        infoId,
+        infoTitle,
+        infoURL,
+        infoType,
+        deleteBnr,
+        bnrId,
+        bnrURL,
+        bnrName,
+        deleteFileViaApi,
+        linkCharacter,
+        linkUId,
+        linkUsername,
+        linkCId,
+    } from '$ts/main';
+    import '$scss/style_admin.scss';
+
+    // data from the server
+    export let data: PageData;
+    export let form: ActionData;
+    let status: keyof StatusMsg;
+    let targetId: number;
+    form?.status ? (status = form?.status) : (status = '');
+    form?.targetId ? (targetId = form?.targetId) : (targetId = 0);
+    form?.success ? success.set(form!.success) : success.set(false);
+    form?.error ? (error.set(form!.error), err_details.set(form!.err_details)) : (error.set(false), err_details.set(''));
+    clicked_submit.set(false);
+    notice.set(false);
+
+    // status messages
+    interface StatusMsg {
+        [key: string]: string;
+    }
+    const success_msg: StatusMsg = {
+        system_updated: 'The system mode has been successfully updated.',
+        maint_all_updated: 'All maintenance modes have been successfully updated.',
+        info_created: 'The information data has been successfully created.',
+        info_updated: `The information data (ID: ${targetId}) has been successfully updated.`,
+        info_deleted: `The information data (ID: ${targetId}) has been successfully deleted.`,
+        user_updated: 'The user data has been successfully updated.',
+        suspend_user: 'The user account was successfully suspended.',
+        unsuspend_user: 'The user account was successfully unsuspended.',
+        bnr_created: 'The banner data was successfully created.',
+        bnr_updated: `The banner data (ID: ${targetId}) has been successfully updated.`,
+        bnr_deleted: `The banner data (ID: ${targetId}) has been successfully deleted.`,
+    };
+
+    // message display timer bar
+    let t: Timeout | null = null;
+    let timerPause: boolean = false;
+    let width: Tweened<number>;
+    $: if ($success || $error || $notice) {
+        width = tweened(100);
+        width.set(-1, { duration: 5000 });
+        t = new Timeout(() => {
+            status = '';
+            success.set(false);
+            error.set(false);
+            notice.set(false);
+            err_details.set('');
+            targetId;
+            width.set(100, { duration: 0 });
+        }, 5000);
+    }
+
+    // toggle error details message
+    const toggleErrDetail = (e: Event) => {
+        // prevent repeatedly pressing btn
+        const target = e.target as HTMLButtonElement;
+        target.disabled = true;
+        setTimeout(() => {
+            // after 2s, enable btn
+            target.disabled = false;
+        }, 2000);
+
+        if (t) {
+            if (timerPause) {
+                errDetailMode.set(false);
+                timerPause = false;
+                t.run();
+                width.set(0, { duration: t.getRestTime() });
+            } else {
+                errDetailMode.set(true);
+                timerPause = true;
+                t.pause();
+                width.set($width, { duration: 0 });
+            }
+        }
+    };
+
+    // close the message display manually
+    const closeMsgDisplay = () => {
+        // the message is not closed when the error details are open.
+        if ($errDetailMode) {
+            return false;
+        }
+
+        status = '';
+        success.set(false);
+        error.set(false);
+        notice.set(false);
+        width.set(0, { duration: 0 });
+        t!.stop();
+    };
+
+    /* delete file function
+    ====================================================*/
+    const deleteAllBnrFiles = () => {
+        if ($bnrName === '') {
+            return false;
+        }
+
+        deleteFileViaApi('ja', `${$bnrName}_ja`);
+        deleteFileViaApi('en', `${$bnrName}_en`);
+    };
 </script>
 
-<p>This is an admin page.</p>
-
-<form action="?/storeData" method="POST">
-    <div>
-        <label for="rain_jp">Rain (JP)</label>
-        <input id="rain_jp" type="checkbox" name="rain_jp" checked={maint_jp} />
+<header>
+    <div class="header_inner">
+        <!-- svelte-ignore a11y-label-has-associated-control -->
+        <label class="header_platform" />
     </div>
+</header>
 
-    <div>
-        <label for="rain_us">Rain (US)</label>
-        <input id="rain_us" type="checkbox" name="rain_us" checked={maint_us} />
+{#if $clicked_submit}
+    <div class="saving_overlay">
+        <div class="loader" />
+        <p class="saving_overlay_text">Saving...</p>
     </div>
+{/if}
 
-    <div>
-        <label for="rain_eu">Rain (EU)</label>
-        <input id="rain_eu" type="checkbox" name="rain_eu" checked={maint_eu} />
+<div class="background_img" />
+
+{#if $success || $error || $notice}
+    <div transition:fade class="msg_display" class:success={$success} class:error={$error} class:notice={$notice}>
+        <span class="left_side_bar" />
+        {#if $success}
+            <span class="material-icons-outlined">check_circle</span>
+            <p style="padding-top: 0.3%;">{success_msg[status]}</p>
+        {:else if $error}
+            <span class="material-icons-outlined">warning</span>
+            <p style="padding-top: 0.3%;">An error occurred.</p>
+            <button on:click={(e) => toggleErrDetail(e)} class="error_view_btn">View Details</button>
+        {:else if $notice}
+            <span class="material-icons-outlined">notification_important</span>
+            <p style="padding-top: 0.3%;">Unauthorized operation detected.</p>
+            <button on:click={(e) => toggleErrDetail(e)} class="error_view_btn">View Details</button>
+        {/if}
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <span on:click={() => closeMsgDisplay()} class="msg_close_btn" />
+        <div class="timer_bar" style={`width: ${$width}%;`} />
     </div>
+    {#if $errDetailMode}
+        <div transition:slide class="msg_detail">
+            Message Details:
+            <p>{$err_details}</p>
+        </div>
+    {/if}
+{/if}
 
-    <div>
-        <label for="update_mode">Update Mode</label>
-        <input id="update_mode" type="checkbox" name="update_mode" checked={update} />
+{#if $banUser}
+    <div class="modal">
+        <div class="modal_content">
+            <form method="POST">
+                <div class="modal_header">
+                    <h1>Suspend / Unsuspend User</h1>
+                </div>
+                <div class="modal_body">
+                    <p>{$modalTitle}</p>
+                    <ul class="modal_list">
+                        <li class="modal_list_item">
+                            <p>User ID</p>
+                            <span>{$banUid}</span>
+                            <input type="hidden" name="user_id" value={$banUid} />
+                        </li>
+
+                        <li class="modal_list_item">
+                            <p>Username</p>
+                            <span>{$banUsername}</span>
+                            <input type="hidden" name="user_username" value={$banUsername} />
+                        </li>
+
+                        <li class="modal_list_item">
+                            <p>Character ID (Last Played)</p>
+                            <span>{$banCid}</span>
+                            {#each _.filter(data.charactersWithoutBytes, (each_data) => {
+                                return each_data.user_id === $banUid;
+                            }) as character}
+                                <input type="hidden" name="character_id" value={character.id} />
+                            {/each}
+                        </li>
+                    </ul>
+                </div>
+                <div class="ban_btn_group">
+                    <button class="blue_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => clicked_submit.set(true)}>
+                        <span class="btn_icon material-icons">check</span>
+                        <span class="btn_text">Yes</span>
+                    </button>
+                    <button class="red_btn" type="button" on:click={() => cancelModal()}>
+                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_text">No</span>
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
+{/if}
 
-    <button type="submit">Save</button>
-</form>
+{#if $deleteInfo}
+    <div class="modal">
+        <div class="modal_content">
+            <form method="POST">
+                <input type="hidden" name="info_id" value={$infoId} />
+                <div class="modal_header">
+                    <h1>Delete Information</h1>
+                </div>
+                <div class="modal_body">
+                    <p>{$modalTitle}</p>
+                    <ul class="modal_list">
+                        <li class="modal_list_item">
+                            <p>Information Title</p>
+                            <span>{$infoTitle}</span>
+                        </li>
 
-<section class="data_transfer_section">
-    <dl class="maintenance">
-        <dt>RainJP</dt>
-        <dd>
-            {#if maint_jp}
-                true
-            {:else}
-                false
-            {/if}
-        </dd>
+                        <li class="modal_list_item">
+                            <p>Information URL</p>
+                            <span>{$infoURL}</span>
+                        </li>
 
-        <dt>RainUS</dt>
-        <dd>
-            {#if maint_us}
-                true
-            {:else}
-                false
-            {/if}
-        </dd>
+                        <li class="modal_list_item">
+                            <p>Information Type</p>
+                            <span>{$infoType}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="ban_btn_group">
+                    <button class="blue_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => clicked_submit.set(true)}>
+                        <span class="btn_icon material-icons">check</span>
+                        <span class="btn_text">Yes</span>
+                    </button>
+                    <button class="red_btn" type="button" on:click={() => cancelModal()}>
+                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_text">No</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{/if}
 
-        <dt>RainEU</dt>
-        <dd>
-            {#if maint_eu}
-                true
-            {:else}
-                false
-            {/if}
-        </dd>
-    </dl>
+{#if $deleteBnr}
+    <div class="modal">
+        <div class="modal_content">
+            <form method="POST">
+                <input type="hidden" name="bnr_id" value={$bnrId} />
+                <input type="hidden" name="bnr_name" value={$bnrName} />
+                <div class="modal_header">
+                    <h1>Delete Banner Data</h1>
+                </div>
+                <div class="modal_body">
+                    <p>{$modalTitle}</p>
+                    <ul class="modal_list">
+                        <li class="modal_list_item">
+                            <p>Banner Preview</p>
+                            <img src={$bnrURL} alt={String($bnrName)} />
+                        </li>
 
-    <dl class="update">
-        <dt>UpdateMode</dt>
-        <dd>
-            {#if update}
-                true
-            {:else}
-                false
-            {/if}
-        </dd>
-    </dl>
-</section>
+                        <li class="modal_list_item">
+                            <p>Banner Name</p>
+                            <span>{$bnrName}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="ban_btn_group">
+                    <button class="blue_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => (clicked_submit.set(true), deleteAllBnrFiles())}>
+                        <span class="btn_icon material-icons">check</span>
+                        <span class="btn_text">Yes</span>
+                    </button>
+                    <button class="red_btn" type="button" on:click={() => cancelModal()}>
+                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_text">No</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{/if}
+
+{#if $linkCharacter}
+    <div class="modal">
+        <div class="modal_content">
+            <form method="POST">
+                <input type="hidden" name="user_id" value={$linkUId} />
+                <input type="hidden" name="char_id" value={$linkCId} />
+                <div class="modal_header">
+                    <h1>Link Account</h1>
+                </div>
+                <div class="modal_body">
+                    <p>{$modalTitle}</p>
+                    <ul class="modal_list">
+                        <li class="modal_list_item">
+                            <p>User ID</p>
+                            <span>{$linkUId}</span>
+                        </li>
+
+                        <li class="modal_list_item">
+                            <p>Username</p>
+                            <span>{$linkUsername}</span>
+                        </li>
+
+                        <li class="modal_list_item">
+                            <p>Character ID</p>
+                            <span>{$linkCId}</span>
+                        </li>
+
+                        <li class="modal_list_item">
+                            <p>Discord ID</p>
+                            <input type="text" name="discord_id" />
+                        </li>
+                    </ul>
+                    <p class="modal_note">* If Discord ID you entered is already linked to another account, the internal data (bounty coins, bounty progress, etc.) of that account will be transferred and re-linked to the target account.</p>
+                </div>
+                <div class="ban_btn_group">
+                    <button class="blue_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => clicked_submit.set(true)}>
+                        <span class="btn_icon material-icons">check</span>
+                        <span class="btn_text">Yes</span>
+                    </button>
+                    <button class="red_btn" type="button" on:click={() => cancelModal()}>
+                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_text">No</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{/if}
+
+<main class="console_body">
+    <nav class="console_menu">
+        <AdminMenu />
+    </nav>
+
+    <article class="console_article">
+        <h1>
+            <span class="material-symbols-outlined">admin_panel_settings</span>
+            Admin Console
+        </h1>
+        <AdminContents {data} />
+    </article>
+</main>
+
+<footer>
+    <div class="footer_note">
+        <p>
+            * Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated
+            through this project.
+        </p>
+    </div>
+</footer>
+
+<svelte:head>
+    <title>Admin Console</title>
+    <meta name="robots" content="noindex,nofollow,noarchive" />
+    <meta name="description" content="Console page for administrators only." />
+    <!-- favicon -->
+    <link rel="icon" href="/img/common/rain_favicon.ico?v=1" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/common/rain_apple_icon.png?v=1" />
+    <link rel="manifest" href="/manifest.webmanifest?v=1" />
+    <!-- mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" />
+    <!-- icon -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons%7CMaterial+Icons+Outlined" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+</svelte:head>

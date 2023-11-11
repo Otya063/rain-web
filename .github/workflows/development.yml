@@ -35,7 +35,7 @@ jobs:
 
             - name: Install dependencies
               run: pnpm i
-            - run: npx prisma generate --schema=./prisma/schema.prisma --data-proxy
+            - run: npx prisma generate --schema=./prisma/schema.prisma --no-engine
 
             - name: Build
               run: pnpm build
@@ -46,4 +46,4 @@ jobs:
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_ACCOUNT_ID }}
-                  command: publish --name development
+                  command: deploy --name development
