@@ -8,8 +8,8 @@ const L = i18n();
 const securityHeaders = {
     'Access-Control-Allow-Credentials': 'true',
     'Access-Control-Allow-Origin': import.meta.env.VITE_ALLOW_ORIGIN,
-    'Access-Control-Allow-Methods': import.meta.env.VITE_ALLOW_METHODS,
-    'Access-Control-Allow-Headers': import.meta.env.VITE_ALLOW_HEADERS,
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
 };
 
 export const handle: Handle = async ({ event, resolve }) => {

@@ -16,6 +16,13 @@ jobs:
         runs-on: ubuntu-latest
         env:
             VITE_DATABASE_URL: ${{ secrets.DATABASE_URL }}
+            VITE_DIRECT_URL: ${{ secrets.DIRECT_URL }}
+            VITE_ALLOW_ORIGIN: ${{ secrets.ALLOW_ORIGIN }}
+            VITE_R2_ACCESS_KEY: ${{ secrets.R2_ACCESS_KEY }}
+            VITE_R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
+            VITE_R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+            VITE_R2_BNR_BUCKETNAME: ${{ secrets.R2_BNR_BUCKETNAME }}
+            VITE_R2_BNR_UNIQUE_URL: ${{ secrets.R2_BNR_UNIQUE_URL }}
 
         steps:
             - name: Checkout
