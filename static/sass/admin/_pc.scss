@@ -1011,6 +1011,7 @@
             height: 47px;
             top: 48%;
             left: 6%;
+            background: url(#{$path_img}/common/char_wpn_icon/NoData.png);
 
             // 武器種名に応じてアイコン表示
             $weaponNames: $weaponNamesArray;

@@ -307,7 +307,7 @@
                             <input style="margin-left: 7%; width: 95%;" type="text" name="specified_u_text" placeholder="Ex) 1364+1489+ ..." disabled={specifiedText} />
                         </div>
                         <p class="console_contents_note" style="margin: 0px 0px 3% 4%; text-indent: -1.2rem;">
-                            * When specifying multiple users in the "Specify Users" text box, be sure to join the User IDs with "+".
+                            * When specifying multiple users in the "Specify Users" text box, be sure to join User IDs with "+".
                         </p>
                     </dd>
 
@@ -451,7 +451,7 @@
 
                     {#if editId === user.id && catTypes['password']}
                         <form transition:slide class="edit_area_form" action="?/updateUserData" method="POST">
-                            <input type="hidden" name="password" value={editId} />
+                            <input type="hidden" name="user_id" value={editId} />
                             <div class="edit_area enter">
                                 <p class="edit_area_title">Change Password</p>
                                 <dl class="edit_area_form_parts text">
@@ -738,7 +738,7 @@
                     {:else}
                         {#each _.sortBy( _.filter(charactersData, (c_data) => c_data.user_id === user.id), 'id' ) as character}
                             {#if !character.is_new_character}
-                                <div class="character_item {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '')}">
+                                <div class="character_item {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '').replace('&', 'And')}">
                                     <span class="name">
                                         {character.name}
                                     </span>
@@ -796,7 +796,7 @@
                                         </button>
                                     {/if}
 
-                                    <div class="wpn_icon {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '')}" />
+                                    <div class="wpn_icon {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '').replace('&', 'And')}" />
                                     <p class="wpn_text">
                                         {getWpnTypeByDec(character.weapon_type, 'en')}
                                         <br />
@@ -824,53 +824,75 @@
                             {:else}
                                 <div class="character_item new" style="cursor: not-allowed;">
                                     <span class="name">Ready to Hunt</span>
+
+                                    {#if character.deleted}
+                                        <button class="red_btn deleted_character">
+                                            <span class="btn_icon material-icons">delete</span>
+                                            <span class="btn_text">Deleted</span>
+                                        </button>
+                                    {:else}
+                                        <button class="red_btn delete_character">
+                                            <span class="btn_icon material-icons">delete</span>
+                                            <span class="btn_text">Delete</span>
+                                        </button>
+                                    {/if}
+
+                                    {#if _.sortBy( _.filter(linkedCharacters, (l_data) => l_data.char_id === character.id), 'id' ).map(function (val) {
+                                        return val['char_id'];
+                                    })[0] === character.id}
+                                        {#each _.sortBy( _.filter(linkedCharacters, (l_data) => l_data.char_id === character.id), 'id' ) as linkedCharacter}
+                                            <button
+                                                class="green_btn linked_character"
+                                                on:click={() =>
+                                                    prepareModal(
+                                                        'linkDiscord',
+                                                        'Are you sure you want to unlink the following characters?',
+                                                        'unlinkDiscord',
+                                                        user.id,
+                                                        user.username,
+                                                        character.id,
+                                                        character.name,
+                                                        linkedCharacter.discord_id
+                                                    )}
+                                            >
+                                                <span class="btn_icon material-icons">link</span>
+                                                <span class="btn_text">Linked</span>
+                                            </button>
+                                        {/each}
+                                    {:else}
+                                        <button
+                                            class="green_btn link_character"
+                                            on:click={() =>
+                                                prepareModal(
+                                                    'linkDiscord',
+                                                    'Execute the linking process with the following user and character. Please confirm the target ID and Username, and enter the ID (18-digit) of Discord to be linked.',
+                                                    'linkDiscord',
+                                                    user.id,
+                                                    user.username,
+                                                    character.id,
+                                                    character.name
+                                                )}
+                                        >
+                                            <span class="btn_icon material-icons">link</span>
+                                            <span class="btn_text">Link</span>
+                                        </button>
+                                    {/if}
+
+                                    <div class="wpn_icon" />
+                                    <p class="wpn_text">
+                                        No Data
+                                        <br />
+                                        No Data
+                                    </p>
+                                    <span class="rank">HR: {character.hrp} / GR: {character.gr}</span>
+                                    <span class="char_id">Character ID: {character.id}</span>
+                                    <span class="last_login">Last Login: {convUnixToDate(character.last_login, false)}</span>
                                 </div>
                             {/if}
                         {/each}
                     {/if}
                 </dd>
             </dl>
-
-            <!--
-            
-                <dl transition:slide class="console_contents_list">
-                    {#if characters_data.every((character) => character.user_id !== user.id)}
-                        <p class="no_character_msg">This user doesn't have any characters.</p>
-                    {:else}
-                        {#each characters_data as character}
-                            {#if user.id === character.user_id && character.is_new_character}
-                                <p>New Hunter</p>
-                            {/if}
-                            
-                            {#if user.id === character.user_id && !character.is_new_character}
-                                <dt class="contents_term">Character ID</dt>
-                                <dd class="contents_desc">{character.id}</dd>
-
-                                <dt class="contents_term">Gender</dt>
-                                <dd class="contents_desc">
-                                    {#if !character.is_female}
-                                        Male
-                                    {:else}
-                                        Female
-                                    {/if}
-                                </dd>
-
-                                <dt class="contents_term">Character Name</dt>
-                                <dd class="contents_desc">{character.name}</dd>
-
-                                <dt class="contents_term">HR</dt>
-                                <dd class="contents_desc">{character.hrp}</dd>
-
-                                <dt class="contents_term">GR</dt>
-                                <dd class="contents_desc">{character.gr}</dd>
-
-                                <dt class="contents_term">Last Login Date</dt>
-                                <dd class="contents_desc">{convUnixToDate(character.last_login, false)}</dd>
-                            {/if}
-                        {/each}
-                    {/if}
-                </dl>
-            -->
         {/each}
     {/if}
 </div>
