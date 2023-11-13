@@ -82,7 +82,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
         case 2:
             const status = await requestActToServer(requestData[2], requestData[3]);
-            console.log(status)
+            console.log(status);
 
             return json({
                 status,

@@ -16,10 +16,10 @@
         modalTitle,
         modalFormAction,
         cancelModal,
-        banUser,
-        banUid,
-        banUsername,
-        banCid,
+        suspendUser,
+        suspendUid,
+        suspendUsername,
+        suspendCid,
         deleteInfo,
         infoId,
         infoTitle,
@@ -36,6 +36,9 @@
         linkCId,
         linkCName,
         linkDiscordId,
+        deleteChar,
+        deleteCharId,
+        deleteCharName,
     } from '$ts/main';
     import '$scss/style_admin.scss';
 
@@ -62,13 +65,17 @@
         info_updated: `The information data (ID: ${targetId}) has been successfully updated.`,
         info_deleted: `The information data (ID: ${targetId}) has been successfully deleted.`,
         user_updated: 'The user data has been successfully updated.',
-        suspend_user: 'The user account was successfully suspended.',
+        suspend_user: 'The user account was successfully suspended. (Restorable)',
+        permanently_suspend_user: 'The user account was successfully suspended. (Not Restorable)',
         unsuspend_user: 'The user account was successfully unsuspended.',
         bnr_created: 'The banner data was successfully created.',
         bnr_updated: `The banner data (ID: ${targetId}) has been successfully updated.`,
         bnr_deleted: `The banner data (ID: ${targetId}) has been successfully deleted.`,
         link_discord: 'The linking process has been successfully completed.',
         unlink_discord: 'The unlinking process has been successfully completed.',
+        delete_character: 'The character data has been successfully deleted. (Restorable)',
+        permanently_delete_character: 'The character data has been successfully deleted. (Not Restorable)',
+        restore_character: 'The character data has been successfully restored.',
     };
 
     // message display timer bar
@@ -185,7 +192,7 @@
     {/if}
 {/if}
 
-{#if $banUser}
+{#if $suspendUser}
     <div class="modal">
         <div class="modal_content">
             <form method="POST">
@@ -197,26 +204,41 @@
                     <ul class="modal_list">
                         <li class="modal_list_item">
                             <p>User ID</p>
-                            <span>{$banUid}</span>
-                            <input type="hidden" name="user_id" value={$banUid} />
+                            <span>{$suspendUid}</span>
+                            <input type="hidden" name="user_id" value={$suspendUid} />
                         </li>
 
                         <li class="modal_list_item">
                             <p>Username</p>
-                            <span>{$banUsername}</span>
-                            <input type="hidden" name="user_username" value={$banUsername} />
+                            <span>{$suspendUsername}</span>
+                            <input type="hidden" name="user_username" value={$suspendUsername} />
                         </li>
 
                         <li class="modal_list_item">
-                            <p>Character ID (Last Played)</p>
-                            <span>{$banCid}</span>
-                            {#each _.filter(data.charactersWithoutBytes, (each_data) => {
-                                return each_data.user_id === $banUid;
-                            }) as character}
-                                <input type="hidden" name="character_id" value={character.id} />
-                            {/each}
+                            <p>Owned Character Name</p>
+                            <span>
+                                {#each _.sortBy( _.filter(data.charactersWithoutBytes, (c_data) => c_data.user_id === $suspendUid), 'id' ) as character, i}
+                                    <input type="hidden" name="character_id" value={character.id} />
+                                    ({i + 1}){`${character.name}　`}
+                                {/each}
+                            </span>
                         </li>
+
+                        {#if $modalFormAction === 'suspendUser'}
+                            <li class="modal_list_item">
+                                <p>Permanently Suspend</p>
+                                <input type="checkbox" name="permanently_del" />
+                            </li>
+                        {/if}
                     </ul>
+
+                    {#if $modalFormAction === 'suspendUser'}
+                        <p class="modal_note">
+                            * Once a user account is suspended, all characters owned by that account are considered as deleted. But its data isn't deleted from database and can be restored via
+                            "Unsuspend" button.
+                        </p>
+                        <p class="modal_note">* If "Permanently Suspend" is checked, the user account, including all character data, will be completely deleted from the database and can't be restored.</p>
+                    {/if}
                 </div>
                 <div class="ban_btn_group">
                     <button class="blue_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => clicked_submit.set(true)}>
@@ -239,7 +261,7 @@
             <form method="POST">
                 <input type="hidden" name="info_id" value={$infoId} />
                 <div class="modal_header">
-                    <h1>Delete Information</h1>
+                    <h1>Delete Information Data</h1>
                 </div>
                 <div class="modal_body">
                     <p>{$modalTitle}</p>
@@ -364,6 +386,54 @@
                             * Once the account is unlinked, all internal data (bounty coins, bounty progress, etc.) will be deleted completely. If you want to re-link another character or account,
                             please execute the process from the "Link" button.
                         </p>
+                    {/if}
+                </div>
+                <div class="ban_btn_group">
+                    <button class="blue_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => clicked_submit.set(true)}>
+                        <span class="btn_icon material-icons">check</span>
+                        <span class="btn_text">Yes</span>
+                    </button>
+                    <button class="red_btn" type="button" on:click={() => cancelModal()}>
+                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_text">No</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{/if}
+
+{#if $deleteChar}
+    <div class="modal">
+        <div class="modal_content">
+            <form method="POST">
+                <input type="hidden" name="char_id" value={$deleteCharId} />
+                <div class="modal_header">
+                    <h1>Delete / Restore Character</h1>
+                </div>
+                <div class="modal_body">
+                    <p>{$modalTitle}</p>
+                    <ul class="modal_list">
+                        <li class="modal_list_item">
+                            <p>Character ID</p>
+                            <span>{$deleteCharId}</span>
+                        </li>
+
+                        <li class="modal_list_item">
+                            <p>Character Name</p>
+                            <span>{$deleteCharName}</span>
+                        </li>
+
+                        {#if $modalFormAction === 'deleteCharacter'}
+                            <li class="modal_list_item">
+                                <p>Permanently Delete</p>
+                                <input type="checkbox" name="permanently_del" />
+                            </li>
+                        {/if}
+                    </ul>
+
+                    {#if $modalFormAction === 'deleteCharacter'}
+                        <p class="modal_note">* If "Permanently Delete" is checked, all character data will be completely deleted from the database and can't be restored.</p>
                     {/if}
                 </div>
                 <div class="ban_btn_group">

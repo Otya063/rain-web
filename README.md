@@ -9,7 +9,7 @@ Install dependencies.
 npm install
 ```
 
-Generate prisma client with data proxy.
+Generate prisma client for accelerate.
 ```bash
 npx prisma generate --no-engine
 ```

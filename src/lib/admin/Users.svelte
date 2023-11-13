@@ -365,7 +365,10 @@
         {#each currentUsers as user}
             <dl class="console_contents_list">
                 <p class="console_contents_list_title">
-                    <button class="red_btn" on:click={() => prepareModal('banUser', 'Are you sure you want to suspend the following user?', 'banUser', user.id, user.username, user.last_character)}>
+                    <button
+                        class="red_btn"
+                        on:click={() => prepareModal('suspendUser', 'Are you sure you want to suspend the following user?', 'suspendUser', user.id, user.username, user.last_character)}
+                    >
                         <span class="btn_icon material-icons">delete</span>
                         <span class="btn_text">Suspend</span>
                     </button>
@@ -383,7 +386,7 @@
                             <p class="banned_text">This user account has been suspended.</p>
                             <button
                                 class="red_btn"
-                                on:click={() => prepareModal('banUser', 'Are you sure you want to unsuspend the following users?', 'removeBanUser', user.id, user.username, user.last_character)}
+                                on:click={() => prepareModal('suspendUser', 'Are you sure you want to unsuspend the following users?', 'unsuspendUser', user.id, user.username, user.last_character)}
                             >
                                 <span style="font-size: 2.8rem;" class="btn_icon material-icons">restore_from_trash</span>
                                 <span style="font-size: 2rem; padding-top: 2px;" class="btn_text">Unsuspend</span>
@@ -744,12 +747,20 @@
                                     </span>
 
                                     {#if character.deleted}
-                                        <button class="red_btn deleted_character">
+                                        <button
+                                            class="red_btn deleted_character"
+                                            on:click={() =>
+                                                prepareModal('deleteCharacter', 'Are you sure you want to restore the following character?', 'restoreCharacter', character.id, character.name)}
+                                        >
                                             <span class="btn_icon material-icons">delete</span>
                                             <span class="btn_text">Deleted</span>
                                         </button>
                                     {:else}
-                                        <button class="red_btn delete_character">
+                                        <button
+                                            class="red_btn delete_character"
+                                            on:click={() =>
+                                                prepareModal('deleteCharacter', 'Are you sure you want to delete the following character?', 'deleteCharacter', character.id, character.name)}
+                                        >
                                             <span class="btn_icon material-icons">delete</span>
                                             <span class="btn_text">Delete</span>
                                         </button>
@@ -826,12 +837,20 @@
                                     <span class="name">Ready to Hunt</span>
 
                                     {#if character.deleted}
-                                        <button class="red_btn deleted_character">
+                                        <button
+                                            class="red_btn deleted_character"
+                                            on:click={() =>
+                                                prepareModal('deleteCharacter', 'Are you sure you want to restore the following character?', 'restoreCharacter', character.id, 'Ready to Hunt')}
+                                        >
                                             <span class="btn_icon material-icons">delete</span>
                                             <span class="btn_text">Deleted</span>
                                         </button>
                                     {:else}
-                                        <button class="red_btn delete_character">
+                                        <button
+                                            class="red_btn delete_character"
+                                            on:click={() =>
+                                                prepareModal('deleteCharacter', 'Are you sure you want to delete the following character?', 'deleteCharacter', character.id, 'Ready to Hunt')}
+                                        >
                                             <span class="btn_icon material-icons">delete</span>
                                             <span class="btn_text">Delete</span>
                                         </button>

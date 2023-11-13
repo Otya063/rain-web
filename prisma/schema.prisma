@@ -3,16 +3,18 @@ generator client {
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("VITE_DATABASE_URL")
-  directUrl = env("VITE_DIRECT_URL")
+  provider     = "postgresql"
+  url          = env("VITE_DATABASE_URL")
+  directUrl    = env("VITE_DIRECT_URL")
+  relationMode = "prisma"
 }
 
-model account_ban {
-  user_id  Int    @id
-  username String
-  reason   String
-  date     Int
+model suspended_account {
+  user_id   Int     @id
+  username  String
+  reason    String
+  date      Int
+  permanent Boolean
 }
 
 model achievements {
@@ -50,6 +52,14 @@ model achievements {
   ach30 Int? @default(0)
   ach31 Int? @default(0)
   ach32 Int? @default(0)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model cafe_accepted {
+  cafe_id      Int
+  character_id Int
+
+  @@ignore
 }
 
 model cafebonus {
@@ -109,42 +119,54 @@ model characters {
   pact_id                                                        Int?
   stampcard                                                      Int                  @default(0)
   mezfes                                                         Bytes?
-  users                                                          users?               @relation(fields: [user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  users                                                          users?               @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   guild_applications_guild_applications_actor_idTocharacters     guild_applications[] @relation("guild_applications_actor_idTocharacters")
   guild_applications_guild_applications_character_idTocharacters guild_applications[] @relation("guild_applications_character_idTocharacters")
+  guild_characters                                               guild_characters?
   mail_mail_recipient_idTocharacters                             mail[]               @relation("mail_recipient_idTocharacters")
   mail_mail_sender_idTocharacters                                mail[]               @relation("mail_sender_idTocharacters")
+  discord_discord_char_idTocharacters                            discord[]            @relation("discord_char_idTocharacters")
+  rengoku_score_rengoku_score_character_idTocharacters           rengoku_score[]      @relation("rengoku_score_character_idTocharacters")
+  warehouse_warehouse_character_idTocharacters                   warehouse[]          @relation("warehouse_character_idTocharacters")
+
+  @@index([user_id])
 }
 
 model discord {
-  id                 Int      @id @default(autoincrement())
-  char_id            Int
-  discord_id         String   @db.VarChar(255)
-  is_male            Boolean? @default(true)
-  bounty             Int      @default(0)
-  road_champion      Boolean  @default(false)
-  rain_demolizer     Boolean  @default(false)
-  bounty_champion    Boolean  @default(false)
-  bounty_master      Boolean  @default(false)
-  bounty_expert      Boolean  @default(false)
-  gacha              Int      @default(0)
-  pity               Int      @default(0)
-  boostcd            BigInt   @default(0)
-  newbie             Boolean  @default(true)
-  latest_bounty      String   @default("None") @db.VarChar(10)
-  latest_bounty_time BigInt   @default(0)
-  transfercd         BigInt?  @default(0)
-  title              Int?     @default(0)
-  gold               Int?     @default(0)
-  silver             Int?     @default(0)
-  bronze             Int?     @default(0)
+  id                                     Int        @id @default(autoincrement())
+  char_id                                Int
+  discord_id                             String     @db.VarChar(255)
+  is_male                                Boolean?   @default(true)
+  bounty                                 Int        @default(0)
+  road_champion                          Boolean    @default(false)
+  rain_demolizer                         Boolean    @default(false)
+  bounty_champion                        Boolean    @default(false)
+  bounty_master                          Boolean    @default(false)
+  bounty_expert                          Boolean    @default(false)
+  gacha                                  Int        @default(0)
+  pity                                   Int        @default(0)
+  boostcd                                BigInt     @default(0)
+  newbie                                 Boolean    @default(true)
+  latest_bounty                          String     @default("None") @db.VarChar(10)
+  latest_bounty_time                     BigInt     @default(0)
+  transfercd                             BigInt?    @default(0)
+  title                                  Int?       @default(0)
+  gold                                   Int?       @default(0)
+  silver                                 Int?       @default(0)
+  bronze                                 Int?       @default(0)
+  characters_discord_char_idTocharacters characters @relation("discord_char_idTocharacters", fields: [char_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([char_id])
 }
 
 model discord_register {
-  id         Int       @id @default(autoincrement())
-  discord_id String?   @db.VarChar(32)
-  user_id    Int?
-  created_at DateTime? @default(now()) @db.Timestamp(6)
+  id                                    Int       @id @default(autoincrement())
+  discord_id                            String?   @db.VarChar(32)
+  user_id                               Int
+  created_at                            DateTime? @default(now()) @db.Timestamp(6)
+  users_discord_register_user_idTousers users     @relation("discord_register_user_idTousers", fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([user_id])
 }
 
 model distribution {
@@ -164,10 +186,26 @@ model distribution {
   data             Bytes
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model distributions_accepted {
+  distribution_id Int?
+  character_id    Int?
+
+  @@ignore
+}
+
 model events {
   id         Int        @id @default(autoincrement())
   event_type event_type
   start_time DateTime   @default(now()) @db.Timestamptz(6)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model feature_weapon {
+  start_time DateTime @db.Timestamptz(6)
+  featured   Int
+
+  @@ignore
 }
 
 model festa_prizes {
@@ -177,6 +215,22 @@ model festa_prizes {
   souls_req Int
   item_id   Int
   num_item  Int
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model festa_prizes_accepted {
+  prize_id     Int
+  character_id Int
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model festa_registrations {
+  guild_id Int
+  team     festival_colour
+
+  @@ignore
 }
 
 model festa_trials {
@@ -195,6 +249,15 @@ model fpoint_items {
   quantity   Int?
   fpoints    Int?
   trade_type Int?
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model gacha_box {
+  gacha_id     Int?
+  entry_id     Int?
+  character_id Int?
+
+  @@ignore
 }
 
 model gacha_entries {
@@ -233,6 +296,15 @@ model gacha_shop {
   hidden        Boolean?
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model gacha_stepup {
+  gacha_id     Int?
+  step         Int?
+  character_id Int?
+
+  @@ignore
+}
+
 model gook {
   id    Int    @id @default(autoincrement())
   gook0 Bytes?
@@ -268,25 +340,31 @@ model guild_applications {
   actor_id                                               Int
   application_type                                       guild_application_type
   created_at                                             DateTime               @default(now()) @db.Timestamptz(6)
-  characters_guild_applications_actor_idTocharacters     characters             @relation("guild_applications_actor_idTocharacters", fields: [actor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  characters_guild_applications_character_idTocharacters characters             @relation("guild_applications_character_idTocharacters", fields: [character_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  guilds                                                 guilds                 @relation(fields: [guild_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  characters_guild_applications_actor_idTocharacters     characters             @relation("guild_applications_actor_idTocharacters", fields: [actor_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  characters_guild_applications_character_idTocharacters characters             @relation("guild_applications_character_idTocharacters", fields: [character_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  guilds                                                 guilds                 @relation(fields: [guild_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([guild_id, character_id], map: "guild_application_character_id")
   @@index([application_type], map: "guild_application_type_index")
+  @@index([actor_id])
+  @@index([character_id])
 }
 
 model guild_characters {
-  id               Int       @id @default(autoincrement())
-  guild_id         BigInt?
-  character_id     BigInt?   @unique(map: "guild_character_unique_index")
-  joined_at        DateTime? @default(now()) @db.Timestamptz(6)
-  avoid_leadership Boolean   @default(false)
-  order_index      Int       @default(1)
-  recruiter        Boolean   @default(false)
-  souls            Int?      @default(0)
-  rp_today         Int?      @default(0)
-  rp_yesterday     Int?      @default(0)
+  id               Int         @id @default(autoincrement())
+  guild_id         Int?
+  character_id     Int?        @unique(map: "guild_character_unique_index")
+  joined_at        DateTime?   @default(now()) @db.Timestamptz(6)
+  avoid_leadership Boolean     @default(false)
+  order_index      Int         @default(1)
+  recruiter        Boolean     @default(false)
+  souls            Int?        @default(0)
+  rp_today         Int?        @default(0)
+  rp_yesterday     Int?        @default(0)
+  characters       characters? @relation(fields: [character_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  guilds           guilds?     @relation(fields: [guild_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([guild_id])
 }
 
 model guild_hunts {
@@ -345,6 +423,7 @@ model guilds {
   pugi_outfit_3      Int                  @default(0)
   pugi_outfits       Int                  @default(0)
   guild_applications guild_applications[]
+  guild_characters   guild_characters[]
 }
 
 model launcher_banner {
@@ -373,6 +452,16 @@ model launcher_system {
   launcher_ver String
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model login_boost {
+  char_id    Int?
+  week_req   Int?
+  expiration DateTime? @db.Timestamptz(6)
+  reset      DateTime? @db.Timestamptz(6)
+
+  @@ignore
+}
+
 model mail {
   id                                       Int        @id @default(autoincrement())
   sender_id                                Int
@@ -387,18 +476,34 @@ model mail {
   created_at                               DateTime   @default(now()) @db.Timestamptz(6)
   deleted                                  Boolean    @default(false)
   locked                                   Boolean    @default(false)
-  characters_mail_recipient_idTocharacters characters @relation("mail_recipient_idTocharacters", fields: [recipient_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  characters_mail_sender_idTocharacters    characters @relation("mail_sender_idTocharacters", fields: [sender_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  characters_mail_recipient_idTocharacters characters @relation("mail_recipient_idTocharacters", fields: [recipient_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  characters_mail_sender_idTocharacters    characters @relation("mail_sender_idTocharacters", fields: [sender_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([recipient_id, deleted, created_at(sort: Desc), id(sort: Desc)], map: "mail_recipient_deleted_created_id_index")
+  @@index([sender_id])
 }
 
 model rengoku_score {
-  character_id  Int  @id
-  max_stages_mp Int?
-  max_points_mp Int?
-  max_stages_sp Int?
-  max_points_sp Int?
+  character_id                                      Int        @id
+  max_stages_mp                                     Int?
+  max_points_mp                                     Int?
+  max_stages_sp                                     Int?
+  max_points_sp                                     Int?
+  characters_rengoku_score_character_idTocharacters characters @relation("rengoku_score_character_idTocharacters", fields: [character_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([character_id])
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model servers {
+  server_id         Int
+  season            Int
+  current_players   Int
+  world_name        String?
+  world_description String?
+  land              Int?
+
+  @@ignore
 }
 
 model shop_items {
@@ -417,6 +522,25 @@ model shop_items {
   road_fatalis Int?
 }
 
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model shop_items_bought {
+  character_id Int?
+  shop_item_id Int?
+  bought       Int?
+
+  @@ignore
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model sign_sessions {
+  user_id   Int
+  char_id   Int?
+  token     String @db.VarChar(16)
+  server_id Int?
+
+  @@ignore
+}
+
 model stamps {
   character_id Int       @id
   hl_total     Int?      @default(0)
@@ -425,6 +549,16 @@ model stamps {
   ex_total     Int?      @default(0)
   ex_redeemed  Int?      @default(0)
   ex_next      DateTime? @db.Timestamptz(6)
+}
+
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
+model titles {
+  id          Int
+  char_id     Int
+  unlocked_at DateTime? @db.Timestamptz(6)
+  updated_at  DateTime? @db.Timestamptz(6)
+
+  @@ignore
 }
 
 model user_binary {
@@ -444,64 +578,68 @@ model user_binary {
 }
 
 model users {
-  id              Int          @id @default(autoincrement())
-  username        String       @unique
-  password        String
-  item_box        Bytes?
-  rights          Int          @default(12)
-  last_character  Int?         @default(0)
-  last_login      DateTime?    @db.Timestamptz(6)
-  return_expires  DateTime?    @db.Timestamptz(6)
-  gacha_premium   Int?
-  gacha_trial     Int?
-  frontier_points Int?
-  characters      characters[]
+  id                                               Int                @id @default(autoincrement())
+  username                                         String             @unique
+  password                                         String
+  item_box                                         Bytes?
+  rights                                           Int                @default(12)
+  last_character                                   Int?               @default(0)
+  last_login                                       DateTime?          @db.Timestamptz(6)
+  return_expires                                   DateTime?          @db.Timestamptz(6)
+  gacha_premium                                    Int?
+  gacha_trial                                      Int?
+  frontier_points                                  Int?
+  characters                                       characters[]
+  discord_register_discord_register_user_idTousers discord_register[] @relation("discord_register_user_idTousers")
 }
 
 model warehouse {
-  character_id Int     @id
-  item0        Bytes?
-  item1        Bytes?
-  item2        Bytes?
-  item3        Bytes?
-  item4        Bytes?
-  item5        Bytes?
-  item6        Bytes?
-  item7        Bytes?
-  item8        Bytes?
-  item9        Bytes?
-  item10       Bytes?
-  item0name    String?
-  item1name    String?
-  item2name    String?
-  item3name    String?
-  item4name    String?
-  item5name    String?
-  item6name    String?
-  item7name    String?
-  item8name    String?
-  item9name    String?
-  equip0       Bytes?
-  equip1       Bytes?
-  equip2       Bytes?
-  equip3       Bytes?
-  equip4       Bytes?
-  equip5       Bytes?
-  equip6       Bytes?
-  equip7       Bytes?
-  equip8       Bytes?
-  equip9       Bytes?
-  equip10      Bytes?
-  equip0name   String?
-  equip1name   String?
-  equip2name   String?
-  equip3name   String?
-  equip4name   String?
-  equip5name   String?
-  equip6name   String?
-  equip7name   String?
-  equip8name   String?
-  equip9name   String?
+  character_id                                  Int        @id
+  item0                                         Bytes?
+  item1                                         Bytes?
+  item2                                         Bytes?
+  item3                                         Bytes?
+  item4                                         Bytes?
+  item5                                         Bytes?
+  item6                                         Bytes?
+  item7                                         Bytes?
+  item8                                         Bytes?
+  item9                                         Bytes?
+  item10                                        Bytes?
+  item0name                                     String?
+  item1name                                     String?
+  item2name                                     String?
+  item3name                                     String?
+  item4name                                     String?
+  item5name                                     String?
+  item6name                                     String?
+  item7name                                     String?
+  item8name                                     String?
+  item9name                                     String?
+  equip0                                        Bytes?
+  equip1                                        Bytes?
+  equip2                                        Bytes?
+  equip3                                        Bytes?
+  equip4                                        Bytes?
+  equip5                                        Bytes?
+  equip6                                        Bytes?
+  equip7                                        Bytes?
+  equip8                                        Bytes?
+  equip9                                        Bytes?
+  equip10                                       Bytes?
+  equip0name                                    String?
+  equip1name                                    String?
+  equip2name                                    String?
+  equip3name                                    String?
+  equip4name                                    String?
+  equip5name                                    String?
+  equip6name                                    String?
+  equip7name                                    String?
+  equip8name                                    String?
+  equip9name                                    String?
+  characters_warehouse_character_idTocharacters characters @relation("warehouse_character_idTocharacters", fields: [character_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([character_id])
 }
 
 enum event_type {

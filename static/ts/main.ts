@@ -153,25 +153,28 @@ export const notice = writable(false);
 export const clicked_submit = writable(false);
 export const modalTitle = writable('');
 export const modalFormAction = writable('');
-export const banUser = writable(false);
-export const banUid = writable(0);
-export const banUsername = writable('');
-export const banCid = writable(0);
+export const suspendUser = writable(false);
+export const suspendUid = writable(0);
+export const suspendUsername = writable('');
+export const suspendCid = writable(0);
 export const deleteInfo = writable(false);
-export const infoId = writable('');
+export const infoId = writable(0);
 export const infoTitle = writable('');
 export const infoURL = writable('');
 export const infoType = writable('');
 export const deleteBnr = writable(false);
-export const bnrId = writable('');
+export const bnrId = writable(0);
 export const bnrURL = writable('');
 export const bnrName = writable('');
 export const linkDiscord = writable(false);
-export const linkUId = writable('');
+export const linkUId = writable(0);
 export const linkUsername = writable('');
-export const linkCId = writable('');
+export const linkCId = writable(0);
 export const linkCName = writable('');
 export const linkDiscordId = writable('');
+export const deleteChar = writable(false);
+export const deleteCharId = writable(0);
+export const deleteCharName = writable('');
 
 /* prepare modal window data
 ====================================================*/
@@ -186,13 +189,13 @@ export const prepareModal = (
     data5: string | null = ''
 ) => {
     switch (type) {
-        case 'banUser':
-            banUser.set(true);
+        case 'suspendUser':
+            suspendUser.set(true);
             modalTitle.set(title);
             modalFormAction.set(action);
-            banUid.set(data1);
-            banUsername.set(data2);
-            banCid.set(data3);
+            suspendUid.set(data1);
+            suspendUsername.set(data2);
+            suspendCid.set(data3);
             break;
 
         case 'deleteInfo':
@@ -225,6 +228,14 @@ export const prepareModal = (
             linkDiscordId.set(data5);
             break;
 
+        case 'deleteCharacter':
+            deleteChar.set(true);
+            modalTitle.set(title);
+            modalFormAction.set(action);
+            deleteCharId.set(data1);
+            deleteCharName.set(data2);
+            break;
+
         default:
             throw new Error('Invalid input.');
     }
@@ -234,24 +245,27 @@ export const prepareModal = (
 ====================================================*/
 export const cancelModal = () => {
     deleteInfo.set(false);
-    banUser.set(false);
+    suspendUser.set(false);
     deleteBnr.set(false);
     linkDiscord.set(false);
+    deleteChar.set(false);
     modalTitle.set('');
     modalFormAction.set('');
-    banUid.set(0);
-    banUsername.set('');
-    banCid.set(0);
+    suspendUid.set(0);
+    suspendUsername.set('');
+    suspendCid.set(0);
     infoTitle.set('');
     infoURL.set('');
     infoType.set('');
-    bnrId.set('');
+    bnrId.set(0);
     bnrURL.set('');
     bnrName.set('');
-    linkUId.set('');
+    linkUId.set(0);
     linkUsername.set('');
-    linkCId.set('');
+    linkCId.set(0);
     linkCName.set('');
+    deleteCharId.set(0);
+    deleteCharName.set('');
 };
 
 /* Pause and Resume on setTimeout Function

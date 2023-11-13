@@ -110,13 +110,13 @@ export const getServerData = (data1: string, data2: string | number = undefined,
             }
             break;
 
-        case 'getBannedUserByUIdAndName':
+        case 'getSuspendedUserByUIdAndName':
             if (data2 === undefined) {
                 data = 'Invalid Input';
             } else {
-                data = db.account_ban.findFirst({
+                data = db.suspended_account.findFirst({
                     where: {
-                        AND: [{ user_id: data2 }, { username: data3 }],
+                        username: data2,
                     },
                 });
             }
@@ -127,15 +127,19 @@ export const getServerData = (data1: string, data2: string | number = undefined,
             break;
 
         case 'getCharactersByUId':
-            data = db.characters.findMany({
-                where: {
-                    user_id: data2,
-                },
-            });
+            if (data2 === undefined) {
+                data = 'Invalid Input';
+            } else {
+                data = db.characters.findMany({
+                    where: {
+                        user_id: data2,
+                    },
+                });
+            }
             break;
 
-        case 'getAllBannedUsers':
-            data = db.account_ban.findMany({});
+        case 'getAllSuspendedUsers':
+            data = db.suspended_account.findMany({});
             break;
 
         case 'getBannerData':
