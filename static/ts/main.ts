@@ -156,7 +156,6 @@ export const modalFormAction = writable('');
 export const suspendUser = writable(false);
 export const suspendUid = writable(0);
 export const suspendUsername = writable('');
-export const suspendCid = writable(0);
 export const deleteInfo = writable(false);
 export const infoId = writable(0);
 export const infoTitle = writable('');
@@ -195,7 +194,6 @@ export const prepareModal = (
             modalFormAction.set(action);
             suspendUid.set(data1);
             suspendUsername.set(data2);
-            suspendCid.set(data3);
             break;
 
         case 'deleteInfo':
@@ -253,7 +251,6 @@ export const cancelModal = () => {
     modalFormAction.set('');
     suspendUid.set(0);
     suspendUsername.set('');
-    suspendCid.set(0);
     infoTitle.set('');
     infoURL.set('');
     infoType.set('');
@@ -659,7 +656,7 @@ export const convUnixToDate = (timestamp: number | null, ISO8601: boolean) => {
 
 /* Convert RFC 2822 Time to ISO 8601 with Time
 ====================================================*/
-export const convRFCToISOWithTime = (rfc: Date | null) => {
+export const convRFCToISOWithTime = (rfc: Date | null): string => {
     // parse the RFC2822 string into a Date object
     const date = new Date(rfc);
 
@@ -675,8 +672,8 @@ export const convRFCToISOWithTime = (rfc: Date | null) => {
 
 /* Convert FormData Into Objects
 ====================================================*/
-export const convFormDataToObj = (data: FormData) => {
-    const obj: Record<string, string | number | boolean> = {};
+export const convFormDataToObj = (data: FormData): Record<string, string | number | boolean> => {
+    const obj = {};
 
     for (const [key, value] of data.entries()) {
         if (value === 'true') {
@@ -722,5 +719,15 @@ export const decToLittleEndian = (dec: number) => {
         return uppercaseLittleEndianHex;
     } else {
         throw new Error('Invalid input');
+    }
+};
+
+/* Discord Link Conversion
+====================================================*/
+export const discordLinkConvertor = (url: string): string => {
+    if (url.indexOf('discord.com')) {
+        return url.replace('https://discord.com/', 'discord://discordapp.com/');
+    } else {
+        return url;
     }
 };

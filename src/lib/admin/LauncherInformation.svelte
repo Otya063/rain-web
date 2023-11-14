@@ -104,6 +104,7 @@
 
                 <dt class="contents_term">URL</dt>
                 <dd class="contents_desc">
+                    <p class="console_contents_note">If the domain is "discord.com," the URL will be converted so that the discord app will open automatically.</p>
                     <input type="text" name="url" autocomplete="off" />
                 </dd>
 
@@ -225,6 +226,7 @@
                                         <dl class="edit_area_form_parts text">
                                             <dt>Enter new URL</dt>
                                             <dd>
+                                                <p class="console_contents_note">If the domain is "discord.com," the URL will be converted so that the discord app will open automatically.</p>
                                                 <input type="text" name="url" value={info.url} autocomplete="off" />
                                             </dd>
                                         </dl>
@@ -238,14 +240,9 @@
                             {/if}
                         </dd>
 
-                        <dt class="contents_term">
-                            Date<br />
-                            Unix Time
-                        </dt>
+                        <dt class="contents_term">Date</dt>
                         <dd class="contents_desc">
                             {convUnixToDate(info.created_at, false)}
-                            <br />
-                            {info.created_at}
 
                             {#if edit_id === info.id && cat_types['date']}
                                 <button class="red_btn" on:click={() => editModeHandle(0, 'date')}>

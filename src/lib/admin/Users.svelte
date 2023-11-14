@@ -577,6 +577,14 @@
                                 <dl class="edit_area_form_parts text">
                                     <dt>Set new date</dt>
                                     <dd>
+                                        <p class="console_contents_note">
+                                            The date and time being managed in the database is UTC (Coordinated Universal Time), which is actually different from the date and time set here (the time
+                                            in the country where you live, local time).
+                                        </p>
+                                        <p class="console_contents_note">
+                                            For example, if you live in Japan (UTC+9) and you set the date and time here as "November 30, 00:00," the date and time in the database (used in the game)
+                                            would be "November 29, 15:00."
+                                        </p>
                                         <input type="datetime-local" name="return_expires" value={convRFCToISOWithTime(user.return_expires)} />
                                     </dd>
                                 </dl>

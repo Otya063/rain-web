@@ -96,8 +96,13 @@
             return false;
         }
 
-        // file format validation
+        // file format validation1
         if (jaFileName?.indexOf(bnrNameInput.value) === -1 || enFileName?.indexOf(bnrNameInput.value) === -1) {
+            return false;
+        }
+
+        // file format validation2
+        if (jaFileName?.indexOf('_ja') === -1 || enFileName?.indexOf('_en') === -1) {
             return false;
         }
 
@@ -122,9 +127,24 @@
             return false;
         }
 
-        // file format validation
+        // file format validation1
         if (fileName?.indexOf(bnrName) === -1) {
             return false;
+        }
+
+        // file format validation2
+        switch (lang) {
+            case 'ja':
+                if (fileName?.indexOf('_ja') === -1) {
+                    return false;
+                }
+                break;
+
+            case 'en':
+                if (fileName?.indexOf('_en') === -1) {
+                    return false;
+                }
+                break;
         }
 
         // file extension validation
@@ -233,6 +253,7 @@
 
                         {#if editId === bnr.id && catTypes['ja_img_src']}
                             <form transition:slide class="edit_area_form" action="?/updateBnrData" method="POST">
+                                <input type="hidden" name="lang" value="ja" />
                                 <input type="hidden" name="bnr_id" value={editId} />
                                 <input type="hidden" name="bnr_name" value={bnr.bnr_name} />
                                 <div class="edit_area enter">
@@ -272,6 +293,7 @@
 
                         {#if editId === bnr.id && catTypes['en_img_src']}
                             <form transition:slide class="edit_area_form" action="?/updateBnrData" method="POST">
+                                <input type="hidden" name="lang" value="en" />
                                 <input type="hidden" name="bnr_id" value={editId} />
                                 <input type="hidden" name="bnr_name" value={bnr.bnr_name} />
                                 <div class="edit_area enter">

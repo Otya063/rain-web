@@ -1,4 +1,4 @@
-import { convDateToUnix, convFormDataToObj, getCourseByFormDat, deleteFileViaApi } from '$ts/main';
+import { convDateToUnix, convFormDataToObj, getCourseByFormData, deleteFileViaApi, discordLinkConvertor } from '$ts/main';
 import { getServerData } from '$ts/database';
 import { redirect } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
@@ -129,17 +129,20 @@ const updateSystemMode: Action = async ({ request }) => {
 const createInfoData: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
-    const title: string = dataObj['title'];
-    const url: string = dataObj['url'];
-    const type: string = dataObj['type'];
+    const { title, type } = dataObj;
+    let { url } = dataObj;
     const created_at: number = Math.floor(Date.now() / 1000);
+
+    if (url.indexOf('discord.com')) {
+        url = discordLinkConvertor(url);
+    }
 
     try {
         await db.launcher_info.create({
             data: {
-                title,
-                url,
-                type,
+                title: String(title),
+                url: String(url),
+                type: String(type),
                 created_at,
             },
         });
@@ -159,22 +162,26 @@ const createInfoData: Action = async ({ request }) => {
 const updateInfoData: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
-    const id: number = Number(dataObj['info_id']);
+    const { info_id } = dataObj;
     const column: string = Object.keys(dataObj)[1];
     let value: string | number = Object.values(dataObj)[1];
     column === 'created_at' && (value = convDateToUnix(value));
 
+    if (column === 'url' && value.indexOf('discord.com')) {
+        value = discordLinkConvertor(value);
+    }
+
     try {
         await db.launcher_info.update({
             where: {
-                id,
+                id: Number(info_id),
             },
             data: {
                 [column]: value,
             },
         });
 
-        return { success: true, status: 'info_updated', targetId: id };
+        return { success: true, status: 'info_updated', targetId: info_id };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };
@@ -188,16 +195,17 @@ const updateInfoData: Action = async ({ request }) => {
 
 const deleteInfoData: Action = async ({ request }) => {
     const data = await request.formData();
-    const id = Number(data.get('info_id'));
+    const dataObj = convFormDataToObj(data);
+    const { info_id } = dataObj;
 
     try {
         await db.launcher_info.delete({
             where: {
-                id,
+                id: Number(info_id),
             },
         });
 
-        return { success: true, status: 'info_deleted', targetId: id };
+        return { success: true, status: 'info_deleted', targetId: info_id };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };
@@ -212,57 +220,64 @@ const deleteInfoData: Action = async ({ request }) => {
 const updateUserData: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
-    const id: number = Number(dataObj['user_id']);
+    const { user_id, target_u_radio } = dataObj;
     let adminCtrlMode: boolean = false;
-    let ids: string[];
+    let ids: number[];
     let column: string;
-    let value: string | number;
+    let value: string | number | Date;
 
-    if (Object.values(dataObj).some((value) => value === 'on')) {
+    // for admin control panel handling
+    if (user_id === undefined) {
         // course
         column = 'rights';
         value = getCourseByFormData(dataObj);
 
-        // for admin control panel handling
-        if (isNaN(id)) {
-            switch (dataObj['target_u_radio']) {
-                case 'all':
-                    adminCtrlMode = true;
-                    const users = await getServerData('getAllUsers');
-                    ids = users.map((obj) => obj.id);
-                    column = 'rights';
-                    delete dataObj.target_u_radio;
-                    value = getCourseByFormData(dataObj);
-
-                    break;
-
-                case 'specified':
-                    adminCtrlMode = true;
-                    const u_ids: string = dataObj['specified_u_text'];
-                    ids = u_ids.split('+');
-                    column = 'rights';
-                    delete dataObj.target_u_radio;
-                    delete dataObj.specified_u_text;
-                    value = getCourseByFormData(dataObj);
-                    break;
-            }
-        }
-    } else {
-        // the others
-        column = Object.keys(dataObj)[1];
-        value = Object.values(dataObj)[1];
-
-        // switch between string or number depending on column
-        switch (column) {
-            case 'gacha_premium':
-            case 'gacha_trial':
-            case 'frontier_points':
-                value = Number(value);
-                value === 0 && (value = null);
+        switch (target_u_radio) {
+            case 'all':
+                adminCtrlMode = true;
+                const users = await getServerData('getAllUsers');
+                ids = users.map((obj) => obj.id);
+                column = 'rights';
+                delete dataObj.target_u_radio;
+                value = getCourseByFormData(dataObj);
                 break;
 
-            default:
-                value = String(value);
+            case 'specified':
+                adminCtrlMode = true;
+                const u_ids: string = dataObj['specified_u_text'];
+                ids = u_ids.split('+');
+                column = 'rights';
+                delete dataObj.target_u_radio;
+                delete dataObj.specified_u_text;
+                value = getCourseByFormData(dataObj);
+                break;
+        }
+    } else {
+        if (Object.values(dataObj).some((value) => value === 'on')) {
+            // course
+            column = 'rights';
+            value = getCourseByFormData(dataObj);
+        } else {
+            // the others
+            column = Object.keys(dataObj)[1];
+            value = Object.values(dataObj)[1];
+
+            // switch between string or number depending on column
+            switch (column) {
+                case 'gacha_premium':
+                case 'gacha_trial':
+                case 'frontier_points':
+                    value = Number(value);
+                    value === 0 && (value = null);
+                    break;
+
+                case 'return_expires':
+                    value = new Date(value);
+                    break;
+
+                default:
+                    value = String(value);
+            }
         }
     }
 
@@ -281,7 +296,7 @@ const updateUserData: Action = async ({ request }) => {
         } else {
             await db.users.update({
                 where: {
-                    id,
+                    id: Number(user_id),
                 },
                 data: {
                     [column]: value,
@@ -303,13 +318,10 @@ const updateUserData: Action = async ({ request }) => {
 
 const suspendUser: Action = async ({ request }) => {
     const data = await request.formData();
-    const character_id = data.getAll('character_id');
-    const user_id = Number(data.get('user_id'));
-    const username = String(data.get('user_username'));
-    const permanently_del = data.get('permanently_del');
+    const dataObj = convFormDataToObj(data);
+    const { user_id, username, character_id, reason, permanently_del } = dataObj;
     const date = Math.floor(Date.now() / 1000);
 
-    console.log(character_id);
     try {
         if (permanently_del === 'on') {
             for (const char_id of character_id) {
@@ -324,7 +336,7 @@ const suspendUser: Action = async ({ request }) => {
                 data: {
                     user_id: Number(user_id),
                     username: String(username),
-                    reason: 'test reason.', // 1, Cheating 2, Gameplay Exploit 3, Toxic and Abusive Behavior 4, Violation of Terms and Services
+                    reason: String(reason),
                     date,
                     permanent: true,
                 },
@@ -336,7 +348,7 @@ const suspendUser: Action = async ({ request }) => {
                 },
             });
 
-            return { success: true, status: 'permanently_suspend_user' };
+            return { success: true, status: 'permanently_suspend_user', targetName: username };
         } else {
             for (const char_id of character_id) {
                 await db.characters.update({
@@ -353,13 +365,13 @@ const suspendUser: Action = async ({ request }) => {
                 data: {
                     user_id: Number(user_id),
                     username: String(username),
-                    reason: 'test reason.',
+                    reason: String(reason),
                     date,
                     permanent: false,
                 },
             });
 
-            return { success: true, status: 'suspend_user' };
+            return { success: true, status: 'suspend_user', targetName: username };
         }
     } catch (err) {
         if (err instanceof Error) {
@@ -374,8 +386,9 @@ const suspendUser: Action = async ({ request }) => {
 
 const unsuspendUser: Action = async ({ request }) => {
     const data = await request.formData();
+    const dataObj = convFormDataToObj(data);
+    const { user_id, username } = dataObj;
     const character_id = data.getAll('character_id');
-    const user_id = Number(data.get('user_id'));
 
     try {
         for (const char_id of character_id) {
@@ -391,11 +404,11 @@ const unsuspendUser: Action = async ({ request }) => {
 
         await db.suspended_account.delete({
             where: {
-                user_id,
+                user_id: Number(user_id),
             },
         });
 
-        return { success: true, status: 'unsuspend_user' };
+        return { success: true, status: 'unsuspend_user', targetName: username };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };
@@ -410,21 +423,32 @@ const unsuspendUser: Action = async ({ request }) => {
 const createBnrData: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
-    const { ja_file_name, en_file_name, bnr_name, bnr_url } = dataObj;
+    const { ja_file_name, en_file_name, bnr_name } = dataObj;
+    let { bnr_url } = dataObj;
 
     // file check
     if (ja_file_name === '' || en_file_name === '' || bnr_name === '') {
         return { error: true, err_details: 'Failed to upload the files. Please make sure that all files are selected and the banner name is entered.' };
     }
 
-    // file format validation
-    if (ja_file_name.indexOf(bnr_name) === -1 || en_file_name.indexOf(bnr_name)) {
+    // file format validation1
+    if (ja_file_name.indexOf(bnr_name) === -1 || en_file_name.indexOf(bnr_name) === -1) {
         return { error: true, err_details: "Failed to upload the files. The banner name in the file name doesn't match the banner name entered." };
+    }
+
+    // file format validation2
+    if (ja_file_name.indexOf('_ja') === -1 || en_file_name.indexOf('_en') === -1) {
+        return { error: true, err_details: 'Failed to upload the files. There is no language information in the file name.' };
     }
 
     // file extension validation
     if (ja_file_name.split('.').pop() !== 'png' || en_file_name.split('.').pop() !== 'png') {
         return { error: true, err_details: 'Failed to upload the files. File extension is incorrect.' };
+    }
+
+    // url convertor
+    if (bnr_url.indexOf('discord.com')) {
+        bnr_url = discordLinkConvertor(bnr_url);
     }
 
     try {
@@ -437,7 +461,7 @@ const createBnrData: Action = async ({ request }) => {
             },
         });
 
-        return { success: true, status: 'bnr_created' };
+        return { success: true, status: 'bnr_created', targetName: bnr_name };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };
@@ -452,7 +476,8 @@ const createBnrData: Action = async ({ request }) => {
 const updateBnrData: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
-    const { bnr_id, file_name, bnr_name, bnr_url } = dataObj;
+    const { bnr_id, file_name, bnr_name, lang } = dataObj;
+    let { bnr_url } = dataObj;
 
     try {
         if (!dataObj.hasOwnProperty('bnr_url')) {
@@ -461,9 +486,24 @@ const updateBnrData: Action = async ({ request }) => {
                 return { error: true, err_details: 'Failed to reupload the files. Please make sure that the file is selected.' };
             }
 
-            // file format validation
+            // file format validation1
             if (file_name.indexOf(bnr_name) === -1) {
                 return { error: true, err_details: "Failed to reupload the files. The banner name in the file name doesn't match the banner name already set." };
+            }
+
+            // file format validation2
+            switch (lang) {
+                case 'ja':
+                    if (file_name.indexOf('ja') === -1) {
+                        return { error: true, err_details: 'Failed to upload the files. There is no language information in the file name.' };
+                    }
+                    break;
+
+                case 'en':
+                    if (file_name.indexOf('en') === -1) {
+                        return { error: true, err_details: 'Failed to upload the files. There is no language information in the file name.' };
+                    }
+                    break;
             }
 
             // file extension validation
@@ -471,8 +511,13 @@ const updateBnrData: Action = async ({ request }) => {
                 return { error: true, err_details: 'Failed to upload the files. File extension is incorrect.' };
             }
 
-            return { success: true, status: 'bnr_updated', targetId: bnr_id };
+            return { success: true, status: 'bnr_updated', targetId: bnr_id, targetName: bnr_name };
         } else {
+            // url convertor
+            if (bnr_url.indexOf('discord.com')) {
+                bnr_url = discordLinkConvertor(bnr_url);
+            }
+
             await db.launcher_banner.update({
                 where: {
                     id: Number(bnr_id),
@@ -482,7 +527,7 @@ const updateBnrData: Action = async ({ request }) => {
                 },
             });
 
-            return { success: true, status: 'bnr_updated', targetId: bnr_id };
+            return { success: true, status: 'bnr_updated', targetId: bnr_id, targetName: bnr_name };
         }
     } catch (err) {
         if (err instanceof Error) {
@@ -507,7 +552,7 @@ const deleteBnrData: Action = async ({ request }) => {
             },
         });
 
-        return { success: true, status: 'bnr_deleted', targetId: bnr_id };
+        return { success: true, status: 'bnr_deleted', targetId: bnr_id, targetName: bnr_name };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };

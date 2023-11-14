@@ -2,6 +2,7 @@
     import _ from 'lodash';
     import AdminMenu from '$lib/admin/AdminMenu.svelte';
     import AdminContents from '$lib/admin/AdminContents.svelte';
+    import SuspendUser from '$lib/admin/modalContents/SuspendUser.svelte';
     import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
     import type { ActionData, PageData } from './$types';
@@ -19,7 +20,6 @@
         suspendUser,
         suspendUid,
         suspendUsername,
-        suspendCid,
         deleteInfo,
         infoId,
         infoTitle,
@@ -47,10 +47,12 @@
     export let form: ActionData;
     let status: keyof StatusMsg;
     let targetId: number;
-    form?.status ? (status = form?.status) : (status = '');
-    form?.targetId ? (targetId = form?.targetId) : (targetId = 0);
-    form?.success ? success.set(form!.success) : success.set(false);
-    form?.error ? (error.set(form!.error), err_details.set(form!.err_details)) : (error.set(false), err_details.set(''));
+    let targetName: string;
+    form?.status ? (status = form.status) : (status = '');
+    form?.targetId ? (targetId = form.targetId) : (targetId = 0);
+    form?.targetName ? (targetName = form.targetName) : (targetName = '');
+    form?.success ? success.set(form.success) : success.set(false);
+    form?.error ? (error.set(form.error), err_details.set(form.err_details)) : (error.set(false), err_details.set(''));
     clicked_submit.set(false);
     notice.set(false);
 
@@ -65,12 +67,12 @@
         info_updated: `The information data (ID: ${targetId}) has been successfully updated.`,
         info_deleted: `The information data (ID: ${targetId}) has been successfully deleted.`,
         user_updated: 'The user data has been successfully updated.',
-        suspend_user: 'The user account was successfully suspended. (Restorable)',
-        permanently_suspend_user: 'The user account was successfully suspended. (Not Restorable)',
-        unsuspend_user: 'The user account was successfully unsuspended.',
-        bnr_created: 'The banner data was successfully created.',
-        bnr_updated: `The banner data (ID: ${targetId}) has been successfully updated.`,
-        bnr_deleted: `The banner data (ID: ${targetId}) has been successfully deleted.`,
+        suspend_user: `The user account (Username: ${targetName}) was successfully suspended. (Restorable)`,
+        permanently_suspend_user: `The user account (Username: ${targetName}) was successfully suspended. (Not Restorable)`,
+        unsuspend_user: `The user account (Username: ${targetName}) was successfully unsuspended.`,
+        bnr_created: `The banner data (Banner Name: ${targetName}) was successfully created.`,
+        bnr_updated: `The banner data (ID: ${targetId} / Banner Name: ${targetName}) has been successfully updated.`,
+        bnr_deleted: `The banner data (ID: ${targetId} / Banner Name: ${targetName}) has been successfully deleted.`,
         link_discord: 'The linking process has been successfully completed.',
         unlink_discord: 'The unlinking process has been successfully completed.',
         delete_character: 'The character data has been successfully deleted. (Restorable)',
@@ -172,7 +174,7 @@
             <p style="padding-top: 0.3%;">{success_msg[status]}</p>
         {:else if $error}
             <span class="material-icons-outlined">warning</span>
-            <p style="padding-top: 0.3%;">An error occurred.</p>
+            <p style="padding-top: 0.3%;">Error occurred.</p>
             <button on:click={(e) => toggleErrDetail(e)} class="error_view_btn">View Details</button>
         {:else if $notice}
             <span class="material-icons-outlined">notification_important</span>
@@ -192,68 +194,7 @@
     {/if}
 {/if}
 
-{#if $suspendUser}
-    <div class="modal">
-        <div class="modal_content">
-            <form method="POST">
-                <div class="modal_header">
-                    <h1>Suspend / Unsuspend User Account</h1>
-                </div>
-                <div class="modal_body">
-                    <p>{$modalTitle}</p>
-                    <ul class="modal_list">
-                        <li class="modal_list_item">
-                            <p>User ID</p>
-                            <span>{$suspendUid}</span>
-                            <input type="hidden" name="user_id" value={$suspendUid} />
-                        </li>
-
-                        <li class="modal_list_item">
-                            <p>Username</p>
-                            <span>{$suspendUsername}</span>
-                            <input type="hidden" name="user_username" value={$suspendUsername} />
-                        </li>
-
-                        <li class="modal_list_item">
-                            <p>Owned Character Name</p>
-                            <span>
-                                {#each _.sortBy( _.filter(data.charactersWithoutBytes, (c_data) => c_data.user_id === $suspendUid), 'id' ) as character, i}
-                                    <input type="hidden" name="character_id" value={character.id} />
-                                    ({i + 1}){`${character.name}　`}
-                                {/each}
-                            </span>
-                        </li>
-
-                        {#if $modalFormAction === 'suspendUser'}
-                            <li class="modal_list_item">
-                                <p>Permanently Suspend</p>
-                                <input type="checkbox" name="permanently_del" />
-                            </li>
-                        {/if}
-                    </ul>
-
-                    {#if $modalFormAction === 'suspendUser'}
-                        <p class="modal_note">
-                            * Once a user account is suspended, all characters owned by that account are considered as deleted. But its data isn't deleted from database and can be restored via
-                            "Unsuspend" button.
-                        </p>
-                        <p class="modal_note">* If "Permanently Suspend" is checked, the user account, including all character data, will be completely deleted from the database and can't be restored.</p>
-                    {/if}
-                </div>
-                <div class="ban_btn_group">
-                    <button class="blue_btn" formaction="?/{$modalFormAction}" type="submit" on:click={() => clicked_submit.set(true)}>
-                        <span class="btn_icon material-icons">check</span>
-                        <span class="btn_text">Yes</span>
-                    </button>
-                    <button class="red_btn" type="button" on:click={() => cancelModal()}>
-                        <span class="btn_icon material-icons">close</span>
-                        <span class="btn_text">No</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-{/if}
+<SuspendUser {data} />
 
 {#if $deleteInfo}
     <div class="modal">

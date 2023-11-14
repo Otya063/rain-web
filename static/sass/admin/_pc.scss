@@ -1141,10 +1141,14 @@
                     flex-direction: row;
                     justify-content: space-evenly;
                     padding: 2%;
+                    flex-wrap: wrap;
 
                     // リストアイテム
                     .modal_list_item {
                         text-align: center;
+                        width: calc(50% - 30px);
+                        margin: 0 15px 3%;
+                        overflow-wrap: break-word;
 
                         // アイテム見出し用
                         p {
