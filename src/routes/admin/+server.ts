@@ -1,5 +1,5 @@
 import { getServerData, requestActToServer } from '$ts/database';
-import { decToLittleEndian, getWpnTypeByDec } from '$ts/main';
+import { decToLittleEndian, getWpnTypeByDec, getWpnNameByDec } from '$ts/main';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
@@ -41,35 +41,18 @@ export const POST: RequestHandler = async ({ request }) => {
                         Message: 'Invalid Input',
                     });
                 } else {
-                    switch (requestData[4]) {
-                        case 'ja': {
-                            const { meleeJA } = await import('$i18n/ja/meleeData');
-                            const newObj = data.map((character) => ({
-                                ...character,
-                                weapon_id_name: meleeJA[decToLittleEndian(character.weapon_id)],
-                                weapon_type_name: getWpnTypeByDec(character.weapon_type, requestData[4]),
-                            }));
+                    const newObj = await Promise.all(
+                        data.map(async (character) => ({
+                            ...character,
+                            weapon_id_name: await getWpnNameByDec(character.weapon_id, character.weapon_type, requestData[4]),
+                            weapon_type_name: getWpnTypeByDec(character.weapon_type, requestData[4]),
+                        }))
+                    );
 
-                            return json({
-                                success: true,
-                                data: newObj,
-                            });
-                        }
-
-                        case 'en': {
-                            const { meleeEN } = await import('$i18n/en/meleeData');
-                            const newObj = data.map((character) => ({
-                                ...character,
-                                weapon_id_name: meleeEN[decToLittleEndian(character.weapon_id)],
-                                weapon_type_name: getWpnTypeByDec(character.weapon_type, requestData[4]),
-                            }));
-
-                            return json({
-                                success: true,
-                                data: newObj,
-                            });
-                        }
-                    }
+                    return json({
+                        success: true,
+                        data: newObj,
+                    });
                 }
             } else {
                 return json({

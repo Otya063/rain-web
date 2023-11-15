@@ -826,6 +826,12 @@
         }
     }
 
+    // 無効化ボタン
+    .disabled_btn {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+
     /* Ban関連
 ====================================================*/
     // Ban済ユーザー表示
@@ -1049,7 +1055,7 @@
         // 武器詳細
         .little_endian {
             position: absolute;
-            top: 8%;
+            top: 9%;
             left: -50%;
             font-weight: 800;
             font-size: 1.5rem;

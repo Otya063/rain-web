@@ -585,13 +585,12 @@ export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang:
             // language select
             switch (lang) {
                 case 'ja':
-                    //const { ranged_ja } = await import('$i18n/ja/ranged');
-                    //return ranged_ja[hex];
-                    return 'No Data';
+                    const { rangedJa } = await import('$i18n/ja/rangedData');
+                    return rangedJa[hex];
 
                 case 'en':
-                    //const { ranged_en } = await import('$i18n/en/ranged');
-                    //return ranged_en[hex];
+                    //const { rangedEn } = await import('$i18n/en/rangedData');
+                    //return rangedEn[hex];
                     return 'No Data';
             }
             break;
@@ -601,12 +600,12 @@ export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang:
             // language select
             switch (lang) {
                 case 'ja':
-                    const { meleeJA } = await import('$i18n/ja/meleeData');
-                    return meleeJA[hex];
+                    const { meleeJa } = await import('$i18n/ja/meleeData');
+                    return meleeJa[hex];
 
                 case 'en':
-                    const { meleeEN } = await import('$i18n/en/meleeData');
-                    return meleeEN[hex];
+                    const { meleeEn } = await import('$i18n/en/meleeData');
+                    return meleeEn[hex];
             }
             break;
     }

@@ -2,7 +2,7 @@ interface MeleeData {
     [key: string]: string;
 }
 
-export const meleeEN: MeleeData = {
+export const meleeEn: MeleeData = {
     '0000': 'None',
     '0100': 'Iron Sword',
     '0200': 'Iron Sword α',

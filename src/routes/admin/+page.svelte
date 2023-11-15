@@ -10,40 +10,7 @@
     import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
     import type { ActionData, PageData } from './$types';
-    import {
-        Timeout,
-        success,
-        error,
-        err_details,
-        errDetailMode,
-        notice,
-        clicked_submit,
-        modalTitle,
-        modalFormAction,
-        cancelModal,
-        suspendUser,
-        suspendUid,
-        suspendUsername,
-        deleteInfo,
-        infoId,
-        infoTitle,
-        infoURL,
-        infoType,
-        deleteBnr,
-        bnrId,
-        bnrURL,
-        bnrName,
-        deleteFileViaApi,
-        linkDiscord,
-        linkUId,
-        linkUsername,
-        linkCId,
-        linkCName,
-        linkDiscordId,
-        deleteChar,
-        deleteCharId,
-        deleteCharName,
-    } from '$ts/main';
+    import { Timeout, success, error, err_details, errDetailMode, notice, clicked_submit } from '$ts/main';
     import '$scss/style_admin.scss';
 
     // data from the server
