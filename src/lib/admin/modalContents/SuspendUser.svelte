@@ -1,7 +1,6 @@
 <script lang="ts">
     import _ from 'lodash';
     import { clicked_submit, modalTitle, modalFormAction, cancelModal, suspendUser, suspendUid, suspendUsername } from '$ts/main';
-    import '$scss/style_admin.scss';
 
     export let data;
     const characterData = data.charactersWithoutBytes;
@@ -50,9 +49,7 @@
                                     <option value="Violation of Server Terms of Service">Violation of Server Terms of Service</option>
                                 </select>
                             </li>
-                        {/if}
 
-                        {#if $modalFormAction === 'suspendUser'}
                             <li class="modal_list_item">
                                 <p>Permanently Suspend</p>
                                 <input type="checkbox" name="permanently_del" />
