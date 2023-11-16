@@ -172,7 +172,8 @@
                 </div>
                 <!-- svelte-ignore a11y-missing-attribute -->
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <a on:click={() => loadArticle($locale, 'begin/', 'multiple/')} class="check_contents_list_link">{start.check_contents['link']()}</a>
+                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                <a on:click={() => loadArticle($locale, 'manual/', 'begin/', 'multiple/')} class="check_contents_list_link">{start.check_contents['link']()}</a>
             </li>
         </ul>
     </div>

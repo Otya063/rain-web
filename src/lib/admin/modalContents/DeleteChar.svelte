@@ -8,6 +8,7 @@
         <div class="modal_content">
             <form method="POST">
                 <input type="hidden" name="char_id" value={$deleteCharId} />
+                <input type="hidden" name="char_name" value={$deleteCharName} />
                 <div class="modal_header">
                     <h1>Delete / Restore Character</h1>
                 </div>

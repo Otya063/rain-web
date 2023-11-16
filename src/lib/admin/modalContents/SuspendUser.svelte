@@ -41,12 +41,12 @@
                         {#if $modalFormAction === 'suspendUser'}
                             <li class="modal_list_item">
                                 <p>Reason</p>
-                                <select name="reason" required>
+                                <select name="reason_type" required>
                                     <option selected disabled>Select the Reason for Account Suspension</option>
-                                    <option value="Cheating">Cheating</option>
-                                    <option value="Gameplay Exploit">Gameplay Exploit</option>
-                                    <option value="Toxic and Abusive Behavior">Toxic and Abusive Behavior</option>
-                                    <option value="Violation of Server Terms of Service">Violation of Server Terms of Service</option>
+                                    <option value="1">Cheating</option>
+                                    <option value="2">Gameplay Exploit</option>
+                                    <option value="3">Toxic and Abusive Behavior</option>
+                                    <option value="4">Violation of Server Terms of Service</option>
                                 </select>
                             </li>
 

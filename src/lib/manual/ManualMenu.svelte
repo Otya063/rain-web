@@ -25,7 +25,7 @@
             <ul class="sub_categories">
                 <li class="sub_categories_list">
                     {#each Object.entries(contents) as [subdir, content]}
-                        <button class="sub_category" class:tab_active={path2 === subdir} on:click={() => loadArticle($locale, `${maindir}/`, `${subdir}/`)}>
+                        <button class="sub_category" class:tab_active={path2 === subdir} on:click={() => loadArticle($locale, 'manual/', `${maindir}/`, `${subdir}/`)}>
                             {content()}
                         </button>
                     {/each}

@@ -110,7 +110,7 @@ export const getServerData = (data1: string, data2: string | number = undefined,
             }
             break;
 
-        case 'getSuspendedUserByUIdAndName':
+        case 'getSuspendedUserByUsername':
             if (data2 === undefined) {
                 data = 'Invalid Input';
             } else {

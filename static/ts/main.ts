@@ -1,7 +1,7 @@
 import { browser } from '$app/environment';
 import { writable } from 'svelte/store';
-import { courseJA } from '$i18n/ja/courseData.ts';
-import { courseEN } from '$i18n/en/courseData.ts';
+import { courseJa } from '$i18n/ja/courseData.ts';
+import { courseEn } from '$i18n/en/courseData.ts';
 
 /*=========================================================
 　　　　　Slide Functions
@@ -100,8 +100,13 @@ export const scrollToElm = (e: MouseEvent) => {
 
 /* Load Article
 ====================================================*/
-export const loadArticle = (lang_code: string = '', maindir: string = '', subdir: string = '') => {
-    const href_path: string = `${lang_code}/manual/${maindir}${subdir}`;
+export const loadArticle = (lang_code: string, dir1: string, dir2: string = '', dir3: string = '') => {
+    let href_path: string;
+    if (lang_code === 'none') {
+        href_path = `${dir1}${dir2}${dir3}`;
+    } else {
+        href_path = `${lang_code}/${dir1}${dir2}${dir3}`;
+    }
     const url = new URL(href_path, location.origin);
     // remove unnecessary things
     url.search = '';
@@ -391,10 +396,10 @@ export const getCourseByDecimal = (dec: number, lang: string) => {
 
     switch (lang) {
         case 'ja':
-            return courseJA(bin);
+            return courseJa(bin);
 
         case 'en':
-            return courseEN(bin);
+            return courseEn(bin);
 
         default:
             return 'No Data';
@@ -589,9 +594,8 @@ export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang:
                     return rangedJa[hex];
 
                 case 'en':
-                    //const { rangedEn } = await import('$i18n/en/rangedData');
-                    //return rangedEn[hex];
-                    return 'No Data';
+                    const { rangedEn } = await import('$i18n/en/rangedData');
+                    return !rangedEn[hex] ? (await import('$i18n/ja/rangedData')).rangedJa[hex] : rangedEn[hex];
             }
             break;
 
@@ -605,7 +609,7 @@ export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang:
 
                 case 'en':
                     const { meleeEn } = await import('$i18n/en/meleeData');
-                    return meleeEn[hex];
+                    return !meleeEn[hex] ? (await import('$i18n/ja/meleeData')).meleeJa[hex] : meleeEn[hex];
             }
             break;
     }

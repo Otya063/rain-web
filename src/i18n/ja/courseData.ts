@@ -1,25 +1,25 @@
 type CourseData = Record<
-string,
-{
-    id: number;
-    enabled: boolean;
-    code: string;
-}
+    string,
+    {
+        id: number;
+        enabled: boolean;
+        code: string;
+    }
 >;
 
-export const courseJA = (bin: string[]): CourseData => {
+export const courseJa = (bin: string[]): CourseData => {
     return {
         /* 'トライアルコース': {
             id: 1,
             enabled: bin[1] === '1',
             code: 'tlc',
         }, */ // automatically enabled (= 1) on the server side
-        'ハンターライフコース': {
+        ハンターライフコース: {
             id: 2,
             enabled: bin[2] === '1',
             code: 'hlc',
         },
-        'エクストラコース': {
+        エクストラコース: {
             id: 3,
             enabled: bin[3] === '1',
             code: 'exc',
@@ -29,12 +29,12 @@ export const courseJA = (bin: string[]): CourseData => {
             enabled: bin[4] === '1',
             code: 'exbc',
         }, */ // leftover
-        'モバイルコース': {
+        モバイルコース: {
             id: 5,
             enabled: bin[5] === '1',
             code: 'mbc',
         },
-        'プレミアムコース': {
+        プレミアムコース: {
             id: 6,
             enabled: bin[6] === '1',
             code: 'prc',
@@ -44,27 +44,27 @@ export const courseJA = (bin: string[]): CourseData => {
             enabled: bin[7] === '1',
             code: 'plc',
         }, */ // leftover
-        'アシストコース': {
+        アシストコース: {
             id: 8,
             enabled: bin[8] === '1',
             code: 'asc',
         },
-        'Nコース': {
+        Nコース: {
             id: 9,
             enabled: bin[9] === '1',
             code: 'nc',
         },
-        '秘伝コース': {
+        秘伝コース: {
             id: 10,
             enabled: bin[10] === '1',
             code: 'hdc',
         },
-        '狩人応援コース': {
+        狩人応援コース: {
             id: 11,
             enabled: bin[11] === '1',
             code: 'hsc',
         },
-        'Nブーストコース': {
+        Nブーストコース: {
             id: 12,
             enabled: bin[12] === '1',
             code: 'nbc',
@@ -100,22 +100,22 @@ export const courseJA = (bin: string[]): CourseData => {
             enabled: bin[25] === '1',
             code: 'nc',
         }, */
-        '公認ネットカフェ': {
+        公認ネットカフェ: {
             id: 26,
             enabled: bin[26] === '1',
             code: 'cnc',
         },
-        'ハンターライフ継続コース': {
+        ハンターライフ継続コース: {
             id: 27,
             enabled: bin[27] === '1',
             code: 'hlcc',
         }, // override HL Course
-        'エクストラ継続コース': {
+        エクストラ継続コース: {
             id: 28,
             enabled: bin[28] === '1',
             code: 'excc',
         }, // override EX Course
-        'フリーコース': {
+        フリーコース: {
             id: 29,
             enabled: bin[29] === '1',
             code: 'frc',

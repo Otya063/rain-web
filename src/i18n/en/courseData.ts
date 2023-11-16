@@ -1,13 +1,13 @@
 type CourseData = Record<
-string,
-{
-    id: number;
-    enabled: boolean;
-    code: string;
-}
+    string,
+    {
+        id: number;
+        enabled: boolean;
+        code: string;
+    }
 >;
 
-export const courseEN = (bin: string[]): CourseData => {
+export const courseEn = (bin: string[]): CourseData => {
     return {
         /* 'Trial Course': {
             id: 1,

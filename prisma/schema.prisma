@@ -9,14 +9,6 @@ datasource db {
   relationMode = "prisma"
 }
 
-model suspended_account {
-  user_id   Int     @id
-  username  String
-  reason    String
-  date      Int
-  permanent Boolean
-}
-
 model achievements {
   id    Int  @id
   ach0  Int? @default(0)
@@ -549,6 +541,14 @@ model stamps {
   ex_total     Int?      @default(0)
   ex_redeemed  Int?      @default(0)
   ex_next      DateTime? @db.Timestamptz(6)
+}
+
+model suspended_account {
+  user_id   Int     @id
+  username  String
+  reason    Int
+  date      Int
+  permanent Boolean
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.

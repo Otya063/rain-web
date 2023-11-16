@@ -9,7 +9,7 @@
     <!-- svelte-ignore a11y-label-has-associated-control -->
     <label class="header_platform" />
     <p class="header_logo">
-        <button class="header_logo_button" on:click={() => loadArticle($locale)} />
+        <button class="header_logo_button" on:click={() => loadArticle($locale, 'manual/')} />
     </p>
     <aside class="header_language">
         <ul>

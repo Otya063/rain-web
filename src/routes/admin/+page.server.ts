@@ -181,7 +181,7 @@ const updateInfoData: Action = async ({ request }) => {
             },
         });
 
-        return { success: true, status: 'info_updated', targetId: info_id };
+        return { success: true, status: 'info_updated', targetNumber: info_id };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };
@@ -205,7 +205,7 @@ const deleteInfoData: Action = async ({ request }) => {
             },
         });
 
-        return { success: true, status: 'info_deleted', targetId: info_id };
+        return { success: true, status: 'info_deleted', targetNumber: info_id };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };
@@ -304,7 +304,7 @@ const updateUserData: Action = async ({ request }) => {
             });
         }
 
-        return { success: true, status: 'user_updated' };
+        return { success: true, status: 'user_updated', targetString: column };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };
@@ -319,7 +319,7 @@ const updateUserData: Action = async ({ request }) => {
 const suspendUser: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
-    const { user_id, username, character_id, reason, permanently_del } = dataObj;
+    const { user_id, username, character_id, reason_type, permanently_del } = dataObj;
     const date = Math.floor(Date.now() / 1000);
 
     try {
@@ -336,7 +336,7 @@ const suspendUser: Action = async ({ request }) => {
                 data: {
                     user_id: Number(user_id),
                     username: String(username),
-                    reason: String(reason),
+                    reason: Number(reason_type),
                     date,
                     permanent: true,
                 },
@@ -348,7 +348,7 @@ const suspendUser: Action = async ({ request }) => {
                 },
             });
 
-            return { success: true, status: 'permanently_suspend_user', targetName: username };
+            return { success: true, status: 'permanently_suspend_user', targetString: username };
         } else {
             for (const char_id of character_id) {
                 await db.characters.update({
@@ -365,13 +365,13 @@ const suspendUser: Action = async ({ request }) => {
                 data: {
                     user_id: Number(user_id),
                     username: String(username),
-                    reason: String(reason),
+                    reason: Number(reason_type),
                     date,
                     permanent: false,
                 },
             });
 
-            return { success: true, status: 'suspend_user', targetName: username };
+            return { success: true, status: 'suspend_user', targetString: username };
         }
     } catch (err) {
         if (err instanceof Error) {
@@ -408,7 +408,7 @@ const unsuspendUser: Action = async ({ request }) => {
             },
         });
 
-        return { success: true, status: 'unsuspend_user', targetName: username };
+        return { success: true, status: 'unsuspend_user', targetString: username };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };
@@ -461,7 +461,7 @@ const createBnrData: Action = async ({ request }) => {
             },
         });
 
-        return { success: true, status: 'bnr_created', targetName: bnr_name };
+        return { success: true, status: 'bnr_created', targetString: bnr_name };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };
@@ -511,7 +511,7 @@ const updateBnrData: Action = async ({ request }) => {
                 return { error: true, err_details: 'Failed to upload the files. File extension is incorrect.' };
             }
 
-            return { success: true, status: 'bnr_updated', targetId: bnr_id, targetName: bnr_name };
+            return { success: true, status: 'bnr_updated', targetNumber: bnr_id, targetString: bnr_name };
         } else {
             // url convertor
             if (bnr_url.indexOf('discord.com')) {
@@ -527,7 +527,7 @@ const updateBnrData: Action = async ({ request }) => {
                 },
             });
 
-            return { success: true, status: 'bnr_updated', targetId: bnr_id, targetName: bnr_name };
+            return { success: true, status: 'bnr_updated', targetNumber: bnr_id, targetString: bnr_name };
         }
     } catch (err) {
         if (err instanceof Error) {
@@ -552,7 +552,7 @@ const deleteBnrData: Action = async ({ request }) => {
             },
         });
 
-        return { success: true, status: 'bnr_deleted', targetId: bnr_id, targetName: bnr_name };
+        return { success: true, status: 'bnr_deleted', targetNumber: bnr_id, targetString: bnr_name };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };
@@ -721,7 +721,7 @@ const unlinkDiscord: Action = async ({ request }) => {
 const deleteCharacter: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
-    const { char_id, permanently_del } = dataObj;
+    const { char_id, char_name, permanently_del } = dataObj;
 
     try {
         if (permanently_del === 'on') {
@@ -737,7 +737,7 @@ const deleteCharacter: Action = async ({ request }) => {
                 },
             });
 
-            return { success: true, status: 'permanently_delete_character' };
+            return { success: true, status: 'permanently_delete_character', targetString: char_name };
         } else {
             await db.characters.update({
                 where: {
@@ -748,7 +748,7 @@ const deleteCharacter: Action = async ({ request }) => {
                 },
             });
 
-            return { success: true, status: 'delete_character' };
+            return { success: true, status: 'delete_character', targetString: char_name };
         }
     } catch (err) {
         if (err instanceof Error) {
@@ -764,7 +764,7 @@ const deleteCharacter: Action = async ({ request }) => {
 const restoreCharacter: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
-    const { char_id } = dataObj;
+    const { char_id, char_name } = dataObj;
 
     try {
         await db.characters.update({
@@ -776,7 +776,7 @@ const restoreCharacter: Action = async ({ request }) => {
             },
         });
 
-        return { success: true, status: 'restore_character' };
+        return { success: true, status: 'restore_character', targetString: char_name };
     } catch (err) {
         if (err instanceof Error) {
             return { error: true, err_details: err.message };

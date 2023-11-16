@@ -10,18 +10,18 @@
     import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
     import type { ActionData, PageData } from './$types';
-    import { Timeout, success, error, err_details, errDetailMode, notice, clicked_submit } from '$ts/main';
+    import { loadArticle, Timeout, success, error, err_details, errDetailMode, notice, clicked_submit } from '$ts/main';
     import '$scss/style_admin.scss';
 
     // data from the server
     export let data: PageData;
     export let form: ActionData;
     let status: keyof StatusMsg;
-    let targetId: number;
-    let targetName: string;
+    let targetNumber: number;
+    let targetString: string;
     form?.status ? (status = form.status) : (status = '');
-    form?.targetId ? (targetId = form.targetId) : (targetId = 0);
-    form?.targetName ? (targetName = form.targetName) : (targetName = '');
+    form?.targetNumber ? (targetNumber = form.targetNumber) : (targetNumber = 0);
+    form?.targetString ? (targetString = form.targetString) : (targetString = '');
     form?.success ? success.set(form.success) : success.set(false);
     form?.error ? (error.set(form.error), err_details.set(form.err_details)) : (error.set(false), err_details.set(''));
     clicked_submit.set(false);
@@ -35,20 +35,20 @@
         system_updated: 'The system mode has been successfully updated.',
         maint_all_updated: 'All maintenance modes have been successfully updated.',
         info_created: 'The information data has been successfully created.',
-        info_updated: `The information data (ID: ${targetId}) has been successfully updated.`,
-        info_deleted: `The information data (ID: ${targetId}) has been successfully deleted.`,
-        user_updated: 'The user data has been successfully updated.',
-        suspend_user: `The user account (Username: ${targetName}) was successfully suspended. (Restorable)`,
-        permanently_suspend_user: `The user account (Username: ${targetName}) was successfully suspended. (Not Restorable)`,
-        unsuspend_user: `The user account (Username: ${targetName}) was successfully unsuspended.`,
-        bnr_created: `The banner data (Banner Name: ${targetName}) was successfully created.`,
-        bnr_updated: `The banner data (ID: ${targetId} / Banner Name: ${targetName}) has been successfully updated.`,
-        bnr_deleted: `The banner data (ID: ${targetId} / Banner Name: ${targetName}) has been successfully deleted.`,
+        info_updated: `The information data (ID: ${targetNumber}) has been successfully updated.`,
+        info_deleted: `The information data (ID: ${targetNumber}) has been successfully deleted.`,
+        user_updated: `The user data (Data Column: ${targetString}) has been successfully updated.`,
+        suspend_user: `The user account (Username: ${targetString}) was successfully suspended. (Restorable)`,
+        permanently_suspend_user: `The user account (Username: ${targetString}) was successfully suspended. (Not Restorable)`,
+        unsuspend_user: `The user account (Username: ${targetString}) was successfully unsuspended.`,
+        bnr_created: `The banner data (Banner Name: ${targetString}) was successfully created.`,
+        bnr_updated: `The banner data (ID: ${targetNumber} / Banner Name: ${targetString}) has been successfully updated.`,
+        bnr_deleted: `The banner data (ID: ${targetNumber} / Banner Name: ${targetString}) has been successfully deleted.`,
         link_discord: 'The linking process has been successfully completed.',
         unlink_discord: 'The unlinking process has been successfully completed.',
-        delete_character: 'The character data has been successfully deleted. (Restorable)',
-        permanently_delete_character: 'The character data has been successfully deleted. (Not Restorable)',
-        restore_character: 'The character data has been successfully restored.',
+        delete_character: `The character data (Character Name: ${targetString}) has been successfully deleted. (Restorable)`,
+        permanently_delete_character: `The character data (Character Name: ${targetString}) has been successfully deleted. (Not Restorable)`,
+        restore_character: `The character data (Character Name: ${targetString}) has been successfully restored.`,
     };
 
     // message display timer bar
@@ -64,7 +64,8 @@
             error.set(false);
             notice.set(false);
             err_details.set('');
-            targetId;
+            targetNumber = 0;
+            targetString = '';
             width.set(100, { duration: 0 });
         }, 5000);
     }
@@ -74,10 +75,13 @@
         // prevent repeatedly pressing btn
         const target = e.target as HTMLButtonElement;
         target.disabled = true;
+        target.classList.add('disabled_btn');
+
         setTimeout(() => {
-            // after 2s, enable btn
+            // after 1.5s, enable btn
             target.disabled = false;
-        }, 2000);
+            target.classList.remove('disabled_btn');
+        }, 1500);
 
         if (t) {
             if (timerPause) {
@@ -114,6 +118,9 @@
     <div class="header_inner">
         <!-- svelte-ignore a11y-label-has-associated-control -->
         <label class="header_platform" />
+        <p class="header_logo">
+            <button class="header_logo_button" on:click={() => loadArticle('none', 'admin/')} />
+        </p>
     </div>
 </header>
 
@@ -141,9 +148,7 @@
             <p style="padding-top: 0.3%;">Unauthorized operation detected.</p>
             <button on:click={(e) => toggleErrDetail(e)} class="error_view_btn">View Details</button>
         {/if}
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <span on:click={() => closeMsgDisplay()} class="msg_close_btn" />
+        <button on:click={() => closeMsgDisplay()} class="msg_close_btn" />
         <div class="timer_bar" style={`width: ${$width}%;`} />
     </div>
     {#if $errDetailMode}

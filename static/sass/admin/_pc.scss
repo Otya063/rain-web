@@ -50,6 +50,19 @@
                     background-size: auto 75%;
                 }
             }
+
+            // ヘッダーロゴ
+            .header_logo {
+                display: flex;
+                @include right_left;
+
+                .header_logo_button {
+                    width: 130px;
+                    height: 67px;
+                    background: url(#{$path_img}/common/rain_textlogo.webp) center center no-repeat;
+                    background-size: 100%;
+                }
+            }
         }
     }
 
@@ -422,7 +435,7 @@
                 left: 50%;
                 width: 5px;
                 height: 30px;
-                background: #dae0e0;
+                background: #3e4444;
             }
 
             &::before {
