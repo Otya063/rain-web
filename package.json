@@ -4,9 +4,9 @@
 	"private": true,
 	"scripts": {
 		"dev": "npm-run-all --parallel vite typesafe-i18n",
-		"vite": "vite",
-		"build": "vite build",
-		"preview": "vite preview",
+		"vite": "vite --mode development",
+		"build": "vite build --mode production",
+		"preview": "vite preview --mode production",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"typesafe-i18n": "typesafe-i18n"
@@ -21,7 +21,7 @@
 		"@types/node": "^20.9.0",
 		"bcryptjs": "^2.4.3",
 		"npm-run-all": "^4.1.5",
-		"prisma": "^5.5.2",
+		"prisma": "^5.6.0",
 		"sass": "^1.69.5",
 		"svelte": "^4.2.3",
 		"svelte-check": "^3.6.0",
@@ -34,7 +34,7 @@
 	"dependencies": {
 		"@aws-sdk/client-s3": "^3.449.0",
 		"@aws-sdk/s3-request-presigner": "^3.449.0",
-		"@prisma/client": "^5.5.2",
+		"@prisma/client": "^5.6.0",
 		"@prisma/extension-accelerate": "^0.6.2",
 		"lodash": "^4.17.21",
 		"typesafe-i18n": "^5.26.2"

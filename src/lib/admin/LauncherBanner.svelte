@@ -1,7 +1,7 @@
 <script lang="ts">
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
-    import { prepareModal, editMode, clicked_submit, notice, err_details, uploadFileViaApi, deleteFileViaApi } from '$ts/main';
+    import { prepareModal, editMode, clicked_submit, notice, err_details, uploadFileViaApi, deleteFileViaApi, validateImageDimensions } from '$ts/main';
 
     export let launcherBanner: LauncherBanner[];
 
@@ -111,6 +111,15 @@
             return false;
         }
 
+        // image dimensions validation
+        const isJaValid = await validateImageDimensions(jaFile, 515, 120);
+        const isEnValid = await validateImageDimensions(enFile, 515, 120);
+
+        if (!isJaValid || !isEnValid) {
+            alert('File Dimensions are incorrect.');
+            return false;
+        }
+
         uploadFileViaApi(jaFile, 'ja');
         uploadFileViaApi(enFile, 'en');
     };
@@ -152,6 +161,14 @@
             return false;
         }
 
+        // image dimensions validation
+        const isValid = await validateImageDimensions(file, 515, 120);
+
+        if (!isValid) {
+            alert('File Dimensions are incorrect.');
+            return false;
+        }
+
         deleteFileViaApi(lang, `${bnrName}_${lang}`);
         uploadFileViaApi(file, lang);
     };
@@ -165,6 +182,7 @@
     <div class="console_contents">
         <form class="info_add_form" action="?/createBnrData" method="POST">
             <p class="console_contents_note">* Each file must be named "BannerName_lang," and have a png extension.</p>
+            <p class="console_contents_note">* The dimensions of each file must be 515px (width) and 120px (height).</p>
 
             <dl class="console_contents_list">
                 <dt class="contents_term">Banner URL</dt>

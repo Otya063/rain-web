@@ -859,6 +859,7 @@
                                             class="red_btn delete_character"
                                             on:click={() =>
                                                 prepareModal('deleteCharacter', 'Are you sure you want to delete the following character?', 'deleteCharacter', character.id, 'Ready to Hunt')}
+                                            class:disabled_btn={_.filter(charactersData, (c_data) => c_data.user_id === user.id).length === 1}
                                         >
                                             <span class="btn_icon material-icons">delete</span>
                                             <span class="btn_text">Delete</span>

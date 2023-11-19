@@ -40,11 +40,11 @@
 
 <svelte:head>
     <!-- ogp -->
-    <meta property="og:url" content="https://online-manual.rain-server.workers.dev/" />
+    <meta property="og:url" content="https://development.rain-server.workers.dev/" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content={$LL.articles['description']()} />
     <meta property="og:site_name" content="Rain Server" />
-    <meta property="og:image" content="https://online-manual.rain-server.workers.dev/img/common/sns_share.webp" />
+    <meta property="og:image" content="https://development.rain-server.workers.dev/img/common/sns_share.webp" />
     <!-- twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <!-- favicon -->

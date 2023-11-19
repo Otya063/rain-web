@@ -435,13 +435,14 @@ model launcher_info {
 }
 
 model launcher_system {
-  id           Int     @id
+  id           Int       @id
   RainJP       Boolean
   RainUS       Boolean
   RainEU       Boolean
   update       Boolean
   debug        Boolean
   launcher_ver String
+  rain_admins  String[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -589,6 +590,7 @@ model users {
   gacha_premium                                    Int?
   gacha_trial                                      Int?
   frontier_points                                  Int?
+  authToken                                        String?            @unique
   characters                                       characters[]
   discord_register_discord_register_user_idTousers discord_register[] @relation("discord_register_user_idTousers")
 }

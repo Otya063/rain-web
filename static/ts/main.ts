@@ -307,7 +307,7 @@ export class Timeout {
     }
 }
 
-/* upload file
+/* Upload File
 ====================================================*/
 export const uploadFileViaApi = async (file: File | undefined, lang: string) => {
     const getPresignedUrlResponse = await fetch(`/api/upload/${lang}`, {
@@ -344,7 +344,7 @@ export const uploadFileViaApi = async (file: File | undefined, lang: string) => 
     }
 };
 
-/* delete file
+/* Delete File
 ====================================================*/
 export const deleteFileViaApi = async (lang: string, bnrName: string) => {
     const getPresignedUrlResponse = await fetch(`/api/delete/${lang}/${bnrName}`, {
@@ -368,6 +368,31 @@ export const deleteFileViaApi = async (lang: string, bnrName: string) => {
     } else {
         console.error('Failed to delete file.');
     }
+};
+
+/* Check File Size (width / height)
+====================================================*/
+export const validateImageDimensions = (file: File, reqWidth: number, reqHeight: number): Promise<boolean> => {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+            const image = new Image();
+            image.onload = () => {
+                const width = image.width;
+                const height = image.height;
+
+                // Check if dimensions match the required size
+                const isValid = width === reqWidth && height === reqHeight;
+
+                resolve(isValid);
+            };
+
+            event.target?.result && (image.src = event.target.result.toString());
+        };
+
+        reader.readAsDataURL(file);
+    });
 };
 
 /*=========================================================

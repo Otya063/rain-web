@@ -11,6 +11,8 @@ interface ImportMetaEnv {
     readonly VITE_R2_ACCOUNT_ID: string;
     readonly VITE_R2_BNR_BUCKETNAME: string;
     readonly VITE_R2_BNR_UNIQUE_URL: string;
+    readonly VITE_MAIN_DOMAIN: string;
+    readonly VITE_AUTH_DOMAIN: string;
 }
 
 interface ImportMeta {

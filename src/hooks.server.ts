@@ -1,7 +1,9 @@
+import { error } from '@sveltejs/kit';
 import { detectLocale, i18n, isLocale } from '$i18n/i18n-util';
 import { loadAllLocales } from '$i18n/i18n-util.sync';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
-import { initAcceptLanguageHeaderDetector, localStorageDetector } from 'typesafe-i18n/detectors';
+import { initAcceptLanguageHeaderDetector } from 'typesafe-i18n/detectors';
+import { db } from '$ts/database';
 
 loadAllLocales();
 const L = i18n();
@@ -34,6 +36,8 @@ export const handle: Handle = async ({ event, resolve }) => {
     const pathname = event.url.pathname;
 
     if (origin === securityHeaders['Access-Control-Allow-Origin'] && pathname === '/admin') {
+        console.log('[Allowed CORS]');
+
         const response = await resolve(event, {
             transformPageChunk: ({ html }) => html.replace('%lang%', 'en'),
         });
@@ -44,15 +48,42 @@ export const handle: Handle = async ({ event, resolve }) => {
             headers: response.headers,
         });
 
-        console.log('[Allowed CORS]');
         return newResponse;
     } else if (origin !== securityHeaders['Access-Control-Allow-Origin'] && pathname === '/admin') {
         console.log('[Admins Normal Browsing.]');
-        return resolve(event, {
-            transformPageChunk: ({ html }) => html.replace('%lang%', 'en'),
+
+        const session = event.cookies.get('session');
+        const redirectURL = encodeURIComponent(`${import.meta.env.VITE_MAIN_DOMAIN}/admin`);
+        if (!session) {
+            const redirectUrl = `${import.meta.env.VITE_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${redirectURL}`;
+            return new Response(null, {
+                status: 302,
+                headers: { Location: redirectUrl },
+            });
+        }
+
+        const launcherSystem = await db.launcher_system.findFirst({
+            where: {
+                id: 1,
+            },
         });
+        const authUser = await db.users.findFirst({
+            where: {
+                authToken: session,
+            },
+        });
+        const isRainAdmin = launcherSystem['rain_admins'].includes(authUser.username);
+
+        if (isRainAdmin) {
+            return resolve(event, {
+                transformPageChunk: ({ html }) => html.replace('%lang%', 'en'),
+            });
+        } else {
+            throw error(403);
+        }
     } else {
         console.log('[User Normal Browsing.]');
+
         return resolve(event, {
             transformPageChunk: ({ html }) => html.replace('%lang%', locale),
         });
