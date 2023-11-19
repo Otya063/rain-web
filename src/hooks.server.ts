@@ -18,7 +18,12 @@ export const handle: Handle = async ({ event, resolve }) => {
     const [, lang] = event.url.pathname.split('/');
 
     if (!lang) {
-        throw error(404);
+        const locale = getPreferredLocale(event);
+        const redirectUrl = `/${locale}`;
+        return new Response(null, {
+            status: 302,
+            headers: { Location: redirectUrl },
+        });
     }
 
     const locale = isLocale(lang) ? (lang as Locales) : getPreferredLocale(event);
