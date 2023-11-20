@@ -21,7 +21,6 @@ export const load: PageServerLoad = async ({ locals: { locale }, cookies }) => {
     }
 
     const isRainAdmin = launcherSystem['rain_admins'].includes(authUser.username);
-    console.log(isRainAdmin)
     if (isRainAdmin) {
         const important = await getServerData('getInformation', 1);
 
