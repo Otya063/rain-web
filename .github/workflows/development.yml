@@ -23,6 +23,8 @@ jobs:
             VITE_R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
             VITE_R2_BNR_BUCKETNAME: ${{ secrets.R2_BNR_BUCKETNAME }}
             VITE_R2_BNR_UNIQUE_URL: ${{ secrets.R2_BNR_UNIQUE_URL }}
+            VITE_MAIN_DOMAIN: ${{ secrets.DEV_MAIN_DOMAIN }}
+            VITE_AUTH_DOMAIN: ${{ secrets.DEV_AUTH_DOMAIN }}
 
         steps:
             - name: Checkout

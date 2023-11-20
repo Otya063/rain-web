@@ -15,6 +15,8 @@ const securityHeaders = {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
+    console.log(event.url.href);
+
     const [, lang] = event.url.pathname.split('/');
 
     if (!lang) {
@@ -52,35 +54,9 @@ export const handle: Handle = async ({ event, resolve }) => {
     } else if (origin !== securityHeaders['Access-Control-Allow-Origin'] && pathname === '/admin') {
         console.log('[Admins Normal Browsing.]');
 
-        const session = event.cookies.get('session');
-        const redirectURL = encodeURIComponent(`${import.meta.env.VITE_MAIN_DOMAIN}/admin`);
-        if (!session) {
-            const redirectUrl = `${import.meta.env.VITE_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${redirectURL}`;
-            return new Response(null, {
-                status: 302,
-                headers: { Location: redirectUrl },
-            });
-        }
-
-        const launcherSystem = await db.launcher_system.findFirst({
-            where: {
-                id: 1,
-            },
+        return resolve(event, {
+            transformPageChunk: ({ html }) => html.replace('%lang%', 'en'),
         });
-        const authUser = await db.users.findFirst({
-            where: {
-                authToken: session,
-            },
-        });
-        const isRainAdmin = launcherSystem['rain_admins'].includes(authUser.username);
-
-        if (isRainAdmin) {
-            return resolve(event, {
-                transformPageChunk: ({ html }) => html.replace('%lang%', 'en'),
-            });
-        } else {
-            throw error(403);
-        }
     } else {
         console.log('[User Normal Browsing.]');
 

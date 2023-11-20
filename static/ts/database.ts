@@ -146,6 +146,14 @@ export const getServerData = (data1: string, data2: string | number = undefined,
             data = db.launcher_banner.findMany({});
             break;
 
+        case 'getAuthUserBySession':
+            data = db.users.findFirst({
+                where: {
+                    authToken: data2,
+                },
+            });
+            break;
+
         default:
             data = 'Nothing';
     }

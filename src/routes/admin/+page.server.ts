@@ -1,69 +1,88 @@
 import { convDateToUnix, convFormDataToObj, getCourseByFormData, deleteFileViaApi, discordLinkConvertor } from '$ts/main';
-import { getServerData } from '$ts/database';
-import { redirect } from '@sveltejs/kit';
+import { db, getServerData } from '$ts/database';
+import { redirect, error } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
-import { db } from '$ts/database';
 
-export const load: PageServerLoad = async () => {
+export const load: PageServerLoad = async ({ locals: { locale }, cookies }) => {
+    // check if the accessing user is admin
+    const session = cookies.get('session');
+    const queryRedirect = encodeURIComponent(`${import.meta.env.VITE_MAIN_DOMAIN}/admin`);
+    const redirectUrl = `${import.meta.env.VITE_AUTH_DOMAIN}/${locale}/login/?redirect_url=${queryRedirect}`;
+    if (!session) {
+        throw redirect(303, redirectUrl);
+    }
+
     const launcherSystem = await getServerData('getLauncherSystem');
 
-    const important = await getServerData('getInformation', 1);
+    const authUser = await getServerData('getAuthUserBySession', session);
 
-    const defectsAndTroubles = await getServerData('getInformation', 2);
+    if (!authUser) {
+        throw redirect(303, redirectUrl);
+    }
 
-    const managementAndService = await getServerData('getInformation', 3);
+    const isRainAdmin = launcherSystem['rain_admins'].includes(authUser.username);
+    console.log(isRainAdmin)
+    if (isRainAdmin) {
+        const important = await getServerData('getInformation', 1);
 
-    const ingameEvents = await getServerData('getInformation', 4);
+        const defectsAndTroubles = await getServerData('getInformation', 2);
 
-    const updatesAndMaintenance = await getServerData('getInformation', 5);
+        const managementAndService = await getServerData('getInformation', 3);
 
-    const users = await getServerData('getAllUsers');
-    const usersWithoutBytes = users.map(({ item_box, ...rest }) => rest);
+        const ingameEvents = await getServerData('getInformation', 4);
 
-    const characters = await getServerData('getAllCharacters');
-    const charactersWithoutBytes = characters.map(
-        ({
-            savedata,
-            decomyset,
-            hunternavi,
-            otomoairou,
-            partner,
-            platebox,
-            platedata,
-            platemyset,
-            rengokudata,
-            savemercenary,
-            minidata,
-            gacha_items,
-            house_info,
-            login_boost,
-            skin_hist,
-            scenariodata,
-            savefavoritequest,
-            mezfes,
-            ...rest
-        }) => rest
-    );
+        const updatesAndMaintenance = await getServerData('getInformation', 5);
 
-    const bannedUsers = await getServerData('getAllSuspendedUsers');
+        const users = await getServerData('getAllUsers');
+        const usersWithoutBytes = users.map(({ item_box, ...rest }) => rest);
 
-    const launcherBanner = await getServerData('getBannerData');
+        const characters = await getServerData('getAllCharacters');
+        const charactersWithoutBytes = characters.map(
+            ({
+                savedata,
+                decomyset,
+                hunternavi,
+                otomoairou,
+                partner,
+                platebox,
+                platedata,
+                platemyset,
+                rengokudata,
+                savemercenary,
+                minidata,
+                gacha_items,
+                house_info,
+                login_boost,
+                skin_hist,
+                scenariodata,
+                savefavoritequest,
+                mezfes,
+                ...rest
+            }) => rest
+        );
 
-    const linkedCharacters = await getServerData('getAllLinkedCharacters');
+        const bannedUsers = await getServerData('getAllSuspendedUsers');
 
-    return {
-        launcherSystem,
-        important,
-        defectsAndTroubles,
-        managementAndService,
-        ingameEvents,
-        updatesAndMaintenance,
-        usersWithoutBytes,
-        charactersWithoutBytes,
-        bannedUsers,
-        launcherBanner,
-        linkedCharacters,
-    };
+        const launcherBanner = await getServerData('getBannerData');
+
+        const linkedCharacters = await getServerData('getAllLinkedCharacters');
+
+        return {
+            launcherSystem,
+            important,
+            defectsAndTroubles,
+            managementAndService,
+            ingameEvents,
+            updatesAndMaintenance,
+            usersWithoutBytes,
+            charactersWithoutBytes,
+            bannedUsers,
+            launcherBanner,
+            linkedCharacters,
+        };
+    } else {
+        throw error(403);
+    }
 };
 
 const updateSystemMode: Action = async ({ request }) => {
@@ -676,7 +695,6 @@ const unlinkDiscord: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
     const { user_id, char_id, discord_id } = dataObj;
-    console.log(dataObj);
 
     try {
         const discordExist = await db.discord.findFirst({
