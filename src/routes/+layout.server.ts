@@ -4,7 +4,7 @@ import { db, getServerData } from '$ts/database';
 
 export const load: LayoutServerLoad = async ({ locals: { locale, LL }, url, cookies }) => {
     // when development env, check if the accessing user is admin
-    if (url.href.includes('dev')) {
+    if (url.href.includes('dev') && url.pathname !== '/admin') {
         const session = cookies.get('session');
         const queryRedirect = encodeURIComponent(url.href);
         const redirectUrl = `${import.meta.env.VITE_AUTH_DOMAIN}/${locale}/login/?redirect_url=${queryRedirect}`;
@@ -28,6 +28,7 @@ export const load: LayoutServerLoad = async ({ locals: { locale, LL }, url, cook
         } else {
             throw error(403);
         }
+        return { locale };
     }
 
     return { locale };
