@@ -10,7 +10,7 @@ export const db = new PrismaClient({
     },
 }).$extends(withAccelerate());
 
-export const getServerData = (data1: string, data2: string | number = undefined, data3: string = undefined) => {
+export const getServerData = async (data1: string, data2: string | number | undefined = undefined, data3: string | undefined = undefined) => {
     let data: [];
 
     switch (data1) {

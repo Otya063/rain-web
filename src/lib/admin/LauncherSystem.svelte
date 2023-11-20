@@ -3,7 +3,15 @@
     import { clicked_submit, editMode } from '$ts/main';
 
     export let systemData;
-    const { RainJP, RainUS, RainEU, update, debug, launcher_ver }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean; debug: boolean; launcher_ver: string } = systemData;
+    const {
+        RainJP,
+        RainUS,
+        RainEU,
+        update,
+        debug,
+        launcher_ver,
+        rain_admins,
+    }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean; debug: boolean; launcher_ver: string; rain_admins: string[] } = systemData;
 
     /* Below is the edit mode script
     ====================================================*/

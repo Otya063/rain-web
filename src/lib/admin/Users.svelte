@@ -20,6 +20,7 @@
         gacha_premium: number | null;
         gacha_trial: number | null;
         frontier_points: number | null;
+        authToken: string;
     }
     interface Characters {
         id: number;
