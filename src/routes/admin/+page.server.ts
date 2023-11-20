@@ -1,87 +1,68 @@
 import { convDateToUnix, convFormDataToObj, getCourseByFormData, deleteFileViaApi, discordLinkConvertor } from '$ts/main';
 import { db, getServerData } from '$ts/database';
-import { redirect, error } from '@sveltejs/kit';
+import { error } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ locals: { locale }, cookies }) => {
-    // check if the accessing user is admin
-    const session = cookies.get('session');
-    const queryRedirect = encodeURIComponent(`${import.meta.env.VITE_MAIN_DOMAIN}/admin`);
-    const redirectUrl = `${import.meta.env.VITE_AUTH_DOMAIN}/${locale}/login/?redirect_url=${queryRedirect}`;
-    if (!session) {
-        throw redirect(303, redirectUrl);
-    }
-
     const launcherSystem = await getServerData('getLauncherSystem');
 
-    const authUser = await getServerData('getAuthUserBySession', session);
+    const important = await getServerData('getInformation', 1);
 
-    if (!authUser) {
-        throw redirect(303, redirectUrl);
-    }
+    const defectsAndTroubles = await getServerData('getInformation', 2);
 
-    const isRainAdmin = launcherSystem['rain_admins'].includes(authUser.username);
-    if (isRainAdmin) {
-        const important = await getServerData('getInformation', 1);
+    const managementAndService = await getServerData('getInformation', 3);
 
-        const defectsAndTroubles = await getServerData('getInformation', 2);
+    const ingameEvents = await getServerData('getInformation', 4);
 
-        const managementAndService = await getServerData('getInformation', 3);
+    const updatesAndMaintenance = await getServerData('getInformation', 5);
 
-        const ingameEvents = await getServerData('getInformation', 4);
+    const users = await getServerData('getAllUsers');
+    const usersWithoutBytes = users.map(({ item_box, ...rest }) => rest);
 
-        const updatesAndMaintenance = await getServerData('getInformation', 5);
+    const characters = await getServerData('getAllCharacters');
+    const charactersWithoutBytes = characters.map(
+        ({
+            savedata,
+            decomyset,
+            hunternavi,
+            otomoairou,
+            partner,
+            platebox,
+            platedata,
+            platemyset,
+            rengokudata,
+            savemercenary,
+            minidata,
+            gacha_items,
+            house_info,
+            login_boost,
+            skin_hist,
+            scenariodata,
+            savefavoritequest,
+            mezfes,
+            ...rest
+        }) => rest
+    );
 
-        const users = await getServerData('getAllUsers');
-        const usersWithoutBytes = users.map(({ item_box, ...rest }) => rest);
+    const bannedUsers = await getServerData('getAllSuspendedUsers');
 
-        const characters = await getServerData('getAllCharacters');
-        const charactersWithoutBytes = characters.map(
-            ({
-                savedata,
-                decomyset,
-                hunternavi,
-                otomoairou,
-                partner,
-                platebox,
-                platedata,
-                platemyset,
-                rengokudata,
-                savemercenary,
-                minidata,
-                gacha_items,
-                house_info,
-                login_boost,
-                skin_hist,
-                scenariodata,
-                savefavoritequest,
-                mezfes,
-                ...rest
-            }) => rest
-        );
+    const launcherBanner = await getServerData('getBannerData');
 
-        const bannedUsers = await getServerData('getAllSuspendedUsers');
+    const linkedCharacters = await getServerData('getAllLinkedCharacters');
 
-        const launcherBanner = await getServerData('getBannerData');
-
-        const linkedCharacters = await getServerData('getAllLinkedCharacters');
-
-        return {
-            launcherSystem,
-            important,
-            defectsAndTroubles,
-            managementAndService,
-            ingameEvents,
-            updatesAndMaintenance,
-            usersWithoutBytes,
-            charactersWithoutBytes,
-            bannedUsers,
-            launcherBanner,
-            linkedCharacters,
-        };
-    } else {
-        throw error(403);
-    }
+    return {
+        launcherSystem,
+        important,
+        defectsAndTroubles,
+        managementAndService,
+        ingameEvents,
+        updatesAndMaintenance,
+        usersWithoutBytes,
+        charactersWithoutBytes,
+        bannedUsers,
+        launcherBanner,
+        linkedCharacters,
+    };
 };
 
 const updateSystemMode: Action = async ({ request }) => {
