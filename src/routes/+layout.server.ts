@@ -6,7 +6,7 @@ export const load: LayoutServerLoad = async ({ locals: { locale, LL }, url, cook
     // when development env, check if the accessing user is admin
     if (url.pathname === '/admin') {
         const session = cookies.get('session');
-        const queryRedirect = encodeURIComponent(url.href);
+        const queryRedirect = encodeURIComponent(`${import.meta.env.VITE_MAIN_DOMAIN}/admin`);
         const redirectUrl = `${import.meta.env.VITE_AUTH_DOMAIN}/${locale}/login/?redirect_url=${queryRedirect}`;
 
         // go to login page
@@ -32,7 +32,7 @@ export const load: LayoutServerLoad = async ({ locals: { locale, LL }, url, cook
     } else if (url.href.includes('dev') && url.pathname !== '/admin') {
         // check if the accessing user is admin
         const session = cookies.get('session');
-        const queryRedirect = encodeURIComponent(`${import.meta.env.VITE_MAIN_DOMAIN}/admin`);
+        const queryRedirect = encodeURIComponent(url.href);
         const redirectUrl = `${import.meta.env.VITE_AUTH_DOMAIN}/${locale}/login/?redirect_url=${queryRedirect}`;
         if (!session) {
             throw redirect(303, redirectUrl);
