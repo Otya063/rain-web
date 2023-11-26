@@ -13,6 +13,7 @@ interface ImportMetaEnv {
     readonly VITE_R2_BNR_UNIQUE_URL: string;
     readonly VITE_MAIN_DOMAIN: string;
     readonly VITE_AUTH_DOMAIN: string;
+    readonly VITE_ADMIN_CREDENTIALS: string;
 }
 
 interface ImportMeta {

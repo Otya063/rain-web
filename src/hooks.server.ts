@@ -15,10 +15,20 @@ const securityHeaders = {
 };
 
 export const handle: Handle = async ({ event, resolve }) => {
-    console.log(event.url.href);
+    const auth = event.request.headers.get('Authorization');
+
+    if (event.url.href.includes('dev')) {
+        if (auth !== `Basic ${btoa(import.meta.env.VITE_ADMIN_CREDENTIALS)}`) {
+            return new Response('Not authorized', {
+                status: 401,
+                headers: {
+                    'WWW-Authenticate': 'Basic realm="User Visible Realm", charset="UTF-8"',
+                },
+            });
+        }
+    }
 
     const [, lang] = event.url.pathname.split('/');
-
     if (!lang) {
         const locale = getPreferredLocale(event);
         const redirectUrl = `/${locale}`;

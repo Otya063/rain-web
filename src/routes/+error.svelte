@@ -3,8 +3,7 @@
     import { setLocale } from '$i18n/i18n-svelte';
     import LL from '$i18n/i18n-svelte';
     import Alternate from '$lib/manual/Alternate.svelte';
-    //import '$scss/global.scss';
-    import '$scss/style_error.scss';
+    import '$scss/global.scss';
 
     export let data: LayoutData;
     setLocale(data.locale);
@@ -69,6 +68,6 @@
 </svelte:head>
 
 <!-- svelte-ignore css-unused-selector -->
-<!-- <style lang="scss">
+<style lang="scss">
     @import '$scss/style_error.scss';
-</style> -->
+</style>
