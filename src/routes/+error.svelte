@@ -26,6 +26,7 @@
         </div>
         <button class="btn" on:click={() => (location.href = '/')}>{$LL.E404['btn_name']()}</button>
     </main>
+    
     <footer>
         <section class="error_footer">
             <img class="footer_logo" src="/img/common/rain_textlogo.webp" alt="rain_textlogo" />

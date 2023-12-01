@@ -18,6 +18,7 @@ jobs:
             VITE_DATABASE_URL: ${{ secrets.DATABASE_URL }}
             VITE_DIRECT_URL: ${{ secrets.DIRECT_URL }}
             VITE_ALLOW_ORIGIN: ${{ secrets.ALLOW_ORIGIN }}
+            VITE_ADMIN_CREDENTIALS: ${{ secrets.ADMIN_CREDENTIALS }}
             VITE_R2_ACCESS_KEY: ${{ secrets.R2_ACCESS_KEY }}
             VITE_R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
             VITE_R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
