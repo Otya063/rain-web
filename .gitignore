@@ -10,7 +10,6 @@ node_modules
 .npmrc
 !.env.example
 .cloudflare
-robots.txt
 changelog.txt
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
