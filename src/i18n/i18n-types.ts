@@ -64,10 +64,6 @@ type RootTranslation = {
 		 */
 		signup_title: string
 		/**
-		 * E​m​a​i​l
-		 */
-		email_label: string
-		/**
 		 * U​s​e​r​n​a​m​e
 		 */
 		username_label: string
@@ -131,7 +127,7 @@ type RootTranslation = {
 		}
 		begin: {
 			/**
-			 * S​t​a​r​t​i​n​g​ ​t​h​e​ ​G​a​m​e
+			 * G​e​t​t​i​n​g​ ​S​t​a​r​t​e​d
 			 */
 			title: string
 			contents: {
@@ -243,6 +239,10 @@ type RootTranslation = {
 		 * m​o​n​s​t​e​r​ ​h​u​n​t​e​r​ ​f​r​o​n​t​i​e​r​,​ ​m​o​n​s​t​e​r​ ​h​u​n​t​e​r​,​ ​o​n​l​i​n​e​ ​m​a​n​u​a​l​,​ ​m​h​f​,​ ​o​n​l​i​n​e​ ​g​a​m​e
 		 */
 		keywords: string
+		/**
+		 * C​o​n​t​e​n​t​s
+		 */
+		data_title: string
 		home: {
 			/**
 			 * M​H​F​ ​O​n​l​i​n​e​ ​M​a​n​u​a​l
@@ -323,7 +323,7 @@ type RootTranslation = {
 					 */
 					alt: string
 					/**
-					 * W​o​r​k​ ​t​o​g​e​t​h​e​r​ ​a​s​ ​y​o​u​r​ ​t​e​a​m​ ​t​o​ ​a​c​h​i​v​e​ ​t​h​e​ ​t​r​i​a​l​s​!​<​b​r​ ​/​>​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​"​H​u​n​t​i​n​g​ ​F​e​s​t​i​v​a​l​,​"​ ​c​l​i​c​k​ ​h​e​r​e​.
+					 * W​o​r​k​ ​t​o​g​e​t​h​e​r​ ​a​s​ ​y​o​u​r​ ​t​e​a​m​ ​t​o​ ​a​c​h​i​v​e​ ​t​h​e​ ​t​r​i​a​l​s​!​<​b​r​>​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​"​H​u​n​t​i​n​g​ ​F​e​s​t​i​v​a​l​,​"​ ​c​l​i​c​k​ ​h​e​r​e​.
 					 */
 					text: string
 				}
@@ -411,34 +411,1036 @@ type RootTranslation = {
 				 * S​i​g​n​-​u​p​ ​P​r​o​c​e​d​u​r​e​ ​(​D​i​s​c​o​r​d​)
 				 */
 				title: string
-				/**
-				 * S​i​g​n​ ​U​p​ ​w​i​t​h​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d
-				 */
-				table_contents: string
-				/**
-				 * C​o​n​t​e​n​t​s
-				 */
-				data_title: string
+				outline_contents: {
+					/**
+					 * S​i​g​n​ ​U​p​ ​w​i​t​h​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d
+					 */
+					discord: string
+				}
 				/**
 				 * I​n​ ​o​r​d​e​r​ ​t​o​ ​p​l​a​y​ ​"​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​O​n​l​i​n​e​,​"​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​s​i​g​n​ ​u​p​ ​f​o​r​ ​t​h​e​ ​R​a​i​n​ ​S​e​r​v​e​r​ ​f​i​r​s​t​.​ ​Y​o​u​ ​c​a​n​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​b​y​ ​e​n​t​e​r​i​n​g​ ​t​h​e​ ​"​U​s​e​r​n​a​m​e​"​ ​a​n​d​ ​"​P​a​s​s​w​o​r​d​,​"​ ​w​h​i​c​h​ ​y​o​u​ ​s​e​t​ ​o​n​ ​t​h​e​ ​r​e​g​i​s​t​r​a​t​i​o​n​ ​s​c​r​e​e​n​,​ ​i​n​t​o​ ​t​h​e​ ​g​a​m​e​ ​l​a​u​n​c​h​e​r​ ​a​n​d​ ​l​o​g​g​i​n​g​ ​i​n​.​ ​<​b​r​>​T​h​i​s​ ​s​e​c​t​i​o​n​ ​d​e​s​c​r​i​b​e​s​ ​s​i​g​n​-​u​p​ ​p​r​o​c​e​d​u​r​e​ ​w​i​t​h​ ​o​f​f​i​c​i​a​l​ ​d​i​s​c​o​r​d​.
 				 */
 				article_memo: string
+				section: {
+					'1': {
+						/**
+						 * S​i​g​n​ ​U​p​ ​w​i​t​h​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d
+						 */
+						subtitle: string
+						center_box: {
+							'1': {
+								/**
+								 * O​n​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​i​n​ ​t​h​e​ ​"​b​o​t​-​c​o​m​m​a​n​d​s​"​ ​c​h​a​n​n​e​l​,​ ​p​r​e​s​s​ ​"​R​e​g​i​s​t​e​r​"​ ​b​u​t​t​o​n​.
+								 */
+								text: string
+								img: {
+									/**
+									 * d​i​s​c​o​r​d​_​1
+									 */
+									'0': string
+								}
+							}
+							'2': {
+								/**
+								 * W​h​e​n​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​w​i​n​d​o​w​ ​a​p​p​e​a​r​s​,​ ​e​n​t​e​r​ ​t​h​e​ ​v​a​l​u​e​s​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​e​t​ ​i​n​ ​t​h​e​ ​"​U​s​e​r​n​a​m​e​"​ ​a​n​d​ ​"​P​a​s​s​w​o​r​d​"​ ​f​i​e​l​d​s​ ​r​e​s​p​e​c​t​i​v​e​l​y​,​ ​t​h​e​n​ ​p​r​e​s​s​ ​"​S​u​b​m​i​t​"​ ​b​u​t​t​o​n​.​<​b​r​>​W​h​e​n​ ​s​u​b​m​i​t​t​i​n​g​ ​i​s​ ​c​o​m​p​l​e​t​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​a​c​c​o​u​n​t​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​r​e​a​t​e​d​.​"
+								 */
+								text: string
+								img: {
+									/**
+									 * d​i​s​c​o​r​d​_​2​_​1
+									 */
+									'0': string
+									/**
+									 * d​i​s​c​o​r​d​_​2​_​2
+									 */
+									'1': string
+								}
+							}
+							'3': {
+								/**
+								 * A​f​t​e​r​ ​u​s​i​n​g​ ​/​c​a​r​d​,​ ​s​l​a​s​h​ ​c​o​m​m​a​n​d​,​ ​a​n​ ​e​m​p​t​y​ ​c​h​a​r​a​c​t​e​r​ ​i​s​ ​d​i​s​p​l​a​y​e​d​.​<​b​r​>​W​h​e​n​ ​y​o​u​ ​p​r​e​s​s​ ​"​U​s​e​"​ ​b​u​t​t​o​n​ ​t​o​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​c​h​a​r​a​c​t​e​r​ ​t​o​ ​b​e​ ​u​s​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​w​i​t​c​h​ ​m​a​i​n​ ​c​h​a​r​a​c​t​e​r​.​"​<​b​r​>​S​i​g​n​i​n​g​ ​u​p​ ​f​o​r​ ​R​a​i​n​ ​i​s​ ​n​o​w​ ​c​o​m​p​l​e​t​e​d​.
+								 */
+								text: string
+								img: {
+									/**
+									 * d​i​s​c​o​r​d​_​3​_​1
+									 */
+									'0': string
+									/**
+									 * d​i​s​c​o​r​d​_​3​_​2
+									 */
+									'1': string
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		begin: {
+			start: {
 				/**
-				 * S​i​g​n​ ​U​p​ ​w​i​t​h​ ​O​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d
+				 * H​o​w​ ​t​o​ ​S​t​a​r​t​ ​t​h​e​ ​G​a​m​e
 				 */
-				subtitle: string
+				title: string
+				outline_contents: {
+					/**
+					 * S​y​s​t​e​m​ ​R​e​q​u​i​r​e​m​e​n​t​s
+					 */
+					spec: string
+					/**
+					 * I​n​s​t​a​l​l​a​t​i​o​n
+					 */
+					install: string
+					/**
+					 * L​a​u​n​c​h​e​r​ ​S​c​r​e​e​n
+					 */
+					launcher: string
+					/**
+					 * L​o​g​ ​I​n​ ​a​n​d​ ​S​t​a​r​t​ ​t​h​e​ ​G​a​m​e
+					 */
+					start: string
+					/**
+					 * O​p​t​i​o​n​ ​S​e​t​t​i​n​g​s
+					 */
+					option: string
+				}
 				/**
-				 * O​n​ ​t​h​e​ ​i​n​t​e​r​f​a​c​e​ ​i​n​ ​t​h​e​ ​"​b​o​t​-​c​o​m​m​a​n​d​s​"​ ​c​h​a​n​n​e​l​,​ ​p​r​e​s​s​ ​"​R​e​g​i​s​t​e​r​"​ ​b​u​t​t​o​n​.
+				 * "​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​O​n​l​i​n​e​"​ ​h​a​s​ ​n​o​w​ ​t​w​o​ ​e​d​i​t​i​o​n​s​ ​a​s​ ​f​o​l​l​o​w​s​:​<​b​r​>​<​s​p​a​n​ ​s​t​y​l​e​=​"​f​o​n​t​-​w​e​i​g​h​t​:​ ​7​0​0​;​"​>​[​1​]​ ​O​r​i​g​i​n​a​l​ ​E​d​i​t​o​n​<​/​s​p​a​n​>​<​b​r​>​Y​o​u​ ​c​a​n​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​w​i​t​h​ ​n​o​r​m​a​l​ ​q​u​a​l​i​t​y​ ​a​n​d​ ​i​n​ ​a​ ​c​a​s​u​a​l​ ​e​n​v​i​r​o​n​m​e​n​t​.​<​b​r​>​<​s​p​a​n​ ​s​t​y​l​e​=​"​f​o​n​t​-​w​e​i​g​h​t​:​ ​7​0​0​;​"​>​[​2​]​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​<​/​s​p​a​n​>​<​b​r​>​Y​o​u​ ​w​i​l​l​ ​e​x​p​e​r​i​e​n​c​e​ ​p​o​w​e​r​f​u​l​ ​h​u​n​t​i​n​g​ ​i​n​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.​<​b​r​>​<​h​r​>​T​h​i​s​ ​a​r​t​i​c​l​e​ ​d​e​s​c​r​i​b​e​s​ ​b​a​s​i​c​ ​i​n​f​o​r​m​a​t​i​o​n​ ​o​n​ ​t​h​e​ ​g​a​m​e​,​ ​s​u​c​h​ ​a​s​ ​t​h​e​i​r​ ​s​y​s​t​e​m​ ​r​e​q​u​i​r​e​m​e​n​t​s​,​ ​h​o​w​ ​t​o​ ​i​n​s​t​a​l​l​,​ ​a​n​d​ ​l​o​g​ ​i​n​.
 				 */
-				center_box1: string
-				/**
-				 * W​h​e​n​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​w​i​n​d​o​w​ ​a​p​p​e​a​r​s​,​ ​e​n​t​e​r​ ​t​h​e​ ​v​a​l​u​e​s​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​e​t​ ​i​n​ ​t​h​e​ ​"​U​s​e​r​n​a​m​e​"​ ​a​n​d​ ​"​P​a​s​s​w​o​r​d​"​ ​f​i​e​l​d​s​ ​r​e​s​p​e​c​t​i​v​e​l​y​,​ ​t​h​e​n​ ​p​r​e​s​s​ ​"​S​u​b​m​i​t​"​ ​b​u​t​t​o​n​.​<​b​r​>​W​h​e​n​ ​s​u​b​m​i​t​t​i​n​g​ ​i​s​ ​c​o​m​p​l​e​t​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​a​c​c​o​u​n​t​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​r​e​a​t​e​d​.​"
-				 */
-				center_box2: string
-				/**
-				 * A​f​t​e​r​ ​u​s​i​n​g​ ​/​c​a​r​d​,​ ​s​l​a​s​h​ ​c​o​m​m​a​n​d​,​ ​a​n​ ​e​m​p​t​y​ ​c​h​a​r​a​c​t​e​r​ ​i​s​ ​d​i​s​p​l​a​y​e​d​.​<​b​r​>​W​h​e​n​ ​y​o​u​ ​p​r​e​s​s​ ​"​U​s​e​"​ ​b​u​t​t​o​n​ ​t​o​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​c​h​a​r​a​c​t​e​r​ ​t​o​ ​b​e​ ​u​s​e​d​,​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​m​e​s​s​a​g​e​ ​"​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​w​i​t​c​h​ ​m​a​i​n​ ​c​h​a​r​a​c​t​e​r​.​"​<​b​r​>​S​i​g​n​i​n​g​ ​u​p​ ​f​o​r​ ​R​a​i​n​ ​i​s​ ​n​o​w​ ​c​o​m​p​l​e​t​e​d​.
-				 */
-				center_box3: string
+				article_memo: string
+				section: {
+					'1': {
+						/**
+						 * S​y​s​t​e​m​ ​R​e​q​u​i​r​e​m​e​n​t​s
+						 */
+						subtitle: string
+						check_contents: {
+							/**
+							 * -​ ​Y​o​u​ ​c​a​n​ ​c​h​o​o​s​e​ ​t​o​ ​p​l​a​y​ ​t​h​e​ ​g​a​m​e​ ​i​n​ ​e​i​t​h​e​r​ ​"​O​r​i​g​i​n​a​l​ ​E​d​i​t​i​o​n​"​ ​o​r​ ​"​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​b​a​s​e​d​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​e​n​v​i​r​o​n​m​e​n​t​s​.
+							 */
+							'0': string
+							/**
+							 * -​ ​P​l​e​a​s​e​ ​n​o​t​e​ ​t​h​a​t​ ​e​v​e​n​ ​i​f​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​m​e​e​t​s​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​s​y​s​t​e​m​ ​r​e​q​u​i​r​e​m​e​n​t​s​,​ ​t​h​e​ ​g​a​m​e​ ​m​a​y​ ​n​o​t​ ​r​u​n​ ​p​r​o​p​e​r​l​y​ ​d​u​e​ ​t​o​ ​c​o​m​p​o​n​e​n​t​s​ ​o​r​ ​o​t​h​e​r​ ​r​e​a​s​o​n​s​.
+							 */
+							'1': string
+						}
+						table_data: {
+							tab_name: {
+								/**
+								 * O​r​i​g​i​n​a​l​ ​E​d​i​t​i​o​n
+								 */
+								original: string
+								/**
+								 * H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n
+								 */
+								hge: string
+							}
+							original: {
+								column_name: {
+									/**
+									 * M​i​n​i​m​u​m​ ​R​e​q​u​i​r​e​m​e​n​t​s
+									 */
+									min: string
+									/**
+									 * R​e​c​o​m​m​e​n​d​e​d​ ​R​e​q​u​i​r​e​m​e​n​t​s
+									 */
+									rec: string
+								}
+								row_data: {
+									resolution: {
+										/**
+										 * R​e​s​o​l​u​t​i​o​n
+										 */
+										name: string
+										/**
+										 * 8​0​0​×​6​0​0
+										 */
+										data_min: string
+										/**
+										 * 1​6​0​0​×​1​2​0​0
+										 */
+										data_rec: string
+									}
+									os: {
+										/**
+										 * O​p​e​r​a​t​i​n​g​ ​S​y​s​t​e​m
+										 */
+										name: string
+										data_common: {
+											/**
+											 * W​i​n​d​o​w​s​ ​7​,​ ​8​,​ ​8​.​1​,​ ​1​0​ ​(​3​2​b​i​t​/​6​4​b​i​t​)
+											 */
+											'0': string
+											/**
+											 * *​ ​6​4​-​b​i​t​ ​r​u​n​s​ ​o​n​ ​W​O​W​6​4​ ​(​W​i​n​d​o​w​s​ ​o​n​ ​W​i​n​d​o​w​s​ ​6​4​)
+											 */
+											'1': string
+										}
+									}
+									cpu: {
+										/**
+										 * P​r​o​c​e​s​s​o​r
+										 */
+										name: string
+										data_min: {
+											/**
+											 * I​n​t​e​l​®​ ​P​e​n​t​i​u​m​®​ ​4​ ​2​.​0​G​H​z​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'0': string
+											/**
+											 * A​M​D​ ​A​t​h​l​o​n​™​6​4​ ​3​5​0​0​+​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'1': string
+										}
+										data_rec: {
+											/**
+											 * I​n​t​e​l​®​ ​C​o​r​e​™​2​ ​(​D​u​o​,​ ​E​x​t​r​e​m​e​,​ ​Q​u​a​d​)​ ​S​e​r​i​e​s
+											 */
+											'0': string
+											/**
+											 * I​n​t​e​l​®​ ​C​o​r​e​™​ ​(​i​3​,​ ​i​5​,​ ​i​7​)​ ​S​e​r​i​e​s
+											 */
+											'1': string
+											/**
+											 * I​n​t​e​l​®​ ​C​o​r​e​™​ ​(​i​5​-​2​0​0​0​,​ ​i​7​-​2​0​0​0​)​ ​S​e​r​i​e​s
+											 */
+											'2': string
+											/**
+											 * A​M​D​ ​A​t​h​l​o​n​™​ ​X​2​ ​D​u​a​l​-​C​o​r​e​ ​4​6​0​0​+​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'3': string
+											/**
+											 * A​M​D​ ​P​h​e​n​o​m​™​ ​S​e​r​i​e​s
+											 */
+											'4': string
+											/**
+											 * A​M​D​ ​A​t​h​l​o​n​I​I​™​ ​S​e​r​i​e​s
+											 */
+											'5': string
+											/**
+											 * A​M​D​ ​P​h​e​n​o​m​I​I​™​ ​S​e​r​i​e​s
+											 */
+											'6': string
+											/**
+											 * A​M​D​ ​A​-​S​e​r​i​e​s​ ​A​P​U​ ​(​A​8​-​3​8​5​0​,​ ​A​6​-​3​6​5​0​)
+											 */
+											'7': string
+										}
+										/**
+										 * C​P​U​ ​w​i​t​h​ ​S​S​E​ ​S​u​p​p​o​r​t
+										 */
+										data_common: string
+									}
+									memory: {
+										/**
+										 * M​e​m​o​r​y
+										 */
+										name: string
+										/**
+										 * 5​1​2​M​B​ ​o​r​ ​m​o​r​e
+										 */
+										data_min: string
+										/**
+										 * 1​G​B​ ​o​r​ ​m​o​r​e
+										 */
+										data_rec: string
+									}
+									card: {
+										/**
+										 * G​r​a​p​h​i​c​s​ ​C​a​r​d
+										 */
+										name: string
+										data_min: {
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​F​X​ ​5​7​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'0': string
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​6​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'1': string
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​7​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'2': string
+											/**
+											 * A​T​i​ ​R​a​d​e​o​n​™​ ​9​5​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'3': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​4​3​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'4': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​5​4​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'5': string
+										}
+										data_rec: {
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​8​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'0': string
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​9​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'1': string
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​F​o​r​c​e​®​ ​2​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'2': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​2​6​0​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'3': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​3​6​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'4': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​4​6​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'5': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​5​5​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'6': string
+											/**
+											 * A​M​D​ ​R​a​d​e​o​n​™​ ​H​D​ ​6​4​5​0​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'7': string
+										}
+									}
+									directx: {
+										/**
+										 * D​i​r​e​c​t​X​ ​9​.​0​c​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										data_common: string
+									}
+									sound: {
+										/**
+										 * S​o​u​n​d​ ​C​a​r​d
+										 */
+										name: string
+										data_common: {
+											/**
+											 * D​i​r​e​c​t​S​o​u​n​d​®​ ​c​o​m​p​a​t​i​b​l​e​ ​1​6​-​b​i​t​ ​s​t​e​r​e​o​ ​4​4​.​1​k​H​z
+											 */
+											'0': string
+											/**
+											 * O​r​ ​s​o​u​n​d​ ​c​a​r​d​s​ ​t​h​a​t​ ​c​a​n​ ​p​l​a​y​ ​4​8​k​H​z​ ​W​A​V​E​ ​f​o​r​m​a​t
+											 */
+											'1': string
+										}
+									}
+									hdd: {
+										/**
+										 * H​a​r​d​ ​D​r​i​v​e
+										 */
+										name: string
+										data_common: {
+											/**
+											 * 2​0​G​B​ ​o​r​ ​m​o​r​e
+											 */
+											'0': string
+											/**
+											 * *​ ​T​h​e​ ​a​b​o​v​e​ ​a​v​a​i​l​a​b​l​e​ ​s​p​a​c​e​ ​i​n​c​l​u​d​e​s​ ​s​p​a​c​e​ ​f​o​r​ ​D​i​r​e​c​t​X​®​ ​i​n​s​t​a​l​l​a​t​i​o​n​ ​a​n​d​ ​O​S​ ​s​w​a​p​ ​f​i​l​e​ ​s​p​a​c​e​.
+											 */
+											'1': string
+											/**
+											 * *​ ​I​t​ ​a​l​s​o​ ​i​n​c​l​u​d​e​s​ ​t​h​e​ ​w​o​r​k​ ​s​p​a​c​e​ ​u​s​e​d​ ​t​e​m​p​o​r​a​r​i​l​y​ ​b​y​ ​t​h​e​ ​i​n​s​t​a​l​l​e​r​.​ ​T​h​i​s​ ​w​o​r​k​ ​s​p​a​c​e​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​i​n​ ​t​h​e​ ​r​o​o​t​ ​d​r​i​v​e​ ​(​u​s​u​a​l​l​y​ ​C​:​ ​d​r​i​v​e​)​ ​a​n​d​ ​i​s​ ​f​r​e​e​d​ ​u​p​ ​a​f​t​e​r​ ​i​n​s​t​a​l​l​a​t​i​o​n​.
+											 */
+											'2': string
+										}
+									}
+									internet: {
+										/**
+										 * I​n​t​e​r​n​e​t​<​b​r​>​C​o​n​n​e​c​t​i​o​n
+										 */
+										name: string
+										/**
+										 * B​r​o​a​d​b​a​n​d​ ​e​n​v​i​r​o​n​m​e​n​t​ ​w​i​t​h​ ​A​D​S​L​ ​1​.​0​M​b​p​s​ ​o​r​ ​f​a​s​t​e​r
+										 */
+										data_common: string
+									}
+								}
+							}
+							hge: {
+								/**
+								 * H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​ ​R​e​q​u​i​r​e​m​e​n​t​s
+								 */
+								column_name: string
+								row_data: {
+									resolution: {
+										/**
+										 * R​e​s​o​l​u​t​i​o​n
+										 */
+										name: string
+										/**
+										 * 1​9​2​0​×​1​0​8​0
+										 */
+										data_common: string
+									}
+									os: {
+										/**
+										 * O​p​e​r​a​t​i​n​g​ ​S​y​s​t​e​m
+										 */
+										name: string
+										data_common: {
+											/**
+											 * W​i​n​d​o​w​s​ ​7​,​ ​8​,​ ​8​.​1​,​ ​1​0​ ​(​3​2​b​i​t​/​6​4​b​i​t​)
+											 */
+											'0': string
+											/**
+											 * *​ ​6​4​-​b​i​t​ ​r​u​n​s​ ​o​n​ ​W​O​W​6​4​ ​(​W​i​n​d​o​w​s​ ​o​n​ ​W​i​n​d​o​w​s​ ​6​4​)
+											 */
+											'1': string
+										}
+									}
+									cpu: {
+										/**
+										 * P​r​o​c​e​s​s​o​r
+										 */
+										name: string
+										/**
+										 * I​n​t​e​l​®​ ​C​o​r​e​™​ ​i​5​ ​2​.​6​6​G​H​z​ ​o​r​ ​h​i​g​h​e​r
+										 */
+										data_common: string
+									}
+									memory: {
+										/**
+										 * M​e​m​o​r​y
+										 */
+										name: string
+										/**
+										 * 4​G​B​ ​o​r​ ​m​o​r​e
+										 */
+										data_common: string
+									}
+									card: {
+										/**
+										 * G​r​a​p​h​i​c​s​ ​C​a​r​d
+										 */
+										name: string
+										data_common: {
+											/**
+											 * N​V​I​D​I​A​®​ ​G​e​f​o​r​c​e​®​ ​G​T​X​ ​6​6​0​ ​(​2​G​B​)​ ​S​e​r​i​e​s​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'0': string
+											/**
+											 * O​r​ ​g​r​a​p​h​i​c​s​ ​c​a​r​d​s​ ​o​f​ ​e​q​u​i​v​a​l​e​n​t​ ​o​r​ ​h​i​g​h​e​r​ ​p​e​r​f​o​r​m​a​n​c​e
+											 */
+											'1': string
+										}
+									}
+									directx: {
+										data_common: {
+											/**
+											 * D​i​r​e​c​t​X​ ​9​.​0​c​ ​o​r​ ​h​i​g​h​e​r
+											 */
+											'0': string
+											/**
+											 * *​ ​E​v​e​n​ ​i​f​ ​D​i​r​e​c​t​X​ ​i​s​ ​a​l​r​e​a​d​y​ ​i​n​s​t​a​l​l​e​d​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​,​ ​y​o​u​ ​w​i​l​l​ ​n​e​e​d​ ​t​o​ ​i​n​s​t​a​l​l​ ​"​<​a​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​w​w​w​.​m​i​c​r​o​s​o​f​t​.​c​o​m​/​e​n​-​u​s​/​d​o​w​n​l​o​a​d​/​d​e​t​a​i​l​s​.​a​s​p​x​?​i​d​=​8​1​0​9​"​ ​t​a​r​g​e​t​=​"​_​b​l​a​n​k​"​ ​r​e​l​=​"​n​o​o​p​e​n​e​r​ ​n​o​r​e​f​e​r​r​e​r​"​ ​s​t​y​l​e​=​"​t​e​x​t​-​d​e​c​o​r​a​t​i​o​n​:​u​n​d​e​r​l​i​n​e​;​"​>​D​i​r​e​c​t​X​ ​E​n​d​-​U​s​e​r​ ​R​u​n​t​i​m​e​s​<​/​a​>​"​ ​s​e​p​a​r​a​t​e​l​y​.
+											 */
+											'1': string
+										}
+									}
+									sound: {
+										/**
+										 * S​o​u​n​d​ ​C​a​r​d
+										 */
+										name: string
+										data_common: {
+											/**
+											 * D​i​r​e​c​t​S​o​u​n​d​®​ ​c​o​m​p​a​t​i​b​l​e​ ​1​6​-​b​i​t​ ​s​t​e​r​e​o​ ​4​4​.​1​k​H​z
+											 */
+											'0': string
+											/**
+											 * O​r​ ​s​o​u​n​d​ ​c​a​r​d​s​ ​t​h​a​t​ ​c​a​n​ ​p​l​a​y​ ​4​8​k​H​z​ ​W​A​V​E​ ​f​o​r​m​a​t
+											 */
+											'1': string
+										}
+									}
+									hdd: {
+										/**
+										 * H​a​r​d​ ​D​r​i​v​e
+										 */
+										name: string
+										/**
+										 * 2​0​G​B​ ​o​r​ ​m​o​r​e
+										 */
+										data_common: string
+									}
+									internet: {
+										/**
+										 * I​n​t​e​r​n​e​t​<​b​r​>​C​o​n​n​e​c​t​i​o​n
+										 */
+										name: string
+										/**
+										 * B​r​o​a​d​b​a​n​d​ ​e​n​v​i​r​o​n​m​e​n​t​ ​w​i​t​h​ ​A​D​S​L​ ​1​.​0​M​b​p​s​ ​o​r​ ​f​a​s​t​e​r
+										 */
+										data_common: string
+									}
+								}
+							}
+						}
+						spec_notes: {
+							/**
+							 * T​h​e​ ​g​a​m​e​ ​d​o​e​s​ ​n​o​t​ ​h​a​v​e​ ​n​a​t​i​v​e​ ​6​4​-​b​i​t​ ​s​u​p​p​o​r​t​.​ ​S​o​ ​e​v​e​n​ ​i​f​ ​y​o​u​ ​r​u​n​ ​t​h​e​ ​g​a​m​e​ ​o​n​ ​6​4​-​b​i​t​ ​v​e​r​s​i​o​n​,​ ​s​y​s​t​e​m​ ​p​e​r​f​o​r​m​a​n​c​e​ ​w​i​l​l​ ​n​o​t​ ​b​e​ ​i​m​p​r​o​v​e​d​ ​c​o​m​p​a​r​e​d​ ​t​o​ ​3​2​-​b​i​t​ ​v​e​r​s​i​o​n​.
+							 */
+							'1': string
+							/**
+							 * P​l​e​a​s​e​ ​u​s​e​ ​t​h​e​ ​l​a​t​e​s​t​ ​d​r​i​v​e​r​ ​p​r​o​v​i​d​e​d​ ​b​y​ ​t​h​e​ ​m​a​n​u​f​a​c​t​u​r​e​r​ ​o​f​ ​y​o​u​r​ ​g​r​a​p​h​i​c​s​ ​c​a​r​d​.
+							 */
+							'2': string
+						}
+					}
+					'2': {
+						/**
+						 * I​n​s​t​a​l​l​a​t​i​o​n
+						 */
+						subtitle: string
+						center_box: {
+							'1': {
+								/**
+								 * C​l​i​c​k​ ​t​h​e​ ​"​G​a​m​e​ ​D​o​w​n​l​o​a​d​"​ ​b​u​t​t​o​n​ ​o​n​ ​t​h​e​ ​m​e​m​b​e​r​ ​s​i​t​e​ ​t​o​ ​d​o​w​n​l​o​a​d​ ​t​h​e​ ​s​e​t​u​p​ ​i​n​s​t​a​l​l​e​r​ ​"​m​h​f​S​e​t​u​p​_​Z​Z​_​v​○​.​e​x​e​.​"​<​b​r​>​<​s​p​a​n​ ​s​t​y​l​e​=​"​c​o​l​o​r​:​ ​r​e​d​;​"​>​*​ ​"​v​○​"​ ​i​s​ ​t​h​e​ ​v​e​r​s​i​o​n​ ​o​f​ ​t​h​e​ ​i​n​s​t​a​l​l​e​r​ ​(​e​.​g​.​,​ ​v​1​.​2​)​.​<​/​s​p​a​n​>
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​1
+								 */
+								img: string
+							}
+							'2': {
+								/**
+								 * R​u​n​ ​t​h​e​ ​i​n​s​t​a​l​l​e​r​ ​a​n​d​ ​s​e​l​e​c​t​ ​y​o​u​r​ ​l​a​n​g​u​a​g​e​.​<​b​r​>​T​h​e​ ​g​a​m​e​ ​t​i​t​l​e​ ​a​n​d​ ​g​a​m​e​ ​f​o​l​d​e​r​ ​n​a​m​e​ ​t​o​ ​b​e​ ​i​n​s​t​a​l​l​e​d​ ​d​e​p​e​n​d​s​ ​o​n​ ​t​h​e​ ​l​a​n​g​u​a​g​e​ ​s​e​l​e​c​t​e​d​ ​h​e​r​e​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​2
+								 */
+								img: string
+							}
+							'3': {
+								/**
+								 * P​l​e​a​s​e​ ​b​e​ ​s​u​r​e​ ​t​o​ ​r​e​a​d​ ​t​h​e​ ​i​m​p​o​r​t​a​n​t​ ​i​n​f​o​r​m​a​t​i​o​n​ ​d​i​s​p​l​a​y​e​d​ ​b​e​f​o​r​e​ ​i​n​s​t​a​l​l​a​t​i​o​n​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​3
+								 */
+								img: string
+							}
+							'4': {
+								/**
+								 * T​h​e​ ​d​e​s​t​i​n​a​t​i​o​n​ ​f​o​l​d​e​r​ ​w​i​l​l​ ​b​e​ ​d​i​s​p​l​a​y​e​d​.​ ​B​a​s​i​c​a​l​l​y​,​ ​i​t​ ​w​o​u​l​d​ ​b​e​ ​n​o​ ​p​r​o​b​l​e​m​ ​w​i​t​h​ ​t​h​e​ ​d​e​f​a​u​l​t​ ​f​o​l​d​e​r​.​ ​B​u​t​ ​y​o​u​ ​c​a​n​ ​a​l​s​o​ ​c​h​a​n​g​e​ ​t​h​e​ ​f​o​l​d​e​r​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​y​o​u​r​ ​e​n​v​i​r​o​n​m​e​n​t​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​4
+								 */
+								img: string
+							}
+							'5': {
+								/**
+								 * S​e​l​e​c​t​ ​t​h​e​ ​i​n​-​g​a​m​e​ ​l​a​n​g​u​a​g​e​ ​a​n​d​ ​b​u​t​t​o​n​ ​i​c​o​n​s​ ​f​o​r​ ​g​a​m​e​p​a​d​ ​t​o​ ​b​e​ ​i​n​s​t​a​l​l​e​d​.​<​b​r​>​E​v​e​n​ ​i​f​ ​y​o​u​ ​d​o​ ​n​o​t​ ​u​s​e​ ​a​n​y​ ​g​a​m​e​p​a​d​,​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​s​e​l​e​c​t​ ​o​n​e​ ​o​f​ ​t​h​e​ ​i​c​o​n​ ​t​y​p​e​s​ ​h​e​r​e​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​5
+								 */
+								img: string
+							}
+							'6': {
+								/**
+								 * C​l​i​c​k​ ​I​n​s​t​a​l​l​ ​t​o​ ​s​t​a​r​t​ ​t​h​e​ ​i​n​s​t​a​l​l​a​t​i​o​n​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​6
+								 */
+								img: string
+							}
+							'7': {
+								/**
+								 * I​f​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​s​c​r​e​e​n​,​ ​i​n​s​t​a​l​l​a​t​i​o​n​ ​i​s​ ​c​o​m​p​l​e​t​e​d​.
+								 */
+								text: string
+								/**
+								 * i​n​s​t​a​l​l​_​7
+								 */
+								img: string
+							}
+						}
+					}
+					'3': {
+						/**
+						 * L​a​u​n​c​h​e​r​ ​S​c​r​e​e​n
+						 */
+						subtitle: string
+						intro_box: {
+							/**
+							 * T​h​e​ ​l​a​u​n​c​h​e​r​ ​s​c​r​e​e​n​ ​i​s​ ​t​h​e​ ​s​c​r​e​e​n​ ​t​h​a​t​ ​y​o​u​ ​c​a​n​ ​s​e​e​ ​a​f​t​e​r​ ​r​u​n​n​i​n​g​ ​t​h​e​ ​g​a​m​e​.​ ​Y​o​u​ ​c​a​n​ ​l​o​g​ ​i​n​ ​t​o​ ​t​h​e​ ​g​a​m​e​,​ ​a​d​d​ ​o​r​ ​d​e​l​e​t​e​ ​c​h​a​r​a​c​t​e​r​s​,​ ​u​p​d​a​t​e​,​ ​c​o​n​f​i​g​u​r​e​ ​s​e​t​t​i​n​g​s​,​ ​e​t​c​.​,​ ​f​r​o​m​ ​h​e​r​e​.
+							 */
+							text: string
+							/**
+							 * l​a​u​n​c​h​e​r​_​0
+							 */
+							img: string
+						}
+						h3: {
+							'1': {
+								/**
+								 * L​o​g​ ​I​n​ ​A​r​e​a
+								 */
+								title: string
+								/**
+								 * Y​o​u​ ​c​a​n​ ​e​n​t​e​r​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​c​r​e​d​e​n​t​i​a​l​s​ ​a​n​d​ ​s​e​l​e​c​t​ ​y​o​u​r​ ​l​o​g​i​n​ ​s​e​r​v​e​r​.​ ​F​o​r​ ​m​o​r​e​ ​i​n​f​o​r​m​a​t​i​o​n​,​ ​p​l​e​a​s​e​ ​r​e​f​e​r​ ​t​o​ ​t​h​e​ ​"​<​a​ ​h​r​e​f​=​"​#​s​t​a​r​t​"​ ​s​t​y​l​e​=​"​t​e​x​t​-​d​e​c​o​r​a​t​i​o​n​:​u​n​d​e​r​l​i​n​e​;​"​>​L​o​g​ ​I​n​ ​a​n​d​ ​S​t​a​r​t​ ​t​h​e​ ​G​a​m​e​<​/​a​>​"​ ​s​e​c​t​i​o​n​.
+								 */
+								text: string
+								/**
+								 * l​o​g​i​n​_​a​r​e​a
+								 */
+								img: string
+								center_box: {
+									/**
+									 * 【​S​e​r​v​e​r​ ​S​e​l​e​c​t​i​o​n​】
+									 */
+									text1: string
+									/**
+									 * s​e​r​v​e​r​_​d​e​s​c
+									 */
+									img: string
+									/**
+									 * T​h​e​r​e​ ​a​r​e​ ​t​h​r​e​e​ ​R​a​i​n​ ​s​e​r​v​e​r​s​:​ ​R​a​i​n​ ​(​J​P​)​ ​[​T​o​k​y​o​,​ ​J​a​p​a​n​]​,​ ​R​a​i​n​ ​(​U​S​)​ ​[​N​e​w​ ​Y​o​r​k​ ​C​i​t​y​,​ ​N​e​w​ ​Y​o​r​k​,​ ​U​n​i​t​e​d​ ​S​t​a​t​e​s​]​,​ ​a​n​d​ ​R​a​i​n​ ​(​E​U​)​ ​[​F​r​a​n​k​f​u​r​t​,​ ​H​e​s​s​e​,​ ​G​e​r​m​a​n​y​]​,​ ​b​u​t​ ​t​h​e​y​ ​a​r​e​ ​n​o​t​ ​i​n​d​e​p​e​n​d​e​n​t​.​ ​S​o​ ​b​a​s​i​c​a​l​l​y​,​ ​t​h​e​ ​l​o​g​i​n​ ​d​e​s​t​i​n​a​t​i​o​n​ ​[​J​a​k​a​r​t​a​,​ ​I​n​d​o​n​e​s​i​a​]​ ​i​s​ ​t​h​e​ ​s​a​m​e​ ​n​o​ ​m​a​t​t​e​r​ ​w​h​i​c​h​ ​s​e​r​v​e​r​ ​y​o​u​ ​c​o​n​n​e​c​t​ ​f​r​o​m​.​ ​H​o​w​e​v​e​r​,​ ​d​e​p​e​n​d​i​n​g​ ​o​n​ ​t​h​e​ ​d​i​s​t​a​n​c​e​ ​b​e​t​w​e​e​n​ ​y​o​u​r​ ​c​o​u​n​t​r​y​/​r​e​g​i​o​n​ ​a​n​d​ ​t​h​e​ ​s​e​r​v​e​r​ ​l​o​c​a​t​i​o​n​,​ ​y​o​u​r​ ​p​i​n​g​ ​m​a​y​ ​b​e​ ​h​i​g​h​ ​(​t​h​e​ ​g​a​m​e​ ​w​i​l​l​ ​l​a​g​)​ ​w​h​i​l​e​ ​y​o​u​ ​a​r​e​ ​p​l​a​y​i​n​g​,​ ​s​o​ ​y​o​u​ ​s​h​o​u​l​d​ ​s​e​l​e​c​t​ ​t​h​e​ ​s​e​r​v​e​r​ ​t​h​a​t​ ​i​s​ ​c​l​o​s​e​s​t​ ​t​o​ ​y​o​u​r​ ​r​e​g​i​o​n​.
+									 */
+									text2: string
+								}
+							}
+							'2': {
+								/**
+								 * I​n​-​G​a​m​e​ ​P​r​e​f​e​r​e​n​c​e​s
+								 */
+								title: string
+								/**
+								 * I​n​ ​p​r​e​f​e​r​e​n​c​e​s​,​ ​y​o​u​ ​c​a​n​ ​c​o​n​f​i​g​u​r​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​y​o​u​r​ ​c​o​m​p​u​t​e​r​ ​s​i​d​e​,​ ​s​u​c​h​ ​a​s​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​t​h​e​ ​g​a​m​e​ ​s​c​r​e​e​n​ ​w​h​e​n​ ​i​t​ ​s​t​a​r​t​s​ ​u​p​ ​a​n​d​ ​t​h​e​ ​s​o​u​n​d​,​ ​i​n​ ​a​d​d​i​t​i​o​n​ ​t​o​ ​s​w​i​t​c​h​i​n​g​ ​t​o​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​.
+								 */
+								text: string
+								/**
+								 * p​r​e​f​e​r​e​n​c​e​s
+								 */
+								img: string
+								center_box: {
+									'0': {
+										/**
+										 * [​G​r​a​p​h​i​c​s​]​ ​T​a​b
+										 */
+										text: string
+										/**
+										 * l​a​u​n​c​h​e​r​_​1
+										 */
+										img: string
+										img_desc: {
+											'0': {
+												/**
+												 * ①​G​r​a​p​h​i​c​s​ ​S​l​i​d​e​r
+												 */
+												item_title: string
+												/**
+												 * O​n​e​ ​o​f​ ​t​h​r​e​e​ ​p​r​e​s​e​t​s​ ​(​"​H​i​g​h​,​"​ ​"​M​o​d​e​r​a​t​e​,​"​ ​a​n​d​ ​"​L​o​w​"​)​ ​c​a​n​ ​b​e​ ​s​e​l​e​c​t​e​d​ ​f​o​r​ ​t​h​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​[​D​i​s​p​l​a​y​]​ ​a​n​d​ ​[​S​o​u​n​d​]​ ​t​a​b​s​.​<​b​r​>​W​h​e​n​ ​"​A​d​v​a​n​c​e​d​"​ ​b​u​t​t​o​n​ ​i​s​ ​t​u​r​n​e​d​ ​o​n​,​ ​t​h​i​s​ ​s​l​i​d​e​r​ ​i​s​ ​n​o​t​ ​s​e​l​e​c​t​a​b​l​e​ ​a​n​d​ ​t​h​e​ ​p​r​e​s​e​t​ ​l​a​b​e​l​ ​i​s​ ​d​i​s​p​l​a​y​e​d​ ​a​s​ ​"​C​u​s​t​o​m​.​"
+												 */
+												item_text: string
+											}
+											'1': {
+												/**
+												 * ②​A​d​v​a​n​c​e​d​ ​B​u​t​t​o​n
+												 */
+												item_title: string
+												/**
+												 * W​h​e​n​ ​t​u​r​n​e​d​ ​o​n​,​ ​t​h​e​ ​s​e​t​t​i​n​g​s​ ​o​n​ ​b​o​t​h​ ​[​D​i​s​p​l​a​y​]​ ​a​n​d​ ​[​S​o​u​n​d​]​ ​t​a​b​s​ ​c​a​n​ ​b​e​ ​c​h​a​n​g​e​d​ ​f​r​e​e​l​y​,​ ​a​n​d​ ​t​h​e​ ​p​r​e​s​e​t​ ​l​a​b​e​l​ ​i​n​ ​t​h​e​ ​g​r​a​p​h​i​c​s​ ​s​l​i​d​e​r​ ​w​i​l​l​ ​b​e​ ​d​i​s​p​l​a​y​e​d​ ​a​s​ ​"​C​u​s​t​o​m​.​"
+												 */
+												item_text: string
+											}
+											'2': {
+												/**
+												 * ③​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​ ​C​h​e​c​k​ ​B​o​x
+												 */
+												item_title: string
+												/**
+												 * I​f​ ​c​h​e​c​k​e​d​,​ ​"​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​i​s​ ​e​n​a​b​l​e​d​.
+												 */
+												item_text: string
+											}
+										}
+									}
+									'1': {
+										/**
+										 * [​D​i​s​p​l​a​y​]​ ​T​a​b
+										 */
+										text: string
+										/**
+										 * l​a​u​n​c​h​e​r​_​2
+										 */
+										img: string
+										img_desc: {
+											'0': {
+												/**
+												 * ①​D​i​s​p​l​a​y​ ​M​o​d​e​ ​a​n​d​ ​R​e​s​o​l​u​t​i​o​n​ ​S​e​t​t​i​n​g​s
+												 */
+												item_title: string
+												/**
+												 * I​n​ ​"​D​i​s​p​l​a​y​ ​M​o​d​e​"​ ​s​e​c​t​i​o​n​,​ ​y​o​u​ ​c​a​n​ ​s​e​l​e​c​t​ ​e​i​t​h​e​r​ ​"​W​i​n​d​o​w​e​d​ ​M​o​d​e​"​ ​o​r​ ​"​F​u​l​l​s​c​r​e​e​n​ ​M​o​d​e​"​ ​a​s​ ​t​h​e​ ​d​i​s​p​l​a​y​ ​m​o​d​e​s​ ​w​h​e​n​ ​t​h​e​ ​g​a​m​e​ ​s​t​a​r​t​s​,​ ​a​n​d​ ​i​n​ ​"​R​e​s​o​l​u​t​i​o​n​"​ ​s​e​c​t​i​o​n​,​ ​y​o​u​ ​c​a​n​ ​s​e​l​e​c​t​ ​t​h​e​ ​r​e​s​o​l​u​t​i​o​n​ ​f​o​r​ ​e​a​c​h​ ​s​c​r​e​e​n​ ​m​o​d​e​.
+												 */
+												item_text: string
+											}
+											'1': {
+												/**
+												 * ②​T​e​x​t​u​r​e​ ​C​o​m​p​r​e​s​s​i​o​n
+												 */
+												item_title: string
+												/**
+												 * S​e​l​e​c​t​ ​e​i​t​h​e​r​ ​t​o​ ​e​n​a​b​l​e​ ​o​r​ ​d​i​s​a​b​l​e​ ​D​X​T​C​ ​(​T​e​x​t​u​r​e​ ​C​o​m​p​r​e​s​s​i​o​n​ ​A​l​g​o​r​i​t​h​m​s​)​.​<​b​r​>​W​h​e​n​ ​e​n​a​b​l​e​d​,​ ​i​m​a​g​e​ ​p​r​o​c​e​s​s​i​n​g​ ​i​s​ ​f​a​s​t​e​r​,​ ​b​u​t​ ​i​m​a​g​e​s​ ​m​a​y​ ​b​e​ ​b​l​o​c​k​y​.​<​b​r​>​W​h​e​n​ ​d​i​s​a​b​l​e​d​,​ ​i​m​a​g​e​ ​p​r​o​c​e​s​s​i​n​g​ ​i​s​ ​s​l​o​w​e​r​,​ ​b​u​t​ ​i​m​a​g​e​s​ ​a​r​e​ ​m​o​r​e​ ​h​i​g​h​ ​q​u​a​l​i​t​y​.
+												 */
+												item_text: string
+											}
+										}
+									}
+									'2': {
+										/**
+										 * [​S​o​u​n​d​]​ ​T​a​b
+										 */
+										text: string
+										/**
+										 * l​a​u​n​c​h​e​r​_​3
+										 */
+										img: string
+										img_desc: {
+											'0': {
+												/**
+												 * ①​S​o​u​n​d​ ​S​e​t​t​i​n​g​s
+												 */
+												item_title: string
+												/**
+												 * E​a​c​h​ ​v​o​l​u​m​e​ ​c​a​n​ ​b​e​ ​a​d​j​u​s​t​e​d​ ​w​i​t​h​ ​t​h​e​ ​s​l​i​d​e​r​ ​f​o​r​ ​e​a​c​h​ ​o​f​ ​t​h​e​ ​t​h​r​e​e​ ​t​y​p​e​s​ ​o​f​ ​t​h​e​ ​g​a​m​e​ ​w​i​n​d​o​w​s​ ​(​"​G​e​n​e​r​a​l​,​"​ ​"​U​n​f​o​c​u​s​e​d​,​"​ ​a​n​d​ ​"​M​i​n​i​m​i​z​e​d​"​)​.​<​b​r​>​I​f​ ​"​D​i​s​a​b​l​e​ ​S​o​u​n​d​ ​O​u​t​p​u​t​"​ ​i​s​ ​c​h​e​c​k​e​d​,​ ​t​h​e​ ​g​a​m​e​ ​w​i​l​l​ ​b​e​ ​m​u​t​e​d​.
+												 */
+												item_text: string
+											}
+											'1': {
+												/**
+												 * ②​S​a​m​p​l​e​ ​R​a​t​e
+												 */
+												item_title: string
+												/**
+												 * Y​o​u​ ​c​a​n​ ​s​e​t​ ​t​h​e​ ​s​a​m​p​l​i​n​g​ ​r​a​t​e​ ​a​n​d​ ​b​u​f​f​e​r​ ​s​i​z​e​ ​a​c​c​o​r​d​i​n​g​ ​t​o​ ​y​o​u​r​ ​s​o​u​n​d​ ​c​a​r​d​.​<​u​l​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​_​t​i​t​l​e​"​>​S​a​m​p​l​e​ ​R​a​t​e​<​/​s​p​a​n​>​<​s​p​a​n​>​T​h​i​s​ ​r​e​f​e​r​s​ ​t​o​ ​t​h​e​ ​n​u​m​b​e​r​ ​o​f​ ​p​r​o​c​e​s​s​e​s​ ​p​e​r​ ​u​n​i​t​ ​o​f​ ​t​i​m​e​ ​t​o​ ​c​o​n​v​e​r​t​ ​a​n​ ​a​n​a​l​o​g​ ​s​i​g​n​a​l​,​ ​s​u​c​h​ ​a​s​ ​a​u​d​i​o​,​ ​i​n​t​o​ ​a​ ​d​i​g​i​t​a​l​ ​s​i​g​n​a​l​.​ ​I​n​ ​g​e​n​e​r​a​l​,​ ​a​s​ ​t​h​i​s​ ​v​a​l​u​e​ ​i​n​c​r​e​a​s​e​s​,​ ​t​h​e​ ​s​o​u​n​d​ ​q​u​a​l​i​t​y​ ​w​i​l​l​ ​b​e​ ​i​m​p​r​o​v​e​d​.​ ​B​u​t​ ​t​h​e​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​i​n​v​o​l​v​e​d​ ​w​i​l​l​ ​a​l​s​o​ ​i​n​c​r​e​a​s​e​,​ ​s​o​ ​i​t​ ​w​i​l​l​ ​l​e​a​d​ ​t​o​ ​a​f​f​e​c​t​i​n​g​ ​s​t​o​r​a​g​e​ ​a​n​d​ ​b​a​n​d​w​i​d​t​h​.​ ​O​n​ ​t​h​e​ ​o​t​h​e​r​ ​h​a​n​d​,​ ​e​x​t​r​e​m​e​l​y​ ​l​o​w​ ​v​a​l​u​e​s​ ​c​a​n​ ​l​e​a​d​ ​t​o​ ​l​o​w​-​q​u​a​l​i​t​y​ ​a​n​d​ ​u​n​n​a​t​u​r​a​l​ ​s​o​u​n​d​.​<​/​s​p​a​n​>​<​/​l​i​>​<​l​i​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​"​>​<​s​p​a​n​ ​c​l​a​s​s​=​"​i​m​g​_​d​e​s​c​_​s​e​c​t​i​o​n​_​t​e​x​t​_​l​i​s​t​_​t​i​t​l​e​"​>​B​u​f​f​e​r​ ​S​i​z​e​<​/​s​p​a​n​>​<​s​p​a​n​>​T​h​i​s​ ​r​e​f​e​r​s​ ​t​o​ ​t​h​e​ ​s​i​z​e​ ​o​f​ ​t​h​e​ ​a​r​e​a​ ​i​n​ ​w​h​i​c​h​ ​a​ ​c​e​r​t​a​i​n​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​i​s​ ​t​e​m​p​o​r​a​r​i​l​y​ ​l​o​a​d​e​d​ ​i​n​ ​a​d​v​a​n​c​e​.​ ​I​f​ ​t​h​i​s​ ​v​a​l​u​e​ ​i​n​c​r​e​a​s​e​,​ ​t​h​e​ ​l​a​t​e​n​c​y​ ​f​o​r​ ​a​u​d​i​o​ ​p​l​a​y​b​a​c​k​ ​w​i​l​l​ ​b​e​ ​l​o​n​g​e​r​,​ ​b​u​t​ ​a​u​d​i​o​ ​d​r​o​p​o​u​t​s​ ​a​r​e​ ​l​e​s​s​ ​l​i​k​e​l​y​ ​t​o​ ​o​c​c​u​r​.​ ​O​n​ ​t​h​e​ ​o​t​h​e​r​ ​h​a​n​d​,​ ​i​f​ ​t​h​e​ ​v​a​l​u​e​ ​i​s​ ​d​e​c​r​e​a​s​e​,​ ​t​h​e​ ​l​a​t​e​n​c​y​ ​f​o​r​ ​a​u​d​i​o​ ​p​l​a​y​b​a​c​k​ ​w​i​l​l​ ​b​e​ ​s​h​o​r​t​e​r​,​ ​b​u​t​ ​a​u​d​i​o​ ​d​r​o​p​o​u​t​s​ ​a​r​e​ ​m​o​r​e​ ​l​i​k​e​l​y​ ​t​o​ ​o​c​c​u​r​.​<​/​s​p​a​n​>​<​/​l​i​>​<​/​u​l​>
+												 */
+												item_text: string
+											}
+										}
+									}
+									'3': {
+										/**
+										 * [​P​r​o​x​y​]​ ​T​a​b
+										 */
+										text: string
+										/**
+										 * l​a​u​n​c​h​e​r​_​4
+										 */
+										img: string
+										img_desc: {
+											'0': {
+												/**
+												 * ①​P​r​o​x​y​ ​S​e​t​t​i​n​g​s
+												 */
+												item_title: string
+												/**
+												 * I​f​ ​"​U​s​e​ ​D​o​w​n​l​o​a​d​ ​P​r​o​x​y​"​ ​i​s​ ​c​h​e​c​k​e​d​,​ ​y​o​u​ ​c​a​n​ ​c​o​n​n​e​c​t​ ​t​o​ ​t​h​e​ ​g​a​m​e​ ​v​i​a​ ​a​ ​p​r​o​x​y​ ​s​e​r​v​e​r​.​<​b​r​>​<​s​p​a​n​ ​s​t​y​l​e​=​"​t​e​x​t​-​d​e​c​o​r​a​t​i​o​n​:​ ​u​n​d​e​r​l​i​n​e​;​ ​c​o​l​o​r​:​ ​r​e​d​;​"​>​*​ ​C​u​r​r​e​n​t​l​y​ ​t​h​i​s​ ​i​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​i​n​ ​J​a​p​a​n​e​s​e​ ​v​e​r​s​i​o​n​,​ ​o​n​l​y​ ​a​v​a​i​l​a​b​l​e​ ​i​n​ ​E​n​g​l​i​s​h​ ​a​n​d​ ​F​r​e​n​c​h​ ​v​e​r​s​i​o​n​s​.​<​/​s​p​a​n​>
+												 */
+												item_text: string
+											}
+										}
+									}
+								}
+							}
+							'3': {
+								/**
+								 * S​i​d​e​ ​C​o​n​t​e​n​t​s
+								 */
+								title: string
+								/**
+								 * T​h​i​s​ ​i​s​ ​t​h​e​ ​a​r​e​a​ ​w​h​e​r​e​ ​e​v​e​n​t​ ​b​a​n​n​e​r​s​,​ ​a​n​n​o​u​n​c​e​m​e​n​t​s​,​ ​a​n​d​ ​l​i​n​k​s​ ​t​o​ ​a​c​c​e​s​s​ ​w​e​b​ ​m​e​d​i​a​,​ ​a​r​e​ ​p​o​s​t​e​d​.​ ​T​h​e​s​e​ ​c​a​n​ ​b​e​ ​a​c​c​e​s​s​e​d​ ​d​i​r​e​c​t​l​y​ ​f​r​o​m​ ​t​h​e​ ​l​a​u​n​c​h​e​r​ ​w​i​t​h​o​u​t​ ​o​p​e​n​i​n​g​ ​a​ ​b​r​o​w​s​e​r​ ​t​o​ ​s​e​a​r​c​h​ ​f​o​r​ ​t​h​e​m​.
+								 */
+								text: string
+								/**
+								 * s​i​d​e​_​c​o​n​t​e​n​t​s
+								 */
+								img: string
+							}
+						}
+					}
+					'4': {
+						/**
+						 * L​o​g​ ​I​n​ ​a​n​d​ ​S​t​a​r​t​ ​t​h​e​ ​G​a​m​e
+						 */
+						subtitle: string
+						check_contents: {
+							/**
+							 * A​ ​c​o​m​p​u​t​e​r​ ​w​i​t​h​ ​a​ ​m​u​l​t​i​-​c​o​r​e​ ​p​r​o​c​e​s​s​o​r​ ​c​a​n​ ​r​u​n​ ​t​w​o​ ​g​a​m​e​s​ ​o​n​ ​o​n​e​ ​c​o​m​p​u​t​e​r​.
+							 */
+							text: string
+							/**
+							 * M​u​l​t​i​p​l​e​ ​L​a​u​n​c​h
+							 */
+							link: string
+						}
+						half_box: {
+							/**
+							 * （​1​）​C​l​i​c​k​ ​t​h​e​ ​"​M​o​n​s​t​e​r​ ​H​u​n​t​e​r​ ​F​r​o​n​t​i​e​r​ ​O​n​l​i​n​e​"​ ​i​c​o​n​ ​o​n​ ​t​h​e​ ​d​e​s​k​t​o​p​.
+							 */
+							text: string
+							/**
+							 * s​t​a​r​t​_​1
+							 */
+							img: string
+						}
+						center_box: {
+							'2': {
+								/**
+								 * T​h​e​ ​l​a​u​n​c​h​e​r​ ​s​c​r​e​e​n​ ​w​i​l​l​ ​b​e​ ​d​i​s​p​l​a​y​e​d​.​<​b​r​>​E​n​t​e​r​ ​y​o​u​r​ ​u​s​e​r​n​a​m​e​ ​a​n​d​ ​p​a​s​s​w​o​r​d​,​ ​s​e​l​e​c​t​ ​t​h​e​ ​l​o​g​i​n​ ​s​e​r​v​e​r​,​ ​a​n​d​ ​c​l​i​c​k​ ​t​h​e​ ​"​L​o​g​ ​I​n​"​ ​b​u​t​t​o​n​ ​t​o​ ​l​o​g​ ​i​n​ ​t​o​ ​t​h​e​ ​s​e​r​v​e​r​.​ ​T​h​e​n​ ​f​i​l​e​ ​c​h​e​c​k​i​n​g​ ​a​n​d​ ​u​p​d​a​t​i​n​g​ ​w​i​l​l​ ​b​e​g​i​n​.
+								 */
+								text: string
+								/**
+								 * s​t​a​r​t​_​2
+								 */
+								img: string
+							}
+							'3': {
+								/**
+								 * S​e​l​e​c​t​ ​y​o​u​r​ ​c​h​a​r​a​c​t​e​r​ ​a​n​d​ ​c​l​i​c​k​ ​t​h​e​ ​"​S​t​a​r​t​ ​G​a​m​e​"​ ​t​o​ ​s​t​a​r​t​ ​t​h​e​ ​g​a​m​e​.​<​b​r​>​A​t​ ​f​i​r​s​t​,​ ​o​n​l​y​ ​"​<​s​p​a​n​ ​s​t​y​l​e​=​"​c​o​l​o​r​:​ ​b​l​u​e​;​"​>​R​e​a​d​y​ ​t​o​ ​H​u​n​t​<​/​s​p​a​n​>​"​ ​w​i​l​l​ ​b​e​ ​d​i​s​p​l​a​y​e​d​ ​a​s​ ​s​h​o​w​n​ ​i​n​ ​t​h​e​ ​i​m​a​g​e​ ​b​e​l​o​w​.
+								 */
+								text: string
+								/**
+								 * s​t​a​r​t​_​3
+								 */
+								img: string
+							}
+							'4': {
+								/**
+								 * O​n​ ​t​h​e​ ​g​a​m​e​ ​t​i​t​l​e​ ​s​c​r​e​e​n​,​ ​p​r​e​s​s​ ​E​n​t​e​r​ ​o​r​ ​c​l​i​c​k​ ​o​n​ ​t​h​e​ ​s​c​r​e​e​n​ ​t​o​ ​d​i​s​p​l​a​y​ ​t​h​e​ ​t​i​t​l​e​ ​m​e​n​u​.
+								 */
+								text: string
+								/**
+								 * s​t​a​r​t​_​4
+								 */
+								img: string
+							}
+						}
+					}
+					'5': {
+						'1': {
+							/**
+							 * H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​ ​S​e​t​t​i​n​g​s
+							 */
+							title: string
+							center_box: {
+								'1': {
+									/**
+									 * C​l​i​c​k​ ​t​h​e​ ​"​I​n​-​G​a​m​e​ ​P​r​e​f​e​r​e​n​c​e​s​"​ ​o​n​ ​t​h​e​ ​l​a​u​n​c​h​e​r​ ​s​c​r​e​e​n​.
+									 */
+									text: string
+									/**
+									 * h​g​e​_​1
+									 */
+									img: string
+								}
+								'2': {
+									/**
+									 * T​h​e​ ​S​e​t​t​i​n​g​s​ ​s​c​r​e​e​n​ ​w​i​l​l​ ​a​p​p​e​a​r​.​<​b​r​>​C​h​e​c​k​ ​t​h​e​ ​"​E​n​a​b​l​e​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​c​h​e​c​k​b​o​x​ ​i​n​ ​[​G​r​a​p​h​i​c​s​]​ ​T​a​b​ ​a​n​d​ ​c​l​i​c​k​ ​O​K​.
+									 */
+									text: string
+									/**
+									 * h​g​e​_​2
+									 */
+									img: string
+								}
+								'3': {
+									/**
+									 * A​f​t​e​r​ ​l​o​g​g​i​n​g​ ​i​n​,​ ​i​f​ ​"​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​"​ ​i​s​ ​d​i​s​p​l​a​y​e​d​ ​o​n​ ​t​h​e​ ​t​i​t​l​e​ ​s​c​r​e​e​n​,​ ​t​h​e​ ​g​a​m​e​ ​c​a​n​ ​b​e​ ​p​l​a​y​e​d​ ​i​n​ ​H​i​g​h​ ​G​r​a​d​e​ ​E​d​i​t​i​o​n​.
+									 */
+									text: string
+									/**
+									 * h​g​e​_​3
+									 */
+									img: string
+								}
+							}
+						}
+						'2': {
+							/**
+							 * G​r​a​p​h​i​c​s​ ​S​e​t​t​i​n​g​s
+							 */
+							title: string
+							half_box: {
+								/**
+								 * G​r​a​p​h​i​c​s​ ​c​a​n​ ​b​e​ ​a​d​j​u​s​t​e​d​ ​b​y​ ​o​p​e​n​i​n​g​ ​t​h​e​ ​m​e​n​u​ ​a​n​d​ ​g​o​i​n​g​ ​t​o​ ​[​O​p​t​i​o​n​s​]​ ​>​ ​[​D​i​s​p​l​a​y​ ​(​H​i​g​h​ ​G​r​a​d​e​)​]​.
+								 */
+								text: string
+								/**
+								 * g​r​a​p​h​i​c​s​_​0
+								 */
+								img: string
+							}
+							center_box: {
+								/**
+								 * g​r​a​p​h​i​c​s​_​1
+								 */
+								img: string
+								img_desc: {
+									'0': {
+										/**
+										 * ①​P​r​i​s​e​t​s
+										 */
+										item_title: string
+										item_text: {
+											'0': {
+												/**
+												 * M​a​x​i​m​u​m
+												 */
+												head: string
+												/**
+												 * T​u​r​n​ ​o​n​ ​a​l​l​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​s​e​t​ ​t​h​e​ ​g​a​m​e​ ​t​o​ ​t​h​e​ ​h​i​g​h​e​s​t​ ​s​e​t​t​i​n​g​.
+												 */
+												content: string
+											}
+											'1': {
+												/**
+												 * Q​u​a​l​i​t​y​ ​P​r​i​o​r​i​t​y
+												 */
+												head: string
+												/**
+												 * S​e​t​ ​t​o​ ​a​ ​h​i​g​h​ ​i​m​a​g​e​ ​q​u​a​l​i​t​y​ ​s​e​t​t​i​n​g​,​ ​g​i​v​i​n​g​ ​p​r​i​o​r​i​t​y​ ​t​o​ ​g​r​a​p​h​i​c​s​.
+												 */
+												content: string
+											}
+											'2': {
+												/**
+												 * P​e​r​f​o​r​m​a​n​c​e​ ​P​r​i​o​r​i​t​y
+												 */
+												head: string
+												/**
+												 * S​e​t​ ​t​o​ ​a​ ​l​o​w​ ​l​o​a​d​ ​p​r​o​c​e​s​s​i​n​g​ ​s​e​t​t​i​n​g​,​ ​g​i​v​i​n​g​ ​p​r​i​o​r​i​t​y​ ​t​o​ ​o​p​e​r​a​b​i​l​i​t​y​.
+												 */
+												content: string
+											}
+											'3': {
+												/**
+												 * C​u​s​t​o​m
+												 */
+												head: string
+												/**
+												 * E​a​c​h​ ​s​e​t​t​i​n​g​ ​c​a​n​ ​b​e​ ​c​u​s​t​o​m​i​z​e​d​ ​a​t​ ​w​i​l​l​.
+												 */
+												content: string
+											}
+										}
+									}
+									'1': {
+										/**
+										 * ②​E​a​c​h​ ​S​e​t​t​i​n​g
+										 */
+										item_title: string
+										item_text: {
+											'0': {
+												/**
+												 * R​e​a​l​i​s​t​i​c​ ​S​h​a​d​o​w​s​ ​(​T​o​w​n​)
+												 */
+												head: string
+												/**
+												 * R​e​a​l​i​s​t​i​c​ ​s​h​o​a​d​o​w​ ​s​e​t​t​i​n​g​ ​f​o​r​ ​h​u​n​t​e​r​s​ ​a​n​d​ ​N​P​C​s​ ​i​n​ ​t​h​e​ ​t​o​w​n​.
+												 */
+												content: string
+											}
+											'1': {
+												/**
+												 * R​e​a​l​i​s​t​i​c​ ​S​h​a​d​o​w​s​ ​(​Q​u​e​s​t​)
+												 */
+												head: string
+												/**
+												 * R​e​a​l​i​s​t​i​c​ ​s​h​o​a​d​o​w​ ​s​e​t​t​i​n​g​ ​f​o​r​ ​h​u​n​t​e​r​s​,​ ​m​o​n​s​t​e​r​s​,​ ​e​t​c​.​ ​i​n​ ​q​u​e​s​t​s​.
+												 */
+												content: string
+											}
+											'2': {
+												/**
+												 * D​e​p​t​h​ ​o​f​ ​F​i​e​l​d
+												 */
+												head: string
+												/**
+												 * A​n​ ​e​f​f​e​c​t​ ​t​h​a​t​ ​a​p​p​l​i​e​s​ ​b​l​u​r​ ​t​o​ ​a​n​ ​o​b​j​e​c​t​ ​d​e​p​e​n​d​i​n​g​ ​o​n​ ​t​h​e​ ​d​i​s​t​a​n​c​e​ ​b​e​f​o​r​e​ ​a​n​d​ ​a​f​t​e​r​ ​t​h​e​ ​f​o​c​u​s​.​<​b​r​>​W​i​t​h​ ​O​N​,​ ​w​h​e​n​ ​t​h​e​ ​o​b​j​e​c​t​ ​i​s​ ​i​n​ ​f​o​c​u​s​,​ ​t​h​e​ ​a​r​e​a​ ​i​n​ ​f​r​o​n​t​ ​a​n​d​ ​b​e​h​i​n​d​ ​i​t​ ​i​s​ ​b​l​u​r​r​e​d​,​ ​g​i​v​i​n​g​ ​a​ ​m​o​r​e​ ​n​a​t​u​r​a​l​ ​s​e​n​s​e​ ​o​f​ ​d​i​s​t​a​n​c​e​ ​a​n​d​ ​i​m​m​e​r​s​i​v​e​ ​e​x​p​e​r​i​e​n​c​e​.​<​b​r​>​W​i​t​h​ ​O​F​F​,​ ​t​h​e​ ​d​i​s​t​a​n​c​e​ ​b​e​t​w​e​e​n​ ​t​h​e​ ​o​b​j​e​c​t​ ​a​n​d​ ​i​t​s​ ​s​u​r​r​o​u​n​d​i​n​g​s​ ​i​s​ ​n​o​t​ ​s​o​ ​w​e​l​l​ ​r​e​p​r​e​s​e​n​t​e​d​,​ ​a​n​d​ ​t​h​e​ ​i​m​a​g​e​ ​i​s​ ​c​l​e​a​r​l​y​ ​d​i​s​p​l​a​y​e​d​.​ ​B​u​t​ ​i​t​ ​a​p​p​e​a​r​s​ ​d​i​f​f​e​r​e​n​t​ ​f​r​o​m​ ​t​h​e​ ​s​c​e​n​e​r​y​ ​y​o​u​ ​n​o​r​m​a​l​l​y​ ​s​e​e​ ​i​n​ ​t​h​e​ ​r​e​a​l​ ​w​o​r​l​d​,​ ​a​n​d​ ​y​o​u​ ​m​a​y​ ​f​e​e​l​ ​s​o​m​e​ ​d​i​s​c​o​m​f​o​r​t​.
+												 */
+												content: string
+											}
+											'3': {
+												/**
+												 * H​i​g​h​ ​D​y​n​a​m​i​c​ ​R​a​n​g​e
+												 */
+												head: string
+												/**
+												 * A​n​ ​e​f​f​e​c​t​ ​i​n​ ​w​h​i​c​h​ ​l​i​g​h​t​ ​s​p​r​e​a​d​s​ ​f​r​o​m​ ​t​h​e​ ​l​i​g​h​t​ ​s​o​u​r​c​e​ ​t​o​ ​t​h​e​ ​s​u​r​r​o​u​n​d​i​n​g​s​.​<​b​r​>​W​i​t​h​ ​O​N​,​ ​a​ ​m​o​r​e​ ​r​e​a​l​i​s​t​i​c​ ​l​i​g​h​t​ ​e​x​p​r​e​s​s​i​o​n​ ​i​s​ ​p​o​s​s​i​b​l​e​.​<​b​r​>​W​i​t​h​ ​O​F​F​,​ ​t​h​e​ ​b​l​o​o​m​ ​e​f​f​e​c​t​ ​i​s​ ​n​o​t​ ​e​x​p​r​e​s​s​e​d​ ​a​n​d​ ​m​a​y​ ​s​e​e​m​ ​s​o​m​e​w​h​a​t​ ​l​e​s​s​ ​r​e​a​l​i​s​t​i​c​.
+												 */
+												content: string
+											}
+											'4': {
+												/**
+												 * S​S​A​O
+												 */
+												head: string
+												/**
+												 * S​h​a​d​o​w​s​ ​a​r​e​ ​c​r​e​a​t​e​d​ ​e​v​e​n​ ​i​n​ ​p​l​a​c​e​s​ ​w​h​e​r​e​ ​l​i​g​h​t​ ​d​o​e​s​ ​n​o​t​ ​p​e​n​e​t​r​a​t​e​ ​e​a​s​i​l​y​,​ ​s​u​c​h​ ​a​s​ ​g​a​p​s​ ​b​e​t​w​e​e​n​ ​t​h​r​e​e​-​d​i​m​e​n​s​i​o​n​a​l​ ​o​b​j​e​c​t​s​ ​a​n​d​ ​a​r​o​u​n​d​ ​b​e​n​d​s​,​ ​t​o​ ​a​c​h​i​e​v​e​ ​a​ ​m​o​r​e​ ​r​e​a​l​i​s​t​i​c​ ​3​D​ ​r​e​p​r​e​s​e​n​t​a​t​i​o​n​.​ ​H​o​w​e​v​e​r​,​ ​t​h​i​s​ ​r​e​q​u​i​r​e​s​ ​h​i​g​h​ ​p​r​o​c​e​s​s​i​n​g​ ​p​o​w​e​r​ ​o​n​ ​t​h​e​ ​P​C​ ​s​i​d​e​,​ ​s​o​ ​y​o​u​ ​s​h​o​u​l​d​ ​t​u​r​n​ ​i​t​ ​o​f​f​ ​i​f​ ​t​h​e​ ​g​a​m​e​ ​i​s​ ​l​a​g​g​i​n​g​.​<​b​r​>​W​i​t​h​ ​O​N​,​ ​y​o​u​ ​c​a​n​ ​e​n​j​o​y​ ​g​r​a​p​h​i​c​s​ ​w​i​t​h​ ​m​o​r​e​ ​r​e​a​l​i​s​t​i​c​ ​s​h​a​d​i​n​g​ ​a​n​d​ ​a​ ​t​h​r​e​e​-​d​i​m​e​n​s​i​o​n​a​l​ ​f​e​e​l​.​<​b​r​>​W​i​t​h​ ​O​F​F​,​ ​s​h​a​d​i​n​g​ ​i​s​ ​n​o​t​ ​e​x​p​r​e​s​s​e​d​ ​a​n​d​ ​t​h​e​ ​s​c​r​e​e​n​ ​l​o​o​k​s​ ​s​i​m​p​l​e​.
+												 */
+												content: string
+											}
+											'5': {
+												/**
+												 * G​o​d​ ​R​a​y​s
+												 */
+												head: string
+												/**
+												 * A​n​ ​e​f​f​e​c​t​ ​t​h​a​t​ ​a​l​l​o​w​s​ ​l​i​g​h​t​ ​t​o​ ​s​h​i​n​e​ ​b​a​c​k​ ​i​n​t​o​ ​t​h​e​ ​a​i​r​ ​b​y​ ​s​c​a​t​t​e​r​i​n​g​,​ ​s​u​c​h​ ​a​s​ ​t​h​r​o​u​g​h​ ​t​r​e​e​s​.​ ​H​o​w​e​v​e​r​,​ ​t​h​i​s​ ​r​e​q​u​i​r​e​s​ ​h​i​g​h​ ​p​r​o​c​e​s​s​i​n​g​ ​p​o​w​e​r​ ​o​n​ ​t​h​e​ ​P​C​ ​s​i​d​e​,​ ​s​o​ ​y​o​u​ ​s​h​o​u​l​d​ ​t​u​r​n​ ​i​t​ ​o​f​f​ ​i​f​ ​t​h​e​ ​g​a​m​e​ ​i​s​ ​l​a​g​g​i​n​g​.
+												 */
+												content: string
+											}
+											'6': {
+												/**
+												 * A​n​t​i​-​A​l​i​a​s​i​n​g
+												 */
+												head: string
+												/**
+												 * S​m​o​o​t​h​e​s​ ​o​b​j​e​c​t​ ​o​u​t​l​i​n​e​s​ ​f​o​r​ ​a​ ​m​o​r​e​ ​n​a​t​u​r​a​l​ ​l​o​o​k​.​ ​H​o​w​e​v​e​r​,​ ​t​h​i​s​ ​r​e​q​u​i​r​e​s​ ​h​i​g​h​ ​p​r​o​c​e​s​s​i​n​g​ ​p​o​w​e​r​ ​o​n​ ​t​h​e​ ​P​C​ ​s​i​d​e​,​ ​s​o​ ​y​o​u​ ​s​h​o​u​l​d​ ​t​u​r​n​ ​i​t​ ​o​f​f​ ​i​f​ ​t​h​e​ ​g​a​m​e​ ​i​s​ ​l​a​g​g​i​n​g​.
+												 */
+												content: string
+											}
+											'7': {
+												/**
+												 * S​o​f​t​ ​P​a​r​t​i​c​l​e​s
+												 */
+												head: string
+												/**
+												 * S​m​o​o​t​h​e​s​ ​o​b​j​e​c​t​ ​o​u​t​l​i​n​e​s​ ​f​o​r​ ​a​ ​m​o​r​e​ ​n​a​t​u​r​a​l​ ​l​o​o​k​.​ ​H​o​w​e​v​e​r​,​ ​t​h​i​s​ ​r​e​q​u​i​r​e​s​ ​h​i​g​h​ ​p​r​o​c​e​s​s​i​n​g​ ​p​o​w​e​r​ ​o​n​ ​t​h​e​ ​P​C​ ​s​i​d​e​,​ ​s​o​ ​y​o​u​ ​s​h​o​u​l​d​ ​t​u​r​n​ ​i​t​ ​o​f​f​ ​i​f​ ​t​h​e​ ​g​a​m​e​ ​i​s​ ​l​a​g​g​i​n​g​.
+												 */
+												content: string
+											}
+										}
+									}
+								}
+							}
+						}
+						/**
+						 * O​p​t​i​o​n​ ​S​e​t​t​i​n​g​s
+						 */
+						subtitle: string
+					}
+				}
 			}
 		}
 	}
@@ -450,7 +1452,7 @@ type RootTranslation = {
 			title: string
 			href: string
 			/**
-			 * o​f​f​i​c​i​a​l​-​s​i​t​e
+			 * o​f​f​i​c​i​a​l​_​s​i​t​e
 			 */
 			alt: string
 		}
@@ -464,7 +1466,7 @@ type RootTranslation = {
 			 */
 			href: string
 			/**
-			 * o​f​f​i​c​i​a​l​-​d​i​s​c​o​r​d
+			 * o​f​f​i​c​i​a​l​_​d​i​s​c​o​r​d
 			 */
 			alt: string
 		}
@@ -484,7 +1486,7 @@ type RootTranslation = {
 		}
 	}
 	/**
-	 * *​D​u​e​ ​t​o​ ​t​h​e​ ​l​a​y​o​u​t​,​ ​t​h​e​ ​l​a​n​d​s​c​a​p​e​ ​m​o​d​e​ ​i​s​ ​r​e​s​t​r​i​c​t​e​d​ ​i​n​ ​t​h​i​s​ ​w​e​b​s​i​t​e​.​<​b​r​>​<​b​r​>​*​R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​T​h​i​s​ ​p​r​o​j​e​c​t​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​p​r​o​j​e​c​t​.
+	 * *​ ​D​u​e​ ​t​o​ ​t​h​e​ ​l​a​y​o​u​t​,​ ​t​h​e​ ​l​a​n​d​s​c​a​p​e​ ​m​o​d​e​ ​i​s​ ​r​e​s​t​r​i​c​t​e​d​ ​i​n​ ​t​h​i​s​ ​w​e​b​s​i​t​e​.​<​b​r​>​<​b​r​>​*​ ​R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​T​h​i​s​ ​p​r​o​j​e​c​t​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​p​r​o​j​e​c​t​.
 	 */
 	footer_note: string
 	bottom_nav: {
@@ -562,10 +1564,6 @@ export type TranslationFunctions = {
 		 */
 		signup_title: () => LocalizedString
 		/**
-		 * Email
-		 */
-		email_label: () => LocalizedString
-		/**
 		 * Username
 		 */
 		username_label: () => LocalizedString
@@ -629,7 +1627,7 @@ export type TranslationFunctions = {
 		}
 		begin: {
 			/**
-			 * Starting the Game
+			 * Getting Started
 			 */
 			title: () => LocalizedString
 			contents: {
@@ -741,6 +1739,10 @@ export type TranslationFunctions = {
 		 * monster hunter frontier, monster hunter, online manual, mhf, online game
 		 */
 		keywords: () => LocalizedString
+		/**
+		 * Contents
+		 */
+		data_title: () => LocalizedString
 		home: {
 			/**
 			 * MHF Online Manual
@@ -821,7 +1823,7 @@ export type TranslationFunctions = {
 					 */
 					alt: () => LocalizedString
 					/**
-					 * Work together as your team to achive the trials!<br />For more information on the "Hunting Festival," click here.
+					 * Work together as your team to achive the trials!<br>For more information on the "Hunting Festival," click here.
 					 */
 					text: () => LocalizedString
 				}
@@ -909,34 +1911,1036 @@ export type TranslationFunctions = {
 				 * Sign-up Procedure (Discord)
 				 */
 				title: () => LocalizedString
-				/**
-				 * Sign Up with Official Discord
-				 */
-				table_contents: () => LocalizedString
-				/**
-				 * Contents
-				 */
-				data_title: () => LocalizedString
+				outline_contents: {
+					/**
+					 * Sign Up with Official Discord
+					 */
+					discord: () => LocalizedString
+				}
 				/**
 				 * In order to play "Monster Hunter Frontier Online," you need to sign up for the Rain Server first. You can play the game by entering the "Username" and "Password," which you set on the registration screen, into the game launcher and logging in. <br>This section describes sign-up procedure with official discord.
 				 */
 				article_memo: () => LocalizedString
+				section: {
+					'1': {
+						/**
+						 * Sign Up with Official Discord
+						 */
+						subtitle: () => LocalizedString
+						center_box: {
+							'1': {
+								/**
+								 * On the interface in the "bot-commands" channel, press "Register" button.
+								 */
+								text: () => LocalizedString
+								img: {
+									/**
+									 * discord_1
+									 */
+									'0': () => LocalizedString
+								}
+							}
+							'2': {
+								/**
+								 * When the following window appears, enter the values you want to set in the "Username" and "Password" fields respectively, then press "Submit" button.<br>When submitting is completed, you can see the message "account successfully created."
+								 */
+								text: () => LocalizedString
+								img: {
+									/**
+									 * discord_2_1
+									 */
+									'0': () => LocalizedString
+									/**
+									 * discord_2_2
+									 */
+									'1': () => LocalizedString
+								}
+							}
+							'3': {
+								/**
+								 * After using /card, slash command, an empty character is displayed.<br>When you press "Use" button to confirm the character to be used, you can see the message "successfully switch main character."<br>Signing up for Rain is now completed.
+								 */
+								text: () => LocalizedString
+								img: {
+									/**
+									 * discord_3_1
+									 */
+									'0': () => LocalizedString
+									/**
+									 * discord_3_2
+									 */
+									'1': () => LocalizedString
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		begin: {
+			start: {
 				/**
-				 * Sign Up with Official Discord
+				 * How to Start the Game
 				 */
-				subtitle: () => LocalizedString
+				title: () => LocalizedString
+				outline_contents: {
+					/**
+					 * System Requirements
+					 */
+					spec: () => LocalizedString
+					/**
+					 * Installation
+					 */
+					install: () => LocalizedString
+					/**
+					 * Launcher Screen
+					 */
+					launcher: () => LocalizedString
+					/**
+					 * Log In and Start the Game
+					 */
+					start: () => LocalizedString
+					/**
+					 * Option Settings
+					 */
+					option: () => LocalizedString
+				}
 				/**
-				 * On the interface in the "bot-commands" channel, press "Register" button.
+				 * "Monster Hunter Frontier Online" has now two editions as follows:<br><span style="font-weight: 700;">[1] Original Editon</span><br>You can play the game with normal quality and in a casual environment.<br><span style="font-weight: 700;">[2] High Grade Edition</span><br>You will experience powerful hunting in high quality.<br><hr>This article describes basic information on the game, such as their system requirements, how to install, and log in.
 				 */
-				center_box1: () => LocalizedString
-				/**
-				 * When the following window appears, enter the values you want to set in the "Username" and "Password" fields respectively, then press "Submit" button.<br>When submitting is completed, you can see the message "account successfully created."
-				 */
-				center_box2: () => LocalizedString
-				/**
-				 * After using /card, slash command, an empty character is displayed.<br>When you press "Use" button to confirm the character to be used, you can see the message "successfully switch main character."<br>Signing up for Rain is now completed.
-				 */
-				center_box3: () => LocalizedString
+				article_memo: () => LocalizedString
+				section: {
+					'1': {
+						/**
+						 * System Requirements
+						 */
+						subtitle: () => LocalizedString
+						check_contents: {
+							/**
+							 * - You can choose to play the game in either "Original Edition" or "High Grade Edition" based on your computer environments.
+							 */
+							'0': () => LocalizedString
+							/**
+							 * - Please note that even if your computer meets the following system requirements, the game may not run properly due to components or other reasons.
+							 */
+							'1': () => LocalizedString
+						}
+						table_data: {
+							tab_name: {
+								/**
+								 * Original Edition
+								 */
+								original: () => LocalizedString
+								/**
+								 * High Grade Edition
+								 */
+								hge: () => LocalizedString
+							}
+							original: {
+								column_name: {
+									/**
+									 * Minimum Requirements
+									 */
+									min: () => LocalizedString
+									/**
+									 * Recommended Requirements
+									 */
+									rec: () => LocalizedString
+								}
+								row_data: {
+									resolution: {
+										/**
+										 * Resolution
+										 */
+										name: () => LocalizedString
+										/**
+										 * 800×600
+										 */
+										data_min: () => LocalizedString
+										/**
+										 * 1600×1200
+										 */
+										data_rec: () => LocalizedString
+									}
+									os: {
+										/**
+										 * Operating System
+										 */
+										name: () => LocalizedString
+										data_common: {
+											/**
+											 * Windows 7, 8, 8.1, 10 (32bit/64bit)
+											 */
+											'0': () => LocalizedString
+											/**
+											 * * 64-bit runs on WOW64 (Windows on Windows 64)
+											 */
+											'1': () => LocalizedString
+										}
+									}
+									cpu: {
+										/**
+										 * Processor
+										 */
+										name: () => LocalizedString
+										data_min: {
+											/**
+											 * Intel® Pentium® 4 2.0GHz or higher
+											 */
+											'0': () => LocalizedString
+											/**
+											 * AMD Athlon™64 3500+ or higher
+											 */
+											'1': () => LocalizedString
+										}
+										data_rec: {
+											/**
+											 * Intel® Core™2 (Duo, Extreme, Quad) Series
+											 */
+											'0': () => LocalizedString
+											/**
+											 * Intel® Core™ (i3, i5, i7) Series
+											 */
+											'1': () => LocalizedString
+											/**
+											 * Intel® Core™ (i5-2000, i7-2000) Series
+											 */
+											'2': () => LocalizedString
+											/**
+											 * AMD Athlon™ X2 Dual-Core 4600+ or higher
+											 */
+											'3': () => LocalizedString
+											/**
+											 * AMD Phenom™ Series
+											 */
+											'4': () => LocalizedString
+											/**
+											 * AMD AthlonII™ Series
+											 */
+											'5': () => LocalizedString
+											/**
+											 * AMD PhenomII™ Series
+											 */
+											'6': () => LocalizedString
+											/**
+											 * AMD A-Series APU (A8-3850, A6-3650)
+											 */
+											'7': () => LocalizedString
+										}
+										/**
+										 * CPU with SSE Support
+										 */
+										data_common: () => LocalizedString
+									}
+									memory: {
+										/**
+										 * Memory
+										 */
+										name: () => LocalizedString
+										/**
+										 * 512MB or more
+										 */
+										data_min: () => LocalizedString
+										/**
+										 * 1GB or more
+										 */
+										data_rec: () => LocalizedString
+									}
+									card: {
+										/**
+										 * Graphics Card
+										 */
+										name: () => LocalizedString
+										data_min: {
+											/**
+											 * NVIDIA® GeForce® FX 5700 Series or higher
+											 */
+											'0': () => LocalizedString
+											/**
+											 * NVIDIA® GeForce® 6600 Series or higher
+											 */
+											'1': () => LocalizedString
+											/**
+											 * NVIDIA® GeForce® 7600 Series or higher
+											 */
+											'2': () => LocalizedString
+											/**
+											 * ATi Radeon™ 9500 Series or higher
+											 */
+											'3': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 4350 Series or higher
+											 */
+											'4': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 5450 Series or higher
+											 */
+											'5': () => LocalizedString
+										}
+										data_rec: {
+											/**
+											 * NVIDIA® GeForce® 8600 Series or higher
+											 */
+											'0': () => LocalizedString
+											/**
+											 * NVIDIA® GeForce® 9600 Series or higher
+											 */
+											'1': () => LocalizedString
+											/**
+											 * NVIDIA® GeForce® 200 Series or higher
+											 */
+											'2': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 2600 Series or higher
+											 */
+											'3': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 3650 Series or higher
+											 */
+											'4': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 4650 Series or higher
+											 */
+											'5': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 5550 Series or higher
+											 */
+											'6': () => LocalizedString
+											/**
+											 * AMD Radeon™ HD 6450 Series or higher
+											 */
+											'7': () => LocalizedString
+										}
+									}
+									directx: {
+										/**
+										 * DirectX 9.0c or higher
+										 */
+										data_common: () => LocalizedString
+									}
+									sound: {
+										/**
+										 * Sound Card
+										 */
+										name: () => LocalizedString
+										data_common: {
+											/**
+											 * DirectSound® compatible 16-bit stereo 44.1kHz
+											 */
+											'0': () => LocalizedString
+											/**
+											 * Or sound cards that can play 48kHz WAVE format
+											 */
+											'1': () => LocalizedString
+										}
+									}
+									hdd: {
+										/**
+										 * Hard Drive
+										 */
+										name: () => LocalizedString
+										data_common: {
+											/**
+											 * 20GB or more
+											 */
+											'0': () => LocalizedString
+											/**
+											 * * The above available space includes space for DirectX® installation and OS swap file space.
+											 */
+											'1': () => LocalizedString
+											/**
+											 * * It also includes the work space used temporarily by the installer. This work space is required in the root drive (usually C: drive) and is freed up after installation.
+											 */
+											'2': () => LocalizedString
+										}
+									}
+									internet: {
+										/**
+										 * Internet<br>Connection
+										 */
+										name: () => LocalizedString
+										/**
+										 * Broadband environment with ADSL 1.0Mbps or faster
+										 */
+										data_common: () => LocalizedString
+									}
+								}
+							}
+							hge: {
+								/**
+								 * High Grade Edition Requirements
+								 */
+								column_name: () => LocalizedString
+								row_data: {
+									resolution: {
+										/**
+										 * Resolution
+										 */
+										name: () => LocalizedString
+										/**
+										 * 1920×1080
+										 */
+										data_common: () => LocalizedString
+									}
+									os: {
+										/**
+										 * Operating System
+										 */
+										name: () => LocalizedString
+										data_common: {
+											/**
+											 * Windows 7, 8, 8.1, 10 (32bit/64bit)
+											 */
+											'0': () => LocalizedString
+											/**
+											 * * 64-bit runs on WOW64 (Windows on Windows 64)
+											 */
+											'1': () => LocalizedString
+										}
+									}
+									cpu: {
+										/**
+										 * Processor
+										 */
+										name: () => LocalizedString
+										/**
+										 * Intel® Core™ i5 2.66GHz or higher
+										 */
+										data_common: () => LocalizedString
+									}
+									memory: {
+										/**
+										 * Memory
+										 */
+										name: () => LocalizedString
+										/**
+										 * 4GB or more
+										 */
+										data_common: () => LocalizedString
+									}
+									card: {
+										/**
+										 * Graphics Card
+										 */
+										name: () => LocalizedString
+										data_common: {
+											/**
+											 * NVIDIA® Geforce® GTX 660 (2GB) Series or higher
+											 */
+											'0': () => LocalizedString
+											/**
+											 * Or graphics cards of equivalent or higher performance
+											 */
+											'1': () => LocalizedString
+										}
+									}
+									directx: {
+										data_common: {
+											/**
+											 * DirectX 9.0c or higher
+											 */
+											'0': () => LocalizedString
+											/**
+											 * * Even if DirectX is already installed on your computer, you will need to install "<a href="https://www.microsoft.com/en-us/download/details.aspx?id=8109" target="_blank" rel="noopener noreferrer" style="text-decoration:underline;">DirectX End-User Runtimes</a>" separately.
+											 */
+											'1': () => LocalizedString
+										}
+									}
+									sound: {
+										/**
+										 * Sound Card
+										 */
+										name: () => LocalizedString
+										data_common: {
+											/**
+											 * DirectSound® compatible 16-bit stereo 44.1kHz
+											 */
+											'0': () => LocalizedString
+											/**
+											 * Or sound cards that can play 48kHz WAVE format
+											 */
+											'1': () => LocalizedString
+										}
+									}
+									hdd: {
+										/**
+										 * Hard Drive
+										 */
+										name: () => LocalizedString
+										/**
+										 * 20GB or more
+										 */
+										data_common: () => LocalizedString
+									}
+									internet: {
+										/**
+										 * Internet<br>Connection
+										 */
+										name: () => LocalizedString
+										/**
+										 * Broadband environment with ADSL 1.0Mbps or faster
+										 */
+										data_common: () => LocalizedString
+									}
+								}
+							}
+						}
+						spec_notes: {
+							/**
+							 * The game does not have native 64-bit support. So even if you run the game on 64-bit version, system performance will not be improved compared to 32-bit version.
+							 */
+							'1': () => LocalizedString
+							/**
+							 * Please use the latest driver provided by the manufacturer of your graphics card.
+							 */
+							'2': () => LocalizedString
+						}
+					}
+					'2': {
+						/**
+						 * Installation
+						 */
+						subtitle: () => LocalizedString
+						center_box: {
+							'1': {
+								/**
+								 * Click the "Game Download" button on the member site to download the setup installer "mhfSetup_ZZ_v○.exe."<br><span style="color: red;">* "v○" is the version of the installer (e.g., v1.2).</span>
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_1
+								 */
+								img: () => LocalizedString
+							}
+							'2': {
+								/**
+								 * Run the installer and select your language.<br>The game title and game folder name to be installed depends on the language selected here.
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_2
+								 */
+								img: () => LocalizedString
+							}
+							'3': {
+								/**
+								 * Please be sure to read the important information displayed before installation.
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_3
+								 */
+								img: () => LocalizedString
+							}
+							'4': {
+								/**
+								 * The destination folder will be displayed. Basically, it would be no problem with the default folder. But you can also change the folder according to your environment.
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_4
+								 */
+								img: () => LocalizedString
+							}
+							'5': {
+								/**
+								 * Select the in-game language and button icons for gamepad to be installed.<br>Even if you do not use any gamepad, you need to select one of the icon types here.
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_5
+								 */
+								img: () => LocalizedString
+							}
+							'6': {
+								/**
+								 * Click Install to start the installation.
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_6
+								 */
+								img: () => LocalizedString
+							}
+							'7': {
+								/**
+								 * If you can see the following screen, installation is completed.
+								 */
+								text: () => LocalizedString
+								/**
+								 * install_7
+								 */
+								img: () => LocalizedString
+							}
+						}
+					}
+					'3': {
+						/**
+						 * Launcher Screen
+						 */
+						subtitle: () => LocalizedString
+						intro_box: {
+							/**
+							 * The launcher screen is the screen that you can see after running the game. You can log in to the game, add or delete characters, update, configure settings, etc., from here.
+							 */
+							text: () => LocalizedString
+							/**
+							 * launcher_0
+							 */
+							img: () => LocalizedString
+						}
+						h3: {
+							'1': {
+								/**
+								 * Log In Area
+								 */
+								title: () => LocalizedString
+								/**
+								 * You can enter your account credentials and select your login server. For more information, please refer to the "<a href="#start" style="text-decoration:underline;">Log In and Start the Game</a>" section.
+								 */
+								text: () => LocalizedString
+								/**
+								 * login_area
+								 */
+								img: () => LocalizedString
+								center_box: {
+									/**
+									 * 【Server Selection】
+									 */
+									text1: () => LocalizedString
+									/**
+									 * server_desc
+									 */
+									img: () => LocalizedString
+									/**
+									 * There are three Rain servers: Rain (JP) [Tokyo, Japan], Rain (US) [New York City, New York, United States], and Rain (EU) [Frankfurt, Hesse, Germany], but they are not independent. So basically, the login destination [Jakarta, Indonesia] is the same no matter which server you connect from. However, depending on the distance between your country/region and the server location, your ping may be high (the game will lag) while you are playing, so you should select the server that is closest to your region.
+									 */
+									text2: () => LocalizedString
+								}
+							}
+							'2': {
+								/**
+								 * In-Game Preferences
+								 */
+								title: () => LocalizedString
+								/**
+								 * In preferences, you can configure settings on your computer side, such as the size of the game screen when it starts up and the sound, in addition to switching to High Grade Edition.
+								 */
+								text: () => LocalizedString
+								/**
+								 * preferences
+								 */
+								img: () => LocalizedString
+								center_box: {
+									'0': {
+										/**
+										 * [Graphics] Tab
+										 */
+										text: () => LocalizedString
+										/**
+										 * launcher_1
+										 */
+										img: () => LocalizedString
+										img_desc: {
+											'0': {
+												/**
+												 * ①Graphics Slider
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * One of three presets ("High," "Moderate," and "Low") can be selected for the settings on [Display] and [Sound] tabs.<br>When "Advanced" button is turned on, this slider is not selectable and the preset label is displayed as "Custom."
+												 */
+												item_text: () => LocalizedString
+											}
+											'1': {
+												/**
+												 * ②Advanced Button
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * When turned on, the settings on both [Display] and [Sound] tabs can be changed freely, and the preset label in the graphics slider will be displayed as "Custom."
+												 */
+												item_text: () => LocalizedString
+											}
+											'2': {
+												/**
+												 * ③High Grade Edition Check Box
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * If checked, "High Grade Edition" is enabled.
+												 */
+												item_text: () => LocalizedString
+											}
+										}
+									}
+									'1': {
+										/**
+										 * [Display] Tab
+										 */
+										text: () => LocalizedString
+										/**
+										 * launcher_2
+										 */
+										img: () => LocalizedString
+										img_desc: {
+											'0': {
+												/**
+												 * ①Display Mode and Resolution Settings
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * In "Display Mode" section, you can select either "Windowed Mode" or "Fullscreen Mode" as the display modes when the game starts, and in "Resolution" section, you can select the resolution for each screen mode.
+												 */
+												item_text: () => LocalizedString
+											}
+											'1': {
+												/**
+												 * ②Texture Compression
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * Select either to enable or disable DXTC (Texture Compression Algorithms).<br>When enabled, image processing is faster, but images may be blocky.<br>When disabled, image processing is slower, but images are more high quality.
+												 */
+												item_text: () => LocalizedString
+											}
+										}
+									}
+									'2': {
+										/**
+										 * [Sound] Tab
+										 */
+										text: () => LocalizedString
+										/**
+										 * launcher_3
+										 */
+										img: () => LocalizedString
+										img_desc: {
+											'0': {
+												/**
+												 * ①Sound Settings
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * Each volume can be adjusted with the slider for each of the three types of the game windows ("General," "Unfocused," and "Minimized").<br>If "Disable Sound Output" is checked, the game will be muted.
+												 */
+												item_text: () => LocalizedString
+											}
+											'1': {
+												/**
+												 * ②Sample Rate
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * You can set the sampling rate and buffer size according to your sound card.<ul><li class="img_desc_section_text_list"><span class="img_desc_section_text_list_title">Sample Rate</span><span>This refers to the number of processes per unit of time to convert an analog signal, such as audio, into a digital signal. In general, as this value increases, the sound quality will be improved. But the amount of data involved will also increase, so it will lead to affecting storage and bandwidth. On the other hand, extremely low values can lead to low-quality and unnatural sound.</span></li><li class="img_desc_section_text_list"><span class="img_desc_section_text_list_title">Buffer Size</span><span>This refers to the size of the area in which a certain amount of data is temporarily loaded in advance. If this value increase, the latency for audio playback will be longer, but audio dropouts are less likely to occur. On the other hand, if the value is decrease, the latency for audio playback will be shorter, but audio dropouts are more likely to occur.</span></li></ul>
+												 */
+												item_text: () => LocalizedString
+											}
+										}
+									}
+									'3': {
+										/**
+										 * [Proxy] Tab
+										 */
+										text: () => LocalizedString
+										/**
+										 * launcher_4
+										 */
+										img: () => LocalizedString
+										img_desc: {
+											'0': {
+												/**
+												 * ①Proxy Settings
+												 */
+												item_title: () => LocalizedString
+												/**
+												 * If "Use Download Proxy" is checked, you can connect to the game via a proxy server.<br><span style="text-decoration: underline; color: red;">* Currently this is not available in Japanese version, only available in English and French versions.</span>
+												 */
+												item_text: () => LocalizedString
+											}
+										}
+									}
+								}
+							}
+							'3': {
+								/**
+								 * Side Contents
+								 */
+								title: () => LocalizedString
+								/**
+								 * This is the area where event banners, announcements, and links to access web media, are posted. These can be accessed directly from the launcher without opening a browser to search for them.
+								 */
+								text: () => LocalizedString
+								/**
+								 * side_contents
+								 */
+								img: () => LocalizedString
+							}
+						}
+					}
+					'4': {
+						/**
+						 * Log In and Start the Game
+						 */
+						subtitle: () => LocalizedString
+						check_contents: {
+							/**
+							 * A computer with a multi-core processor can run two games on one computer.
+							 */
+							text: () => LocalizedString
+							/**
+							 * Multiple Launch
+							 */
+							link: () => LocalizedString
+						}
+						half_box: {
+							/**
+							 * （1）Click the "Monster Hunter Frontier Online" icon on the desktop.
+							 */
+							text: () => LocalizedString
+							/**
+							 * start_1
+							 */
+							img: () => LocalizedString
+						}
+						center_box: {
+							'2': {
+								/**
+								 * The launcher screen will be displayed.<br>Enter your username and password, select the login server, and click the "Log In" button to log in to the server. Then file checking and updating will begin.
+								 */
+								text: () => LocalizedString
+								/**
+								 * start_2
+								 */
+								img: () => LocalizedString
+							}
+							'3': {
+								/**
+								 * Select your character and click the "Start Game" to start the game.<br>At first, only "<span style="color: blue;">Ready to Hunt</span>" will be displayed as shown in the image below.
+								 */
+								text: () => LocalizedString
+								/**
+								 * start_3
+								 */
+								img: () => LocalizedString
+							}
+							'4': {
+								/**
+								 * On the game title screen, press Enter or click on the screen to display the title menu.
+								 */
+								text: () => LocalizedString
+								/**
+								 * start_4
+								 */
+								img: () => LocalizedString
+							}
+						}
+					}
+					'5': {
+						'1': {
+							/**
+							 * High Grade Edition Settings
+							 */
+							title: () => LocalizedString
+							center_box: {
+								'1': {
+									/**
+									 * Click the "In-Game Preferences" on the launcher screen.
+									 */
+									text: () => LocalizedString
+									/**
+									 * hge_1
+									 */
+									img: () => LocalizedString
+								}
+								'2': {
+									/**
+									 * The Settings screen will appear.<br>Check the "Enable High Grade Edition" checkbox in [Graphics] Tab and click OK.
+									 */
+									text: () => LocalizedString
+									/**
+									 * hge_2
+									 */
+									img: () => LocalizedString
+								}
+								'3': {
+									/**
+									 * After logging in, if "High Grade Edition" is displayed on the title screen, the game can be played in High Grade Edition.
+									 */
+									text: () => LocalizedString
+									/**
+									 * hge_3
+									 */
+									img: () => LocalizedString
+								}
+							}
+						}
+						'2': {
+							/**
+							 * Graphics Settings
+							 */
+							title: () => LocalizedString
+							half_box: {
+								/**
+								 * Graphics can be adjusted by opening the menu and going to [Options] > [Display (High Grade)].
+								 */
+								text: () => LocalizedString
+								/**
+								 * graphics_0
+								 */
+								img: () => LocalizedString
+							}
+							center_box: {
+								/**
+								 * graphics_1
+								 */
+								img: () => LocalizedString
+								img_desc: {
+									'0': {
+										/**
+										 * ①Prisets
+										 */
+										item_title: () => LocalizedString
+										item_text: {
+											'0': {
+												/**
+												 * Maximum
+												 */
+												head: () => LocalizedString
+												/**
+												 * Turn on all settings and set the game to the highest setting.
+												 */
+												content: () => LocalizedString
+											}
+											'1': {
+												/**
+												 * Quality Priority
+												 */
+												head: () => LocalizedString
+												/**
+												 * Set to a high image quality setting, giving priority to graphics.
+												 */
+												content: () => LocalizedString
+											}
+											'2': {
+												/**
+												 * Performance Priority
+												 */
+												head: () => LocalizedString
+												/**
+												 * Set to a low load processing setting, giving priority to operability.
+												 */
+												content: () => LocalizedString
+											}
+											'3': {
+												/**
+												 * Custom
+												 */
+												head: () => LocalizedString
+												/**
+												 * Each setting can be customized at will.
+												 */
+												content: () => LocalizedString
+											}
+										}
+									}
+									'1': {
+										/**
+										 * ②Each Setting
+										 */
+										item_title: () => LocalizedString
+										item_text: {
+											'0': {
+												/**
+												 * Realistic Shadows (Town)
+												 */
+												head: () => LocalizedString
+												/**
+												 * Realistic shoadow setting for hunters and NPCs in the town.
+												 */
+												content: () => LocalizedString
+											}
+											'1': {
+												/**
+												 * Realistic Shadows (Quest)
+												 */
+												head: () => LocalizedString
+												/**
+												 * Realistic shoadow setting for hunters, monsters, etc. in quests.
+												 */
+												content: () => LocalizedString
+											}
+											'2': {
+												/**
+												 * Depth of Field
+												 */
+												head: () => LocalizedString
+												/**
+												 * An effect that applies blur to an object depending on the distance before and after the focus.<br>With ON, when the object is in focus, the area in front and behind it is blurred, giving a more natural sense of distance and immersive experience.<br>With OFF, the distance between the object and its surroundings is not so well represented, and the image is clearly displayed. But it appears different from the scenery you normally see in the real world, and you may feel some discomfort.
+												 */
+												content: () => LocalizedString
+											}
+											'3': {
+												/**
+												 * High Dynamic Range
+												 */
+												head: () => LocalizedString
+												/**
+												 * An effect in which light spreads from the light source to the surroundings.<br>With ON, a more realistic light expression is possible.<br>With OFF, the bloom effect is not expressed and may seem somewhat less realistic.
+												 */
+												content: () => LocalizedString
+											}
+											'4': {
+												/**
+												 * SSAO
+												 */
+												head: () => LocalizedString
+												/**
+												 * Shadows are created even in places where light does not penetrate easily, such as gaps between three-dimensional objects and around bends, to achieve a more realistic 3D representation. However, this requires high processing power on the PC side, so you should turn it off if the game is lagging.<br>With ON, you can enjoy graphics with more realistic shading and a three-dimensional feel.<br>With OFF, shading is not expressed and the screen looks simple.
+												 */
+												content: () => LocalizedString
+											}
+											'5': {
+												/**
+												 * God Rays
+												 */
+												head: () => LocalizedString
+												/**
+												 * An effect that allows light to shine back into the air by scattering, such as through trees. However, this requires high processing power on the PC side, so you should turn it off if the game is lagging.
+												 */
+												content: () => LocalizedString
+											}
+											'6': {
+												/**
+												 * Anti-Aliasing
+												 */
+												head: () => LocalizedString
+												/**
+												 * Smoothes object outlines for a more natural look. However, this requires high processing power on the PC side, so you should turn it off if the game is lagging.
+												 */
+												content: () => LocalizedString
+											}
+											'7': {
+												/**
+												 * Soft Particles
+												 */
+												head: () => LocalizedString
+												/**
+												 * Smoothes object outlines for a more natural look. However, this requires high processing power on the PC side, so you should turn it off if the game is lagging.
+												 */
+												content: () => LocalizedString
+											}
+										}
+									}
+								}
+							}
+						}
+						/**
+						 * Option Settings
+						 */
+						subtitle: () => LocalizedString
+					}
+				}
 			}
 		}
 	}
@@ -948,7 +2952,7 @@ export type TranslationFunctions = {
 			title: () => LocalizedString
 			href: () => LocalizedString
 			/**
-			 * official-site
+			 * official_site
 			 */
 			alt: () => LocalizedString
 		}
@@ -962,7 +2966,7 @@ export type TranslationFunctions = {
 			 */
 			href: () => LocalizedString
 			/**
-			 * official-discord
+			 * official_discord
 			 */
 			alt: () => LocalizedString
 		}
@@ -982,7 +2986,7 @@ export type TranslationFunctions = {
 		}
 	}
 	/**
-	 * *Due to the layout, the landscape mode is restricted in this website.<br><br>*Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.
+	 * * Due to the layout, the landscape mode is restricted in this website.<br><br>* Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. This project is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this project.
 	 */
 	footer_note: () => LocalizedString
 	bottom_nav: {

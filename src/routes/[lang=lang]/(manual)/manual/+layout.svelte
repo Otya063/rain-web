@@ -3,11 +3,11 @@
     import { setLocale } from '$i18n/i18n-svelte';
     import { scrollToTop } from '$ts/main';
     import LL from '$i18n/i18n-svelte';
-    import Alternate from '$lib/common/Alternate.svelte';
-    import ManualHeader from '$lib/common/ManualHeader.svelte';
-    import BottomNav from '$lib/common/BottomNav.svelte';
-    import LandscapeMode from '$lib/common/LandscapeMode.svelte';
-    import ManualFooter from '$lib/common/ManualFooter.svelte';
+    import Alternate from '$lib/manual/Alternate.svelte';
+    import ManualHeader from '$lib/manual/ManualHeader.svelte';
+    import BottomNav from '$lib/manual/BottomNav.svelte';
+    import LandscapeMode from '$lib/manual/LandscapeMode.svelte';
+    import ManualFooter from '$lib/manual/ManualFooter.svelte';
     import '$scss/style_manual.scss';
 
     export let data: LayoutData;
@@ -40,11 +40,11 @@
 
 <svelte:head>
     <!-- ogp -->
-    <meta property="og:url" content="https://online-manual.rain-server.workers.dev/" />
+    <meta property="og:url" content="https://development.rain-server.workers.dev/" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content={$LL.articles['description']()} />
     <meta property="og:site_name" content="Rain Server" />
-    <meta property="og:image" content="https://online-manual.rain-server.workers.dev/img/common/sns_share.webp" />
+    <meta property="og:image" content="https://development.rain-server.workers.dev/img/common/sns_share.webp" />
     <!-- twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <!-- favicon -->

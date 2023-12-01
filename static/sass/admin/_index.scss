@@ -1,0 +1,17 @@
+@charset "UTF-8";
+
+@use 'pc' as *;
+@use 'sp' as *;
+@use '../global' as *;
+
+/*==================================
+　　　　　初期設定
+==================================*/
+body {
+    height: auto;
+}
+
+.wrapper {
+    width: 100%;
+    overflow: hidden;
+}

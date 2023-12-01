@@ -16,6 +16,16 @@ jobs:
         runs-on: ubuntu-latest
         env:
             VITE_DATABASE_URL: ${{ secrets.DATABASE_URL }}
+            VITE_DIRECT_URL: ${{ secrets.DIRECT_URL }}
+            VITE_ALLOW_ORIGIN: ${{ secrets.ALLOW_ORIGIN }}
+            VITE_ADMIN_CREDENTIALS: ${{ secrets.ADMIN_CREDENTIALS }}
+            VITE_R2_ACCESS_KEY: ${{ secrets.R2_ACCESS_KEY }}
+            VITE_R2_SECRET_KEY: ${{ secrets.R2_SECRET_KEY }}
+            VITE_R2_ACCOUNT_ID: ${{ secrets.R2_ACCOUNT_ID }}
+            VITE_R2_BNR_BUCKETNAME: ${{ secrets.R2_BNR_BUCKETNAME }}
+            VITE_R2_BNR_UNIQUE_URL: ${{ secrets.R2_BNR_UNIQUE_URL }}
+            VITE_MAIN_DOMAIN: ${{ secrets.PROD_MAIN_DOMAIN }}
+            VITE_AUTH_DOMAIN: ${{ secrets.PROD_AUTH_DOMAIN }}
 
         steps:
             - name: Checkout
@@ -35,7 +45,7 @@ jobs:
 
             - name: Install dependencies
               run: pnpm i
-            - run: npx prisma generate --schema=./prisma/schema.prisma --data-proxy
+            - run: npx prisma generate --schema=./prisma/schema.prisma --no-engine
 
             - name: Build
               run: pnpm build
@@ -46,4 +56,4 @@ jobs:
               with:
                   apiToken: ${{ secrets.CF_API_TOKEN }}
                   accountId: ${{ secrets.CF_ACCOUNT_ID }}
-                  command: publish --name production
+                  command: deploy --name production

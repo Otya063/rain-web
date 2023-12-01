@@ -19,7 +19,7 @@
                 {@html $LL.articles['home'].news_text()}
             </li>
         </ul>
-        <button class="news_more" on:click={() => loadArticle($locale)}>
+        <button class="news_more" on:click={() => loadArticle($locale, 'manual/')}>
             <span>&#9650;</span>
             {$LL.articles['home'].news_more()}
         </button>
@@ -31,7 +31,7 @@
     <ul class="featured_list">
         {#each Object.entries($LL.articles['home'].featured_contents) as [item, { maindir, subdir, alt, text }]}
             <li>
-                <button on:click={() => loadArticle($locale, maindir(), subdir())}>
+                <button on:click={() => loadArticle($locale, 'manual/', maindir(), subdir())}>
                     <dl class="featured_items">
                         <dt class="featured_img {item}">
                             <img src="/img/{$locale}/featured/featured_{item}_chara.webp" alt={alt()} />

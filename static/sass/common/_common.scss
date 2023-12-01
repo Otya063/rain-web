@@ -9,7 +9,7 @@ html {
 body {
     font-size: 1.6rem;
     font-family: $font_ja;
-    color: #000;
+    color: #333;
     -moz-text-size-adjust: 100%;
     -ms-text-size-adjust: 100%;
     text-size-adjust: 100%;
@@ -27,6 +27,12 @@ body {
         top: 0;
         left: 0;
     }
+}
+
+// Google Font アイコン用
+.material-icons,
+.material-symbols-outlined {
+    user-select: none;
 }
 
 // 画像初期設定
@@ -70,6 +76,35 @@ button {
     cursor: pointer;
 }
 
+// selectタグ余白調整
+select {
+    padding: 0 19px 0 6px;
+    outline: 0;
+}
+
+// inputテキスト余白調整
+input[type='text'],
+input[type='password'],
+input[type='number'] {
+    padding: 0 6px;
+    outline: 0;
+}
+
+// input日付余白/クリック範囲調整
+input[type='date'],
+input[type='datetime-local'] {
+    position: relative;
+    padding: 0 6px;
+}
+input[type='date']::-webkit-calendar-picker-indicator,
+input[type='datetime-local']::-webkit-calendar-picker-indicator {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
 // 一括入力待機中無効
 img,
 button,
@@ -86,6 +121,11 @@ picture {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+// 表右側ボーダー無し
+.no_border_right {
+    border-right: 0px !important;
 }
 
 // タイトルフォント

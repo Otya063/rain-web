@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Menu from '$lib/common/Menu.svelte';
+    import Menu from '$lib/manual/ManualMenu.svelte';
     import LL from '$i18n/i18n-svelte';
 
     export let data;
