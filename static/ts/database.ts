@@ -219,3 +219,18 @@ export const requestActToServer = async (data1: string, data2: string | number) 
 
     return data;
 };
+
+export interface User {
+    id: number;
+    username: string;
+    password: string;
+    item_box: Buffer | null;
+    rights: number;
+    last_character: number | null;
+    last_login: Date | null;
+    return_expires: Date | null;
+    gacha_premium: number | null;
+    gacha_trial: number | null;
+    frontier_points: number | null;
+    authToken: string | null;
+}
