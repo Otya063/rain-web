@@ -17,7 +17,7 @@ const securityHeaders = {
 export const handle: Handle = async ({ event, resolve }) => {
     const auth = event.request.headers.get('Authorization');
 
-    if (!event.url.pathname.includes('localhost') && !event.url.pathname === '/admin') {
+    if (!event.url.origin.includes('localhost') && !event.url.pathname === '/admin') {
         if (auth !== `Basic ${btoa(import.meta.env.VITE_ADMIN_CREDENTIALS)}`) {
             return new Response('Not authorized', {
                 status: 401,
@@ -85,12 +85,6 @@ export const handle: Handle = async ({ event, resolve }) => {
         }
 
         event.locals.authUser = authUser;
-
-        /* const launcherSystem = await getServerData('getLauncherSystem');
-        const isAdmin: boolean = launcherSystem['rain_admins'].includes(authUser.username);
-        if(isAdmin) {
-
-        } */
 
         return resolve(event, {
             transformPageChunk: ({ html }) => html.replace('%lang%', 'en'),
