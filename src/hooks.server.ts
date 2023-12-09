@@ -17,7 +17,7 @@ const securityHeaders = {
 export const handle: Handle = async ({ event, resolve }) => {
     const auth = event.request.headers.get('Authorization');
 
-    if (!event.url.origin.includes('localhost') && !event.url.pathname === '/admin') {
+    if (!event.url.origin.includes('localhost') && event.url.pathname !== '/admin') {
         if (auth !== `Basic ${btoa(import.meta.env.VITE_ADMIN_CREDENTIALS)}`) {
             return new Response('Not authorized', {
                 status: 401,
@@ -74,7 +74,7 @@ export const handle: Handle = async ({ event, resolve }) => {
             });
         }
 
-        const authUser = await getServerData('getAuthUserBySession', session) as User;
+        const authUser = (await getServerData('getAuthUserBySession', session)) as User;
         if (!authUser) {
             const redirectUrl = `${import.meta.env.VITE_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${import.meta.env.VITE_MAIN_DOMAIN}/admin`;
 

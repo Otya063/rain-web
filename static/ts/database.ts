@@ -70,7 +70,7 @@ export const getServerData = async (data1: string, data2: string | number | unde
             data = db.users.findMany({});
             break;
 
-        case 'getExtgUserByUserName':
+        case 'getUserByUserName':
             if (data2 === undefined) {
                 data = 'Invalid Input';
             } else {
