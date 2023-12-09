@@ -3,7 +3,7 @@ import { detectLocale, i18n, isLocale } from '$i18n/i18n-util';
 import { loadAllLocales } from '$i18n/i18n-util.sync';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 import { initAcceptLanguageHeaderDetector } from 'typesafe-i18n/detectors';
-import { db } from '$ts/database';
+import { db, getServerData, type User } from '$ts/database';
 
 loadAllLocales();
 const L = i18n();
@@ -17,13 +17,15 @@ const securityHeaders = {
 export const handle: Handle = async ({ event, resolve }) => {
     const auth = event.request.headers.get('Authorization');
 
-    if (auth !== `Basic ${btoa(import.meta.env.VITE_ADMIN_CREDENTIALS)}`) {
-        return new Response('Not authorized', {
-            status: 401,
-            headers: {
-                'WWW-Authenticate': 'Basic realm="User Visible Realm", charset="UTF-8"',
-            },
-        });
+    if (!event.url.origin.includes('localhost') && event.url.pathname !== '/admin') {
+        if (auth !== `Basic ${btoa(import.meta.env.VITE_ADMIN_CREDENTIALS)}`) {
+            return new Response('Not authorized', {
+                status: 401,
+                headers: {
+                    'WWW-Authenticate': 'Basic realm="User Visible Realm", charset="UTF-8"',
+                },
+            });
+        }
     }
 
     const [, lang] = event.url.pathname.split('/');
@@ -61,6 +63,28 @@ export const handle: Handle = async ({ event, resolve }) => {
         return newResponse;
     } else if (origin !== securityHeaders['Access-Control-Allow-Origin'] && pathname === '/admin') {
         console.log('[Admins Normal Browsing.]');
+
+        const session = event.cookies.get('session');
+        if (!session) {
+            const redirectUrl = `${import.meta.env.VITE_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${import.meta.env.VITE_MAIN_DOMAIN}/admin`;
+
+            return new Response(null, {
+                status: 302,
+                headers: { Location: redirectUrl },
+            });
+        }
+
+        const authUser = (await getServerData('getAuthUserBySession', session)) as User;
+        if (!authUser) {
+            const redirectUrl = `${import.meta.env.VITE_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${import.meta.env.VITE_MAIN_DOMAIN}/admin`;
+
+            return new Response(null, {
+                status: 302,
+                headers: { Location: redirectUrl },
+            });
+        }
+
+        event.locals.authUser = authUser;
 
         return resolve(event, {
             transformPageChunk: ({ html }) => html.replace('%lang%', 'en'),

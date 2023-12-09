@@ -3,8 +3,12 @@ import { db, getServerData } from '$ts/database';
 import { error } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { locale }, cookies }) => {
+export const load: PageServerLoad = async ({ locals: { locale, authUser }, cookies }) => {
     const launcherSystem = await getServerData('getLauncherSystem');
+    const isAdmin: boolean = launcherSystem['rain_admins'].includes(authUser.username);
+    if (!isAdmin) {
+        throw error(403);
+    }
 
     const important = await getServerData('getInformation', 1);
 
