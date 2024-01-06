@@ -4,8 +4,9 @@
     import Users from '$lib/admin/Users.svelte';
     import LauncherBanner from '$lib/admin/LauncherBanner.svelte';
     import { tab_param } from '$ts/main';
+    import type { PageData } from '../../routes/admin/$types';
 
-    export let data;
+    export let data: PageData;
     const systemData = data.launcherSystem;
     const importantInfoData = data.important;
     const defectsAndTroublesInfoData = data.defectsAndTroubles;

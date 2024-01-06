@@ -3,86 +3,13 @@
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
     import { convUnixToDate, editMode, prepareModal, clicked_submit, getCourseByDecimal, convRFCToISOWithTime, decToLittleEndian, getWpnTypeByDec, getWpnNameByDec, showTipHoverWpn } from '$ts/main';
+    import type { users, characters, suspended_account, discord } from '@prisma/client/edge';
+    import { DateTime } from 'luxon';
 
-    export let usersData: Users[];
-    export let charactersData: Characters[];
-    export let bannedUsersData: BannedUser[];
-    export let linkedCharacters: LinkedCharacters[];
-
-    interface Users {
-        id: number;
-        username: string;
-        password: string;
-        rights: number;
-        last_character: number | null;
-        last_login: Date | null;
-        return_expires: Date | null;
-        gacha_premium: number | null;
-        gacha_trial: number | null;
-        frontier_points: number | null;
-        authToken: string;
-    }
-    interface Characters {
-        id: number;
-        user_id: number | null;
-        is_female: boolean | null;
-        is_new_character: boolean | null;
-        name: string | null;
-        unk_desc_string: string | null;
-        gr: number | null;
-        hrp: number | null;
-        weapon_type: number | null;
-        last_login: number | null;
-        restrict_guild_scout: boolean;
-        daily_time: Date | null;
-        kouryou_point: number | null;
-        gcp: number | null;
-        guild_post_checked: Date;
-        time_played: number;
-        weapon_id: number;
-        friends: string | null;
-        blocked: string | null;
-        deleted: boolean;
-        cafe_time: number | null;
-        netcafe_points: number | null;
-        boost_time: Date | null;
-        cafe_reset: Date | null;
-        bonus_quests: number;
-        daily_quests: number;
-        promo_points: number;
-        rasta_id: number | null;
-        pact_id: number | null;
-        stampcard: number;
-    }
-    interface BannedUser {
-        user_id: number;
-        username: string;
-        reason: string;
-        date: number;
-    }
-    interface LinkedCharacters {
-        id: number;
-        char_id: number;
-        discord_id: string;
-        is_male: boolean | null;
-        bounty: number;
-        road_champion: boolean;
-        rain_demolizer: boolean;
-        bounty_champion: boolean;
-        bounty_master: boolean;
-        bounty_expert: boolean;
-        gacha: number;
-        pity: number;
-        boostcd: bigint;
-        newbie: boolean;
-        latest_bounty: string;
-        latest_bounty_time: bigint;
-        transfercd: bigint | null;
-        title: number | null;
-        gold: number | null;
-        silver: number | null;
-        bronze: number | null;
-    }
+    export let usersData: users[];
+    export let charactersData: characters[];
+    export let bannedUsersData: suspended_account[];
+    export let linkedCharacters: discord[];
 
     /* Related to Edit Mode
 ====================================================*/
@@ -186,7 +113,7 @@
     };
 
     // return what is actually displayed
-    const paginatedUsers = (filterMode: boolean = false): Users[] => {
+    const paginatedUsers = (filterMode: boolean = false): users[] => {
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
 
@@ -195,7 +122,7 @@
     };
 
     // filtering data based on param
-    const calculateFilter = (): Users[] => {
+    const calculateFilter = (): users[] => {
         return _.sortBy(
             _.filter(usersData, (u_data) => {
                 switch (filterParam) {
@@ -551,12 +478,24 @@
                 <dt class="contents_term">Character ID<br />(Last Played)</dt>
                 <dd class="contents_desc">{user.last_character}</dd>
 
-                <dt class="contents_term">Last Login Time (Zulu)</dt>
-                <dd class="contents_desc">{convRFCToISOWithTime(user.last_login)}</dd>
-
-                <dt class="contents_term">Expiry Date for<br />Return Ward (Zulu)</dt>
+                <dt class="contents_term">Last Login Time</dt>
                 <dd class="contents_desc">
-                    {convRFCToISOWithTime(user.return_expires)}
+                    {!user.last_login
+                        ? 'No Data'
+                        : DateTime.fromJSDate(user.last_login)
+                              .setZone(DateTime.local().zoneName)
+                              .setLocale('en')
+                              .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                </dd>
+
+                <dt class="contents_term">Expiry Date for<br />Return Ward</dt>
+                <dd class="contents_desc">
+                    {!user.return_expires
+                        ? 'No Data'
+                        : DateTime.fromJSDate(user.return_expires)
+                              .setZone(DateTime.local().zoneName)
+                              .setLocale('en')
+                              .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
 
                     {#if editId === user.id && catTypes['return_expires']}
                         <button class="red_btn" on:click={() => editModeSwitch(0, 'return_expires')}>
@@ -840,7 +779,14 @@
                                     </span>
                                     <span class="rank">HR: {character.hrp} / GR: {character.gr}</span>
                                     <span class="char_id">Character ID: {character.id}</span>
-                                    <span class="last_login">Last Login: {convUnixToDate(character.last_login, false)}</span>
+                                    <span class="last_login"
+                                        >Last Login: {!character.last_login
+                                            ? 'No Data'
+                                            : DateTime.fromSeconds(character.last_login)
+                                                  .setZone(DateTime.local().zoneName)
+                                                  .setLocale('en')
+                                                  .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span
+                                    >
                                 </div>
                             {:else}
                                 <div class="character_item new" style="cursor: not-allowed;">

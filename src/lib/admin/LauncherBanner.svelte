@@ -2,16 +2,9 @@
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
     import { prepareModal, editMode, clicked_submit, notice, err_details, uploadFileViaApi, deleteFileViaApi, validateImageDimensions } from '$ts/main';
+    import type { launcher_banner } from '@prisma/client/edge';
 
-    export let launcherBanner: LauncherBanner[];
-
-    interface LauncherBanner {
-        id: number;
-        bnr_name: string;
-        bnr_url: string;
-        ja_img_src: string;
-        en_img_src: string;
-    }
+    export let launcherBanner: launcher_banner[];
 
     /* Below is the add mode script
     ====================================================*/

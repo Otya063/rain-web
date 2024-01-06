@@ -149,7 +149,7 @@ export const getServerData = async (data1: string, data2: string | number | unde
         case 'getAuthUserBySession':
             data = db.users.findFirst({
                 where: {
-                    authToken: data2,
+                    web_login_key: data2,
                 },
             });
             break;

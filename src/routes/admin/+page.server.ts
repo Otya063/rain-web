@@ -3,11 +3,16 @@ import { db, getServerData } from '$ts/database';
 import { error } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 
-export const load: PageServerLoad = async ({ locals: { locale, authUser }, cookies }) => {
+export const load: PageServerLoad = async ({ url, locals: { locale, authUser }, cookies }) => {
     const launcherSystem = await getServerData('getLauncherSystem');
-    const isAdmin: boolean = launcherSystem['rain_admins'].includes(authUser.username);
-    if (!isAdmin) {
-        throw error(403);
+
+    // when prod env, check if the user is an admin
+    if (!url.origin.includes('localhost')) {
+        const isAdmin: boolean = launcherSystem['rain_admins'].includes(authUser.username);
+
+        if (!isAdmin) {
+            throw error(403);
+        }
     }
 
     const important = await getServerData('getInformation', 1);
@@ -72,14 +77,15 @@ export const load: PageServerLoad = async ({ locals: { locale, authUser }, cooki
 const updateSystemMode: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
-    const column: string = Object.keys(dataObj)[0];
+    let column: string = Object.keys(dataObj)[0];
     let value: boolean | string = Object.values(dataObj)[0];
-    if (column === 'launcher_ver' && value.length === 1) {
-        value = value + '.0';
+    if (column === 'client_data_0' && Object.keys(dataObj)[1] === 'client_data_1') {
+        value = [value.length === 1 ? value + '.0' : value, Object.values(dataObj)[1]];
+        column = 'client_data';
     }
 
     try {
-        // when updating the system mode one by one (success)
+        // when updating something that isn't main_all (success)
         await db.launcher_system.update({
             where: {
                 id: 1,
@@ -91,7 +97,7 @@ const updateSystemMode: Action = async ({ request }) => {
 
         return { success: true, status: 'system_updated' };
     } catch (err) {
-        // when updating the system mode one by one (error)
+        // when updating something that isn't main_all (error)
         if (column !== 'maint_all') {
             if (err instanceof Error) {
                 return { error: true, err_details: err.message };
@@ -134,7 +140,6 @@ const createInfoData: Action = async ({ request }) => {
     const dataObj = convFormDataToObj(data);
     const { title, type } = dataObj;
     let { url } = dataObj;
-    const created_at: number = Math.floor(Date.now() / 1000);
 
     if (url.indexOf('discord.com')) {
         url = discordLinkConvertor(url);
@@ -146,7 +151,6 @@ const createInfoData: Action = async ({ request }) => {
                 title: String(title),
                 url: String(url),
                 type: String(type),
-                created_at,
             },
         });
 
@@ -168,7 +172,6 @@ const updateInfoData: Action = async ({ request }) => {
     const { info_id } = dataObj;
     const column: string = Object.keys(dataObj)[1];
     let value: string | number = Object.values(dataObj)[1];
-    column === 'created_at' && (value = convDateToUnix(value));
 
     if (column === 'url' && value.indexOf('discord.com')) {
         value = discordLinkConvertor(value);
@@ -323,7 +326,6 @@ const suspendUser: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
     const { user_id, username, character_id, reason_type, permanently_del } = dataObj;
-    const date = Math.floor(Date.now() / 1000);
 
     try {
         if (permanently_del === 'on') {
@@ -340,7 +342,6 @@ const suspendUser: Action = async ({ request }) => {
                     user_id: Number(user_id),
                     username: String(username),
                     reason: Number(reason_type),
-                    date,
                     permanent: true,
                 },
             });
