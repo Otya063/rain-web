@@ -1,7 +1,8 @@
-import { convDateToUnix, convFormDataToObj, getCourseByFormData, deleteFileViaApi, discordLinkConvertor } from '$ts/main';
+import { convFormDataToObj, getCourseByFormData, deleteFileViaApi, discordLinkConvertor } from '$ts/main';
 import { db, getServerData } from '$ts/database';
 import { error } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
+import { R2_BNR_UNIQUE_URL } from '$env/static/private';
 
 export const load: PageServerLoad = async ({ url, locals: { locale, authUser }, cookies }) => {
     const launcherSystem = await getServerData('getLauncherSystem');
@@ -460,8 +461,8 @@ const createBnrData: Action = async ({ request }) => {
             data: {
                 bnr_name,
                 bnr_url,
-                ja_img_src: `https://${import.meta.env.VITE_R2_BNR_UNIQUE_URL}/bnr/bnr_ja/${ja_file_name}`,
-                en_img_src: `https://${import.meta.env.VITE_R2_BNR_UNIQUE_URL}/bnr/bnr_en/${en_file_name}`,
+                ja_img_src: `https://${R2_BNR_UNIQUE_URL}/bnr/bnr_ja/${ja_file_name}`,
+                en_img_src: `https://${R2_BNR_UNIQUE_URL}/bnr/bnr_en/${en_file_name}`,
             },
         });
 

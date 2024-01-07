@@ -1,7 +1,7 @@
 <script lang="ts">
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
-    import { prepareModal, convUnixToDate, underscoreAndLowercase, clicked_submit, editMode, notice, err_details } from '$ts/main';
+    import { prepareModal, underscoreAndLowercase, clicked_submit, editMode, notice, err_details } from '$ts/main';
     import type { launcher_info } from '@prisma/client/edge';
     import { DateTime } from 'luxon';
 

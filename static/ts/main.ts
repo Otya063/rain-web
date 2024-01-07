@@ -643,61 +643,6 @@ export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang:
 /*=========================================================
 　　　　　Conversion Functions
 =======================================================*/
-/* Convert Normal Date to Unixtimestamp
-====================================================*/
-export const convDateToUnix = (dateValue: string) => {
-    const split_date = dateValue.split('-');
-    const year = parseInt(split_date[0]);
-    const month = parseInt(split_date[1]) - 1;
-    const day = parseInt(split_date[2]);
-
-    const date = new Date(Date.UTC(year, month, day));
-
-    const timeStamp = Math.floor(date.getTime() / 1000);
-
-    return timeStamp;
-};
-
-/* Convert Unixtimestamp to Date
-====================================================*/
-export const convUnixToDate = (timestamp: number | null, ISO8601: boolean) => {
-    const date = new Date(timestamp * 1000);
-
-    // for nomal expression
-    const formattedDate1 = date.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-    });
-
-    // for ISO 8601 expression
-    const formattedDate2 = date
-        .toLocaleDateString('ja-JP', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-        })
-        .replace(/\//g, '-');
-
-    return ISO8601 ? formattedDate2 : formattedDate1;
-};
-
-/* Convert RFC 2822 Time to ISO 8601 with Time
-====================================================*/
-export const convRFCToISOWithTime = (rfc: Date | null): string => {
-    // parse the RFC2822 string into a Date object
-    const date = new Date(rfc);
-
-    // set seconds and milliseconds to zero
-    date.setSeconds(0);
-    date.setMilliseconds(0);
-
-    // format the Date object as an ISO 8601 string with seconds and milliseconds removed
-    const iso8601 = date.toISOString().replace(/:00\.000Z$/, '');
-
-    return iso8601;
-};
-
 /* Convert FormData Into Objects
 ====================================================*/
 export const convFormDataToObj = (data: FormData): Record<string, string | number | boolean> => {

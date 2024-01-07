@@ -2,7 +2,7 @@
     import { page } from '$app/stores';
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
-    import { convUnixToDate, editMode, prepareModal, clicked_submit, getCourseByDecimal, convRFCToISOWithTime, decToLittleEndian, getWpnTypeByDec, getWpnNameByDec, showTipHoverWpn } from '$ts/main';
+    import { editMode, prepareModal, clicked_submit, getCourseByDecimal, decToLittleEndian, getWpnTypeByDec, getWpnNameByDec, showTipHoverWpn } from '$ts/main';
     import type { users, characters, suspended_account, discord } from '@prisma/client/edge';
     import { DateTime } from 'luxon';
 
@@ -495,7 +495,7 @@
                         : DateTime.fromJSDate(user.return_expires)
                               .setZone(DateTime.local().zoneName)
                               .setLocale('en')
-                              .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                              .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
 
                     {#if editId === user.id && catTypes['return_expires']}
                         <button class="red_btn" on:click={() => editModeSwitch(0, 'return_expires')}>
@@ -517,15 +517,12 @@
                                 <dl class="edit_area_form_parts text">
                                     <dt>Set new date</dt>
                                     <dd>
-                                        <p class="console_contents_note">
-                                            The date and time being managed in the database is UTC (Coordinated Universal Time), which is actually different from the date and time set here (the time
-                                            in the country where you live, local time).
-                                        </p>
-                                        <p class="console_contents_note">
-                                            For example, if you live in Japan (UTC+9) and you set the date and time here as "November 30, 00:00," the date and time in the database (used in the game)
-                                            would be "November 29, 15:00."
-                                        </p>
-                                        <input type="datetime-local" name="return_expires" value={convRFCToISOWithTime(user.return_expires)} />
+                                        <p class="console_contents_note">The date and time to be set are automatically converted to UTC.</p>
+                                        <input
+                                            type="datetime-local"
+                                            name="return_expires"
+                                            value={!user.return_expires ? '' : DateTime.fromJSDate(user.return_expires).toFormat("yyyy-MM-dd'T'HH:mm")}
+                                        />
                                     </dd>
                                 </dl>
 
@@ -862,7 +859,14 @@
                                     </p>
                                     <span class="rank">HR: {character.hrp} / GR: {character.gr}</span>
                                     <span class="char_id">Character ID: {character.id}</span>
-                                    <span class="last_login">Last Login: {convUnixToDate(character.last_login, false)}</span>
+                                    <span class="last_login"
+                                        >Last Login: {!character.last_login
+                                            ? 'No Data'
+                                            : DateTime.fromSeconds(character.last_login)
+                                                  .setZone(DateTime.local().zoneName)
+                                                  .setLocale('en')
+                                                  .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span
+                                    >
                                 </div>
                             {/if}
                         {/each}

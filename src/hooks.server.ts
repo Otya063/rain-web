@@ -4,7 +4,7 @@ import { loadAllLocales } from '$i18n/i18n-util.sync';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 import { initAcceptLanguageHeaderDetector } from 'typesafe-i18n/detectors';
 import { db, getServerData, type User } from '$ts/database';
-import { ALLOW_ORIGIN } from '$env/static/private';
+import { ALLOW_ORIGIN, MAIN_DOMAIN, AUTH_DOMAIN, ADMIN_CREDENTIALS } from '$env/static/private';
 
 loadAllLocales();
 const L = i18n();
@@ -12,7 +12,7 @@ const L = i18n();
 export const handle: Handle = async ({ event, resolve }) => {
     const auth = event.request.headers.get('Authorization');
     if (!event.url.origin.includes('localhost') && event.url.pathname !== '/admin') {
-        if (auth !== `Basic ${btoa(import.meta.env.VITE_ADMIN_CREDENTIALS)}`) {
+        if (auth !== `Basic ${btoa(ADMIN_CREDENTIALS)}`) {
             return new Response('Not authorized', {
                 status: 401,
                 headers: {
@@ -44,7 +44,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         if (!event.url.origin.includes('localhost')) {
             const session = event.cookies.get('rainLoginKey');
             if (!session) {
-                const redirectUrl = `${import.meta.env.VITE_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${import.meta.env.VITE_MAIN_DOMAIN}/admin`;
+                const redirectUrl = `${AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${MAIN_DOMAIN}/admin`;
 
                 return new Response(null, {
                     status: 302,
@@ -54,7 +54,7 @@ export const handle: Handle = async ({ event, resolve }) => {
 
             const authUser = (await getServerData('getAuthUserBySession', session)) as User;
             if (!authUser) {
-                const redirectUrl = `${import.meta.env.VITE_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${import.meta.env.VITE_MAIN_DOMAIN}/admin`;
+                const redirectUrl = `${AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${MAIN_DOMAIN}/admin`;
 
                 return new Response(null, {
                     status: 302,

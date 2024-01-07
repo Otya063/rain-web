@@ -1,11 +1,12 @@
 import _ from 'lodash';
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
+import { DATABASE_URL } from '$env/static/private';
 
 export const db = new PrismaClient({
     datasources: {
         db: {
-            url: import.meta.env.VITE_DATABASE_URL,
+            url: DATABASE_URL,
         },
     },
 }).$extends(withAccelerate());
