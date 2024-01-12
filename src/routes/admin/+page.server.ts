@@ -3,6 +3,7 @@ import { db, getServerData } from '$ts/database';
 import { error } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
+import { DateTime } from 'luxon';
 
 export const load: PageServerLoad = async ({ url, locals: { locale, authUser }, cookies }) => {
     const launcherSystem = await getServerData('getLauncherSystem');
@@ -326,53 +327,44 @@ const updateUserData: Action = async ({ request }) => {
 const suspendUser: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
-    const { user_id, username, character_id, reason_type, permanently_del } = dataObj;
+    const { user_id, username, reason_type, permanently_del, until_at } = dataObj;
 
     try {
         if (permanently_del === 'on') {
-            for (const char_id of character_id) {
-                await db.distribution.deleteMany({
-                    where: {
-                        character_id: Number(char_id),
-                    },
-                });
-            }
-
             await db.suspended_account.create({
                 data: {
                     user_id: Number(user_id),
                     username: String(username),
                     reason: Number(reason_type),
+                    until_at: DateTime.utc(9999, 1, 1).toISO(),
                     permanent: true,
                 },
             });
 
-            await db.users.delete({
+            await db.characters.deleteMany({
                 where: {
-                    id: Number(user_id),
+                    user_id: Number(user_id),
                 },
             });
 
             return { success: true, status: 'permanently_suspend_user', targetString: username };
         } else {
-            for (const char_id of character_id) {
-                await db.characters.update({
-                    where: {
-                        id: Number(char_id),
-                    },
-                    data: {
-                        deleted: true,
-                    },
-                });
-            }
-
             await db.suspended_account.create({
                 data: {
                     user_id: Number(user_id),
                     username: String(username),
                     reason: Number(reason_type),
-                    date,
+                    until_at: DateTime.fromISO(String(until_at)).toUTC().toISO(),
                     permanent: false,
+                },
+            });
+
+            await db.characters.updateMany({
+                where: {
+                    user_id: Number(user_id),
+                },
+                data: {
+                    deleted: true,
                 },
             });
 
@@ -393,19 +385,16 @@ const unsuspendUser: Action = async ({ request }) => {
     const data = await request.formData();
     const dataObj = convFormDataToObj(data);
     const { user_id, username } = dataObj;
-    const character_id = data.getAll('character_id');
 
     try {
-        for (const char_id of character_id) {
-            await db.characters.update({
-                where: {
-                    id: Number(char_id),
-                },
-                data: {
-                    deleted: false,
-                },
-            });
-        }
+        await db.characters.updateMany({
+            where: {
+                user_id: Number(user_id),
+            },
+            data: {
+                deleted: false,
+            },
+        });
 
         await db.suspended_account.delete({
             where: {

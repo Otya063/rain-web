@@ -12,7 +12,7 @@
     export let linkedCharacters: discord[];
 
     /* Related to Edit Mode
-====================================================*/
+    ====================================================*/
     let editId: number;
     interface CategoryType {
         [key: string]: boolean;
@@ -94,7 +94,7 @@
     };
 
     /* Related to Pagination
-====================================================*/
+    ====================================================*/
     const itemsPerPage = 5;
     let filterParam = '';
     $: filterValue = '';
@@ -485,7 +485,7 @@
                         : DateTime.fromJSDate(user.last_login)
                               .setZone(DateTime.local().zoneName)
                               .setLocale('en')
-                              .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                              .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
                 </dd>
 
                 <dt class="contents_term">Expiry Date for<br />Return Ward</dt>

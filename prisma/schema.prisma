@@ -120,6 +120,7 @@ model characters {
   discord_discord_char_idTocharacters                            discord[]            @relation("discord_char_idTocharacters")
   rengoku_score_rengoku_score_character_idTocharacters           rengoku_score[]      @relation("rengoku_score_character_idTocharacters")
   warehouse_warehouse_character_idTocharacters                   warehouse[]          @relation("warehouse_character_idTocharacters")
+  distribution_distribution_character_idTocharacters             distribution[]       @relation("distribution_character_idTocharacters")
 
   @@index([user_id])
 }
@@ -162,20 +163,23 @@ model discord_register {
 }
 
 model distribution {
-  id               Int       @id @default(autoincrement())
-  character_id     Int?
-  type             Int
-  deadline         DateTime? @db.Timestamptz(6)
-  event_name       String    @default("GM Gift!")
-  description      String    @default("~C05You received a gift!")
-  times_acceptable Int       @default(1)
-  min_hr           Int       @default(65535)
-  max_hr           Int       @default(65535)
-  min_sr           Int       @default(65535)
-  max_sr           Int       @default(65535)
-  min_gr           Int       @default(65535)
-  max_gr           Int       @default(65535)
-  data             Bytes
+  id                                               Int         @id @default(autoincrement())
+  character_id                                     Int?
+  type                                             Int
+  deadline                                         DateTime?   @db.Timestamptz(6)
+  event_name                                       String      @default("GM Gift!")
+  description                                      String      @default("~C05You received a gift!")
+  times_acceptable                                 Int         @default(1)
+  min_hr                                           Int         @default(65535)
+  max_hr                                           Int         @default(65535)
+  min_sr                                           Int         @default(65535)
+  max_sr                                           Int         @default(65535)
+  min_gr                                           Int         @default(65535)
+  max_gr                                           Int         @default(65535)
+  data                                             Bytes
+  characters_distribution_character_idTocharacters characters? @relation("distribution_character_idTocharacters", fields: [character_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([character_id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -545,11 +549,11 @@ model stamps {
 }
 
 model suspended_account {
-  user_id      Int      @id
-  username     String
-  reason       Int
-  suspended_at DateTime @default(now()) @db.Timestamptz(6)
-  permanent    Boolean
+  user_id   Int       @id
+  username  String
+  reason    Int
+  until_at  DateTime @db.Timestamptz(6)
+  permanent Boolean
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
