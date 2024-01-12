@@ -1,7 +1,9 @@
 <script lang="ts">
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
-    import { prepareModal, convUnixToDate, underscoreAndLowercase, clicked_submit, editMode, notice, err_details } from '$ts/main';
+    import { prepareModal, underscoreAndLowercase, clicked_submit, editMode, notice, err_details } from '$ts/main';
+    import type { launcher_info } from '@prisma/client/edge';
+    import { DateTime } from 'luxon';
 
     export let importantInfoData;
     export let defectsAndTroublesInfoData; // manually
@@ -9,15 +11,7 @@
     export let ingameEventsInfoData;
     export let updatesAndMaintenanceInfoData;
 
-    interface LauncherInfo {
-        id: number;
-        title: string;
-        url: string;
-        type: string;
-        created_at: number;
-    }
-
-    const info_type_data: Record<string, LauncherInfo[]> = {
+    const info_type_data: Record<string, launcher_info[]> = {
         Important: importantInfoData,
         'Defects and Troubles': defectsAndTroublesInfoData,
         'Management and Service': managementAndServiceInfoData,
@@ -56,7 +50,6 @@
     const cat_types: CategoryType = {
         title: false,
         url: false,
-        date: false,
         info_type: false,
     };
     const editModeHandle = (id: number, type: keyof CategoryType) => {
@@ -119,6 +112,7 @@
                 </dd>
 
                 <dt class="contents_term">Date</dt>
+                <!-- unixから変更したのでサーバーサイドプロセス要確認 -->
                 <dd class="contents_desc">This is set with the current date automatically.</dd>
             </dl>
 
@@ -242,39 +236,10 @@
 
                         <dt class="contents_term">Date</dt>
                         <dd class="contents_desc">
-                            {convUnixToDate(info.created_at, false)}
-
-                            {#if edit_id === info.id && cat_types['date']}
-                                <button class="red_btn" on:click={() => editModeHandle(0, 'date')}>
-                                    <span class="btn_icon material-icons">close</span>
-                                    <span class="btn_text">Cancel</span>
-                                </button>
-                            {:else}
-                                <button class="normal_btn" on:click={() => editModeHandle(info.id, 'date')}>
-                                    <span class="btn_icon material-icons">mode_edit</span>
-                                    <span class="btn_text">Edit</span>
-                                </button>
-                            {/if}
-
-                            {#if edit_id === info.id && cat_types['date']}
-                                <form transition:slide class="edit_area_form" action="?/updateInfoData" method="POST">
-                                    <input type="hidden" name="info_id" value={edit_id} />
-                                    <div class="edit_area enter">
-                                        <p class="edit_area_title">Change Date</p>
-                                        <dl class="edit_area_form_parts text">
-                                            <dt>Set new date</dt>
-                                            <dd>
-                                                <input type="date" name="created_at" value={convUnixToDate(info.created_at, true)} />
-                                            </dd>
-                                        </dl>
-
-                                        <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
-                                            <span class="btn_icon material-icons">check</span>
-                                            <span class="btn_text">Save</span>
-                                        </button>
-                                    </div>
-                                </form>
-                            {/if}
+                            {DateTime.fromJSDate(info.created_at)
+                                .setZone(DateTime.local().zoneName)
+                                .setLocale('en')
+                                .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
                         </dd>
 
                         <dt class="contents_term">Info Type</dt>

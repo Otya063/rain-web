@@ -590,7 +590,7 @@
             justify-content: space-around;
             background-color: #f0f1f2;
 
-            // 選択式
+            // ラジオボタン
             &.select {
                 align-items: center;
                 padding: 4% 2%;
@@ -601,7 +601,7 @@
                 }
             }
 
-            // 入力式
+            // 通常
             &.enter {
                 flex-direction: column;
                 padding: 2% 5%;
@@ -753,15 +753,17 @@
         font-size: 1.6rem;
         border-radius: 4px;
         transition: all 0.3s;
+        padding: 5px 11px;
 
         // ボタンアイコン
         .btn_icon {
-            padding: 6px 5px 4px 10px;
+            padding-right: 5px;
         }
 
         // ボタンテキスト
         .btn_text {
-            padding-right: 13px;
+            line-height: 16px;
+            font-size: 1.7rem;
         }
 
         &.active,

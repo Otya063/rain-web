@@ -1,11 +1,12 @@
 import _ from 'lodash';
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
+import { DATABASE_URL } from '$env/static/private';
 
 export const db = new PrismaClient({
     datasources: {
         db: {
-            url: import.meta.env.VITE_DATABASE_URL,
+            url: DATABASE_URL,
         },
     },
 }).$extends(withAccelerate());
@@ -149,7 +150,7 @@ export const getServerData = async (data1: string, data2: string | number | unde
         case 'getAuthUserBySession':
             data = db.users.findFirst({
                 where: {
-                    authToken: data2,
+                    web_login_key: data2,
                 },
             });
             break;

@@ -1,17 +1,10 @@
 <script lang="ts">
     import { slide } from 'svelte/transition';
     import { clicked_submit, editMode } from '$ts/main';
+    import type { launcher_system } from '@prisma/client/edge';
 
     export let systemData;
-    const {
-        RainJP,
-        RainUS,
-        RainEU,
-        update,
-        debug,
-        launcher_ver,
-        rain_admins,
-    }: { RainJP: boolean; RainUS: boolean; RainEU: boolean; update: boolean; debug: boolean; launcher_ver: string; rain_admins: string[] } = systemData;
+    const { RainJP, RainUS, RainEU, update, debug, client_data }: launcher_system = systemData;
 
     /* Below is the edit mode script
     ====================================================*/
@@ -24,7 +17,7 @@
         rainEU: false,
         update: false,
         debug: false,
-        launcher_ver: false,
+        client_data: false,
     };
 
     const editModeHandle = (type: keyof CategoryType) => {
@@ -347,32 +340,53 @@
         </dd>
 
         <!-- Launcher Version -->
-        <dt class="contents_term">Launcher Version</dt>
+        <dt class="contents_term">Client Data</dt>
         <dd class="contents_desc">
-            {launcher_ver}
+            {client_data[0]} (The version of client data)
+            <br />
+            {client_data[1]} (Whether to force updating client data)
+            <p class="console_contents_note">* This is an alternative to the patch server, but the installation isn't automatic.</p>
 
-            {#if catTypes['launcher_ver']}
-                <button class="red_btn" on:click={() => editModeHandle('launcher_ver')}>
+            {#if catTypes['client_data']}
+                <button class="red_btn" on:click={() => editModeHandle('client_data')}>
                     <span class="btn_icon material-icons">close</span>
                     <span class="btn_text">Cancel</span>
                 </button>
             {:else}
-                <button class="normal_btn" on:click={() => editModeHandle('launcher_ver')}>
+                <button class="normal_btn" on:click={() => editModeHandle('client_data')}>
                     <span class="btn_icon material-icons">mode_edit</span>
                     <span class="btn_text">Edit</span>
                 </button>
             {/if}
 
-            {#if catTypes['launcher_ver']}
+            {#if catTypes['client_data']}
                 <form transition:slide class="edit_area_form" action="?/updateSystemMode" method="POST">
                     <div class="edit_area enter">
-                        <p class="edit_area_title">Change the Version of Rain Launcher</p>
+                        <p class="edit_area_title">Change the Version of Client Data</p>
                         <dl class="edit_area_form_parts text">
                             <dt>Enter the version</dt>
                             <dd>
-                                <input type="number" name="launcher_ver" step="0.1" inputmode="decimal" pattern="\d*" value={launcher_ver} placeholder="Enter the version" />
+                                <input type="number" name="client_data_0" step="0.1" inputmode="decimal" pattern="\d*" value={client_data[0]} placeholder="Enter the version" />
                             </dd>
                         </dl>
+                    </div>
+
+                    <div class="edit_area select">
+                        <p class="edit_area_title">Select Whether to Force</p>
+                        <ul class="edit_area_form_parts radio">
+                            <li>
+                                <label for="update_force">
+                                    <input type="radio" name="client_data_1" id="update_force" value="force" checked={client_data[1] === 'force'} />
+                                    Force
+                                </label>
+                            </li>
+                            <li>
+                                <label for="update_not_force">
+                                    <input type="radio" name="client_data_1" id="update_not_force" value="not_force" checked={client_data[1] === 'not_force'} />
+                                    Not Force
+                                </label>
+                            </li>
+                        </ul>
 
                         <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
                             <span class="btn_icon material-icons">check</span>

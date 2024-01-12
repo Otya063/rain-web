@@ -3,6 +3,7 @@
     import { clicked_submit, modalTitle, modalFormAction, cancelModal, suspendUser, suspendUid, suspendUsername } from '$ts/main';
 
     export let data;
+    let permanent: boolean;
     const characterData = data.charactersWithoutBytes;
 </script>
 
@@ -32,7 +33,6 @@
                             <p>Owned Character Name</p>
                             <span>
                                 {#each _.sortBy( _.filter(characterData, (c_data) => c_data.user_id === $suspendUid), 'id' ) as character, i}
-                                    <input type="hidden" name="character_id" value={character.id} />
                                     ({i + 1}){`${character.name}　`}
                                 {/each}
                             </span>
@@ -52,7 +52,12 @@
 
                             <li class="modal_list_item">
                                 <p>Permanently Suspend</p>
-                                <input type="checkbox" name="permanently_del" />
+                                <input type="checkbox" name="permanently_del" bind:checked={permanent} />
+                            </li>
+
+                            <li class="modal_list_item">
+                                <p>Suspention Period (until at)</p>
+                                <input type="datetime-local" name="until_at" class:disabled_elm={permanent} />
                             </li>
                         {/if}
                     </ul>
@@ -65,6 +70,7 @@
                         <p class="modal_note">
                             * If "Permanently Suspend" is checked, the user account, including all character data, will be completely deleted from the database and can't be restored.
                         </p>
+                        <p class="modal_note">* "Suspention Period" is automatically converted to UTC.</p>
                     {/if}
                 </div>
                 <div class="ban_btn_group">

@@ -4,8 +4,8 @@ generator client {
 
 datasource db {
   provider     = "postgresql"
-  url          = env("VITE_DATABASE_URL")
-  directUrl    = env("VITE_DIRECT_URL")
+  url          = env("DATABASE_URL")
+  directUrl    = env("DIRECT_URL")
   relationMode = "prisma"
 }
 
@@ -120,6 +120,7 @@ model characters {
   discord_discord_char_idTocharacters                            discord[]            @relation("discord_char_idTocharacters")
   rengoku_score_rengoku_score_character_idTocharacters           rengoku_score[]      @relation("rengoku_score_character_idTocharacters")
   warehouse_warehouse_character_idTocharacters                   warehouse[]          @relation("warehouse_character_idTocharacters")
+  distribution_distribution_character_idTocharacters             distribution[]       @relation("distribution_character_idTocharacters")
 
   @@index([user_id])
 }
@@ -162,20 +163,23 @@ model discord_register {
 }
 
 model distribution {
-  id               Int       @id @default(autoincrement())
-  character_id     Int?
-  type             Int
-  deadline         DateTime? @db.Timestamptz(6)
-  event_name       String    @default("GM Gift!")
-  description      String    @default("~C05You received a gift!")
-  times_acceptable Int       @default(1)
-  min_hr           Int       @default(65535)
-  max_hr           Int       @default(65535)
-  min_sr           Int       @default(65535)
-  max_sr           Int       @default(65535)
-  min_gr           Int       @default(65535)
-  max_gr           Int       @default(65535)
-  data             Bytes
+  id                                               Int         @id @default(autoincrement())
+  character_id                                     Int?
+  type                                             Int
+  deadline                                         DateTime?   @db.Timestamptz(6)
+  event_name                                       String      @default("GM Gift!")
+  description                                      String      @default("~C05You received a gift!")
+  times_acceptable                                 Int         @default(1)
+  min_hr                                           Int         @default(65535)
+  max_hr                                           Int         @default(65535)
+  min_sr                                           Int         @default(65535)
+  max_sr                                           Int         @default(65535)
+  min_gr                                           Int         @default(65535)
+  max_gr                                           Int         @default(65535)
+  data                                             Bytes
+  characters_distribution_character_idTocharacters characters? @relation("distribution_character_idTocharacters", fields: [character_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([character_id])
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -427,22 +431,22 @@ model launcher_banner {
 }
 
 model launcher_info {
-  id         Int    @id @default(autoincrement())
-  title      String @db.VarChar(255)
-  url        String @db.VarChar(255)
+  id         Int      @id @default(autoincrement())
+  title      String   @db.VarChar(255)
+  url        String?  @db.VarChar(255)
   type       String
-  created_at Int
+  created_at DateTime @default(now()) @db.Timestamptz(6)
 }
 
 model launcher_system {
-  id           Int       @id
-  RainJP       Boolean
-  RainUS       Boolean
-  RainEU       Boolean
-  update       Boolean
-  debug        Boolean
-  launcher_ver String
-  rain_admins  String[]
+  id          Int      @id
+  RainJP      Boolean
+  RainUS      Boolean
+  RainEU      Boolean
+  update      Boolean
+  debug       Boolean
+  client_data String[]
+  rain_admins String[]
 }
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by Prisma Client.
@@ -545,10 +549,10 @@ model stamps {
 }
 
 model suspended_account {
-  user_id   Int     @id
+  user_id   Int       @id
   username  String
   reason    Int
-  date      Int
+  until_at  DateTime @db.Timestamptz(6)
   permanent Boolean
 }
 
@@ -590,7 +594,7 @@ model users {
   gacha_premium                                    Int?
   gacha_trial                                      Int?
   frontier_points                                  Int?
-  authToken                                        String?            @unique
+  web_login_key                                    String?
   characters                                       characters[]
   discord_register_discord_register_user_idTousers discord_register[] @relation("discord_register_user_idTousers")
 }

@@ -137,3 +137,9 @@ h2 {
         font-family: $font_title_en;
     }
 }
+
+// 要素無効化
+.disabled_elm {
+    opacity: 0.6;
+    pointer-events: none;
+}
