@@ -3,7 +3,7 @@ import { detectLocale, i18n, isLocale } from '$i18n/i18n-util';
 import { loadAllLocales } from '$i18n/i18n-util.sync';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
 import { initAcceptLanguageHeaderDetector } from 'typesafe-i18n/detectors';
-import { db, getServerData, type User } from '$ts/database';
+import { db, getServerData, type User } from '$lib/database';
 import { ALLOW_ORIGIN, MAIN_DOMAIN, AUTH_DOMAIN, ADMIN_CREDENTIALS } from '$env/static/private';
 
 loadAllLocales();

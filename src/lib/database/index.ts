@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { PrismaClient } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 import { DATABASE_URL } from '$env/static/private';
+import { paginate } from "prisma-extension-pagination";
 
 export const db = new PrismaClient({
     datasources: {
@@ -9,7 +10,15 @@ export const db = new PrismaClient({
             url: DATABASE_URL,
         },
     },
-}).$extends(withAccelerate());
+})
+    .$extends(withAccelerate())
+    .$extends({
+        model: {
+            users: {
+                paginate,
+            },
+        },
+    });
 
 export const getServerData = async (data1: string, data2: string | number | undefined = undefined, data3: string | undefined = undefined) => {
     let data: [];

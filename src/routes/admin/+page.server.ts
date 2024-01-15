@@ -1,14 +1,14 @@
-import { convFormDataToObj, getCourseByFormData, deleteFileViaApi, discordLinkConvertor } from '$ts/main';
-import { db, getServerData } from '$ts/database';
+import { convFormDataToObj, getCourseByFormData, deleteFileViaApi, discordLinkConvertor, excludeCharacters } from '$ts/main';
+import { db, getServerData } from '$lib/database';
 import { error } from '@sveltejs/kit';
 import type { Action, Actions, PageServerLoad } from './$types';
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
 import { DateTime } from 'luxon';
+import type { characters, users } from '@prisma/client/edge';
 
 export const load: PageServerLoad = async ({ url, locals: { locale, authUser }, cookies }) => {
     const launcherSystem = await getServerData('getLauncherSystem');
 
-    // when prod env, check if the user is an admin
     if (!url.origin.includes('localhost')) {
         const isAdmin: boolean = launcherSystem['rain_admins'].includes(authUser.username);
 
@@ -27,39 +27,7 @@ export const load: PageServerLoad = async ({ url, locals: { locale, authUser }, 
 
     const updatesAndMaintenance = await getServerData('getInformation', 5);
 
-    const users = await getServerData('getAllUsers');
-    const usersWithoutBytes = users.map(({ item_box, ...rest }) => rest);
-
-    const characters = await getServerData('getAllCharacters');
-    const charactersWithoutBytes = characters.map(
-        ({
-            savedata,
-            decomyset,
-            hunternavi,
-            otomoairou,
-            partner,
-            platebox,
-            platedata,
-            platemyset,
-            rengokudata,
-            savemercenary,
-            minidata,
-            gacha_items,
-            house_info,
-            login_boost,
-            skin_hist,
-            scenariodata,
-            savefavoritequest,
-            mezfes,
-            ...rest
-        }) => rest
-    );
-
-    const bannedUsers = await getServerData('getAllSuspendedUsers');
-
     const launcherBanner = await getServerData('getBannerData');
-
-    const linkedCharacters = await getServerData('getAllLinkedCharacters');
 
     return {
         launcherSystem,
@@ -68,11 +36,7 @@ export const load: PageServerLoad = async ({ url, locals: { locale, authUser }, 
         managementAndService,
         ingameEvents,
         updatesAndMaintenance,
-        usersWithoutBytes,
-        charactersWithoutBytes,
-        bannedUsers,
         launcherBanner,
-        linkedCharacters,
     };
 };
 
@@ -781,6 +745,206 @@ const restoreCharacter: Action = async ({ request }) => {
     }
 };
 
+const getFirstQueryResults: Action = async ({ request }) => {
+    const data = await request.formData();
+    const dataObj = convFormDataToObj(data);
+    const { filter_param, filter_value }: { filter_param: 'username' | 'web_login_key'; filter_value: string } = dataObj;
+
+    let [users, meta] = await db.users
+        .paginate({
+            where: {
+                [filter_param]: {
+                    contains: filter_value,
+                },
+            },
+            orderBy: {
+                id: 'asc',
+            },
+        })
+        .withCursor({
+            limit: 5,
+        });
+
+    users = await Promise.all(
+        users.map(async (user) => ({
+            ...user,
+            characters: await Promise.all(
+                (
+                    await db.characters.findMany({
+                        where: {
+                            user_id: user.id,
+                        },
+                        select: {
+                            id: true,
+                            user_id: true,
+                            is_new_character: true,
+                            name: true,
+                            gr: true,
+                            hrp: true,
+                            weapon_type: true,
+                            weapon_id: true,
+                            last_login: true,
+                            deleted: true,
+                        },
+                        orderBy: {
+                            id: 'asc',
+                        },
+                    })
+                ).map(async (character) => ({
+                    ...character,
+                    discord: await db.discord.findFirst({
+                        where: {
+                            char_id: character.id,
+                        },
+                    }),
+                }))
+            ),
+            get char_name_array() {
+                return this.characters.map((character: characters) => character.name || 'Ready to Hunt');
+            },
+            not_suspended: !(await db.suspended_account.findFirst({
+                where: {
+                    user_id: user.id,
+                },
+            })),
+        }))
+    );
+
+    return { users, meta };
+};
+
+const userPaginateBack: Action = async ({ request }) => {
+    const data = await request.formData();
+    const dataObj = convFormDataToObj(data);
+    const { filter_param, filter_value, start_cursor }: { filter_param: 'username' | 'web_login_key'; filter_value: string; start_cursor: string } = dataObj;
+
+    let [users, meta] = await db.users
+        .paginate({
+            where: {
+                [filter_param]: {
+                    contains: filter_value,
+                },
+            },
+        })
+        .withCursor({
+            limit: 5,
+            before: start_cursor,
+        });
+
+    users = await Promise.all(
+        users.map(async (user) => ({
+            ...user,
+            characters: await Promise.all(
+                (
+                    await db.characters.findMany({
+                        where: {
+                            user_id: user.id,
+                        },
+                        select: {
+                            id: true,
+                            user_id: true,
+                            is_new_character: true,
+                            name: true,
+                            gr: true,
+                            hrp: true,
+                            weapon_type: true,
+                            weapon_id: true,
+                            last_login: true,
+                            deleted: true,
+                        },
+                        orderBy: {
+                            id: 'asc',
+                        },
+                    })
+                ).map(async (character) => ({
+                    ...character,
+                    discord: await db.discord.findFirst({
+                        where: {
+                            char_id: character.id,
+                        },
+                    }),
+                }))
+            ),
+            get char_name_array() {
+                return this.characters.map((character: characters) => character.name);
+            },
+            not_suspended: !(await db.suspended_account.findFirst({
+                where: {
+                    user_id: user.id,
+                },
+            })),
+        }))
+    );
+
+    return { users, meta };
+};
+
+const userPaginateNext: Action = async ({ request }) => {
+    const data = await request.formData();
+    const dataObj = convFormDataToObj(data);
+    const { filter_param, filter_value, end_cursor }: { filter_param: 'username' | 'web_login_key'; filter_value: string; end_cursor: string } = dataObj;
+
+    let [users, meta] = await db.users
+        .paginate({
+            where: {
+                [filter_param]: {
+                    contains: filter_value,
+                },
+            },
+        })
+        .withCursor({
+            limit: 5,
+            after: end_cursor,
+        });
+
+    users = await Promise.all(
+        users.map(async (user) => ({
+            ...user,
+            characters: await Promise.all(
+                (
+                    await db.characters.findMany({
+                        where: {
+                            user_id: user.id,
+                        },
+                        select: {
+                            id: true,
+                            user_id: true,
+                            is_new_character: true,
+                            name: true,
+                            gr: true,
+                            hrp: true,
+                            weapon_type: true,
+                            weapon_id: true,
+                            last_login: true,
+                            deleted: true,
+                        },
+                        orderBy: {
+                            id: 'asc',
+                        },
+                    })
+                ).map(async (character) => ({
+                    ...character,
+                    discord: await db.discord.findFirst({
+                        where: {
+                            char_id: character.id,
+                        },
+                    }),
+                }))
+            ),
+            get char_name_array() {
+                return this.characters.map((character: characters) => character.name);
+            },
+            not_suspended: !(await db.suspended_account.findFirst({
+                where: {
+                    user_id: user.id,
+                },
+            })),
+        }))
+    );
+
+    return { users, meta };
+};
+
 export const actions: Actions = {
     updateSystemMode,
     createInfoData,
@@ -796,4 +960,7 @@ export const actions: Actions = {
     unlinkDiscord,
     deleteCharacter,
     restoreCharacter,
+    getFirstQueryResults,
+    userPaginateBack,
+    userPaginateNext,
 };

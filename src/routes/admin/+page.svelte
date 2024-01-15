@@ -159,7 +159,7 @@
     {/if}
 {/if}
 
-<SuspendUser {data} />
+<SuspendUser />
 
 <DeleteInfo />
 
@@ -179,7 +179,7 @@
             <span class="material-symbols-outlined">admin_panel_settings</span>
             Admin Console
         </h1>
-        <AdminContents {data} />
+        <AdminContents {data} {form} />
     </article>
 </main>
 

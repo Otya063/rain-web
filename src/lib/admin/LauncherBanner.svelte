@@ -233,7 +233,14 @@
                     <p class="console_contents_list_title">
                         <button
                             class="red_btn"
-                            on:click={() => prepareModal('deleteBnr', 'Are you sure you want to delete the following banner data?', 'deleteBnrData', bnr.id, bnr.en_img_src, bnr.bnr_name)}
+                            on:click={() =>
+                                prepareModal('deleteBnr', {
+                                    title: 'Delete the following banner data?',
+                                    form_action: 'deleteBnrData',
+                                    bnr_id: bnr.id,
+                                    bnr_url: bnr.en_img_src,
+                                    bnr_name: bnr.bnr_name,
+                                })}
                         >
                             <span class="btn_icon material-icons">delete</span>
                             <span class="btn_text">Delete</span>

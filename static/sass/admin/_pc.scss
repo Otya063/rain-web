@@ -148,14 +148,12 @@
                 // ペジネーションボタングループ
                 .pagination_btn_list {
                     text-align: center;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
+                    user-select: none;
                     margin: 2% 0;
 
                     // 各ボタン
                     .pagination_btn_item {
-                        padding: 0.5% 1%;
+                        padding: 1% 1% 0.7%;
                         margin: 0 1%;
                         border: #272727 solid 1px;
                         background: #f7f6f6;
@@ -177,11 +175,12 @@
                 // コンテンツ内リストタイトル
                 .console_contents_list_title {
                     width: 100%;
-                    font-size: 2rem;
-                    padding: 2% 0 0 1%;
+                    font-size: 2.5rem;
+                    padding: 1% 0 0 1%;
                     color: #df9e27;
                     user-select: none;
                     border-bottom: #df9e27 2px solid;
+                    font-weight: 700;
 
                     // 赤ボタン調整
                     .red_btn {
@@ -700,6 +699,21 @@
                         }
                     }
                 }
+
+                // ユーザー内コントロールフォーム
+                .filter_form {
+                    position: relative;
+                    display: flex;
+                    width: 70%;
+                    height: 50px;
+                    justify-content: flex-start;
+                    align-items: center;
+
+                    .green_btn {
+                        top: auto;
+                        right: 0px;
+                    }
+                }
             }
         }
     }
@@ -838,6 +852,23 @@
             background: #0ad275;
             border: 1px solid #0ad275;
         }
+
+        // ロード中
+        &.loading_btn {
+            border-radius: 50%;
+        }
+    }
+
+    // ボタンロード中
+    .loading {
+        @include authLoaderKey;
+        width: 24px;
+        height: 24px;
+        margin: 10px;
+        border-radius: 50%;
+        border: 0.25rem solid rgb(79 79 79 / 20%);
+        border-top-color: black;
+        animation: authLoaderAni 1s infinite linear;
     }
 
     // 無効化ボタン
@@ -1046,7 +1077,7 @@
         .wpn_text {
             position: absolute;
             font-weight: 700;
-            width: 160px;
+            width: 130px;
             left: 17%;
             top: 50%;
             overflow: hidden;
@@ -1093,7 +1124,7 @@
         .rank {
             position: absolute;
             top: 44%;
-            left: 50%;
+            left: 45%;
             font-weight: 700;
         }
 
@@ -1101,7 +1132,7 @@
         .char_id {
             position: absolute;
             top: 57.5%;
-            left: 50%;
+            left: 45%;
             font-weight: 700;
         }
 
@@ -1109,7 +1140,7 @@
         .last_login {
             position: absolute;
             top: 70%;
-            left: 50%;
+            left: 45%;
             font-weight: 700;
         }
     }

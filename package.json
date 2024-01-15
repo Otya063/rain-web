@@ -39,6 +39,7 @@
 		"@prisma/extension-accelerate": "^0.6.2",
 		"lodash": "^4.17.21",
 		"luxon": "^3.4.4",
+		"prisma-extension-pagination": "^0.6.0",
 		"typesafe-i18n": "^5.26.2"
 	}
 }

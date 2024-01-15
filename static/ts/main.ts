@@ -156,118 +156,141 @@ export const err_details = writable('');
 export const errDetailMode = writable(false);
 export const notice = writable(false);
 export const clicked_submit = writable(false);
-export const modalTitle = writable('');
-export const modalFormAction = writable('');
-export const suspendUser = writable(false);
-export const suspendUid = writable(0);
-export const suspendUsername = writable('');
 export const deleteInfo = writable(false);
-export const infoId = writable(0);
-export const infoTitle = writable('');
-export const infoURL = writable('');
-export const infoType = writable('');
+export const deleteInfoData = writable<DeleteInfoData>({});
 export const deleteBnr = writable(false);
-export const bnrId = writable(0);
-export const bnrURL = writable('');
-export const bnrName = writable('');
-export const linkDiscord = writable(false);
-export const linkUId = writable(0);
-export const linkUsername = writable('');
-export const linkCId = writable(0);
-export const linkCName = writable('');
-export const linkDiscordId = writable('');
+export const deleteBnrData = writable<DeleteBnrData>({});
+export const suspendUser = writable(false);
+export const suspendUserData = writable<SuspendUserData>({});
 export const deleteChar = writable(false);
-export const deleteCharId = writable(0);
-export const deleteCharName = writable('');
+export const deleteCharacterData = writable<DeleteCharacterData>({});
+export const linkDiscord = writable(false);
+export const linkDiscordData = writable<LinkDiscordData>({});
+
+interface ModalCommonData {
+    title: string;
+    form_action: string;
+}
+
+interface DeleteInfoData extends ModalCommonData {
+    info_id: number;
+    info_title: string;
+    info_url: string | null;
+    info_type: string;
+}
+
+interface DeleteBnrData extends ModalCommonData {
+    bnr_id: number;
+    bnr_url: string;
+    bnr_name: string;
+}
+
+interface SuspendUserData extends ModalCommonData {
+    user_id: number;
+    username: string;
+    char_name: string[];
+}
+
+interface DeleteCharacterData extends ModalCommonData {
+    char_id: number;
+    char_name: string;
+}
+
+interface LinkDiscordData extends ModalCommonData {
+    user_id: number;
+    username: string;
+    char_id: number;
+    char_name: string;
+    discord_id?: string;
+}
+
+/* Switching Buttons During Authentication
+====================================================*/
+export const switchBtnInAuth = (enable: boolean, btnElm: HTMLElement | null, labelElm: HTMLCollectionOf<Element> | null = null, inputElm: NodeListOf<Element> | null = null): void => {
+    if (enable) {
+        btnElm?.classList.remove('loading_btn', 'disabled_elm');
+
+        if (labelElm) {
+            Array.from(labelElm).forEach((elm) => {
+                elm.classList.remove('disabled_elm');
+            });
+        }
+
+        inputElm?.forEach((elm) => {
+            elm.classList.remove('disabled_elm');
+        });
+    } else {
+        btnElm?.classList.add('loading_btn', 'disabled_elm');
+
+        if (labelElm) {
+            Array.from(labelElm).forEach((elm) => {
+                elm.classList.add('disabled_elm');
+            });
+        }
+
+        inputElm?.forEach((elm) => {
+            elm.classList.add('disabled_elm');
+        });
+    }
+};
 
 /* prepare modal window data
 ====================================================*/
-export const prepareModal = (
-    type: string,
-    title: string,
-    action: string,
-    data1: string | number | null = '',
-    data2: string | null = '',
-    data3: string | number | null = '',
-    data4: string | null = '',
-    data5: string | null = ''
-) => {
+export const prepareModal = (type: string, data: DeleteInfoData | DeleteBnrData | SuspendUserData | DeleteCharacterData | LinkDiscordData): void => {
     switch (type) {
-        case 'suspendUser':
-            suspendUser.set(true);
-            modalTitle.set(title);
-            modalFormAction.set(action);
-            suspendUid.set(data1);
-            suspendUsername.set(data2);
-            break;
-
-        case 'deleteInfo':
+        case 'deleteInfo': {
             deleteInfo.set(true);
-            modalTitle.set(title);
-            modalFormAction.set(action);
-            infoId.set(data1);
-            infoTitle.set(data2);
-            infoURL.set(data3);
-            infoType.set(data4);
-            break;
+            deleteInfoData.set(data);
 
-        case 'deleteBnr':
+            break;
+        }
+
+        case 'deleteBnr': {
             deleteBnr.set(true);
-            modalTitle.set(title);
-            modalFormAction.set(action);
-            bnrId.set(data1);
-            bnrURL.set(data2);
-            bnrName.set(data3);
-            break;
+            deleteBnrData.set(data);
 
-        case 'linkDiscord':
-            linkDiscord.set(true);
-            modalTitle.set(title);
-            modalFormAction.set(action);
-            linkUId.set(data1);
-            linkUsername.set(data2);
-            linkCId.set(data3);
-            linkCName.set(data4);
-            linkDiscordId.set(data5);
             break;
+        }
 
-        case 'deleteCharacter':
+        case 'suspendUser': {
+            suspendUser.set(true);
+            suspendUserData.set(data);
+
+            break;
+        }
+
+        case 'deleteCharacter': {
             deleteChar.set(true);
-            modalTitle.set(title);
-            modalFormAction.set(action);
-            deleteCharId.set(data1);
-            deleteCharName.set(data2);
+            deleteCharacterData.set(data);
+
             break;
+        }
+
+        case 'linkDiscord': {
+            linkDiscord.set(true);
+            linkDiscordData.set(data);
+
+            break;
+        }
 
         default:
-            throw new Error('Invalid input.');
+            throw new Error('Invalid Type');
     }
 };
 
 /* close modal window
 ====================================================*/
-export const cancelModal = () => {
+export const cancelModal = (): void => {
     deleteInfo.set(false);
     suspendUser.set(false);
     deleteBnr.set(false);
     linkDiscord.set(false);
     deleteChar.set(false);
-    modalTitle.set('');
-    modalFormAction.set('');
-    suspendUid.set(0);
-    suspendUsername.set('');
-    infoTitle.set('');
-    infoURL.set('');
-    infoType.set('');
-    bnrId.set(0);
-    bnrURL.set('');
-    bnrName.set('');
-    linkUId.set(0);
-    linkUsername.set('');
-    linkCId.set(0);
-    linkCName.set('');
-    deleteCharId.set(0);
-    deleteCharName.set('');
+    deleteInfoData.set({});
+    deleteBnrData.set({});
+    suspendUserData.set({});
+    deleteCharacterData.set({});
+    linkDiscordData.set({});
 };
 
 /* Pause and Resume on setTimeout Function

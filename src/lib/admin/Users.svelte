@@ -1,23 +1,23 @@
 <script lang="ts">
-    import { page } from '$app/stores';
     import _ from 'lodash';
-    import { slide } from 'svelte/transition';
-    import { editMode, prepareModal, clicked_submit, getCourseByDecimal, decToLittleEndian, getWpnTypeByDec, getWpnNameByDec, showTipHoverWpn } from '$ts/main';
-    import type { users, characters, suspended_account, discord } from '@prisma/client/edge';
+    import { fade, slide } from 'svelte/transition';
+    import { applyAction, enhance } from '$app/forms';
+    import { editMode, prepareModal, clicked_submit, getCourseByDecimal, decToLittleEndian, getWpnTypeByDec, getWpnNameByDec, showTipHoverWpn, switchBtnInAuth } from '$ts/main';
     import { DateTime } from 'luxon';
+    import type { ActionData } from '../../routes/admin/$types';
 
-    export let usersData: users[];
-    export let charactersData: characters[];
-    export let bannedUsersData: suspended_account[];
-    export let linkedCharacters: discord[];
+    export let form: ActionData;
+    let paginationBackClick = false;
+    let paginationNextClick = false;
+    let specifiedUser = true;
+    let filterValue: string;
+    let filterParam: string;
+    let btnStage = 1;
 
     /* Related to Edit Mode
     ====================================================*/
     let editId: number;
-    interface CategoryType {
-        [key: string]: boolean;
-    }
-    const catTypes: CategoryType = {
+    const catTypes: { [key: string]: boolean } = {
         username: false,
         password: false,
         rights: false,
@@ -26,13 +26,13 @@
         gacha_trial: false,
         frontier_points: false,
     };
-    const adminCtrlTypes: CategoryType = {
+    const adminCtrlTypes: { [key: string]: boolean } = {
         filter: false,
         courseCtrl: false,
     };
 
     // switch edit contents
-    const editModeSwitch = (id: number, type: keyof CategoryType) => {
+    const editModeSwitch = (id: number, type: keyof { [key: string]: boolean }) => {
         // check if another cat type is already open
         const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
 
@@ -65,7 +65,7 @@
     };
 
     // switch admin control contents
-    const adminCtrlSwitch = (type: keyof CategoryType) => {
+    const adminCtrlSwitch = (type: keyof { [key: string]: boolean }) => {
         // check if another cat type is already open
         const activeCat = Object.values(adminCtrlTypes).some((boolean) => boolean === true);
 
@@ -92,75 +92,6 @@
         // toggle true <-> false
         adminCtrlTypes[type] = !adminCtrlTypes[type];
     };
-
-    /* Related to Pagination
-    ====================================================*/
-    const itemsPerPage = 5;
-    let filterParam = '';
-    $: filterValue = '';
-    $: filterRegExp = new RegExp(String(filterValue), 'i');
-
-    // set currentPage from the query parameter or default value (1)
-    let currentPage = Number($page.url.searchParams.get('userPage')) || 1;
-
-    // switch the display data with pagination button
-    const switchPagination = (index: number, filterMode: boolean = false) => {
-        currentPage = index;
-        const currentURL = $page.url;
-        currentURL.searchParams.set('userPage', String(currentPage));
-        window.history.pushState({ path: currentURL.href }, '', currentURL.href);
-        currentUsers = paginatedUsers(filterMode);
-    };
-
-    // return what is actually displayed
-    const paginatedUsers = (filterMode: boolean = false): users[] => {
-        const startIndex = (currentPage - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-
-        // returns filtered data if filter mode is true, raw data if normal
-        return filterMode ? _.sortBy(filteredUsers, 'id').slice(startIndex, endIndex) : _.sortBy(usersData, 'id').slice(startIndex, endIndex);
-    };
-
-    // filtering data based on param
-    const calculateFilter = (): users[] => {
-        return _.sortBy(
-            _.filter(usersData, (u_data) => {
-                switch (filterParam) {
-                    case 'id':
-                        return filterRegExp.test(u_data.id.toString());
-
-                    case 'username':
-                        return filterRegExp.test(u_data.username);
-
-                    default:
-                        return u_data.id === u_data.id;
-                }
-            }),
-            'id'
-        );
-    };
-
-    // reset pagination to prevent malfunctions (when select filterParam or input filterValue)
-    const resetPagination = (filterMode: boolean = false) => {
-        currentPage = 1;
-        const currentURL = $page.url;
-        currentURL.searchParams.delete('userPage');
-        window.history.pushState({ path: currentURL.href }, '', currentURL.href);
-        currentUsers = paginatedUsers(filterMode);
-    };
-
-    // clear input area
-    const clearFilterInput = () => {
-        const filter_input = document.getElementById('filter_input') as HTMLInputElement;
-        filter_input.value = '';
-        filterValue = '';
-    };
-
-    // initialize
-    let currentUsers = paginatedUsers();
-    let filteredUsers = calculateFilter();
-
-    let specifiedText = true;
 </script>
 
 <h2>
@@ -169,13 +100,13 @@
 </h2>
 
 <div class="console_contents">
-    <form class="edit_area_form" method="POST">
+    <form class="edit_area_form" method="POST" style="margin-bottom: 2%;">
         <div class="edit_area enter">
             <p class="edit_area_title" style="margin: 0;">Admin Control Panel</p>
             <div class="group_btns" style="margin-bottom: 3%;">
                 <button
                     on:click={() => {
-                        adminCtrlSwitch('filter'), resetPagination(), clearFilterInput(), (filterParam = '');
+                        adminCtrlSwitch('filter');
                     }}
                     class="blue_btn"
                     class:active={adminCtrlTypes['filter']}
@@ -187,7 +118,7 @@
 
                 <button
                     on:click={() => {
-                        adminCtrlSwitch('courseCtrl'), (specifiedText = true);
+                        adminCtrlSwitch('courseCtrl');
                     }}
                     class="blue_btn"
                     class:active={adminCtrlTypes['courseCtrl']}
@@ -200,26 +131,41 @@
 
             {#if adminCtrlTypes['filter']}
                 <div transition:slide class="edit_area_form_parts text">
-                    <input
-                        id="filter_input"
-                        type="text"
-                        bind:value={filterValue}
-                        placeholder="Filter ..."
-                        on:input={() => (resetPagination(true), (filteredUsers = calculateFilter()), (currentUsers = paginatedUsers(true)))}
-                        disabled={filterParam === ''}
-                    />
-                    By
-                    <select
-                        class="filter_select"
-                        bind:value={filterParam}
-                        on:change={() => {
-                            resetPagination(), clearFilterInput();
+                    <form
+                        class="filter_form"
+                        action="?/getFirstQueryResults"
+                        method="POST"
+                        use:enhance={() => {
+                            // when clicking submit button
+                            const btnElm = document.getElementById('btn');
+                            const inputElm = document.querySelectorAll('#filter_input');
+                            switchBtnInAuth(false, btnElm, null, inputElm);
+                            btnStage = 0;
+
+                            return async ({ result }) => {
+                                console.log(result);
+                                await applyAction(result);
+                                switchBtnInAuth(true, btnElm, null, inputElm);
+                                btnStage = 1;
+                            };
                         }}
                     >
-                        <option value="">Unselected (Default)</option>
-                        <option value="id">ID</option>
-                        <option value="username">Username</option>
-                    </select>
+                        <input name="filter_value" id="filter_input" type="text" placeholder="Filter ..." bind:value={filterValue} />
+                        By
+                        <select name="filter_param" class="filter_select" bind:value={filterParam}>
+                            <option value="username">Username</option>
+                            <option value="web_login_key">Web Login Key</option>
+                        </select>
+
+                        <button id="btn" class="green_btn" type="submit">
+                            {#if btnStage === 0}
+                                <span in:fade class="loading"></span>
+                            {:else if btnStage === 1}
+                                <span in:fade={{ delay: 100 }} class="btn_icon material-icons">search</span>
+                                <span in:fade={{ delay: 100 }} class="btn_text">Search</span>
+                            {/if}
+                        </button>
+                    </form>
                     <p class="console_contents_note" style="margin-top: 3%;">* Once this tab is closed, the filter input is cleared and the select box returns to default.</p>
                 </div>
             {/if}
@@ -228,11 +174,11 @@
                 <dl transition:slide class="edit_area_form_parts radio">
                     <dt class="course_list_title">Target Users (Single Select)</dt>
                     <dd class="course_list">
-                        <label class="course_item"><input type="radio" name="target_u_radio" value="all" on:change={() => (specifiedText = true)} />All Users</label>
+                        <label class="course_item"><input type="radio" name="target_u_radio" value="all" on:change={() => (specifiedUser = true)} />All Users</label>
 
                         <div style="width: calc(50% - 20px); margin: 0 10px 6%;">
-                            <label style="cursor: pointer;"><input type="radio" name="target_u_radio" value="specified" on:change={() => (specifiedText = false)} />Specify User(s)</label>
-                            <input style="margin-left: 7%; width: 95%;" type="text" name="specified_u_text" placeholder="Ex) 1364+1489+ ..." disabled={specifiedText} />
+                            <label style="cursor: pointer;"><input type="radio" name="target_u_radio" value="specified" on:change={() => (specifiedUser = false)} />Specify User(s)</label>
+                            <input style="margin-left: 7%; width: 95%;" type="text" name="specified_u_text" placeholder="Ex) 1364+1489+ ..." disabled={specifiedUser} />
                         </div>
                         <p class="console_contents_note" style="margin: 0px 0px 3% 4%; text-indent: -1.2rem;">
                             * When specifying multiple users in the "Specify Users" text box, be sure to join User IDs with "+".
@@ -275,53 +221,87 @@
         </div>
     </form>
 
-    {#if currentUsers.length === 0}
+    {#if form?.users.length === 0}
         <p class="console_contents_note">No User Found.</p>
-    {:else}
+    {:else if form?.users}
         <div class="pagination_btn_list">
-            {#if filterValue === ''}
-                {#each Array(Math.ceil(usersData.length / 5)) as _, i}
-                    <button class="pagination_btn_item" class:active={currentPage === i + 1} on:click={() => switchPagination(i + 1)}>{i + 1}</button>
-                {/each}
-            {:else}
-                {#each Array(Math.ceil(filteredUsers.length / 5)) as _, i}
-                    <button class="pagination_btn_item" class:active={currentPage === i + 1} on:click={() => switchPagination(i + 1, true)}>{i + 1}</button>
-                {/each}
-            {/if}
+            <form
+                method="POST"
+                use:enhance={() => {
+                    return async ({ result }) => {
+                        paginationBackClick = false;
+                        paginationNextClick = false;
+
+                        await applyAction(result);
+                    };
+                }}
+            >
+                <input type="hidden" name="filter_value" value={filterValue} />
+                <input type="hidden" name="filter_param" value={filterParam} />
+                <input type="hidden" name="start_cursor" value={form?.meta.startCursor} />
+                <input type="hidden" name="end_cursor" value={form?.meta.endCursor} />
+
+                <button
+                    class="pagination_btn_item"
+                    on:click|once={() => {
+                        paginationBackClick = true;
+                    }}
+                    class:active={paginationBackClick}
+                    class:disabled_elm={!form?.meta.hasPreviousPage || paginationBackClick}
+                    formaction="?/userPaginateBack">Back</button
+                >
+                <button
+                    class="pagination_btn_item"
+                    on:click|once={() => {
+                        paginationNextClick = true;
+                    }}
+                    class:active={paginationNextClick}
+                    class:disabled_elm={!form?.meta.hasNextPage || paginationNextClick}
+                    formaction="?/userPaginateNext">Next</button
+                >
+            </form>
         </div>
 
-        {#each currentUsers as user}
+        {#each form?.users as user}
             <dl class="console_contents_list">
                 <p class="console_contents_list_title">
+                    {user.username}
+
                     <button
                         class="red_btn"
-                        on:click={() => prepareModal('suspendUser', 'Are you sure you want to suspend the following user?', 'suspendUser', user.id, user.username, user.last_character)}
+                        on:click={() =>
+                            prepareModal('suspendUser', {
+                                title: 'Suspend the following user?',
+                                form_action: 'suspendUser',
+                                user_id: user.id,
+                                username: user.username,
+                                char_name: user.char_name_array,
+                            })}
                     >
                         <span class="btn_icon material-icons">delete</span>
                         <span class="btn_text">Suspend</span>
                     </button>
-                    User Data
                 </p>
 
-                {#each bannedUsersData as banned_user}
-                    {#if user.id === banned_user.user_id}
-                        <div class="banned_user_container">
-                            <input type="hidden" name="user_id" value={user.id} />
-                            {#each _.filter(charactersData, (c_data) => c_data.user_id === user.id) as character}
-                                <input type="hidden" name="character_id" value={character.id} />
-                            {/each}
-
-                            <p class="banned_text">This user account has been suspended.</p>
-                            <button
-                                class="red_btn"
-                                on:click={() => prepareModal('suspendUser', 'Are you sure you want to unsuspend the following users?', 'unsuspendUser', user.id, user.username, user.last_character)}
-                            >
-                                <span style="font-size: 2.8rem;" class="btn_icon material-icons">restore_from_trash</span>
-                                <span style="font-size: 2rem; padding-top: 2px;" class="btn_text">Unsuspend</span>
-                            </button>
-                        </div>
-                    {/if}
-                {/each}
+                {#if !user.not_suspended}
+                    <div class="banned_user_container">
+                        <p class="banned_text">This user account has been suspended.</p>
+                        <button
+                            class="red_btn"
+                            on:click={() =>
+                                prepareModal('suspendUser', {
+                                    title: 'Unsuspend the following user?',
+                                    form_action: 'unsuspendUser',
+                                    user_id: user.id,
+                                    username: user.username,
+                                    char_name: user.char_name_array,
+                                })}
+                        >
+                            <span style="font-size: 2.8rem;" class="btn_icon material-icons">restore_from_trash</span>
+                            <span style="font-size: 2rem; padding-top: 2px;" class="btn_text">Unsuspend</span>
+                        </button>
+                    </div>
+                {/if}
 
                 <dt class="contents_term">User ID</dt>
                 <dd class="contents_desc">{user.id}</dd>
@@ -681,78 +661,49 @@
 
                 <dt class="contents_term">Character List</dt>
                 <dd class="contents_desc">
-                    {#if _.filter(charactersData, (c_data) => c_data.user_id === user.id).length === 0}
+                    {#if user?.characters.length === 0}
                         <p style="color: #ff8100;">This user doesn't have any characters.</p>
                     {:else}
-                        {#each _.sortBy( _.filter(charactersData, (c_data) => c_data.user_id === user.id), 'id' ) as character}
-                            {#if !character.is_new_character}
-                                <div class="character_item {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '').replace('&', 'And')}">
-                                    <span class="name">
-                                        {character.name}
-                                    </span>
+                        {#each user?.characters as character}
+                            <div class="character_item {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '').replace('&', 'And')}" class:new={character.is_new_character}>
+                                <span class="name">{character.name || 'Ready to Hunt'}</span>
 
-                                    {#if character.deleted}
-                                        <button
-                                            class="red_btn deleted_character"
-                                            on:click={() =>
-                                                prepareModal('deleteCharacter', 'Are you sure you want to restore the following character?', 'restoreCharacter', character.id, character.name)}
-                                        >
-                                            <span class="btn_icon material-icons">delete</span>
-                                            <span class="btn_text">Deleted</span>
-                                        </button>
-                                    {:else}
-                                        <button
-                                            class="red_btn delete_character"
-                                            on:click={() =>
-                                                prepareModal('deleteCharacter', 'Are you sure you want to delete the following character?', 'deleteCharacter', character.id, character.name)}
-                                            class:disabled_btn={_.filter(charactersData, (c_data) => c_data.user_id === user.id).length === 1}
-                                        >
-                                            <span class="btn_icon material-icons">delete</span>
-                                            <span class="btn_text">Delete</span>
-                                        </button>
-                                    {/if}
+                                {#if character.discord}
+                                    <button
+                                        class="green_btn linked_character"
+                                        on:click={() =>
+                                            prepareModal('linkDiscord', {
+                                                title: 'Unlink the following characters?',
+                                                form_action: 'unlinkDiscord',
+                                                user_id: user.id,
+                                                username: user.username,
+                                                char_id: character.id,
+                                                char_name: character.name,
+                                                discord_id: character.discord.discord_id,
+                                            })}
+                                    >
+                                        <span class="btn_icon material-icons">link</span>
+                                        <span class="btn_text">Linked</span>
+                                    </button>
+                                {:else}
+                                    <button
+                                        class="green_btn link_character"
+                                        on:click={() =>
+                                            prepareModal('linkDiscord', {
+                                                title: 'Execute the linking process with the following user and character. Please confirm the target ID and Username, and enter the ID (18-digit) of Discord to be linked.',
+                                                form_action: 'linkDiscord',
+                                                user_id: user.id,
+                                                username: user.username,
+                                                char_id: character.id,
+                                                char_name: character.name,
+                                            })}
+                                    >
+                                        <span class="btn_icon material-icons">link</span>
+                                        <span class="btn_text">Link</span>
+                                    </button>
+                                {/if}
 
-                                    {#if _.sortBy( _.filter(linkedCharacters, (l_data) => l_data.char_id === character.id), 'id' ).map(function (val) {
-                                        return val['char_id'];
-                                    })[0] === character.id}
-                                        {#each _.sortBy( _.filter(linkedCharacters, (l_data) => l_data.char_id === character.id), 'id' ) as linkedCharacter}
-                                            <button
-                                                class="green_btn linked_character"
-                                                on:click={() =>
-                                                    prepareModal(
-                                                        'linkDiscord',
-                                                        'Are you sure you want to unlink the following characters?',
-                                                        'unlinkDiscord',
-                                                        user.id,
-                                                        user.username,
-                                                        character.id,
-                                                        character.name,
-                                                        linkedCharacter.discord_id
-                                                    )}
-                                            >
-                                                <span class="btn_icon material-icons">link</span>
-                                                <span class="btn_text">Linked</span>
-                                            </button>
-                                        {/each}
-                                    {:else}
-                                        <button
-                                            class="green_btn link_character"
-                                            on:click={() =>
-                                                prepareModal(
-                                                    'linkDiscord',
-                                                    'Execute the linking process with the following user and character. Please confirm the target ID and Username, and enter the ID (18-digit) of Discord to be linked.',
-                                                    'linkDiscord',
-                                                    user.id,
-                                                    user.username,
-                                                    character.id,
-                                                    character.name
-                                                )}
-                                        >
-                                            <span class="btn_icon material-icons">link</span>
-                                            <span class="btn_text">Link</span>
-                                        </button>
-                                    {/if}
-
+                                {#if !character.is_new_character}
                                     <div class="wpn_icon {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '').replace('&', 'And')}" />
                                     <p class="wpn_text">
                                         {getWpnTypeByDec(character.weapon_type, 'en')}
@@ -774,26 +725,17 @@
                                             <p>{wpnName}</p>
                                         {/await}
                                     </span>
-                                    <span class="rank">HR: {character.hrp} / GR: {character.gr}</span>
-                                    <span class="char_id">Character ID: {character.id}</span>
-                                    <span class="last_login"
-                                        >Last Login: {!character.last_login
-                                            ? 'No Data'
-                                            : DateTime.fromSeconds(character.last_login)
-                                                  .setZone(DateTime.local().zoneName)
-                                                  .setLocale('en')
-                                                  .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span
-                                    >
-                                </div>
-                            {:else}
-                                <div class="character_item new" style="cursor: not-allowed;">
-                                    <span class="name">Ready to Hunt</span>
 
                                     {#if character.deleted}
                                         <button
                                             class="red_btn deleted_character"
                                             on:click={() =>
-                                                prepareModal('deleteCharacter', 'Are you sure you want to restore the following character?', 'restoreCharacter', character.id, 'Ready to Hunt')}
+                                                prepareModal('deleteCharacter', {
+                                                    title: 'Restore the following character?',
+                                                    form_action: 'restoreCharacter',
+                                                    char_id: character.id,
+                                                    char_name: character.name,
+                                                })}
                                         >
                                             <span class="btn_icon material-icons">delete</span>
                                             <span class="btn_text">Deleted</span>
@@ -802,77 +744,80 @@
                                         <button
                                             class="red_btn delete_character"
                                             on:click={() =>
-                                                prepareModal('deleteCharacter', 'Are you sure you want to delete the following character?', 'deleteCharacter', character.id, 'Ready to Hunt')}
-                                            class:disabled_btn={_.filter(charactersData, (c_data) => c_data.user_id === user.id).length === 1}
+                                                prepareModal('deleteCharacter', {
+                                                    title: 'Delete the following character?',
+                                                    form_action: 'deleteCharacter',
+                                                    char_id: character.id,
+                                                    char_name: character.name,
+                                                })}
+                                            class:disabled_btn={user?.characters.length === 1}
                                         >
                                             <span class="btn_icon material-icons">delete</span>
                                             <span class="btn_text">Delete</span>
                                         </button>
                                     {/if}
-
-                                    {#if _.sortBy( _.filter(linkedCharacters, (l_data) => l_data.char_id === character.id), 'id' ).map(function (val) {
-                                        return val['char_id'];
-                                    })[0] === character.id}
-                                        {#each _.sortBy( _.filter(linkedCharacters, (l_data) => l_data.char_id === character.id), 'id' ) as linkedCharacter}
-                                            <button
-                                                class="green_btn linked_character"
-                                                on:click={() =>
-                                                    prepareModal(
-                                                        'linkDiscord',
-                                                        'Are you sure you want to unlink the following characters?',
-                                                        'unlinkDiscord',
-                                                        user.id,
-                                                        user.username,
-                                                        character.id,
-                                                        character.name,
-                                                        linkedCharacter.discord_id
-                                                    )}
-                                            >
-                                                <span class="btn_icon material-icons">link</span>
-                                                <span class="btn_text">Linked</span>
-                                            </button>
-                                        {/each}
-                                    {:else}
-                                        <button
-                                            class="green_btn link_character"
-                                            on:click={() =>
-                                                prepareModal(
-                                                    'linkDiscord',
-                                                    'Execute the linking process with the following user and character. Please confirm the target ID and Username, and enter the ID (18-digit) of Discord to be linked.',
-                                                    'linkDiscord',
-                                                    user.id,
-                                                    user.username,
-                                                    character.id,
-                                                    character.name
-                                                )}
-                                        >
-                                            <span class="btn_icon material-icons">link</span>
-                                            <span class="btn_text">Link</span>
-                                        </button>
-                                    {/if}
-
+                                {:else}
                                     <div class="wpn_icon" />
                                     <p class="wpn_text">
                                         No Data
                                         <br />
                                         No Data
                                     </p>
-                                    <span class="rank">HR: {character.hrp} / GR: {character.gr}</span>
-                                    <span class="char_id">Character ID: {character.id}</span>
-                                    <span class="last_login"
-                                        >Last Login: {!character.last_login
-                                            ? 'No Data'
-                                            : DateTime.fromSeconds(character.last_login)
-                                                  .setZone(DateTime.local().zoneName)
-                                                  .setLocale('en')
-                                                  .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span
-                                    >
-                                </div>
-                            {/if}
+                                {/if}
+
+                                <span class="rank">HR: {character.hrp} / GR: {character.gr}</span>
+                                <span class="char_id">Character ID: {character.id}</span>
+                                <span class="last_login"
+                                    >Last Login: {!character.last_login
+                                        ? 'No Data'
+                                        : DateTime.fromSeconds(character.last_login)
+                                              .setZone(DateTime.local().zoneName)
+                                              .setLocale('en')
+                                              .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span
+                                >
+                            </div>
                         {/each}
                     {/if}
                 </dd>
             </dl>
         {/each}
+
+        <div class="pagination_btn_list">
+            <form
+                method="POST"
+                use:enhance={() => {
+                    return async ({ result }) => {
+                        paginationBackClick = false;
+                        paginationNextClick = false;
+
+                        await applyAction(result);
+                    };
+                }}
+            >
+                <input type="hidden" name="filter_value" value={filterValue} />
+                <input type="hidden" name="filter_param" value={filterParam} />
+                <input type="hidden" name="start_cursor" value={form?.meta.startCursor} />
+                <input type="hidden" name="end_cursor" value={form?.meta.endCursor} />
+
+                <button
+                    class="pagination_btn_item"
+                    on:click|once={() => {
+                        paginationBackClick = true;
+                    }}
+                    class:active={paginationBackClick}
+                    class:disabled_elm={!form?.meta.hasPreviousPage || paginationBackClick}
+                    formaction="?/userPaginateBack">Back</button
+                >
+                <button
+                    class="pagination_btn_item"
+                    on:click|once={() => {
+                        paginationNextClick = true;
+                    }}
+                    class:active={paginationNextClick}
+                    class:disabled_elm={!form?.meta.hasNextPage || paginationNextClick}
+                    formaction="?/userPaginateNext">Next</button
+                >
+            </form>
+        </div>
     {/if}
 </div>

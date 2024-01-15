@@ -150,7 +150,15 @@
                         <p class="console_contents_list_title">
                             <button
                                 class="red_btn"
-                                on:click={() => prepareModal('deleteInfo', 'Are you sure you want to delete the following information?', 'deleteInfoData', info.id, info.title, info.url, info.type)}
+                                on:click={() =>
+                                    prepareModal('deleteInfo', {
+                                        title: 'Delete the following information?',
+                                        form_action: 'deleteInfoData',
+                                        info_id: info.id,
+                                        info_title: info.title,
+                                        info_url: info.url,
+                                        info_type: info.type,
+                                    })}
                             >
                                 <span class="btn_icon material-icons">delete</span>
                                 <span class="btn_text">Delete</span>
