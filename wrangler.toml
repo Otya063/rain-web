@@ -8,3 +8,7 @@ workers_dev = true
 
 [placement]
 mode = "smart"
+
+[vars]
+MAINTENANCE_MODE = "false"
+MAINTENANCE_DATE = ""

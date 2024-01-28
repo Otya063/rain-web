@@ -28,33 +28,27 @@
             width: 100%;
             height: 67px;
             @include flex_center;
+            align-items: flex-start;
             justify-content: space-between;
 
             // プラットフォーム
             .header_platform {
                 position: relative;
-                width: 70px;
-                height: 70px;
                 cursor: auto;
 
                 // プラットフォーム画像
                 &::before {
-                    display: block;
-                    position: absolute;
-                    top: 0;
-                    left: 10%;
                     content: '';
-                    width: 43px;
-                    aspect-ratio: 3 / 5;
+                    display: block;
+                    width: 50px;
+                    height: 67px;
                     background: url(#{$path_img}/common/platform_sp_portrait.webp) no-repeat center center;
                     background-size: auto 75%;
 
                     @include landscape {
-                        top: 10%;
-                        left: 5%;
                         content: '';
-                        width: 90px;
-                        aspect-ratio: 1.7 / 1;
+                        width: 100px;
+                        height: 63px;
                         background: url(#{$path_img}/common/platform_sp_landscape.webp) no-repeat center center;
                         background-size: auto 75%;
                     }
@@ -79,6 +73,120 @@
                     }
                 }
             }
+
+            // 言語選択枠
+            .header_language_selector {
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+                flex-direction: column;
+                color: #fff;
+                border: 2px solid #fff;
+                box-sizing: content-box;
+                position: relative;
+                padding: 11px;
+                width: 30px;
+                height: 30px;
+                transition: all 0.7s ease-in-out;
+                margin: 5px;
+                z-index: 2;
+
+                @include landscape {
+                    margin: 3px;
+                }
+
+                // 言語選択アクティブ時
+                &.lang_arrow_open {
+                    width: 40vw;
+                    height: 35vh;
+                    background: rgb(0 0 0 / 85%);
+
+                    @include landscape {
+                        width: 30vw;
+                        height: 70vh;
+                    }
+                }
+
+                // グローバルマーク
+                .global_mark {
+                    font-size: 3rem;
+                    position: absolute;
+                    top: 11.5px;
+                    right: 10.5px;
+                }
+
+                // 現在表示言語
+                .current_language {
+                    display: none;
+                }
+
+                // 矢印
+                .lang_arrow {
+                    display: none;
+                }
+            }
+
+            // 言語選択欄
+            .language_select_area_list {
+                display: flex;
+                flex-direction: column;
+                z-index: 1;
+                width: 100%;
+                align-items: center;
+
+                // 各言語
+                .language_names {
+                    @include flex_center;
+                    flex-direction: column;
+                    color: #fff;
+                    margin-top: 35%;
+                    padding-bottom: 2%;
+                    position: relative;
+                    will-change: opacity;
+
+                    // 言語名初めのみ上部余白なし
+                    &:first-child {
+                        margin-top: 0;
+                    }
+
+                    // 現在の言語に下線
+                    &.lang_selected {
+                        color: orange;
+                    }
+
+                    // 言語名メイン
+                    .language_main_name {
+                        font-size: 1.9rem;
+                        transform: translateY(6%);
+                    }
+
+                    // 言語名サブ
+                    .language_sub_name {
+                        font-size: 1.2rem;
+                        transform: translateY(6%);
+                    }
+
+                    // 言語名選択時下線
+                    &::before {
+                        background: #ff701e;
+                        content: '';
+                        width: 100%;
+                        height: 2px;
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        margin: auto;
+                        transform-origin: center top;
+                        transform: scale(0, 1);
+                        transition: transform 0.3s;
+                    }
+                    // +
+                    &:hover::before {
+                        transform-origin: center top;
+                        transform: scale(1, 1);
+                    }
+                }
+            }
         }
     }
 
@@ -96,15 +204,6 @@
 
         // RainServerロゴ
         &::before {
-            /* display: block;
-            position: absolute;
-            content: '';
-            background: url(#{$path_img}/common/rainserver_logo.webp) center center no-repeat;
-            background-size: 100%;
-            width: 35vw;
-            aspect-ratio: 20 / 13;
-            top: 0;
-            left: 1%; */
             display: none;
         }
 
@@ -131,6 +230,49 @@
         }
     }
 
+    // サイドメニュー表示切り替えボタン
+    .menu_btn {
+        position: fixed;
+        bottom: 2%;
+        right: 3%;
+        padding: 21px 0px;
+        width: 60px;
+        height: 60px;
+        border: grey 2px solid;
+        border-radius: 50%;
+        background: white;
+        z-index: 12;
+
+        // ３本線
+        .menu_btn_line {
+            width: 20px;
+            height: 2px;
+            display: block;
+            margin: 0px auto 4px;
+            background: black;
+            transition: all 0.4s;
+        }
+
+        // メニューアクティブ時
+        &.active {
+            .menu_btn_line {
+                &:nth-child(1) {
+                    transform: rotate(-405deg);
+                    transform-origin: 19px 3px;
+                }
+
+                &:nth-child(2) {
+                    opacity: 0;
+                }
+
+                &:nth-child(3) {
+                    transform: rotate(405deg);
+                    transform-origin: 16px 0px;
+                }
+            }
+        }
+    }
+
     // サイドメニュー、メインコンテンツ位置調整及び背景画像設定
     .bg {
         &::before {
@@ -154,101 +296,19 @@
         }
     }
 
-    /* ボトムナビゲーション
+    /* サイドメニュー
 ====================================================*/
 
-    // 位置調整
-    .bottom_navigations {
-        position: fixed;
-        left: 0;
-        bottom: 0;
-        width: 100%;
-        height: 50px;
-        margin: 0;
-        padding: 0;
-        background-color: white;
-        border-top: 2px solid gray;
-        border-bottom: 2px solid gray;
-        transition: all 0.5s;
-        z-index: 30;
-        padding-bottom: env(safe-area-inset-bottom);
-
-        // ボトムナビゲーション本体
-        ul {
-            @include flex_center;
-            justify-content: space-around;
-            text-align: center;
-            height: 100%;
-
-            // ナビゲーションボタン位置調整
-            .btm_nav_item {
-                position: relative;
-                height: 100%;
-                display: flex;
-                align-items: center;
-
-                // アイコン
-                .icon-tabler {
-                    width: 28px;
-                    height: 28px;
-                    stroke-width: 1.2;
-                    transition: all 0.4s;
-                }
-
-                // 選択時テキスト装飾
-                &.btm_nav_text_selected {
-                    font-weight: 600;
-                    color: rgb(255, 189, 68);
-
-                    // 選択時アイコン装飾
-                    .icon-tabler {
-                        stroke-width: 1.6;
-                        color: rgb(255, 189, 68);
-                    }
-
-                    // 選択時のアイテム下「・」装飾
-                    &::after {
-                        height: 3px;
-                        border-radius: 0;
-                        background: rgb(255, 186, 58);
-                        transform: scale(1, 1);
-                    }
-                }
-
-                // 非選択時のアイテム下「・」装飾
-                &::after {
-                    content: '';
-                    position: absolute;
-                    bottom: 10%;
-                    left: 0;
-                    width: 100%;
-                    height: 5px;
-                    border-radius: 50%;
-                    background: white;
-                    transition: all 0.4s;
-                    transform: scale(0.04, 1);
-                    transform-origin: center bottom;
-                }
-            }
-        }
-
-        // 非表示
-        &.nav_hide {
-            opacity: 0;
-            visibility: hidden;
-        }
-    }
-
-    // メニュー本体非選択時
+    // メニュー本体
     .side_menu {
         position: fixed;
         z-index: 11;
-        top: 0;
-        left: -120%;
+        bottom: -120%;
         width: 100%;
-        height: 100vh;
+        height: 100%;
         background: rgba(255, 255, 255, 0.8);
-        transition: all 0.3s;
+        transition: all 0.7s;
+        overflow-y: scroll;
 
         // サイドメニュー上部装飾
         &::before {
@@ -283,10 +343,6 @@
 
                 // サブカテゴリー
                 .sub_categories {
-                    padding: 0;
-                    margin: 0;
-                    height: 0;
-                    overflow: hidden;
                     transition: 0.5s;
                     border-top: none;
                     background: rgba(85, 85, 85, 0.3);
@@ -457,107 +513,8 @@
         }
 
         // 選択時
-        &.btm_nav_selected {
-            left: 0;
-
-            // スライド可能
-            &.slidable_on_mobile {
-                position: fixed;
-                z-index: 11;
-                width: 100%;
-                height: 100vh;
-                overflow: auto;
-            }
-        }
-    }
-
-    // 言語選択
-    .language_selectArea {
-        position: fixed;
-        z-index: 11;
-        top: 0;
-        right: -120%;
-        width: 100%;
-        height: 100vh;
-        background: rgba(255, 255, 255, 0.8);
-        transition: all 0.3s;
-
-        // 言語選択欄
-        .language_selectArea_list {
-            position: relative;
-            display: flex;
-            justify-content: space-around;
-            background: rgba(0, 0, 0, 0.8);
-            border: gray 4px solid;
-            border-top: none;
-            padding: 10% 5%;
-            z-index: 1;
-
-            // 各言語
-            .language_names {
-                @include flex_center;
-                flex-direction: column;
-                color: #fff;
-                padding-bottom: 2%;
-                position: relative;
-                will-change: opacity;
-
-                // 言語名初めのみ上部余白なし
-                &:first-child {
-                    margin-top: 0;
-                }
-
-                // 言語名ホバー時
-                &.lang_selected {
-                    color: orange;
-                }
-
-                // 言語名メイン
-                .language_mainName {
-                    font-size: 2rem;
-                    transform: translateY(6%);
-                }
-
-                // 言語名サブ
-                .language_subName {
-                    font-size: 1.4rem;
-                    transform: translateY(6%);
-                }
-
-                // 言語名選択時下線
-                &::before {
-                    background: #ff701e;
-                    content: '';
-                    width: 100%;
-                    height: 2px;
-                    position: absolute;
-                    left: 0;
-                    bottom: 0;
-                    margin: auto;
-                    transform-origin: center top;
-                    transform: scale(0, 1);
-                    transition: transform 0.1s;
-                }
-                // +
-                &:hover::before {
-                    transform-origin: center top;
-                    transform: scale(1, 1);
-                }
-            }
-        }
-
-        // 選択時
-        &.btm_nav_selected {
-            right: 0%;
-
-            // スライド可能
-            &.slidable_on_mobile {
-                position: fixed;
-                z-index: 11;
-                width: 100%;
-                height: 100vh;
-                overflow: auto;
-            }
+        &.active {
+            bottom: 0;
         }
     }
 

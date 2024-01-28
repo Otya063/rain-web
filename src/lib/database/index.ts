@@ -1,8 +1,19 @@
-import _ from 'lodash';
-import { PrismaClient } from '@prisma/client/edge';
+import {
+    PrismaClient,
+    type characters,
+    type discord,
+    type discord_register,
+    type launcher_banner,
+    type launcher_info,
+    type launcher_system,
+    type suspended_account,
+    type users,
+} from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 import { DATABASE_URL } from '$env/static/private';
-import { paginate } from "prisma-extension-pagination";
+import type { InformationType } from '$lib/types';
+import _ from 'lodash';
+import { extension } from 'prisma-paginate';
 
 export const db = new PrismaClient({
     datasources: {
@@ -12,235 +23,273 @@ export const db = new PrismaClient({
     },
 })
     .$extends(withAccelerate())
-    .$extends({
-        model: {
-            users: {
-                paginate,
+    .$extends(extension);
+
+class ServerDataManager {
+    /* Characters
+    ====================================================*/
+    public async getAllCharacters(): Promise<characters[]> {
+        return await db.characters.findMany({
+            orderBy: {
+                id: 'asc',
             },
-        },
-    });
+        });
+    }
 
-export const getServerData = async (data1: string, data2: string | number | undefined = undefined, data3: string | undefined = undefined) => {
-    let data: [];
+    public async getCharactersByUserId(user_id: number): Promise<characters[]> {
+        return await db.characters.findMany({
+            where: {
+                user_id,
+            },
+            orderBy: {
+                id: 'asc',
+            },
+        });
+    }
 
-    switch (data1) {
-        case 'getLauncherSystem':
-            data = db.launcher_system.findUnique({
-                where: {
-                    id: 1,
-                },
-            });
-            break;
+    /* Discord (Character)
+    ====================================================*/
+    public async getAllLinkedCharacters(): Promise<discord[]> {
+        return await db.discord.findMany({
+            orderBy: {
+                id: 'asc',
+            },
+        });
+    }
 
-        case 'getInformation':
-            switch (data2) {
-                case 1:
-                    data = db.launcher_info.findMany({
+    public async getLinkedCharactersByDiscordId(discord_id: string): Promise<discord | null> {
+        return await db.discord.findFirst({
+            where: {
+                discord_id,
+            },
+        });
+    }
+
+    public async getLinkedCharacterByCharId(char_id: number): Promise<discord | null> {
+        return await db.discord.findFirst({
+            where: {
+                char_id,
+            },
+        });
+    }
+
+    /* Discord Register (User Account)
+    ====================================================*/
+    public async getLinkedUserByUserId(user_id: number): Promise<discord_register | null> {
+        return await db.discord_register.findFirst({
+            where: {
+                user_id,
+            },
+        });
+    }
+
+    public async getLinkedUserByDiscordId(discord_id: string): Promise<discord_register | null> {
+        return await db.discord_register.findFirst({
+            where: {
+                discord_id,
+            },
+        });
+    }
+
+    /* Launcher Banner
+    ====================================================*/
+    public async getBannerData(): Promise<launcher_banner[]> {
+        return await db.launcher_banner.findMany({
+            orderBy: {
+                id: 'asc',
+            },
+        });
+    }
+
+    /* Launcher Information
+    ====================================================*/
+    public async getInformation(type: InformationType): Promise<launcher_info[] | { [key: string]: launcher_info[] }> {
+        switch (type) {
+            // important info
+            case 'IMP': {
+                return await db.launcher_info.findMany({
+                    where: {
+                        type: 'Important',
+                    },
+                    orderBy: {
+                        id: 'asc',
+                    },
+                });
+            }
+
+            // defects and trobles info
+            case 'DNT': {
+                return await db.launcher_info.findMany({
+                    where: {
+                        type: 'Defects and Troubles',
+                    },
+                    orderBy: {
+                        id: 'asc',
+                    },
+                });
+            }
+
+            // management and service info
+            case 'MAS': {
+                return await db.launcher_info.findMany({
+                    where: {
+                        type: 'Management and Service',
+                    },
+                    orderBy: {
+                        id: 'asc',
+                    },
+                });
+            }
+
+            // in-game events info
+            case 'IGE': {
+                return await db.launcher_info.findMany({
+                    where: {
+                        type: 'In-Game Events',
+                    },
+                    orderBy: {
+                        id: 'asc',
+                    },
+                });
+            }
+
+            // updates and maintenance info
+            case 'UAM': {
+                return await db.launcher_info.findMany({
+                    where: {
+                        type: 'Updates and Maintenance',
+                    },
+                    orderBy: {
+                        id: 'asc',
+                    },
+                });
+            }
+
+            // all info
+            case 'ALL': {
+                return {
+                    Important: await db.launcher_info.findMany({
                         where: {
                             type: 'Important',
                         },
-                    });
-                    break;
+                        orderBy: {
+                            id: 'asc',
+                        },
+                    }),
 
-                case 2:
-                    data = db.launcher_info.findMany({
+                    'Defects and Troubles': await db.launcher_info.findMany({
                         where: {
                             type: 'Defects and Troubles',
                         },
-                    });
-                    break;
+                        orderBy: {
+                            id: 'asc',
+                        },
+                    }),
 
-                case 3:
-                    data = db.launcher_info.findMany({
+                    'Management and Service': await db.launcher_info.findMany({
                         where: {
                             type: 'Management and Service',
                         },
-                    });
-                    break;
+                        orderBy: {
+                            id: 'asc',
+                        },
+                    }),
 
-                case 4:
-                    data = db.launcher_info.findMany({
+                    'In-Game Events': await db.launcher_info.findMany({
                         where: {
                             type: 'In-Game Events',
                         },
-                    });
-                    break;
+                        orderBy: {
+                            id: 'asc',
+                        },
+                    }),
 
-                case 5:
-                    data = db.launcher_info.findMany({
+                    'Updates and Maintenance': await db.launcher_info.findMany({
                         where: {
                             type: 'Updates and Maintenance',
                         },
-                    });
-                    break;
+                        orderBy: {
+                            id: 'asc',
+                        },
+                    }),
+                };
             }
-            break;
 
-        case 'getAllUsers':
-            data = db.users.findMany({});
-            break;
-
-        case 'getUserByUserName':
-            if (data2 === undefined) {
-                data = 'Invalid Input';
-            } else {
-                data = db.users.findUnique({
-                    where: {
-                        username: data2,
+            default:
+                return [
+                    {
+                        id: 0,
+                        title: '',
+                        url: '',
+                        type: '',
+                        created_at: new Date(),
                     },
-                });
-            }
-            break;
-
-        case 'getLinkedAccByUId':
-            if (data2 === undefined) {
-                data = 'Invalid Input';
-            } else {
-                data = db.discord_register.findFirst({
-                    where: {
-                        user_id: data2,
-                    },
-                });
-            }
-            break;
-
-        case 'getAllLinkedCharacters':
-            data = db.discord.findMany({});
-            break;
-
-        case 'getLinkedCharacterByCId':
-            if (data2 === undefined) {
-                data = 'Invalid Input';
-            } else {
-                data = db.discord.findFirst({
-                    where: {
-                        char_id: data2,
-                    },
-                });
-            }
-            break;
-
-        case 'getSuspendedUserByUsername':
-            if (data2 === undefined) {
-                data = 'Invalid Input';
-            } else {
-                data = db.suspended_account.findFirst({
-                    where: {
-                        username: data2,
-                    },
-                });
-            }
-            break;
-
-        case 'getAllCharacters':
-            data = db.characters.findMany({});
-            break;
-
-        case 'getCharactersByUId':
-            if (data2 === undefined) {
-                data = 'Invalid Input';
-            } else {
-                data = db.characters.findMany({
-                    where: {
-                        user_id: data2,
-                    },
-                });
-            }
-            break;
-
-        case 'getAllSuspendedUsers':
-            data = db.suspended_account.findMany({});
-            break;
-
-        case 'getBannerData':
-            data = db.launcher_banner.findMany({});
-            break;
-
-        case 'getAuthUserBySession':
-            data = db.users.findFirst({
-                where: {
-                    web_login_key: data2,
-                },
-            });
-            break;
-
-        default:
-            data = 'Nothing';
+                ];
+        }
     }
 
-    return data;
-};
-
-export const requestActToServer = async (data1: string, data2: string | number) => {
-    let data: string;
-
-    switch (data1) {
-        case 'deleteCharacter':
-            try {
-                await db.characters.update({
-                    where: {
-                        id: Number(data2),
-                    },
-                    data: {
-                        deleted: true,
-                    },
-                });
-
-                data = 'Deleted_Character';
-            } catch (err) {
-                if (err instanceof Error) {
-                    data = err.message;
-                } else if (typeof err === 'string') {
-                    data = err;
-                } else {
-                    data = 'Unexpected_Error';
-                }
-            }
-            break;
-
-        case 'addCharacter':
-            try {
-                const lastLoginTime = Math.floor(Date.now() / 1000);
-
-                await db.characters.create({
-                    data: {
-                        user_id: Number(data2),
-                        is_female: false,
-                        is_new_character: true,
-                        last_login: lastLoginTime,
-                    },
-                });
-
-                data = 'Added_Character';
-            } catch (err) {
-                if (err instanceof Error) {
-                    data = err.message;
-                } else if (typeof err === 'string') {
-                    data = err;
-                } else {
-                    data = 'Unexpected_Error';
-                }
-            }
-            break;
-
-        default:
-            data = 'Invalid_Input';
+    /* Launcher System
+    ====================================================*/
+    public async getLauncherSystem(): Promise<launcher_system | null> {
+        return await db.launcher_system.findUnique({
+            where: {
+                id: 1,
+            },
+        });
     }
 
-    return data;
-};
+    /* Suspended Account
+    ====================================================*/
+    public async getAllSuspendedUsers(): Promise<suspended_account[]> {
+        return await db.suspended_account.findMany({});
+    }
 
-export interface User {
-    id: number;
-    username: string;
-    password: string;
-    item_box: Buffer | null;
-    rights: number;
-    last_character: number | null;
-    last_login: Date | null;
-    return_expires: Date | null;
-    gacha_premium: number | null;
-    gacha_trial: number | null;
-    frontier_points: number | null;
-    authToken: string | null;
+    public async getSuspendedUsersByUsername(username: string): Promise<suspended_account | null> {
+        return await db.suspended_account.findFirst({
+            where: {
+                username,
+            },
+        });
+    }
+
+    /* Users
+    ====================================================*/
+    public async getAllUsers(): Promise<{ id: number }[]> {
+        return await db.users.findMany({
+            orderBy: {
+                id: 'asc',
+            },
+            select: {
+                id: true,
+            },
+        });
+    }
+
+    public async getUserByUsername(username: string): Promise<users | null> {
+        return await db.users.findUnique({
+            where: {
+                username,
+            },
+        });
+    }
+
+    public async getUserByUserId(id: number): Promise<users | null> {
+        return await db.users.findUnique({
+            where: {
+                id,
+            },
+        });
+    }
+
+    public async getUserByAuthToken(web_login_key: string): Promise<users | null> {
+        return await db.users.findFirst({
+            where: {
+                web_login_key,
+            },
+        });
+    }
 }
+
+const ServerData = new ServerDataManager();
+
+export default ServerData;

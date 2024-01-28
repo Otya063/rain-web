@@ -1,19 +1,12 @@
-type CourseData = Record<
-    string,
-    {
-        id: number;
-        enabled: boolean;
-        code: string;
-    }
->;
+import type { CourseEnData } from "$lib/types";
 
-export const courseEn = (bin: string[]): CourseData => {
+export const courseEn = (bin: string[]): CourseEnData => {
     return {
-        /* 'Trial Course': {
+        'Trial Course [Deprecated]': {
             id: 1,
             enabled: bin[1] === '1',
             code: 'tlc',
-        }, */ // automatically enabled (= 1) on the server side
+        }, // automatically enabled (= 1) on the server side
         'Hunter Life Course': {
             id: 2,
             enabled: bin[2] === '1',
@@ -24,11 +17,11 @@ export const courseEn = (bin: string[]): CourseData => {
             enabled: bin[3] === '1',
             code: 'exc',
         },
-        /* 'Extra B Course': {
+        'Extra B Course [Deprecated]': {
             id: 4,
             enabled: bin[4] === '1',
             code: 'exbc',
-        }, */ // leftover
+        }, // leftover
         'Mobile Course': {
             id: 5,
             enabled: bin[5] === '1',
@@ -39,11 +32,11 @@ export const courseEn = (bin: string[]): CourseData => {
             enabled: bin[6] === '1',
             code: 'prc',
         },
-        /* 'Pallone Course (Extra C Course)': {
+        'Pallone Course (Extra C Course) [Deprecated]': {
             id: 7,
             enabled: bin[7] === '1',
             code: 'plc',
-        }, */ // leftover
+        }, // leftover
         'Assist Course': {
             id: 8,
             enabled: bin[8] === '1',
@@ -70,36 +63,36 @@ export const courseEn = (bin: string[]): CourseData => {
             code: 'nbc',
         },
         // [13]-[19] nothing
-        /* 'Debug': {
+        'Debug [Deprecated]': {
             id: 20,
             enabled: bin[20] === '1',
             code: 'dbg',
-        }, */
-        /* 'COG Link Expired': {
+        },
+        'COG Link Expired [Deprecated]': {
             id: 21,
             enabled: bin[21] === '1',
             code: 'cle',
-        }, */
-        /* 'Xbox Gold Membership': {
+        },
+        'Xbox Gold Membership [Deprecated]': {
             id: 22,
             enabled: bin[22] === '1',
             code: 'xgm',
-        }, */
-        /* 'PS3/Vita Trophy Reqs': {
+        },
+        'PS3/Vita Trophy Reqs [Deprecated]': {
             id: 23,
             enabled: bin[23] === '1',
             code: 'trq',
-        }, */
-        /* 'COG Link Check': {
+        },
+        'COG Link Check [Deprecated]': {
             id: 24,
             enabled: bin[24] === '1',
             code: 'clc',
-        }, */
-        /* 'NetCafe': {
+        },
+        'NetCafe [Deprecated]': {
             id: 25,
             enabled: bin[25] === '1',
             code: 'nc',
-        }, */
+        },
         'Certified NetCafe': {
             id: 26,
             enabled: bin[26] === '1',

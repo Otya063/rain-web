@@ -117,7 +117,8 @@ model characters {
   guild_characters                                               guild_characters?
   mail_mail_recipient_idTocharacters                             mail[]               @relation("mail_recipient_idTocharacters")
   mail_mail_sender_idTocharacters                                mail[]               @relation("mail_sender_idTocharacters")
-  discord_discord_char_idTocharacters                            discord[]            @relation("discord_char_idTocharacters")
+  //discord_discord_char_idTocharacters                            discord[]            @relation("discord_char_idTocharacters")
+  discord                                                        discord?
   rengoku_score_rengoku_score_character_idTocharacters           rengoku_score[]      @relation("rengoku_score_character_idTocharacters")
   warehouse_warehouse_character_idTocharacters                   warehouse[]          @relation("warehouse_character_idTocharacters")
   distribution_distribution_character_idTocharacters             distribution[]       @relation("distribution_character_idTocharacters")
@@ -126,28 +127,29 @@ model characters {
 }
 
 model discord {
-  id                                     Int        @id @default(autoincrement())
-  char_id                                Int
-  discord_id                             String     @db.VarChar(255)
-  is_male                                Boolean?   @default(true)
-  bounty                                 Int        @default(0)
-  road_champion                          Boolean    @default(false)
-  rain_demolizer                         Boolean    @default(false)
-  bounty_champion                        Boolean    @default(false)
-  bounty_master                          Boolean    @default(false)
-  bounty_expert                          Boolean    @default(false)
-  gacha                                  Int        @default(0)
-  pity                                   Int        @default(0)
-  boostcd                                BigInt     @default(0)
-  newbie                                 Boolean    @default(true)
-  latest_bounty                          String     @default("None") @db.VarChar(10)
-  latest_bounty_time                     BigInt     @default(0)
-  transfercd                             BigInt?    @default(0)
-  title                                  Int?       @default(0)
-  gold                                   Int?       @default(0)
-  silver                                 Int?       @default(0)
-  bronze                                 Int?       @default(0)
-  characters_discord_char_idTocharacters characters @relation("discord_char_idTocharacters", fields: [char_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id                 Int        @id @default(autoincrement())
+  char_id            Int        @unique
+  discord_id         String     @db.VarChar(255)
+  is_male            Boolean?   @default(true)
+  bounty             Int        @default(0)
+  road_champion      Boolean    @default(false)
+  rain_demolizer     Boolean    @default(false)
+  bounty_champion    Boolean    @default(false)
+  bounty_master      Boolean    @default(false)
+  bounty_expert      Boolean    @default(false)
+  gacha              Int        @default(0)
+  pity               Int        @default(0)
+  boostcd            BigInt     @default(0)
+  newbie             Boolean    @default(true)
+  latest_bounty      String     @default("None") @db.VarChar(10)
+  latest_bounty_time BigInt     @default(0)
+  transfercd         BigInt?    @default(0)
+  title              Int?       @default(0)
+  gold               Int?       @default(0)
+  silver             Int?       @default(0)
+  bronze             Int?       @default(0)
+  //characters_discord_char_idTocharacters characters @relation("discord_char_idTocharacters", fields: [char_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  characters         characters @relation(fields: [char_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([char_id])
 }
@@ -549,7 +551,7 @@ model stamps {
 }
 
 model suspended_account {
-  user_id   Int       @id
+  user_id   Int      @id
   username  String
   reason    Int
   until_at  DateTime @db.Timestamptz(6)

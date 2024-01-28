@@ -1,8 +1,4 @@
-interface RangedData {
-    [key: string]: string;
-}
-
-export const rangedJa: RangedData = {
+export const rangedJa: { [key: string]: string } = {
     '0000': '無し',
     '0100': 'クロスボウガン',
     '0200': 'クロスボウガン改',

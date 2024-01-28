@@ -1,169 +1,69 @@
 <script lang="ts">
+    import type { launcher_banner } from '@prisma/client/edge';
+    import { applyAction, enhance } from '$app/forms';
+    import { prepareModal, onSubmit, msgClosed, allBanners, conv2DArrayToObject, discordLinkConvertor } from '$lib/utils';
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
-    import { prepareModal, editMode, clicked_submit, notice, err_details, uploadFileViaApi, deleteFileViaApi, validateImageDimensions } from '$ts/main';
-    import type { launcher_banner } from '@prisma/client/edge';
 
     export let launcherBanner: launcher_banner[];
+    export let createdBnr: launcher_banner;
+    allBanners.set(launcherBanner);
 
     /* Below is the add mode script
     ====================================================*/
-    let add_mode: boolean = false;
-    const addBnrMode = (cancel: boolean) => {
-        // check if editing is in progress
-        if ($editMode && !cancel) {
-            notice.set(true);
-            err_details.set('Edit mode remains active. Page transitions can be made after all editing is completed.');
-            return false;
-        }
-
-        if (!cancel) {
+    let add_mode: boolean;
+    const addBnrMode = (enable: boolean): void => {
+        if (enable) {
             // when editing
-            editMode.set(true);
             add_mode = true;
         } else {
             // when finished editing
-            editMode.set(false);
             add_mode = false;
         }
     };
 
     /* Below is the edit mode script
     ====================================================*/
-    let editId: number;
-    interface CategoryType {
-        [key: string]: boolean;
-    }
-    const catTypes: CategoryType = {
+    let editingId: number;
+    let editMode = false;
+    const catTypes: { [key in keyof Omit<launcher_banner, 'id' | 'bnr_name'>]: boolean } = {
         bnr_url: false,
         ja_img_src: false,
         en_img_src: false,
     };
 
     // switch edit contents
-    const editModeSwitch = (id: number, type: keyof CategoryType) => {
+    const editModeSwitch = <T extends number, U extends keyof Omit<launcher_banner, 'id' | 'bnr_name'>>(id: T, type: U): void | false => {
         // check if another cat type is already open
         const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
 
         // if there is an open cat and a different category is cliked (try to open it) + not cancel btn
         if (activeCat && id !== 0) {
             // set everything to false (close) in a loop.
-            Object.keys(catTypes).forEach((key) => {
+            Object.keys(catTypes).forEach((_key) => {
+                const key = _key as keyof Omit<launcher_banner, 'id' | 'bnr_name'>;
                 catTypes[key] = false;
             });
 
             // set the category clicked to true (open), adn set editting u_id
             catTypes[type] = true;
-            editId = id;
+            editingId = id;
 
             return false;
         }
 
         // toggle true <-> false
-        if (!$editMode) {
+        if (!editMode) {
             // open a cat
-            editMode.set(true);
-            editId = id;
+            editMode = true;
+            editingId = id;
             catTypes[type] = true;
         } else {
             // close a cat
-            editMode.set(false);
-            editId = id;
+            editMode = false;
+            editingId = id;
             catTypes[type] = false;
         }
-    };
-
-    /* upload file function
-    ====================================================*/
-    const uploadAllBnrFiles = async () => {
-        const jaFileInput = document.getElementById('file_input1') as HTMLInputElement;
-        const enFileInput = document.getElementById('file_input2') as HTMLInputElement;
-        const bnrNameInput = document.getElementById('file_input3') as HTMLInputElement;
-        const jaFile: File | undefined = jaFileInput.files?.[0];
-        const enFile: File | undefined = enFileInput.files?.[0];
-        const jaFileName: string | undefined = jaFile?.name;
-        const enFileName: string | undefined = enFile?.name;
-
-        // file check
-        if (!jaFile || !enFile || bnrNameInput.value === '') {
-            return false;
-        }
-
-        // file format validation1
-        if (jaFileName?.indexOf(bnrNameInput.value) === -1 || enFileName?.indexOf(bnrNameInput.value) === -1) {
-            return false;
-        }
-
-        // file format validation2
-        if (jaFileName?.indexOf('_ja') === -1 || enFileName?.indexOf('_en') === -1) {
-            return false;
-        }
-
-        // file extension validation
-        if (jaFileName?.split('.').pop() !== 'png' || enFileName?.split('.').pop() !== 'png') {
-            return false;
-        }
-
-        // image dimensions validation
-        const isJaValid = await validateImageDimensions(jaFile, 515, 120);
-        const isEnValid = await validateImageDimensions(enFile, 515, 120);
-
-        if (!isJaValid || !isEnValid) {
-            alert('File Dimensions are incorrect.');
-            return false;
-        }
-
-        uploadFileViaApi(jaFile, 'ja');
-        uploadFileViaApi(enFile, 'en');
-    };
-
-    /* reupload file function
-    ====================================================*/
-    const reuploadBnrFile = async (elmId: string, lang: string, bnrName: string) => {
-        const fileInput = document.getElementById(elmId) as HTMLInputElement;
-        const file: File | undefined = fileInput.files?.[0];
-        const fileName: string | undefined = file?.name;
-
-        // file check
-        if (!file) {
-            return false;
-        }
-
-        // file format validation1
-        if (fileName?.indexOf(bnrName) === -1) {
-            return false;
-        }
-
-        // file format validation2
-        switch (lang) {
-            case 'ja':
-                if (fileName?.indexOf('_ja') === -1) {
-                    return false;
-                }
-                break;
-
-            case 'en':
-                if (fileName?.indexOf('_en') === -1) {
-                    return false;
-                }
-                break;
-        }
-
-        // file extension validation
-        if (fileName?.split('.').pop() !== 'png') {
-            return false;
-        }
-
-        // image dimensions validation
-        const isValid = await validateImageDimensions(file, 515, 120);
-
-        if (!isValid) {
-            alert('File Dimensions are incorrect.');
-            return false;
-        }
-
-        deleteFileViaApi(lang, `${bnrName}_${lang}`);
-        uploadFileViaApi(file, lang);
     };
 </script>
 
@@ -173,42 +73,59 @@
         Add New Banner
     </h2>
     <div class="console_contents">
-        <form class="info_add_form" action="?/createBnrData" method="POST">
-            <p class="console_contents_note">* Each file must be named "BannerName_lang," and have a png extension.</p>
-            <p class="console_contents_note">* The dimensions of each file must be 515px (width) and 120px (height).</p>
+        <form
+            class="info_add_form"
+            action="?/createBnrData"
+            method="POST"
+            enctype="multipart/form-data"
+            use:enhance={() => {
+                return async ({ result }) => {
+                    msgClosed.set(false);
+                    onSubmit.set(false);
+                    await applyAction(result);
+
+                    if (result.type === 'success') {
+                        $allBanners.push(createdBnr);
+                        addBnrMode(false);
+                    }
+                };
+            }}
+        >
+            <p class="console_contents_note">* Each banner must be named "BannerName_lang," and type of file is image/png.</p>
+            <p class="console_contents_note">* Banner width is 515px and height is 120px.</p>
 
             <dl class="console_contents_list">
                 <dt class="contents_term">Banner URL</dt>
                 <dd class="contents_desc">
                     <input type="text" name="bnr_url" autocomplete="off" />
-                    <p class="console_contents_note">* The link to the site that is displayed when users click on the banner. This setting is optional.</p>
+                    <p class="console_contents_note">* The URL of the site to be displayed when the banner is clicked.</p>
                 </dd>
 
-                <dt class="contents_term">Japanese Banner</dt>
+                <dt class="contents_term">Japanese Banner<br /><span class="contents_term_required">[Required]</span></dt>
                 <dd class="contents_desc">
-                    <input id="file_input1" name="ja_file_name" type="file" />
+                    <input name="ja_file" type="file" accept=".png" />
                 </dd>
 
-                <dt class="contents_term">English Banner</dt>
+                <dt class="contents_term">English Banner<br /><span class="contents_term_required">[Required]</span></dt>
                 <dd class="contents_desc">
-                    <input id="file_input2" name="en_file_name" type="file" />
+                    <input name="en_file" type="file" accept=".png" />
                 </dd>
 
-                <dt class="contents_term">Banner Name</dt>
+                <dt class="contents_term">Banner Name<br /><span class="contents_term_required">[Required]</span></dt>
                 <dd class="contents_desc">
-                    <input id="file_input3" type="text" name="bnr_name" autocomplete="off" style="margin-bottom: 1%;" />
-                    <p class="console_contents_note">* The banner names must be all lowercase, and if two words are combined, use underscores.</p>
-                    <p class="console_contents_note">* The banner name can't be changed again after the files have been uploaded.</p>
+                    <input type="text" name="bnr_name" autocomplete="off" />
+                    <p class="console_contents_note">* Banner names must be all lowercase, and if two words are combined, use underscores.</p>
+                    <p class="console_contents_note">* Banner name is permanent.</p>
                 </dd>
             </dl>
 
             <div class="group_btns">
-                <button on:click={() => (clicked_submit.set(true), uploadAllBnrFiles())} class="blue_btn" type="submit">
+                <button on:click={() => onSubmit.set(true)} class="blue_btn" type="submit">
                     <span class="btn_icon material-icons">check</span>
                     <span class="btn_text">Save</span>
                 </button>
 
-                <button class="red_btn" type="button" on:click={() => addBnrMode(true)}>
+                <button class="red_btn" type="button" on:click={() => addBnrMode(false)}>
                     <span class="btn_icon material-icons">close</span>
                     <span class="btn_text">Cancel</span>
                 </button>
@@ -216,7 +133,7 @@
         </form>
     </div>
 {:else}
-    <button class="green_btn" on:click={() => addBnrMode(false)}>
+    <button class="green_btn" on:click={() => addBnrMode(true)}>
         <span class="btn_icon material-icons">add</span>
         <span class="btn_text">Add Banner</span>
     </button>
@@ -225,156 +142,210 @@
         Launcher Banner
     </h2>
     <div class="console_contents">
-        {#if launcherBanner.length === 0}
-            <p class="console_contents_note">No Banner Data Found</p>
+        {#if $allBanners.length === 0}
+            <p class="console_contents_note">No Banner Data</p>
         {:else}
-            {#each _.sortBy(launcherBanner, 'id') || [] as bnr}
-                <dl class="console_contents_list">
-                    <p class="console_contents_list_title">
-                        <button
-                            class="red_btn"
-                            on:click={() =>
-                                prepareModal('deleteBnr', {
-                                    title: 'Delete the following banner data?',
-                                    form_action: 'deleteBnrData',
-                                    bnr_id: bnr.id,
-                                    bnr_url: bnr.en_img_src,
-                                    bnr_name: bnr.bnr_name,
-                                })}
-                        >
-                            <span class="btn_icon material-icons">delete</span>
-                            <span class="btn_text">Delete</span>
-                        </button>
-                        Banner Data
-                    </p>
+            {#each _.sortBy($allBanners, 'id') as bnr}
+                <form
+                    action="?/updateBnrData"
+                    method="POST"
+                    enctype="multipart/form-data"
+                    use:enhance={({ formData }) => {
+                        const data = conv2DArrayToObject([...formData.entries()]);
+                        const column = Object.keys(data)[1];
+                        const id = Number(data.bnr_id);
 
-                    <dt class="contents_term">Banner ID</dt>
-                    <dd class="contents_desc">
-                        {bnr.id}
-                    </dd>
+                        return async ({ result }) => {
+                            msgClosed.set(false);
+                            onSubmit.set(false);
+                            await applyAction(result);
 
-                    <dt class="contents_term">Ja Banner Source</dt>
-                    <dd class="contents_desc">
-                        {bnr.ja_img_src}
+                            if (result.type === 'success' && column === 'bnr_url') {
+                                const bnr_url = data.bnr_url;
 
-                        {#if editId === bnr.id && catTypes['ja_img_src']}
-                            <button class="red_btn" on:click={() => editModeSwitch(0, 'ja_img_src')}>
-                                <span class="btn_icon material-icons">close</span>
-                                <span class="btn_text">Cancel</span>
+                                // update bnr_url
+                                $allBanners = $allBanners.map((bnr) => {
+                                    if (bnr.id === id)
+                                        return {
+                                            ...bnr,
+                                            bnr_url: !bnr_url ? null : bnr_url.indexOf('discord.com') ? discordLinkConvertor(bnr_url) : bnr_url,
+                                        };
+
+                                    return bnr;
+                                });
+                            }
+                        };
+                    }}
+                >
+                    <dl class="console_contents_list">
+                        <p class="console_contents_list_title">
+                            <button
+                                class="red_btn"
+                                type="button"
+                                on:click={() =>
+                                    prepareModal('deleteBnr', {
+                                        title: 'Delete the following banner data?',
+                                        form_action: 'deleteBnrData',
+                                        bnr_id: bnr.id,
+                                        bnr_url: bnr.en_img_src,
+                                        bnr_name: bnr.bnr_name,
+                                    })}
+                            >
+                                <span class="btn_icon material-icons">delete</span>
+                                <span class="btn_text">Delete</span>
                             </button>
-                        {:else}
-                            <button class="normal_btn" on:click={() => editModeSwitch(bnr.id, 'ja_img_src')}>
-                                <span class="btn_icon material-icons">upload_file</span>
-                                <span class="btn_text">Reupload</span>
-                            </button>
-                        {/if}
+                            Banner Data
+                        </p>
 
-                        {#if editId === bnr.id && catTypes['ja_img_src']}
-                            <form transition:slide class="edit_area_form" action="?/updateBnrData" method="POST">
-                                <input type="hidden" name="lang" value="ja" />
-                                <input type="hidden" name="bnr_id" value={editId} />
-                                <input type="hidden" name="bnr_name" value={bnr.bnr_name} />
-                                <div class="edit_area enter">
-                                    <p class="edit_area_title">Reupload File</p>
-                                    <dl class="edit_area_form_parts text">
-                                        <dt>Select new file</dt>
-                                        <dd>
-                                            <p class="console_contents_note">Once reuploaded, the original file will be deleted.</p>
-                                            <input id="file_input4" name="file_name" type="file" />
-                                        </dd>
-                                    </dl>
+                        <dt class="contents_term">Banner ID</dt>
+                        <dd class="contents_desc">
+                            {bnr.id}
+                        </dd>
 
-                                    <button on:click={() => (clicked_submit.set(true), reuploadBnrFile('file_input4', 'ja', bnr.bnr_name))} class="blue_btn" type="submit">
-                                        <span class="btn_icon material-icons">check</span>
-                                        <span class="btn_text">Save</span>
-                                    </button>
+                        <dt class="contents_term">Ja Banner Source</dt>
+                        <dd class="contents_desc">
+                            {bnr.ja_img_src}
+
+                            {#if editingId === bnr.id && catTypes['ja_img_src']}
+                                <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'ja_img_src')}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" on:click={() => editModeSwitch(bnr.id, 'ja_img_src')}>
+                                    <span class="btn_icon material-icons">upload_file</span>
+                                    <span class="btn_text">Re-upload</span>
+                                </button>
+                            {/if}
+
+                            {#if editingId === bnr.id && catTypes['ja_img_src']}
+                                <div transition:slide class="edit_area_box">
+                                    <input type="hidden" name="lang" value="ja" />
+                                    <input type="hidden" name="bnr_id" value={editingId} />
+                                    <input type="hidden" name="bnr_name" value={bnr.bnr_name} />
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Re-upload File</p>
+                                        <p class="console_contents_note">* Once re-uploaded, the original file will be deleted.</p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Select new file</dt>
+                                            <dd>
+                                                <input name="file" type="file" />
+                                            </dd>
+                                        </dl>
+
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                editModeSwitch(0, 'ja_img_src');
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
                                 </div>
-                            </form>
-                        {/if}
-                    </dd>
+                            {/if}
+                        </dd>
 
-                    <dt class="contents_term">En Banner Source</dt>
-                    <dd class="contents_desc">
-                        {bnr.en_img_src}
+                        <dt class="contents_term">En Banner Source</dt>
+                        <dd class="contents_desc">
+                            {bnr.en_img_src}
 
-                        {#if editId === bnr.id && catTypes['en_img_src']}
-                            <button class="red_btn" on:click={() => editModeSwitch(0, 'en_img_src')}>
-                                <span class="btn_icon material-icons">close</span>
-                                <span class="btn_text">Cancel</span>
-                            </button>
-                        {:else}
-                            <button class="normal_btn" on:click={() => editModeSwitch(bnr.id, 'en_img_src')}>
-                                <span class="btn_icon material-icons">upload_file</span>
-                                <span class="btn_text">Reupload</span>
-                            </button>
-                        {/if}
+                            {#if editingId === bnr.id && catTypes['en_img_src']}
+                                <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'en_img_src')}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" on:click={() => editModeSwitch(bnr.id, 'en_img_src')}>
+                                    <span class="btn_icon material-icons">upload_file</span>
+                                    <span class="btn_text">Re-upload</span>
+                                </button>
+                            {/if}
 
-                        {#if editId === bnr.id && catTypes['en_img_src']}
-                            <form transition:slide class="edit_area_form" action="?/updateBnrData" method="POST">
-                                <input type="hidden" name="lang" value="en" />
-                                <input type="hidden" name="bnr_id" value={editId} />
-                                <input type="hidden" name="bnr_name" value={bnr.bnr_name} />
-                                <div class="edit_area enter">
-                                    <p class="edit_area_title">Reupload File</p>
-                                    <dl class="edit_area_form_parts text">
-                                        <dt>Select new file</dt>
-                                        <dd>
-                                            <p class="console_contents_note">Once reuploaded, the original file will be deleted.</p>
-                                            <input id="file_input5" name="file_name" type="file" />
-                                        </dd>
-                                    </dl>
+                            {#if editingId === bnr.id && catTypes['en_img_src']}
+                                <div transition:slide class="edit_area_box">
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Re-upload File</p>
+                                        <p class="console_contents_note">* Once re-uploaded, the original file will be deleted.</p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Select new file</dt>
+                                            <dd>
+                                                <input type="hidden" name="bnr_id" value={editingId} />
+                                                <input name="file" type="file" />
+                                                <input type="hidden" name="lang" value="en" />
+                                                <input type="hidden" name="bnr_name" value={bnr.bnr_name} />
+                                            </dd>
+                                        </dl>
 
-                                    <button on:click={() => (clicked_submit.set(true), reuploadBnrFile('file_input5', 'en', bnr.bnr_name))} class="blue_btn" type="submit">
-                                        <span class="btn_icon material-icons">check</span>
-                                        <span class="btn_text">Save</span>
-                                    </button>
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                editModeSwitch(0, 'en_img_src');
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
                                 </div>
-                            </form>
-                        {/if}
-                    </dd>
+                            {/if}
+                        </dd>
 
-                    <dt class="contents_term">Banner URL</dt>
-                    <dd class="contents_desc">
-                        {bnr.bnr_url}
+                        <dt class="contents_term">Banner URL</dt>
+                        <dd class="contents_desc">
+                            {bnr.bnr_url}
 
-                        {#if editId === bnr.id && catTypes['bnr_url']}
-                            <button class="red_btn" on:click={() => editModeSwitch(0, 'bnr_url')}>
-                                <span class="btn_icon material-icons">close</span>
-                                <span class="btn_text">Cancel</span>
-                            </button>
-                        {:else}
-                            <button class="normal_btn" on:click={() => editModeSwitch(bnr.id, 'bnr_url')}>
-                                <span class="btn_icon material-icons">mode_edit</span>
-                                <span class="btn_text">Edit</span>
-                            </button>
-                        {/if}
+                            {#if editingId === bnr.id && catTypes['bnr_url']}
+                                <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'bnr_url')}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" on:click={() => editModeSwitch(bnr.id, 'bnr_url')}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
 
-                        {#if editId === bnr.id && catTypes['bnr_url']}
-                            <form transition:slide class="edit_area_form" action="?/updateBnrData" method="POST">
-                                <input type="hidden" name="bnr_id" value={editId} />
-                                <div class="edit_area enter">
-                                    <p class="edit_area_title">Change URL</p>
-                                    <dl class="edit_area_form_parts text">
-                                        <dt>Enter new URL</dt>
-                                        <dd>
-                                            <input type="text" name="bnr_url" value={bnr.bnr_url} autocomplete="off" />
-                                        </dd>
-                                    </dl>
+                            {#if editingId === bnr.id && catTypes['bnr_url']}
+                                <div transition:slide class="edit_area_box">
+                                    <input type="hidden" name="bnr_id" value={editingId} />
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Change URL</p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Enter new URL</dt>
+                                            <dd>
+                                                <input type="text" name="bnr_url" value={bnr.bnr_url} autocomplete="off" />
+                                            </dd>
+                                        </dl>
 
-                                    <button on:click={() => clicked_submit.set(true)} class="blue_btn" type="submit">
-                                        <span class="btn_icon material-icons">check</span>
-                                        <span class="btn_text">Save</span>
-                                    </button>
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                editModeSwitch(0, 'bnr_url');
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
                                 </div>
-                            </form>
-                        {/if}
-                    </dd>
+                            {/if}
+                        </dd>
 
-                    <dt class="contents_term">Banner Name</dt>
-                    <dd class="contents_desc">
-                        {bnr.bnr_name}
-                    </dd>
-                </dl>
+                        <dt class="contents_term">Banner Name</dt>
+                        <dd class="contents_desc">
+                            {bnr.bnr_name}
+                        </dd>
+                    </dl>
+                </form>
             {/each}
         {/if}
     </div>

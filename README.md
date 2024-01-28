@@ -1,6 +1,6 @@
-<img src="https://raw.githubusercontent.com/Otya063/rain-web/development/static/img/common/rainserver_logo.webp" width="50%" height="50%" />
+<img src="https://raw.githubusercontent.com/Otya063/rain-web/development/static/img/common/rain_server_logo.webp" width="50%" height="50%" />
 
-The Rain Server website repository.
+Rain Website repository.
 
 ## Get Started
 

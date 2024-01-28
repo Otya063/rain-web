@@ -18,6 +18,10 @@ body {
     -webkit-text-size-adjust: 100%;
 }
 
+.disable_default_wrapper {
+    display: block !important;
+}
+
 .error_wrapper {
     width: 100%;
     overflow: hidden;

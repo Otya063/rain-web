@@ -211,6 +211,11 @@
                         border-bottom: 1px gray dashed;
                         user-select: none;
                         overflow-wrap: break-word;
+
+                        .contents_term_required {
+                            color: #f17373;
+                            font-size: 1.4rem;
+                        }
                     }
 
                     // コンテンツアイテム説明
@@ -254,35 +259,6 @@
                         .red_btn {
                             margin: 1% 0;
                         }
-
-                        // 編集モードキャンセルボタン
-                        /* .cancel_btn {
-                            position: relative;
-                            right: 0;
-                            color: #f56044;
-                            background: #fff;
-                            border: 1px solid #f56044;
-                            font-weight: 700;
-                            font-size: 1.6rem;
-                            width: 18%;
-                            padding: 0.3% 2.3% 0% 0;
-                            margin: 1% 0;
-                            transition: all 0.3s;
-                            text-align: right;
-
-                            .material-icons {
-                                position: absolute;
-                                left: 11%;
-                                top: 51%;
-                                transform: translateY(-50%);
-                            }
-
-                            &:hover {
-                                color: #fff;
-                                background: #f58c7a;
-                                border: 1px solid #f58c7a;
-                            }
-                        } */
                     }
                 }
 
@@ -295,35 +271,6 @@
                 .group_btns {
                     display: flex;
                     justify-content: space-evenly;
-
-                    // キャンセルボタン
-                    /* .cancel_btn {
-                        position: relative;
-                        right: 0;
-                        color: #f56044;
-                        background: #fff;
-                        border: 1px solid #f56044;
-                        font-weight: 700;
-                        font-size: 1.6rem;
-                        width: 15%;
-                        padding: 0.3% 2.3% 0% 0;
-                        border-radius: 4px;
-                        text-align: right;
-                        transition: all 0.3s;
-
-                        .material-icons {
-                            position: absolute;
-                            left: 11%;
-                            top: 51%;
-                            transform: translateY(-50%);
-                        }
-
-                        &:hover {
-                            color: #fff;
-                            background: #f58c7a;
-                            border: 1px solid #f58c7a;
-                        }
-                    } */
                 }
             }
 
@@ -582,7 +529,7 @@
 ====================================================*/
 
     // 編集フォーム本体
-    .edit_area_form {
+    .edit_area_box {
         // フォームdivタグ
         .edit_area {
             display: flex;
@@ -637,7 +584,7 @@
             }
 
             // フォーム部品
-            .edit_area_form_parts {
+            .edit_area_box_parts {
                 user-select: none;
 
                 // ラジオボタン
@@ -682,7 +629,8 @@
                     flex-wrap: wrap;
                     align-items: center;
                     justify-content: center;
-
+                    margin-top: 2%;
+                    
                     dt {
                         width: 30%;
                     }
@@ -871,12 +819,6 @@
         animation: authLoaderAni 1s infinite linear;
     }
 
-    // 無効化ボタン
-    .disabled_btn {
-        opacity: 0.6;
-        pointer-events: none;
-    }
-
     /* Ban関連
 ====================================================*/
     // Ban済ユーザー表示
@@ -889,7 +831,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: space-evenly;
+        justify-content: center;
         background: rgba(127, 127, 127, 0.5);
         z-index: 2;
         user-select: none;
@@ -947,35 +889,6 @@
                 border: 1px solid #2abcec;
             }
         }
-
-        // キャンセルボタン
-        /* .cancel_btn {
-            position: relative;
-            right: 0;
-            color: #f56044;
-            background: #fff;
-            border: 1px solid #f56044;
-            font-weight: 700;
-            font-size: 1.6rem;
-            width: 11.5%;
-            padding: 1% 1.5% 0.5% 0;
-            border-radius: 4px;
-            text-align: right;
-            transition: all 0.3s;
-
-            .material-icons {
-                position: absolute;
-                left: 11%;
-                top: 51%;
-                transform: translateY(-50%);
-            }
-
-            &:hover {
-                color: #fff;
-                background: #f58c7a;
-                border: 1px solid #f58c7a;
-            }
-        } */
     }
 
     /* ユーザーコンポーネント内キャラクターリスト
@@ -993,7 +906,7 @@
         height: 143px;
         margin-bottom: 1%;
         user-select: none;
-        cursor: pointer;
+        //cursor: pointer;
 
         // 武器種名に応じて背景変更
         $weaponNames: $weaponNamesArray;
