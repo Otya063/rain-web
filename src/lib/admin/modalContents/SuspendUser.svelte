@@ -2,6 +2,7 @@
     import type { suspended_account } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
     import { onSubmit, closeModal, suspendUserData, conv2DArrayToObject, msgClosed, paginatedUsersData, timeOut, closeMsgDisplay } from '$lib/utils';
+    import { DateTime } from 'luxon';
 
     export let suspendedAccount: suspended_account;
     let permanent: boolean;
@@ -50,7 +51,7 @@
             }}
         >
             <input type="hidden" name="type" value={$suspendUserData.form_action} />
-            <input type="hidden" name="zoneName" value={$suspendUserData.form_action} />
+            <input type="hidden" name="zoneName" value={DateTime.local().zoneName} />
 
             <div class="modal_header">
                 <h1>Suspend / Unsuspend User Account</h1>
