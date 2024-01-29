@@ -999,7 +999,7 @@
             </form>
         {/each}
 
-        <!-- <div class="pagination_btn_list">
+        <div class="pagination_btn_list">
             <form
                 method="POST"
                 action="?/getPaginatedUsers"
@@ -1010,20 +1010,25 @@
                         await applyAction(result);
 
                         if (result.type === 'success') {
-                            paginatedUsers.set(usersData);
+                            paginatedUsersData.set(paginatedUsers);
                             paginationMetaData.set(paginationMeta);
                         }
                     };
                 }}
             >
-                <input type="hidden" name="filter_value" value={filterValue} />
-                <input type="hidden" name="filter_param" value={filterParam} />
+                <input name="filter_value" type="hidden" value={$filterValue} />
+                <input name="filter_param" type="hidden" value={$filterParam} />
+                <input name="status" type="hidden" bind:value={status} />
+                <input type="hidden" name="cursor" bind:value={cursor} />
 
                 <button
                     class="pagination_btn_item"
                     type="submit"
                     on:click={() => {
+                        $timeOut && closeMsgDisplay($timeOut);
                         paginationBackClick = true;
+                        status = 'back';
+                        cursor = $paginationMetaData.prevCursor;
                     }}
                     class:active={paginationBackClick}
                     class:disabled_elm={!$paginationMetaData.hasPrevPage || paginationBackClick}>Back</button
@@ -1032,12 +1037,15 @@
                     class="pagination_btn_item"
                     type="submit"
                     on:click={() => {
+                        $timeOut && closeMsgDisplay($timeOut);
                         paginationNextClick = true;
+                        status = 'next';
+                        cursor = $paginationMetaData.nextCursor;
                     }}
                     class:active={paginationNextClick}
                     class:disabled_elm={!$paginationMetaData.hasNextPage || paginationNextClick}>Next</button
                 >
             </form>
-        </div> -->
+        </div>
     {/if}
 </div>
