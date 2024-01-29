@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { suspended_account } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, suspendUserData, conv2DArrayToObject, msgClosed, paginatedUsers, timeOut, closeMsgDisplay } from '$lib/utils';
+    import { onSubmit, closeModal, suspendUserData, conv2DArrayToObject, msgClosed, paginatedUsersData, timeOut, closeMsgDisplay } from '$lib/utils';
 
     export let suspendedAccount: suspended_account;
     let permanent: boolean;
@@ -22,7 +22,7 @@
                     await applyAction(result);
 
                     if (result.type === 'success') {
-                        $paginatedUsers = $paginatedUsers.map((user) => {
+                        $paginatedUsersData = $paginatedUsersData.map((user) => {
                             if (user.id === id) {
                                 return {
                                     ...user,

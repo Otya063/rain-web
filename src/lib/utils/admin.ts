@@ -1,12 +1,14 @@
 import type { launcher_banner, launcher_info } from '@prisma/client/edge';
-import type { PaginatedUsers2, PaginationMeta } from '$lib/types';
+import type { PaginatedUsers, PaginationMeta } from '$lib/types';
 import { writable } from 'svelte/store';
 
+export const filterValue = writable('');
+export const filterParam = writable('');
 export const adminTabValue = writable<string | null>('');
 export const onSubmit = writable(false);
 export const allInformation = writable<{ [key: string]: launcher_info[] }>();
 export const allBanners = writable<launcher_banner[]>();
-export const paginatedUsers = writable<PaginatedUsers2[]>();
+export const paginatedUsersData = writable<PaginatedUsers[]>();
 export const paginationMetaData = writable<PaginationMeta>();
 
 /* Upload File

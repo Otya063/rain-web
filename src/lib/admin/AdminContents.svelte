@@ -18,7 +18,7 @@
 {:else if $adminTabValue === 'info'}
     <LauncherInformation createdInfo={form?.createdInfo} updatedInfo={form?.updatedInfo} {informationData} />
 {:else if $adminTabValue === 'users'}
-    <Users searchedUsers={form?.searchedUsers} paginationMeta={form?.paginationMeta} />
+    <Users paginatedUsers={form?.paginatedUsers} paginationMeta={form?.paginationMeta} />
 {:else if $adminTabValue === 'bnr'}
     <LauncherBanner createdBnr={form?.createdBnr} {launcherBanner} />
 {/if}

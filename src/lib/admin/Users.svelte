@@ -14,23 +14,26 @@
         timeOut,
         closeMsgDisplay,
         conv2DArrayToObject,
-        paginatedUsers,
+        paginatedUsersData,
         paginationMetaData,
         getCourseByObjData,
+        filterValue,
+        filterParam,
     } from '$lib/utils';
-    import type { PaginationMeta, PaginatedUsers2 } from '$lib/types';
+    import type { PaginatedUsers, PaginationMeta } from '$lib/types';
     import _ from 'lodash';
     import { DateTime } from 'luxon';
     import { fade, slide } from 'svelte/transition';
 
-    export let searchedUsers: PaginatedUsers2[];
+    export let paginatedUsers: PaginatedUsers[];
     export let paginationMeta: PaginationMeta;
     let paginationBackClick = false;
     let paginationNextClick = false;
     let specifiedUser = true;
-    let filterValue: string;
-    let filterParam: string;
-    let page = 1;
+    let bindedValue: string;
+    let bindedParam: string;
+    let status = 'init';
+    let cursor = 0;
     let btnStage = 1;
     let rightsData: Record<string, any> = {};
     let ids: number[];
@@ -171,7 +174,7 @@
                                 btnStage = 1;
 
                                 if (result.type === 'success') {
-                                    paginatedUsers.set(searchedUsers);
+                                    paginatedUsersData.set(paginatedUsers);
                                     paginationMetaData.set(paginationMeta);
                                 } else {
                                     msgClosed.set(false);
@@ -179,15 +182,28 @@
                             };
                         }}
                     >
-                        <input name="page" type="hidden" bind:value={page} />
-                        <input name="filter_value" id="filter_input" type="text" placeholder="Filter ..." bind:value={filterValue} on:change={() => (page = 1)} />
+                        <input name="filter_value" type="hidden" value={$filterValue} />
+                        <input name="filter_param" type="hidden" value={$filterParam} />
+                        <input name="status" type="hidden" bind:value={status} />
+
+                        <input id="filter_input" type="text" placeholder="Filter ..." bind:value={bindedValue} />
                         By
-                        <select name="filter_param" class="filter_select" bind:value={filterParam} on:change={() => (page = 1)}>
+                        <select class="filter_select" bind:value={bindedParam}>
                             <option value="username">Username</option>
                             <option value="character_name">Character Name</option>
                         </select>
 
-                        <button id="btn" class="green_btn" type="submit" on:click={() => $timeOut && closeMsgDisplay($timeOut)}>
+                        <button
+                            id="btn"
+                            class="green_btn"
+                            type="submit"
+                            on:click={() => {
+                                $timeOut && closeMsgDisplay($timeOut);
+                                filterValue.set(bindedValue);
+                                filterParam.set(bindedParam);
+                                status = 'init';
+                            }}
+                        >
                             {#if btnStage === 0}
                                 <span in:fade class="loading"></span>
                             {:else if btnStage === 1}
@@ -218,7 +234,7 @@
 
                                 switch (target) {
                                     case 'all': {
-                                        $paginatedUsers = $paginatedUsers.map((user) => ({
+                                        $paginatedUsersData = $paginatedUsersData.map((user) => ({
                                             ...user,
                                             rights: getCourseByObjData(data),
                                         }));
@@ -230,7 +246,7 @@
                                         ids = data.specified_u_text.split('+').map(Number);
                                         delete data.specified_u_text;
 
-                                        $paginatedUsers = $paginatedUsers.map((user) => ({
+                                        $paginatedUsersData = $paginatedUsersData.map((user) => ({
                                             ...user,
                                             rights: ids.includes(user.id) ? getCourseByObjData(data) : user.rights,
                                         }));
@@ -301,7 +317,7 @@
         </div>
     </div>
 
-    {#if !$paginatedUsers}
+    {#if !$paginatedUsersData}
         <p class="console_contents_note">Searched user(s) will be displayed here.</p>
     {:else}
         <div class="pagination_btn_list">
@@ -315,15 +331,16 @@
                         await applyAction(result);
 
                         if (result.type === 'success') {
-                            paginatedUsers.set(searchedUsers);
+                            paginatedUsersData.set(paginatedUsers);
                             paginationMetaData.set(paginationMeta);
                         }
                     };
                 }}
             >
-                <input type="hidden" name="filter_value" value={filterValue} />
-                <input type="hidden" name="filter_param" value={filterParam} />
-                <input type="hidden" name="page" bind:value={page} />
+                <input name="filter_value" type="hidden" value={$filterValue} />
+                <input name="filter_param" type="hidden" value={$filterParam} />
+                <input name="status" type="hidden" bind:value={status} />
+                <input type="hidden" name="cursor" bind:value={cursor} />
 
                 <button
                     class="pagination_btn_item"
@@ -331,7 +348,8 @@
                     on:click={() => {
                         $timeOut && closeMsgDisplay($timeOut);
                         paginationBackClick = true;
-                        page -= 1;
+                        status = 'back';
+                        cursor = $paginationMetaData.prevCursor;
                     }}
                     class:active={paginationBackClick}
                     class:disabled_elm={!$paginationMetaData.hasPrevPage || paginationBackClick}>Back</button
@@ -342,7 +360,8 @@
                     on:click={() => {
                         $timeOut && closeMsgDisplay($timeOut);
                         paginationNextClick = true;
-                        page += 1;
+                        status = 'next';
+                        cursor = $paginationMetaData.nextCursor;
                     }}
                     class:active={paginationNextClick}
                     class:disabled_elm={!$paginationMetaData.hasNextPage || paginationNextClick}>Next</button
@@ -350,7 +369,7 @@
             </form>
         </div>
 
-        {#each $paginatedUsers as user}
+        {#each $paginatedUsersData as user}
             <form
                 action="?/updateUserData"
                 method="POST"
@@ -375,7 +394,7 @@
                                 });
                             }
 
-                            $paginatedUsers = $paginatedUsers.map((user) => {
+                            $paginatedUsersData = $paginatedUsersData.map((user) => {
                                 if (user.id === id) {
                                     return {
                                         ...user,
@@ -980,7 +999,7 @@
             </form>
         {/each}
 
-        <div class="pagination_btn_list">
+        <!-- <div class="pagination_btn_list">
             <form
                 method="POST"
                 action="?/getPaginatedUsers"
@@ -991,7 +1010,7 @@
                         await applyAction(result);
 
                         if (result.type === 'success') {
-                            paginatedUsers.set(searchedUsers);
+                            paginatedUsers.set(usersData);
                             paginationMetaData.set(paginationMeta);
                         }
                     };
@@ -999,14 +1018,12 @@
             >
                 <input type="hidden" name="filter_value" value={filterValue} />
                 <input type="hidden" name="filter_param" value={filterParam} />
-                <input type="hidden" name="page" bind:value={page} />
 
                 <button
                     class="pagination_btn_item"
                     type="submit"
                     on:click={() => {
                         paginationBackClick = true;
-                        page -= 1;
                     }}
                     class:active={paginationBackClick}
                     class:disabled_elm={!$paginationMetaData.hasPrevPage || paginationBackClick}>Back</button
@@ -1016,12 +1033,11 @@
                     type="submit"
                     on:click={() => {
                         paginationNextClick = true;
-                        page += 1;
                     }}
                     class:active={paginationNextClick}
                     class:disabled_elm={!$paginationMetaData.hasNextPage || paginationNextClick}>Next</button
                 >
             </form>
-        </div>
+        </div> -->
     {/if}
 </div>

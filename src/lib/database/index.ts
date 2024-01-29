@@ -13,17 +13,15 @@ import { withAccelerate } from '@prisma/extension-accelerate';
 import { DATABASE_URL } from '$env/static/private';
 import type { InformationType } from '$lib/types';
 import _ from 'lodash';
-import { extension } from 'prisma-paginate';
 
+export * from './admin';
 export const db = new PrismaClient({
     datasources: {
         db: {
             url: DATABASE_URL,
         },
     },
-})
-    .$extends(withAccelerate())
-    .$extends(extension);
+}).$extends(withAccelerate());
 
 class ServerDataManager {
     /* Characters
@@ -248,6 +246,14 @@ class ServerDataManager {
         return await db.suspended_account.findFirst({
             where: {
                 username,
+            },
+        });
+    }
+
+    public async getSuspendedUsersByUserId(user_id: number): Promise<suspended_account | null> {
+        return await db.suspended_account.findFirst({
+            where: {
+                user_id,
             },
         });
     }

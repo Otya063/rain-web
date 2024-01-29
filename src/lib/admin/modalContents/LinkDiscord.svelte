@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { discord } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, linkDiscordData, conv2DArrayToObject, msgClosed, paginatedUsers } from '$lib/utils';
+    import { onSubmit, closeModal, linkDiscordData, conv2DArrayToObject, msgClosed, paginatedUsersData } from '$lib/utils';
 
     export let createdDiscord: discord;
 </script>
@@ -23,7 +23,7 @@
                     await applyAction(result);
 
                     if (result.type === 'success') {
-                        $paginatedUsers = $paginatedUsers.map((user) => {
+                        $paginatedUsersData = $paginatedUsersData.map((user) => {
                             // delete same discord data
                             type === 'linkDiscord' &&
                                 (user.characters = user.characters.map((character) => ({

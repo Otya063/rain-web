@@ -1,4 +1,5 @@
 export * from './modal';
+export * from './admin';
 
 /* Manual Article
 ====================================================*/

@@ -24,7 +24,7 @@
 
 <slot />
 
-<footer>
+<footer class="common_footer">
     <Footer />
 </footer>
 

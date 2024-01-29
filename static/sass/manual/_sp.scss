@@ -1628,7 +1628,7 @@
 ====================================================*/
 
     // フッター背景
-    footer {
+    .common_footer {
         background: url(#{$path_img}/common/footer/footer_bg.webp) center top no-repeat;
         background-color: #000;
         background-size: 100%;

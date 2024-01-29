@@ -52,31 +52,32 @@ export const toggleMsgDetail = (e: Event, t: Timeout, width: Tweened<number>): v
     target.classList.add('disabled_elm');
 
     setTimeout(() => {
-        // after 1s, enable btn
+        // after 0.5s, enable btn
         target.disabled = false;
         target.classList.remove('disabled_elm');
-    }, 1000);
+    }, 500);
 
-    if (t) {
-        if (get(timerPause)) {
-            errDetailMode.set(false);
-            timerPause.set(false);
-            t.run();
-            width.set(0, { duration: t.getRestTime() });
-            document.getElementById('msg_close_btn')?.classList.remove('disabled_elm');
-        } else {
-            errDetailMode.set(true);
-            timerPause.set(true);
-            t.pause();
-            width.set(get(width), { duration: 0 });
-            document.getElementById('msg_close_btn')?.classList.add('disabled_elm');
-        }
+    if (get(timerPause)) {
+        errDetailMode.set(false);
+        timerPause.set(false);
+        t.run();
+        width.set(0, { duration: t.getRestTime() });
+    } else {
+        errDetailMode.set(true);
+        timerPause.set(true);
+        t.pause();
+        width.set(get(width), { duration: 0 });
     }
 };
 
 /* Close the Message Display Manually
 ====================================================*/
 export const closeMsgDisplay = (t: Timeout): void => {
-    msgClosed.set(true);
+    errDetailMode.set(false);
+    document.getElementById('error_view_btn')?.classList.add('disabled_elm');
     t.stop();
+    setTimeout(() => {
+        timerPause.set(false);
+        msgClosed.set(true);
+    }, 100);
 };

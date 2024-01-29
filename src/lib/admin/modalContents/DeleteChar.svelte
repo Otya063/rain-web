@@ -1,6 +1,6 @@
 <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, deleteCharacterData, conv2DArrayToObject, msgClosed, paginatedUsers } from '$lib/utils';
+    import { onSubmit, closeModal, deleteCharacterData, conv2DArrayToObject, msgClosed, paginatedUsersData } from '$lib/utils';
 
     let permanent: boolean;
 </script>
@@ -20,7 +20,7 @@
                     await applyAction(result);
 
                     if (result.type === 'success') {
-                        $paginatedUsers = $paginatedUsers.map((user) => {
+                        $paginatedUsersData = $paginatedUsersData.map((user) => {
                             // delete character
                             type === 'deleteCharacter' && permanent && (user.characters = user.characters.filter((character) => character.id !== char_id));
 

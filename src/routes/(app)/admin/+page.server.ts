@@ -1,9 +1,9 @@
 import type { Action, Actions, PageServerLoad } from './$types';
-import type { discord, discord_register, launcher_banner, launcher_info, launcher_system, suspended_account, users } from '@prisma/client/edge';
+import type { discord, discord_register, launcher_banner, launcher_info, launcher_system, users } from '@prisma/client/edge';
 import { error, fail } from '@sveltejs/kit';
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
-import ServerData, { db } from '$lib/database';
-import type { PaginatedUsers1, PaginationMeta, PaginatedUsers2 } from '$lib/types';
+import ServerData, { db, getPaginatedUserData, getPaginationMeta } from '$lib/database';
+import type { PaginatedUsers, PaginationMeta } from '$lib/types';
 import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi } from '$lib/utils';
 import { DateTime } from 'luxon';
 
@@ -257,116 +257,54 @@ const courseControl: Action = async ({ request }) => {
 
 const getPaginatedUsers: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { filter_param, filter_value, page } = data as { filter_param: 'username' | 'character_name'; filter_value: string; page: number };
+    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'username' | 'character_name'; filter_value: string; status: string; cursor: number };
 
     if (!filter_value) {
         return fail(400, { error: true, message: emptyMsg });
     }
 
-    let usersData!: PaginatedUsers1[];
-    let paginationMeta: PaginationMeta = {
-        hasPrevPage: false,
-        hasNextPage: false,
-    };
+    let paginatedUsers: PaginatedUsers[];
+    let paginationMeta: PaginationMeta;
 
-    if (filter_param === 'username') {
-        const result = await db.users.paginate({
-            limit: 5,
-            page: Number(page),
-            where: {
-                username: {
-                    contains: filter_value,
-                },
-            },
-            include: {
-                characters: {
-                    select: {
-                        id: true,
-                        user_id: true,
-                        is_new_character: true,
-                        name: true,
-                        gr: true,
-                        hrp: true,
-                        weapon_type: true,
-                        weapon_id: true,
-                        last_login: true,
-                        deleted: true,
-                        discord: true,
-                    },
-                    orderBy: {
-                        id: 'asc',
-                    },
-                },
-            },
-            orderBy: {
-                id: 'asc',
-            },
-        });
-        if (!result.result.length) {
-            return fail(400, { error: true, message: "The user(s) with the entered username doesn't exist." });
+    switch (status) {
+        case 'init': {
+            paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'init', 5);
+            if (!paginatedUsers.length) {
+                return fail(400, {
+                    error: true,
+                    message: filter_param === 'username' ? "The user(s) with the entered username doesn't exist." : "The character(s) with the entered name doesn't exist.",
+                });
+            }
+
+            const nextCursor = paginatedUsers[4]?.id || 0;
+            paginationMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
+
+            break;
         }
 
-        usersData = result.result as PaginatedUsers1[];
-        paginationMeta.hasPrevPage = result.hasPrevPage;
-        paginationMeta.hasNextPage = result.hasNextPage;
-    } else if (filter_param === 'character_name') {
-        const result = await db.users.paginate({
-            limit: 5,
-            page: Number(page),
-            where: {
-                characters: {
-                    some: {
-                        name: {
-                            contains: filter_value,
-                        },
-                    },
-                },
-            },
-            include: {
-                characters: {
-                    select: {
-                        id: true,
-                        user_id: true,
-                        is_new_character: true,
-                        name: true,
-                        gr: true,
-                        hrp: true,
-                        weapon_type: true,
-                        weapon_id: true,
-                        last_login: true,
-                        deleted: true,
-                        discord: true,
-                    },
-                    orderBy: {
-                        id: 'asc',
-                    },
-                },
-            },
-            orderBy: {
-                id: 'asc',
-            },
-        });
-        if (!result.result.length) {
-            return fail(400, { error: true, message: "The character(s) with the entered name doesn't exist." });
+        case 'back':
+        case 'next': {
+            paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1);
+            if (!paginatedUsers.length) {
+                return fail(400, {
+                    error: true,
+                    message: filter_param === 'username' ? "The user(s) with the entered username doesn't exist." : "The character(s) with the entered name doesn't exist.",
+                });
+            }
+
+            const prevCursor = paginatedUsers[0]?.id || 0;
+            const nextCursor = paginatedUsers[4]?.id || 0;
+            paginationMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
+
+            break;
         }
 
-        usersData = result.result as PaginatedUsers1[];
-        paginationMeta.hasPrevPage = result.hasPrevPage;
-        paginationMeta.hasNextPage = result.hasNextPage;
+        default: {
+            throw new Error('Invalid Status');
+        }
     }
 
-    let searchedUsers = (await Promise.all(
-        usersData.map(async (user) => ({
-            ...user,
-            suspended_account: await db.suspended_account.findFirst({
-                where: {
-                    user_id: user.id,
-                },
-            }),
-        }))
-    )) as PaginatedUsers2[];
-
-    return { searchedUsers, paginationMeta };
+    return { paginatedUsers, paginationMeta };
 };
 
 const updateUserData: Action = async ({ request }) => {

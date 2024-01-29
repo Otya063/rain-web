@@ -65,7 +65,7 @@
         {:else if form?.error}
             <span class="material-icons-outlined">warning</span>
             <p style="padding-top: 0.3%;">Error occurred.</p>
-            <button on:click={(e) => toggleMsgDetail(e, $timeOut, width)} class="error_view_btn">View Details</button>
+            <button id="error_view_btn" class="error_view_btn" on:click={(e) => toggleMsgDetail(e, $timeOut, width)}>View Details</button>
         {/if}
         <button id="msg_close_btn" class="msg_close_btn" on:click={() => closeMsgDisplay($timeOut)} />
         <div class="timer_bar" style={`width: ${$width}%;`} />
@@ -112,7 +112,7 @@
     </article>
 </main>
 
-<footer>
+<footer class="admin_footer">
     <div class="footer_note">
         <p>
             * Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. <br />This community is based on the cooperation of numerous volunteers, and no revenue of any sort is
