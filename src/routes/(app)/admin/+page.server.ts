@@ -372,7 +372,14 @@ const updateUserData: Action = async ({ request }) => {
 
 const suspendUser: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { user_id, username, reason_type, permanently_del, until_at } = data as { user_id: number; username: string; reason_type: number; permanently_del: string; until_at: string };
+    const { user_id, username, reason_type, permanently_del, until_at, zoneName } = data as {
+        user_id: number;
+        username: string;
+        reason_type: number;
+        permanently_del: string;
+        until_at: string;
+        zoneName: string;
+    };
 
     if (!reason_type) {
         return fail(400, { error: true, message: emptyMsg });
@@ -406,10 +413,10 @@ const suspendUser: Action = async ({ request }) => {
                 return fail(400, { error: true, message: emptyMsg });
             }
 
-            console.log(DateTime.local().zoneName)
+            console.log(zoneName);
             console.log(DateTime.fromISO(String(until_at)));
-            console.log(DateTime.fromISO(String(until_at)).setZone('utc').toISO());
-            console.log(DateTime.fromISO(String(until_at)).setZone('utc').toUTC().toISO());
+            console.log(DateTime.fromISO(String(until_at)).setZone(zoneName).toISO());
+            console.log(DateTime.fromISO(String(until_at)).setZone(zoneName).toUTC().toISO());
             const suspendedAccount = await db.suspended_account.create({
                 data: {
                     user_id: Number(user_id),

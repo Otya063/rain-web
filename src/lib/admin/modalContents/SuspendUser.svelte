@@ -50,6 +50,7 @@
             }}
         >
             <input type="hidden" name="type" value={$suspendUserData.form_action} />
+            <input type="hidden" name="zoneName" value={$suspendUserData.form_action} />
 
             <div class="modal_header">
                 <h1>Suspend / Unsuspend User Account</h1>
