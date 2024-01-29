@@ -148,14 +148,12 @@
                 // ペジネーションボタングループ
                 .pagination_btn_list {
                     text-align: center;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
+                    user-select: none;
                     margin: 2% 0;
 
                     // 各ボタン
                     .pagination_btn_item {
-                        padding: 0.5% 1%;
+                        padding: 1% 1% 0.7%;
                         margin: 0 1%;
                         border: #272727 solid 1px;
                         background: #f7f6f6;
@@ -177,11 +175,12 @@
                 // コンテンツ内リストタイトル
                 .console_contents_list_title {
                     width: 100%;
-                    font-size: 2rem;
-                    padding: 2% 0 0 1%;
+                    font-size: 2.5rem;
+                    padding: 1% 0 0 1%;
                     color: #df9e27;
                     user-select: none;
                     border-bottom: #df9e27 2px solid;
+                    font-weight: 700;
 
                     // 赤ボタン調整
                     .red_btn {
@@ -212,6 +211,11 @@
                         border-bottom: 1px gray dashed;
                         user-select: none;
                         overflow-wrap: break-word;
+
+                        .contents_term_required {
+                            color: #f17373;
+                            font-size: 1.4rem;
+                        }
                     }
 
                     // コンテンツアイテム説明
@@ -255,35 +259,6 @@
                         .red_btn {
                             margin: 1% 0;
                         }
-
-                        // 編集モードキャンセルボタン
-                        /* .cancel_btn {
-                            position: relative;
-                            right: 0;
-                            color: #f56044;
-                            background: #fff;
-                            border: 1px solid #f56044;
-                            font-weight: 700;
-                            font-size: 1.6rem;
-                            width: 18%;
-                            padding: 0.3% 2.3% 0% 0;
-                            margin: 1% 0;
-                            transition: all 0.3s;
-                            text-align: right;
-
-                            .material-icons {
-                                position: absolute;
-                                left: 11%;
-                                top: 51%;
-                                transform: translateY(-50%);
-                            }
-
-                            &:hover {
-                                color: #fff;
-                                background: #f58c7a;
-                                border: 1px solid #f58c7a;
-                            }
-                        } */
                     }
                 }
 
@@ -296,35 +271,6 @@
                 .group_btns {
                     display: flex;
                     justify-content: space-evenly;
-
-                    // キャンセルボタン
-                    /* .cancel_btn {
-                        position: relative;
-                        right: 0;
-                        color: #f56044;
-                        background: #fff;
-                        border: 1px solid #f56044;
-                        font-weight: 700;
-                        font-size: 1.6rem;
-                        width: 15%;
-                        padding: 0.3% 2.3% 0% 0;
-                        border-radius: 4px;
-                        text-align: right;
-                        transition: all 0.3s;
-
-                        .material-icons {
-                            position: absolute;
-                            left: 11%;
-                            top: 51%;
-                            transform: translateY(-50%);
-                        }
-
-                        &:hover {
-                            color: #fff;
-                            background: #f58c7a;
-                            border: 1px solid #f58c7a;
-                        }
-                    } */
                 }
             }
 
@@ -583,7 +529,7 @@
 ====================================================*/
 
     // 編集フォーム本体
-    .edit_area_form {
+    .edit_area_box {
         // フォームdivタグ
         .edit_area {
             display: flex;
@@ -638,7 +584,7 @@
             }
 
             // フォーム部品
-            .edit_area_form_parts {
+            .edit_area_box_parts {
                 user-select: none;
 
                 // ラジオボタン
@@ -683,7 +629,8 @@
                     flex-wrap: wrap;
                     align-items: center;
                     justify-content: center;
-
+                    margin-top: 2%;
+                    
                     dt {
                         width: 30%;
                     }
@@ -698,6 +645,21 @@
                         select {
                             width: 90%;
                         }
+                    }
+                }
+
+                // ユーザー内コントロールフォーム
+                .filter_form {
+                    position: relative;
+                    display: flex;
+                    width: 70%;
+                    height: 50px;
+                    justify-content: flex-start;
+                    align-items: center;
+
+                    .green_btn {
+                        top: auto;
+                        right: 0px;
                     }
                 }
             }
@@ -838,12 +800,23 @@
             background: #0ad275;
             border: 1px solid #0ad275;
         }
+
+        // ロード中
+        &.loading_btn {
+            border-radius: 50%;
+        }
     }
 
-    // 無効化ボタン
-    .disabled_btn {
-        opacity: 0.6;
-        pointer-events: none;
+    // ボタンロード中
+    .loading {
+        @include authLoaderKey;
+        width: 24px;
+        height: 24px;
+        margin: 10px;
+        border-radius: 50%;
+        border: 0.25rem solid rgb(79 79 79 / 20%);
+        border-top-color: black;
+        animation: authLoaderAni 1s infinite linear;
     }
 
     /* Ban関連
@@ -858,7 +831,7 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: space-evenly;
+        justify-content: center;
         background: rgba(127, 127, 127, 0.5);
         z-index: 2;
         user-select: none;
@@ -916,35 +889,6 @@
                 border: 1px solid #2abcec;
             }
         }
-
-        // キャンセルボタン
-        /* .cancel_btn {
-            position: relative;
-            right: 0;
-            color: #f56044;
-            background: #fff;
-            border: 1px solid #f56044;
-            font-weight: 700;
-            font-size: 1.6rem;
-            width: 11.5%;
-            padding: 1% 1.5% 0.5% 0;
-            border-radius: 4px;
-            text-align: right;
-            transition: all 0.3s;
-
-            .material-icons {
-                position: absolute;
-                left: 11%;
-                top: 51%;
-                transform: translateY(-50%);
-            }
-
-            &:hover {
-                color: #fff;
-                background: #f58c7a;
-                border: 1px solid #f58c7a;
-            }
-        } */
     }
 
     /* ユーザーコンポーネント内キャラクターリスト
@@ -962,7 +906,7 @@
         height: 143px;
         margin-bottom: 1%;
         user-select: none;
-        cursor: pointer;
+        //cursor: pointer;
 
         // 武器種名に応じて背景変更
         $weaponNames: $weaponNamesArray;
@@ -1046,7 +990,7 @@
         .wpn_text {
             position: absolute;
             font-weight: 700;
-            width: 160px;
+            width: 130px;
             left: 17%;
             top: 50%;
             overflow: hidden;
@@ -1093,7 +1037,7 @@
         .rank {
             position: absolute;
             top: 44%;
-            left: 50%;
+            left: 45%;
             font-weight: 700;
         }
 
@@ -1101,7 +1045,7 @@
         .char_id {
             position: absolute;
             top: 57.5%;
-            left: 50%;
+            left: 45%;
             font-weight: 700;
         }
 
@@ -1109,7 +1053,7 @@
         .last_login {
             position: absolute;
             top: 70%;
-            left: 50%;
+            left: 45%;
             font-weight: 700;
         }
     }
@@ -1191,7 +1135,7 @@
 
     /* フッター
 ====================================================*/
-    footer {
+    .admin_footer {
         position: relative;
         background: #000;
         z-index: 1;

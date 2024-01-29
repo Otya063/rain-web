@@ -1,20 +1,22 @@
-type Locales = import('$i18n/i18n-types').Locales
-type TranslationFunctions = import('$i18n/i18n-types').TranslationFun
-import type { User } from '$ts/database'
+import type { Locales, TranslationFunctions } from '$i18n/i18n-types';
+import type { users } from '@prisma/client';
 
-// See https://kit.svelte.dev/docs/types#app
-// for information about these interfaces
 declare global {
-	namespace App {
-		// interface Error {}
-		interface Locals {
-			locale: Locales
-			LL: TranslationFunctions
-			authUser: User
-		}
-		// interface PageData {}
-		// interface Platform {}
-	}
+    namespace App {
+        // interface Error {}
+        interface Locals {
+            locale: Locales;
+            LL: TranslationFunctions;
+            authUser: users;
+        }
+        // interface PageData {}
+        interface Platform {
+            env: {
+                MAINTENANCE_MODE: string;
+                MAINTENANCE_DATE: string;
+            };
+        }
+    }
 }
 
 export {};

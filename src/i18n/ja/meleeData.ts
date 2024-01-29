@@ -1,8 +1,4 @@
-interface MeleeData {
-    [key: string]: string;
-}
-
-export const meleeJa: MeleeData = {
+export const meleeJa: { [key: string]: string } = {
     '0000': '無し',
     '0100': 'アイアンソード',
     '0200': 'アイアンソード改',

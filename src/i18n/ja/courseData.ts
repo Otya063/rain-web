@@ -1,19 +1,12 @@
-type CourseData = Record<
-    string,
-    {
-        id: number;
-        enabled: boolean;
-        code: string;
-    }
->;
+import type { CourseJaData } from '$lib/types';
 
-export const courseJa = (bin: string[]): CourseData => {
+export const courseJa = (bin: string[]): CourseJaData => {
     return {
-        /* 'トライアルコース': {
+        'トライアルコース [廃止]': {
             id: 1,
             enabled: bin[1] === '1',
             code: 'tlc',
-        }, */ // automatically enabled (= 1) on the server side
+        }, // automatically enabled (= 1) on the server side
         ハンターライフコース: {
             id: 2,
             enabled: bin[2] === '1',
@@ -24,11 +17,11 @@ export const courseJa = (bin: string[]): CourseData => {
             enabled: bin[3] === '1',
             code: 'exc',
         },
-        /* 'エクストラBコース': {
+        "エクストラBコース [廃止]": {
             id: 4,
             enabled: bin[4] === '1',
             code: 'exbc',
-        }, */ // leftover
+        }, // leftover
         モバイルコース: {
             id: 5,
             enabled: bin[5] === '1',
@@ -39,11 +32,11 @@ export const courseJa = (bin: string[]): CourseData => {
             enabled: bin[6] === '1',
             code: 'prc',
         },
-        /* 'パローネコース（エクストラCコース）': {
+        'パローネコース（エクストラCコース） [廃止]': {
             id: 7,
             enabled: bin[7] === '1',
             code: 'plc',
-        }, */ // leftover
+        }, // leftover
         アシストコース: {
             id: 8,
             enabled: bin[8] === '1',
@@ -70,36 +63,36 @@ export const courseJa = (bin: string[]): CourseData => {
             code: 'nbc',
         },
         // [13]-[19] nothing
-        /* 'デバッグ': {
+        "デバッグ [廃止]": {
             id: 20,
             enabled: bin[20] === '1',
             code: 'dbg',
-        }, */
-        /* 'COG連携切れ': {
+        },
+        "COG連携失効 [廃止]": {
             id: 21,
             enabled: bin[21] === '1',
             code: 'cle',
-        }, */
-        /* 'Xbox LIVE ゴールド メンバーシップ': {
+        },
+        'Xbox LIVE ゴールド メンバーシップ [廃止]': {
             id: 22,
             enabled: bin[22] === '1',
             code: 'xgm',
-        }, */
-        /* 'PS3/Vita トロフィー獲得条件': {
+        },
+        'PS3/Vita トロフィー獲得条件 [廃止]': {
             id: 23,
             enabled: bin[23] === '1',
             code: 'trq',
-        }, */
-        /* 'COG連携確認': {
+        },
+        "COG連携確認 [廃止]": {
             id: 24,
             enabled: bin[24] === '1',
             code: 'clc',
-        }, */
-        /* 'ネットカフェ': {
+        },
+        "ネットカフェ [廃止]": {
             id: 25,
             enabled: bin[25] === '1',
             code: 'nc',
-        }, */
+        },
         公認ネットカフェ: {
             id: 26,
             enabled: bin[26] === '1',

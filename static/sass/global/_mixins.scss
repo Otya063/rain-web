@@ -139,3 +139,15 @@
         }
     }
 }
+
+// 認証中ローディングアニメーション
+@mixin authLoaderKey {
+    @keyframes authLoaderAni {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+}

@@ -26,8 +26,7 @@
         // ヘッダー内部
         .header_inner {
             width: 100%;
-            height: 67px;
-            @include flex_center;
+            display: flex;
             justify-content: space-between;
 
             // プラットフォーム
@@ -64,174 +63,123 @@
                 }
             }
 
-            // ヘッダーメニュー
-            .header_language {
-                position: absolute;
-                right: 0;
-                top: 13%;
-                padding-right: 1%;
+            // 言語選択枠
+            .header_language_selector {
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+                color: #fff;
+                border: 2px solid #fff;
+                box-sizing: content-box;
+                position: relative;
+                transition: all 0.7s ease-in-out;
+                width: 150px;
+                height: 52px;
+                margin: 0.3%;
+                z-index: 2;
 
-                // メニュー中央調整
-                ul {
-                    // 言語選択枠
-                    .header_language_selector {
-                        width: 8em;
-                        height: 2.8em;
-                        color: #fff;
-                        border: 2px solid #fff;
-                        box-sizing: content-box;
-                        position: relative;
-                        padding: 0 0.5em;
-                        transition: border 0.3s ease-in-out;
+                // 言語選択アクティブ時
+                &.lang_arrow_open {
+                    height: 30vh;
+                    background: rgb(0 0 0 / 85%);
 
-                        // 言語選択アクティブ時
-                        &.langArrow_open {
-                            p {
-                                &::after {
-                                    content: '';
-                                    position: absolute;
-                                    background: url(#{$path_img}/common/lang_arrow.webp) no-repeat;
-                                    background-size: 100% 100%;
-                                    width: 0.9em;
-                                    height: 0.5em;
-                                    top: 50%;
-                                    right: 0;
-                                    transform: translateY(-30%) rotate(-180deg);
-                                }
-                            }
-                        }
+                    .lang_arrow {
+                        top: 14.5px;
+                        transform: rotate(-180deg);
+                    }
+                }
 
-                        // 言語選択ホバー
-                        &:hover {
-                            border-color: orangered;
-                        }
+                // 言語選択ホバー
+                &:hover {
+                    border-color: orangered;
+                }
 
-                        // 言語選択枠内調整
-                        p {
-                            position: relative;
-                            @include flex_center;
-                            width: 8em;
-                            height: 2.4em;
-                            padding: 0 12% 0 25%;
+                // グローバルマーク
+                .global_mark {
+                    position: absolute;
+                    top: 11.5px;
+                    left: 9px;
+                    font-size: 3rem;
+                }
 
-                            // グローバルマーク
-                            &::before {
-                                content: '';
-                                position: absolute;
-                                background: url(#{$path_img}/common/global.webp) no-repeat;
-                                background-size: 100% 100%;
-                                aspect-ratio: 1 / 1;
-                                width: 2em;
-                                top: 50%;
-                                left: 0;
-                                transform: translateY(-50%);
-                            }
+                // 現在表示言語
+                .current_language {
+                    position: absolute;
+                    top: 11.5px;
+                    left: 50px;
+                    font-size: 2rem;
+                }
 
-                            // 矢印
-                            &::after {
-                                content: '';
-                                position: absolute;
-                                background: url(#{$path_img}/common/lang_arrow.webp) no-repeat;
-                                background-size: 100% 100%;
-                                width: 0.9em;
-                                height: 0.5em;
-                                top: 50%;
-                                right: 0;
-                                transition: transform 0.4s;
-                                transform: translateY(-25%);
-                            }
+                // 矢印
+                .lang_arrow {
+                    position: absolute;
+                    top: 11.5px;
+                    right: 8px;
+                    font-size: 2.6rem;
+                    padding-top: 2%;
+                    transition: all 0.5s ease-in-out;
+                }
+            }
 
-                            // 現在表示言語
-                            .current_language {
-                                position: absolute;
-                                top: 14%;
-                                font-size: 1.9rem;
-                                line-height: 1.4;
+            // 言語選択欄
+            .language_select_area_list {
+                display: flex;
+                flex-direction: column;
+                z-index: 1;
+                width: 100%;
+                align-items: center;
+                padding-top: 28%;
 
-                                &:lang(en) {
-                                    top: 17%;
-                                }
-                            }
-                        }
+                // 各言語
+                .language_names {
+                    @include flex_center;
+                    flex-direction: column;
+                    color: #fff;
+                    margin-top: 15%;
+                    padding-bottom: 2%;
+                    position: relative;
+                    will-change: opacity;
+
+                    // 言語名初めのみ上部余白なし
+                    &:first-child {
+                        margin-top: 0;
                     }
 
-                    // 言語選択
-                    .lang_sel_judge {
-                        // 言語選択欄初め非表示
-                        .language_selectArea {
-                            padding: 0;
-                            margin: 0;
-                            height: 0;
-                            overflow: hidden;
-                            border: none;
+                    // 言語名ホバー時
+                    &.lang_selected {
+                        color: orange;
+                    }
 
-                            // 言語選択欄
-                            .language_selectArea_list {
-                                position: relative;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                flex-direction: column;
-                                background: rgba(0, 0, 0, 0.8);
-                                border: gray 4px solid;
-                                border-top: none;
-                                padding: 15% 5%;
-                                z-index: 1;
+                    // 言語名メイン
+                    .language_main_name {
+                        font-size: 1.9rem;
+                        transform: translateY(6%);
+                    }
 
-                                // 各言語
-                                .language_names {
-                                    @include flex_center;
-                                    flex-direction: column;
-                                    color: #fff;
-                                    margin-top: 15%;
-                                    padding-bottom: 2%;
-                                    position: relative;
-                                    will-change: opacity;
+                    // 言語名サブ
+                    .language_sub_name {
+                        font-size: 1.2rem;
+                        transform: translateY(6%);
+                    }
 
-                                    // 言語名初めのみ上部余白なし
-                                    &:first-child {
-                                        margin-top: 0;
-                                    }
-
-                                    // 言語名ホバー時
-                                    &.lang_selected {
-                                        color: orange;
-                                    }
-
-                                    // 言語名メイン
-                                    .language_mainName {
-                                        font-size: 1.9rem;
-                                        transform: translateY(6%);
-                                    }
-
-                                    // 言語名サブ
-                                    .language_subName {
-                                        font-size: 1.2rem;
-                                        transform: translateY(6%);
-                                    }
-
-                                    // 言語名選択時下線
-                                    &::before {
-                                        background: #ff701e;
-                                        content: '';
-                                        width: 100%;
-                                        height: 2px;
-                                        position: absolute;
-                                        left: 0;
-                                        bottom: 0;
-                                        margin: auto;
-                                        transform-origin: center top;
-                                        transform: scale(0, 1);
-                                        transition: transform 0.3s;
-                                    }
-                                    // +
-                                    &:hover::before {
-                                        transform-origin: center top;
-                                        transform: scale(1, 1);
-                                    }
-                                }
-                            }
-                        }
+                    // 言語名選択時下線
+                    &::before {
+                        background: #ff701e;
+                        content: '';
+                        width: 100%;
+                        height: 2px;
+                        position: absolute;
+                        left: 0;
+                        bottom: 0;
+                        margin: auto;
+                        transform-origin: center top;
+                        transform: scale(0, 1);
+                        transition: transform 0.3s;
+                    }
+                    // +
+                    &:hover::before {
+                        transform-origin: center top;
+                        transform: scale(1, 1);
                     }
                 }
             }
@@ -255,7 +203,7 @@
             display: block;
             position: absolute;
             content: '';
-            background: url(#{$path_img}/common/rainserver_logo.webp) center center no-repeat;
+            background: url(#{$path_img}/common/rain_server_logo.webp) center center no-repeat;
             background-size: 100%;
             width: 22%;
             aspect-ratio: 20 / 13;
@@ -286,6 +234,11 @@
         }
     }
 
+    // サイドメニュー表示切り替えボタン
+    .menu_btn {
+        display: none;
+    }
+
     // サイドメニュー、メインコンテンツ位置調整及び背景画像設定
     .bg {
         background: url(#{$path_img}/common/body_bg.webp) center top repeat-y;
@@ -302,7 +255,7 @@
     /* サイドメニュー
 ====================================================*/
 
-    // トップページ画像との距離
+    // メニュー本体
     .side_menu {
         position: relative;
         width: 270px;
@@ -384,10 +337,6 @@
 
                 // サブカテゴリー
                 .sub_categories {
-                    padding: 0;
-                    margin: 0;
-                    height: 0;
-                    overflow: hidden;
                     transition: 0.5s;
                     border-top: none;
                     background: rgba(85, 85, 85, 0.3);
@@ -996,6 +945,7 @@
         color: #00a6c4;
         background: #fff;
         opacity: 0.7;
+        z-index: 1;
 
         &::before {
             content: '';
@@ -1489,9 +1439,8 @@
 ====================================================*/
 
     // フッター背景
-    footer {
+    .common_footer {
         background: url(#{$path_img}/common/footer/footer_bg.webp) center top no-repeat;
-        background-color: #000;
         background-size: 100%;
 
         // フッターセクション余白調整
@@ -1532,7 +1481,6 @@
 
                         // アイテムタイトル
                         .footer_list_title {
-                            font-size: 1.5rem;
                             font-weight: bold;
                             color: #fff;
                         }

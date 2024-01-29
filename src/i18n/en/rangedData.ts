@@ -1,8 +1,4 @@
-interface RangedData {
-    [key: string]: string;
-}
-
-export const rangedEn: RangedData = {
+export const rangedEn: { [key: string]: string } = {
     '0000': 'None',
     '0100': 'Cross Bowgun',
     '0200': 'Cross Bowgun α',
@@ -311,7 +307,7 @@ export const rangedEn: RangedData = {
     '3701': 'God\'s Majesty "Dream"',
     '3801': 'God\'s Majesty "Vision"',
     '3901': 'God\'s Majesty "Illusion"',
-    '3A01': 'God\'s Palace',
+    '3A01': "God's Palace",
     '3B01': 'God\'s Palace "Dream"',
     '3C01': 'God\'s Palace "Vision"',
     '3D01': 'God\'s Palace "Illusion"',

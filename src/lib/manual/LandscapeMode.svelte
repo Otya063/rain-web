@@ -1,6 +1,6 @@
 <script lang="ts">
-    import LL from '$i18n/i18n-svelte';
     import { browser } from '$app/environment';
+    import LL from '$i18n/i18n-svelte';
 
     // prohibit users from using landscape mode
     const mobileDevices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
@@ -14,7 +14,7 @@
 
 <div class="landscape_mode" class:detected={landscape}>
     <span class="rotate_text">
-        {$LL.landscape_mode()}
+        {$LL.landscapeMode()}
     </span>
     <img src="/img/common/landscape/rotate_device.webp" alt="rotate" class="rotate_device" />
     <div class="now_waiting">
