@@ -310,6 +310,7 @@ const getPaginatedUsers: Action = async ({ request }) => {
 const updateUserData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.user_id);
+    const zoneName = data.zoneName;
     const column = Object.keys(data)[1] as keyof Omit<users, 'id' | 'last_character' | 'last_login' | 'item_box' | 'web_login_key'>;
     const value = Object.values(data)[1] as string | number;
     let rightsData: Record<string, any> = {};
@@ -346,7 +347,7 @@ const updateUserData: Action = async ({ request }) => {
                     column === 'rights'
                         ? getCourseByObjData(rightsData)
                         : column === 'return_expires'
-                        ? DateTime.fromISO(String(value)).toUTC().toISO()
+                        ? DateTime.fromISO(String(value)).setZone(zoneName).toUTC().toISO()
                         : column === 'frontier_points' || column === 'gacha_premium' || column === 'gacha_trial'
                         ? !value
                             ? null
@@ -413,16 +414,12 @@ const suspendUser: Action = async ({ request }) => {
                 return fail(400, { error: true, message: emptyMsg });
             }
 
-            console.log(zoneName);
-            console.log(DateTime.fromISO(String(until_at)));
-            console.log(DateTime.fromISO(String(until_at)).setZone(zoneName).toISO());
-            console.log(DateTime.fromISO(String(until_at)).setZone(zoneName).toUTC().toISO());
             const suspendedAccount = await db.suspended_account.create({
                 data: {
                     user_id: Number(user_id),
                     username,
                     reason: Number(reason_type),
-                    until_at: DateTime.fromISO(String(until_at)).setZone(DateTime.local().zoneName).toUTC().toISO()!,
+                    until_at: DateTime.fromISO(String(until_at)).setZone(zoneName).toUTC().toISO()!,
                     permanent: false,
                 },
             });

@@ -675,6 +675,8 @@
                         {#if editingId === user.id && catTypes['return_expires']}
                             <div transition:slide class="edit_area_box">
                                 <input type="hidden" name="user_id" value={editingId} />
+                                <input type="hidden" name="zoneName" value={DateTime.local().zoneName} />
+
                                 <div class="edit_area enter">
                                     <p class="edit_area_title">Change Date</p>
                                     <p class="console_contents_note">* The date and time to be set are automatically converted to UTC.</p>
