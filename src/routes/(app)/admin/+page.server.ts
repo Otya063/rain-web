@@ -406,8 +406,9 @@ const suspendUser: Action = async ({ request }) => {
                 return fail(400, { error: true, message: emptyMsg });
             }
 
-            console.log(DateTime.fromISO(String(until_at)).setZone(DateTime.local().zoneName).toUTC().toISO());
-            console.log(DateTime.fromISO(String(until_at)).setZone(DateTime.local().zoneName).toISO());
+            console.log(DateTime.fromISO(String(until_at)).setZone('utc'));
+            console.log(DateTime.fromISO(String(until_at)).setZone('utc').toISO());
+            console.log(DateTime.fromISO(String(until_at)).setZone('utc').toUTC().toISO());
             const suspendedAccount = await db.suspended_account.create({
                 data: {
                     user_id: Number(user_id),
