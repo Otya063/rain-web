@@ -1,6 +1,6 @@
 <img src="https://raw.githubusercontent.com/Otya063/rain-web/development/static/img/common/rain_server_logo.webp" width="50%" height="50%" />
 
-Rain Website repository.
+This is the [Rain Website](https://www.rain-server.com/) repository.
 
 ## Get Started
 
@@ -16,7 +16,7 @@ npx prisma generate --no-engine
 
 Start local server.
 ```bash
-npm run dev
+wrangler dev
 ```
 
 ### Deploy the website.

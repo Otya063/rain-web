@@ -452,6 +452,7 @@
                                         user_id: user.id,
                                         username: user.username,
                                         char_name: user.characters.map((character) => character.name || 'Ready to Hunt'),
+                                        until_at: user.suspended_account?.until_at,
                                     })}
                             >
                                 {#if !user.suspended_account.permanent}
@@ -675,7 +676,6 @@
                         {#if editingId === user.id && catTypes['return_expires']}
                             <div transition:slide class="edit_area_box">
                                 <input type="hidden" name="user_id" value={editingId} />
-                                <input type="hidden" name="zoneName" value={DateTime.local().zoneName} />
 
                                 <div class="edit_area enter">
                                     <p class="edit_area_title">Change Date</p>
@@ -689,6 +689,7 @@
                                                 name="return_expires"
                                                 value={!user.return_expires ? '' : DateTime.fromJSDate(user.return_expires).toFormat("yyyy-MM-dd'T'HH:mm")}
                                             />
+                                            <input type="hidden" name="zoneName" value={DateTime.local().zoneName} />
                                         </dd>
                                     </dl>
 

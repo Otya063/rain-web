@@ -101,14 +101,25 @@
                             <p>Suspention Period (until at)</p>
                             <input type="datetime-local" name="until_at" class:disabled_elm={permanent} />
                         </li>
+                    {:else}
+                        <li class="modal_list_item">
+                            <p>Suspention Period (until at)</p>
+                            <span>
+                                {DateTime.fromJSDate(!$suspendUserData.until_at ? new Date(0) : $suspendUserData.until_at)
+                                    .setZone(DateTime.local().zoneName)
+                                    .setLocale('en')
+                                    .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                        </li>
                     {/if}
                 </ul>
 
                 {#if $suspendUserData.form_action === 'suspendUser'}
+                    <p class="modal_note">* Empty isn't allowed for "Reason" and "Suspention Period (when "Permanently Suspend" is unchecked)."</p>
                     <p class="modal_note">
-                        * Empty isn't allowed for "Reason" and "Suspention Period (when "Permanently Suspend" is unchecked)."
+                        * If "Permanently Suspend" is checked, the user account, including all character data, will be completely deleted from our database and can't be restored. Otherwise, they can
+                        be restored.
                     </p>
-                    <p class="modal_note">* If "Permanently Suspend" is checked, the user account, including all character data, will be completely deleted from our database and can't be restored. Otherwise, they can be restored.</p>
                     <p class="modal_note">* "Suspention Period" is automatically converted to UTC.</p>
                 {/if}
             </div>
