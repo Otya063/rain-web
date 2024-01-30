@@ -24,6 +24,7 @@ export interface SuspendUserData extends ModalCommonData {
     user_id: number;
     username: string;
     char_name: string[];
+    until_at?: Date;
 }
 
 export interface DeleteCharacterData extends ModalCommonData {

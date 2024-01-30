@@ -452,6 +452,7 @@
                                         user_id: user.id,
                                         username: user.username,
                                         char_name: user.characters.map((character) => character.name || 'Ready to Hunt'),
+                                        until_at: user.suspended_account?.until_at,
                                     })}
                             >
                                 {#if !user.suspended_account.permanent}
@@ -675,6 +676,7 @@
                         {#if editingId === user.id && catTypes['return_expires']}
                             <div transition:slide class="edit_area_box">
                                 <input type="hidden" name="user_id" value={editingId} />
+
                                 <div class="edit_area enter">
                                     <p class="edit_area_title">Change Date</p>
                                     <p class="console_contents_note">* The date and time to be set are automatically converted to UTC.</p>
@@ -687,6 +689,7 @@
                                                 name="return_expires"
                                                 value={!user.return_expires ? '' : DateTime.fromJSDate(user.return_expires).toFormat("yyyy-MM-dd'T'HH:mm")}
                                             />
+                                            <input type="hidden" name="zoneName" value={DateTime.local().zoneName} />
                                         </dd>
                                     </dl>
 
@@ -999,7 +1002,7 @@
             </form>
         {/each}
 
-        <!-- <div class="pagination_btn_list">
+        <div class="pagination_btn_list">
             <form
                 method="POST"
                 action="?/getPaginatedUsers"
@@ -1010,20 +1013,25 @@
                         await applyAction(result);
 
                         if (result.type === 'success') {
-                            paginatedUsers.set(usersData);
+                            paginatedUsersData.set(paginatedUsers);
                             paginationMetaData.set(paginationMeta);
                         }
                     };
                 }}
             >
-                <input type="hidden" name="filter_value" value={filterValue} />
-                <input type="hidden" name="filter_param" value={filterParam} />
+                <input name="filter_value" type="hidden" value={$filterValue} />
+                <input name="filter_param" type="hidden" value={$filterParam} />
+                <input name="status" type="hidden" bind:value={status} />
+                <input type="hidden" name="cursor" bind:value={cursor} />
 
                 <button
                     class="pagination_btn_item"
                     type="submit"
                     on:click={() => {
+                        $timeOut && closeMsgDisplay($timeOut);
                         paginationBackClick = true;
+                        status = 'back';
+                        cursor = $paginationMetaData.prevCursor;
                     }}
                     class:active={paginationBackClick}
                     class:disabled_elm={!$paginationMetaData.hasPrevPage || paginationBackClick}>Back</button
@@ -1032,12 +1040,15 @@
                     class="pagination_btn_item"
                     type="submit"
                     on:click={() => {
+                        $timeOut && closeMsgDisplay($timeOut);
                         paginationNextClick = true;
+                        status = 'next';
+                        cursor = $paginationMetaData.nextCursor;
                     }}
                     class:active={paginationNextClick}
                     class:disabled_elm={!$paginationMetaData.hasNextPage || paginationNextClick}>Next</button
                 >
             </form>
-        </div> -->
+        </div>
     {/if}
 </div>
