@@ -126,6 +126,8 @@
     <meta name="robots" content="noindex,nofollow,noarchive" />
     <meta name="description" content="This page is for Rain Server administrators only." />
     <!-- ogp -->
+    <meta property="og:title" content="Admin Console | Rain Server" />
+    <meta property="og:description" content="This page is for Rain Server administrators only." />
     <meta property="og:image" content="{origin}/img/common/sns_share.webp" />
     <meta property="og:url" content={String(url)} />
     <meta property="og:type" content="website" />
