@@ -1,6 +1,7 @@
 import ServerData, { db } from '.';
 import type { PaginatedUsers, PaginationMeta } from '$lib/types';
 import { TextEncoderSJIS } from '$lib/utils';
+import { Buffer } from 'node:buffer';
 
 /* Get Paginated User(s)
 ====================================================*/
