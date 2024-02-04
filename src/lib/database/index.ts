@@ -38,7 +38,7 @@ export const db = new PrismaClient({
                 },
                 async setBinary(type: 'savedata', characterId: number, base64: string): Promise<void> {
                     const manageBinary = new ManageBinary(type, characterId, base64);
-                    manageBinary.set();
+                    await manageBinary.set();
                 },
             },
         },

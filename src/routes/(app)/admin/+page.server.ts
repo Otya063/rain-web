@@ -396,7 +396,7 @@ const updateCharacterData: Action = async ({ request }) => {
             case 'savedata': {
                 const uint8Arr = new Uint8Array(value.split(',').map(Number));
                 const base64 = Buffer.from(uint8Arr).toString('base64');
-                if (!base64) {
+                if (uint8Arr.length <= 1 && uint8Arr[0] === 0) {
                     return fail(400, { error: true, message: 'No file selected.' });
                 }
 
