@@ -5,6 +5,7 @@
     /* ヘッダー
 ====================================================*/
 
+    // ヘッダー帯
     header {
         position: relative;
         background: #000;
@@ -170,8 +171,6 @@
                     }
                 }
 
-                /* .console_contents_list_button {} */
-
                 // コンテンツ内リストタイトル
                 .console_contents_list_title {
                     width: 100%;
@@ -187,12 +186,6 @@
                         position: absolute;
                         top: 0;
                         right: 0;
-                    }
-
-                    // 緑ボタン調整
-                    .green_btn {
-                        top: 0;
-                        right: 125px;
                     }
                 }
 
@@ -281,158 +274,6 @@
                 right: 45px;
                 z-index: 1;
             }
-        }
-    }
-
-    /* 成功・エラーメッセージ表示
-====================================================*/
-
-    // 表示本体
-    .msg_display {
-        position: fixed;
-        top: 3%;
-        left: 20%;
-        display: flex;
-        align-items: center;
-        width: 60%;
-        font-size: 1.8rem;
-        font-weight: 700;
-        background: #fff;
-        padding: 0.7% 1%;
-        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
-        z-index: 101;
-        border-top: 5px solid #e6e6e9;
-        border-bottom: 5px solid #e6e6e9;
-
-        // 成功通知
-        &.success {
-            color: #5ab052;
-
-            .left_side_bar {
-                background: #5ab052;
-            }
-
-            .timer_bar {
-                background: #85df7d;
-            }
-        }
-
-        // エラー通知
-        &.error {
-            color: #c93a3a;
-
-            .left_side_bar {
-                background: #c93a3a;
-            }
-
-            .timer_bar {
-                background: #eb7b7b;
-            }
-        }
-
-        // 不正操作通知
-        &.notice {
-            color: #5997db;
-
-            .left_side_bar {
-                background: #5997db;
-            }
-
-            .timer_bar {
-                background: #9ec6ef;
-            }
-        }
-
-        // アイコン
-        .material-icons-outlined {
-            font-size: 3.5rem;
-            padding-right: 2%;
-        }
-
-        // 左側装飾バー
-        .left_side_bar {
-            display: block;
-            position: absolute;
-            width: 0.7%;
-            height: 72px;
-            top: -8%;
-            left: 0;
-            border-radius: 0 20px 20px 0;
-            z-index: 103;
-        }
-
-        // 閉じるボタン
-        .msg_close_btn {
-            display: block;
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            top: 50%;
-            right: 2%;
-            transform: translateY(-50%);
-            user-select: none;
-            cursor: pointer;
-
-            &::before,
-            &::after {
-                content: '';
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                width: 5px;
-                height: 30px;
-                background: #3e4444;
-            }
-
-            &::before {
-                transform: translate(-50%, -50%) rotate(45deg);
-            }
-
-            &::after {
-                transform: translate(-50%, -50%) rotate(-45deg);
-            }
-        }
-
-        // エラー詳細表示ボタン
-        .error_view_btn {
-            position: absolute;
-            top: -3%;
-            right: 6%;
-            font-size: 1.5rem;
-            padding: 1% 1.5% 0.5%;
-            border: 2px gray solid;
-            background: white;
-            color: #333333;
-            transform: translateY(25%);
-        }
-
-        // 残り時間表示バー（成功）
-        .timer_bar {
-            height: 5px;
-            position: absolute;
-            left: 0%;
-            bottom: -8%;
-            z-index: 102;
-        }
-    }
-
-    // メッセージ詳細表示
-    .msg_detail {
-        position: fixed;
-        left: 20%;
-        top: 10%;
-        width: 60%;
-        padding: 1%;
-        font-size: 1.8rem;
-        color: #333333;
-        background: whitesmoke;
-        border: 2px silver solid;
-        z-index: 100;
-
-        // 内部テキスト
-        p {
-            font-size: 1.6rem;
-            margin: 1%;
         }
     }
 
@@ -630,7 +471,7 @@
                     align-items: center;
                     justify-content: center;
                     margin-top: 2%;
-                    
+
                     dt {
                         width: 30%;
                     }
@@ -906,7 +747,7 @@
         height: 143px;
         margin-bottom: 1%;
         user-select: none;
-        //cursor: pointer;
+        cursor: pointer;
 
         // 武器種名に応じて背景変更
         $weaponNames: $weaponNamesArray;
@@ -916,14 +757,18 @@
             }
         }
 
+        // 新規キャラクター編集不可
+        &.new {
+            cursor: not-allowed;
+        }
+
         // キャラクター名
         .name {
-            position: absolute;
-            font-size: 3rem;
-            text-align: center;
-            font-weight: 700;
+            @include right_left;
             top: 10%;
-            width: 100%;
+            font-size: 3rem;
+            font-weight: 700;
+            width: fit-content;
         }
 
         // 削除済みアカウント表示
@@ -1136,21 +981,204 @@
     /* フッター
 ====================================================*/
     .admin_footer {
+        width: 100%;
         position: relative;
         background: #000;
-        z-index: 1;
 
-        // フッターテキスト領域
-        .footer_note {
-            padding: 2% 0;
-            text-align: center;
-            color: #fff;
-            font-size: 1.3rem;
+        // フッター帯上部装飾
+        &::before {
+            display: block;
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 0.2vw;
+            background: rgb(190, 193, 195);
+        }
+
+        // フッター内コンテンツ調整
+        .footer_inner {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2%;
+
+            // フッターテキスト
+            .footer_text {
+                color: white;
+                font-size: 1.3rem;
+                text-align: center;
+            }
         }
     }
 
-    /* セーブ中オーバーレイ
+    /* 成功・エラーメッセージ表示
 ====================================================*/
+
+    // 表示本体
+    .msg_display {
+        position: fixed;
+        top: 3%;
+        left: 20%;
+        display: flex;
+        align-items: center;
+        width: 60%;
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: #fff;
+        padding: 0.7% 1%;
+        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+        z-index: 101;
+        border-top: 5px solid #e6e6e9;
+        border-bottom: 5px solid #e6e6e9;
+
+        // 成功通知
+        &.success {
+            color: #5ab052;
+
+            .left_side_bar {
+                background: #5ab052;
+            }
+
+            .timer_bar {
+                background: #85df7d;
+            }
+        }
+
+        // エラー通知
+        &.error {
+            color: #c93a3a;
+
+            .left_side_bar {
+                background: #c93a3a;
+            }
+
+            .timer_bar {
+                background: #eb7b7b;
+            }
+        }
+
+        // 不正操作通知
+        &.notice {
+            color: #5997db;
+
+            .left_side_bar {
+                background: #5997db;
+            }
+
+            .timer_bar {
+                background: #9ec6ef;
+            }
+        }
+
+        // アイコン
+        .material-icons-outlined {
+            font-size: 3.5rem;
+            padding-right: 2%;
+        }
+
+        // 左側装飾バー
+        .left_side_bar {
+            display: block;
+            position: absolute;
+            width: 0.7%;
+            height: 72px;
+            top: -8%;
+            left: 0;
+            border-radius: 0 20px 20px 0;
+            z-index: 103;
+        }
+
+        // 閉じるボタン
+        .msg_close_btn {
+            display: block;
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            top: 50%;
+            right: 2%;
+            transform: translateY(-50%);
+            user-select: none;
+            cursor: pointer;
+
+            &::before,
+            &::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 5px;
+                height: 30px;
+                background: #3e4444;
+            }
+
+            &::before {
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+
+            &::after {
+                transform: translate(-50%, -50%) rotate(-45deg);
+            }
+        }
+
+        // エラー詳細表示ボタン
+        .error_view_btn {
+            position: absolute;
+            top: -3%;
+            right: 6%;
+            font-size: 1.5rem;
+            padding: 1% 1.5% 0.5%;
+            border: 2px gray solid;
+            background: white;
+            color: #333333;
+            transform: translateY(25%);
+        }
+
+        // 残り時間表示バー（成功）
+        .timer_bar {
+            height: 5px;
+            position: absolute;
+            left: 0%;
+            bottom: -8%;
+            z-index: 102;
+        }
+    }
+
+    // メッセージ詳細表示
+    .msg_detail {
+        position: fixed;
+        left: 20%;
+        top: 10%;
+        width: 60%;
+        padding: 1%;
+        font-size: 1.8rem;
+        color: #333333;
+        background: whitesmoke;
+        border: 2px silver solid;
+        z-index: 100;
+
+        // 内部テキスト
+        p {
+            font-size: 1.6rem;
+            margin: 1%;
+        }
+    }
+
+    /* オーバーレイ
+====================================================*/
+
+    // DOMマウント待機オーバーレイ
+    .mount_overlay {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: whitesmoke;
+        z-index: 99999;
+    }
+
+    // セーブ中オーバーレイ
     .saving_overlay {
         display: flex;
         align-items: center;

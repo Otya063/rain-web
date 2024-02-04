@@ -285,7 +285,7 @@
             </dd>
         </dl>
 
-        <div class="edit_area_box">
+        <div id="change_all_settings" class="edit_area_box">
             <div class="edit_area select">
                 <p class="edit_area_title">Change All Settings</p>
                 <ul class="edit_area_box_parts radio">
@@ -318,9 +318,9 @@
 </h2>
 <div class="console_contents">
     <p class="console_contents_note">* These data will be fetched when users run the Rain launcher.</p>
-    
+
     <form
-    action="?/updateSystemMode"
+        action="?/updateSystemMode"
         method="POST"
         use:enhance={({ formData }) => {
             const data = conv2DArrayToObject([...formData.entries()]);

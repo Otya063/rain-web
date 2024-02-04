@@ -9,9 +9,11 @@
     import AdminMenu from '$lib/admin/AdminMenu.svelte';
     import { suspendUser, deleteInfo, deleteBnr, linkDiscord, deleteChar, loadArticle, Timeout, msgClosed, errDetailMode, onSubmit, closeMsgDisplay, toggleMsgDetail, timeOut } from '$lib/utils';
     import _ from 'lodash';
+    import { onMount } from 'svelte';
     import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
     import '$scss/style_admin.scss';
+    import { enhance } from '$app/forms';
 
     // data from the server
     export let data: PageData;
@@ -19,6 +21,11 @@
     const { url } = data;
     const origin = url.origin;
     let width: Tweened<number>;
+    let loaded = false;
+
+    onMount(() => {
+        loaded = true;
+    });
 
     // message display timer bar
     $: if (form?.success || form?.error) {
@@ -32,10 +39,15 @@
     }
 
     // reset display when on:submit is performed while a message is being displayed
-    $: if ($onSubmit && $timeOut) {
-        closeMsgDisplay($timeOut);
+    $: if ($onSubmit && $timeOut && $timeOut.time !== 0) {
+        msgClosed.set(true);
+        $timeOut.stop();
     }
 </script>
+
+{#if !loaded}
+    <div transition:fade class="mount_overlay"></div>
+{/if}
 
 <header>
     <div class="header_inner">
@@ -113,12 +125,12 @@
 </main>
 
 <footer class="admin_footer">
-    <div class="footer_note">
-        <p>
-            * Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. <br />This community is based on the cooperation of numerous volunteers, and no revenue of any sort is
+    <section class="footer_inner">
+        <p class="footer_text">
+            Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. <br />This community is based on the cooperation of numerous volunteers, and no revenue of any sort is
             generated through this community.
         </p>
-    </div>
+    </section>
 </footer>
 
 <svelte:head>

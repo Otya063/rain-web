@@ -3,7 +3,7 @@ import { get, writable } from 'svelte/store';
 
 export const errDetailMode = writable(false);
 export const msgClosed = writable(true);
-export const timeOut = writable<Timeout>();
+export const timeOut = writable<Timeout | undefined>();
 export const timerPause = writable(false);
 
 /* Pause and Resume on setTimeout Function
@@ -45,7 +45,11 @@ export class Timeout {
 
 /* Toggle Message Details
 ====================================================*/
-export const toggleMsgDetail = (e: Event, t: Timeout, width: Tweened<number>): void => {
+export const toggleMsgDetail = (e: Event, t: Timeout | undefined, width: Tweened<number>): void => {
+    if (!t) {
+        throw new Error('Timeout is undefined.');
+    }
+
     // prevent repeatedly pressing btn
     const target = e.target as HTMLButtonElement;
     target.disabled = true;
@@ -72,7 +76,11 @@ export const toggleMsgDetail = (e: Event, t: Timeout, width: Tweened<number>): v
 
 /* Close the Message Display Manually
 ====================================================*/
-export const closeMsgDisplay = (t: Timeout): void => {
+export const closeMsgDisplay = (t: Timeout | undefined): void => {
+    if (!t) {
+        throw new Error('Timeout is undefined.');
+    }
+
     errDetailMode.set(false);
     document.getElementById('error_view_btn')?.classList.add('disabled_elm');
     t.stop();
