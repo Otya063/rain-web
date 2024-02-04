@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { users } from '@prisma/client/edge';
+    import type { characters, users } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
     import {
         prepareModal,
@@ -40,9 +40,12 @@
 
     /* Related to Edit Mode
     ====================================================*/
+    let savedata: Uint8Array;
     let editingId: number;
+    let editingCharId: number;
+    let editingCharCard: string;
     let editMode = false;
-    let catTypes: { [key in keyof Omit<users, 'id' | 'item_box' | 'last_character' | 'last_login' | 'web_login_key'>]: boolean } = {
+    const catTypes: { [key in keyof Omit<users, 'id' | 'item_box' | 'last_character' | 'last_login' | 'web_login_key'>]: boolean } = {
         username: false,
         password: false,
         rights: false,
@@ -50,6 +53,11 @@
         gacha_premium: false,
         gacha_trial: false,
         frontier_points: false,
+    };
+    const catCharTypes: { [key in 'id' | 'name' | 'savedata']: boolean } = {
+        id: false,
+        name: false,
+        savedata: false,
     };
     const adminCtrlTypes: { [key: string]: boolean } = {
         filter: false,
@@ -90,6 +98,51 @@
         }
     };
 
+    const editModeCharSwitch = <T extends number, U extends 'id' | 'name' | 'savedata'>(id: T, type: U, disableAll?: boolean): void | false => {
+        if (disableAll) {
+            editingCharId = 0;
+            editMode = false;
+
+            Object.keys(catTypes).forEach((_key) => {
+                const key = _key as 'id' | 'name' | 'savedata';
+                catCharTypes[key] = false;
+            });
+
+            return false;
+        }
+
+        // check if another cat type is already open
+        const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
+
+        // if there is an open cat and a different category is cliked (try to open it) + not cancel btn
+        if (activeCat && id !== 0) {
+            // set everything to false (close) in a loop.
+            Object.keys(catTypes).forEach((_key) => {
+                const key = _key as 'id' | 'name' | 'savedata';
+                catCharTypes[key] = false;
+            });
+
+            // set the category clicked to true (open), adn set editting u_id
+            catCharTypes[type] = true;
+            editingCharId = id;
+
+            return false;
+        }
+
+        // toggle true <-> false
+        if (!editMode) {
+            // open a cat
+            editMode = true;
+            editingCharId = id;
+            catCharTypes[type] = true;
+        } else {
+            // close a cat
+            editMode = false;
+            editingCharId = id;
+            catCharTypes[type] = false;
+        }
+    };
+
     // switch admin control contents
     const adminCtrlSwitch = (type: string): void | false => {
         // check if another cat type is already open
@@ -118,6 +171,18 @@
         // toggle true <-> false
         adminCtrlTypes[type] = !adminCtrlTypes[type];
     };
+
+    const convFileToUint8 = (e: Event): void => {
+        const target = e.target as HTMLInputElement;
+        const file = (target.files as FileList)[0];
+
+        let reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+        reader.onload = (e) => {
+            const buffer = e.target!.result as ArrayBuffer;
+            savedata = new Uint8Array(buffer);
+        };
+    };
 </script>
 
 <h2>
@@ -126,7 +191,7 @@
 </h2>
 
 <div class="console_contents">
-    <div class="edit_area_box" style="margin-bottom: 2%;">
+    <div id="admin_control" class="edit_area_box" style="margin-bottom: 2%;">
         <div class="edit_area enter">
             <p class="edit_area_title" style="margin: 0;">Admin Control Panel</p>
             <div class="group_btns" style="margin-bottom: 3%;">
@@ -487,7 +552,6 @@
                                 <input type="hidden" name="user_id" value={editingId} />
                                 <div class="edit_area enter">
                                     <p class="edit_area_title">Change Username</p>
-                                    <p class="console_contents_note">* Editing without the user's permission is strictly prohibited.</p>
                                     <p class="console_contents_note">* Empty isn't allowed.</p>
                                     <dl class="edit_area_box_parts text">
                                         <dt>Enter new username</dt>
@@ -533,7 +597,6 @@
                                 <input type="hidden" name="user_id" value={editingId} />
                                 <div class="edit_area enter">
                                     <p class="edit_area_title">Change Password</p>
-                                    <p class="console_contents_note">* Editing without the user's permission is strictly prohibited.</p>
                                     <p class="console_contents_note">* Empty isn't allowed.</p>
                                     <dl class="edit_area_box_parts text">
                                         <dt>Enter new<br />hashed password</dt>
@@ -880,7 +943,17 @@
                             <p style="color: #ff8100;">This user doesn't have any characters.</p>
                         {:else}
                             {#each user.characters as character}
-                                <div class="character_item {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '').replace('&', 'And')}" class:new={character.is_new_character}>
+                                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                                <div
+                                    class="character_item {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '').replace('&', 'And')}"
+                                    class:new={character.is_new_character}
+                                    on:click={() => {
+                                        if (character.is_new_character) return false;
+                                        editModeCharSwitch(0, 'id', true);
+                                        editingCharCard === `${character.id}${character.name}` ? (editingCharCard = '') : (editingCharCard = `${character.id}${character.name}`);
+                                    }}
+                                >
                                     <span class="name">{character.name || 'Ready to Hunt'}</span>
 
                                     {#if character.discord}
@@ -995,6 +1068,135 @@
                                                   .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span
                                     >
                                 </div>
+
+                                {#if editingCharCard === `${character.id}${character.name}`}
+                                    <form
+                                        action="?/updateCharacterData"
+                                        method="POST"
+                                        use:enhance={({ formData }) => {
+                                            const data = conv2DArrayToObject([...formData.entries()]);
+                                            const id = Number(data.character_id);
+                                            const column = Object.keys(data)[1];
+                                            const value = Object.values(data)[1];
+
+                                            return async ({ result }) => {
+                                                msgClosed.set(false);
+                                                onSubmit.set(false);
+                                                await applyAction(result);
+
+                                                if (result.type === 'success') {
+                                                    $paginatedUsersData = $paginatedUsersData.map((user) => {
+                                                        // update
+                                                        user.characters = user.characters.map((character) => {
+                                                            if (character.id === id)
+                                                                return {
+                                                                    ...character,
+                                                                    [column]: value,
+                                                                };
+
+                                                            return character;
+                                                        });
+
+                                                        return user;
+                                                    });
+                                                }
+                                            };
+                                        }}
+                                    >
+                                        <dl in:slide out:slide class="console_contents_list">
+                                            <dt class="contents_term">Name</dt>
+                                            <dd class="contents_desc">
+                                                {character.name}
+
+                                                {#if editingCharId === character.id && catCharTypes['name']}
+                                                    <button type="button" class="red_btn" on:click={() => editModeCharSwitch(0, 'name')}>
+                                                        <span class="btn_icon material-icons">close</span>
+                                                        <span class="btn_text">Cancel</span>
+                                                    </button>
+                                                {:else}
+                                                    <button type="button" class="normal_btn" on:click={() => editModeCharSwitch(character.id, 'name')}>
+                                                        <span class="btn_icon material-icons">mode_edit</span>
+                                                        <span class="btn_text">Edit</span>
+                                                    </button>
+                                                {/if}
+
+                                                {#if editingCharId === character.id && catCharTypes['name']}
+                                                    <div transition:slide class="edit_area_box">
+                                                        <input type="hidden" name="character_id" value={editingCharId} />
+                                                        <div class="edit_area enter">
+                                                            <p class="edit_area_title">Change Character Name</p>
+                                                            <p class="console_contents_note">* Empty isn't allowed.</p>
+                                                            <dl class="edit_area_box_parts text">
+                                                                <dt>Enter new name</dt>
+                                                                <dd>
+                                                                    <input type="text" name="name" value={character.name} autocomplete="off" />
+                                                                </dd>
+                                                            </dl>
+
+                                                            <button
+                                                                class="blue_btn"
+                                                                type="submit"
+                                                                on:click={() => {
+                                                                    editModeCharSwitch(0, 'name');
+                                                                    editingCharCard = '';
+                                                                    onSubmit.set(true);
+                                                                }}
+                                                            >
+                                                                <span class="btn_icon material-icons">check</span>
+                                                                <span class="btn_text">Save</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                {/if}
+                                            </dd>
+
+                                            <dt class="contents_term">Savedata</dt>
+                                            <dd class="contents_desc">
+                                                {#if editingCharId === character.id && catCharTypes['savedata']}
+                                                    <button type="button" class="red_btn" on:click={() => editModeCharSwitch(0, 'savedata')}>
+                                                        <span class="btn_icon material-icons">close</span>
+                                                        <span class="btn_text">Cancel</span>
+                                                    </button>
+                                                {:else}
+                                                    <button type="button" class="normal_btn" on:click={() => editModeCharSwitch(character.id, 'savedata')}>
+                                                        <span class="btn_icon material-icons">upload_file</span>
+                                                        <span class="btn_text">Re-upload</span>
+                                                    </button>
+                                                {/if}
+
+                                                {#if editingCharId === character.id && catCharTypes['savedata']}
+                                                    <div transition:slide class="edit_area_box">
+                                                        <input type="hidden" name="character_id" value={editingCharId} />
+                                                        <div class="edit_area enter">
+                                                            <p class="edit_area_title">Re-upload Savedata</p>
+                                                            <p class="console_contents_note">* Once re-uploaded, the original file will be deleted.</p>
+                                                            <dl class="edit_area_box_parts text">
+                                                                <dt>Select new file</dt>
+                                                                <dd>
+                                                                    <input name="savedata" type="hidden" bind:value={savedata} />
+                                                                    <input type="file" on:change={convFileToUint8} />
+                                                                </dd>
+                                                            </dl>
+
+                                                            <button
+                                                                class="blue_btn"
+                                                                type="submit"
+                                                                on:click={() => {
+                                                                    editModeCharSwitch(0, 'savedata');
+                                                                    editingCharCard = '';
+                                                                    onSubmit.set(true);
+                                                                }}
+                                                            >
+                                                                <span class="btn_icon material-icons">check</span>
+                                                                <span class="btn_text">Save</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                {/if}
+                                            </dd>
+                                        </dl>
+                                    </form>
+                                {/if}
                             {/each}
                         {/if}
                     </dd>

@@ -5,6 +5,7 @@ import { R2_BNR_UNIQUE_URL } from '$env/static/private';
 import ServerData, { db, getPaginatedUserData, getPaginationMeta } from '$lib/database';
 import type { PaginatedUsers, PaginationMeta } from '$lib/types';
 import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi } from '$lib/utils';
+import { Buffer } from 'node:buffer';
 import { DateTime } from 'luxon';
 
 const emptyMsg = 'Input value is empty.';
@@ -360,6 +361,57 @@ const updateUserData: Action = async ({ request }) => {
             success: true,
             message: `The user data (Type: ${column}) has been successfully updated.`,
         };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const updateCharacterData: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const id = Number(data.character_id);
+    const column = Object.keys(data)[1] as 'id' | 'name' | 'savedata';
+    const value = Object.values(data)[1] as string;
+
+    try {
+        switch (column) {
+            case 'name': {
+                const { success, message } = await db.characters.editName(id, value);
+
+                if (!success) {
+                    return fail(400, { error: true, message });
+                } else {
+                    return {
+                        success: true,
+                        message: `The character name (New Name: ${value}) has been successfully updated.`,
+                    };
+                }
+            }
+
+            case 'savedata': {
+                const uint8Arr = new Uint8Array(value.split(',').map(Number));
+                const base64 = Buffer.from(uint8Arr).toString('base64');
+                if (!base64) {
+                    return fail(400, { error: true, message: 'No file selected.' });
+                }
+
+                await db.characters.setBinary('savedata', id, base64);
+
+                return {
+                    success: true,
+                    message: `The binary data (Binary Type: ${column}) of the character has been successfully updated.`,
+                };
+            }
+
+            default: {
+                throw new Error('Invalid Column');
+            }
+        }
     } catch (err) {
         if (err instanceof Error) {
             return fail(400, { error: true, message: err.message });
@@ -862,6 +914,7 @@ export const actions: Actions = {
     courseControl,
     getPaginatedUsers,
     updateUserData,
+    updateCharacterData,
     suspendUser,
     unsuspendUser,
     createBnrData,

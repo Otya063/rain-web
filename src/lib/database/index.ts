@@ -1,3 +1,4 @@
+import { ManageBinary, editName } from './admin';
 import {
     PrismaClient,
     type characters,
@@ -21,7 +22,27 @@ export const db = new PrismaClient({
             url: DATABASE_URL,
         },
     },
-}).$extends(withAccelerate());
+})
+    .$extends(withAccelerate())
+    .$extends({
+        model: {
+            characters: {
+                async editName(
+                    characterId: number,
+                    setName: string
+                ): Promise<{
+                    success: boolean;
+                    message: string;
+                }> {
+                    return await editName(characterId, setName);
+                },
+                async setBinary(type: 'savedata', characterId: number, base64: string): Promise<void> {
+                    const manageBinary = new ManageBinary(type, characterId, base64);
+                    manageBinary.set();
+                },
+            },
+        },
+    });
 
 class ServerDataManager {
     /* Characters

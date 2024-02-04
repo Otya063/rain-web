@@ -274,7 +274,7 @@
                                             <dt>Select new file</dt>
                                             <dd>
                                                 <input type="hidden" name="bnr_id" value={editingId} />
-                                                <input name="file" type="file" />
+                                                <input name="file" type="file"  />
                                                 <input type="hidden" name="lang" value="en" />
                                                 <input type="hidden" name="bnr_name" value={bnr.bnr_name} />
                                             </dd>

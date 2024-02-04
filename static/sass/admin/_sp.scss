@@ -1,0 +1,1195 @@
+@charset "UTF-8";
+@use '../global/' as *;
+
+@include sp() {
+    body {
+        font-size: 1.5rem !important;
+    }
+
+    /* ヘッダー
+====================================================*/
+
+    // ヘッダー帯
+    header {
+        background: #000;
+        width: 100%;
+        height: 70px;
+        position: relative;
+        z-index: 1;
+
+        // ヘッダー帯下部装飾
+        &::after {
+            display: block;
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 0.6vw;
+            background: rgb(190, 193, 195);
+        }
+
+        // ヘッダー内部
+        .header_inner {
+            width: 100%;
+            height: 67px;
+            @include flex_center;
+            align-items: flex-start;
+            justify-content: space-between;
+
+            // プラットフォーム
+            .header_platform {
+                position: relative;
+                cursor: auto;
+
+                // プラットフォーム画像
+                &::before {
+                    content: '';
+                    display: block;
+                    width: 50px;
+                    height: 67px;
+                    background: url(#{$path_img}/common/platform_sp_portrait.webp) no-repeat center center;
+                    background-size: auto 75%;
+
+                    @include landscape {
+                        content: '';
+                        width: 100px;
+                        height: 63px;
+                        background: url(#{$path_img}/common/platform_sp_landscape.webp) no-repeat center center;
+                        background-size: auto 75%;
+                    }
+                }
+            }
+
+            // ヘッダーロゴ
+            .header_logo {
+                display: flex;
+                @include pos_center;
+
+                .header_logo_button {
+                    width: 110px;
+                    height: 70px;
+                    background: url(#{$path_img}/common/rain_textlogo.webp) center center no-repeat;
+                    background-size: 100%;
+
+                    @include landscape {
+                        width: 120px;
+                        height: 70px;
+                        background-position: center 6px;
+                    }
+                }
+            }
+        }
+    }
+
+    /* 管理者コンソール
+====================================================*/
+
+    // 背景画像
+    .background_img {
+        display: none;
+    }
+
+    // コンソール画面本体
+    .console_body {
+        display: flex;
+        margin: 0px auto;
+        justify-content: center;
+
+        // コンソールコンテンツ側
+        .console_article {
+            position: relative;
+            width: 100%;
+            min-height: 700px;
+            padding-top: 5%;
+            background: #f5f6f7;
+            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+            z-index: 1;
+
+            // 管理者コンソールタイトル
+            h1 {
+                position: relative;
+                padding-left: 45px;
+                margin: 0 30px;
+                border-bottom: solid 3px #65696a;
+                font-size: 3rem;
+                font-weight: 700;
+                user-select: none;
+
+                .material-symbols-outlined {
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    font-size: 4.5rem;
+                }
+            }
+
+            // 各項目タイトル表示
+            h2 {
+                position: relative;
+                padding-left: 45px;
+                font-size: 2rem;
+                margin: 12% 0 0 5%;
+                user-select: none;
+
+                .material-icons {
+                    position: absolute;
+                    left: 0;
+                    bottom: 0;
+                    font-size: 4rem;
+                }
+
+                // ランチャーインフォ用h2タイトル装飾
+                @each $infotype, $color in $infoColorMap {
+                    &.#{$infotype} {
+                        color: $color;
+                    }
+                }
+            }
+
+            // 各コンテンツ
+            .console_contents {
+                display: flex;
+                flex-direction: column;
+                margin: 0% 5% 5%;
+                background: #fff;
+                padding: 3%;
+
+                // ペジネーションボタングループ
+                .pagination_btn_list {
+                    text-align: center;
+                    user-select: none;
+                    margin: 2% 0;
+
+                    // 各ボタン
+                    .pagination_btn_item {
+                        padding: 1% 1% 0.7%;
+                        margin: 0 1%;
+                        border: #272727 solid 1px;
+                        background: #f7f6f6;
+                        color: #272727;
+                        transition: all 0.3s;
+
+                        // ホバーもしくはアクティブ時
+                        &.active,
+                        &:hover {
+                            border: #f7f6f6 solid 1px;
+                            background: #272727;
+                            color: #f7f6f6;
+                        }
+                    }
+                }
+
+                // コンテンツ内リストタイトル
+                .console_contents_list_title {
+                    width: 100%;
+                    font-size: 2rem;
+                    padding: 3% 0 0 3%;
+                    color: #df9e27;
+                    user-select: none;
+                    border-bottom: #df9e27 2px solid;
+                    font-weight: 700;
+
+                    // 赤ボタン調整
+                    .red_btn {
+                        position: absolute;
+                        top: 0;
+                        right: 0;
+                    }
+                }
+
+                // コンテンツ内リスト
+                .console_contents_list {
+                    position: relative;
+                    display: flex;
+                    flex-wrap: wrap;
+                    margin-bottom: 3%;
+
+                    // コンテンツアイテムタイトル
+                    .contents_term {
+                        width: 35%;
+                        font-weight: 700;
+                        padding: 3% 0 2% 2%;
+                        border-bottom: 1px gray dashed;
+                        user-select: none;
+                        overflow-wrap: break-word;
+
+                        .contents_term_required {
+                            color: #f17373;
+                            font-size: 1.3rem;
+                        }
+                    }
+
+                    // コンテンツアイテム説明
+                    .contents_desc {
+                        position: relative;
+                        display: flex;
+                        flex-direction: column;
+                        width: 65%;
+                        padding: 3% 0 2%;
+                        border-bottom: 1px gray dashed;
+                        overflow-wrap: break-word;
+
+                        // 編集モード切り替えボタン
+                        .edit_btn {
+                            position: relative;
+                            right: 0;
+                            color: darkslategray;
+                            background: #fff;
+                            border: 1px solid darkslategray;
+                            font-size: 1.6rem;
+                            width: 18%;
+                            padding: 0.3% 4% 0 0;
+                            margin: 1% 0;
+                            text-align: right;
+
+                            .material-icons {
+                                position: absolute;
+                                left: 20%;
+                                top: 50%;
+                                transform: translateY(-50%);
+                                font-size: 2.2rem;
+                            }
+                        }
+
+                        // ノーマルボタン調整
+                        .normal_btn {
+                            margin: 3% 0;
+                        }
+
+                        // 赤ボタン調整
+                        .red_btn {
+                            margin: 3% 0;
+                        }
+                    }
+                }
+
+                // コンテンツ注意事項
+                .console_contents_note {
+                    color: red;
+                }
+
+                // ボタングループ化
+                .group_btns {
+                    display: flex;
+                    justify-content: space-evenly;
+                }
+            }
+
+            // 緑ボタン調整
+            .green_btn {
+                position: absolute;
+                top: 65px;
+                right: 20px;
+                z-index: 1;
+
+                .btn_icon {
+                    padding: 5px;
+                }
+
+                .btn_text {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    /* コンソールメニュー
+====================================================*/
+
+    // メニュー本体
+    .console_menu {
+        position: fixed;
+        bottom: -4%;
+        width: 90%;
+        border-radius: 20px;
+        background: rgb(248, 248, 248);
+        transform: translateY(-50%);
+        user-select: none;
+        filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
+        z-index: 2;
+
+        // メニューリスト
+        .console_menu_list {
+            padding: 15px 0;
+            display: flex;
+
+            // メニュー各項目
+            .console_menu_list_item {
+                width: 30px;
+                height: 35px;
+                margin: 0 auto;
+                border-bottom: 1px solid gray;
+                cursor: pointer;
+
+                .console_menu_list_link {
+                    position: relative;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+
+                    // リンクテキスト（ホバー時に出現）
+                    .console_menu_list_text {
+                        display: none;
+                    }
+
+                    // リンクアイコン
+                    .material-symbols-outlined {
+                        font-size: 3rem;
+                    }
+                }
+
+                // メニュー最後、下部余白なし
+                &:last-child {
+                    margin: 0 auto;
+                }
+
+                &.active {
+                    .material-symbols-outlined {
+                        color: #0aa0d2;
+                    }
+
+                    .console_menu_list_text {
+                        color: #0a61d2;
+                    }
+                }
+            }
+        }
+    }
+
+    /* フォームスタイル
+====================================================*/
+
+    // 編集フォーム本体
+    .edit_area_box {
+        margin: 0px calc(50% - 57vw);
+        width: 85vw;
+
+        &#change_all_settings,
+        &#admin_control {
+            margin: auto;
+            width: 100%;
+        }
+
+        // フォームdivタグ
+        .edit_area {
+            display: flex;
+            justify-content: space-around;
+            background-color: #f0f1f2;
+
+            // ラジオボタン
+            &.select {
+                align-items: center;
+                padding: 4% 2%;
+
+                // フォーム内タイトル
+                .edit_area_title {
+                    font-size: 1.8rem;
+                }
+            }
+
+            // 通常
+            &.enter {
+                flex-direction: column;
+                padding: 2% 5%;
+
+                // フォーム内タイトル
+                .edit_area_title {
+                    border-bottom: #333333 1px solid;
+                    padding-left: 2%;
+                    margin-bottom: 3%;
+                    font-size: 2.2rem;
+                }
+
+                // フィルター入力エリア
+                #filter_input {
+                    margin-right: 2%;
+                    width: 150px;
+                }
+
+                // フィルター選択ボックス
+                .filter_select {
+                    margin-left: 1%;
+                }
+
+                // 青ボタン調整
+                .blue_btn {
+                    margin: 4% auto 0;
+                }
+            }
+
+            // フォームタイトル
+            .edit_area_title {
+                display: none;
+                font-weight: 700;
+                user-select: none;
+            }
+
+            // フォーム部品
+            .edit_area_box_parts {
+                user-select: none;
+
+                // ラジオボタン
+                &.radio {
+                    label {
+                        display: flex;
+                        align-items: baseline;
+                        justify-content: flex-start;
+
+                        // space between text and btn
+                        input[type='radio'],
+                        input[type='checkbox'] {
+                            margin-right: 10px;
+                            cursor: pointer;
+                        }
+                    }
+
+                    //利用権リストタイトル
+                    .course_list_title {
+                        border-left: 3px solid #808080;
+                        padding: 0 0 0.5% 2%;
+                        border-bottom: 1px dotted;
+                        margin: 0 0 2% 2%;
+                    }
+
+                    // 利用権選択リスト
+                    .course_list {
+                        display: flex;
+                        flex-wrap: wrap;
+
+                        // 利用権各項目
+                        .course_item {
+                            width: calc(50% - 20px);
+                            margin: 0 10px 6%;
+                        }
+                    }
+                }
+
+                // テキスト
+                &.text {
+                    display: flex;
+                    flex-direction: column;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    justify-content: center;
+                    margin: 5% 0;
+
+                    dd {
+                        width: 100%;
+
+                        input {
+                            width: 100%;
+                        }
+
+                        select {
+                            width: 100%;
+                        }
+                    }
+                }
+
+                // ユーザー内コントロールフォーム
+                .filter_form {
+                    position: relative;
+                    display: flex;
+                    width: 70%;
+                    height: 50px;
+                    justify-content: flex-start;
+                    align-items: center;
+
+                    .green_btn {
+                        top: auto;
+                        right: 0px;
+                    }
+                }
+            }
+        }
+    }
+
+    /* ボタン関連
+====================================================*/
+
+    // ノーマルボタンデフォルト
+    .normal_btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        color: darkslategray;
+        width: fit-content;
+        background: #fff;
+        border: 1px solid darkslategray;
+        font-weight: 700;
+        font-size: 1.5rem;
+        border-radius: 4px;
+        transition: all 0.3s;
+
+        // ボタンアイコン
+        .btn_icon {
+            font-size: 2rem;
+            padding: 5px 5px 5px 10px;
+        }
+
+        // ボタンテキスト
+        .btn_text {
+            padding-right: 13px;
+            padding-top: 2px;
+        }
+    }
+
+    // 青ボタンデフォルト
+    .blue_btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        color: #0aa0d2;
+        width: fit-content;
+        background: #fff;
+        border: 1px solid #0aa0d2;
+        font-weight: 700;
+        font-size: 1.5rem;
+        border-radius: 4px;
+        transition: all 0.3s;
+        padding: 5px 11px;
+
+        // ボタンアイコン
+        .btn_icon {
+            font-size: 2rem;
+            padding-right: 5px;
+        }
+
+        // ボタンテキスト
+        .btn_text {
+            line-height: 16px;
+        }
+    }
+
+    // 赤ボタンデフォルト
+    .red_btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        color: #de6161;
+        width: fit-content;
+        background: #fff;
+        border: 1px solid #de6161;
+        font-weight: 700;
+        font-size: 1.5rem;
+        border-radius: 4px;
+        transition: all 0.3s;
+
+        // ボタンアイコン
+        .btn_icon {
+            font-size: 2rem;
+            padding: 5px 5px 5px 10px;
+        }
+
+        // ボタンテキスト
+        .btn_text {
+            padding-right: 13px;
+            padding-top: 2px;
+        }
+    }
+
+    // 緑ボタンデフォルト
+    .green_btn {
+        position: relative;
+        display: flex;
+        align-items: center;
+        color: #0ad275;
+        width: fit-content;
+        background: #fff;
+        border: 1px solid #0ad275;
+        font-weight: 700;
+        font-size: 1.6rem;
+        border-radius: 4px;
+        transition: all 0.3s;
+
+        // ボタンアイコン
+        .btn_icon {
+            padding: 5px 5px 5px 10px;
+        }
+
+        // ボタンテキスト
+        .btn_text {
+            padding-right: 13px;
+            padding-top: 3px;
+        }
+
+        // ロード中
+        &.loading_btn {
+            border-radius: 50%;
+        }
+    }
+
+    // ボタンロード中
+    .loading {
+        @include authLoaderKey;
+        width: 15px;
+        height: 15px;
+        margin: 10px;
+        border-radius: 50%;
+        border: 0.25rem solid rgb(79 79 79 / 20%);
+        border-top-color: black;
+        animation: authLoaderAni 1s infinite linear;
+    }
+
+    /* Ban関連
+====================================================*/
+    // Ban済ユーザー表示
+    .banned_user_container {
+        position: absolute;
+        width: 102%;
+        height: 102%;
+        top: -1%;
+        left: -1%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: rgba(127, 127, 127, 0.5);
+        z-index: 2;
+        user-select: none;
+        box-shadow: 0 0 20px black;
+        border-radius: 20px;
+
+        // テキスト
+        .banned_text {
+            color: whitesmoke;
+            font-size: 3rem;
+            font-weight: 700;
+            text-shadow: 3px 3px 5px black;
+        }
+
+        // Ban解除ボタン
+        .remove_ban_btn {
+            color: red;
+            font-weight: 700;
+            font-size: 1.8rem;
+            text-shadow: 3px 3px 5px black;
+            margin: 5% 0 10% 0;
+        }
+    }
+
+    // Ban 確認/キャンセルボタン
+    .ban_btn_group {
+        display: flex;
+        justify-content: space-evenly;
+        padding: 2% 0;
+
+        // 確認ボタン
+        .confirm_btn {
+            position: relative;
+            color: #0aa0d2;
+            background: #fff;
+            border: 1px solid #0aa0d2;
+            text-align: right;
+            font-weight: 700;
+            font-size: 1.6rem;
+            width: 11.5%;
+            border-radius: 4px;
+            padding: 1% 1.5% 0.5% 0;
+            transition: all 0.3s;
+
+            .material-icons {
+                position: absolute;
+                left: 7%;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            &:hover {
+                color: #fff;
+                background: #2abcec;
+                border: 1px solid #2abcec;
+            }
+        }
+    }
+
+    /* ユーザーコンポーネント内キャラクターリスト
+====================================================*/
+    // キャラクターなし
+    .no_character_msg {
+        text-align: center;
+        color: #ff8100;
+    }
+
+    //　各キャラクター
+    .character_item {
+        position: relative;
+        width: 520px;
+        height: 143px;
+        margin-bottom: 1%;
+        user-select: none;
+        cursor: pointer;
+
+        // 武器種名に応じて背景変更
+        $weaponNames: $weaponNamesArray;
+        @each $weapon in $weaponNames {
+            &.#{$weapon} {
+                background: url(#{$path_img}/common/char_background/#{$weapon}.png) no-repeat center center;
+            }
+        }
+
+        // 新規キャラクター編集不可
+        &.new {
+            cursor: not-allowed;
+        }
+
+        // キャラクター名
+        .name {
+            position: absolute;
+            font-size: 3rem;
+            text-align: center;
+            font-weight: 700;
+            top: 10%;
+            width: 100%;
+        }
+
+        // 削除済みアカウント表示
+        .deleted_character {
+            top: 9% !important;
+            left: 4% !important;
+            color: #fff;
+            background: #de6161;
+            border: 1px solid #de6161;
+            z-index: 1;
+
+            &:hover {
+                background: #f57e7e;
+                border: 1px solid #f57e7e;
+            }
+        }
+
+        // キャラクター削除表示
+        .delete_character {
+            top: 9% !important;
+            left: 4% !important;
+            z-index: 1;
+        }
+
+        // 連携済みアカウント表示
+        .linked_character {
+            top: 12% !important;
+            right: 4% !important;
+            color: #fff;
+            background: #0ad275;
+            border: 1px solid #0ad275;
+
+            &:hover {
+                background: #5ae3a3;
+                border: 1px solid #5ae3a3;
+            }
+        }
+
+        // アカウント連携表示
+        .link_character {
+            top: 12% !important;
+            right: 4% !important;
+        }
+
+        // 武器アイコン
+        .wpn_icon {
+            position: absolute;
+            width: 48px;
+            height: 47px;
+            top: 48%;
+            left: 6%;
+            background: url(#{$path_img}/common/char_wpn_icon/NoData.png);
+
+            // 武器種名に応じてアイコン表示
+            $weaponNames: $weaponNamesArray;
+            @each $weapon in $weaponNames {
+                &.#{$weapon} {
+                    background: url(#{$path_img}/common/char_wpn_icon/#{$weapon}.png);
+                }
+            }
+        }
+
+        // 武器名
+        .wpn_text {
+            position: absolute;
+            font-weight: 700;
+            width: 130px;
+            left: 17%;
+            top: 50%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+
+            &.wpn_name_hover {
+                overflow: visible;
+            }
+
+            .wpn_name {
+                transition: all 0.3s;
+
+                &:hover {
+                    color: #ffffff;
+                }
+            }
+        }
+
+        // 武器詳細
+        .little_endian {
+            position: absolute;
+            top: 9%;
+            left: -50%;
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #fb3737;
+            background: #fffbf7;
+            padding: 1% 2%;
+            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            text-shadow: 0px 2px 8px #a7a7a7;
+            transition: all 0.2s;
+            transform: translate(0, 100%);
+            opacity: 0;
+
+            &.wpn_name_hover {
+                transform: translate(55%, 100%);
+                opacity: 1;
+            }
+        }
+
+        // プレイヤーHR/GR
+        .rank {
+            position: absolute;
+            top: 44%;
+            left: 45%;
+            font-weight: 700;
+        }
+
+        // キャラクターID
+        .char_id {
+            position: absolute;
+            top: 57.5%;
+            left: 45%;
+            font-weight: 700;
+        }
+
+        // 最終ログイン日時（UTC）
+        .last_login {
+            position: absolute;
+            top: 70%;
+            left: 45%;
+            font-weight: 700;
+        }
+    }
+
+    /* モーダルウィンドウ
+====================================================*/
+    .modal {
+        position: fixed;
+        z-index: 998;
+        left: 0;
+        top: 0;
+        height: 100%;
+        width: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.5);
+        user-select: none;
+
+        // モーダルコンテンツ
+        .modal_content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            background-color: #f4f4f4;
+            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+
+            // ヘッダー
+            .modal_header {
+                background: lightblue;
+                padding: 3px 15px;
+                display: flex;
+                justify-content: space-between;
+
+                h1 {
+                    font-size: 3rem;
+                    margin: 1% 0;
+                }
+            }
+
+            // 内容
+            .modal_body {
+                padding: 10px 20px;
+                color: black;
+
+                // モーダルリスト
+                .modal_list {
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-evenly;
+                    padding: 2%;
+                    flex-wrap: wrap;
+
+                    // リストアイテム
+                    .modal_list_item {
+                        text-align: center;
+                        width: calc(50% - 30px);
+                        margin: 0 15px 3%;
+                        overflow-wrap: break-word;
+
+                        // アイテム見出し用
+                        p {
+                            font-size: 1.7rem;
+                            font-weight: 700;
+                        }
+                    }
+                }
+
+                // モーダル注意文
+                .modal_note {
+                    text-align: center;
+                    color: red;
+                    font-weight: 700;
+                    font-size: 1.7rem;
+                }
+            }
+        }
+    }
+
+    /* フッター
+====================================================*/
+    .admin_footer {
+        width: 100%;
+        position: relative;
+        background: #000;
+        grid-area: footer;
+
+        // フッター帯上部装飾
+        &::before {
+            display: block;
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 4px;
+            background: rgb(190, 193, 195);
+        }
+
+        // フッター内コンテンツ調整
+        .footer_inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 7% 10%;
+
+            // フッターテキスト
+            .footer_text {
+                color: white;
+                font-size: 1.1rem;
+                text-align: center;
+            }
+        }
+    }
+
+    /* 成功・エラーメッセージ表示
+====================================================*/
+
+    // 表示本体
+    .msg_display {
+        position: fixed;
+        top: 3%;
+        left: 20%;
+        display: flex;
+        align-items: center;
+        width: 60%;
+        font-size: 1.8rem;
+        font-weight: 700;
+        background: #fff;
+        padding: 0.7% 1%;
+        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+        z-index: 101;
+        border-top: 5px solid #e6e6e9;
+        border-bottom: 5px solid #e6e6e9;
+
+        // 成功通知
+        &.success {
+            color: #5ab052;
+
+            .left_side_bar {
+                background: #5ab052;
+            }
+
+            .timer_bar {
+                background: #85df7d;
+            }
+        }
+
+        // エラー通知
+        &.error {
+            color: #c93a3a;
+
+            .left_side_bar {
+                background: #c93a3a;
+            }
+
+            .timer_bar {
+                background: #eb7b7b;
+            }
+        }
+
+        // 不正操作通知
+        &.notice {
+            color: #5997db;
+
+            .left_side_bar {
+                background: #5997db;
+            }
+
+            .timer_bar {
+                background: #9ec6ef;
+            }
+        }
+
+        // アイコン
+        .material-icons-outlined {
+            font-size: 3.5rem;
+            padding-right: 2%;
+        }
+
+        // 左側装飾バー
+        .left_side_bar {
+            display: block;
+            position: absolute;
+            width: 0.7%;
+            height: 72px;
+            top: -8%;
+            left: 0;
+            border-radius: 0 20px 20px 0;
+            z-index: 103;
+        }
+
+        // 閉じるボタン
+        .msg_close_btn {
+            display: block;
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            top: 50%;
+            right: 2%;
+            transform: translateY(-50%);
+            user-select: none;
+            cursor: pointer;
+
+            &::before,
+            &::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 5px;
+                height: 30px;
+                background: #3e4444;
+            }
+
+            &::before {
+                transform: translate(-50%, -50%) rotate(45deg);
+            }
+
+            &::after {
+                transform: translate(-50%, -50%) rotate(-45deg);
+            }
+        }
+
+        // エラー詳細表示ボタン
+        .error_view_btn {
+            position: absolute;
+            top: -3%;
+            right: 6%;
+            font-size: 1.5rem;
+            padding: 1% 1.5% 0.5%;
+            border: 2px gray solid;
+            background: white;
+            color: #333333;
+            transform: translateY(25%);
+        }
+
+        // 残り時間表示バー（成功）
+        .timer_bar {
+            height: 5px;
+            position: absolute;
+            left: 0%;
+            bottom: -8%;
+            z-index: 102;
+        }
+    }
+
+    // メッセージ詳細表示
+    .msg_detail {
+        position: fixed;
+        left: 20%;
+        top: 10%;
+        width: 60%;
+        padding: 1%;
+        font-size: 1.8rem;
+        color: #333333;
+        background: whitesmoke;
+        border: 2px silver solid;
+        z-index: 100;
+
+        // 内部テキスト
+        p {
+            font-size: 1.6rem;
+            margin: 1%;
+        }
+    }
+
+    /* オーバーレイ
+====================================================*/
+
+    // DOMマウント待機オーバーレイ
+    .mount_overlay {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: whitesmoke;
+        z-index: 99999;
+    }
+
+    // セーブ中オーバーレイ
+    .saving_overlay {
+        display: flex;
+        align-items: center;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 999;
+        backdrop-filter: blur(4px);
+        user-select: none;
+
+        .loader {
+            position: relative;
+            color: #d6dadf;
+            font-size: 15rem;
+            text-indent: -9999em;
+            overflow: hidden;
+            width: 1em;
+            height: 1em;
+            border-radius: 50%;
+            margin: 72px auto;
+            transform: translateZ(0);
+            @include loaderKey;
+            animation: loaderAni1 1.7s infinite ease, loaderAni2 1.7s infinite ease;
+        }
+
+        .saving_overlay_text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            font-size: 2.5rem;
+            font-weight: 700;
+            font-family: 'Noto Serif', serif;
+            color: #63ebeb;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 1), 0 0 10px rgba(0, 0, 0, 1);
+            transform: translate(-50%, -50%);
+        }
+    }
+}

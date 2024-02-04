@@ -1,5 +1,5 @@
-import { courseJa } from '$i18n/ja/courseData.ts';
-import { courseEn } from '$i18n/en/courseData.ts';
+import { courseJa } from '$i18n/ja/courseData';
+import { courseEn } from '$i18n/en/courseData';
 import type { WeaponType, CourseJaData, CourseEnData } from '$lib/types';
 
 /* Get Course by Decimal
@@ -273,3 +273,59 @@ export const discordLinkConvertor = (url: string): string => {
         return url;
     }
 };
+
+export class TextEncoderSJIS {
+    static mapping: Uint16Array;
+    constructor() {
+        if (TextEncoderSJIS.mapping !== undefined) {
+            return;
+        }
+        let dec = new TextDecoder('sjis');
+        let mapping = new Uint16Array(65536);
+
+        let ranges = [
+            [0x20, 0x7e],
+            [0xa1, 0xdf],
+            [0x8140, 0x9ffc],
+            [0xe040, 0xeffc],
+            [0xf040, 0xfcf4],
+        ];
+        let c8 = new Uint8Array(1);
+        let c16 = new Uint8Array(2);
+        for (let r of ranges) {
+            for (let i = r[0]; i <= r[1]; ++i) {
+                let u8 = c8;
+                if (i < 0x100) {
+                    c8[0] = i;
+                } else {
+                    c16[0] = i >> 8;
+                    c16[1] = i & 0xff;
+                    u8 = c16;
+                }
+                let c = dec.decode(u8);
+                if (c.length == 1) {
+                    mapping[c.charCodeAt(0)] = i;
+                }
+            }
+        }
+        TextEncoderSJIS.mapping = mapping;
+    }
+
+    encode(str: string) {
+        let sjis: number[] = [];
+        for (let i = 0; i < str.length; ++i) {
+            let c = TextEncoderSJIS.mapping[str.charCodeAt(i)];
+            if (c != 0) {
+                if (c < 0x100) {
+                    sjis.push(c);
+                } else {
+                    sjis.push(c >>> 8);
+                    sjis.push(c & 0xff);
+                }
+            } else {
+                sjis.push(0x20);
+            }
+        }
+        return new Uint8Array(sjis);
+    }
+}

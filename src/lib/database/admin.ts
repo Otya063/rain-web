@@ -1,5 +1,6 @@
 import ServerData, { db } from '.';
 import type { PaginatedUsers, PaginationMeta } from '$lib/types';
+import { TextEncoderSJIS } from '$lib/utils';
 
 /* Get Paginated User(s)
 ====================================================*/
@@ -305,3 +306,72 @@ export const getPaginationMeta = async (filterParam: string, filterValue: string
         }
     }
 };
+
+/* Edit Character Name
+====================================================*/
+export const editName = async (
+    characterId: number,
+    setName: string
+): Promise<{
+    success: boolean;
+    message: string;
+}> => {
+    const encoder = new TextEncoderSJIS();
+    const sjisBytes = encoder.encode(setName);
+    const hexString = Array.from(sjisBytes)
+        .map((byte) => byte.toString(16).padStart(2, '0'))
+        .join('');
+    if (hexString.length > 24 || hexString.length === 0) {
+        return { success: false, message: 'Character name must be 1-12 characters (1-6 characters in Japanese).' };
+    }
+
+    const savedata = (
+        await db.characters.findFirst({
+            where: {
+                id: characterId,
+            },
+            select: {
+                savedata: true,
+            },
+        })
+    )?.savedata;
+    if (!savedata) {
+        return { success: false, message: 'Savedata not found.' };
+    }
+
+    const uint8Arr = Uint8Array.from(savedata);
+    const index255 = uint8Arr.indexOf(255);
+    const index0 = uint8Arr.indexOf(0, index255);
+    const array1 = uint8Arr.slice(0, index255 + 1);
+    const oldNameArr = uint8Arr.slice(index255 + 1, index0);
+    const array2 = uint8Arr.slice(index0 + 1);
+
+    const nameArr = (hexString + '0').match(/.{1,2}/g)?.map((hex) => parseInt(hex, 16))!;
+    array2[0] = array2[0] - (sjisBytes.length - oldNameArr.length);
+    const finalArr = new Uint8Array([...array1, ...nameArr, ...array2]);
+
+    const base64 = Buffer.from(finalArr).toString('base64');
+    await db.$queryRaw`UPDATE characters SET savedata = decode(${base64}, 'base64'), name = ${setName} WHERE id = ${characterId}`;
+
+    return { success: true, message: '' };
+};
+
+/* Manage Character Binary
+====================================================*/
+export class ManageBinary {
+    constructor(private type: 'savedata', private characterId: number, private base64: string) {}
+
+    public async set(): Promise<void> {
+        switch (this.type) {
+            case 'savedata': {
+                await db.$queryRaw`UPDATE characters SET savedata = decode(${this.base64}, 'base64') WHERE id = ${this.characterId}`;
+
+                break;
+            }
+
+            default: {
+                throw new Error('Invalid Binary Type');
+            }
+        }
+    }
+}

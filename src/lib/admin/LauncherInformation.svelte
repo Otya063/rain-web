@@ -104,8 +104,8 @@
                 <dt class="contents_term">Info Type<br /><span class="contents_term_required">[Required]</span></dt>
                 <dd class="contents_desc">
                     <select name="type">
+                        <option hidden disabled selected>Select the type of information here.</option>
                         {#each Object.keys($allInformation) as key}
-                            <option hidden>Select the type of information here.</option>
                             <option value={key}>{key}</option>
                         {/each}
                     </select>
