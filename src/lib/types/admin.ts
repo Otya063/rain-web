@@ -1,4 +1,22 @@
-import type { discord, suspended_account } from '@prisma/client/edge';
+import type { guild_characters, suspended_account } from '@prisma/client/edge';
+
+/* Binary Data
+====================================================*/
+export type BinaryTypes =
+    | 'savedata'
+    | 'decomyset'
+    | 'hunternavi'
+    | 'otomoairou'
+    | 'partner'
+    | 'platebox'
+    | 'platedata'
+    | 'platemyset'
+    | 'rengokudata'
+    | 'savemercenary'
+    | 'skin_hist'
+    | 'minidata'
+    | 'scenariodata'
+    | 'savefavoritequest';
 
 /* Paginated User Type
 ====================================================*/
@@ -19,7 +37,7 @@ export interface PaginatedUsers {
     suspended_account: suspended_account | null;
 }
 
-interface PaginatedCharacter {
+export interface PaginatedCharacter {
     id: number;
     last_login: number | null;
     user_id: number | null;
@@ -30,7 +48,33 @@ interface PaginatedCharacter {
     weapon_type: number | null;
     weapon_id: number;
     deleted: boolean;
-    discord: discord | null;
+    discord: {
+        id: number;
+        char_id: number;
+        discord_id: string;
+        is_male: boolean | null;
+        bounty: number;
+        road_champion: boolean;
+        rain_demolizer: boolean;
+        bounty_champion: boolean;
+        bounty_master: boolean;
+        bounty_expert: boolean;
+        gacha: number;
+        pity: number;
+        newbie: boolean;
+        latest_bounty: string;
+        title: number | null;
+        gold: number | null;
+        silver: number | null;
+        bronze: number | null;
+    } | null;
+    guild_characters: {
+        guilds: {
+            id: number;
+            name: string | null;
+            guild_characters: guild_characters[]
+        } | null;
+    } | null;
 }
 
 export interface PaginationMeta {

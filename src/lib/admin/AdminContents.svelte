@@ -8,6 +8,10 @@
 
     export let data: PageData;
     export let form: ActionData;
+    export let addBnrMode: (enable: boolean) => void;
+    export let addInfoMode: (enable: boolean) => void;
+    export let infoAddMode: boolean;
+    export let bnrAddMode: boolean;
     const systemData = data.launcherSystem;
     const informationData = data.launcherInformation;
     const launcherBanner = data.launcherBanner;
@@ -16,9 +20,9 @@
 {#if $adminTabValue === '' || $adminTabValue === 'system'}
     <LauncherSystem {systemData} />
 {:else if $adminTabValue === 'info'}
-    <LauncherInformation createdInfo={form?.createdInfo} updatedInfo={form?.updatedInfo} {informationData} />
+    <LauncherInformation bind:addInfoMode bind:infoAddMode createdInfo={form?.createdInfo} updatedInfo={form?.updatedInfo} {informationData} />
 {:else if $adminTabValue === 'users'}
     <Users paginatedUsers={form?.paginatedUsers} paginationMeta={form?.paginationMeta} />
 {:else if $adminTabValue === 'bnr'}
-    <LauncherBanner createdBnr={form?.createdBnr} {launcherBanner} />
+    <LauncherBanner bind:addBnrMode bind:bnrAddMode createdBnr={form?.createdBnr} {launcherBanner} />
 {/if}

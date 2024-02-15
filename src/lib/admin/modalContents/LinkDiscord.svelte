@@ -104,7 +104,7 @@
                     </p>
                 {/if}
             </div>
-            <div class="ban_btn_group">
+            <div class="btn_group">
                 <button class="blue_btn" formaction="?/{$linkDiscordData.form_action}" type="submit" on:click={() => onSubmit.set(true)}>
                     <span class="btn_icon material-icons">check</span>
                     <span class="btn_text">Yes</span>

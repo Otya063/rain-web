@@ -13,14 +13,14 @@
 
     /* Below is the add mode script
     ====================================================*/
-    let addMode: boolean;
-    const addInfoMode = (enable: boolean): void => {
+    export let infoAddMode: boolean;
+    export const addInfoMode = (enable: boolean): void => {
         if (enable) {
             // when editing
-            addMode = true;
+            infoAddMode = true;
         } else {
             // when finished editing
-            addMode = false;
+            infoAddMode = false;
         }
     };
 
@@ -66,7 +66,7 @@
     };
 </script>
 
-{#if addMode}
+{#if infoAddMode}
     <h2>
         <span class="material-icons">post_add</span>
         Add New Information Form
@@ -129,11 +129,6 @@
         </form>
     </div>
 {:else}
-    <button class="green_btn" type="button" on:click={() => addInfoMode(true)}>
-        <span class="btn_icon material-icons">add</span>
-        <span class="btn_text">Add Information</span>
-    </button>
-
     {#each Object.entries($allInformation) as [typename, infoList]}
         <h2 class={underscoreAndLowercase(typename)}>
             <span class="material-icons">info</span>

@@ -32,18 +32,21 @@
             <div class="modal_body">
                 <p>{$deleteBnrData.title}</p>
                 <ul class="modal_list">
-                    <li class="modal_list_item">
-                        <p>Banner Preview</p>
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <!-- svelte-ignore a11y-click-events-have-key-events -->
+                    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+                    <li class="modal_list_item" style="cursor: pointer;" on:click={() => window.open($deleteBnrData.bnr_url, '_blank')}>
+                        <p>Bnr Preview<span class="material-symbols-outlined">open_in_new</span></p>
                         <img src={$deleteBnrData.bnr_url} alt={$deleteBnrData.bnr_name} />
                     </li>
 
                     <li class="modal_list_item">
-                        <p>Banner Name</p>
+                        <p>Bnr Name</p>
                         <span>{$deleteBnrData.bnr_name}</span>
                     </li>
                 </ul>
             </div>
-            <div class="ban_btn_group">
+            <div class="btn_group">
                 <button
                     class="blue_btn"
                     type="submit"

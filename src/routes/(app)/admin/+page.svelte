@@ -7,13 +7,28 @@
     import SuspendUser from '$lib/admin/modalContents/SuspendUser.svelte';
     import AdminContents from '$lib/admin/AdminContents.svelte';
     import AdminMenu from '$lib/admin/AdminMenu.svelte';
-    import { suspendUser, deleteInfo, deleteBnr, linkDiscord, deleteChar, loadArticle, Timeout, msgClosed, errDetailMode, onSubmit, closeMsgDisplay, toggleMsgDetail, timeOut } from '$lib/utils';
+    import {
+        suspendUser,
+        deleteInfo,
+        deleteBnr,
+        linkDiscord,
+        deleteChar,
+        loadArticle,
+        Timeout,
+        msgClosed,
+        errDetailMode,
+        onSubmit,
+        closeMsgDisplay,
+        toggleMsgDetail,
+        timeOut,
+        adminTabValue,
+    } from '$lib/utils';
     import _ from 'lodash';
     import { onMount } from 'svelte';
     import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
+    import { register } from 'swiper/element/bundle';
     import '$scss/style_admin.scss';
-    import { enhance } from '$app/forms';
 
     // data from the server
     export let data: PageData;
@@ -22,9 +37,13 @@
     const origin = url.origin;
     let width: Tweened<number>;
     let loaded = false;
+    let isMobile: boolean;
 
     onMount(() => {
         loaded = true;
+        const regex = /iphone;|(android|nokia|blackberry|bb10;).+mobile|android.+fennec|opera.+mobi|windows phone|symbianos/i;
+        isMobile = regex.test(navigator.userAgent);
+        isMobile && register();
     });
 
     // message display timer bar
@@ -43,6 +62,11 @@
         msgClosed.set(true);
         $timeOut.stop();
     }
+
+    let addBnrMode: (enable: boolean) => void;
+    let addInfoMode: (enable: boolean) => void;
+    let infoAddMode: boolean;
+    let bnrAddMode: boolean;
 </script>
 
 {#if !loaded}
@@ -70,24 +94,27 @@
 
 {#if !$msgClosed}
     <div transition:fade class="msg_display" class:success={form?.success} class:error={form?.error}>
-        <span class="left_side_bar" />
-        {#if form?.success}
-            <span class="material-icons-outlined">check_circle</span>
-            <p style="padding-top: 0.3%;">{form?.message}</p>
-        {:else if form?.error}
-            <span class="material-icons-outlined">warning</span>
-            <p style="padding-top: 0.3%;">Error occurred.</p>
-            <button id="error_view_btn" class="error_view_btn" on:click={(e) => toggleMsgDetail(e, $timeOut, width)}>View Details</button>
-        {/if}
-        <button id="msg_close_btn" class="msg_close_btn" on:click={() => closeMsgDisplay($timeOut)} />
-        <div class="timer_bar" style={`width: ${$width}%;`} />
-    </div>
-    {#if $errDetailMode}
-        <div transition:slide class="msg_detail">
-            Message Details:
-            <p>{form?.message}</p>
+        <div class="msg_display_contents">
+            <span class="msg_display_left_bar" />
+            {#if form?.success}
+                <span class="msg_display_icon material-icons-outlined">check_circle</span>
+                <p class="msg_display_status">{form?.message}</p>
+            {:else if form?.error}
+                <span class="msg_display_icon material-icons-outlined">warning</span>
+                <p class="msg_display_status">Error occurred.</p>
+                <button id="error_view_btn" class="error_view_btn material-icons-outlined" class:open={$errDetailMode} on:click={(e) => toggleMsgDetail(e, $timeOut, width)}>expand_more</button>
+            {/if}
+            <button id="msg_close_btn" class="msg_close_btn material-icons-outlined" on:click={() => closeMsgDisplay($timeOut)}>highlight_off</button>
+            <div class="timer_bar" style={`width: ${$width}%;`} />
         </div>
-    {/if}
+
+        {#if $errDetailMode}
+            <div transition:slide class="msg_detail">
+                Message Details:
+                <p>{form?.message}</p>
+            </div>
+        {/if}
+    </div>
 {/if}
 
 {#if $suspendUser}
@@ -111,16 +138,42 @@
 {/if}
 
 <main class="console_body">
-    <nav class="console_menu">
-        <AdminMenu />
-    </nav>
+    {#if isMobile}
+        <swiper-container class="console_menu_swiper" direction={'horizontal'} dir="rtl">
+            <swiper-slide>
+                <div class="console_menu_arrow"></div>
+            </swiper-slide>
+            <swiper-slide>
+                <nav class="console_menu" dir="ltr">
+                    <AdminMenu />
+                </nav>
+            </swiper-slide>
+        </swiper-container>
+    {:else}
+        <nav class="console_menu">
+            <AdminMenu />
+        </nav>
+    {/if}
 
     <article class="console_article">
         <h1>
             <span class="material-symbols-outlined">admin_panel_settings</span>
             Admin Console
+
+            {#if $adminTabValue === 'bnr' && !bnrAddMode}
+                <button class="green_btn" on:click={() => addBnrMode(true)}>
+                    <span class="btn_icon material-icons">add</span>
+                    <span class="btn_text">Add Banner</span>
+                </button>
+            {:else if $adminTabValue === 'info' && !infoAddMode}
+                <button class="green_btn" type="button" on:click={() => addInfoMode(true)}>
+                    <span class="btn_icon material-icons">add</span>
+                    <span class="btn_text">Add Information</span>
+                </button>
+            {/if}
         </h1>
-        <AdminContents {data} {form} />
+
+        <AdminContents bind:addBnrMode bind:addInfoMode bind:infoAddMode bind:bnrAddMode {data} {form} />
     </article>
 </main>
 
@@ -163,5 +216,5 @@
     <!-- icon -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons%7CMaterial+Icons+Outlined" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0..1,0" />
 </svelte:head>

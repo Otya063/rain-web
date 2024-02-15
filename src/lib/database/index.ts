@@ -12,7 +12,7 @@ import {
 } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 import { DATABASE_URL } from '$env/static/private';
-import type { InformationType } from '$lib/types';
+import type { InformationType, BinaryTypes } from '$lib/types';
 import _ from 'lodash';
 
 export * from './admin';
@@ -29,16 +29,23 @@ export const db = new PrismaClient({
             characters: {
                 async editName(
                     characterId: number,
-                    setName: string
+                    setName: string,
+                    bountyCoin: number
                 ): Promise<{
                     success: boolean;
                     message: string;
                 }> {
-                    return await editName(characterId, setName);
+                    return await editName(characterId, setName, bountyCoin);
                 },
-                async setBinary(type: 'savedata', characterId: number, base64: string): Promise<void> {
-                    const manageBinary = new ManageBinary(type, characterId, base64);
-                    await manageBinary.set();
+                async setBinary(
+                    characterId: number,
+                    binaryData: { [key in BinaryTypes]: string }
+                ): Promise<{
+                    success: boolean;
+                    message: string;
+                }> {
+                    const manageBinary = new ManageBinary(characterId, binaryData);
+                    return await manageBinary.set();
                 },
             },
         },

@@ -20,7 +20,7 @@
         },
         users: {
             text: 'Users',
-            icon: 'group',
+            icon: 'person',
         },
         bnr: {
             text: 'Launcher Banner',

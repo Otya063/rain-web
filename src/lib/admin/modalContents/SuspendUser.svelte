@@ -84,7 +84,7 @@
                         <li class="modal_list_item">
                             <p>Reason</p>
                             <select name="reason_type" required>
-                                <option selected disabled>Select the Reason for Account Suspension</option>
+                                <option selected disabled>Select the Reason</option>
                                 <option value="1">Cheating</option>
                                 <option value="2">Gameplay Exploit</option>
                                 <option value="3">Toxic and Abusive Behavior</option>
@@ -93,13 +93,17 @@
                         </li>
 
                         <li class="modal_list_item">
-                            <p>Permanently Suspend</p>
-                            <input type="checkbox" name="permanently_del" bind:checked={permanent} />
+                            <label>
+                                <p>Permanently Suspend</p>
+                                <input type="checkbox" name="permanently_del" bind:checked={permanent} />
+                            </label>
                         </li>
 
-                        <li class="modal_list_item">
-                            <p>Suspention Period (until at)</p>
-                            <input type="datetime-local" name="until_at" class:disabled_elm={permanent} />
+                        <li class="modal_list_item" class:disabled_elm={permanent}>
+                            <label>
+                                <p>Suspention Period (until at)</p>
+                                <input type="datetime-local" name="until_at" />
+                            </label>
                         </li>
                     {:else}
                         <li class="modal_list_item">
@@ -123,7 +127,7 @@
                     <p class="modal_note">* "Suspention Period" is automatically converted to UTC.</p>
                 {/if}
             </div>
-            <div class="ban_btn_group">
+            <div class="btn_group">
                 <button
                     class="blue_btn"
                     formaction="?/{$suspendUserData.form_action}"

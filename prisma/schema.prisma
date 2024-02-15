@@ -67,8 +67,8 @@ model characters {
   user_id                                                        Int?
   is_female                                                      Boolean?
   is_new_character                                               Boolean?
-  name                                                           String?              @default("") @db.VarChar(15)
-  unk_desc_string                                                String?              @default("") @db.VarChar(31)
+  name                                                           String?
+  unk_desc_string                                                String?
   gr                                                             Int?
   hrp                                                            Int?
   weapon_type                                                    Int?
@@ -117,7 +117,6 @@ model characters {
   guild_characters                                               guild_characters?
   mail_mail_recipient_idTocharacters                             mail[]               @relation("mail_recipient_idTocharacters")
   mail_mail_sender_idTocharacters                                mail[]               @relation("mail_sender_idTocharacters")
-  //discord_discord_char_idTocharacters                            discord[]            @relation("discord_char_idTocharacters")
   discord                                                        discord?
   rengoku_score_rengoku_score_character_idTocharacters           rengoku_score[]      @relation("rengoku_score_character_idTocharacters")
   warehouse_warehouse_character_idTocharacters                   warehouse[]          @relation("warehouse_character_idTocharacters")
@@ -148,7 +147,6 @@ model discord {
   gold               Int?       @default(0)
   silver             Int?       @default(0)
   bronze             Int?       @default(0)
-  //characters_discord_char_idTocharacters characters @relation("discord_char_idTocharacters", fields: [char_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   characters         characters @relation(fields: [char_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([char_id])

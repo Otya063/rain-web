@@ -52,7 +52,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         console.log('[Admins Normal Browsing.]');
 
         // when prod env, check if the user is an admin
-        if (!event.url.origin.includes('localhost')) {
+        /* if (!event.url.origin.includes('localhost')) {
             const session = event.cookies.get('rainLoginKey');
             if (!session) {
                 const redirectUrl = `${PUBLIC_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${PUBLIC_MAIN_DOMAIN}/admin`;
@@ -74,7 +74,7 @@ export const handle: Handle = async ({ event, resolve }) => {
             }
 
             event.locals.authUser = authUser;
-        }
+        } */
 
         return resolve(event, {
             transformPageChunk: ({ html }) => html.replace('%lang%', 'en'),

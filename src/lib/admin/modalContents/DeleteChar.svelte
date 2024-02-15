@@ -65,8 +65,10 @@
 
                     {#if $deleteCharacterData.form_action === 'deleteCharacter'}
                         <li class="modal_list_item">
-                            <p>Permanently Delete</p>
-                            <input type="checkbox" name="permanently_del" bind:checked={permanent} />
+                            <label>
+                                <p>Permanently Delete</p>
+                                <input type="checkbox" name="permanently_del" bind:checked={permanent} />
+                            </label>
                         </li>
                     {/if}
                 </ul>
@@ -75,7 +77,7 @@
                     <p class="modal_note">* If "Permanently Delete" is checked, all character data will be completely deleted from the database and can't be restored.</p>
                 {/if}
             </div>
-            <div class="ban_btn_group">
+            <div class="btn_group">
                 <button class="blue_btn" formaction="?/{$deleteCharacterData.form_action}" type="submit" on:click={() => onSubmit.set(true)}>
                     <span class="btn_icon material-icons">check</span>
                     <span class="btn_text">Yes</span>
