@@ -3,7 +3,7 @@ import type { discord, discord_register, launcher_banner, launcher_info, launche
 import { error, fail } from '@sveltejs/kit';
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
 import ServerData, { db, getPaginatedUserData, getPaginationMeta } from '$lib/database';
-import type { PaginatedUsers, PaginationMeta } from '$lib/types';
+import type { PaginatedUsers, PaginationMeta, BinaryTypes } from '$lib/types';
 import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi } from '$lib/utils';
 import { Buffer } from 'node:buffer';
 import { DateTime } from 'luxon';
@@ -15,13 +15,13 @@ export const load: PageServerLoad = async ({ url, locals: { authUser } }) => {
     const launcherSystem = (await ServerData.getLauncherSystem()) as launcher_system;
 
     // check rain admin
-    if (!url.origin.includes('localhost')) {
+    /* if (!url.origin.includes('localhost')) {
         const isAdmin: boolean = launcherSystem['rain_admins'].includes(authUser.username);
 
         if (!isAdmin) {
             throw error(403);
         }
-    }
+    } */
 
     const launcherInformation = (await ServerData.getInformation('ALL')) as { [key: string]: launcher_info[] };
 
@@ -375,14 +375,21 @@ const updateUserData: Action = async ({ request }) => {
 const updateCharacterData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.character_id);
-    const column = Object.keys(data)[1] as 'id' | 'name' | 'savedata';
-    const value = Object.values(data)[1] as string;
+    const column = Object.keys(data)[2] as 'name' | 'clan' | 'binary';
+    const value = Object.values(data)[2] as string;
 
     try {
         switch (column) {
             case 'name': {
-                const { success, message } = await db.characters.editName(id, value);
+                const discordLinked = data.not_linked === 'false';
+                const bountyCoin = Number(data.bounty_coin);
+                if (!discordLinked) {
+                    return fail(400, { error: true, message: "This character isn't linked to a discord account." });
+                } else if (bountyCoin < 50000) {
+                    return fail(400, { error: true, message: `Insufficient bounty coins (Owned: ${bountyCoin}).` });
+                }
 
+                const { success, message } = await db.characters.editName(id, value, bountyCoin);
                 if (!success) {
                     return fail(400, { error: true, message });
                 } else {
@@ -393,19 +400,68 @@ const updateCharacterData: Action = async ({ request }) => {
                 }
             }
 
-            case 'savedata': {
-                const uint8Arr = new Uint8Array(value.split(',').map(Number));
-                const base64 = Buffer.from(uint8Arr).toString('base64');
-                if (uint8Arr.length <= 1 && uint8Arr[0] === 0) {
+            case 'clan': {
+                const clanId = Number(data.clan_id);
+                const clanCharNum = Number(data.clan_length);
+                const clanName = data.clan_name;
+
+                try {
+                    if (clanCharNum - 1 === 0) {
+                        await db.guilds.delete({
+                            where: {
+                                id: clanId,
+                            },
+                        });
+                    } else {
+                        await db.guild_characters.delete({
+                            where: {
+                                character_id: id,
+                            },
+                        });
+                    }
+
+                    return {
+                        success: true,
+                        message: `The character (ID: ${id}) has successfully left the "${clanName}."`,
+                    };
+                } catch (err) {
+                    if (err instanceof Error) {
+                        return fail(400, { error: true, message: err.message });
+                    } else if (typeof err === 'string') {
+                        return fail(400, { error: true, message: err });
+                    } else {
+                        return fail(400, { error: true, message: 'Unexpected Error' });
+                    }
+                }
+            }
+
+            case 'binary': {
+                const file = data.file as File;
+                if (file.size === 0) {
                     return fail(400, { error: true, message: 'No file selected.' });
                 }
 
-                await db.characters.setBinary('savedata', id, base64);
+                delete data.user_id;
+                delete data.character_id;
+                delete data.binary;
+                delete data.file;
 
-                return {
-                    success: true,
-                    message: `The binary data (Binary Type: ${column}) of the character has been successfully updated.`,
-                };
+                const binaryData: { [key in BinaryTypes]: string } = data as { [key in BinaryTypes]: string };
+                Object.keys(data).forEach((_value) => {
+                    const value = _value as BinaryTypes;
+                    const base64 = Buffer.from(new Uint8Array(data[value].split(',').map(Number))).toString('base64');
+                    binaryData[value] = base64 === 'AA==' ? '' : base64;
+                });
+
+                const { success, message } = await db.characters.setBinary(id, binaryData);
+                if (!success) {
+                    return fail(400, { error: true, message });
+                } else {
+                    return {
+                        success: true,
+                        message: `The binary data of the character (ID: ${id}) has been successfully updated.`,
+                    };
+                }
             }
 
             default: {

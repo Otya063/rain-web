@@ -97,7 +97,6 @@
 
         // コンソールコンテンツ側
         .console_article {
-            position: relative;
             width: 100%;
             min-height: 700px;
             padding-top: 5%;
@@ -120,6 +119,11 @@
                     left: 0;
                     bottom: 0;
                     font-size: 4.5rem;
+                }
+
+                // 緑ボタン調整
+                .green_btn {
+                    bottom: -140%;
                 }
             }
 
@@ -162,16 +166,15 @@
 
                     // 各ボタン
                     .pagination_btn_item {
-                        padding: 1% 1% 0.7%;
-                        margin: 0 1%;
+                        padding: 6px 6px 5px;
+                        margin: 0 3%;
                         border: #272727 solid 1px;
                         background: #f7f6f6;
                         color: #272727;
                         transition: all 0.3s;
 
-                        // ホバーもしくはアクティブ時
-                        &.active,
-                        &:hover {
+                        // ホバー時
+                        &.active {
                             border: #f7f6f6 solid 1px;
                             background: #272727;
                             color: #f7f6f6;
@@ -181,9 +184,10 @@
 
                 // コンテンツ内リストタイトル
                 .console_contents_list_title {
+                    position: relative;
                     width: 100%;
                     font-size: 2rem;
-                    padding: 3% 0 0 3%;
+                    padding: 10% 0 0 3%;
                     color: #df9e27;
                     user-select: none;
                     border-bottom: #df9e27 2px solid;
@@ -192,8 +196,43 @@
                     // 赤ボタン調整
                     .red_btn {
                         position: absolute;
-                        top: 0;
+                        bottom: 10%;
                         right: 0;
+                    }
+
+                    // ユーザー内情報切り替えパネル
+                    .user_ctrl_panel {
+                        color: #333333;
+
+                        // タブボタン
+                        button {
+                            font-size: 3rem;
+
+                            // アクティブ時
+                            &.active {
+                                font-variation-settings: 'FILL' 1;
+                            }
+                        }
+                    }
+                }
+
+                // キャラクターリスト用スワイパー
+                swiper-container {
+                    position: relative;
+
+                    // swiperコンテナ調整
+                    swiper-slide {
+                        display: flex;
+                        align-items: center;
+                        flex-direction: column;
+                    }
+
+                    // スワイパー矢印ボタン調整
+                    &::part(button-prev) {
+                        display: none;
+                    }
+                    &::part(button-next) {
+                        display: none;
                     }
                 }
 
@@ -208,7 +247,7 @@
                     .contents_term {
                         width: 35%;
                         font-weight: 700;
-                        padding: 3% 0 2% 2%;
+                        padding: 3% 2% 2%;
                         border-bottom: 1px gray dashed;
                         user-select: none;
                         overflow-wrap: break-word;
@@ -225,7 +264,7 @@
                         display: flex;
                         flex-direction: column;
                         width: 65%;
-                        padding: 3% 0 2%;
+                        padding: 3% 2% 2% 0;
                         border-bottom: 1px gray dashed;
                         overflow-wrap: break-word;
 
@@ -278,8 +317,7 @@
             // 緑ボタン調整
             .green_btn {
                 position: absolute;
-                top: 65px;
-                right: 20px;
+                right: 0;
                 z-index: 1;
 
                 .btn_icon {
@@ -295,61 +333,87 @@
 
     /* コンソールメニュー
 ====================================================*/
-
-    // メニュー本体
-    .console_menu {
+    .console_menu_swiper {
         position: fixed;
-        bottom: -4%;
-        width: 90%;
-        border-radius: 20px;
-        background: rgb(248, 248, 248);
-        transform: translateY(-50%);
-        user-select: none;
-        filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
+        width: 100%;
+        bottom: 2%;
         z-index: 2;
+        filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
 
-        // メニューリスト
-        .console_menu_list {
-            padding: 15px 0;
+        @include landscape {
+            bottom: 7%;
+        }
+
+        swiper-slide {
             display: flex;
+            flex-direction: column;
+            align-items: center;
 
-            // メニュー各項目
-            .console_menu_list_item {
-                width: 30px;
-                height: 35px;
-                margin: 0 auto;
-                border-bottom: 1px solid gray;
-                cursor: pointer;
+            // メニュー矢印
+            .console_menu_arrow {
+                position: absolute;
+                width: 0;
+                height: 0;
+                left: -2px;
+                border-left: 40px solid rgb(248, 248, 248);
+                border-top: 33.5px solid transparent;
+                border-bottom: 33.5px solid transparent;
+                transform: translateY(-1px);
+            }
 
-                .console_menu_list_link {
-                    position: relative;
+            // メニュー本体
+            .console_menu {
+                width: 100%;
+                //border-radius: 20px 0 0 20px;
+                border-right: 1px rgb(80, 80, 80) solid;
+                background: rgb(248, 248, 248);
+                user-select: none;
+
+                // メニューリスト
+                .console_menu_list {
                     width: 100%;
+                    padding: 15px 0;
                     display: flex;
-                    justify-content: center;
 
-                    // リンクテキスト（ホバー時に出現）
-                    .console_menu_list_text {
-                        display: none;
-                    }
+                    // メニュー各項目
+                    .console_menu_list_item {
+                        width: 30px;
+                        height: 35px;
+                        margin: 0 auto;
+                        border-bottom: 1px solid gray;
+                        cursor: pointer;
 
-                    // リンクアイコン
-                    .material-symbols-outlined {
-                        font-size: 3rem;
-                    }
-                }
+                        .console_menu_list_link {
+                            position: relative;
+                            width: 100%;
+                            display: flex;
+                            justify-content: center;
 
-                // メニュー最後、下部余白なし
-                &:last-child {
-                    margin: 0 auto;
-                }
+                            // リンクテキスト（ホバー時に出現）
+                            .console_menu_list_text {
+                                display: none;
+                            }
 
-                &.active {
-                    .material-symbols-outlined {
-                        color: #0aa0d2;
-                    }
+                            // リンクアイコン
+                            .material-symbols-outlined {
+                                font-size: 3rem;
+                            }
+                        }
 
-                    .console_menu_list_text {
-                        color: #0a61d2;
+                        // メニュー最後、下部余白なし
+                        &:last-child {
+                            margin: 0 auto;
+                        }
+
+                        &.active {
+                            .material-symbols-outlined {
+                                color: #0aa0d2;
+                            }
+
+                            .console_menu_list_text {
+                                color: #0a61d2;
+                            }
+                        }
                     }
                 }
             }
@@ -390,7 +454,7 @@
             // 通常
             &.enter {
                 flex-direction: column;
-                padding: 2% 5%;
+                padding: 5%;
 
                 // フォーム内タイトル
                 .edit_area_title {
@@ -400,20 +464,9 @@
                     font-size: 2.2rem;
                 }
 
-                // フィルター入力エリア
-                #filter_input {
-                    margin-right: 2%;
-                    width: 150px;
-                }
-
-                // フィルター選択ボックス
-                .filter_select {
-                    margin-left: 1%;
-                }
-
                 // 青ボタン調整
                 .blue_btn {
-                    margin: 4% auto 0;
+                    margin: 5% auto 0;
                 }
             }
 
@@ -432,15 +485,8 @@
                 &.radio {
                     label {
                         display: flex;
-                        align-items: baseline;
+                        align-items: center;
                         justify-content: flex-start;
-
-                        // space between text and btn
-                        input[type='radio'],
-                        input[type='checkbox'] {
-                            margin-right: 10px;
-                            cursor: pointer;
-                        }
                     }
 
                     //利用権リストタイトル
@@ -459,7 +505,7 @@
                         // 利用権各項目
                         .course_item {
                             width: calc(50% - 20px);
-                            margin: 0 10px 6%;
+                            margin: 0 10px 10%;
                         }
                     }
                 }
@@ -486,6 +532,30 @@
                     }
                 }
 
+                &.admin_ctrl {
+                    justify-content: space-between;
+                    flex-direction: row;
+                    margin: 0 auto;
+
+                    .filter_form {
+                        width: 80%;
+
+                        #filter_input {
+                            width: 50%;
+                            margin-right: 5%;
+                        }
+
+                        .filter_select {
+                            width: 70%;
+                            margin-left: 3%;
+                        }
+                    }
+
+                    .green_btn {
+                        position: static;
+                    }
+                }
+
                 // ユーザー内コントロールフォーム
                 .filter_form {
                     position: relative;
@@ -494,11 +564,6 @@
                     height: 50px;
                     justify-content: flex-start;
                     align-items: center;
-
-                    .green_btn {
-                        top: auto;
-                        right: 0px;
-                    }
                 }
             }
         }
@@ -558,6 +623,13 @@
         // ボタンテキスト
         .btn_text {
             line-height: 16px;
+        }
+
+        // アクティブ時
+        &.active {
+            color: #fff;
+            background: #2abcec;
+            border: 1px solid #2abcec;
         }
     }
 
@@ -631,6 +703,17 @@
         animation: authLoaderAni 1s infinite linear;
     }
 
+    // ボタングループ
+    .btn_group {
+        display: flex;
+        justify-content: space-evenly;
+        padding: 5% 0;
+
+        @include landscape {
+            padding: 3% 0;
+        }
+    }
+
     /* Ban関連
 ====================================================*/
     // Ban済ユーザー表示
@@ -668,41 +751,6 @@
         }
     }
 
-    // Ban 確認/キャンセルボタン
-    .ban_btn_group {
-        display: flex;
-        justify-content: space-evenly;
-        padding: 2% 0;
-
-        // 確認ボタン
-        .confirm_btn {
-            position: relative;
-            color: #0aa0d2;
-            background: #fff;
-            border: 1px solid #0aa0d2;
-            text-align: right;
-            font-weight: 700;
-            font-size: 1.6rem;
-            width: 11.5%;
-            border-radius: 4px;
-            padding: 1% 1.5% 0.5% 0;
-            transition: all 0.3s;
-
-            .material-icons {
-                position: absolute;
-                left: 7%;
-                top: 50%;
-                transform: translateY(-50%);
-            }
-
-            &:hover {
-                color: #fff;
-                background: #2abcec;
-                border: 1px solid #2abcec;
-            }
-        }
-    }
-
     /* ユーザーコンポーネント内キャラクターリスト
 ====================================================*/
     // キャラクターなし
@@ -714,17 +762,19 @@
     //　各キャラクター
     .character_item {
         position: relative;
-        width: 520px;
-        height: 143px;
-        margin-bottom: 1%;
-        user-select: none;
-        cursor: pointer;
+        width: 100%;
+        height: 23vw;
+
+        @include landscape {
+            width: 80%;
+            height: 20vw;
+        }
 
         // 武器種名に応じて背景変更
         $weaponNames: $weaponNamesArray;
         @each $weapon in $weaponNames {
             &.#{$weapon} {
-                background: url(#{$path_img}/common/char_background/#{$weapon}.png) no-repeat center center;
+                background: url(#{$path_img}/common/char_background/#{$weapon}.png) no-repeat 0px 0px / contain;
             }
         }
 
@@ -735,70 +785,144 @@
 
         // キャラクター名
         .name {
-            position: absolute;
-            font-size: 3rem;
-            text-align: center;
+            @include right_left;
+            top: 9%;
+            font-size: 5.5vw;
             font-weight: 700;
-            top: 10%;
-            width: 100%;
-        }
+            width: fit-content;
 
-        // 削除済みアカウント表示
-        .deleted_character {
-            top: 9% !important;
-            left: 4% !important;
-            color: #fff;
-            background: #de6161;
-            border: 1px solid #de6161;
-            z-index: 1;
-
-            &:hover {
-                background: #f57e7e;
-                border: 1px solid #f57e7e;
+            @include landscape {
+                font-size: 4vw;
             }
         }
 
-        // キャラクター削除表示
+        // キャラクター削除ボタン
         .delete_character {
-            top: 9% !important;
-            left: 4% !important;
+            top: 10% !important;
+            left: 5% !important;
             z-index: 1;
+
+            .btn_icon {
+                font-size: 4.6vw;
+                padding: 1vw;
+            }
+
+            .btn_text {
+                display: none;
+            }
+
+            @include landscape {
+                top: 12% !important;
+
+                .btn_icon {
+                    font-size: 2.9vw;
+                    padding: 0.8vw;
+                }
+            }
         }
 
-        // 連携済みアカウント表示
+        // 削除済みアカウントボタン
+        .deleted_character {
+            top: 10% !important;
+            left: 5% !important;
+            z-index: 1;
+            color: #fff;
+            background: #de6161;
+            border: 1px solid #de6161;
+
+            .btn_icon {
+                font-size: 4.6vw;
+                padding: 1vw;
+            }
+
+            .btn_text {
+                display: none;
+            }
+
+            @include landscape {
+                top: 12% !important;
+
+                .btn_icon {
+                    font-size: 2.9vw;
+                    padding: 0.8vw;
+                }
+            }
+        }
+
+        // アカウント連携ボタン
+        .link_character {
+            top: 10% !important;
+            right: 5% !important;
+            z-index: 1;
+
+            .btn_icon {
+                font-size: 4.6vw;
+                padding: 1vw !important;
+            }
+
+            .btn_text {
+                display: none;
+            }
+
+            @include landscape {
+                top: 12% !important;
+
+                .btn_icon {
+                    font-size: 2.9vw;
+                    padding: 0.8vw !important;
+                }
+            }
+        }
+
+        // 連携済みアカウントボタン
         .linked_character {
-            top: 12% !important;
-            right: 4% !important;
+            top: 10% !important;
+            right: 5% !important;
+            z-index: 1;
             color: #fff;
             background: #0ad275;
             border: 1px solid #0ad275;
 
-            &:hover {
-                background: #5ae3a3;
-                border: 1px solid #5ae3a3;
+            .btn_icon {
+                font-size: 4.6vw;
+                padding: 1vw !important;
             }
-        }
 
-        // アカウント連携表示
-        .link_character {
-            top: 12% !important;
-            right: 4% !important;
+            .btn_text {
+                display: none;
+            }
+
+            @include landscape {
+                top: 12% !important;
+
+                .btn_icon {
+                    font-size: 2.9vw;
+                    padding: 0.8vw !important;
+                }
+            }
         }
 
         // 武器アイコン
         .wpn_icon {
             position: absolute;
-            width: 48px;
-            height: 47px;
-            top: 48%;
-            left: 6%;
-            background: url(#{$path_img}/common/char_wpn_icon/NoData.png);
+            width: 10%;
+            height: 35%;
+            top: 46%;
+            left: 7%;
+            background: url(#{$path_img}/common/char_wpn_icon/NoData.png) no-repeat center center/100%;
+
+            @include landscape {
+                width: 10%;
+                top: 42%;
+                left: 6%;
+                background-size: 90% !important;
+            }
 
             // 武器種名に応じてアイコン表示
             $weaponNames: $weaponNamesArray;
             @each $weapon in $weaponNames {
                 &.#{$weapon} {
-                    background: url(#{$path_img}/common/char_wpn_icon/#{$weapon}.png);
+                    background: url(#{$path_img}/common/char_wpn_icon/#{$weapon}.png) no-repeat center center/100%;
                 }
             }
         }
@@ -807,12 +931,20 @@
         .wpn_text {
             position: absolute;
             font-weight: 700;
-            width: 130px;
-            left: 17%;
-            top: 50%;
+            width: 20%;
+            left: 19%;
+            top: 48%;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            font-size: 2.6vw;
+
+            @include landscape {
+                width: 23%;
+                left: 18%;
+                top: 44%;
+                font-size: 2.2vw;
+            }
 
             &.wpn_name_hover {
                 overflow: visible;
@@ -821,7 +953,7 @@
             .wpn_name {
                 transition: all 0.3s;
 
-                &:hover {
+                &.active {
                     color: #ffffff;
                 }
             }
@@ -830,10 +962,10 @@
         // 武器詳細
         .little_endian {
             position: absolute;
-            top: 9%;
-            left: -50%;
+            top: 0%;
+            left: -18%;
             font-weight: 800;
-            font-size: 1.5rem;
+            font-size: 3vw;
             color: #fb3737;
             background: #fffbf7;
             padding: 1% 2%;
@@ -841,11 +973,16 @@
             border-radius: 10px;
             text-shadow: 0px 2px 8px #a7a7a7;
             transition: all 0.2s;
-            transform: translate(0, 100%);
+            transform: translate(55%, -100%);
             opacity: 0;
+            z-index: 2;
+
+            @include landscape {
+                font-size: 2.2vw;
+            }
 
             &.wpn_name_hover {
-                transform: translate(55%, 100%);
+                transform: translate(55%, 0);
                 opacity: 1;
             }
         }
@@ -854,24 +991,45 @@
         .rank {
             position: absolute;
             top: 44%;
-            left: 45%;
+            left: 40%;
             font-weight: 700;
+            font-size: 2.6vw;
+
+            @include landscape {
+                top: 41%;
+                left: 42%;
+                font-size: 2.1vw;
+            }
         }
 
         // キャラクターID
         .char_id {
             position: absolute;
             top: 57.5%;
-            left: 45%;
+            left: 40%;
             font-weight: 700;
+            font-size: 2.6vw;
+
+            @include landscape {
+                top: 52.5%;
+                left: 42%;
+                font-size: 2.1vw;
+            }
         }
 
         // 最終ログイン日時（UTC）
         .last_login {
             position: absolute;
             top: 70%;
-            left: 45%;
+            left: 40%;
             font-weight: 700;
+            font-size: 2.6vw;
+
+            @include landscape {
+                top: 64%;
+                left: 42%;
+                font-size: 2.1vw;
+            }
         }
     }
 
@@ -894,9 +1052,13 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 50%;
+            width: 90%;
             background-color: #f4f4f4;
             box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+
+            @include landscape {
+                width: 70%;
+            }
 
             // ヘッダー
             .modal_header {
@@ -906,35 +1068,79 @@
                 justify-content: space-between;
 
                 h1 {
-                    font-size: 3rem;
+                    font-size: 2rem;
                     margin: 1% 0;
                 }
             }
 
             // 内容
             .modal_body {
-                padding: 10px 20px;
-                color: black;
+                display: flex;
+                padding: 3% 5% 0;
+                flex-direction: column;
+                align-items: center;
+                max-height: 300px;
+                overflow-y: scroll;
+
+                @include landscape {
+                    max-height: 150px;
+                }
 
                 // モーダルリスト
                 .modal_list {
-                    display: flex;
-                    flex-direction: row;
-                    justify-content: space-evenly;
-                    padding: 2%;
-                    flex-wrap: wrap;
+                    width: 100%;
+                    display: grid;
+                    grid-template-columns: 45% 45%;
+                    gap: 20px;
+                    justify-content: center;
+                    padding: 5%;
 
                     // リストアイテム
                     .modal_list_item {
                         text-align: center;
-                        width: calc(50% - 30px);
-                        margin: 0 15px 3%;
                         overflow-wrap: break-word;
 
                         // アイテム見出し用
                         p {
-                            font-size: 1.7rem;
+                            background: beige;
+                            font-size: 1.6rem;
                             font-weight: 700;
+                            margin-bottom: 5px;
+
+                            @include landscape {
+                                margin-bottom: 10px;
+                            }
+
+                            .material-symbols-outlined {
+                                font-size: 1.5rem;
+                            }
+                        }
+
+                        // 選択ボックス
+                        select,
+                        input[type='datetime-local'],
+                        input[type='text'] {
+                            width: 100%;
+                        }
+
+                        // チェックボックス調整
+                        label:has(input[type='checkbox']) {
+                            &::before {
+                                content: none;
+                            }
+
+                            &::after {
+                                font-family: 'Material Icons';
+                                content: '\e835';
+                                font-size: 2.1rem;
+                                padding: 0 10px 2px 0;
+                            }
+                        }
+
+                        label:has(input[type='checkbox']:checked) {
+                            &::after {
+                                content: '\e834';
+                            }
                         }
                     }
                 }
@@ -944,7 +1150,7 @@
                     text-align: center;
                     color: red;
                     font-weight: 700;
-                    font-size: 1.7rem;
+                    font-size: 1.4rem;
                 }
             }
         }
@@ -988,28 +1194,20 @@
     /* 成功・エラーメッセージ表示
 ====================================================*/
 
-    // 表示本体
+    // メッセージ表示ボディ
     .msg_display {
         position: fixed;
         top: 3%;
-        left: 20%;
-        display: flex;
-        align-items: center;
-        width: 60%;
-        font-size: 1.8rem;
-        font-weight: 700;
-        background: #fff;
-        padding: 0.7% 1%;
+        left: 5%;
+        width: 90%;
         box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
         z-index: 101;
-        border-top: 5px solid #e6e6e9;
-        border-bottom: 5px solid #e6e6e9;
 
         // 成功通知
         &.success {
             color: #5ab052;
 
-            .left_side_bar {
+            .msg_display_left_bar {
                 background: #5ab052;
             }
 
@@ -1022,7 +1220,7 @@
         &.error {
             color: #c93a3a;
 
-            .left_side_bar {
+            .msg_display_left_bar {
                 background: #c93a3a;
             }
 
@@ -1035,7 +1233,7 @@
         &.notice {
             color: #5997db;
 
-            .left_side_bar {
+            .msg_display_left_bar {
                 background: #5997db;
             }
 
@@ -1044,96 +1242,107 @@
             }
         }
 
-        // アイコン
-        .material-icons-outlined {
-            font-size: 3.5rem;
-            padding-right: 2%;
-        }
+        // メッセージ本体
+        .msg_display_contents {
+            position: relative;
+            display: flex;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: #fff;
+            padding: 3% 85px 3% 5%;
+            border: 5px solid #e6e6e9;
+            border-left: none;
 
-        // 左側装飾バー
-        .left_side_bar {
-            display: block;
-            position: absolute;
-            width: 0.7%;
-            height: 72px;
-            top: -8%;
-            left: 0;
-            border-radius: 0 20px 20px 0;
-            z-index: 103;
-        }
+            @include landscape {
+                padding: 2% 95px 2% 4%;
+            }
 
-        // 閉じるボタン
-        .msg_close_btn {
-            display: block;
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            top: 50%;
-            right: 2%;
-            transform: translateY(-50%);
-            user-select: none;
-            cursor: pointer;
+            // メッセージ
+            .msg_display_status {
+                transform: translateY(5%);
+            }
 
-            &::before,
-            &::after {
-                content: '';
+            // アイコン
+            .msg_display_icon {
+                font-size: 3.5rem;
+                padding-right: 10px;
+            }
+
+            // 左側装飾バー
+            .msg_display_left_bar {
+                display: block;
                 position: absolute;
-                top: 50%;
-                left: 50%;
                 width: 5px;
-                height: 30px;
-                background: #3e4444;
+                height: 100%;
+                top: 0;
+                left: 0;
+                z-index: 103;
             }
 
-            &::before {
-                transform: translate(-50%, -50%) rotate(45deg);
+            // 閉じるボタン
+            .msg_close_btn {
+                @include up_down;
+                left: auto;
+                right: 10px;
+                color: #333333;
+                font-size: 3.5rem;
+
+                @include landscape {
+                    right: 15px;
+                }
             }
 
-            &::after {
-                transform: translate(-50%, -50%) rotate(-45deg);
+            // エラー詳細表示ボタン
+            .error_view_btn {
+                @extend .msg_close_btn;
+                right: 50px;
+                transition: all 0.5s;
+                transform: translateY(-50%) rotate(0deg);
+
+                &.open {
+                    transform: translateY(-50%) rotateZ(-180deg);
+                }
+
+                @include landscape {
+                    right: 60px;
+                }
+            }
+
+            // 残り時間表示バー
+            .timer_bar {
+                height: 5px;
+                position: absolute;
+                left: 0%;
+                bottom: -5px;
+                z-index: 102;
             }
         }
 
-        // エラー詳細表示ボタン
-        .error_view_btn {
-            position: absolute;
-            top: -3%;
-            right: 6%;
+        // メッセージ詳細表示
+        .msg_detail {
+            padding: 3%;
             font-size: 1.5rem;
-            padding: 1% 1.5% 0.5%;
-            border: 2px gray solid;
-            background: white;
             color: #333333;
-            transform: translateY(25%);
-        }
+            background: whitesmoke;
+            border: 2px silver solid;
+            border-top: none;
 
-        // 残り時間表示バー（成功）
-        .timer_bar {
-            height: 5px;
-            position: absolute;
-            left: 0%;
-            bottom: -8%;
-            z-index: 102;
-        }
-    }
+            @include landscape {
+                padding: 2%;
+            }
 
-    // メッセージ詳細表示
-    .msg_detail {
-        position: fixed;
-        left: 20%;
-        top: 10%;
-        width: 60%;
-        padding: 1%;
-        font-size: 1.8rem;
-        color: #333333;
-        background: whitesmoke;
-        border: 2px silver solid;
-        z-index: 100;
+            // 内部テキスト
+            p {
+                margin: 4%;
+                max-height: 70px;
+                overflow-y: scroll;
 
-        // 内部テキスト
-        p {
-            font-size: 1.6rem;
-            margin: 1%;
+                @include landscape {
+                    margin: 2%;
+                    max-height: 35px;
+                }
+            }
         }
     }
 

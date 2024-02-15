@@ -90,11 +90,55 @@ input[type='number'] {
     outline: 0;
 }
 
+input[type='checkbox'],
+input[type='radio'] {
+    display: none;
+}
+
+// ラジオボタンアイコン
+label:has(input[type='radio']) {
+    &::before {
+        font-family: 'Material Icons';
+        content: '\e836';
+        font-size: 2.1rem;
+        padding: 0 10px 2px 0;
+    }
+}
+
+// 選択済みラジオボタンアイコン
+label:has(input[type='radio']:checked) {
+    &::before {
+        content: '\e837';
+    }
+}
+
+// チェックボックスアイコン
+label:has(input[type='checkbox']) {
+    &::before {
+        font-family: 'Material Icons';
+        content: '\e835';
+        font-size: 2.1rem;
+        padding: 0 10px 2px 0;
+    }
+}
+
+//選択済みチェックボックスアイコン
+label:has(input[type='checkbox']:checked) {
+    &::before {
+        content: '\e834';
+    }
+}
+
 // input日付余白/クリック範囲調整
 input[type='date'],
 input[type='datetime-local'] {
     position: relative;
     padding: 0 6px;
+
+    @include sp() {
+        appearance: none;
+        -webkit-appearance: none;
+    }
 }
 input[type='date']::-webkit-calendar-picker-indicator,
 input[type='datetime-local']::-webkit-calendar-picker-indicator {

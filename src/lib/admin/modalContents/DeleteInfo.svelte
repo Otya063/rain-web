@@ -54,7 +54,7 @@
                     </li>
                 </ul>
             </div>
-            <div class="ban_btn_group">
+            <div class="btn_group">
                 <button
                     class="blue_btn"
                     type="submit"

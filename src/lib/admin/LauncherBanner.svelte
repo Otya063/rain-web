@@ -11,14 +11,14 @@
 
     /* Below is the add mode script
     ====================================================*/
-    let add_mode: boolean;
-    const addBnrMode = (enable: boolean): void => {
+    export let bnrAddMode: boolean;
+    export const addBnrMode = (enable: boolean): void => {
         if (enable) {
             // when editing
-            add_mode = true;
+            bnrAddMode = true;
         } else {
             // when finished editing
-            add_mode = false;
+            bnrAddMode = false;
         }
     };
 
@@ -67,7 +67,7 @@
     };
 </script>
 
-{#if add_mode}
+{#if bnrAddMode}
     <h2>
         <span class="material-icons">post_add</span>
         Add New Banner
@@ -133,10 +133,6 @@
         </form>
     </div>
 {:else}
-    <button class="green_btn" on:click={() => addBnrMode(true)}>
-        <span class="btn_icon material-icons">add</span>
-        <span class="btn_text">Add Banner</span>
-    </button>
     <h2>
         <span class="material-icons">newspaper</span>
         Launcher Banner
@@ -229,7 +225,7 @@
                                         <dl class="edit_area_box_parts text">
                                             <dt>Select new file</dt>
                                             <dd>
-                                                <input name="file" type="file" />
+                                                <input name="file" type="file" accept=".png" />
                                             </dd>
                                         </dl>
 
@@ -274,7 +270,7 @@
                                             <dt>Select new file</dt>
                                             <dd>
                                                 <input type="hidden" name="bnr_id" value={editingId} />
-                                                <input name="file" type="file"  />
+                                                <input name="file" type="file" accept=".png" />
                                                 <input type="hidden" name="lang" value="en" />
                                                 <input type="hidden" name="bnr_name" value={bnr.bnr_name} />
                                             </dd>

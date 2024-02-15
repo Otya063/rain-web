@@ -1,5 +1,5 @@
 import ServerData, { db } from '.';
-import type { PaginatedUsers, PaginationMeta } from '$lib/types';
+import type { PaginatedUsers, PaginationMeta, BinaryTypes } from '$lib/types';
 import { TextEncoderSJIS } from '$lib/utils';
 import { Buffer } from 'node:buffer';
 
@@ -32,7 +32,39 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                             weapon_id: true,
                                             last_login: true,
                                             deleted: true,
-                                            discord: true,
+                                            discord: {
+                                                select: {
+                                                    bounty: true,
+                                                    bounty_champion: true,
+                                                    bounty_expert: true,
+                                                    bounty_master: true,
+                                                    bronze: true,
+                                                    char_id: true,
+                                                    discord_id: true,
+                                                    gacha: true,
+                                                    gold: true,
+                                                    id: true,
+                                                    is_male: true,
+                                                    latest_bounty: true,
+                                                    newbie: true,
+                                                    pity: true,
+                                                    rain_demolizer: true,
+                                                    road_champion: true,
+                                                    silver: true,
+                                                    title: true,
+                                                },
+                                            },
+                                            guild_characters: {
+                                                select: {
+                                                    guilds: {
+                                                        select: {
+                                                            id: true,
+                                                            name: true,
+                                                            guild_characters: true
+                                                        },
+                                                    },
+                                                },
+                                            },
                                         },
                                         orderBy: {
                                             id: 'asc',
@@ -77,7 +109,39 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                             weapon_id: true,
                                             last_login: true,
                                             deleted: true,
-                                            discord: true,
+                                            discord: {
+                                                select: {
+                                                    bounty: true,
+                                                    bounty_champion: true,
+                                                    bounty_expert: true,
+                                                    bounty_master: true,
+                                                    bronze: true,
+                                                    char_id: true,
+                                                    discord_id: true,
+                                                    gacha: true,
+                                                    gold: true,
+                                                    id: true,
+                                                    is_male: true,
+                                                    latest_bounty: true,
+                                                    newbie: true,
+                                                    pity: true,
+                                                    rain_demolizer: true,
+                                                    road_champion: true,
+                                                    silver: true,
+                                                    title: true,
+                                                },
+                                            },
+                                            guild_characters: {
+                                                select: {
+                                                    guilds: {
+                                                        select: {
+                                                            id: true,
+                                                            name: true,
+                                                            guild_characters: true,
+                                                        },
+                                                    },
+                                                },
+                                            },
                                         },
                                         orderBy: {
                                             id: 'asc',
@@ -131,7 +195,39 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                             weapon_id: true,
                                             last_login: true,
                                             deleted: true,
-                                            discord: true,
+                                            discord: {
+                                                select: {
+                                                    bounty: true,
+                                                    bounty_champion: true,
+                                                    bounty_expert: true,
+                                                    bounty_master: true,
+                                                    bronze: true,
+                                                    char_id: true,
+                                                    discord_id: true,
+                                                    gacha: true,
+                                                    gold: true,
+                                                    id: true,
+                                                    is_male: true,
+                                                    latest_bounty: true,
+                                                    newbie: true,
+                                                    pity: true,
+                                                    rain_demolizer: true,
+                                                    road_champion: true,
+                                                    silver: true,
+                                                    title: true,
+                                                },
+                                            },
+                                            guild_characters: {
+                                                select: {
+                                                    guilds: {
+                                                        select: {
+                                                            id: true,
+                                                            name: true,
+                                                            guild_characters: true,
+                                                        },
+                                                    },
+                                                },
+                                            },
                                         },
                                         orderBy: {
                                             id: 'asc',
@@ -180,7 +276,39 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                             weapon_id: true,
                                             last_login: true,
                                             deleted: true,
-                                            discord: true,
+                                            discord: {
+                                                select: {
+                                                    bounty: true,
+                                                    bounty_champion: true,
+                                                    bounty_expert: true,
+                                                    bounty_master: true,
+                                                    bronze: true,
+                                                    char_id: true,
+                                                    discord_id: true,
+                                                    gacha: true,
+                                                    gold: true,
+                                                    id: true,
+                                                    is_male: true,
+                                                    latest_bounty: true,
+                                                    newbie: true,
+                                                    pity: true,
+                                                    rain_demolizer: true,
+                                                    road_champion: true,
+                                                    silver: true,
+                                                    title: true,
+                                                },
+                                            },
+                                            guild_characters: {
+                                                select: {
+                                                    guilds: {
+                                                        select: {
+                                                            id: true,
+                                                            name: true,
+                                                            guild_characters: true,
+                                                        },
+                                                    },
+                                                },
+                                            },
                                         },
                                         orderBy: {
                                             id: 'asc',
@@ -312,7 +440,8 @@ export const getPaginationMeta = async (filterParam: string, filterValue: string
 ====================================================*/
 export const editName = async (
     characterId: number,
-    setName: string
+    setName: string,
+    bountyCoin: number
 ): Promise<{
     success: boolean;
     message: string;
@@ -352,26 +481,67 @@ export const editName = async (
     const finalArr = new Uint8Array([...array1, ...nameArr, ...array2]);
 
     const base64 = Buffer.from(finalArr).toString('base64');
-    await db.$queryRaw`UPDATE characters SET savedata = decode(${base64}, 'base64'), name = ${setName} WHERE id = ${characterId}`;
 
-    return { success: true, message: '' };
+    try {
+        await db.$queryRaw`UPDATE characters SET savedata = decode(${base64}, 'base64'), name = ${setName} WHERE id = ${characterId}`;
+        await db.discord.update({
+            where: {
+                char_id: characterId,
+            },
+            data: {
+                bounty: bountyCoin - 50000,
+            },
+        });
+
+        return { success: true, message: '' };
+    } catch (err) {
+        if (err instanceof Error) {
+            return { success: false, message: err.message };
+        } else if (typeof err === 'string') {
+            return { success: false, message: err };
+        } else {
+            return { success: false, message: 'Unexpected Error' };
+        }
+    }
 };
 
 /* Manage Character Binary
 ====================================================*/
 export class ManageBinary {
-    constructor(private type: 'savedata', private characterId: number, private base64: string) {}
+    constructor(private characterId: number, private binaryData: { [key in BinaryTypes]: string }) {}
 
-    public async set(): Promise<void> {
-        switch (this.type) {
-            case 'savedata': {
-                await db.$queryRaw`UPDATE characters SET savedata = decode(${this.base64}, 'base64') WHERE id = ${this.characterId}`;
+    public async set(): Promise<{
+        success: boolean;
+        message: string;
+    }> {
+        try {
+            const isNull = {
+                savedata: !this.binaryData.savedata ? 'NULL' : 'NOT_NULL',
+                decomyset: !this.binaryData.decomyset ? 'NULL' : 'NOT_NULL',
+                hunternavi: !this.binaryData.hunternavi ? 'NULL' : 'NOT_NULL',
+                otomoairou: !this.binaryData.otomoairou ? 'NULL' : 'NOT_NULL',
+                partner: !this.binaryData.partner ? 'NULL' : 'NOT_NULL',
+                platebox: !this.binaryData.platebox ? 'NULL' : 'NOT_NULL',
+                platedata: !this.binaryData.platedata ? 'NULL' : 'NOT_NULL',
+                platemyset: !this.binaryData.platemyset ? 'NULL' : 'NOT_NULL',
+                rengokudata: !this.binaryData.rengokudata ? 'NULL' : 'NOT_NULL',
+                savemercenary: !this.binaryData.savemercenary ? 'NULL' : 'NOT_NULL',
+                skin_hist: !this.binaryData.skin_hist ? 'NULL' : 'NOT_NULL',
+                minidata: !this.binaryData.minidata ? 'NULL' : 'NOT_NULL',
+                scenariodata: !this.binaryData.scenariodata ? 'NULL' : 'NOT_NULL',
+                savefavoritequest: !this.binaryData.savefavoritequest ? 'NULL' : 'NOT_NULL',
+            };
 
-                break;
-            }
+            await db.$queryRaw`UPDATE characters SET savedata = CASE ${isNull.savedata} WHEN 'NULL' THEN decode((SELECT encode(savedata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.savedata}, 'base64') END, decomyset = CASE ${isNull.decomyset} WHEN 'NULL' THEN decode((SELECT encode(decomyset, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.decomyset}, 'base64') END, hunternavi = CASE ${isNull.hunternavi} WHEN 'NULL' THEN decode((SELECT encode(hunternavi, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.hunternavi}, 'base64') END, otomoairou = CASE ${isNull.otomoairou} WHEN 'NULL' THEN decode((SELECT encode(otomoairou, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.otomoairou}, 'base64') END, partner = CASE ${isNull.partner} WHEN 'NULL' THEN decode((SELECT encode(partner, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.partner}, 'base64') END, platebox = CASE ${isNull.platebox} WHEN 'NULL' THEN decode((SELECT encode(platebox, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.platebox}, 'base64') END, platedata = CASE ${isNull.platedata} WHEN 'NULL' THEN decode((SELECT encode(platedata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.platedata}, 'base64') END, platemyset = CASE ${isNull.platemyset} WHEN 'NULL' THEN decode((SELECT encode(platemyset, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.platemyset}, 'base64') END, rengokudata = CASE ${isNull.rengokudata} WHEN 'NULL' THEN decode((SELECT encode(rengokudata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.rengokudata}, 'base64') END, savemercenary = CASE ${isNull.savemercenary} WHEN 'NULL' THEN decode((SELECT encode(savemercenary, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.savemercenary}, 'base64') END, skin_hist = CASE ${isNull.skin_hist} WHEN 'NULL' THEN decode((SELECT encode(skin_hist, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.skin_hist}, 'base64') END, minidata = CASE ${isNull.minidata} WHEN 'NULL' THEN decode((SELECT encode(minidata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.minidata}, 'base64') END, scenariodata = CASE ${isNull.scenariodata} WHEN 'NULL' THEN decode((SELECT encode(scenariodata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.scenariodata}, 'base64') END, savefavoritequest = CASE ${isNull.savefavoritequest} WHEN 'NULL' THEN decode((SELECT encode(savefavoritequest, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.savefavoritequest}, 'base64') END WHERE id = ${this.characterId}`;
 
-            default: {
-                throw new Error('Invalid Binary Type');
+            return { success: true, message: '' };
+        } catch (err) {
+            if (err instanceof Error) {
+                return { success: false, message: err.message };
+            } else if (typeof err === 'string') {
+                return { success: false, message: err };
+            } else {
+                return { success: false, message: 'Unexpected Error' };
             }
         }
     }

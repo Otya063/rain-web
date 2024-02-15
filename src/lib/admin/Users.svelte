@@ -1,5 +1,4 @@
 <script lang="ts">
-    import type { characters, users } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
     import {
         prepareModal,
@@ -19,11 +18,16 @@
         getCourseByObjData,
         filterValue,
         filterParam,
+        userCtrlPanel,
+        setSelectedCharacter,
+        updateUserCtrlPanel,
+        initUserCtrlPanel,
     } from '$lib/utils';
     import type { PaginatedUsers, PaginationMeta } from '$lib/types';
     import _ from 'lodash';
     import { DateTime } from 'luxon';
     import { fade, slide } from 'svelte/transition';
+    import { register } from 'swiper/element/bundle';
 
     export let paginatedUsers: PaginatedUsers[];
     export let paginationMeta: PaginationMeta;
@@ -38,109 +42,16 @@
     let rightsData: Record<string, any> = {};
     let ids: number[];
 
+    /* User Control Panel
+    ====================================================*/
+    const userCtrlIconList: string[] = ['description', 'group'];
+    register();
+
     /* Related to Edit Mode
     ====================================================*/
-    let savedata: Uint8Array;
-    let editingId: number;
-    let editingCharId: number;
-    let editingCharCard: string;
-    let editMode = false;
-    const catTypes: { [key in keyof Omit<users, 'id' | 'item_box' | 'last_character' | 'last_login' | 'web_login_key'>]: boolean } = {
-        username: false,
-        password: false,
-        rights: false,
-        return_expires: false,
-        gacha_premium: false,
-        gacha_trial: false,
-        frontier_points: false,
-    };
-    const catCharTypes: { [key in 'id' | 'name' | 'savedata']: boolean } = {
-        id: false,
-        name: false,
-        savedata: false,
-    };
     const adminCtrlTypes: { [key: string]: boolean } = {
         filter: false,
         courseCtrl: false,
-    };
-
-    // switch edit contents
-    const editModeSwitch = <T extends number, U extends keyof Omit<users, 'id' | 'item_box' | 'last_character' | 'last_login' | 'web_login_key'>>(id: T, type: U): void | false => {
-        // check if another cat type is already open
-        const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
-
-        // if there is an open cat and a different category is cliked (try to open it) + not cancel btn
-        if (activeCat && id !== 0) {
-            // set everything to false (close) in a loop.
-            Object.keys(catTypes).forEach((_key) => {
-                const key = _key as keyof Omit<users, 'id' | 'item_box' | 'last_character' | 'last_login' | 'web_login_key'>;
-                catTypes[key] = false;
-            });
-
-            // set the category clicked to true (open), adn set editting u_id
-            catTypes[type] = true;
-            editingId = id;
-
-            return false;
-        }
-
-        // toggle true <-> false
-        if (!editMode) {
-            // open a cat
-            editMode = true;
-            editingId = id;
-            catTypes[type] = true;
-        } else {
-            // close a cat
-            editMode = false;
-            editingId = id;
-            catTypes[type] = false;
-        }
-    };
-
-    const editModeCharSwitch = <T extends number, U extends 'id' | 'name' | 'savedata'>(id: T, type: U, disableAll?: boolean): void | false => {
-        if (disableAll) {
-            editingCharId = 0;
-            editMode = false;
-
-            Object.keys(catTypes).forEach((_key) => {
-                const key = _key as 'id' | 'name' | 'savedata';
-                catCharTypes[key] = false;
-            });
-
-            return false;
-        }
-
-        // check if another cat type is already open
-        const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
-
-        // if there is an open cat and a different category is cliked (try to open it) + not cancel btn
-        if (activeCat && id !== 0) {
-            // set everything to false (close) in a loop.
-            Object.keys(catTypes).forEach((_key) => {
-                const key = _key as 'id' | 'name' | 'savedata';
-                catCharTypes[key] = false;
-            });
-
-            // set the category clicked to true (open), adn set editting u_id
-            catCharTypes[type] = true;
-            editingCharId = id;
-
-            return false;
-        }
-
-        // toggle true <-> false
-        if (!editMode) {
-            // open a cat
-            editMode = true;
-            editingCharId = id;
-            catCharTypes[type] = true;
-        } else {
-            // close a cat
-            editMode = false;
-            editingCharId = id;
-            catCharTypes[type] = false;
-        }
     };
 
     // switch admin control contents
@@ -172,16 +83,68 @@
         adminCtrlTypes[type] = !adminCtrlTypes[type];
     };
 
+    /* Binary Functions
+    ====================================================*/
+    let input: HTMLInputElement;
+    const validFileName = [
+        'savedata.bin',
+        'decomyset.bin',
+        'hunternavi.bin',
+        'otomoairou.bin',
+        'partner.bin',
+        'platebox.bin',
+        'platedata.bin',
+        'platemyset.bin',
+        'rengokudata.bin',
+        'savemercenary.bin',
+        'skinhist.bin',
+        'minidata.bin',
+        'scenariodata.bin',
+        'savefavoritequest.bin',
+    ] as const;
+    let binaryData: { [key in (typeof validFileName)[number]]: Uint8Array | null } = {
+        'savedata.bin': null,
+        'decomyset.bin': null,
+        'hunternavi.bin': null,
+        'otomoairou.bin': null,
+        'partner.bin': null,
+        'platebox.bin': null,
+        'platedata.bin': null,
+        'platemyset.bin': null,
+        'rengokudata.bin': null,
+        'savemercenary.bin': null,
+        'skinhist.bin': null,
+        'minidata.bin': null,
+        'scenariodata.bin': null,
+        'savefavoritequest.bin': null,
+    };
+
     const convFileToUint8 = (e: Event): void => {
         const target = e.target as HTMLInputElement;
-        const file = (target.files as FileList)[0];
+        const files = target.files as FileList;
+        let isValidFiles = true;
 
-        let reader = new FileReader();
-        reader.readAsArrayBuffer(file);
-        reader.onload = (e) => {
-            const buffer = e.target!.result as ArrayBuffer;
-            savedata = new Uint8Array(buffer);
-        };
+        Array.from(files).forEach((file) => {
+            if (!validFileName.includes(file.name as any)) {
+                alert(`Invalid file name (${file.name}).`);
+                isValidFiles = false; // set flag to false if any file is invalid
+            }
+        });
+
+        // if any file is invalid, clear input and return
+        if (!isValidFiles) {
+            input.value = '';
+            return;
+        }
+
+        Array.from(files).forEach((file) => {
+            const reader = new FileReader();
+            reader.readAsArrayBuffer(file);
+            reader.onload = (e) => {
+                const buffer = e.target!.result as ArrayBuffer;
+                binaryData[file.name as (typeof validFileName)[number]] = new Uint8Array(buffer);
+            };
+        });
     };
 </script>
 
@@ -194,7 +157,7 @@
     <div id="admin_control" class="edit_area_box" style="margin-bottom: 2%;">
         <div class="edit_area enter">
             <p class="edit_area_title" style="margin: 0;">Admin Control Panel</p>
-            <div class="group_btns" style="margin-bottom: 3%;">
+            <div class="group_btns" style="margin-bottom: 30px;">
                 <button
                     class="blue_btn"
                     type="button"
@@ -221,8 +184,9 @@
             </div>
 
             {#if adminCtrlTypes['filter']}
-                <div transition:slide class="edit_area_box_parts text">
+                <div transition:slide class="edit_area_box_parts text admin_ctrl">
                     <form
+                        id="getPaginatedUsers"
                         class="filter_form"
                         action="?/getPaginatedUsers"
                         method="POST"
@@ -241,6 +205,7 @@
                                 if (result.type === 'success') {
                                     paginatedUsersData.set(paginatedUsers);
                                     paginationMetaData.set(paginationMeta);
+                                    initUserCtrlPanel(paginatedUsers);
                                 } else {
                                     msgClosed.set(false);
                                 }
@@ -252,31 +217,32 @@
                         <input name="status" type="hidden" bind:value={status} />
 
                         <input id="filter_input" type="text" placeholder="Filter ..." bind:value={bindedValue} />
-                        By
+                        <span>By</span>
                         <select class="filter_select" bind:value={bindedParam}>
                             <option value="username">Username</option>
                             <option value="character_name">Character Name</option>
                         </select>
-
-                        <button
-                            id="btn"
-                            class="green_btn"
-                            type="submit"
-                            on:click={() => {
-                                $timeOut && closeMsgDisplay($timeOut);
-                                filterValue.set(bindedValue);
-                                filterParam.set(bindedParam);
-                                status = 'init';
-                            }}
-                        >
-                            {#if btnStage === 0}
-                                <span in:fade class="loading"></span>
-                            {:else if btnStage === 1}
-                                <span in:fade={{ delay: 100 }} class="btn_icon material-icons">search</span>
-                                <span in:fade={{ delay: 100 }} class="btn_text">Search</span>
-                            {/if}
-                        </button>
                     </form>
+
+                    <button
+                        id="btn"
+                        class="green_btn"
+                        type="submit"
+                        form="getPaginatedUsers"
+                        on:click={() => {
+                            $timeOut && closeMsgDisplay($timeOut);
+                            filterValue.set(bindedValue);
+                            filterParam.set(bindedParam);
+                            status = 'init';
+                        }}
+                    >
+                        {#if btnStage === 0}
+                            <span in:fade class="loading"></span>
+                        {:else if btnStage === 1}
+                            <span in:fade={{ delay: 100 }} class="btn_icon material-icons">search</span>
+                            <span in:fade={{ delay: 100 }} class="btn_text">Search</span>
+                        {/if}
+                    </button>
                 </div>
             {/if}
 
@@ -329,7 +295,9 @@
                             <label class="course_item"><input type="radio" name="target_u_radio" value="all" on:change={() => (specifiedUser = true)} />All Users</label>
 
                             <div style="width: calc(50% - 20px); margin: 0 10px 6%;">
-                                <label style="cursor: pointer;"><input type="radio" name="target_u_radio" value="specified" on:change={() => (specifiedUser = false)} />Specify User(s)</label>
+                                <label style="cursor: pointer; white-space: nowrap;"
+                                    ><input type="radio" name="target_u_radio" value="specified" on:change={() => (specifiedUser = false)} />Specify User(s)</label
+                                >
                                 <input style="margin-left: 7%; width: 95%;" type="text" name="specified_u_text" placeholder="1364+1489+ ..." disabled={specifiedUser} />
                             </div>
                             <p class="console_contents_note" style="margin: 0px 0px 3% 4%; text-indent: -1.2rem;">
@@ -385,54 +353,57 @@
     {#if !$paginatedUsersData}
         <p class="console_contents_note">Searched user(s) will be displayed here.</p>
     {:else}
-        <div class="pagination_btn_list">
-            <form
-                method="POST"
-                action="?/getPaginatedUsers"
-                use:enhance={() => {
-                    return async ({ result }) => {
-                        paginationBackClick = false;
-                        paginationNextClick = false;
-                        await applyAction(result);
+        {#if $paginationMetaData.hasPrevPage || $paginationMetaData.hasNextPage}
+            <div class="pagination_btn_list">
+                <form
+                    method="POST"
+                    action="?/getPaginatedUsers"
+                    use:enhance={() => {
+                        return async ({ result }) => {
+                            paginationBackClick = false;
+                            paginationNextClick = false;
+                            await applyAction(result);
 
-                        if (result.type === 'success') {
-                            paginatedUsersData.set(paginatedUsers);
-                            paginationMetaData.set(paginationMeta);
-                        }
-                    };
-                }}
-            >
-                <input name="filter_value" type="hidden" value={$filterValue} />
-                <input name="filter_param" type="hidden" value={$filterParam} />
-                <input name="status" type="hidden" bind:value={status} />
-                <input type="hidden" name="cursor" bind:value={cursor} />
+                            if (result.type === 'success') {
+                                paginatedUsersData.set(paginatedUsers);
+                                paginationMetaData.set(paginationMeta);
+                                initUserCtrlPanel(paginatedUsers);
+                            }
+                        };
+                    }}
+                >
+                    <input name="filter_value" type="hidden" value={$filterValue} />
+                    <input name="filter_param" type="hidden" value={$filterParam} />
+                    <input name="status" type="hidden" bind:value={status} />
+                    <input type="hidden" name="cursor" bind:value={cursor} />
 
-                <button
-                    class="pagination_btn_item"
-                    type="submit"
-                    on:click={() => {
-                        $timeOut && closeMsgDisplay($timeOut);
-                        paginationBackClick = true;
-                        status = 'back';
-                        cursor = $paginationMetaData.prevCursor;
-                    }}
-                    class:active={paginationBackClick}
-                    class:disabled_elm={!$paginationMetaData.hasPrevPage || paginationBackClick}>Back</button
-                >
-                <button
-                    class="pagination_btn_item"
-                    type="submit"
-                    on:click={() => {
-                        $timeOut && closeMsgDisplay($timeOut);
-                        paginationNextClick = true;
-                        status = 'next';
-                        cursor = $paginationMetaData.nextCursor;
-                    }}
-                    class:active={paginationNextClick}
-                    class:disabled_elm={!$paginationMetaData.hasNextPage || paginationNextClick}>Next</button
-                >
-            </form>
-        </div>
+                    <button
+                        class="pagination_btn_item"
+                        type="submit"
+                        on:click={() => {
+                            $timeOut && closeMsgDisplay($timeOut);
+                            paginationBackClick = true;
+                            status = 'back';
+                            cursor = $paginationMetaData.prevCursor;
+                        }}
+                        class:active={paginationBackClick}
+                        class:disabled_elm={!$paginationMetaData.hasPrevPage || paginationBackClick}>Back</button
+                    >
+                    <button
+                        class="pagination_btn_item"
+                        type="submit"
+                        on:click={() => {
+                            $timeOut && closeMsgDisplay($timeOut);
+                            paginationNextClick = true;
+                            status = 'next';
+                            cursor = $paginationMetaData.nextCursor;
+                        }}
+                        class:active={paginationNextClick}
+                        class:disabled_elm={!$paginationMetaData.hasNextPage || paginationNextClick}>Next</button
+                    >
+                </form>
+            </div>
+        {/if}
 
         {#each $paginatedUsersData as user}
             <form
@@ -460,7 +431,7 @@
                             }
 
                             $paginatedUsersData = $paginatedUsersData.map((user) => {
-                                if (user.id === id) {
+                                if (user.id === id)
                                     return {
                                         ...user,
                                         [column]:
@@ -474,7 +445,6 @@
                                                         : Number(value)
                                                     : value,
                                     };
-                                }
 
                                 return user;
                             });
@@ -482,616 +452,665 @@
                     };
                 }}
             >
-                <dl class="console_contents_list">
-                    <p class="console_contents_list_title">
-                        {user.username}
+                <div class="console_contents_list_title">
+                    {user.username}
 
-                        <button
-                            class="red_btn"
-                            type="button"
-                            on:click={() =>
-                                prepareModal('suspendUser', {
-                                    title: 'Suspend the following user?',
-                                    form_action: 'suspendUser',
-                                    user_id: user.id,
-                                    username: user.username,
-                                    char_name: user.characters.map((character) => character.name || 'Ready to Hunt'),
-                                })}
-                        >
-                            <span class="btn_icon material-icons">delete</span>
-                            <span class="btn_text">Suspend</span>
-                        </button>
-                    </p>
-
-                    {#if user.suspended_account}
-                        <div class="banned_user_container">
-                            <p class="banned_text">This user account has been {user.suspended_account.permanent ? 'permanently' : 'temporarily'} suspended.</p>
+                    <div class="user_ctrl_panel">
+                        {#each userCtrlIconList as icon}
                             <button
-                                class="red_btn"
-                                type="button"
-                                style="margin-top: 5%;"
-                                on:click={() =>
-                                    prepareModal('suspendUser', {
-                                        title: 'Unsuspend the following user?',
-                                        form_action: 'unsuspendUser',
-                                        user_id: user.id,
-                                        username: user.username,
-                                        char_name: user.characters.map((character) => character.name || 'Ready to Hunt'),
-                                        until_at: user.suspended_account?.until_at,
-                                    })}
+                                class="material-symbols-outlined active"
+                                class:active={$userCtrlPanel[user.id].icon === icon}
+                                on:click={() => {
+                                    ($userCtrlPanel[user.id].icon = icon),
+                                        ($userCtrlPanel[user.id].selectedChar = user.characters[0]),
+                                        ($userCtrlPanel[user.id].activeCategories = {
+                                            username: false,
+                                            password: false,
+                                            rights: false,
+                                            return_expires: false,
+                                            gacha_premium: false,
+                                            gacha_trial: false,
+                                            frontier_points: false,
+                                            name: false,
+                                            clan: false,
+                                            binary: false,
+                                        });
+                                }}
+                                type="button">{icon}</button
                             >
-                                {#if !user.suspended_account.permanent}
-                                    <span style="font-size: 2.8rem;" class="btn_icon material-icons">restore_from_trash</span>
-                                    <span style="font-size: 2rem; padding-top: 2px;" class="btn_text">Unsuspend</span>
-                                {/if}
-                            </button>
-                        </div>
-                    {/if}
+                        {/each}
+                    </div>
 
-                    <dt class="contents_term">User ID</dt>
-                    <dd class="contents_desc">{user.id}</dd>
+                    <button
+                        class="red_btn"
+                        type="button"
+                        on:click={() =>
+                            prepareModal('suspendUser', {
+                                title: 'Suspend the following user?',
+                                form_action: 'suspendUser',
+                                user_id: user.id,
+                                username: user.username,
+                                char_name: user.characters.map((character) => character.name || 'Ready to Hunt'),
+                            })}
+                    >
+                        <span class="btn_icon material-icons">delete</span>
+                        <span class="btn_text">Suspend</span>
+                    </button>
+                </div>
 
-                    <dt class="contents_term">Username</dt>
-                    <dd class="contents_desc">
-                        {user.username}
+                {#if $userCtrlPanel[user.id].icon === 'description'}
+                    <input type="hidden" name="user_id" value={user.id} />
 
-                        {#if editingId === user.id && catTypes['username']}
-                            <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'username')}>
-                                <span class="btn_icon material-icons">close</span>
-                                <span class="btn_text">Cancel</span>
-                            </button>
-                        {:else}
-                            <button class="normal_btn" type="button" on:click={() => editModeSwitch(user.id, 'username')}>
-                                <span class="btn_icon material-icons">mode_edit</span>
-                                <span class="btn_text">Edit</span>
-                            </button>
-                        {/if}
-
-                        {#if editingId === user.id && catTypes['username']}
-                            <div transition:slide class="edit_area_box">
-                                <input type="hidden" name="user_id" value={editingId} />
-                                <div class="edit_area enter">
-                                    <p class="edit_area_title">Change Username</p>
-                                    <p class="console_contents_note">* Empty isn't allowed.</p>
-                                    <dl class="edit_area_box_parts text">
-                                        <dt>Enter new username</dt>
-                                        <dd>
-                                            <input type="text" name="username" value={user.username} autocomplete="off" />
-                                        </dd>
-                                    </dl>
-
-                                    <button
-                                        class="blue_btn"
-                                        type="submit"
-                                        on:click={() => {
-                                            onSubmit.set(true);
-                                            editModeSwitch(0, 'username');
-                                        }}
-                                    >
-                                        <span class="btn_icon material-icons">check</span>
-                                        <span class="btn_text">Save</span>
-                                    </button>
-                                </div>
-                            </div>
-                        {/if}
-                    </dd>
-
-                    <dt class="contents_term">Hashed Password</dt>
-                    <dd class="contents_desc">
-                        {user.password}
-
-                        {#if editingId === user.id && catTypes['password']}
-                            <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'password')}>
-                                <span class="btn_icon material-icons">close</span>
-                                <span class="btn_text">Cancel</span>
-                            </button>
-                        {:else}
-                            <button class="normal_btn" type="button" on:click={() => editModeSwitch(user.id, 'password')}>
-                                <span class="btn_icon material-icons">mode_edit</span>
-                                <span class="btn_text">Edit</span>
-                            </button>
-                        {/if}
-
-                        {#if editingId === user.id && catTypes['password']}
-                            <div transition:slide class="edit_area_box">
-                                <input type="hidden" name="user_id" value={editingId} />
-                                <div class="edit_area enter">
-                                    <p class="edit_area_title">Change Password</p>
-                                    <p class="console_contents_note">* Empty isn't allowed.</p>
-                                    <dl class="edit_area_box_parts text">
-                                        <dt>Enter new<br />hashed password</dt>
-                                        <dd>
-                                            <input type="text" name="password" value={user.password} autocomplete="off" />
-                                        </dd>
-                                        <p style="margin: 2% 0 0 2%; padding: 1%; user-select: text; border: 2px solid rgb(255 164 164);">
-                                            <span style="font-weight: 700;">Editing Procedure:</span><br />
-                                            [1] Tell the user the following.<br />
-                                            "Go to the following site, enter the new password in the String field and press Encrypt. Then send the generated password to me. (https://bcrypt-generator.com/)"<br
-                                            />
-                                            [2] Receive the generated hashed password from the user via DM.<br />
-                                            [3] Enter the hashed password in the text box above and press Save.
-                                        </p>
-                                    </dl>
-
-                                    <button
-                                        class="blue_btn"
-                                        type="submit"
-                                        on:click={() => {
-                                            onSubmit.set(true);
-                                            editModeSwitch(0, 'password');
-                                        }}
-                                    >
-                                        <span class="btn_icon material-icons">check</span>
-                                        <span class="btn_text">Save</span>
-                                    </button>
-                                </div>
-                            </div>
-                        {/if}
-                    </dd>
-
-                    <dt class="contents_term">Course</dt>
-                    <dd class="contents_desc">
-                        <ul>
-                            {#each Object.entries(getCourseByDecimal(user.rights, 'en')) as [course, { enabled }]}
-                                {#if enabled}
-                                    <li>{course}</li>
-                                {/if}
-                            {/each}
-                        </ul>
-
-                        {#if editingId === user.id && catTypes['rights']}
-                            <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'rights')}>
-                                <span class="btn_icon material-icons">close</span>
-                                <span class="btn_text">Cancel</span>
-                            </button>
-                        {:else}
-                            <button class="normal_btn" type="button" on:click={() => editModeSwitch(user.id, 'rights')}>
-                                <span class="btn_icon material-icons">mode_edit</span>
-                                <span class="btn_text">Edit</span>
-                            </button>
-                        {/if}
-
-                        {#if editingId === user.id && catTypes['rights']}
-                            <div transition:slide class="edit_area_box">
-                                <input type="hidden" name="user_id" value={editingId} />
-                                <input type="hidden" name="rights" />
-                                <div class="edit_area enter">
-                                    <p class="edit_area_title">Change Courses</p>
-                                    <dl class="edit_area_box_parts radio">
-                                        <dt class="course_list_title">HL (Single Select)</dt>
-                                        <dd class="course_list">
-                                            {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
-                                                {#if courseName === 'Hunter Life Course' || courseName === 'Hunter Life Continued Course' || courseName === 'Free Course'}
-                                                    <label class="course_item"><input type="radio" name="hl" value={code} checked={enabled} />{courseName}</label>
-                                                {/if}
-                                            {/each}
-                                        </dd>
-
-                                        <dt class="course_list_title">EX (Single Select)</dt>
-                                        <dd class="course_list">
-                                            {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
-                                                {#if courseName === 'Extra Course' || courseName === 'Extra Continued Course'}
-                                                    <label class="course_item"><input type="radio" name="ex" value={code} checked={enabled} />{courseName}</label>
-                                                {/if}
-                                            {/each}
-                                        </dd>
-
-                                        <dt class="course_list_title">The Others (Multiple Select)</dt>
-                                        <dd class="course_list">
-                                            {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
-                                                {#if courseName !== 'Hunter Life Course' && courseName !== 'Hunter Life Continued Course' && courseName !== 'Free Course' && courseName !== 'Extra Course' && courseName !== 'Extra Continued Course'}
-                                                    <label class="course_item"><input type="checkbox" name={code} checked={enabled} />{courseName}</label>
-                                                {/if}
-                                            {/each}
-                                        </dd>
-                                    </dl>
-
-                                    <button
-                                        class="blue_btn"
-                                        type="submit"
-                                        on:click={() => {
-                                            onSubmit.set(true);
-                                            editModeSwitch(0, 'rights');
-                                        }}
-                                    >
-                                        <span class="btn_icon material-icons">check</span>
-                                        <span class="btn_text">Save</span>
-                                    </button>
-                                </div>
-                            </div>
-                        {/if}
-                    </dd>
-
-                    <dt class="contents_term">Character ID<br />(Last Played)</dt>
-                    <dd class="contents_desc">{user.last_character}</dd>
-
-                    <dt class="contents_term">Last Login Time</dt>
-                    <dd class="contents_desc">
-                        {!user.last_login
-                            ? 'No Data'
-                            : DateTime.fromJSDate(user.last_login)
-                                  .setZone(DateTime.local().zoneName)
-                                  .setLocale('en')
-                                  .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
-                    </dd>
-
-                    <dt class="contents_term">Expiry Date for<br />Return Ward</dt>
-                    <dd class="contents_desc">
-                        {!user.return_expires
-                            ? 'No Data'
-                            : DateTime.fromJSDate(user.return_expires)
-                                  .setZone(DateTime.local().zoneName)
-                                  .setLocale('en')
-                                  .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
-
-                        {#if editingId === user.id && catTypes['return_expires']}
-                            <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'return_expires')}>
-                                <span class="btn_icon material-icons">close</span>
-                                <span class="btn_text">Cancel</span>
-                            </button>
-                        {:else}
-                            <button class="normal_btn" type="button" on:click={() => editModeSwitch(user.id, 'return_expires')}>
-                                <span class="btn_icon material-icons">mode_edit</span>
-                                <span class="btn_text">Edit</span>
-                            </button>
-                        {/if}
-
-                        {#if editingId === user.id && catTypes['return_expires']}
-                            <div transition:slide class="edit_area_box">
-                                <input type="hidden" name="user_id" value={editingId} />
-
-                                <div class="edit_area enter">
-                                    <p class="edit_area_title">Change Date</p>
-                                    <p class="console_contents_note">* The date and time to be set are automatically converted to UTC.</p>
-                                    <p class="console_contents_note">* Empty isn't allowed.</p>
-                                    <dl class="edit_area_box_parts text">
-                                        <dt>Set new date</dt>
-                                        <dd>
-                                            <input
-                                                type="datetime-local"
-                                                name="return_expires"
-                                                value={!user.return_expires ? '' : DateTime.fromJSDate(user.return_expires).toFormat("yyyy-MM-dd'T'HH:mm")}
-                                            />
-                                            <input type="hidden" name="zoneName" value={DateTime.local().zoneName} />
-                                        </dd>
-                                    </dl>
-
-                                    <button
-                                        class="blue_btn"
-                                        type="submit"
-                                        on:click={() => {
-                                            onSubmit.set(true);
-                                            editModeSwitch(0, 'return_expires');
-                                        }}
-                                    >
-                                        <span class="btn_icon material-icons">check</span>
-                                        <span class="btn_text">Save</span>
-                                    </button>
-                                </div>
-                            </div>
-                        {/if}
-                    </dd>
-
-                    <dt class="contents_term">Premium Coin G</dt>
-                    <dd class="contents_desc">
-                        {#if !user.gacha_premium}
-                            No coins.
-                        {:else}
-                            {user.gacha_premium} Coin(s)
-                        {/if}
-
-                        {#if editingId === user.id && catTypes['gacha_premium']}
-                            <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'gacha_premium')}>
-                                <span style="margin: 1% 0%;" class="btn_icon material-icons">close</span>
-                                <span class="btn_text">Cancel</span>
-                            </button>
-                        {:else}
-                            <button class="normal_btn" type="button" on:click={() => editModeSwitch(user.id, 'gacha_premium')}>
-                                <span class="btn_icon material-icons">mode_edit</span>
-                                <span class="btn_text">Edit</span>
-                            </button>
-                        {/if}
-
-                        {#if editingId === user.id && catTypes['gacha_premium']}
-                            <div transition:slide class="edit_area_box">
-                                <input type="hidden" name="user_id" value={editingId} />
-                                <div class="edit_area enter">
-                                    <p class="edit_area_title">Change the Quantity of Coins</p>
-                                    <dl class="edit_area_box_parts text">
-                                        <dt>Enter the quantity</dt>
-                                        <dd>
-                                            <input
-                                                type="text"
-                                                name="gacha_premium"
-                                                inputmode="numeric"
-                                                pattern="\d*"
-                                                value={!user.gacha_premium ? null : user.gacha_premium}
-                                                placeholder="Enter the quantity"
-                                            />
-                                        </dd>
-                                    </dl>
-
-                                    <button
-                                        class="blue_btn"
-                                        type="submit"
-                                        on:click={() => {
-                                            onSubmit.set(true);
-                                            editModeSwitch(0, 'gacha_premium');
-                                        }}
-                                    >
-                                        <span class="btn_icon material-icons">check</span>
-                                        <span class="btn_text">Save</span>
-                                    </button>
-                                </div>
-                            </div>
-                        {/if}
-                    </dd>
-
-                    <dt class="contents_term">Trial Coin G</dt>
-                    <dd class="contents_desc">
-                        {#if !user.gacha_trial}
-                            No coins.
-                        {:else}
-                            {user.gacha_trial} Coin(s)
-                        {/if}
-
-                        {#if editingId === user.id && catTypes['gacha_trial']}
-                            <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'gacha_trial')}>
-                                <span class="btn_icon material-icons">close</span>
-                                <span class="btn_text">Cancel</span>
-                            </button>
-                        {:else}
-                            <button class="normal_btn" type="button" on:click={() => editModeSwitch(user.id, 'gacha_trial')}>
-                                <span class="btn_icon material-icons">mode_edit</span>
-                                <span class="btn_text">Edit</span>
-                            </button>
-                        {/if}
-
-                        {#if editingId === user.id && catTypes['gacha_trial']}
-                            <div transition:slide class="edit_area_box">
-                                <input type="hidden" name="user_id" value={editingId} />
-                                <div class="edit_area enter">
-                                    <p class="edit_area_title">Change the Quantity of Coins</p>
-                                    <dl class="edit_area_box_parts text">
-                                        <dt>Enter the quantity</dt>
-                                        <dd>
-                                            <input
-                                                type="text"
-                                                name="gacha_trial"
-                                                inputmode="numeric"
-                                                pattern="\d*"
-                                                value={!user.gacha_trial ? null : user.gacha_trial}
-                                                placeholder="Enter the quantity"
-                                            />
-                                        </dd>
-                                    </dl>
-
-                                    <button
-                                        class="blue_btn"
-                                        type="submit"
-                                        on:click={() => {
-                                            onSubmit.set(true);
-                                            editModeSwitch(0, 'gacha_trial');
-                                        }}
-                                    >
-                                        <span class="btn_icon material-icons">check</span>
-                                        <span class="btn_text">Save</span>
-                                    </button>
-                                </div>
-                            </div>
-                        {/if}
-                    </dd>
-
-                    <dt class="contents_term">Frontier Points</dt>
-                    <dd class="contents_desc">
-                        {#if !user.frontier_points}
-                            No points.
-                        {:else}
-                            {user.frontier_points} Point(s)
-                        {/if}
-
-                        {#if editingId === user.id && catTypes['frontier_points']}
-                            <button type="button" class="red_btn" on:click={() => editModeSwitch(0, 'frontier_points')}>
-                                <span class="btn_icon material-icons">close</span>
-                                <span class="btn_text">Cancel</span>
-                            </button>
-                        {:else}
-                            <button type="button" class="normal_btn" on:click={() => editModeSwitch(user.id, 'frontier_points')}>
-                                <span class="btn_icon material-icons">mode_edit</span>
-                                <span class="btn_text">Edit</span>
-                            </button>
-                        {/if}
-
-                        {#if editingId === user.id && catTypes['frontier_points']}
-                            <div transition:slide class="edit_area_box">
-                                <input type="hidden" name="user_id" value={editingId} />
-                                <div class="edit_area enter">
-                                    <p class="edit_area_title">Change the Quantity of Points</p>
-                                    <dl class="edit_area_box_parts text">
-                                        <dt>Enter the quantity</dt>
-                                        <dd>
-                                            <input
-                                                type="text"
-                                                name="frontier_points"
-                                                inputmode="numeric"
-                                                pattern="\d*"
-                                                value={!user.frontier_points ? null : user.frontier_points}
-                                                placeholder="Enter the quantity"
-                                            />
-                                        </dd>
-                                    </dl>
-
-                                    <button
-                                        class="blue_btn"
-                                        type="submit"
-                                        on:click={() => {
-                                            onSubmit.set(true);
-                                            editModeSwitch(0, 'frontier_points');
-                                        }}
-                                    >
-                                        <span class="btn_icon material-icons">check</span>
-                                        <span class="btn_text">Save</span>
-                                    </button>
-                                </div>
-                            </div>
-                        {/if}
-                    </dd>
-
-                    <dt class="contents_term">Character List</dt>
-                    <dd class="contents_desc">
-                        {#if user.characters.length === 0}
-                            <p style="color: #ff8100;">This user doesn't have any characters.</p>
-                        {:else}
-                            {#each user.characters as character}
-                                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                                <div
-                                    class="character_item {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '').replace('&', 'And')}"
-                                    class:new={character.is_new_character}
-                                    on:click={() => {
-                                        if (character.is_new_character) return false;
-                                        editModeCharSwitch(0, 'id', true);
-                                        editingCharCard === `${character.id}${character.name}` ? (editingCharCard = '') : (editingCharCard = `${character.id}${character.name}`);
-                                    }}
+                    <dl class="console_contents_list">
+                        {#if user.suspended_account}
+                            <div class="banned_user_container">
+                                <p class="banned_text">This user account has been {user.suspended_account.permanent ? 'permanently' : 'temporarily'} suspended.</p>
+                                <button
+                                    class="red_btn"
+                                    type="button"
+                                    style="margin-top: 5%;"
+                                    on:click={() =>
+                                        prepareModal('suspendUser', {
+                                            title: 'Unsuspend the following user?',
+                                            form_action: 'unsuspendUser',
+                                            user_id: user.id,
+                                            username: user.username,
+                                            char_name: user.characters.map((character) => character.name || 'Ready to Hunt'),
+                                            until_at: user.suspended_account?.until_at,
+                                        })}
                                 >
-                                    <span class="name">{character.name || 'Ready to Hunt'}</span>
-
-                                    {#if character.discord}
-                                        <button
-                                            class="green_btn linked_character"
-                                            type="button"
-                                            on:click={() =>
-                                                prepareModal('linkDiscord', {
-                                                    title: 'Unlink the following characters?',
-                                                    form_action: 'unlinkDiscord',
-                                                    user_id: user.id,
-                                                    username: user.username,
-                                                    char_id: character.id,
-                                                    char_name: character.name,
-                                                    discord_id: character.discord?.discord_id,
-                                                })}
-                                        >
-                                            <span class="btn_icon material-icons">link</span>
-                                            <span class="btn_text">Linked</span>
-                                        </button>
-                                    {:else}
-                                        <button
-                                            class="green_btn link_character"
-                                            type="button"
-                                            on:click={() =>
-                                                prepareModal('linkDiscord', {
-                                                    title: 'Execute the linking process with the following user and character. Please confirm the target ID and Username, and enter the ID (18-digit) of Discord to be linked.',
-                                                    form_action: 'linkDiscord',
-                                                    user_id: user.id,
-                                                    username: user.username,
-                                                    char_id: character.id,
-                                                    char_name: character.name,
-                                                })}
-                                        >
-                                            <span class="btn_icon material-icons">link</span>
-                                            <span class="btn_text">Link</span>
-                                        </button>
+                                    {#if !user.suspended_account.permanent}
+                                        <span style="font-size: 2.8rem;" class="btn_icon material-icons">restore_from_trash</span>
+                                        <span style="font-size: 2rem; padding-top: 2px;" class="btn_text">Unsuspend</span>
                                     {/if}
+                                </button>
+                            </div>
+                        {/if}
 
-                                    {#if !character.is_new_character}
-                                        <div class="wpn_icon {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '').replace('&', 'And')}" />
-                                        <p class="wpn_text">
-                                            {getWpnTypeByDec(character.weapon_type, 'en')}
-                                            <br />
-                                            <!-- svelte-ignore a11y-no-static-element-interactions -->
-                                            <span class="wpn_name" on:mouseenter={() => showTipHoverWpn(character.id)} on:mouseleave={() => showTipHoverWpn(character.id)}>
-                                                {#await getWpnNameByDec(character.weapon_id, character.weapon_type, 'en')}
-                                                    Loading...
-                                                {:then wpnName}
-                                                    {wpnName}
-                                                {/await}
-                                            </span>
+                        <dt class="contents_term">User ID</dt>
+                        <dd class="contents_desc">{user.id}</dd>
+
+                        <dt class="contents_term">Username</dt>
+                        <dd class="contents_desc">
+                            {user.username}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['username']}
+                                <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['username'] = false)}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['username'] = true)}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['username']}
+                                <div transition:slide class="edit_area_box">
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Change Username</p>
+                                        <p class="console_contents_note">* Empty isn't allowed.</p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Enter new username</dt>
+                                            <dd>
+                                                <input type="text" name="username" value={user.username} autocomplete="off" />
+                                            </dd>
+                                        </dl>
+
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                $userCtrlPanel[user.id].activeCategories['username'] = false;
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {/if}
+                        </dd>
+
+                        <dt class="contents_term">Hashed Password</dt>
+                        <dd class="contents_desc">
+                            {user.password}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['password']}
+                                <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['password'] = false)}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['password'] = true)}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['password']}
+                                <div transition:slide class="edit_area_box">
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Change Password</p>
+                                        <p class="console_contents_note">* Empty isn't allowed.</p>
+                                        <p class="console_contents_note">
+                                            * To manually generate a hashed password, click <a
+                                                href="https://bcrypt-generator.com/"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                style="text-decoration: underline;">here</a
+                                            >.
                                         </p>
-                                        <span id={String(character.id)} class="little_endian {decToLittleEndian(character.weapon_id)}">
-                                            [ Little Endian: {decToLittleEndian(character.weapon_id)} ]
-                                            {#await getWpnNameByDec(character.weapon_id, character.weapon_type, 'en')}
-                                                <p>Loading...</p>
-                                            {:then wpnName}
-                                                <p>{wpnName}</p>
-                                            {/await}
-                                        </span>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Enter new<br />hashed password</dt>
+                                            <dd>
+                                                <input type="text" name="password" value={user.password} autocomplete="off" />
+                                            </dd>
+                                        </dl>
 
-                                        {#if character.deleted}
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                $userCtrlPanel[user.id].activeCategories['password'] = false;
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {/if}
+                        </dd>
+
+                        <dt class="contents_term">Course</dt>
+                        <dd class="contents_desc">
+                            <ul>
+                                {#each Object.entries(getCourseByDecimal(user.rights, 'en')) as [course, { enabled }]}
+                                    {#if enabled}
+                                        <li>{course}</li>
+                                    {/if}
+                                {/each}
+                            </ul>
+
+                            {#if $userCtrlPanel[user.id].activeCategories['rights']}
+                                <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['rights'] = false)}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['rights'] = true)}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['rights']}
+                                <div transition:slide class="edit_area_box">
+                                    <input type="hidden" name="rights" />
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Change Courses</p>
+                                        <dl class="edit_area_box_parts radio">
+                                            <dt class="course_list_title">HL (Single Select)</dt>
+                                            <dd class="course_list">
+                                                {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
+                                                    {#if courseName === 'Hunter Life Course' || courseName === 'Hunter Life Continued Course' || courseName === 'Free Course'}
+                                                        <label class="course_item"><input type="radio" name="hl" value={code} checked={enabled} />{courseName}</label>
+                                                    {/if}
+                                                {/each}
+                                            </dd>
+
+                                            <dt class="course_list_title">EX (Single Select)</dt>
+                                            <dd class="course_list">
+                                                {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
+                                                    {#if courseName === 'Extra Course' || courseName === 'Extra Continued Course'}
+                                                        <label class="course_item"><input type="radio" name="ex" value={code} checked={enabled} />{courseName}</label>
+                                                    {/if}
+                                                {/each}
+                                            </dd>
+
+                                            <dt class="course_list_title">The Others (Multiple Select)</dt>
+                                            <dd class="course_list">
+                                                {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
+                                                    {#if courseName !== 'Hunter Life Course' && courseName !== 'Hunter Life Continued Course' && courseName !== 'Free Course' && courseName !== 'Extra Course' && courseName !== 'Extra Continued Course'}
+                                                        <label class="course_item"><input type="checkbox" name={code} checked={enabled} />{courseName}</label>
+                                                    {/if}
+                                                {/each}
+                                            </dd>
+                                        </dl>
+
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                $userCtrlPanel[user.id].activeCategories['rights'] = false;
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {/if}
+                        </dd>
+
+                        <dt class="contents_term">Character ID<br />(Last Played)</dt>
+                        <dd class="contents_desc">{user.last_character}</dd>
+
+                        <dt class="contents_term">Last Login Time</dt>
+                        <dd class="contents_desc">
+                            {!user.last_login
+                                ? 'No Data'
+                                : DateTime.fromJSDate(user.last_login)
+                                      .setZone(DateTime.local().zoneName)
+                                      .setLocale('en')
+                                      .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                        </dd>
+
+                        <dt class="contents_term">Expiry Date for<br />Return Ward</dt>
+                        <dd class="contents_desc">
+                            {!user.return_expires
+                                ? 'No Data'
+                                : DateTime.fromJSDate(user.return_expires)
+                                      .setZone(DateTime.local().zoneName)
+                                      .setLocale('en')
+                                      .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['return_expires']}
+                                <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['return_expires'] = false)}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['return_expires'] = true)}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['return_expires']}
+                                <div transition:slide class="edit_area_box">
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Change Date</p>
+                                        <p class="console_contents_note">* The date and time to be set are automatically converted to UTC.</p>
+                                        <p class="console_contents_note">* Empty isn't allowed.</p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Set new date</dt>
+                                            <dd>
+                                                <input
+                                                    type="datetime-local"
+                                                    name="return_expires"
+                                                    value={!user.return_expires ? '' : DateTime.fromJSDate(user.return_expires).toFormat("yyyy-MM-dd'T'HH:mm")}
+                                                />
+                                                <input type="hidden" name="zoneName" value={DateTime.local().zoneName} />
+                                            </dd>
+                                        </dl>
+
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                $userCtrlPanel[user.id].activeCategories['return_expires'] = false;
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {/if}
+                        </dd>
+
+                        <dt class="contents_term">Premium Coin G</dt>
+                        <dd class="contents_desc">
+                            {#if !user.gacha_premium}
+                                No coins.
+                            {:else}
+                                {user.gacha_premium} Coin(s)
+                            {/if}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['gacha_premium']}
+                                <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['gacha_premium'] = false)}>
+                                    <span style="margin: 1% 0%;" class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['gacha_premium'] = true)}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['gacha_premium']}
+                                <div transition:slide class="edit_area_box">
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Change the Quantity of Coins</p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Enter the quantity</dt>
+                                            <dd>
+                                                <input
+                                                    type="text"
+                                                    name="gacha_premium"
+                                                    inputmode="numeric"
+                                                    pattern="\d*"
+                                                    value={!user.gacha_premium ? null : user.gacha_premium}
+                                                    placeholder="Enter the quantity"
+                                                />
+                                            </dd>
+                                        </dl>
+
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                $userCtrlPanel[user.id].activeCategories['gacha_premium'] = false;
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {/if}
+                        </dd>
+
+                        <dt class="contents_term">Trial Coin G</dt>
+                        <dd class="contents_desc">
+                            {#if !user.gacha_trial}
+                                No coins.
+                            {:else}
+                                {user.gacha_trial} Coin(s)
+                            {/if}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['gacha_trial']}
+                                <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['gacha_trial'] = false)}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['gacha_trial'] = true)}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['gacha_trial']}
+                                <div transition:slide class="edit_area_box">
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Change the Quantity of Coins</p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Enter the quantity</dt>
+                                            <dd>
+                                                <input
+                                                    type="text"
+                                                    name="gacha_trial"
+                                                    inputmode="numeric"
+                                                    pattern="\d*"
+                                                    value={!user.gacha_trial ? null : user.gacha_trial}
+                                                    placeholder="Enter the quantity"
+                                                />
+                                            </dd>
+                                        </dl>
+
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                $userCtrlPanel[user.id].activeCategories['gacha_trial'] = false;
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {/if}
+                        </dd>
+
+                        <dt class="contents_term">Frontier Points</dt>
+                        <dd class="contents_desc">
+                            {#if !user.frontier_points}
+                                No points.
+                            {:else}
+                                {user.frontier_points} Point(s)
+                            {/if}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['frontier_points']}
+                                <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['frontier_points'] = false)}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button type="button" class="normal_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['frontier_points'] = true)}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['frontier_points']}
+                                <div transition:slide class="edit_area_box">
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Change the Quantity of Points</p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Enter the quantity</dt>
+                                            <dd>
+                                                <input
+                                                    type="text"
+                                                    name="frontier_points"
+                                                    inputmode="numeric"
+                                                    pattern="\d*"
+                                                    value={!user.frontier_points ? null : user.frontier_points}
+                                                    placeholder="Enter the quantity"
+                                                />
+                                            </dd>
+                                        </dl>
+
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                $userCtrlPanel[user.id].activeCategories['frontier_points'] = false;
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {/if}
+                        </dd>
+                    </dl>
+                {:else if $userCtrlPanel[user.id].icon === 'group'}
+                    {#if user.characters.length === 0}
+                        <p style="color: #ff8100; padding-top: 1%;">This user doesn't have any characters.</p>
+                    {:else}
+                        <swiper-container
+                            centered-slides={true}
+                            effect={'coverflow'}
+                            coverflow-effect-slide-shadows={false}
+                            mousewheel={true}
+                            direction={'horizontal'}
+                            speed={500}
+                            navigation={true}
+                            space-between={50}
+                            observer={true}
+                            observe-parents={true}
+                            on:swiperslidechange={setSelectedCharacter}
+                        >
+                            {#each user.characters as character}
+                                <swiper-slide>
+                                    <div
+                                        class="character_item {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '').replace('&', 'And')}"
+                                        class:new={character.is_new_character}
+                                        data-userId={user.id}
+                                        data-charId={character.id}
+                                    >
+                                        <span class="name">{character.name || 'Ready to Hunt'}</span>
+
+                                        {#if character.discord}
                                             <button
-                                                class="red_btn deleted_character"
+                                                class="green_btn linked_character"
                                                 type="button"
                                                 on:click={() =>
-                                                    prepareModal('deleteCharacter', {
-                                                        title: 'Restore the following character?',
-                                                        form_action: 'restoreCharacter',
+                                                    prepareModal('linkDiscord', {
+                                                        title: 'Unlink the following characters?',
+                                                        form_action: 'unlinkDiscord',
+                                                        user_id: user.id,
+                                                        username: user.username,
                                                         char_id: character.id,
                                                         char_name: character.name,
+                                                        discord_id: character.discord?.discord_id,
                                                     })}
                                             >
-                                                <span class="btn_icon material-icons">delete</span>
-                                                <span class="btn_text">Deleted</span>
+                                                <span class="btn_icon material-icons">link</span>
+                                                <span class="btn_text">Linked</span>
                                             </button>
                                         {:else}
                                             <button
-                                                class="red_btn delete_character"
+                                                class="green_btn link_character"
                                                 type="button"
                                                 on:click={() =>
-                                                    prepareModal('deleteCharacter', {
-                                                        title: 'Delete the following character?',
-                                                        form_action: 'deleteCharacter',
+                                                    prepareModal('linkDiscord', {
+                                                        title: 'Execute the linking process with the following user and character. Please confirm the target ID and Username, and enter the ID (18-digit) of Discord to be linked.',
+                                                        form_action: 'linkDiscord',
+                                                        user_id: user.id,
+                                                        username: user.username,
                                                         char_id: character.id,
                                                         char_name: character.name,
                                                     })}
-                                                class:disabled_elm={user.characters.length === 1}
                                             >
-                                                <span class="btn_icon material-icons">delete</span>
-                                                <span class="btn_text">Delete</span>
+                                                <span class="btn_icon material-icons">link</span>
+                                                <span class="btn_text">Link</span>
                                             </button>
                                         {/if}
-                                    {:else}
-                                        <div class="wpn_icon" />
-                                        <p class="wpn_text">
-                                            No Data
-                                            <br />
-                                            No Data
-                                        </p>
-                                    {/if}
 
-                                    <span class="rank">HR: {character.hrp} / GR: {character.gr}</span>
-                                    <span class="char_id">Character ID: {character.id}</span>
-                                    <span class="last_login"
-                                        >Last Login: {!character.last_login
-                                            ? 'No Data'
-                                            : DateTime.fromSeconds(character.last_login)
-                                                  .setZone(DateTime.local().zoneName)
-                                                  .setLocale('en')
-                                                  .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span
-                                    >
-                                </div>
+                                        {#if !character.is_new_character}
+                                            <div class="wpn_icon {getWpnTypeByDec(character.weapon_type, 'en').replace(/\s+/g, '').replace('&', 'And')}" />
 
-                                {#if editingCharCard === `${character.id}${character.name}`}
-                                    <form
-                                        action="?/updateCharacterData"
-                                        method="POST"
-                                        use:enhance={({ formData }) => {
-                                            const data = conv2DArrayToObject([...formData.entries()]);
-                                            const id = Number(data.character_id);
-                                            const column = Object.keys(data)[1];
-                                            const value = Object.values(data)[1];
+                                            <p class="wpn_text">
+                                                {getWpnTypeByDec(character.weapon_type, 'en')}
+                                                <br />
+                                                <!-- svelte-ignore a11y-no-static-element-interactions -->
+                                                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                                                <span class="wpn_name" on:click={() => showTipHoverWpn(character.id)}>
+                                                    {#await getWpnNameByDec(character.weapon_id, character.weapon_type, 'en')}
+                                                        Loading...
+                                                    {:then wpnName}
+                                                        {wpnName}
+                                                    {/await}
+                                                </span>
+                                            </p>
 
-                                            return async ({ result }) => {
-                                                msgClosed.set(false);
-                                                onSubmit.set(false);
-                                                await applyAction(result);
+                                            <span id={String(character.id)} class="little_endian {decToLittleEndian(character.weapon_id)}">
+                                                [ Little Endian: {decToLittleEndian(character.weapon_id)} ]
+                                                {#await getWpnNameByDec(character.weapon_id, character.weapon_type, 'en')}
+                                                    <p>Loading...</p>
+                                                {:then wpnName}
+                                                    <p>{wpnName}</p>
+                                                {/await}
+                                            </span>
 
-                                                if (result.type === 'success') {
+                                            {#if character.deleted}
+                                                <button
+                                                    class="red_btn deleted_character"
+                                                    type="button"
+                                                    on:click={() =>
+                                                        prepareModal('deleteCharacter', {
+                                                            title: 'Restore the following character?',
+                                                            form_action: 'restoreCharacter',
+                                                            char_id: character.id,
+                                                            char_name: character.name,
+                                                        })}
+                                                >
+                                                    <span class="btn_icon material-icons">delete</span>
+                                                    <span class="btn_text">Deleted</span>
+                                                </button>
+                                            {:else}
+                                                <button
+                                                    class="red_btn delete_character"
+                                                    type="button"
+                                                    on:click={() =>
+                                                        prepareModal('deleteCharacter', {
+                                                            title: 'Delete the following character?',
+                                                            form_action: 'deleteCharacter',
+                                                            char_id: character.id,
+                                                            char_name: character.name,
+                                                        })}
+                                                    class:disabled_elm={user.characters.length === 1}
+                                                >
+                                                    <span class="btn_icon material-icons">delete</span>
+                                                    <span class="btn_text">Delete</span>
+                                                </button>
+                                            {/if}
+                                        {:else}
+                                            <div class="wpn_icon" />
+                                            <p class="wpn_text">
+                                                No Data
+                                                <br />
+                                                <span class="wpn_name">No Data</span>
+                                            </p>
+                                        {/if}
+
+                                        <span class="rank">HR: {character.hrp} / GR: {character.gr}</span>
+                                        <span class="char_id">Character ID: {character.id}</span>
+                                        <span class="last_login"
+                                            >Last Login: {!character.last_login
+                                                ? 'No Data'
+                                                : DateTime.fromSeconds(character.last_login)
+                                                      .setZone(DateTime.local().zoneName)
+                                                      .setLocale('en')
+                                                      .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span
+                                        >
+                                    </div>
+                                </swiper-slide>
+                            {/each}
+                        </swiper-container>
+
+                        {#if $userCtrlPanel[user.id].selectedChar.is_new_character}
+                            <p style="color: #ff8100; padding-top: 1%;">New character can't be edited.</p>
+                        {:else}
+                            <form
+                                action="?/updateCharacterData"
+                                method="POST"
+                                enctype="multipart/form-data"
+                                use:enhance={({ formData }) => {
+                                    const data = conv2DArrayToObject([...formData.entries()]);
+                                    const userId = Number(data.user_id);
+                                    const charId = Number(data.character_id);
+                                    const column = Object.keys(data)[2];
+                                    const value = Object.values(data)[2];
+
+                                    return async ({ result }) => {
+                                        msgClosed.set(false);
+                                        onSubmit.set(false);
+                                        await applyAction(result);
+
+                                        if (result.type === 'success') {
+                                            updateUserCtrlPanel(userId, charId, column, value);
+
+                                            switch (column) {
+                                                case 'name': {
                                                     $paginatedUsersData = $paginatedUsersData.map((user) => {
-                                                        // update
+                                                        // update name
                                                         user.characters = user.characters.map((character) => {
-                                                            if (character.id === id)
+                                                            const bounty = !character.discord?.bounty ? 0 : character.discord?.bounty - 50000;
+
+                                                            if (character.id === charId && character.discord)
                                                                 return {
                                                                     ...character,
-                                                                    [column]: value,
+                                                                    name: value,
+                                                                    discord: {
+                                                                        ...character.discord,
+                                                                        bounty,
+                                                                    },
                                                                 };
 
                                                             return character;
@@ -1099,158 +1118,260 @@
 
                                                         return user;
                                                     });
+
+                                                    break;
                                                 }
-                                            };
-                                        }}
-                                    >
-                                        <dl in:slide out:slide class="console_contents_list">
-                                            <dt class="contents_term">Name</dt>
-                                            <dd class="contents_desc">
-                                                {character.name}
 
-                                                {#if editingCharId === character.id && catCharTypes['name']}
-                                                    <button type="button" class="red_btn" on:click={() => editModeCharSwitch(0, 'name')}>
-                                                        <span class="btn_icon material-icons">close</span>
-                                                        <span class="btn_text">Cancel</span>
+                                                case 'clan': {
+                                                    $paginatedUsersData = $paginatedUsersData.map((user) => {
+                                                        // delete guild_characters data
+                                                        user.characters = user.characters.map((character) => {
+                                                            if (character.id === charId)
+                                                                return {
+                                                                    ...character,
+                                                                    guild_characters: null,
+                                                                };
+
+                                                            return character;
+                                                        });
+
+                                                        return user;
+                                                    });
+                                                    console.log($userCtrlPanel);
+
+                                                    break;
+                                                }
+
+                                                case 'binary': {
+                                                    break;
+                                                }
+
+                                                default: {
+                                                    throw new Error('Invalid Column');
+                                                }
+                                            }
+                                        }
+                                    };
+                                }}
+                            >
+                                <input type="hidden" name="user_id" value={user.id} />
+                                <input type="hidden" name="character_id" value={$userCtrlPanel[user.id].selectedChar.id} />
+
+                                <dl class="console_contents_list">
+                                    <dt class="contents_term">Name</dt>
+                                    <dd class="contents_desc">
+                                        {$userCtrlPanel[user.id].selectedChar.name || 'Ready to Hunt'}
+
+                                        {#if $userCtrlPanel[user.id].activeCategories['name']}
+                                            <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['name'] = false)}>
+                                                <span class="btn_icon material-icons">close</span>
+                                                <span class="btn_text">Cancel</span>
+                                            </button>
+                                        {:else}
+                                            <button type="button" class="normal_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['name'] = true)}>
+                                                <span class="btn_icon material-icons">mode_edit</span>
+                                                <span class="btn_text">Edit</span>
+                                            </button>
+                                        {/if}
+
+                                        {#if $userCtrlPanel[user.id].activeCategories['name']}
+                                            <div transition:slide class="edit_area_box">
+                                                <div class="edit_area enter">
+                                                    <p class="edit_area_title">Change Character Name</p>
+                                                    <p class="console_contents_note">* Empty isn't allowed.</p>
+                                                    <dl class="edit_area_box_parts text">
+                                                        <dt>Enter new name</dt>
+                                                        <dd>
+                                                            <input type="text" name="name" value={$userCtrlPanel[user.id].selectedChar.name || 'Ready to Hunt'} autocomplete="off" />
+                                                            <input type="hidden" name="not_linked" value={!$userCtrlPanel[user.id].selectedChar.discord} />
+                                                            <input type="hidden" name="bounty_coin" value={$userCtrlPanel[user.id].selectedChar.discord?.bounty} />
+                                                        </dd>
+                                                    </dl>
+
+                                                    <button
+                                                        class="blue_btn"
+                                                        type="submit"
+                                                        on:click={() => {
+                                                            $userCtrlPanel[user.id].activeCategories['name'] = false;
+                                                            onSubmit.set(true);
+                                                        }}
+                                                    >
+                                                        <span class="btn_icon material-icons">check</span>
+                                                        <span class="btn_text">Save</span>
                                                     </button>
-                                                {:else}
-                                                    <button type="button" class="normal_btn" on:click={() => editModeCharSwitch(character.id, 'name')}>
-                                                        <span class="btn_icon material-icons">mode_edit</span>
-                                                        <span class="btn_text">Edit</span>
+                                                </div>
+                                            </div>
+                                        {/if}
+                                    </dd>
+
+                                    <dt class="contents_term">Clan Name</dt>
+                                    <dd class="contents_desc">
+                                        {$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name || 'None'}
+
+                                        {#if $userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name}
+                                            {#if $userCtrlPanel[user.id].activeCategories['clan']}
+                                                <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['clan'] = false)}>
+                                                    <span class="btn_icon material-icons">close</span>
+                                                    <span class="btn_text">Cancel</span>
+                                                </button>
+                                            {:else}
+                                                <button type="button" class="normal_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['clan'] = true)}>
+                                                    <span class="btn_icon material-icons">mode_edit</span>
+                                                    <span class="btn_text">Edit</span>
+                                                </button>
+                                            {/if}
+                                        {/if}
+
+                                        {#if $userCtrlPanel[user.id].activeCategories['clan']}
+                                            <div transition:slide class="edit_area_box">
+                                                <div class="edit_area enter">
+                                                    <p class="edit_area_title">Leave the Clan</p>
+                                                    <p class="console_contents_note">* If this character is the last one in the clan, the clan itself will also be automatically deleted.</p>
+
+                                                    <input type="hidden" name="clan" />
+                                                    <input type="hidden" name="clan_length" value={$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.guild_characters?.length} />
+                                                    <input type="hidden" name="clan_id" value={$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.id} />
+                                                    <input type="hidden" name="clan_name" value={$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name} />
+
+                                                    <button
+                                                        class="blue_btn"
+                                                        type="submit"
+                                                        on:click={() => {
+                                                            $userCtrlPanel[user.id].activeCategories['clan'] = false;
+                                                            onSubmit.set(true);
+                                                        }}
+                                                    >
+                                                        <span class="btn_icon material-icons">check</span>
+                                                        <span class="btn_text">Leave</span>
                                                     </button>
-                                                {/if}
+                                                </div>
+                                            </div>
+                                        {/if}
+                                    </dd>
 
-                                                {#if editingCharId === character.id && catCharTypes['name']}
-                                                    <div transition:slide class="edit_area_box">
-                                                        <input type="hidden" name="character_id" value={editingCharId} />
-                                                        <div class="edit_area enter">
-                                                            <p class="edit_area_title">Change Character Name</p>
-                                                            <p class="console_contents_note">* Empty isn't allowed.</p>
-                                                            <dl class="edit_area_box_parts text">
-                                                                <dt>Enter new name</dt>
-                                                                <dd>
-                                                                    <input type="text" name="name" value={character.name} autocomplete="off" />
-                                                                </dd>
-                                                            </dl>
+                                    <dt class="contents_term">Binary Data</dt>
+                                    <dd class="contents_desc">
+                                        {#if $userCtrlPanel[user.id].activeCategories['binary']}
+                                            <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['binary'] = false)}>
+                                                <span class="btn_icon material-icons">close</span>
+                                                <span class="btn_text">Cancel</span>
+                                            </button>
+                                        {:else}
+                                            <button type="button" class="normal_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['binary'] = true)}>
+                                                <span class="btn_icon material-icons">upload_file</span>
+                                                <span class="btn_text">Re-upload</span>
+                                            </button>
+                                        {/if}
 
-                                                            <button
-                                                                class="blue_btn"
-                                                                type="submit"
-                                                                on:click={() => {
-                                                                    editModeCharSwitch(0, 'name');
-                                                                    editingCharCard = '';
-                                                                    onSubmit.set(true);
-                                                                }}
-                                                            >
-                                                                <span class="btn_icon material-icons">check</span>
-                                                                <span class="btn_text">Save</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                {/if}
-                                            </dd>
+                                        {#if $userCtrlPanel[user.id].activeCategories['binary']}
+                                            <div transition:slide class="edit_area_box">
+                                                <div class="edit_area enter">
+                                                    <p class="edit_area_title">Re-upload Binary Data</p>
+                                                    <p class="console_contents_note">* Once re-uploaded, the original binary data will be overwritten.</p>
+                                                    <p class="console_contents_note">
+                                                        * You can upload any file you want, as long as it's one of the 14 files listed below. The remaining files that aren't uploaded won't be changed.
+                                                        Of course, uploading all 14 files at once is no problem.
+                                                    </p>
+                                                    <p class="console_contents_note">
+                                                        * Each file must have the following name resspectively.<br /><span style="color: #7d7d7d; border-bottom: 1px solid black;">
+                                                            ー {@html validFileName.join('<br>ー ')}
+                                                        </span>
+                                                    </p>
+                                                    <dl class="edit_area_box_parts text">
+                                                        <dt>Select new files</dt>
+                                                        <dd>
+                                                            <input type="hidden" name="binary" />
+                                                            <input name="savedata" type="hidden" bind:value={binaryData['savedata.bin']} />
+                                                            <input name="decomyset" type="hidden" bind:value={binaryData['decomyset.bin']} />
+                                                            <input name="hunternavi" type="hidden" bind:value={binaryData['hunternavi.bin']} />
+                                                            <input name="otomoairou" type="hidden" bind:value={binaryData['otomoairou.bin']} />
+                                                            <input name="partner" type="hidden" bind:value={binaryData['partner.bin']} />
+                                                            <input name="platebox" type="hidden" bind:value={binaryData['platebox.bin']} />
+                                                            <input name="platedata" type="hidden" bind:value={binaryData['platedata.bin']} />
+                                                            <input name="platemyset" type="hidden" bind:value={binaryData['platemyset.bin']} />
+                                                            <input name="rengokudata" type="hidden" bind:value={binaryData['rengokudata.bin']} />
+                                                            <input name="savemercenary" type="hidden" bind:value={binaryData['savemercenary.bin']} />
+                                                            <input name="skin_hist" type="hidden" bind:value={binaryData['skinhist.bin']} />
+                                                            <input name="minidata" type="hidden" bind:value={binaryData['minidata.bin']} />
+                                                            <input name="scenariodata" type="hidden" bind:value={binaryData['scenariodata.bin']} />
+                                                            <input name="savefavoritequest" type="hidden" bind:value={binaryData['savefavoritequest.bin']} />
+                                                            <input type="file" name="file" on:change={(e) => convFileToUint8(e)} accept=".bin" bind:this={input} multiple />
+                                                        </dd>
+                                                    </dl>
 
-                                            <dt class="contents_term">Savedata</dt>
-                                            <dd class="contents_desc">
-                                                {#if editingCharId === character.id && catCharTypes['savedata']}
-                                                    <button type="button" class="red_btn" on:click={() => editModeCharSwitch(0, 'savedata')}>
-                                                        <span class="btn_icon material-icons">close</span>
-                                                        <span class="btn_text">Cancel</span>
+                                                    <button
+                                                        class="blue_btn"
+                                                        type="submit"
+                                                        on:click={() => {
+                                                            $userCtrlPanel[user.id].activeCategories['binary'] = false;
+                                                            onSubmit.set(true);
+                                                        }}
+                                                    >
+                                                        <span class="btn_icon material-icons">check</span>
+                                                        <span class="btn_text">Save</span>
                                                     </button>
-                                                {:else}
-                                                    <button type="button" class="normal_btn" on:click={() => editModeCharSwitch(character.id, 'savedata')}>
-                                                        <span class="btn_icon material-icons">upload_file</span>
-                                                        <span class="btn_text">Re-upload</span>
-                                                    </button>
-                                                {/if}
-
-                                                {#if editingCharId === character.id && catCharTypes['savedata']}
-                                                    <div transition:slide class="edit_area_box">
-                                                        <input type="hidden" name="character_id" value={editingCharId} />
-                                                        <div class="edit_area enter">
-                                                            <p class="edit_area_title">Re-upload Savedata</p>
-                                                            <p class="console_contents_note">* Once re-uploaded, the original file will be deleted.</p>
-                                                            <dl class="edit_area_box_parts text">
-                                                                <dt>Select new file</dt>
-                                                                <dd>
-                                                                    <input name="savedata" type="hidden" bind:value={savedata} />
-                                                                    <input type="file" on:change={convFileToUint8} />
-                                                                </dd>
-                                                            </dl>
-
-                                                            <button
-                                                                class="blue_btn"
-                                                                type="submit"
-                                                                on:click={() => {
-                                                                    editModeCharSwitch(0, 'savedata');
-                                                                    editingCharCard = '';
-                                                                    onSubmit.set(true);
-                                                                }}
-                                                            >
-                                                                <span class="btn_icon material-icons">check</span>
-                                                                <span class="btn_text">Save</span>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                {/if}
-                                            </dd>
-                                        </dl>
-                                    </form>
-                                {/if}
-                            {/each}
+                                                </div>
+                                            </div>
+                                        {/if}
+                                    </dd>
+                                </dl>
+                            </form>
                         {/if}
-                    </dd>
-                </dl>
+                    {/if}
+                {/if}
             </form>
         {/each}
 
-        <div class="pagination_btn_list">
-            <form
-                method="POST"
-                action="?/getPaginatedUsers"
-                use:enhance={() => {
-                    return async ({ result }) => {
-                        paginationBackClick = false;
-                        paginationNextClick = false;
-                        await applyAction(result);
+        {#if $paginationMetaData.hasPrevPage || $paginationMetaData.hasNextPage}
+            <div class="pagination_btn_list">
+                <form
+                    method="POST"
+                    action="?/getPaginatedUsers"
+                    use:enhance={() => {
+                        return async ({ result }) => {
+                            paginationBackClick = false;
+                            paginationNextClick = false;
+                            await applyAction(result);
 
-                        if (result.type === 'success') {
-                            paginatedUsersData.set(paginatedUsers);
-                            paginationMetaData.set(paginationMeta);
-                        }
-                    };
-                }}
-            >
-                <input name="filter_value" type="hidden" value={$filterValue} />
-                <input name="filter_param" type="hidden" value={$filterParam} />
-                <input name="status" type="hidden" bind:value={status} />
-                <input type="hidden" name="cursor" bind:value={cursor} />
+                            if (result.type === 'success') {
+                                paginatedUsersData.set(paginatedUsers);
+                                paginationMetaData.set(paginationMeta);
+                                initUserCtrlPanel(paginatedUsers);
+                            }
+                        };
+                    }}
+                >
+                    <input name="filter_value" type="hidden" value={$filterValue} />
+                    <input name="filter_param" type="hidden" value={$filterParam} />
+                    <input name="status" type="hidden" bind:value={status} />
+                    <input type="hidden" name="cursor" bind:value={cursor} />
 
-                <button
-                    class="pagination_btn_item"
-                    type="submit"
-                    on:click={() => {
-                        $timeOut && closeMsgDisplay($timeOut);
-                        paginationBackClick = true;
-                        status = 'back';
-                        cursor = $paginationMetaData.prevCursor;
-                    }}
-                    class:active={paginationBackClick}
-                    class:disabled_elm={!$paginationMetaData.hasPrevPage || paginationBackClick}>Back</button
-                >
-                <button
-                    class="pagination_btn_item"
-                    type="submit"
-                    on:click={() => {
-                        $timeOut && closeMsgDisplay($timeOut);
-                        paginationNextClick = true;
-                        status = 'next';
-                        cursor = $paginationMetaData.nextCursor;
-                    }}
-                    class:active={paginationNextClick}
-                    class:disabled_elm={!$paginationMetaData.hasNextPage || paginationNextClick}>Next</button
-                >
-            </form>
-        </div>
+                    <button
+                        class="pagination_btn_item"
+                        type="submit"
+                        on:click={() => {
+                            $timeOut && closeMsgDisplay($timeOut);
+                            paginationBackClick = true;
+                            status = 'back';
+                            cursor = $paginationMetaData.prevCursor;
+                        }}
+                        class:active={paginationBackClick}
+                        class:disabled_elm={!$paginationMetaData.hasPrevPage || paginationBackClick}>Back</button
+                    >
+                    <button
+                        class="pagination_btn_item"
+                        type="submit"
+                        on:click={() => {
+                            $timeOut && closeMsgDisplay($timeOut);
+                            paginationNextClick = true;
+                            status = 'next';
+                            cursor = $paginationMetaData.nextCursor;
+                        }}
+                        class:active={paginationNextClick}
+                        class:disabled_elm={!$paginationMetaData.hasNextPage || paginationNextClick}>Next</button
+                    >
+                </form>
+            </div>
+        {/if}
     {/if}
 </div>

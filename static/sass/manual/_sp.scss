@@ -374,14 +374,6 @@
                                 padding: 4% 8% 4% 14%;
                             }
 
-                            // サブカテゴリーホバー時
-                            &:hover {
-                                background: rgba(77, 77, 77, 0.3);
-                                text-shadow: 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke,
-                                    -10px 0px 10px whitesmoke, 10px 0px 10px whitesmoke, -10px 0px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke,
-                                    0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke, 0px 10px 10px whitesmoke, 0px -10px 10px whitesmoke;
-                            }
-
                             // サブカテゴリーページ表示時
                             &.tab_active {
                                 position: relative;
@@ -495,17 +487,6 @@
                             margin: auto;
                             transform: rotate(90deg);
                             transition: all 0.3s ease-in-out;
-                        }
-                    }
-
-                    // メニューホバー時
-                    &:hover {
-                        color: #fff;
-                        background-color: #61a7f7;
-
-                        // 開閉マークホバー時
-                        .mark {
-                            background-color: #5390d4;
                         }
                     }
                 }
