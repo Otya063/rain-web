@@ -11,13 +11,9 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
-        overflow-x: hidden;
-        padding: calc(1% + 50px) 5% calc(1% + 50px);
+        width: 100%;
+        grid-area: contents;
 
-        @include landscape {
-            padding: calc(1% + 50px) 0 calc(1% + 50px);
-        }
 
         // コケ猫
         .ouch_cat {
@@ -29,8 +25,18 @@
             }
         }
 
+        // 配達猫
+        .delivery_cat {
+            width: 75%;
+            filter: drop-shadow(6px 6px 5px rgba(0, 0, 0, 0.5));
+
+            @include landscape {
+                width: 60%;
+            }
+        }
+
         // タイトル
-        .error_h1 {
+        .h1_error {
             position: relative;
             font-size: 2rem;
             font-weight: 600;
@@ -44,7 +50,7 @@
                 font-size: 2.5rem;
 
                 &:lang(en) {
-                    font-size: 3rem;
+                    font-size: 3.4rem;
                 }
             }
 
@@ -65,21 +71,30 @@
         }
 
         // インナーテキスト
-        .inner_text {
+        .inner_text_error {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
             font-size: 1.4rem;
-            padding: 15% 0;
+            padding: 15% 5% 0;
 
             &:lang(en) {
                 font-size: 1.4rem;
             }
 
             @include landscape {
-                padding: 8%;
+                font-size: 1.6rem;
+                padding: 8% 8% 0;
+
+                &:lang(en) {
+                    font-size: 1.7rem;
+                }
             }
 
             // エラー原因
             .error_cause {
+                width: fit-content;
                 margin: 10% 0;
                 position: relative;
                 padding: 3% 7%;
@@ -152,9 +167,10 @@
 ====================================================*/
     // フッター帯
     footer {
-        display: block;
+        width: 100%;
         position: relative;
         background: #000;
+        grid-area: footer;
 
         // フッター帯上部装飾
         &::before {
@@ -168,15 +184,15 @@
         }
 
         // フッター内コンテンツ調整
-        .error_footer {
+        .footer_inner_error {
             display: flex;
             flex-direction: column;
             align-items: center;
             padding: 3% 2%;
 
             // フッターロゴ
-            .footer_logo {
-                width: 130px;
+            .footer_logo_error {
+                width: 133px;
 
                 @include landscape {
                     width: 150px;
@@ -184,11 +200,14 @@
             }
 
             // フッターテキスト
-            .footer_text {
+            .footer_text_error {
+                width: 90%;
                 color: white;
                 font-size: 1.1rem;
                 text-align: center;
-                padding-top: 3%;
+                border-top: 2px solid #524c4c;
+                margin-top: 2%;
+                padding-top: 2%;
 
                 &:lang(en) {
                     font-size: 1.2rem;

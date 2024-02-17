@@ -11,26 +11,27 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        min-height: 100vh;
-        overflow-x: hidden;
-        padding: calc(1% + 100px) 0 calc(1% + 100px);
+        grid-area: contents;
+        width: 100%;
 
         // コケ猫
         .ouch_cat {
-            width: 25%;
+            width: 22%;
             background-size: 100%;
         }
 
+        // 配達猫
+        .delivery_cat {
+            width: 20%;
+            filter: drop-shadow(6px 6px 5px rgba(0, 0, 0, 0.5));
+        }
+
         // タイトル
-        .error_h1 {
+        .h1_error {
             position: relative;
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 600;
             padding: 3.7% 2% 0.5%;
-
-            &:lang(en) {
-                font-size: 3.5rem;
-            }
 
             &::before {
                 content: '';
@@ -49,10 +50,13 @@
         }
 
         // インナーテキスト
-        .inner_text {
+        .inner_text_error {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
             text-align: center;
             font-size: 1.8rem;
-            padding: 3% 0 3%;
+            padding-top: 3%;
 
             &:lang(en) {
                 font-size: 1.8rem;
@@ -60,6 +64,7 @@
 
             // エラー原因
             .error_cause {
+                width: fit-content;
                 margin: 2em 0;
                 position: relative;
                 padding: 0.5em 1.5em;
@@ -151,9 +156,10 @@
 ====================================================*/
     // フッター帯
     footer {
-        display: block;
+        width: 100%;
         position: relative;
         background: #000;
+        grid-area: footer;
 
         // フッター帯上部装飾
         &::before {
@@ -167,19 +173,19 @@
         }
 
         // フッター内コンテンツ調整
-        .error_footer {
+        .footer_inner_error {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 1% 1.5%;
+            padding: 0.7% 2% 0.5%;
 
             // フッターロゴ
-            .footer_logo {
-                width: 150px;
+            .footer_logo_error {
+                width: 133px;
             }
 
             // フッターテキスト
-            .footer_text {
+            .footer_text_error {
                 color: white;
                 font-size: 1.1rem;
                 text-align: end;

@@ -11,7 +11,7 @@ import { Buffer } from 'node:buffer';
 const emptyMsg = 'Input value is empty.';
 const requiredMsg = 'Required field is empty.';
 
-export const load: PageServerLoad = async ({ url, locals: { authUser } }) => {
+export const load: PageServerLoad = async ({ url, locals: { LL, authUser } }) => {
     const launcherSystem = (await ServerData.getLauncherSystem()) as launcher_system;
 
     // check rain admin
@@ -19,7 +19,7 @@ export const load: PageServerLoad = async ({ url, locals: { authUser } }) => {
         const isAdmin: boolean = launcherSystem['rain_admins'].includes(authUser.username);
 
         if (!isAdmin) {
-            throw error(403);
+            throw error(403, { message: '', message1: undefined, message2: undefined, message3: LL.error['adminForbidden']() });
         }
     }
 

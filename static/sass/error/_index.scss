@@ -22,9 +22,13 @@ body {
     display: block !important;
 }
 
-.error_wrapper {
-    width: 100%;
-    overflow: hidden;
+.wrapper_error {
+    display: grid;
+    grid-template: 'header' auto 'contents' 1fr 'footer' auto;
+    row-gap: 40px;
+    min-height: 100vh;
     background: #fef5e6;
     user-select: none;
+    justify-items: center;
+    align-items: center;
 }
