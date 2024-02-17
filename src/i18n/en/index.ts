@@ -4,22 +4,6 @@ const en: BaseTranslation = {
     serverTitle: 'Rain Server',
     landscapeMode: 'Please view the page in portrait mode.',
 
-    // Error Page
-    E404: {
-        title: '404 Not Found | Rain Server',
-        h1: '404 Not Found',
-        inner_text1: 'The requested page was not found due to the following reasons.',
-        error_cause: {
-            cause1: 'The page file does not exist.',
-            cause2: 'The page has been moved or deleted.',
-            cause3: 'The URL was not correct or has been updated.',
-        },
-        inner_text2: 'If you have any problems with our website, please contact the Rain Team.',
-        btn_name: 'Return to Home',
-        footer_text:
-            'Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. <br>This community is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this community.',
-    },
-
     // Header Language Selection
     header: {
         currentLang: 'English',
@@ -631,9 +615,58 @@ const en: BaseTranslation = {
             alt: 'pewpewdojo',
         },
     },
-
     disclaimer:
         'Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. <br>This community is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this community.',
+
+    // Maintenance Page
+    maintenance: {
+        title: 'Under Maintenance',
+        message1: 'This site is currently under maintenance and cannot be accessed.',
+        message2: 'Maintenance will end on: ',
+        message3: 'Please wait for a while until the end of maintenance is announced.',
+    },
+
+    // Error Page
+    error: {
+        unexpectedErr: 'Unexpected Error',
+        otherMessage1: 'An error occurred in the page for the following reason:',
+        otherMessage2: 'Reason unknown.',
+        adminForbidden: 'Only the Rain Server administrators have access to this page.',
+
+        400: {
+            title: 'Bad Request',
+            message1: 'Failed to process the request for the following reasons:',
+        },
+
+        401: {
+            title: 'Unauthorized',
+        },
+
+        403: {
+            title: 'Forbidden',
+            message1: 'You are not allowed to access this page for the following reason:',
+            message2: ['The user accessing this page is not Rain Administrators.'],
+            message3: 'If you find any problems with our website, please contact the Rain Team.',
+        },
+
+        404: {
+            title: 'Not Found',
+            message1: 'The requested page was not found for the following reason:',
+            message2: ['The page file does not exist.', 'The page has been moved or deleted.', 'The URL was not correct or has been updated.'],
+            message3: 'If you find any problems with our website, please contact the Rain Team.',
+        },
+
+        422: {
+            title: 'Unprocessable Entity',
+            message1: 'Failed to process the request for the following reasons:',
+        },
+
+        500: {
+            title: 'Internal Error',
+            message1: 'An error occurred inside the server for the following reasons:',
+            message3: 'Please try again after a while.',
+        },
+    },
 };
 
 export default en;

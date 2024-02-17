@@ -10,7 +10,9 @@ export const userCtrlPanel = writable<{
         icon: string;
         userData: PaginatedUsers;
         selectedChar: PaginatedCharacter;
-        activeCategories: { [key in keyof Omit<users, 'id' | 'item_box' | 'last_character' | 'last_login' | 'web_login_key'> | 'name' | 'clan' | 'binary']: boolean };
+        activeCategories: {
+            [key in keyof Omit<users, 'id' | 'item_box' | 'last_character' | 'last_login' | 'web_login_key' | 'web_login_key_mobile'> | 'name' | 'bounty' | 'clan' | 'binary']: boolean;
+        };
     };
 }>({});
 export const onSubmit = writable(false);
@@ -106,7 +108,10 @@ export const initUserCtrlPanel = (paginatedUsers: PaginatedUsers[]): void => {
                     gacha_premium: false,
                     gacha_trial: false,
                     frontier_points: false,
+                    psn_id: false,
+                    wiiu_key: false,
                     name: false,
+                    bounty: false,
                     clan: false,
                     binary: false,
                 },
@@ -133,7 +138,10 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                         gacha_premium: false,
                         gacha_trial: false,
                         frontier_points: false,
+                        psn_id: false,
+                        wiiu_key: false,
                         name: false,
+                        bounty: false,
                         clan: false,
                         binary: false,
                     },
@@ -149,7 +157,7 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                         ...data[userId],
                         selectedChar: {
                             ...data[userId].selectedChar,
-                            [column]: value!,
+                            name: value!,
                             discord: {
                                 ...data[userId].selectedChar.discord!,
                                 bounty,
@@ -163,7 +171,39 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                             gacha_premium: false,
                             gacha_trial: false,
                             frontier_points: false,
+                            psn_id: false,
+                            wiiu_key: false,
                             name: false,
+                            bounty: false,
+                            clan: false,
+                            binary: false,
+                        },
+                    },
+                };
+            } else if (column === 'bounty') {
+                return {
+                    ...data,
+                    [userId]: {
+                        ...data[userId],
+                        selectedChar: {
+                            ...data[userId].selectedChar,
+                            discord: {
+                                ...data[userId].selectedChar.discord!,
+                                bounty: Number(value),
+                            },
+                        },
+                        activeCategories: {
+                            username: false,
+                            password: false,
+                            rights: false,
+                            return_expires: false,
+                            gacha_premium: false,
+                            gacha_trial: false,
+                            frontier_points: false,
+                            psn_id: false,
+                            wiiu_key: false,
+                            name: false,
+                            bounty: false,
                             clan: false,
                             binary: false,
                         },
@@ -186,35 +226,17 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                             gacha_premium: false,
                             gacha_trial: false,
                             frontier_points: false,
+                            psn_id: false,
+                            wiiu_key: false,
                             name: false,
+                            bounty: false,
                             clan: false,
                             binary: false,
                         },
                     },
                 };
             } else {
-                return {
-                    ...data,
-                    [userId]: {
-                        ...data[userId],
-                        selectedChar: {
-                            ...data[userId].selectedChar,
-                            [column!]: value,
-                        },
-                        activeCategories: {
-                            username: false,
-                            password: false,
-                            rights: false,
-                            return_expires: false,
-                            gacha_premium: false,
-                            gacha_trial: false,
-                            frontier_points: false,
-                            name: false,
-                            clan: false,
-                            binary: false,
-                        },
-                    },
-                };
+                return { ...data };
             }
         }
     });

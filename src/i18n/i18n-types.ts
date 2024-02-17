@@ -22,46 +22,6 @@ type RootTranslation = {
 	 * P​l​e​a​s​e​ ​v​i​e​w​ ​t​h​e​ ​p​a​g​e​ ​i​n​ ​p​o​r​t​r​a​i​t​ ​m​o​d​e​.
 	 */
 	landscapeMode: string
-	E404: {
-		/**
-		 * 4​0​4​ ​N​o​t​ ​F​o​u​n​d​ ​|​ ​R​a​i​n​ ​S​e​r​v​e​r
-		 */
-		title: string
-		/**
-		 * 4​0​4​ ​N​o​t​ ​F​o​u​n​d
-		 */
-		h1: string
-		/**
-		 * T​h​e​ ​r​e​q​u​e​s​t​e​d​ ​p​a​g​e​ ​w​a​s​ ​n​o​t​ ​f​o​u​n​d​ ​d​u​e​ ​t​o​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​r​e​a​s​o​n​s​.
-		 */
-		inner_text1: string
-		error_cause: {
-			/**
-			 * T​h​e​ ​p​a​g​e​ ​f​i​l​e​ ​d​o​e​s​ ​n​o​t​ ​e​x​i​s​t​.
-			 */
-			cause1: string
-			/**
-			 * T​h​e​ ​p​a​g​e​ ​h​a​s​ ​b​e​e​n​ ​m​o​v​e​d​ ​o​r​ ​d​e​l​e​t​e​d​.
-			 */
-			cause2: string
-			/**
-			 * T​h​e​ ​U​R​L​ ​w​a​s​ ​n​o​t​ ​c​o​r​r​e​c​t​ ​o​r​ ​h​a​s​ ​b​e​e​n​ ​u​p​d​a​t​e​d​.
-			 */
-			cause3: string
-		}
-		/**
-		 * I​f​ ​y​o​u​ ​h​a​v​e​ ​a​n​y​ ​p​r​o​b​l​e​m​s​ ​w​i​t​h​ ​o​u​r​ ​w​e​b​s​i​t​e​,​ ​p​l​e​a​s​e​ ​c​o​n​t​a​c​t​ ​t​h​e​ ​R​a​i​n​ ​T​e​a​m​.
-		 */
-		inner_text2: string
-		/**
-		 * R​e​t​u​r​n​ ​t​o​ ​H​o​m​e
-		 */
-		btn_name: string
-		/**
-		 * R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​<​b​r​>​T​h​i​s​ ​c​o​m​m​u​n​i​t​y​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​c​o​m​m​u​n​i​t​y​.
-		 */
-		footer_text: string
-	}
 	header: {
 		/**
 		 * E​n​g​l​i​s​h
@@ -1473,6 +1433,130 @@ type RootTranslation = {
 	 * R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​ ​C​a​p​c​o​m​ ​C​o​.​,​ ​L​t​d​.​ ​o​r​ ​a​n​y​ ​o​f​ ​i​t​s​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​ ​<​b​r​>​T​h​i​s​ ​c​o​m​m​u​n​i​t​y​ ​i​s​ ​b​a​s​e​d​ ​o​n​ ​t​h​e​ ​c​o​o​p​e​r​a​t​i​o​n​ ​o​f​ ​n​u​m​e​r​o​u​s​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​s​o​r​t​ ​i​s​ ​g​e​n​e​r​a​t​e​d​ ​t​h​r​o​u​g​h​ ​t​h​i​s​ ​c​o​m​m​u​n​i​t​y​.
 	 */
 	disclaimer: string
+	maintenance: {
+		/**
+		 * U​n​d​e​r​ ​M​a​i​n​t​e​n​a​n​c​e
+		 */
+		title: string
+		/**
+		 * T​h​i​s​ ​s​i​t​e​ ​i​s​ ​c​u​r​r​e​n​t​l​y​ ​u​n​d​e​r​ ​m​a​i​n​t​e​n​a​n​c​e​ ​a​n​d​ ​c​a​n​n​o​t​ ​b​e​ ​a​c​c​e​s​s​e​d​.
+		 */
+		message1: string
+		/**
+		 * M​a​i​n​t​e​n​a​n​c​e​ ​w​i​l​l​ ​e​n​d​ ​o​n​:​ 
+		 */
+		message2: string
+		/**
+		 * P​l​e​a​s​e​ ​w​a​i​t​ ​f​o​r​ ​a​ ​w​h​i​l​e​ ​u​n​t​i​l​ ​t​h​e​ ​e​n​d​ ​o​f​ ​m​a​i​n​t​e​n​a​n​c​e​ ​i​s​ ​a​n​n​o​u​n​c​e​d​.
+		 */
+		message3: string
+	}
+	error: {
+		'400': {
+			/**
+			 * B​a​d​ ​R​e​q​u​e​s​t
+			 */
+			title: string
+			/**
+			 * F​a​i​l​e​d​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​e​ ​r​e​q​u​e​s​t​ ​f​o​r​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​r​e​a​s​o​n​s​:
+			 */
+			message1: string
+		}
+		'401': {
+			/**
+			 * U​n​a​u​t​h​o​r​i​z​e​d
+			 */
+			title: string
+		}
+		'403': {
+			/**
+			 * F​o​r​b​i​d​d​e​n
+			 */
+			title: string
+			/**
+			 * Y​o​u​ ​a​r​e​ ​n​o​t​ ​a​l​l​o​w​e​d​ ​t​o​ ​a​c​c​e​s​s​ ​t​h​i​s​ ​p​a​g​e​ ​f​o​r​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​r​e​a​s​o​n​:
+			 */
+			message1: string
+			message2: {
+				/**
+				 * T​h​e​ ​u​s​e​r​ ​a​c​c​e​s​s​i​n​g​ ​t​h​i​s​ ​p​a​g​e​ ​i​s​ ​n​o​t​ ​R​a​i​n​ ​A​d​m​i​n​i​s​t​r​a​t​o​r​s​.
+				 */
+				'0': string
+			}
+			/**
+			 * I​f​ ​y​o​u​ ​f​i​n​d​ ​a​n​y​ ​p​r​o​b​l​e​m​s​ ​w​i​t​h​ ​o​u​r​ ​w​e​b​s​i​t​e​,​ ​p​l​e​a​s​e​ ​c​o​n​t​a​c​t​ ​t​h​e​ ​R​a​i​n​ ​T​e​a​m​.
+			 */
+			message3: string
+		}
+		'404': {
+			/**
+			 * N​o​t​ ​F​o​u​n​d
+			 */
+			title: string
+			/**
+			 * T​h​e​ ​r​e​q​u​e​s​t​e​d​ ​p​a​g​e​ ​w​a​s​ ​n​o​t​ ​f​o​u​n​d​ ​f​o​r​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​r​e​a​s​o​n​:
+			 */
+			message1: string
+			message2: {
+				/**
+				 * T​h​e​ ​p​a​g​e​ ​f​i​l​e​ ​d​o​e​s​ ​n​o​t​ ​e​x​i​s​t​.
+				 */
+				'0': string
+				/**
+				 * T​h​e​ ​p​a​g​e​ ​h​a​s​ ​b​e​e​n​ ​m​o​v​e​d​ ​o​r​ ​d​e​l​e​t​e​d​.
+				 */
+				'1': string
+				/**
+				 * T​h​e​ ​U​R​L​ ​w​a​s​ ​n​o​t​ ​c​o​r​r​e​c​t​ ​o​r​ ​h​a​s​ ​b​e​e​n​ ​u​p​d​a​t​e​d​.
+				 */
+				'2': string
+			}
+			/**
+			 * I​f​ ​y​o​u​ ​f​i​n​d​ ​a​n​y​ ​p​r​o​b​l​e​m​s​ ​w​i​t​h​ ​o​u​r​ ​w​e​b​s​i​t​e​,​ ​p​l​e​a​s​e​ ​c​o​n​t​a​c​t​ ​t​h​e​ ​R​a​i​n​ ​T​e​a​m​.
+			 */
+			message3: string
+		}
+		'422': {
+			/**
+			 * U​n​p​r​o​c​e​s​s​a​b​l​e​ ​E​n​t​i​t​y
+			 */
+			title: string
+			/**
+			 * F​a​i​l​e​d​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​e​ ​r​e​q​u​e​s​t​ ​f​o​r​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​r​e​a​s​o​n​s​:
+			 */
+			message1: string
+		}
+		'500': {
+			/**
+			 * I​n​t​e​r​n​a​l​ ​E​r​r​o​r
+			 */
+			title: string
+			/**
+			 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​i​n​s​i​d​e​ ​t​h​e​ ​s​e​r​v​e​r​ ​f​o​r​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​r​e​a​s​o​n​s​:
+			 */
+			message1: string
+			/**
+			 * P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​a​f​t​e​r​ ​a​ ​w​h​i​l​e​.
+			 */
+			message3: string
+		}
+		/**
+		 * U​n​e​x​p​e​c​t​e​d​ ​E​r​r​o​r
+		 */
+		unexpectedErr: string
+		/**
+		 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​i​n​ ​t​h​e​ ​p​a​g​e​ ​f​o​r​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​r​e​a​s​o​n​:
+		 */
+		otherMessage1: string
+		/**
+		 * R​e​a​s​o​n​ ​u​n​k​n​o​w​n​.
+		 */
+		otherMessage2: string
+		/**
+		 * O​n​l​y​ ​t​h​e​ ​R​a​i​n​ ​S​e​r​v​e​r​ ​a​d​m​i​n​i​s​t​r​a​t​o​r​s​ ​h​a​v​e​ ​a​c​c​e​s​s​ ​t​o​ ​t​h​i​s​ ​p​a​g​e​.
+		 */
+		adminForbidden: string
+	}
 }
 
 export type TranslationFunctions = {
@@ -1484,46 +1568,6 @@ export type TranslationFunctions = {
 	 * Please view the page in portrait mode.
 	 */
 	landscapeMode: () => LocalizedString
-	E404: {
-		/**
-		 * 404 Not Found | Rain Server
-		 */
-		title: () => LocalizedString
-		/**
-		 * 404 Not Found
-		 */
-		h1: () => LocalizedString
-		/**
-		 * The requested page was not found due to the following reasons.
-		 */
-		inner_text1: () => LocalizedString
-		error_cause: {
-			/**
-			 * The page file does not exist.
-			 */
-			cause1: () => LocalizedString
-			/**
-			 * The page has been moved or deleted.
-			 */
-			cause2: () => LocalizedString
-			/**
-			 * The URL was not correct or has been updated.
-			 */
-			cause3: () => LocalizedString
-		}
-		/**
-		 * If you have any problems with our website, please contact the Rain Team.
-		 */
-		inner_text2: () => LocalizedString
-		/**
-		 * Return to Home
-		 */
-		btn_name: () => LocalizedString
-		/**
-		 * Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. <br>This community is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this community.
-		 */
-		footer_text: () => LocalizedString
-	}
 	header: {
 		/**
 		 * English
@@ -2934,6 +2978,130 @@ export type TranslationFunctions = {
 	 * Rain Server is not affiliated with Capcom Co., Ltd. or any of its subsidiaries. <br>This community is based on the cooperation of numerous volunteers, and no revenue of any sort is generated through this community.
 	 */
 	disclaimer: () => LocalizedString
+	maintenance: {
+		/**
+		 * Under Maintenance
+		 */
+		title: () => LocalizedString
+		/**
+		 * This site is currently under maintenance and cannot be accessed.
+		 */
+		message1: () => LocalizedString
+		/**
+		 * Maintenance will end on: 
+		 */
+		message2: () => LocalizedString
+		/**
+		 * Please wait for a while until the end of maintenance is announced.
+		 */
+		message3: () => LocalizedString
+	}
+	error: {
+		'400': {
+			/**
+			 * Bad Request
+			 */
+			title: () => LocalizedString
+			/**
+			 * Failed to process the request for the following reasons:
+			 */
+			message1: () => LocalizedString
+		}
+		'401': {
+			/**
+			 * Unauthorized
+			 */
+			title: () => LocalizedString
+		}
+		'403': {
+			/**
+			 * Forbidden
+			 */
+			title: () => LocalizedString
+			/**
+			 * You are not allowed to access this page for the following reason:
+			 */
+			message1: () => LocalizedString
+			message2: {
+				/**
+				 * The user accessing this page is not Rain Administrators.
+				 */
+				'0': () => LocalizedString
+			}
+			/**
+			 * If you find any problems with our website, please contact the Rain Team.
+			 */
+			message3: () => LocalizedString
+		}
+		'404': {
+			/**
+			 * Not Found
+			 */
+			title: () => LocalizedString
+			/**
+			 * The requested page was not found for the following reason:
+			 */
+			message1: () => LocalizedString
+			message2: {
+				/**
+				 * The page file does not exist.
+				 */
+				'0': () => LocalizedString
+				/**
+				 * The page has been moved or deleted.
+				 */
+				'1': () => LocalizedString
+				/**
+				 * The URL was not correct or has been updated.
+				 */
+				'2': () => LocalizedString
+			}
+			/**
+			 * If you find any problems with our website, please contact the Rain Team.
+			 */
+			message3: () => LocalizedString
+		}
+		'422': {
+			/**
+			 * Unprocessable Entity
+			 */
+			title: () => LocalizedString
+			/**
+			 * Failed to process the request for the following reasons:
+			 */
+			message1: () => LocalizedString
+		}
+		'500': {
+			/**
+			 * Internal Error
+			 */
+			title: () => LocalizedString
+			/**
+			 * An error occurred inside the server for the following reasons:
+			 */
+			message1: () => LocalizedString
+			/**
+			 * Please try again after a while.
+			 */
+			message3: () => LocalizedString
+		}
+		/**
+		 * Unexpected Error
+		 */
+		unexpectedErr: () => LocalizedString
+		/**
+		 * An error occurred in the page for the following reason:
+		 */
+		otherMessage1: () => LocalizedString
+		/**
+		 * Reason unknown.
+		 */
+		otherMessage2: () => LocalizedString
+		/**
+		 * Only the Rain Server administrators have access to this page.
+		 */
+		adminForbidden: () => LocalizedString
+	}
 }
 
 export type Formatters = {}

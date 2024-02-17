@@ -14,7 +14,7 @@ const L = i18n();
 export const handle: Handle = async ({ event, resolve }) => {
     // basic auth
     const auth = event.request.headers.get('Authorization');
-    if (!event.url.origin.includes('localhost') && event.url.pathname !== '/admin') {
+    if (!event.url.origin.includes('localhost') && event.url.pathname !== '/admin/') {
         if (auth !== `Basic ${btoa(ADMIN_CREDENTIALS)}`) {
             return new Response('Unauthorized User', {
                 status: 401,
@@ -52,7 +52,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         console.log('[Admins Normal Browsing.]');
 
         // when prod env, check if the user is an admin
-        /* if (!event.url.origin.includes('localhost')) {
+        if (!event.url.origin.includes('localhost')) {
             const session = event.cookies.get('rainLoginKey');
             if (!session) {
                 const redirectUrl = `${PUBLIC_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${PUBLIC_MAIN_DOMAIN}/admin`;
@@ -63,7 +63,9 @@ export const handle: Handle = async ({ event, resolve }) => {
                 });
             }
 
-            const authUser: users | null = await ServerData.getUserByAuthToken(session);
+            const regex = /iphone;|(android|nokia|blackberry|bb10;).+mobile|android.+fennec|opera.+mobi|windows phone|symbianos/i;
+            const isMobile = regex.test(event.request.headers.get('user-agent')!);
+            const authUser: users | null = await ServerData.getUserByAuthToken(session, isMobile);
             if (!authUser) {
                 const redirectUrl = `${PUBLIC_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${PUBLIC_MAIN_DOMAIN}/admin`;
 
@@ -74,7 +76,7 @@ export const handle: Handle = async ({ event, resolve }) => {
             }
 
             event.locals.authUser = authUser;
-        } */
+        }
 
         return resolve(event, {
             transformPageChunk: ({ html }) => html.replace('%lang%', 'en'),

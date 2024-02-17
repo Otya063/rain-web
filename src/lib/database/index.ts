@@ -315,12 +315,20 @@ class ServerDataManager {
         });
     }
 
-    public async getUserByAuthToken(web_login_key: string): Promise<users | null> {
-        return await db.users.findFirst({
-            where: {
-                web_login_key,
-            },
-        });
+    public async getUserByAuthToken(login_key: string, isMobile: boolean): Promise<users | null> {
+        return !isMobile
+            ? // pc
+              await db.users.findFirst({
+                  where: {
+                      web_login_key: login_key,
+                  },
+              })
+            : // mobile
+              await db.users.findFirst({
+                  where: {
+                      web_login_key_mobile: login_key,
+                  },
+              });
     }
 }
 

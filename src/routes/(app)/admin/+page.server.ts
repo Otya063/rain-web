@@ -5,23 +5,23 @@ import { R2_BNR_UNIQUE_URL } from '$env/static/private';
 import ServerData, { db, getPaginatedUserData, getPaginationMeta } from '$lib/database';
 import type { PaginatedUsers, PaginationMeta, BinaryTypes } from '$lib/types';
 import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi } from '$lib/utils';
-import { Buffer } from 'node:buffer';
 import { DateTime } from 'luxon';
+import { Buffer } from 'node:buffer';
 
 const emptyMsg = 'Input value is empty.';
 const requiredMsg = 'Required field is empty.';
 
-export const load: PageServerLoad = async ({ url, locals: { authUser } }) => {
+export const load: PageServerLoad = async ({ url, locals: { LL, authUser } }) => {
     const launcherSystem = (await ServerData.getLauncherSystem()) as launcher_system;
 
     // check rain admin
-    /* if (!url.origin.includes('localhost')) {
+    if (!url.origin.includes('localhost')) {
         const isAdmin: boolean = launcherSystem['rain_admins'].includes(authUser.username);
 
         if (!isAdmin) {
-            throw error(403);
+            throw error(403, { message: '', message1: undefined, message2: undefined, message3: LL.error['adminForbidden']() });
         }
-    } */
+    }
 
     const launcherInformation = (await ServerData.getInformation('ALL')) as { [key: string]: launcher_info[] };
 
@@ -285,7 +285,7 @@ const getPaginatedUsers: Action = async ({ request }) => {
 
         case 'back':
         case 'next': {
-            paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1);
+            paginatedUsers = (await getPaginatedUserData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1)) as unknown as PaginatedUsers[];
             if (!paginatedUsers.length) {
                 return fail(400, {
                     error: true,
@@ -375,8 +375,8 @@ const updateUserData: Action = async ({ request }) => {
 const updateCharacterData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.character_id);
-    const column = Object.keys(data)[2] as 'name' | 'clan' | 'binary';
-    const value = Object.values(data)[2] as string;
+    const column = Object.keys(data)[2] as 'name' | 'bounty' | 'clan' | 'binary';
+    const value = Object.values(data)[2] as string | number;
 
     try {
         switch (column) {
@@ -389,7 +389,7 @@ const updateCharacterData: Action = async ({ request }) => {
                     return fail(400, { error: true, message: `Insufficient bounty coins (Owned: ${bountyCoin}).` });
                 }
 
-                const { success, message } = await db.characters.editName(id, value, bountyCoin);
+                const { success, message } = await db.characters.editName(id, String(value), bountyCoin);
                 if (!success) {
                     return fail(400, { error: true, message });
                 } else {
@@ -397,6 +397,32 @@ const updateCharacterData: Action = async ({ request }) => {
                         success: true,
                         message: `The character name (New Name: ${value}) has been successfully updated.`,
                     };
+                }
+            }
+
+            case 'bounty': {
+                try {
+                    await db.discord.update({
+                        where: {
+                            char_id: id,
+                        },
+                        data: {
+                            bounty: Number(value),
+                        },
+                    });
+
+                    return {
+                        success: true,
+                        message: `Bounty coin data has been successfully updated (Owned: ${value}).`,
+                    };
+                } catch (err) {
+                    if (err instanceof Error) {
+                        return fail(400, { error: true, message: err.message });
+                    } else if (typeof err === 'string') {
+                        return fail(400, { error: true, message: err });
+                    } else {
+                        return fail(400, { error: true, message: 'Unexpected Error' });
+                    }
                 }
             }
 
