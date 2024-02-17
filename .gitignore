@@ -12,5 +12,6 @@ node_modules
 .cloudflare
 .wrangler
 changelog.txt
+rain-web.sql
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*

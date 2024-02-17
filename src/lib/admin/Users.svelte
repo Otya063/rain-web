@@ -471,7 +471,10 @@
                                             gacha_premium: false,
                                             gacha_trial: false,
                                             frontier_points: false,
+                                            psn_id: false,
+                                            wiiu_key: false,
                                             name: false,
+                                            bounty: false,
                                             clan: false,
                                             binary: false,
                                         });
@@ -927,6 +930,92 @@
                                 </div>
                             {/if}
                         </dd>
+
+                        <dt class="contents_term">PlayStation Network ID</dt>
+                        <dd class="contents_desc">
+                            {user.psn_id}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['psn_id']}
+                                <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['psn_id'] = false)}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['psn_id'] = true)}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['psn_id']}
+                                <div transition:slide class="edit_area_box">
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Change PSN ID</p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Enter new PSN ID</dt>
+                                            <dd>
+                                                <input type="text" name="psn_id" value={user.psn_id} autocomplete="off" />
+                                            </dd>
+                                        </dl>
+
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                $userCtrlPanel[user.id].activeCategories['psn_id'] = false;
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {/if}
+                        </dd>
+
+                        <dt class="contents_term">Wii U Key</dt>
+                        <dd class="contents_desc">
+                            {user.wiiu_key}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['wiiu_key']}
+                                <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['wiiu_key'] = false)}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['wiiu_key'] = true)}>
+                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
+
+                            {#if $userCtrlPanel[user.id].activeCategories['wiiu_key']}
+                                <div transition:slide class="edit_area_box">
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Change Wii U Key</p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Enter new Wii U Key</dt>
+                                            <dd>
+                                                <input type="text" name="wiiu_key" value={user.wiiu_key} autocomplete="off" />
+                                            </dd>
+                                        </dl>
+
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                $userCtrlPanel[user.id].activeCategories['wiiu_key'] = false;
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {/if}
+                        </dd>
                     </dl>
                 {:else if $userCtrlPanel[user.id].icon === 'group'}
                     {#if user.characters.length === 0}
@@ -1122,6 +1211,28 @@
                                                     break;
                                                 }
 
+                                                case 'bounty': {
+                                                    $paginatedUsersData = $paginatedUsersData.map((user) => {
+                                                        // update quantity of coins
+                                                        user.characters = user.characters.map((character) => {
+                                                            if (character.id === charId && character.discord)
+                                                                return {
+                                                                    ...character,
+                                                                    discord: {
+                                                                        ...character.discord,
+                                                                        bounty: value,
+                                                                    },
+                                                                };
+
+                                                            return character;
+                                                        });
+
+                                                        return user;
+                                                    });
+
+                                                    break;
+                                                }
+
                                                 case 'clan': {
                                                     $paginatedUsersData = $paginatedUsersData.map((user) => {
                                                         // delete guild_characters data
@@ -1137,7 +1248,6 @@
 
                                                         return user;
                                                     });
-                                                    console.log($userCtrlPanel);
 
                                                     break;
                                                 }
@@ -1201,6 +1311,60 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                        {/if}
+                                    </dd>
+
+                                    <dt class="contents_term">Bounty Coin</dt>
+                                    <dd class="contents_desc">
+                                        {#if !$userCtrlPanel[user.id].selectedChar.discord}
+                                            No account linked.
+                                        {:else}
+                                            {$userCtrlPanel[user.id].selectedChar.discord?.bounty === 0 ? 'No coins.' : `${$userCtrlPanel[user.id].selectedChar.discord?.bounty} Coin(s)`}
+
+                                            {#if $userCtrlPanel[user.id].activeCategories['bounty']}
+                                                <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['bounty'] = false)}>
+                                                    <span class="btn_icon material-icons">close</span>
+                                                    <span class="btn_text">Cancel</span>
+                                                </button>
+                                            {:else}
+                                                <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['bounty'] = true)}>
+                                                    <span class="btn_icon material-icons">mode_edit</span>
+                                                    <span class="btn_text">Edit</span>
+                                                </button>
+                                            {/if}
+
+                                            {#if $userCtrlPanel[user.id].activeCategories['bounty']}
+                                                <div transition:slide class="edit_area_box">
+                                                    <div class="edit_area enter">
+                                                        <p class="edit_area_title">Change the Quantity of Coins</p>
+                                                        <dl class="edit_area_box_parts text">
+                                                            <dt>Enter the quantity</dt>
+                                                            <dd>
+                                                                <input
+                                                                    type="text"
+                                                                    name="bounty"
+                                                                    inputmode="numeric"
+                                                                    pattern="\d*"
+                                                                    value={!$userCtrlPanel[user.id].selectedChar.discord?.bounty ? null : $userCtrlPanel[user.id].selectedChar.discord?.bounty}
+                                                                    placeholder="Enter the quantity"
+                                                                />
+                                                            </dd>
+                                                        </dl>
+
+                                                        <button
+                                                            class="blue_btn"
+                                                            type="submit"
+                                                            on:click={() => {
+                                                                onSubmit.set(true);
+                                                                $userCtrlPanel[user.id].activeCategories['bounty'] = false;
+                                                            }}
+                                                        >
+                                                            <span class="btn_icon material-icons">check</span>
+                                                            <span class="btn_text">Save</span>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            {/if}
                                         {/if}
                                     </dd>
 

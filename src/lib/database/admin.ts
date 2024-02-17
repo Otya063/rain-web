@@ -19,7 +19,21 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                         contains: filterValue,
                                     },
                                 },
-                                include: {
+                                select: {
+                                    id: true,
+                                    username: true,
+                                    password: true,
+                                    rights: true,
+                                    last_character: true,
+                                    last_login: true,
+                                    return_expires: true,
+                                    gacha_premium: true,
+                                    gacha_trial: true,
+                                    frontier_points: true,
+                                    psn_id: true,
+                                    wiiu_key: true,
+                                    web_login_key: true,
+                                    web_login_key_mobile: true,
                                     characters: {
                                         select: {
                                             id: true,
@@ -32,35 +46,14 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                             weapon_id: true,
                                             last_login: true,
                                             deleted: true,
-                                            discord: {
-                                                select: {
-                                                    bounty: true,
-                                                    bounty_champion: true,
-                                                    bounty_expert: true,
-                                                    bounty_master: true,
-                                                    bronze: true,
-                                                    char_id: true,
-                                                    discord_id: true,
-                                                    gacha: true,
-                                                    gold: true,
-                                                    id: true,
-                                                    is_male: true,
-                                                    latest_bounty: true,
-                                                    newbie: true,
-                                                    pity: true,
-                                                    rain_demolizer: true,
-                                                    road_champion: true,
-                                                    silver: true,
-                                                    title: true,
-                                                },
-                                            },
+                                            discord: true,
                                             guild_characters: {
                                                 select: {
                                                     guilds: {
                                                         select: {
                                                             id: true,
                                                             name: true,
-                                                            guild_characters: true
+                                                            guild_characters: true,
                                                         },
                                                     },
                                                 },
@@ -96,7 +89,21 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                         },
                                     },
                                 },
-                                include: {
+                                select: {
+                                    id: true,
+                                    username: true,
+                                    password: true,
+                                    rights: true,
+                                    last_character: true,
+                                    last_login: true,
+                                    return_expires: true,
+                                    gacha_premium: true,
+                                    gacha_trial: true,
+                                    frontier_points: true,
+                                    psn_id: true,
+                                    wiiu_key: true,
+                                    web_login_key: true,
+                                    web_login_key_mobile: true,
                                     characters: {
                                         select: {
                                             id: true,
@@ -109,28 +116,7 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                             weapon_id: true,
                                             last_login: true,
                                             deleted: true,
-                                            discord: {
-                                                select: {
-                                                    bounty: true,
-                                                    bounty_champion: true,
-                                                    bounty_expert: true,
-                                                    bounty_master: true,
-                                                    bronze: true,
-                                                    char_id: true,
-                                                    discord_id: true,
-                                                    gacha: true,
-                                                    gold: true,
-                                                    id: true,
-                                                    is_male: true,
-                                                    latest_bounty: true,
-                                                    newbie: true,
-                                                    pity: true,
-                                                    rain_demolizer: true,
-                                                    road_champion: true,
-                                                    silver: true,
-                                                    title: true,
-                                                },
-                                            },
+                                            discord: true,
                                             guild_characters: {
                                                 select: {
                                                     guilds: {
@@ -182,7 +168,21 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                         contains: filterValue,
                                     },
                                 },
-                                include: {
+                                select: {
+                                    id: true,
+                                    username: true,
+                                    password: true,
+                                    rights: true,
+                                    last_character: true,
+                                    last_login: true,
+                                    return_expires: true,
+                                    gacha_premium: true,
+                                    gacha_trial: true,
+                                    frontier_points: true,
+                                    psn_id: true,
+                                    wiiu_key: true,
+                                    web_login_key: true,
+                                    web_login_key_mobile: true,
                                     characters: {
                                         select: {
                                             id: true,
@@ -195,28 +195,7 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                             weapon_id: true,
                                             last_login: true,
                                             deleted: true,
-                                            discord: {
-                                                select: {
-                                                    bounty: true,
-                                                    bounty_champion: true,
-                                                    bounty_expert: true,
-                                                    bounty_master: true,
-                                                    bronze: true,
-                                                    char_id: true,
-                                                    discord_id: true,
-                                                    gacha: true,
-                                                    gold: true,
-                                                    id: true,
-                                                    is_male: true,
-                                                    latest_bounty: true,
-                                                    newbie: true,
-                                                    pity: true,
-                                                    rain_demolizer: true,
-                                                    road_champion: true,
-                                                    silver: true,
-                                                    title: true,
-                                                },
-                                            },
+                                            discord: true,
                                             guild_characters: {
                                                 select: {
                                                     guilds: {
@@ -263,7 +242,21 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                         },
                                     },
                                 },
-                                include: {
+                                select: {
+                                    id: true,
+                                    username: true,
+                                    password: true,
+                                    rights: true,
+                                    last_character: true,
+                                    last_login: true,
+                                    return_expires: true,
+                                    gacha_premium: true,
+                                    gacha_trial: true,
+                                    frontier_points: true,
+                                    psn_id: true,
+                                    wiiu_key: true,
+                                    web_login_key: true,
+                                    web_login_key_mobile: true,
                                     characters: {
                                         select: {
                                             id: true,
@@ -276,28 +269,7 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                             weapon_id: true,
                                             last_login: true,
                                             deleted: true,
-                                            discord: {
-                                                select: {
-                                                    bounty: true,
-                                                    bounty_champion: true,
-                                                    bounty_expert: true,
-                                                    bounty_master: true,
-                                                    bronze: true,
-                                                    char_id: true,
-                                                    discord_id: true,
-                                                    gacha: true,
-                                                    gold: true,
-                                                    id: true,
-                                                    is_male: true,
-                                                    latest_bounty: true,
-                                                    newbie: true,
-                                                    pity: true,
-                                                    rain_demolizer: true,
-                                                    road_champion: true,
-                                                    silver: true,
-                                                    title: true,
-                                                },
-                                            },
+                                            discord: true,
                                             guild_characters: {
                                                 select: {
                                                     guilds: {
