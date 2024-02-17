@@ -3,7 +3,11 @@ import type { users } from '@prisma/client';
 
 declare global {
     namespace App {
-        // interface Error {}
+        interface Error {
+            message1?: string;
+            message2?: string[];
+            message3?: string;
+        }
         interface Locals {
             locale: Locales;
             LL: TranslationFunctions;

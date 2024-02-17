@@ -14,7 +14,7 @@ const L = i18n();
 export const handle: Handle = async ({ event, resolve }) => {
     // basic auth
     const auth = event.request.headers.get('Authorization');
-    if (!event.url.origin.includes('localhost') && event.url.pathname !== '/admin') {
+    if (!event.url.origin.includes('localhost') && event.url.pathname !== '/admin/') {
         if (auth !== `Basic ${btoa(ADMIN_CREDENTIALS)}`) {
             return new Response('Unauthorized User', {
                 status: 401,
@@ -63,8 +63,8 @@ export const handle: Handle = async ({ event, resolve }) => {
                 });
             }
 
-             const regex = /iphone;|(android|nokia|blackberry|bb10;).+mobile|android.+fennec|opera.+mobi|windows phone|symbianos/i;
-             const isMobile = regex.test(event.request.headers.get('user-agent')!);
+            const regex = /iphone;|(android|nokia|blackberry|bb10;).+mobile|android.+fennec|opera.+mobi|windows phone|symbianos/i;
+            const isMobile = regex.test(event.request.headers.get('user-agent')!);
             const authUser: users | null = await ServerData.getUserByAuthToken(session, isMobile);
             if (!authUser) {
                 const redirectUrl = `${PUBLIC_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${PUBLIC_MAIN_DOMAIN}/admin`;
