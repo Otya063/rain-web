@@ -74,6 +74,7 @@
                 </ul>
 
                 {#if $deleteCharacterData.form_action === 'deleteCharacter'}
+                    <p class="modal_note">* If the character to be deleted is linked to a discord account, the account linkage will be purged.</p>
                     <p class="modal_note">* If "Permanently Delete" is checked, all character data will be completely deleted from the database and can't be restored.</p>
                 {/if}
             </div>

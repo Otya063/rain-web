@@ -1019,7 +1019,7 @@
                     </dl>
                 {:else if $userCtrlPanel[user.id].icon === 'group'}
                     {#if user.characters.length === 0}
-                        <p style="color: #ff8100; padding-top: 1%;">This user doesn't have any characters.</p>
+                        <p style="color: #ff8100; margin: 1% 0 3%;">This user doesn't have any characters.</p>
                     {:else}
                         <swiper-container
                             centered-slides={true}
