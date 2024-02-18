@@ -36,7 +36,7 @@ export const load: PageServerLoad = async ({ url, locals: { LL, authUser } }) =>
 
 const updateSystemMode: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    let column = Object.keys(data)[0] as keyof Omit<launcher_system, 'id' | 'rain_admins'> | 'client_data_0' | 'client_data_1';
+    let column = Object.keys(data)[0] as keyof Omit<launcher_system, 'id'> | 'client_data_0' | 'client_data_1';
     let value = Object.values(data)[0] as string;
 
     if (column === 'client_data_0' && !value) {
@@ -52,7 +52,7 @@ const updateSystemMode: Action = async ({ request }) => {
                 id: 1,
             },
             data: {
-                [column]: column === 'client_data' ? [value.length === 1 ? `${value}.0` : value, Object.values(data)[1]] : value === 'true',
+                [column]: column === 'client_data' ? [value.length === 1 ? `${value}.0` : value, Object.values(data)[1]] : column === 'rain_admins' ? value.split(',') : value === 'true',
             },
         });
 
