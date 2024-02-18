@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { discord } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, linkDiscordData, conv2DArrayToObject, msgClosed, paginatedUsersData } from '$lib/utils';
+    import { onSubmit, closeModal, linkDiscordData, conv2DArrayToObject, msgClosed, paginatedUsersData, updateUserCtrlPanel } from '$lib/utils';
 
     export let createdDiscord: discord;
 </script>
@@ -12,8 +12,8 @@
             method="POST"
             use:enhance={({ formData }) => {
                 const data = conv2DArrayToObject([...formData.entries()]);
-                const user_id = Number(data.user_id);
-                const char_id = Number(data.char_id);
+                const userId = Number(data.user_id);
+                const charId = Number(data.char_id);
                 const discord_id = data.discord_id;
                 const type = String(data.type);
 
@@ -23,6 +23,8 @@
                     await applyAction(result);
 
                     if (result.type === 'success') {
+                        updateUserCtrlPanel(userId, charId, 'link', createdDiscord);
+
                         $paginatedUsersData = $paginatedUsersData.map((user) => {
                             // delete same discord data
                             type === 'linkDiscord' &&
@@ -32,9 +34,9 @@
                                 })));
 
                             // update discord data
-                            if (user.id === user_id) {
+                            if (user.id === userId) {
                                 user.characters = user.characters.map((character) => {
-                                    if (character.id === char_id)
+                                    if (character.id === charId)
                                         return {
                                             ...character,
                                             discord: type === 'linkDiscord' ? createdDiscord : null,

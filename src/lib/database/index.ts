@@ -14,6 +14,7 @@ import { withAccelerate } from '@prisma/extension-accelerate';
 import { DATABASE_URL } from '$env/static/private';
 import type { InformationType, BinaryTypes } from '$lib/types';
 import _ from 'lodash';
+import { DateTime } from 'luxon';
 
 export * from './admin';
 export const db = new PrismaClient({
@@ -26,6 +27,123 @@ export const db = new PrismaClient({
     .$extends(withAccelerate())
     .$extends({
         model: {
+            users: {
+                async suspend(
+                    userId: number,
+                    username: string,
+                    reasonType: number,
+                    permanent: boolean,
+                    zonename: string,
+                    until_at?: string
+                ): Promise<{
+                    success: boolean;
+                    message: string;
+                    suspendedAccount?: suspended_account;
+                }> {
+                    try {
+                        if (permanent) {
+                            const suspendedAccount = await db.suspended_account.create({
+                                data: {
+                                    user_id: userId,
+                                    username,
+                                    reason: reasonType,
+                                    until_at: DateTime.utc(9999, 1, 1).toISO()!,
+                                    permanent: true,
+                                },
+                            });
+
+                            await db.characters.deleteMany({
+                                where: {
+                                    user_id: userId,
+                                },
+                            });
+
+                            await db.discord_register.delete({
+                                where: {
+                                    user_id: userId,
+                                },
+                            });
+
+                            return {
+                                success: true,
+                                message: '',
+                                suspendedAccount,
+                            };
+                        } else {
+                            if (!until_at) {
+                                return { success: false, message: 'Input value is empty.' };
+                            }
+
+                            const suspendedAccount = await db.suspended_account.create({
+                                data: {
+                                    user_id: userId,
+                                    username,
+                                    reason: reasonType,
+                                    until_at: DateTime.fromISO(String(until_at), { zone: zonename }).toString()!,
+                                    permanent: false,
+                                },
+                            });
+
+                            await db.characters.updateMany({
+                                where: {
+                                    user_id: userId,
+                                },
+                                data: {
+                                    deleted: true,
+                                },
+                            });
+
+                            return {
+                                success: true,
+                                message: '',
+                                suspendedAccount,
+                            };
+                        }
+                    } catch (err) {
+                        if (err instanceof Error) {
+                            return { success: false, message: err.message };
+                        } else if (typeof err === 'string') {
+                            return { success: false, message: err };
+                        } else {
+                            return { success: false, message: 'Unexpected Error' };
+                        }
+                    }
+                },
+                async unsuspend(userId: number): Promise<{
+                    success: boolean;
+                    message: string;
+                }> {
+                    try {
+                        await db.characters.updateMany({
+                            where: {
+                                user_id: userId,
+                            },
+                            data: {
+                                deleted: false,
+                            },
+                        });
+
+                        await db.suspended_account.delete({
+                            where: {
+                                user_id: userId,
+                            },
+                        });
+
+                        return {
+                            success: true,
+                            message: '',
+                        };
+                    } catch (err) {
+                        if (err instanceof Error) {
+                            return { success: false, message: err.message };
+                        } else if (typeof err === 'string') {
+                            return { success: false, message: err };
+                        } else {
+                            return { success: false, message: 'Unexpected Error' };
+                        }
+                    }
+                },
+            },
             characters: {
                 async editName(
                     characterId: number,
@@ -46,6 +164,67 @@ export const db = new PrismaClient({
                 }> {
                     const manageBinary = new ManageBinary(characterId, binaryData);
                     return await manageBinary.set();
+                },
+                async remove(
+                    characterId: number,
+                    permanent: boolean
+                ): Promise<{
+                    success: boolean;
+                    message: string;
+                }> {
+                    try {
+                        if (permanent) {
+                            const discordId = (
+                                await db.characters.delete({
+                                    where: {
+                                        id: characterId,
+                                    },
+                                    select: {
+                                        discord: {
+                                            select: {
+                                                discord_id: true,
+                                            },
+                                        },
+                                    },
+                                })
+                            ).discord?.discord_id;
+
+                            if (discordId) {
+                                await db.discord_register.delete({
+                                    where: {
+                                        discord_id: discordId,
+                                    },
+                                });
+                            }
+
+                            return {
+                                success: true,
+                                message: '',
+                            };
+                        } else {
+                            await db.characters.update({
+                                where: {
+                                    id: characterId,
+                                },
+                                data: {
+                                    deleted: true,
+                                },
+                            });
+
+                            return {
+                                success: true,
+                                message: '',
+                            };
+                        }
+                    } catch (err) {
+                        if (err instanceof Error) {
+                            return { success: false, message: err.message };
+                        } else if (typeof err === 'string') {
+                            return { success: false, message: err };
+                        } else {
+                            return { success: false, message: 'Unexpected Error' };
+                        }
+                    }
                 },
             },
         },

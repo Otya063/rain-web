@@ -1,4 +1,4 @@
-import type { launcher_banner, launcher_info, users } from '@prisma/client/edge';
+import type { discord, launcher_banner, launcher_info, users } from '@prisma/client/edge';
 import type { PaginatedUsers, PaginatedCharacter, PaginationMeta } from '$lib/types';
 import { get, writable } from 'svelte/store';
 
@@ -119,7 +119,7 @@ export const initUserCtrlPanel = (paginatedUsers: PaginatedUsers[]): void => {
         });
     });
 };
-export const updateUserCtrlPanel = (userId: number, charId: number, column?: string, value?: string): void => {
+export const updateUserCtrlPanel = (userId: number, charId: number, column?: string, value?: any): void => {
     userCtrlPanel.update((data) => {
         const userData = data[userId].userData;
         const selectedChar = userData.characters.find((character) => character.id === charId)!;
@@ -157,7 +157,7 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                         ...data[userId],
                         selectedChar: {
                             ...data[userId].selectedChar,
-                            name: value!,
+                            name: String(value)!,
                             discord: {
                                 ...data[userId].selectedChar.discord!,
                                 bounty,
@@ -217,6 +217,32 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                         selectedChar: {
                             ...data[userId].selectedChar,
                             guild_characters: null,
+                        },
+                        activeCategories: {
+                            username: false,
+                            password: false,
+                            rights: false,
+                            return_expires: false,
+                            gacha_premium: false,
+                            gacha_trial: false,
+                            frontier_points: false,
+                            psn_id: false,
+                            wiiu_key: false,
+                            name: false,
+                            bounty: false,
+                            clan: false,
+                            binary: false,
+                        },
+                    },
+                };
+            } else if (column === 'link') {
+                return {
+                    ...data,
+                    [userId]: {
+                        ...data[userId],
+                        selectedChar: {
+                            ...data[userId].selectedChar,
+                            discord: (value as discord)
                         },
                         activeCategories: {
                             username: false,

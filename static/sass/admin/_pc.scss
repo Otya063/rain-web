@@ -743,8 +743,8 @@
     .banned_user_container {
         position: absolute;
         width: 102%;
-        height: 102%;
-        top: -1%;
+        height: 105%;
+        top: -5%;
         left: -1%;
         display: flex;
         flex-direction: column;
@@ -810,7 +810,7 @@
         // キャラクター名
         .name {
             @include right_left;
-            top: 9%;
+            top: 13px;
             font-size: 3rem;
             font-weight: 700;
             width: fit-content;
