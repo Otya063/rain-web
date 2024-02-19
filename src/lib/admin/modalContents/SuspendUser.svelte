@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { suspended_account } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, suspendUserData, conv2DArrayToObject, msgClosed, paginatedUsersData, timeOut, closeMsgDisplay } from '$lib/utils';
+    import { onSubmit, closeModal, suspendUserData, conv2DArrayToObject, msgClosed, paginatedUsersData, timeOut, closeMsgDisplay, userCtrlPanel } from '$lib/utils';
     import { DateTime } from 'luxon';
 
     export let suspendedAccount: suspended_account;
@@ -23,6 +23,8 @@
                     await applyAction(result);
 
                     if (result.type === 'success') {
+                        $userCtrlPanel[id].icon = 'description';
+
                         $paginatedUsersData = $paginatedUsersData.map((user) => {
                             if (user.id === id) {
                                 return {

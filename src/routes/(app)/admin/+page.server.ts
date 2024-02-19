@@ -39,7 +39,7 @@ const updateSystemMode: Action = async ({ request }) => {
     let column = Object.keys(data)[0] as keyof Omit<launcher_system, 'id'> | 'client_data_0' | 'client_data_1';
     let value = Object.values(data)[0] as string;
 
-    if (column === 'client_data_0' && !value) {
+    if ((column === 'client_data_0' || column === 'rain_admins') && !value) {
         return fail(400, { error: true, message: emptyMsg });
     }
 
@@ -213,45 +213,51 @@ const courseControl: Action = async ({ request }) => {
 
     switch (target_u_radio) {
         case 'all': {
-            const userIds = await ServerData.getAllUsers();
-            ids = userIds.map((obj) => obj.id);
-            break;
+            await db.$queryRaw`UPDATE users SET rights = ${getCourseByObjData(data)}`;
+
+            return {
+                success: true,
+                message: "All users' rights have been successfully updated.",
+            };
         }
 
         case 'specified': {
             ids = data.specified_u_text.split('+').map(Number);
             delete data.specified_u_text;
-            break;
+
+            if (ids.length > 10) {
+                return fail(400, { error: true, message: 'No more than 10 users can be specified.' });
+            }
+
+            try {
+                for (const id of ids) {
+                    await db.users.update({
+                        where: {
+                            id,
+                        },
+                        data: {
+                            rights: getCourseByObjData(data),
+                        },
+                    });
+                }
+
+                return {
+                    success: true,
+                    message: `The specified users' (ID: ${ids.join(', ')}) rights have been successfully updated.`,
+                };
+            } catch (err) {
+                if (err instanceof Error) {
+                    return fail(400, { error: true, message: err.message });
+                } else if (typeof err === 'string') {
+                    return fail(400, { error: true, message: err });
+                } else {
+                    return fail(400, { error: true, message: 'Unexpected Error' });
+                }
+            }
         }
 
         default: {
             return fail(400, { error: true, message: 'Select the target user type.' });
-        }
-    }
-
-    try {
-        for (const id of ids) {
-            await db.users.update({
-                where: {
-                    id,
-                },
-                data: {
-                    rights: getCourseByObjData(data),
-                },
-            });
-        }
-
-        return {
-            success: true,
-            message: target_u_radio === 'all' ? "All users' rights have been successfully updated." : `The specified user's (ID: ${ids}) rights have been successfully updated.`,
-        };
-    } catch (err) {
-        if (err instanceof Error) {
-            return fail(400, { error: true, message: err.message });
-        } else if (typeof err === 'string') {
-            return fail(400, { error: true, message: err });
-        } else {
-            return fail(400, { error: true, message: 'Unexpected Error' });
         }
     }
 };

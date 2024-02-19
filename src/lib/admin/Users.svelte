@@ -263,26 +263,28 @@
                             if (result.type === 'success') {
                                 delete data.target_u_radio;
 
-                                switch (target) {
-                                    case 'all': {
-                                        $paginatedUsersData = $paginatedUsersData.map((user) => ({
-                                            ...user,
-                                            rights: getCourseByObjData(data),
-                                        }));
+                                if ($paginatedUsersData) {
+                                    switch (target) {
+                                        case 'all': {
+                                            $paginatedUsersData = $paginatedUsersData.map((user) => ({
+                                                ...user,
+                                                rights: getCourseByObjData(data),
+                                            }));
 
-                                        break;
-                                    }
+                                            break;
+                                        }
 
-                                    case 'specified': {
-                                        ids = data.specified_u_text.split('+').map(Number);
-                                        delete data.specified_u_text;
+                                        case 'specified': {
+                                            ids = data.specified_u_text.split('+').map(Number);
+                                            delete data.specified_u_text;
 
-                                        $paginatedUsersData = $paginatedUsersData.map((user) => ({
-                                            ...user,
-                                            rights: ids.includes(user.id) ? getCourseByObjData(data) : user.rights,
-                                        }));
+                                            $paginatedUsersData = $paginatedUsersData.map((user) => ({
+                                                ...user,
+                                                rights: ids.includes(user.id) ? getCourseByObjData(data) : user.rights,
+                                            }));
 
-                                        break;
+                                            break;
+                                        }
                                     }
                                 }
                             }
@@ -301,14 +303,14 @@
                                 <input style="margin-left: 7%; width: 95%;" type="text" name="specified_u_text" placeholder="1364+1489+ ..." disabled={specifiedUser} />
                             </div>
                             <p class="console_contents_note" style="margin: 0px 0px 3% 4%; text-indent: -1.2rem;">
-                                * When specifying multiple users in the "Specify User(s)" text box, be sure to concatenate the IDs of those users with "+."
+                                * When specifying multiple users in the "Specify User(s)" text box, concatenate the IDs of those users with "+" and be careful not to exceed 10 users.
                             </p>
                         </dd>
 
                         <dt class="course_list_title">HL (Single Select)</dt>
                         <dd class="course_list">
                             {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
-                                {#if courseName === 'Hunter Life Course' || courseName === 'Hunter Life Continued Course' || courseName === 'Free Course'}
+                                {#if code === 'hlc' || code === 'rhlc' || code === 'frc'}
                                     <label class="course_item"><input type="radio" name="hl" value={code} />{courseName}</label>
                                 {/if}
                             {/each}
@@ -317,7 +319,7 @@
                         <dt class="course_list_title">EX (Single Select)</dt>
                         <dd class="course_list">
                             {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
-                                {#if courseName === 'Extra Course' || courseName === 'Extra Continued Course'}
+                                {#if code === 'exc' || code === 'rexc'}
                                     <label class="course_item"><input type="radio" name="ex" value={code} />{courseName}</label>
                                 {/if}
                             {/each}
@@ -326,8 +328,8 @@
                         <dt class="course_list_title">The Others (Multiple Select)</dt>
                         <dd class="course_list">
                             {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
-                                {#if courseName !== 'Hunter Life Course' && courseName !== 'Hunter Life Continued Course' && courseName !== 'Free Course' && courseName !== 'Extra Course' && courseName !== 'Extra Continued Course'}
-                                    <label class="course_item"><input type="checkbox" name={code} />{courseName}</label>
+                                {#if code !== 'hlc' && code !== 'rhlc' && code !== 'frc' && code !== 'exc' && code !== 'rexc'}
+                                    <label class="course_item" class:disabled_elm={courseName.includes('[Deprecated]')}><input type="checkbox" name={code} />{courseName}</label>
                                 {/if}
                             {/each}
                         </dd>
@@ -523,8 +525,8 @@
                                         })}
                                 >
                                     {#if !user.suspended_account.permanent}
-                                        <span style="font-size: 2.8rem;" class="btn_icon material-icons">restore_from_trash</span>
-                                        <span style="font-size: 2rem; padding-top: 2px;" class="btn_text">Unsuspend</span>
+                                        <span class="btn_icon material-icons">restore_from_trash</span>
+                                        <span class="btn_text">Unsuspend</span>
                                     {/if}
                                 </button>
                             </div>
@@ -632,7 +634,7 @@
                         <dt class="contents_term">Course</dt>
                         <dd class="contents_desc">
                             <ul>
-                                {#each Object.entries(getCourseByDecimal(user.rights, 'en')) as [course, { enabled }]}
+                                {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [course, { enabled }]}
                                     {#if enabled}
                                         <li>{course}</li>
                                     {/if}
@@ -660,7 +662,7 @@
                                             <dt class="course_list_title">HL (Single Select)</dt>
                                             <dd class="course_list">
                                                 {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
-                                                    {#if courseName === 'Hunter Life Course' || courseName === 'Hunter Life Continued Course' || courseName === 'Free Course'}
+                                                    {#if code === 'hlc' || code === 'rhlc' || code === 'frc'}
                                                         <label class="course_item"><input type="radio" name="hl" value={code} checked={enabled} />{courseName}</label>
                                                     {/if}
                                                 {/each}
@@ -669,7 +671,7 @@
                                             <dt class="course_list_title">EX (Single Select)</dt>
                                             <dd class="course_list">
                                                 {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
-                                                    {#if courseName === 'Extra Course' || courseName === 'Extra Continued Course'}
+                                                    {#if code === 'exc' || code === 'rexc'}
                                                         <label class="course_item"><input type="radio" name="ex" value={code} checked={enabled} />{courseName}</label>
                                                     {/if}
                                                 {/each}
@@ -678,8 +680,10 @@
                                             <dt class="course_list_title">The Others (Multiple Select)</dt>
                                             <dd class="course_list">
                                                 {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
-                                                    {#if courseName !== 'Hunter Life Course' && courseName !== 'Hunter Life Continued Course' && courseName !== 'Free Course' && courseName !== 'Extra Course' && courseName !== 'Extra Continued Course'}
-                                                        <label class="course_item"><input type="checkbox" name={code} checked={enabled} />{courseName}</label>
+                                                    {#if code !== 'hlc' && code !== 'rhlc' && code !== 'frc' && code !== 'exc' && code !== 'rexc'}
+                                                        <label class="course_item" class:disabled_elm={courseName.includes('[Deprecated]')}
+                                                            ><input type="checkbox" name={code} checked={enabled} />{courseName}</label
+                                                        >
                                                     {/if}
                                                 {/each}
                                             </dd>

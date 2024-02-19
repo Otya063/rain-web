@@ -444,9 +444,9 @@
 
             <dt class="contents_term">Client Data</dt>
             <dd class="contents_desc">
-                {client_data[0]} (The version of client data)
+                {client_data[0]} [ version of client data ]
                 <br />
-                {client_data[1]} (Whether to force updating client data)
+                {client_data[1]} [ whether to force an update ]
 
                 {#if catTypes['client_data']}
                     <button class="red_btn" type="button" on:click={() => editModeSwitch('client_data')}>
@@ -525,10 +525,10 @@
                 {#if catTypes['rain_admins']}
                     <div transition:slide class="edit_area_box">
                         <div class="edit_area enter">
-                            <p class="edit_area_title">Change the Version of Client and Update Setting</p>
+                            <p class="edit_area_title">Change the Admins' Username</p>
                             <p class="console_contents_note">* Empty isn't allowed.</p>
                             <dl class="edit_area_box_parts text">
-                                <dt>Enter the version</dt>
+                                <dt>Enter the Username</dt>
                                 <dd>
                                     <input type="text" name="rain_admins" value={rain_admins} autocomplete="off" />
                                 </dd>
