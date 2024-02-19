@@ -5,7 +5,14 @@ import { Buffer } from 'node:buffer';
 
 /* Get Paginated User(s)
 ====================================================*/
-export const getPaginatedUserData = async (filterParam: string, filterValue: string, status: string, take: number, cursor?: number, skip?: number): Promise<PaginatedUsers[]> => {
+export const getPaginatedUserData = async (
+    filterParam: 'username' | 'character_name' | 'user_id' | 'character_id',
+    filterValue: string | number,
+    status: string,
+    take: number,
+    cursor?: number,
+    skip?: number
+): Promise<PaginatedUsers[]> => {
     switch (status) {
         case 'init': {
             switch (filterParam) {
@@ -16,7 +23,7 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                 take,
                                 where: {
                                     username: {
-                                        contains: filterValue,
+                                        contains: filterValue as string,
                                     },
                                 },
                                 select: {
@@ -84,8 +91,140 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                     characters: {
                                         some: {
                                             name: {
-                                                contains: filterValue,
+                                                contains: filterValue as string,
                                             },
+                                        },
+                                    },
+                                },
+                                select: {
+                                    id: true,
+                                    username: true,
+                                    password: true,
+                                    rights: true,
+                                    last_character: true,
+                                    last_login: true,
+                                    return_expires: true,
+                                    gacha_premium: true,
+                                    gacha_trial: true,
+                                    frontier_points: true,
+                                    psn_id: true,
+                                    wiiu_key: true,
+                                    web_login_key: true,
+                                    web_login_key_mobile: true,
+                                    characters: {
+                                        select: {
+                                            id: true,
+                                            user_id: true,
+                                            is_new_character: true,
+                                            name: true,
+                                            gr: true,
+                                            hrp: true,
+                                            weapon_type: true,
+                                            weapon_id: true,
+                                            last_login: true,
+                                            deleted: true,
+                                            discord: true,
+                                            guild_characters: {
+                                                select: {
+                                                    guilds: {
+                                                        select: {
+                                                            id: true,
+                                                            name: true,
+                                                            guild_characters: true,
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        orderBy: {
+                                            id: 'asc',
+                                        },
+                                    },
+                                },
+                                orderBy: {
+                                    id: 'asc',
+                                },
+                            })
+                        ).map(async (user) => ({
+                            ...user,
+                            suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
+                        }))
+                    );
+                }
+
+                case 'user_id': {
+                    return await Promise.all(
+                        (
+                            await db.users.findMany({
+                                take,
+                                where: {
+                                    id: Number(filterValue),
+                                },
+                                select: {
+                                    id: true,
+                                    username: true,
+                                    password: true,
+                                    rights: true,
+                                    last_character: true,
+                                    last_login: true,
+                                    return_expires: true,
+                                    gacha_premium: true,
+                                    gacha_trial: true,
+                                    frontier_points: true,
+                                    psn_id: true,
+                                    wiiu_key: true,
+                                    web_login_key: true,
+                                    web_login_key_mobile: true,
+                                    characters: {
+                                        select: {
+                                            id: true,
+                                            user_id: true,
+                                            is_new_character: true,
+                                            name: true,
+                                            gr: true,
+                                            hrp: true,
+                                            weapon_type: true,
+                                            weapon_id: true,
+                                            last_login: true,
+                                            deleted: true,
+                                            discord: true,
+                                            guild_characters: {
+                                                select: {
+                                                    guilds: {
+                                                        select: {
+                                                            id: true,
+                                                            name: true,
+                                                            guild_characters: true,
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        orderBy: {
+                                            id: 'asc',
+                                        },
+                                    },
+                                },
+                                orderBy: {
+                                    id: 'asc',
+                                },
+                            })
+                        ).map(async (user) => ({
+                            ...user,
+                            suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
+                        }))
+                    );
+                }
+
+                case 'character_id': {
+                    return await Promise.all(
+                        (
+                            await db.users.findMany({
+                                take,
+                                where: {
+                                    characters: {
+                                        some: {
+                                            id: Number(filterValue),
                                         },
                                     },
                                 },
@@ -165,7 +304,7 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                 },
                                 where: {
                                     username: {
-                                        contains: filterValue,
+                                        contains: filterValue as string,
                                     },
                                 },
                                 select: {
@@ -237,7 +376,7 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                                     characters: {
                                         some: {
                                             name: {
-                                                contains: filterValue,
+                                                contains: filterValue as string,
                                             },
                                         },
                                     },
@@ -298,6 +437,11 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
                     );
                 }
 
+                case 'user_id':
+                case 'character_id': {
+                    break;
+                }
+
                 default: {
                     throw new Error('Invalid Parameter');
                 }
@@ -312,7 +456,12 @@ export const getPaginatedUserData = async (filterParam: string, filterValue: str
 
 /* Get Pagination Meta Data
 ====================================================*/
-export const getPaginationMeta = async (filterParam: string, filterValue: string, prevCursor: number, nextCursor: number): Promise<PaginationMeta> => {
+export const getPaginationMeta = async (
+    filterParam: 'username' | 'character_name' | 'user_id' | 'character_id',
+    filterValue: string,
+    prevCursor: number,
+    nextCursor: number
+): Promise<PaginationMeta> => {
     switch (filterParam) {
         case 'username': {
             const prevData = await db.users.findFirst({
@@ -385,7 +534,7 @@ export const getPaginationMeta = async (filterParam: string, filterValue: string
                     characters: {
                         some: {
                             name: {
-                                contains: filterValue,
+                                contains: filterValue as string,
                             },
                         },
                     },
@@ -400,6 +549,11 @@ export const getPaginationMeta = async (filterParam: string, filterValue: string
             });
 
             return { prevCursor, nextCursor, hasPrevPage: !!prevData, hasNextPage: !!nextData };
+        }
+
+        case 'user_id':
+        case 'character_id': {
+            return { hasPrevPage: false, hasNextPage: false, prevCursor: 0, nextCursor: 0 };
         }
 
         default: {

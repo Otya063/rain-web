@@ -34,7 +34,7 @@
     let paginationBackClick = false;
     let paginationNextClick = false;
     let specifiedUser = true;
-    let bindedValue: string;
+    let bindedValue: string = '';
     let bindedParam: string;
     let status = 'init';
     let cursor = 0;
@@ -220,7 +220,9 @@
                         <span>By</span>
                         <select class="filter_select" bind:value={bindedParam}>
                             <option value="username">Username</option>
+                            <option value="user_id">User ID</option>
                             <option value="character_name">Character Name</option>
+                            <option value="character_id">Character ID</option>
                         </select>
                     </form>
 

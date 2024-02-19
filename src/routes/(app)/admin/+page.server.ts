@@ -1,6 +1,6 @@
 import type { Action, Actions, PageServerLoad } from './$types';
 import type { discord, discord_register, launcher_banner, launcher_info, launcher_system, users } from '@prisma/client/edge';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, type ActionFailure } from '@sveltejs/kit';
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
 import ServerData, { db, getPaginatedUserData, getPaginationMeta } from '$lib/database';
 import type { PaginatedUsers, PaginationMeta, BinaryTypes } from '$lib/types';
@@ -211,25 +211,25 @@ const courseControl: Action = async ({ request }) => {
         return fail(400, { error: true, message: 'You must choose at least one course.' });
     }
 
-    switch (target_u_radio) {
-        case 'all': {
-            await db.$queryRaw`UPDATE users SET rights = ${getCourseByObjData(data)}`;
+    try {
+        switch (target_u_radio) {
+            case 'all': {
+                await db.$queryRaw`UPDATE users SET rights = ${getCourseByObjData(data)}`;
 
-            return {
-                success: true,
-                message: "All users' rights have been successfully updated.",
-            };
-        }
-
-        case 'specified': {
-            ids = data.specified_u_text.split('+').map(Number);
-            delete data.specified_u_text;
-
-            if (ids.length > 10) {
-                return fail(400, { error: true, message: 'No more than 10 users can be specified.' });
+                return {
+                    success: true,
+                    message: "All users' rights have been successfully updated.",
+                };
             }
 
-            try {
+            case 'specified': {
+                ids = data.specified_u_text.split('+').map(Number);
+                delete data.specified_u_text;
+
+                if (ids.length > 10) {
+                    return fail(400, { error: true, message: 'No more than 10 users can be specified.' });
+                }
+
                 for (const id of ids) {
                     await db.users.update({
                         where: {
@@ -245,70 +245,72 @@ const courseControl: Action = async ({ request }) => {
                     success: true,
                     message: `The specified users' (ID: ${ids.join(', ')}) rights have been successfully updated.`,
                 };
-            } catch (err) {
-                if (err instanceof Error) {
-                    return fail(400, { error: true, message: err.message });
-                } else if (typeof err === 'string') {
-                    return fail(400, { error: true, message: err });
-                } else {
-                    return fail(400, { error: true, message: 'Unexpected Error' });
-                }
+            }
+
+            default: {
+                return fail(400, { error: true, message: 'Select the target user type.' });
             }
         }
-
-        default: {
-            return fail(400, { error: true, message: 'Select the target user type.' });
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
         }
     }
 };
 
 const getPaginatedUsers: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'username' | 'character_name'; filter_value: string; status: string; cursor: number };
+    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'username' | 'character_name' | 'user_id' | 'character_id'; filter_value: string; status: string; cursor: number };
+
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
 
     if (!filter_value) {
         return fail(400, { error: true, message: emptyMsg });
     }
 
-    let paginatedUsers: PaginatedUsers[];
-    let paginationMeta: PaginationMeta;
+    const paginatedResult = await (async () => {
+        switch (status) {
+            case 'init': {
+                const paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'init', 5);
 
-    switch (status) {
-        case 'init': {
-            paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'init', 5);
-            if (!paginatedUsers.length) {
-                return fail(400, {
-                    error: true,
-                    message: filter_param === 'username' ? "The user(s) with the entered username doesn't exist." : "The character(s) with the entered name doesn't exist.",
-                });
+                const nextCursor = paginatedUsers[4]?.id || 0;
+                const paginationMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
+
+                return { paginatedUsers, paginationMeta };
             }
 
-            const nextCursor = paginatedUsers[4]?.id || 0;
-            paginationMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
+            case 'back':
+            case 'next': {
+                const paginatedUsers = (await getPaginatedUserData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1)) as unknown as PaginatedUsers[];
 
-            break;
-        }
+                const prevCursor = paginatedUsers[0]?.id || 0;
+                const nextCursor = paginatedUsers[4]?.id || 0;
+                const paginationMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
 
-        case 'back':
-        case 'next': {
-            paginatedUsers = (await getPaginatedUserData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1)) as unknown as PaginatedUsers[];
-            if (!paginatedUsers.length) {
-                return fail(400, {
-                    error: true,
-                    message: filter_param === 'username' ? "The user(s) with the entered username doesn't exist." : "The character(s) with the entered name doesn't exist.",
-                });
+                return { paginatedUsers, paginationMeta };
             }
 
-            const prevCursor = paginatedUsers[0]?.id || 0;
-            const nextCursor = paginatedUsers[4]?.id || 0;
-            paginationMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
-
-            break;
+            default: {
+                throw new Error('Invalid Status');
+            }
         }
+    })();
 
-        default: {
-            throw new Error('Invalid Status');
-        }
+    const { paginatedUsers, paginationMeta } = paginatedResult;
+    if (!paginatedUsers.length) {
+        return fail(400, {
+            error: true,
+            message:
+                filter_param === 'username'
+                    ? `The user(s) with the entered username (${filter_value}) doesn't exist.`
+                    : filter_param === 'character_name'
+                    ? `The character(s) with the entered character name (${filter_value}) doesn't exist.`
+                    : `The account with the entered ${filter_param} (${filter_value}) doesn't exist.`,
+        });
     }
 
     return { paginatedUsers, paginationMeta };
