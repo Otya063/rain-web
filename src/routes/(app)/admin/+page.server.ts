@@ -1,9 +1,9 @@
 import type { Action, Actions, PageServerLoad } from './$types';
 import type { discord, discord_register, launcher_banner, launcher_info, launcher_system, users } from '@prisma/client/edge';
-import { error, fail, type ActionFailure } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
 import ServerData, { db, getPaginatedUserData, getPaginationMeta } from '$lib/database';
-import type { PaginatedUsers, PaginationMeta, BinaryTypes } from '$lib/types';
+import type { BinaryTypes } from '$lib/types';
 import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi } from '$lib/utils';
 import { DateTime } from 'luxon';
 import { Buffer } from 'node:buffer';
@@ -272,7 +272,7 @@ const getPaginatedUsers: Action = async ({ request }) => {
         return fail(400, { error: true, message: emptyMsg });
     }
 
-    const paginatedResult = await (async () => {
+    const { paginatedUsers, paginationMeta } = await (async () => {
         switch (status) {
             case 'init': {
                 const paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'init', 5);
@@ -285,7 +285,7 @@ const getPaginatedUsers: Action = async ({ request }) => {
 
             case 'back':
             case 'next': {
-                const paginatedUsers = (await getPaginatedUserData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1)) as unknown as PaginatedUsers[];
+                const paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1);
 
                 const prevCursor = paginatedUsers[0]?.id || 0;
                 const nextCursor = paginatedUsers[4]?.id || 0;
@@ -300,7 +300,6 @@ const getPaginatedUsers: Action = async ({ request }) => {
         }
     })();
 
-    const { paginatedUsers, paginationMeta } = paginatedResult;
     if (!paginatedUsers.length) {
         return fail(400, {
             error: true,
@@ -690,99 +689,72 @@ const deleteBnrData: Action = async ({ request, url }) => {
 const linkDiscord: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const { user_id, char_id, discord_id } = data as { user_id: number; char_id: number; discord_id: string };
-    let createdDiscord: discord;
 
     if (!discord_id) {
         return fail(400, { error: true, message: emptyMsg });
     }
 
     try {
-        // discord (character)
-        const discord: discord | null = await ServerData.getLinkedCharactersByDiscordId(discord_id);
-        if (discord) {
-            const {
-                id,
-                is_male,
-                bounty,
-                road_champion,
-                rain_demolizer,
-                bounty_champion,
-                bounty_master,
-                bounty_expert,
-                gacha,
-                pity,
-                boostcd,
-                newbie,
-                latest_bounty,
-                latest_bounty_time,
-                transfercd,
-                title,
-                gold,
-                silver,
-                bronze,
-            } = discord;
-
-            await db.discord.delete({
-                where: {
-                    id,
-                },
-            });
-
-            createdDiscord = await db.discord.create({
-                data: {
-                    char_id: Number(char_id),
-                    discord_id,
-                    is_male,
-                    bounty,
-                    road_champion,
-                    rain_demolizer,
-                    bounty_champion,
-                    bounty_master,
-                    bounty_expert,
-                    gacha,
-                    pity,
-                    boostcd,
-                    newbie,
-                    latest_bounty,
-                    latest_bounty_time,
-                    transfercd,
-                    title,
-                    gold,
-                    silver,
-                    bronze,
-                },
-            });
-        } else {
-            createdDiscord = await db.discord.create({
-                data: {
-                    char_id: Number(char_id),
-                    discord_id,
-                },
+        const discordRegisterByUserId: discord_register | null = await ServerData.getLinkedUserByUserId(Number(user_id));
+        if (discordRegisterByUserId && discordRegisterByUserId.discord_id !== discord_id) {
+            return fail(400, {
+                error: true,
+                message: 'This user account is already linked to another discord account.<br>Linked data can only be transferred between characters with the same discord ID (account).',
             });
         }
 
         // discord_register (user)
         const discordRegister: discord_register | null = await ServerData.getLinkedUserByDiscordId(discord_id);
-        if (discordRegister) {
-            const { id } = discordRegister;
-            await db.discord_register.delete({
-                where: {
-                    id,
-                },
-            });
-        }
+        (async () => {
+            if (discordRegister) {
+                await db.discord_register.update({
+                    where: {
+                        discord_id,
+                    },
+                    data: {
+                        user_id: Number(user_id),
+                    },
+                });
+            } else {
+                await db.discord_register.create({
+                    data: {
+                        user_id: Number(user_id),
+                        discord_id,
+                    },
+                });
+            }
+        })();
 
-        await db.discord_register.create({
-            data: {
-                user_id: Number(user_id),
-                discord_id,
-            },
-        });
+        // discord (character)
+        const discord: discord | null = await ServerData.getLinkedCharactersByDiscordId(discord_id);
+        const { newDiscord } = await (async () => {
+            if (discord) {
+                const newDiscord = await db.discord.update({
+                    where: {
+                        discord_id,
+                    },
+                    data: {
+                        char_id: Number(char_id),
+                    },
+                });
+
+                return { newDiscord };
+            } else {
+                const newDiscord = await db.discord.create({
+                    data: {
+                        char_id: Number(char_id),
+                        discord_id,
+                    },
+                });
+
+                return { newDiscord };
+            }
+        })();
 
         return {
             success: true,
             message: `The character (Character ID: ${char_id}) has been successfully linked to the discord account (Discord ID: ${discord_id}).`,
-            createdDiscord,
+            newDiscord,
         };
     } catch (err) {
         if (err instanceof Error) {
