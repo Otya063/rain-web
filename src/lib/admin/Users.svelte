@@ -1295,6 +1295,8 @@
                                                 <div class="edit_area enter">
                                                     <p class="edit_area_title">Change Character Name</p>
                                                     <p class="console_contents_note">* Empty isn't allowed.</p>
+                                                    <p class="console_contents_note">* 50,000 coins are automatically cut from the user's bounty coin owned.</p>
+
                                                     <dl class="edit_area_box_parts text">
                                                         <dt>Enter new name</dt>
                                                         <dd>
