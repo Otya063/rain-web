@@ -1220,6 +1220,14 @@
         &.success {
             color: #5ab052;
 
+            .msg_display_contents {
+                padding: 3% 55px 3% 5%;
+
+                @include landscape {
+                    padding: 2% 55px 2% 3%;
+                }
+            }
+
             .msg_display_left_bar {
                 background: #5ab052;
             }
@@ -1233,6 +1241,14 @@
         &.error {
             color: #c93a3a;
 
+            .msg_display_contents {
+                padding: 3% 85px 3% 5%;
+
+                @include landscape {
+                    padding: 2% 95px 2% 3%;
+                }
+            }
+
             .msg_display_left_bar {
                 background: #c93a3a;
             }
@@ -1243,8 +1259,16 @@
         }
 
         // 不正操作通知
-        &.notice {
+        /* &.notice {
             color: #5997db;
+
+            .msg_display_contents {
+                padding: 3% 85px 3% 5%;
+
+                @include landscape {
+                    padding: 2% 85px 2% 3%;
+                }
+            }
 
             .msg_display_left_bar {
                 background: #5997db;
@@ -1253,7 +1277,7 @@
             .timer_bar {
                 background: #9ec6ef;
             }
-        }
+        } */
 
         // メッセージ本体
         .msg_display_contents {
@@ -1263,7 +1287,6 @@
             font-size: 1.8rem;
             font-weight: 700;
             background: #fff;
-            padding: 2.5% 85px 3% 5%;
             border: 5px solid #e6e6e9;
             border-left: none;
 
@@ -1271,15 +1294,14 @@
                 padding: 2% 95px 2% 4%;
             }
 
-            // メッセージ
-            .msg_display_status {
-                transform: translateY(5%);
-            }
-
             // アイコン
             .msg_display_icon {
                 font-size: 3.5rem;
                 padding-right: 10px;
+
+                @include landscape {
+                    padding-right: 15px;
+                }
             }
 
             // 左側装飾バー
