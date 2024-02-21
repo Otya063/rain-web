@@ -755,7 +755,7 @@
                                                     name="return_expires"
                                                     value={!user.return_expires ? '' : DateTime.fromJSDate(user.return_expires).toFormat("yyyy-MM-dd'T'HH:mm")}
                                                 />
-                                                <input type="hidden" name="zoneName" value={DateTime.local().zoneName} />
+                                                <input type="hidden" name="zonename" value={DateTime.local().zoneName} />
                                             </dd>
                                         </dl>
 
