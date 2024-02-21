@@ -111,6 +111,7 @@ const createInfoData: Action = async ({ request }) => {
     let url = data.url as string | null;
 
     if (type === 'Select the type of information here.' || !title) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
         return fail(400, { error: true, message: requiredMsg });
     }
 
@@ -146,6 +147,7 @@ const updateInfoData: Action = async ({ request }) => {
     let value = Object.values(data)[2] as string | null;
 
     if ((column === 'title' || column === 'type') && !value) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
         return fail(400, { error: true, message: emptyMsg });
     }
 
@@ -208,6 +210,7 @@ const courseControl: Action = async ({ request }) => {
     delete data.target_u_radio;
 
     if (!Object.keys(data).length) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
         return fail(400, { error: true, message: 'You must choose at least one course.' });
     }
 
@@ -266,9 +269,8 @@ const getPaginatedUsers: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const { filter_param, filter_value, status, cursor } = data as { filter_param: 'username' | 'character_name' | 'user_id' | 'character_id'; filter_value: string; status: string; cursor: number };
 
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-
     if (!filter_value) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
         return fail(400, { error: true, message: emptyMsg });
     }
 
@@ -328,6 +330,7 @@ const updateUserData: Action = async ({ request }) => {
             case 'username':
             case 'password':
             case 'return_expires': {
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
                 return fail(400, { error: true, message: emptyMsg });
             }
         }
@@ -509,11 +512,12 @@ const suspendUser: Action = async ({ request }) => {
         username: string;
         reason_type: number;
         permanently_del: string;
-        until_at: string;
+        until_at?: string;
         zoneName: string;
     };
 
-    if (!reason_type) {
+    if (!reason_type || (permanently_del !== 'on' && !until_at)) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
         return fail(400, { error: true, message: emptyMsg });
     }
 
@@ -551,16 +555,19 @@ const createBnrData: Action = async ({ request, url }) => {
 
     // file check
     if (ja_file.size === 0 || en_file.size === 0 || !bnr_name) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
         return fail(400, { error: true, message: `Failed to upload the files. ${requiredMsg} ` });
     }
 
     // file name validation
     if (ja_file.name !== `${bnr_name}_ja.png` || en_file.name !== `${bnr_name}_en.png`) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
         return fail(400, { error: true, message: 'Failed to upload the files. Invalid file name' });
     }
 
     // file type validation
     if (ja_file.type !== 'image/png' || en_file.type !== 'image/png') {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
         return fail(400, { error: true, message: 'Failed to upload the files. Invalid type of file.' });
     }
 
@@ -619,16 +626,19 @@ const updateBnrData: Action = async ({ request, url }) => {
         } else {
             // file check
             if (file.size === 0 || !bnr_name || !lang) {
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
                 return fail(400, { error: true, message: "Failed to re-upload the files. You haven't selected an image to update." });
             }
 
             // file name validation
             if (file.name !== `${bnr_name}_${lang}.png`) {
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
                 return fail(400, { error: true, message: 'Failed to re-upload the files. Invalid file name' });
             }
 
             // file type validation
             if (file.type !== 'image/png') {
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
                 return fail(400, { error: true, message: 'Failed to re-upload the files. Invalid type of file.' });
             }
 
@@ -691,6 +701,7 @@ const linkDiscord: Action = async ({ request }) => {
     const { user_id, char_id, discord_id } = data as { user_id: number; char_id: number; discord_id: string };
 
     if (!discord_id) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
         return fail(400, { error: true, message: emptyMsg });
     }
 

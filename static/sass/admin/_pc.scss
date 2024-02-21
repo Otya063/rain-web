@@ -1109,6 +1109,10 @@
         &.success {
             color: #5ab052;
 
+            .msg_display_contents {
+                padding: 1% 80px 1% 2%;
+            }
+
             .msg_display_left_bar {
                 background: #5ab052;
             }
@@ -1121,6 +1125,10 @@
         // エラー通知
         &.error {
             color: #c93a3a;
+
+            .msg_display_contents {
+                padding: 1% 100px 1% 2%;
+            }
 
             .msg_display_left_bar {
                 background: #c93a3a;
@@ -1152,14 +1160,8 @@
             font-size: 1.8rem;
             font-weight: 700;
             background: #fff;
-            padding: 0.7% 100px 0.7% 2%;
             border: 5px solid #e6e6e9;
             border-left: none;
-
-            // メッセージ
-            .msg_display_status {
-                transform: translateY(5%);
-            }
 
             // アイコン
             .msg_display_icon {
@@ -1207,7 +1209,7 @@
                 height: 5px;
                 position: absolute;
                 left: 0%;
-                bottom: -11%;
+                bottom: -5px;
                 z-index: 102;
             }
         }

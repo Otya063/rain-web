@@ -75,7 +75,7 @@
                         {#each Object.entries($LL.error[403].message2) as [_, cause]}
                             <li>{cause()}</li>
                         {/each}
-                    {:else if (status === 400 || status === 500) && !!$page.error?.message}
+                    {:else if (status === 400 || status === 500) && $page.error?.message}
                         <li>{$page.error?.message}</li>
                     {:else}
                         <li>{$LL.error['otherMessage2']()}</li>
