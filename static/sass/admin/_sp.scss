@@ -193,6 +193,10 @@
                     border-bottom: #df9e27 2px solid;
                     font-weight: 700;
 
+                    @include landscape {
+                        display: flex;
+                    }
+
                     // 赤ボタン調整
                     .red_btn {
                         position: absolute;
@@ -202,7 +206,13 @@
 
                     // ユーザー内情報切り替えパネル
                     .user_ctrl_panel {
+                        display: flex;
                         color: #333333;
+                        width: fit-content;
+
+                        @include landscape {
+                            padding-left: 2%;
+                        }
 
                         // タブボタン
                         button {
@@ -341,7 +351,7 @@
         filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
 
         @include landscape {
-            bottom: 7%;
+            bottom: 4%;
         }
 
         swiper-slide {
@@ -720,8 +730,8 @@
     .banned_user_container {
         position: absolute;
         width: 102%;
-        height: 102%;
-        top: -1%;
+        height: 107%;
+        top: -7%;
         left: -1%;
         display: flex;
         flex-direction: column;
@@ -736,18 +746,21 @@
         // テキスト
         .banned_text {
             color: whitesmoke;
-            font-size: 3rem;
+            font-size: 2.5rem;
             font-weight: 700;
+            text-align: center;
             text-shadow: 3px 3px 5px black;
         }
 
         // Ban解除ボタン
-        .remove_ban_btn {
-            color: red;
-            font-weight: 700;
-            font-size: 1.8rem;
-            text-shadow: 3px 3px 5px black;
-            margin: 5% 0 10% 0;
+        .red_btn {
+            .btn_icon {
+                font-size: 2.5rem;
+            }
+
+            .btn_text {
+                font-size: 1.7rem;
+            }
         }
     }
 
@@ -1250,7 +1263,7 @@
             font-size: 1.8rem;
             font-weight: 700;
             background: #fff;
-            padding: 3% 85px 3% 5%;
+            padding: 2.5% 85px 3% 5%;
             border: 5px solid #e6e6e9;
             border-left: none;
 

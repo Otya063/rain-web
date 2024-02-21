@@ -3,7 +3,7 @@ import type { discord, discord_register, launcher_banner, launcher_info, launche
 import { error, fail } from '@sveltejs/kit';
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
 import ServerData, { db, getPaginatedUserData, getPaginationMeta } from '$lib/database';
-import type { PaginatedUsers, PaginationMeta, BinaryTypes } from '$lib/types';
+import type { BinaryTypes } from '$lib/types';
 import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi } from '$lib/utils';
 import { DateTime } from 'luxon';
 import { Buffer } from 'node:buffer';
@@ -36,10 +36,10 @@ export const load: PageServerLoad = async ({ url, locals: { LL, authUser } }) =>
 
 const updateSystemMode: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    let column = Object.keys(data)[0] as keyof Omit<launcher_system, 'id' | 'rain_admins'> | 'client_data_0' | 'client_data_1';
+    let column = Object.keys(data)[0] as keyof Omit<launcher_system, 'id'> | 'client_data_0' | 'client_data_1';
     let value = Object.values(data)[0] as string;
 
-    if (column === 'client_data_0' && !value) {
+    if ((column === 'client_data_0' || column === 'rain_admins') && !value) {
         return fail(400, { error: true, message: emptyMsg });
     }
 
@@ -52,7 +52,7 @@ const updateSystemMode: Action = async ({ request }) => {
                 id: 1,
             },
             data: {
-                [column]: column === 'client_data' ? [value.length === 1 ? `${value}.0` : value, Object.values(data)[1]] : value === 'true',
+                [column]: column === 'client_data' ? [value.length === 1 ? `${value}.0` : value, Object.values(data)[1]] : column === 'rain_admins' ? value.split(',') : value === 'true',
             },
         });
 
@@ -211,40 +211,46 @@ const courseControl: Action = async ({ request }) => {
         return fail(400, { error: true, message: 'You must choose at least one course.' });
     }
 
-    switch (target_u_radio) {
-        case 'all': {
-            const userIds = await ServerData.getAllUsers();
-            ids = userIds.map((obj) => obj.id);
-            break;
-        }
-
-        case 'specified': {
-            ids = data.specified_u_text.split('+').map(Number);
-            delete data.specified_u_text;
-            break;
-        }
-
-        default: {
-            return fail(400, { error: true, message: 'Select the target user type.' });
-        }
-    }
-
     try {
-        for (const id of ids) {
-            await db.users.update({
-                where: {
-                    id,
-                },
-                data: {
-                    rights: getCourseByObjData(data),
-                },
-            });
-        }
+        switch (target_u_radio) {
+            case 'all': {
+                await db.$queryRaw`UPDATE users SET rights = ${getCourseByObjData(data)}`;
 
-        return {
-            success: true,
-            message: target_u_radio === 'all' ? "All users' rights have been successfully updated." : `The specified user's (ID: ${ids}) rights have been successfully updated.`,
-        };
+                return {
+                    success: true,
+                    message: "All users' rights have been successfully updated.",
+                };
+            }
+
+            case 'specified': {
+                ids = data.specified_u_text.split('+').map(Number);
+                delete data.specified_u_text;
+
+                if (ids.length > 10) {
+                    return fail(400, { error: true, message: 'No more than 10 users can be specified.' });
+                }
+
+                for (const id of ids) {
+                    await db.users.update({
+                        where: {
+                            id,
+                        },
+                        data: {
+                            rights: getCourseByObjData(data),
+                        },
+                    });
+                }
+
+                return {
+                    success: true,
+                    message: `The specified users' (ID: ${ids.join(', ')}) rights have been successfully updated.`,
+                };
+            }
+
+            default: {
+                return fail(400, { error: true, message: 'Select the target user type.' });
+            }
+        }
     } catch (err) {
         if (err instanceof Error) {
             return fail(400, { error: true, message: err.message });
@@ -258,51 +264,52 @@ const courseControl: Action = async ({ request }) => {
 
 const getPaginatedUsers: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'username' | 'character_name'; filter_value: string; status: string; cursor: number };
+    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'username' | 'character_name' | 'user_id' | 'character_id'; filter_value: string; status: string; cursor: number };
+
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
 
     if (!filter_value) {
         return fail(400, { error: true, message: emptyMsg });
     }
 
-    let paginatedUsers: PaginatedUsers[];
-    let paginationMeta: PaginationMeta;
+    const { paginatedUsers, paginationMeta } = await (async () => {
+        switch (status) {
+            case 'init': {
+                const paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'init', 5);
 
-    switch (status) {
-        case 'init': {
-            paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'init', 5);
-            if (!paginatedUsers.length) {
-                return fail(400, {
-                    error: true,
-                    message: filter_param === 'username' ? "The user(s) with the entered username doesn't exist." : "The character(s) with the entered name doesn't exist.",
-                });
+                const nextCursor = paginatedUsers[4]?.id || 0;
+                const paginationMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
+
+                return { paginatedUsers, paginationMeta };
             }
 
-            const nextCursor = paginatedUsers[4]?.id || 0;
-            paginationMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
+            case 'back':
+            case 'next': {
+                const paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1);
 
-            break;
-        }
+                const prevCursor = paginatedUsers[0]?.id || 0;
+                const nextCursor = paginatedUsers[4]?.id || 0;
+                const paginationMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
 
-        case 'back':
-        case 'next': {
-            paginatedUsers = (await getPaginatedUserData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1)) as unknown as PaginatedUsers[];
-            if (!paginatedUsers.length) {
-                return fail(400, {
-                    error: true,
-                    message: filter_param === 'username' ? "The user(s) with the entered username doesn't exist." : "The character(s) with the entered name doesn't exist.",
-                });
+                return { paginatedUsers, paginationMeta };
             }
 
-            const prevCursor = paginatedUsers[0]?.id || 0;
-            const nextCursor = paginatedUsers[4]?.id || 0;
-            paginationMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
-
-            break;
+            default: {
+                throw new Error('Invalid Status');
+            }
         }
+    })();
 
-        default: {
-            throw new Error('Invalid Status');
-        }
+    if (!paginatedUsers.length) {
+        return fail(400, {
+            error: true,
+            message:
+                filter_param === 'username'
+                    ? `The user(s) with the entered username (${filter_value}) doesn't exist.`
+                    : filter_param === 'character_name'
+                    ? `The character(s) with the entered character name (${filter_value}) doesn't exist.`
+                    : `The account with the entered ${filter_param} (${filter_value}) doesn't exist.`,
+        });
     }
 
     return { paginatedUsers, paginationMeta };
@@ -682,99 +689,72 @@ const deleteBnrData: Action = async ({ request, url }) => {
 const linkDiscord: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const { user_id, char_id, discord_id } = data as { user_id: number; char_id: number; discord_id: string };
-    let createdDiscord: discord;
 
     if (!discord_id) {
         return fail(400, { error: true, message: emptyMsg });
     }
 
     try {
-        // discord (character)
-        const discord: discord | null = await ServerData.getLinkedCharactersByDiscordId(discord_id);
-        if (discord) {
-            const {
-                id,
-                is_male,
-                bounty,
-                road_champion,
-                rain_demolizer,
-                bounty_champion,
-                bounty_master,
-                bounty_expert,
-                gacha,
-                pity,
-                boostcd,
-                newbie,
-                latest_bounty,
-                latest_bounty_time,
-                transfercd,
-                title,
-                gold,
-                silver,
-                bronze,
-            } = discord;
-
-            await db.discord.delete({
-                where: {
-                    id,
-                },
-            });
-
-            createdDiscord = await db.discord.create({
-                data: {
-                    char_id: Number(char_id),
-                    discord_id,
-                    is_male,
-                    bounty,
-                    road_champion,
-                    rain_demolizer,
-                    bounty_champion,
-                    bounty_master,
-                    bounty_expert,
-                    gacha,
-                    pity,
-                    boostcd,
-                    newbie,
-                    latest_bounty,
-                    latest_bounty_time,
-                    transfercd,
-                    title,
-                    gold,
-                    silver,
-                    bronze,
-                },
-            });
-        } else {
-            createdDiscord = await db.discord.create({
-                data: {
-                    char_id: Number(char_id),
-                    discord_id,
-                },
+        const discordRegisterByUserId: discord_register | null = await ServerData.getLinkedUserByUserId(Number(user_id));
+        if (discordRegisterByUserId && discordRegisterByUserId.discord_id !== discord_id) {
+            return fail(400, {
+                error: true,
+                message: 'This user account is already linked to another discord account.<br>Linked data can only be transferred between characters with the same discord ID (account).',
             });
         }
 
         // discord_register (user)
         const discordRegister: discord_register | null = await ServerData.getLinkedUserByDiscordId(discord_id);
-        if (discordRegister) {
-            const { id } = discordRegister;
-            await db.discord_register.delete({
-                where: {
-                    id,
-                },
-            });
-        }
+        (async () => {
+            if (discordRegister) {
+                await db.discord_register.update({
+                    where: {
+                        discord_id,
+                    },
+                    data: {
+                        user_id: Number(user_id),
+                    },
+                });
+            } else {
+                await db.discord_register.create({
+                    data: {
+                        user_id: Number(user_id),
+                        discord_id,
+                    },
+                });
+            }
+        })();
 
-        await db.discord_register.create({
-            data: {
-                user_id: Number(user_id),
-                discord_id,
-            },
-        });
+        // discord (character)
+        const discord: discord | null = await ServerData.getLinkedCharactersByDiscordId(discord_id);
+        const { newDiscord } = await (async () => {
+            if (discord) {
+                const newDiscord = await db.discord.update({
+                    where: {
+                        discord_id,
+                    },
+                    data: {
+                        char_id: Number(char_id),
+                    },
+                });
+
+                return { newDiscord };
+            } else {
+                const newDiscord = await db.discord.create({
+                    data: {
+                        char_id: Number(char_id),
+                        discord_id,
+                    },
+                });
+
+                return { newDiscord };
+            }
+        })();
 
         return {
             success: true,
             message: `The character (Character ID: ${char_id}) has been successfully linked to the discord account (Discord ID: ${discord_id}).`,
-            createdDiscord,
+            newDiscord,
         };
     } catch (err) {
         if (err instanceof Error) {

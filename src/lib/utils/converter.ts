@@ -5,8 +5,7 @@ import type { WeaponType, CourseJaData, CourseEnData } from '$lib/types';
 /* Get Course by Decimal
 ====================================================*/
 export const getCourseByDecimal = (dec: number, lang: string): CourseJaData | CourseEnData => {
-    let bin: string[] = dec.toString(2).padStart(30, '0').split('');
-    bin = bin.reverse();
+    const bin: string[] = dec.toString(2).padStart(30, '0').split('').reverse();
 
     switch (lang) {
         case 'ja': {
@@ -33,8 +32,8 @@ export const getCourseByObjData = (courseData: Record<string, any>): number => {
 
     const bin = `
     ${courseData['hl'] === 'frc' ? 1 : 0}
-    ${courseData['ex'] === 'excc' ? 1 : 0}
-    ${courseData['hl'] === 'hlcc' ? 1 : 0}
+    ${courseData['ex'] === 'rexc' ? 1 : 0}
+    ${courseData['hl'] === 'rhlc' ? 1 : 0}
     ${courseData['cnc'] ? 1 : 0}
     ${courseData['nc'] ? 0 : 0}
     ${courseData['clc'] ? 0 : 0}
@@ -52,8 +51,8 @@ export const getCourseByObjData = (courseData: Record<string, any>): number => {
     ${courseData['prc'] ? 1 : 0}
     ${courseData['mbc'] ? 1 : 0}
     ${courseData['exbc'] ? 0 : 0}
-    ${courseData['ex'] === 'exc' ? 1 : 0}
-    ${courseData['hl'] === 'hlc' ? 1 : 0}
+    ${courseData['ex'] === 'exc' || courseData['ex'] === 'rexc' ? 1 : 0}
+    ${courseData['hl'] === 'hlc' || courseData['hl'] === 'rhlc' || courseData['hl'] === 'frc' ? 1 : 0}
     ${courseData['tlc'] ? 0 : 0}
     0`
         .replace(/\n/g, '')

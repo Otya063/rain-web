@@ -119,6 +119,7 @@ export const initUserCtrlPanel = (paginatedUsers: PaginatedUsers[]): void => {
         });
     });
 };
+
 export const updateUserCtrlPanel = (userId: number, charId: number, column?: string, value?: any): void => {
     userCtrlPanel.update((data) => {
         const userData = data[userId].userData;
@@ -236,37 +237,24 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                     },
                 };
             } else if (column === 'link') {
-                return {
-                    ...data,
-                    [userId]: {
-                        ...data[userId],
-                        selectedChar: {
-                            ...data[userId].selectedChar,
-                            discord: (value as discord)
-                        },
-                        activeCategories: {
-                            username: false,
-                            password: false,
-                            rights: false,
-                            return_expires: false,
-                            gacha_premium: false,
-                            gacha_trial: false,
-                            frontier_points: false,
-                            psn_id: false,
-                            wiiu_key: false,
-                            name: false,
-                            bounty: false,
-                            clan: false,
-                            binary: false,
-                        },
-                    },
-                };
+                return Object.keys(data).map((user_id) => {
+                    if (data[Number(user_id)].selectedChar && data[Number(user_id)].selectedChar.discord && data[Number(user_id)].selectedChar?.discord?.discord_id === value.discord_id) {
+                        data[Number(user_id)].selectedChar.discord = null;
+                    }
+
+                    if (Number(user_id) === userId && data[Number(user_id)].selectedChar.id === charId) {
+                        data[Number(user_id)].selectedChar.discord = value;
+                    }
+
+                    return data;
+                })[0];
             } else {
                 return { ...data };
             }
         }
     });
 };
+
 export const setSelectedCharacter = (e: Event): void => {
     setTimeout(() => {
         const target = e.target as HTMLElement;

@@ -3,7 +3,7 @@
     import { applyAction, enhance } from '$app/forms';
     import { onSubmit, closeModal, linkDiscordData, conv2DArrayToObject, msgClosed, paginatedUsersData, updateUserCtrlPanel } from '$lib/utils';
 
-    export let createdDiscord: discord;
+    export let newDiscord: discord;
 </script>
 
 <div class="modal">
@@ -23,7 +23,7 @@
                     await applyAction(result);
 
                     if (result.type === 'success') {
-                        updateUserCtrlPanel(userId, charId, 'link', createdDiscord);
+                        updateUserCtrlPanel(userId, charId, 'link', newDiscord);
 
                         $paginatedUsersData = $paginatedUsersData.map((user) => {
                             // delete same discord data
@@ -39,7 +39,7 @@
                                     if (character.id === charId)
                                         return {
                                             ...character,
-                                            discord: type === 'linkDiscord' ? createdDiscord : null,
+                                            discord: type === 'linkDiscord' ? newDiscord : null,
                                         };
 
                                     return character;
@@ -95,9 +95,10 @@
 
                 {#if $linkDiscordData.form_action === 'linkDiscord'}
                     <p class="modal_note">
-                        * If Discord ID you entered is already linked to another character and account, the internal data (bounty coins, bounty progress, etc.) will be transferred and re-linked to the
+                        * If discord ID you entered is already linked to another character and account, the internal data (bounty coins, bounty progress, etc.) will be transferred and re-linked to the
                         target character and account.
                     </p>
+                    <p class="modal_note">* To switch/re-link character within a linked user account, the same discord ID must be entered.</p>
                     <p class="modal_note">* Empty isn't allowed for "Discord ID."</p>
                 {:else if $linkDiscordData.form_action === 'unlinkDiscord'}
                     <p class="modal_note">

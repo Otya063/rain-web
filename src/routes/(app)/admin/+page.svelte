@@ -111,7 +111,7 @@
         {#if $errDetailMode}
             <div transition:slide class="msg_detail">
                 Message Details:
-                <p>{form?.message}</p>
+                <p>{@html form?.message}</p>
             </div>
         {/if}
     </div>
@@ -130,7 +130,7 @@
 {/if}
 
 {#if $linkDiscord}
-    <LinkDiscord createdDiscord={form?.createdDiscord} />
+    <LinkDiscord newDiscord={form?.newDiscord} />
 {/if}
 
 {#if $deleteChar}

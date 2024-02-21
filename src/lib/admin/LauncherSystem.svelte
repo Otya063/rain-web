@@ -5,20 +5,21 @@
     import { slide } from 'svelte/transition';
 
     export let systemData: launcher_system;
-    let { RainJP, RainUS, RainEU, update, debug, client_data }: launcher_system = systemData;
+    let { RainJP, RainUS, RainEU, update, debug, client_data, rain_admins }: launcher_system = systemData;
 
     /* Below is the edit mode script
     ====================================================*/
-    const catTypes: { [key in keyof Omit<launcher_system, 'id' | 'rain_admins'>]: boolean } = {
+    const catTypes: { [key in keyof Omit<launcher_system, 'id'>]: boolean } = {
         RainJP: false,
         RainUS: false,
         RainEU: false,
         update: false,
         debug: false,
         client_data: false,
+        rain_admins: false,
     };
 
-    const editModeSwitch = <T extends keyof Omit<launcher_system, 'id' | 'rain_admins'>>(type: T): void | false => {
+    const editModeSwitch = <T extends keyof Omit<launcher_system, 'id'>>(type: T): void | false => {
         // check if another cat type is already open
         const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
 
@@ -33,7 +34,7 @@
         if (activeCat) {
             // set everything to false (close) in a loop.
             Object.keys(catTypes).forEach((_key) => {
-                const key = _key as keyof Omit<launcher_system, 'id' | 'rain_admins'>;
+                const key = _key as keyof Omit<launcher_system, 'id'>;
                 catTypes[key] = false;
             });
 
@@ -48,7 +49,7 @@
     };
 
     const updateSystemValue = (data: Record<string, any>): void => {
-        const column = Object.keys(data)[0] as keyof Omit<launcher_system, 'id' | 'rain_admins'> | 'client_data_0' | 'client_data_1' | 'maint_all';
+        const column = Object.keys(data)[0] as keyof Omit<launcher_system, 'id'> | 'client_data_0' | 'client_data_1' | 'maint_all';
         const value = Object.values(data)[0] as string;
 
         switch (column) {
@@ -96,6 +97,11 @@
                 break;
             }
 
+            case 'rain_admins': {
+                rain_admins = value.split(',');
+                break;
+            }
+
             default: {
                 throw new Error(`${column} is invalid column.`);
             }
@@ -128,7 +134,6 @@
         }}
     >
         <dl class="console_contents_list">
-            <!-- Rain (JP) Maintenance Setting -->
             <dt class="contents_term">Rain (JP)</dt>
             <dd class="contents_desc">
                 {RainJP ? 'Enable' : 'Disable'}
@@ -180,7 +185,6 @@
                 {/if}
             </dd>
 
-            <!-- Rain (US) Maintenance Setting -->
             <dt class="contents_term">Rain (US)</dt>
             <dd class="contents_desc">
                 {RainUS ? 'Enable' : 'Disable'}
@@ -232,7 +236,6 @@
                 {/if}
             </dd>
 
-            <!-- Rain (EU) Maintenance Setting -->
             <dt class="contents_term">Rain (EU)</dt>
             <dd class="contents_desc">
                 {RainEU ? 'Enable' : 'Disable'}
@@ -337,7 +340,6 @@
         }}
     >
         <dl class="console_contents_list">
-            <!-- Update Mode Setting -->
             <dt class="contents_term">Update Mode</dt>
             <dd class="contents_desc">
                 {update ? 'Enable' : 'Disable'}
@@ -389,7 +391,6 @@
                 {/if}
             </dd>
 
-            <!-- Debug Mode Setting -->
             <dt class="contents_term">Debug Mode</dt>
             <dd class="contents_desc">
                 {debug ? 'Enable' : 'Disable'}
@@ -441,12 +442,11 @@
                 {/if}
             </dd>
 
-            <!-- Client Version & Forced Updates -->
             <dt class="contents_term">Client Data</dt>
             <dd class="contents_desc">
-                {client_data[0]} (The version of client data)
+                {client_data[0]} [ version of client data ]
                 <br />
-                {client_data[1]} (Whether to force updating client data)
+                {client_data[1]} [ whether to force an update ]
 
                 {#if catTypes['client_data']}
                     <button class="red_btn" type="button" on:click={() => editModeSwitch('client_data')}>
@@ -496,6 +496,50 @@
                                 on:click={() => {
                                     onSubmit.set(true);
                                     editModeSwitch('client_data');
+                                }}
+                            >
+                                <span class="btn_icon material-icons">check</span>
+                                <span class="btn_text">Save</span>
+                            </button>
+                        </div>
+                    </div>
+                {/if}
+            </dd>
+
+            <dt class="contents_term">Rain Admins</dt>
+            <dd class="contents_desc">
+                {rain_admins.join(' / ')}
+
+                {#if catTypes['rain_admins']}
+                    <button class="red_btn" type="button" on:click={() => editModeSwitch('rain_admins')}>
+                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_text">Cancel</span>
+                    </button>
+                {:else}
+                    <button class="normal_btn" type="button" on:click={() => editModeSwitch('rain_admins')}>
+                        <span class="btn_icon material-icons">mode_edit</span>
+                        <span class="btn_text">Edit</span>
+                    </button>
+                {/if}
+
+                {#if catTypes['rain_admins']}
+                    <div transition:slide class="edit_area_box">
+                        <div class="edit_area enter">
+                            <p class="edit_area_title">Change the Admins' Username</p>
+                            <p class="console_contents_note">* Empty isn't allowed.</p>
+                            <dl class="edit_area_box_parts text">
+                                <dt>Enter the Username</dt>
+                                <dd>
+                                    <input type="text" name="rain_admins" value={rain_admins} autocomplete="off" />
+                                </dd>
+                            </dl>
+
+                            <button
+                                class="blue_btn"
+                                type="submit"
+                                on:click={() => {
+                                    onSubmit.set(true);
+                                    editModeSwitch('rain_admins');
                                 }}
                             >
                                 <span class="btn_icon material-icons">check</span>

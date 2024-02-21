@@ -1,4 +1,4 @@
-import type { CourseEnData } from "$lib/types";
+import type { CourseEnData } from '$lib/types';
 
 export const courseEn = (bin: string[]): CourseEnData => {
     return {
@@ -6,15 +6,15 @@ export const courseEn = (bin: string[]): CourseEnData => {
             id: 1,
             enabled: bin[1] === '1',
             code: 'tlc',
-        }, // automatically enabled (= 1) on the server side
+        }, // this course is automatically enabled (= 1) on the server side
         'Hunter Life Course': {
             id: 2,
-            enabled: bin[2] === '1',
+            enabled: bin[29] === '1' || bin[27] === '1' ? false : bin[2] === '1',
             code: 'hlc',
         },
         'Extra Course': {
             id: 3,
-            enabled: bin[3] === '1',
+            enabled: bin[28] !== '1' && bin[3] === '1',
             code: 'exc',
         },
         'Extra B Course [Deprecated]': {
@@ -68,7 +68,7 @@ export const courseEn = (bin: string[]): CourseEnData => {
             enabled: bin[20] === '1',
             code: 'dbg',
         },
-        'COG Link Expired [Deprecated]': {
+        'COG Linkage Expired [Deprecated]': {
             id: 21,
             enabled: bin[21] === '1',
             code: 'cle',
@@ -78,12 +78,12 @@ export const courseEn = (bin: string[]): CourseEnData => {
             enabled: bin[22] === '1',
             code: 'xgm',
         },
-        'PS3/Vita Trophy Reqs [Deprecated]': {
+        'PS3/Vita Trophy Requirements [Deprecated]': {
             id: 23,
             enabled: bin[23] === '1',
             code: 'trq',
         },
-        'COG Link Check [Deprecated]': {
+        'COG Linkage Check [Deprecated]': {
             id: 24,
             enabled: bin[24] === '1',
             code: 'clc',
@@ -98,20 +98,20 @@ export const courseEn = (bin: string[]): CourseEnData => {
             enabled: bin[26] === '1',
             code: 'cnc',
         },
-        'Hunter Life Continued Course': {
+        'Recurring Hunter Life Course': {
             id: 27,
             enabled: bin[27] === '1',
-            code: 'hlcc',
+            code: 'rhlc',
         }, // override HL Course
-        'Extra Continued Course': {
+        'Recurring Extra Course': {
             id: 28,
             enabled: bin[28] === '1',
-            code: 'excc',
+            code: 'rexc',
         }, // override EX Course
         'Free Course': {
             id: 29,
             enabled: bin[29] === '1',
             code: 'frc',
-        }, // override HL / HLC Course
+        }, // override HL / RHL Course
     };
 };

@@ -2,22 +2,22 @@ import type { CourseJaData } from '$lib/types';
 
 export const courseJa = (bin: string[]): CourseJaData => {
     return {
-        'トライアルコース [廃止]': {
+        'トライアルコース [非推奨]': {
             id: 1,
             enabled: bin[1] === '1',
             code: 'tlc',
-        }, // automatically enabled (= 1) on the server side
+        }, // this course is automatically enabled (= 1) on the server side
         ハンターライフコース: {
             id: 2,
-            enabled: bin[2] === '1',
+            enabled: bin[29] === '1' || bin[27] === '1' ? false : bin[2] === '1',
             code: 'hlc',
         },
         エクストラコース: {
             id: 3,
-            enabled: bin[3] === '1',
+            enabled: bin[28] !== '1' && bin[3] === '1',
             code: 'exc',
         },
-        "エクストラBコース [廃止]": {
+        'エクストラBコース [非推奨]': {
             id: 4,
             enabled: bin[4] === '1',
             code: 'exbc',
@@ -32,7 +32,7 @@ export const courseJa = (bin: string[]): CourseJaData => {
             enabled: bin[6] === '1',
             code: 'prc',
         },
-        'パローネコース（エクストラCコース） [廃止]': {
+        'パローネコース（エクストラCコース） [非推奨]': {
             id: 7,
             enabled: bin[7] === '1',
             code: 'plc',
@@ -63,32 +63,32 @@ export const courseJa = (bin: string[]): CourseJaData => {
             code: 'nbc',
         },
         // [13]-[19] nothing
-        "デバッグ [廃止]": {
+        'デバッグ [非推奨]': {
             id: 20,
             enabled: bin[20] === '1',
             code: 'dbg',
         },
-        "COG連携失効 [廃止]": {
+        'COG連携失効 [非推奨]': {
             id: 21,
             enabled: bin[21] === '1',
             code: 'cle',
         },
-        'Xbox LIVE ゴールド メンバーシップ [廃止]': {
+        'Xbox LIVE ゴールド メンバーシップ [非推奨]': {
             id: 22,
             enabled: bin[22] === '1',
             code: 'xgm',
         },
-        'PS3/Vita トロフィー獲得条件 [廃止]': {
+        'PS3/Vita トロフィー獲得条件 [非推奨]': {
             id: 23,
             enabled: bin[23] === '1',
             code: 'trq',
         },
-        "COG連携確認 [廃止]": {
+        'COG連携確認 [非推奨]': {
             id: 24,
             enabled: bin[24] === '1',
             code: 'clc',
         },
-        "ネットカフェ [廃止]": {
+        'ネットカフェ [非推奨]': {
             id: 25,
             enabled: bin[25] === '1',
             code: 'nc',
@@ -101,17 +101,17 @@ export const courseJa = (bin: string[]): CourseJaData => {
         ハンターライフ継続コース: {
             id: 27,
             enabled: bin[27] === '1',
-            code: 'hlcc',
+            code: 'rhlc',
         }, // override HL Course
         エクストラ継続コース: {
             id: 28,
             enabled: bin[28] === '1',
-            code: 'excc',
+            code: 'rexc',
         }, // override EX Course
         フリーコース: {
             id: 29,
             enabled: bin[29] === '1',
             code: 'frc',
-        }, // override HL / HLC Course
+        }, // override HL / RHL Course
     };
 };
