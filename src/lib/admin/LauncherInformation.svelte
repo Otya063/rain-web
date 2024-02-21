@@ -28,20 +28,21 @@
     ====================================================*/
     let editingId: number;
     let editMode = false;
-    const catTypes: { [key in keyof Omit<launcher_info, 'id' | 'created_at'>]: boolean } = {
+    const catTypes: { [key in keyof Omit<launcher_info, 'id'>]: boolean } = {
         title: false,
         url: false,
         type: false,
+        created_at: false,
     };
 
-    const editModeSwitch = <T extends number, U extends keyof Omit<launcher_info, 'id' | 'created_at'>>(id: T, type: U): void | false => {
+    const editModeSwitch = <T extends number, U extends keyof Omit<launcher_info, 'id'>>(id: T, type: U): void | false => {
         // check if another category type is already in edit mode
         const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
 
         // when another normal_btn is pressed while editing, the editing target is switched
         if (activeCat && id !== 0) {
             Object.keys(catTypes).forEach((_key) => {
-                const key = _key as keyof Omit<launcher_info, 'id' | 'created_at'>;
+                const key = _key as keyof Omit<launcher_info, 'id'>;
                 catTypes[key] = false;
             });
 
@@ -161,7 +162,16 @@
                                         if (info.id === id)
                                             return {
                                                 ...info,
-                                                [column]: column !== 'url' ? value : !value ? null : value.indexOf('discord.com') ? discordLinkConvertor(value) : value,
+                                                [column]:
+                                                    column !== 'url'
+                                                        ? column === 'created_at'
+                                                            ? DateTime.fromISO(String(value)).toJSDate()
+                                                            : value
+                                                        : !value
+                                                          ? null
+                                                          : value.indexOf('discord.com')
+                                                            ? discordLinkConvertor(value)
+                                                            : value,
                                             };
 
                                         return info;
@@ -178,6 +188,8 @@
                             };
                         }}
                     >
+                        <input type="hidden" name="info_id" value={editingId} />
+                        <input type="hidden" name="info_type" value={infoItem.type} />
                         <dl class="console_contents_list">
                             <p class="console_contents_list_title">
                                 <button
@@ -222,9 +234,6 @@
 
                                 {#if editingId === infoItem.id && catTypes['title']}
                                     <div transition:slide class="edit_area_box">
-                                        <input type="hidden" name="info_id" value={editingId} />
-                                        <input type="hidden" name="info_type" value={infoItem.type} />
-
                                         <div class="edit_area enter">
                                             <p class="edit_area_title">Change Title</p>
                                             <p class="console_contents_note">* Empty isn't allowed.</p>
@@ -269,9 +278,6 @@
 
                                 {#if editingId === infoItem.id && catTypes['url']}
                                     <div transition:slide class="edit_area_box">
-                                        <input type="hidden" name="info_id" value={editingId} />
-                                        <input type="hidden" name="info_type" value={infoItem.type} />
-
                                         <div class="edit_area enter">
                                             <p class="edit_area_title">Change URL</p>
                                             <p class="console_contents_note">* If the domain is "discord.com," the URL will be converted so that the discord app will open automatically.</p>
@@ -303,7 +309,48 @@
                                 {DateTime.fromJSDate(infoItem.created_at)
                                     .setZone(DateTime.local().zoneName)
                                     .setLocale('en')
-                                    .toLocaleString({ year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                    .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+
+                                {#if editingId === infoItem.id && catTypes['created_at']}
+                                    <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'created_at')}>
+                                        <span class="btn_icon material-icons">close</span>
+                                        <span class="btn_text">Cancel</span>
+                                    </button>
+                                {:else}
+                                    <button class="normal_btn" type="button" on:click={() => editModeSwitch(infoItem.id, 'created_at')}>
+                                        <span class="btn_icon material-icons">mode_edit</span>
+                                        <span class="btn_text">Edit</span>
+                                    </button>
+                                {/if}
+
+                                {#if editingId === infoItem.id && catTypes['created_at']}
+                                    <div transition:slide class="edit_area_box">
+                                        <div class="edit_area enter">
+                                            <p class="edit_area_title">Change Date</p>
+                                            <p class="console_contents_note">* The date and time to be set are automatically converted to UTC.</p>
+                                            <p class="console_contents_note">* Empty isn't allowed.</p>
+                                            <dl class="edit_area_box_parts text">
+                                                <dt>Set new date</dt>
+                                                <dd>
+                                                    <input type="datetime-local" name="created_at" value={DateTime.fromJSDate(infoItem.created_at).toFormat("yyyy-MM-dd'T'HH:mm")} />
+                                                    <input type="hidden" name="zonename" value={DateTime.local().zoneName} />
+                                                </dd>
+                                            </dl>
+
+                                            <button
+                                                class="blue_btn"
+                                                type="submit"
+                                                on:click={() => {
+                                                    onSubmit.set(true);
+                                                    editModeSwitch(0, 'created_at');
+                                                }}
+                                            >
+                                                <span class="btn_icon material-icons">check</span>
+                                                <span class="btn_text">Save</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                {/if}
                             </dd>
 
                             <dt class="contents_term">Info Type</dt>
@@ -324,9 +371,6 @@
 
                                 {#if editingId === infoItem.id && catTypes['type']}
                                     <div transition:slide class="edit_area_box">
-                                        <input type="hidden" name="info_id" value={editingId} />
-                                        <input type="hidden" name="info_type" value={infoItem.type} />
-
                                         <div class="edit_area enter">
                                             <p class="edit_area_title">Change Information Type</p>
                                             <dl class="edit_area_box_parts text">

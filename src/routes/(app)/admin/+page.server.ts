@@ -143,12 +143,23 @@ const createInfoData: Action = async ({ request }) => {
 const updateInfoData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.info_id);
-    const column = Object.keys(data)[2] as keyof Omit<launcher_info, 'id' | 'created_at'>;
+    const zonename = data.zonename;
+    const column = Object.keys(data)[2] as keyof Omit<launcher_info, 'id'>;
     let value = Object.values(data)[2] as string | null;
+    console.log(data);
+    if (!value) {
+        switch (column) {
+            case 'title':
+            case 'type':
+            case 'created_at': {
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                return fail(400, { error: true, message: emptyMsg });
+            }
 
-    if ((column === 'title' || column === 'type') && !value) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-        return fail(400, { error: true, message: emptyMsg });
+            default: {
+                break;
+            }
+        }
     }
 
     try {
@@ -157,7 +168,16 @@ const updateInfoData: Action = async ({ request }) => {
                 id,
             },
             data: {
-                [column]: column !== 'url' ? value : !value ? null : value.indexOf('discord.com') ? discordLinkConvertor(value) : value,
+                [column]:
+                    column !== 'url'
+                        ? column === 'created_at'
+                            ? DateTime.fromISO(String(value), { zone: zonename }).toString()!
+                            : value
+                        : !value
+                        ? null
+                        : value.indexOf('discord.com')
+                        ? discordLinkConvertor(value)
+                        : value,
             },
         });
 
@@ -320,7 +340,7 @@ const getPaginatedUsers: Action = async ({ request }) => {
 const updateUserData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.user_id);
-    const zoneName = String(data.zoneName);
+    const zonename = data.zonename;
     const column = Object.keys(data)[1] as keyof Omit<users, 'id' | 'last_character' | 'last_login' | 'item_box' | 'web_login_key'>;
     const value = Object.values(data)[1] as string | number;
     let rightsData: Record<string, any> = {};
@@ -332,6 +352,10 @@ const updateUserData: Action = async ({ request }) => {
             case 'return_expires': {
                 await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
                 return fail(400, { error: true, message: emptyMsg });
+            }
+
+            default: {
+                break;
             }
         }
     }
@@ -358,7 +382,7 @@ const updateUserData: Action = async ({ request }) => {
                     column === 'rights'
                         ? getCourseByObjData(rightsData)
                         : column === 'return_expires'
-                        ? DateTime.fromISO(String(value), { zone: zoneName }).toString()!
+                        ? DateTime.fromISO(String(value), { zone: zonename }).toString()!
                         : column === 'frontier_points' || column === 'gacha_premium' || column === 'gacha_trial'
                         ? !value
                             ? null
