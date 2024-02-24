@@ -447,7 +447,9 @@
                                                     ? !value
                                                         ? null
                                                         : Number(value)
-                                                    : value,
+                                                    : (column === 'psn_id' || column === 'wiiu_key') && !value
+                                                      ? null
+                                                      : value,
                                     };
 
                                 return user;

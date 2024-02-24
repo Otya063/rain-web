@@ -387,6 +387,8 @@ const updateUserData: Action = async ({ request }) => {
                         ? !value
                             ? null
                             : Number(value)
+                        : (column === 'psn_id' || column === 'wiiu_key') && !value
+                        ? null
                         : value,
             },
         });
