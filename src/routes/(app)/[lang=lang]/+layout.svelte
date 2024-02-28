@@ -2,7 +2,6 @@
     import type { LayoutData } from './$types';
     import LL, { setLocale } from '$i18n/i18n-svelte';
     import Alternate from '$lib/common/Alternate.svelte';
-    import Analytics from '$lib/common/Analytics.svelte';
     import Footer from '$lib/common/Footer.svelte';
     import Header from '$lib/common/Header.svelte';
     import '$scss/style_manual.scss';
@@ -15,8 +14,6 @@
     // at the top, set the locale before the store is accessed and before the actual rendering takes place
     setLocale(data.locale);
 </script>
-
-<Analytics />
 
 <header>
     <Header {pathname} />
