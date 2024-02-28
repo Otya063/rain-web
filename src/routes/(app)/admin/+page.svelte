@@ -7,6 +7,7 @@
     import SuspendUser from '$lib/admin/modalContents/SuspendUser.svelte';
     import AdminContents from '$lib/admin/AdminContents.svelte';
     import AdminMenu from '$lib/admin/AdminMenu.svelte';
+    import Analytics from '$lib/common/Analytics.svelte';
     import {
         suspendUser,
         deleteInfo,
@@ -68,6 +69,8 @@
     let infoAddMode: boolean;
     let bnrAddMode: boolean;
 </script>
+
+<Analytics />
 
 {#if !loaded}
     <div transition:fade class="mount_overlay"></div>
