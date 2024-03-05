@@ -22,6 +22,7 @@
         setSelectedCharacter,
         updateUserCtrlPanel,
         initUserCtrlPanel,
+        convHrpToHr,
     } from '$lib/utils';
     import type { PaginatedUsers, PaginationMeta } from '$lib/types';
     import _ from 'lodash';
@@ -1156,7 +1157,7 @@
                                             </p>
                                         {/if}
 
-                                        <span class="rank">HR: {character.hrp} / GR: {character.gr}</span>
+                                        <span class="rank">HR: {convHrpToHr(character.hrp)} / GR: {character.gr}</span>
                                         <span class="char_id">Character ID: {character.id}</span>
                                         <span class="last_login"
                                             >Last Login: {!character.last_login
