@@ -328,3 +328,38 @@ export class TextEncoderSJIS {
         return new Uint8Array(sjis);
     }
 }
+
+/* Convert Hrp Into True HR
+====================================================*/
+export const convHrpToHr = (hrp: number | null): number => {
+    switch (hrp) {
+        case 999: {
+            return 7;
+        }
+
+        case 998: {
+            return 6;
+        }
+        case 299: {
+            return 5;
+        }
+        case 99: {
+            return 4;
+        }
+
+        case 50: {
+            return 3;
+        }
+
+        case 30: {
+            return 2;
+        }
+        case 1: {
+            return 1;
+        }
+
+        default: {
+            return 0;
+        }
+    }
+};
