@@ -488,6 +488,11 @@
                         display: flex;
                         align-items: center;
                         justify-content: flex-start;
+
+                        .material-icons-outlined {
+                            font-size: 2.1rem;
+                            padding: 0 10px 2px 0;
+                        }
                     }
 
                     //利用権リストタイトル
@@ -507,6 +512,11 @@
                         .course_item {
                             width: calc(50% - 20px);
                             margin: 0 10px 6%;
+
+                            .material-icons-outlined {
+                                font-size: 2.1rem;
+                                padding: 0 10px 2px 0;
+                            }
                         }
                     }
                 }
@@ -1023,26 +1033,6 @@
 
                             .material-symbols-outlined {
                                 font-size: 2rem;
-                            }
-                        }
-
-                        // チェックボックス調整
-                        label:has(input[type='checkbox']) {
-                            &::before {
-                                content: none;
-                            }
-
-                            &::after {
-                                font-family: 'Material Icons';
-                                content: '\e835';
-                                font-size: 2.1rem;
-                                padding: 0 10px 2px 0;
-                            }
-                        }
-
-                        label:has(input[type='checkbox']:checked) {
-                            &::after {
-                                content: '\e834';
                             }
                         }
                     }

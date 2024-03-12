@@ -6,6 +6,10 @@
 
     export let suspendedAccount: suspended_account;
     let permanent: boolean;
+
+    const onChangeInputElm = () => {
+        document.getElementById('permanent')!.textContent = document.getElementById('permanent')?.textContent === 'check_box_outline_blank' ? 'check_box' : 'check_box_outline_blank';
+    };
 </script>
 
 <div class="modal">
@@ -97,7 +101,8 @@
                         <li class="modal_list_item">
                             <label>
                                 <p>Permanently Suspend</p>
-                                <input type="checkbox" name="permanently_del" bind:checked={permanent} />
+                                <span id="permanent" class="material-icons-outlined" style="font-size: 2.1rem;">check_box_outline_blank</span>
+                                <input type="checkbox" name="permanently_del" on:change={() => onChangeInputElm()} bind:checked={permanent} />
                             </label>
                         </li>
 

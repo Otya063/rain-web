@@ -40,6 +40,7 @@ const updateSystemMode: Action = async ({ request }) => {
     let value = Object.values(data)[0] as string;
 
     if ((column === 'client_data_0' || column === 'rain_admins') && !value) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
         return fail(400, { error: true, message: emptyMsg });
     }
 
@@ -146,7 +147,6 @@ const updateInfoData: Action = async ({ request }) => {
     const zonename = data.zonename;
     const column = Object.keys(data)[2] as keyof Omit<launcher_info, 'id'>;
     let value = Object.values(data)[2] as string | null;
-    console.log(data);
     if (!value) {
         switch (column) {
             case 'title':
@@ -229,14 +229,16 @@ const courseControl: Action = async ({ request }) => {
     let ids: number[];
     delete data.target_u_radio;
 
-    if (!Object.keys(data).length) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-        return fail(400, { error: true, message: 'You must choose at least one course.' });
-    }
-
     try {
         switch (target_u_radio) {
             case 'all': {
+                delete data.specified_u_text;
+
+                if (!Object.keys(data).length) {
+                    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                    return fail(400, { error: true, message: 'You must choose at least one course.' });
+                }
+
                 await db.$queryRaw`UPDATE users SET rights = ${getCourseByObjData(data)}`;
 
                 return {
@@ -246,10 +248,21 @@ const courseControl: Action = async ({ request }) => {
             }
 
             case 'specified': {
+                if (!data.specified_u_text) {
+                    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                    return fail(400, { error: true, message: 'Specify the user ID.' });
+                }
+
                 ids = data.specified_u_text.split('+').map(Number);
                 delete data.specified_u_text;
 
+                if (!Object.keys(data).length) {
+                    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                    return fail(400, { error: true, message: 'You must select at least one course.' });
+                }
+
                 if (ids.length > 10) {
+                    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
                     return fail(400, { error: true, message: 'No more than 10 users can be specified.' });
                 }
 
