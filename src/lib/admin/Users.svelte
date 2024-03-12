@@ -147,6 +147,62 @@
             };
         });
     };
+
+    const onChangeInputElm = (e: Event, type?: 'select' | 'hl1' | 'hl2' | 'ex1' | 'ex2') => {
+        switch (type) {
+            case 'select': {
+                document.getElementsByClassName('select')[0].textContent = 'radio_button_unchecked';
+                document.getElementsByClassName('select')[1].textContent = 'radio_button_unchecked';
+                const elm = (e.currentTarget as HTMLInputElement).previousElementSibling;
+                elm!.textContent = 'radio_button_checked';
+
+                break;
+            }
+
+            case 'hl1': {
+                document.getElementsByClassName('hl1')[0].textContent = 'radio_button_unchecked';
+                document.getElementsByClassName('hl1')[1].textContent = 'radio_button_unchecked';
+                document.getElementsByClassName('hl1')[2].textContent = 'radio_button_unchecked';
+                const elm = (e.currentTarget as HTMLInputElement).previousElementSibling;
+                elm!.textContent = 'radio_button_checked';
+
+                break;
+            }
+
+            case 'hl2': {
+                document.getElementsByClassName('hl2')[0].textContent = 'radio_button_unchecked';
+                document.getElementsByClassName('hl2')[1].textContent = 'radio_button_unchecked';
+                document.getElementsByClassName('hl2')[2].textContent = 'radio_button_unchecked';
+                const elm = (e.currentTarget as HTMLInputElement).previousElementSibling;
+                elm!.textContent = 'radio_button_checked';
+
+                break;
+            }
+
+            case 'ex1': {
+                document.getElementsByClassName('ex1')[0].textContent = 'radio_button_unchecked';
+                document.getElementsByClassName('ex1')[1].textContent = 'radio_button_unchecked';
+                const elm = (e.currentTarget as HTMLInputElement).previousElementSibling;
+                elm!.textContent = 'radio_button_checked';
+
+                break;
+            }
+
+            case 'ex2': {
+                document.getElementsByClassName('ex2')[0].textContent = 'radio_button_unchecked';
+                document.getElementsByClassName('ex2')[1].textContent = 'radio_button_unchecked';
+                const elm = (e.currentTarget as HTMLInputElement).previousElementSibling;
+                elm!.textContent = 'radio_button_checked';
+
+                break;
+            }
+
+            default: {
+                const elm = (e.currentTarget as HTMLInputElement).previousElementSibling;
+                elm!.textContent = elm!.textContent === 'check_box_outline_blank' ? 'check_box' : 'check_box_outline_blank';
+            }
+        }
+    };
 </script>
 
 <h2>
@@ -297,14 +353,35 @@
                     <dl class="edit_area_box_parts radio">
                         <dt class="course_list_title">Target User Type (Single Select)</dt>
                         <dd class="course_list">
-                            <label class="course_item"><input type="radio" name="target_u_radio" value="all" on:change={() => (specifiedUser = true)} />All Users</label>
+                            <label class="course_item">
+                                <span class="material-icons-outlined select">radio_button_unchecked</span>
+                                <input
+                                    type="radio"
+                                    name="target_u_radio"
+                                    value="all"
+                                    on:change={(e) => {
+                                        specifiedUser = true;
+                                        onChangeInputElm(e, 'select');
+                                    }}
+                                />All Users
+                            </label>
 
                             <div style="width: calc(50% - 20px); margin: 0 10px 6%;">
-                                <label style="cursor: pointer; white-space: nowrap;"
-                                    ><input type="radio" name="target_u_radio" value="specified" on:change={() => (specifiedUser = false)} />Specify User(s)</label
-                                >
-                                <input style="margin-left: 7%; width: 95%;" type="text" name="specified_u_text" placeholder="1364+1489+ ..." disabled={specifiedUser} />
+                                <label style="cursor: pointer; white-space: nowrap;">
+                                    <span class="material-icons-outlined select" style="font-size: 2.1rem; padding: 0 10px 2px 0;">radio_button_unchecked</span>
+                                    <input
+                                        type="radio"
+                                        name="target_u_radio"
+                                        value="specified"
+                                        on:change={(e) => {
+                                            specifiedUser = false;
+                                            onChangeInputElm(e, 'select');
+                                        }}
+                                    />Specify User(s)
+                                </label>
+                                <input class:disabled_elm={specifiedUser} style="margin-left: 7%; width: 95%;" type="text" name="specified_u_text" placeholder="1364+1489+ ..." />
                             </div>
+
                             <p class="console_contents_note" style="margin: 0px 0px 3% 4%; text-indent: -1.2rem;">
                                 * When specifying multiple users in the "Specify User(s)" text box, concatenate the IDs of those users with "+" and be careful not to exceed 10 users.
                             </p>
@@ -314,7 +391,10 @@
                         <dd class="course_list">
                             {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
                                 {#if code === 'hlc' || code === 'rhlc' || code === 'frc'}
-                                    <label class="course_item"><input type="radio" name="hl" value={code} />{courseName}</label>
+                                    <label class="course_item">
+                                        <span class="material-icons-outlined hl1">radio_button_unchecked</span>
+                                        <input type="radio" name="hl" value={code} on:change={(e) => onChangeInputElm(e, 'hl1')} />{courseName}
+                                    </label>
                                 {/if}
                             {/each}
                         </dd>
@@ -323,7 +403,10 @@
                         <dd class="course_list">
                             {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
                                 {#if code === 'exc' || code === 'rexc'}
-                                    <label class="course_item"><input type="radio" name="ex" value={code} />{courseName}</label>
+                                    <label class="course_item">
+                                        <span class="material-icons-outlined ex1">radio_button_unchecked</span>
+                                        <input type="radio" name="ex" value={code} on:change={(e) => onChangeInputElm(e, 'ex1')} />{courseName}
+                                    </label>
                                 {/if}
                             {/each}
                         </dd>
@@ -332,7 +415,10 @@
                         <dd class="course_list">
                             {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
                                 {#if code !== 'hlc' && code !== 'rhlc' && code !== 'frc' && code !== 'exc' && code !== 'rexc'}
-                                    <label class="course_item" class:disabled_elm={courseName.includes('[Deprecated]')}><input type="checkbox" name={code} />{courseName}</label>
+                                    <label class="course_item" class:disabled_elm={courseName.includes('[Deprecated]')}>
+                                        <span class="material-icons-outlined">check_box_outline_blank</span>
+                                        <input type="checkbox" name={code} on:change={(e) => onChangeInputElm(e)} />{courseName}
+                                    </label>
                                 {/if}
                             {/each}
                         </dd>
@@ -668,7 +754,10 @@
                                             <dd class="course_list">
                                                 {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
                                                     {#if code === 'hlc' || code === 'rhlc' || code === 'frc'}
-                                                        <label class="course_item"><input type="radio" name="hl" value={code} checked={enabled} />{courseName}</label>
+                                                        <label class="course_item">
+                                                            <span class="material-icons-outlined hl2">{enabled ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                                            <input type="radio" name="hl" value={code} checked={enabled} on:change={(e) => onChangeInputElm(e, 'hl2')} />{courseName}
+                                                        </label>
                                                     {/if}
                                                 {/each}
                                             </dd>
@@ -677,7 +766,10 @@
                                             <dd class="course_list">
                                                 {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
                                                     {#if code === 'exc' || code === 'rexc'}
-                                                        <label class="course_item"><input type="radio" name="ex" value={code} checked={enabled} />{courseName}</label>
+                                                        <label class="course_item">
+                                                            <span class="material-icons-outlined ex2">{enabled ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                                            <input type="radio" name="ex" value={code} checked={enabled} on:change={(e) => onChangeInputElm(e, 'ex2')} />{courseName}
+                                                        </label>
                                                     {/if}
                                                 {/each}
                                             </dd>
@@ -686,9 +778,10 @@
                                             <dd class="course_list">
                                                 {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
                                                     {#if code !== 'hlc' && code !== 'rhlc' && code !== 'frc' && code !== 'exc' && code !== 'rexc'}
-                                                        <label class="course_item" class:disabled_elm={courseName.includes('[Deprecated]')}
-                                                            ><input type="checkbox" name={code} checked={enabled} />{courseName}</label
-                                                        >
+                                                        <label class="course_item" class:disabled_elm={courseName.includes('[Deprecated]')}>
+                                                            <span class="material-icons-outlined">{enabled ? 'check_box' : 'check_box_outline_blank'}</span>
+                                                            <input type="checkbox" name={code} checked={enabled} on:change={(e) => onChangeInputElm(e)} />{courseName}
+                                                        </label>
                                                     {/if}
                                                 {/each}
                                             </dd>

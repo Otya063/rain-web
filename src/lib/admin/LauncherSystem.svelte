@@ -48,7 +48,7 @@
         catTypes[type] = !catTypes[type];
     };
 
-    const updateSystemValue = (data: Record<string, any>): void => {
+    const updateSystemValue = async (data: Record<string, any>): Promise<void> => {
         const column = Object.keys(data)[0] as keyof Omit<launcher_system, 'id'> | 'client_data_0' | 'client_data_1' | 'maint_all';
         const value = Object.values(data)[0] as string;
 
@@ -107,6 +107,29 @@
             }
         }
     };
+
+    const onChangeInputElm = (e: Event, type?: 'jp' | 'us' | 'eu' | 'all' | 'update' | 'debug' | 'force') => {
+        switch (type) {
+            case 'jp':
+            case 'us':
+            case 'eu':
+            case 'all':
+            case 'update':
+            case 'debug':
+            case 'force': {
+                document.getElementsByClassName(type)[0].textContent = 'radio_button_unchecked';
+                document.getElementsByClassName(type)[1].textContent = 'radio_button_unchecked';
+                const elm = (e.currentTarget as HTMLInputElement).previousElementSibling;
+                elm!.textContent = 'radio_button_checked';
+
+                break;
+            }
+
+            default: {
+                throw new Error(`${type} is invalid type.`);
+            }
+        }
+    };
 </script>
 
 <h2>
@@ -128,7 +151,7 @@
                 await applyAction(result);
 
                 if (result.type === 'success') {
-                    updateSystemValue(data);
+                    await updateSystemValue(data);
                 }
             };
         }}
@@ -157,13 +180,15 @@
                             <ul class="edit_area_box_parts radio">
                                 <li>
                                     <label for="rain_jp_enable">
-                                        <input type="radio" name="RainJP" id="rain_jp_enable" value="true" checked={RainJP} />
+                                        <span class="material-icons-outlined jp">{RainJP ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <input type="radio" name="RainJP" id="rain_jp_enable" value="true" checked={RainJP} on:change={(e) => onChangeInputElm(e, 'jp')} />
                                         Enable
                                     </label>
                                 </li>
                                 <li>
                                     <label for="rain_jp_disable">
-                                        <input type="radio" name="RainJP" id="rain_jp_disable" value="false" checked={!RainJP} />
+                                        <span class="material-icons-outlined jp">{!RainJP ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <input type="radio" name="RainJP" id="rain_jp_disable" value="false" checked={!RainJP} on:change={(e) => onChangeInputElm(e, 'jp')} />
                                         Disable
                                     </label>
                                 </li>
@@ -208,13 +233,15 @@
                             <ul class="edit_area_box_parts radio">
                                 <li>
                                     <label for="rain_us_enable">
-                                        <input type="radio" name="RainUS" id="rain_us_enable" value="true" checked={RainUS} />
+                                        <span class="material-icons-outlined us">{RainUS ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <input type="radio" name="RainUS" id="rain_us_enable" value="true" checked={RainUS} on:change={(e) => onChangeInputElm(e, 'us')} />
                                         Enable
                                     </label>
                                 </li>
                                 <li>
                                     <label for="rain_us_disable">
-                                        <input type="radio" name="RainUS" id="rain_us_disable" value="false" checked={!RainUS} />
+                                        <span class="material-icons-outlined us">{!RainUS ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <input type="radio" name="RainUS" id="rain_us_disable" value="false" checked={!RainUS} on:change={(e) => onChangeInputElm(e, 'us')} />
                                         Disable
                                     </label>
                                 </li>
@@ -259,13 +286,15 @@
                             <ul class="edit_area_box_parts radio">
                                 <li>
                                     <label for="rain_eu_enable">
-                                        <input type="radio" name="RainEU" id="rain_eu_enable" value="true" checked={RainEU} />
+                                        <span class="material-icons-outlined eu">{RainEU ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <input type="radio" name="RainEU" id="rain_eu_enable" value="true" checked={RainEU} on:change={(e) => onChangeInputElm(e, 'eu')} />
                                         Enable
                                     </label>
                                 </li>
                                 <li>
                                     <label for="rain_eu_disable">
-                                        <input type="radio" name="RainEU" id="rain_eu_disable" value="false" checked={!RainEU} />
+                                        <span class="material-icons-outlined eu">{!RainEU ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <input type="radio" name="RainEU" id="rain_eu_disable" value="false" checked={!RainEU} on:change={(e) => onChangeInputElm(e, 'eu')} />
                                         Disable
                                     </label>
                                 </li>
@@ -291,22 +320,32 @@
         <div id="change_all_settings" class="edit_area_box">
             <div class="edit_area select">
                 <p class="edit_area_title">Change All Settings</p>
-                <ul class="edit_area_box_parts radio">
+                <ul class="edit_area_box_parts radio" class:disabled_elm={catTypes.RainJP || catTypes.RainEU || catTypes.RainUS}>
                     <li>
                         <label style="width: 110px;" for="enable_all">
-                            <input type="radio" name="maint_all" id="enable_all" value="true" />
+                            <span class="material-icons-outlined all">radio_button_unchecked</span>
+                            <input type="radio" name="maint_all" id="enable_all" value="true" on:change={(e) => onChangeInputElm(e, 'all')} />
                             Enable All
                         </label>
                     </li>
                     <li>
                         <label style="width: 110px;" for="disable_all">
-                            <input type="radio" name="maint_all" id="disable_all" value="false" checked />
+                            <span class="material-icons-outlined all">radio_button_checked</span>
+                            <input type="radio" name="maint_all" id="disable_all" value="false" checked on:change={(e) => onChangeInputElm(e, 'all')} />
                             Disable All
                         </label>
                     </li>
                 </ul>
 
-                <button class="blue_btn" type="submit" formaction="?/updateAllMaintData" on:click={() => onSubmit.set(true)}>
+                <button
+                    class="blue_btn"
+                    class:disabled_elm={catTypes.RainJP || catTypes.RainEU || catTypes.RainUS}
+                    type="submit"
+                    formaction="?/updateAllMaintData"
+                    on:click={() => {
+                        onSubmit.set(true);
+                    }}
+                >
                     <span class="btn_icon material-icons">check</span>
                     <span class="btn_text">Save</span>
                 </button>
@@ -363,13 +402,15 @@
                             <ul class="edit_area_box_parts radio">
                                 <li>
                                     <label for="update_enable">
-                                        <input type="radio" name="update" id="update_enable" value="true" checked={update} />
+                                        <span class="material-icons-outlined update">{update ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <input type="radio" name="update" id="update_enable" value="true" checked={update} on:change={(e) => onChangeInputElm(e, 'update')} />
                                         Enable
                                     </label>
                                 </li>
                                 <li>
                                     <label for="update_disable">
-                                        <input type="radio" name="update" id="update_disable" value="false" checked={!update} />
+                                        <span class="material-icons-outlined update">{!update ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <input type="radio" name="update" id="update_disable" value="false" checked={!update} on:change={(e) => onChangeInputElm(e, 'update')} />
                                         Disable
                                     </label>
                                 </li>
@@ -414,13 +455,15 @@
                             <ul class="edit_area_box_parts radio">
                                 <li>
                                     <label for="debug_enable">
-                                        <input type="radio" name="debug" id="debug_enable" value="true" checked={debug} />
+                                        <span class="material-icons-outlined debug">{debug ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <input type="radio" name="debug" id="debug_enable" value="true" checked={debug} on:change={(e) => onChangeInputElm(e, 'debug')} />
                                         Enable
                                     </label>
                                 </li>
                                 <li>
                                     <label for="debug_disable">
-                                        <input type="radio" name="debug" id="debug_disable" value="false" checked={!debug} />
+                                        <span class="material-icons-outlined debug">{!debug ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <input type="radio" name="debug" id="debug_disable" value="false" checked={!debug} on:change={(e) => onChangeInputElm(e, 'debug')} />
                                         Disable
                                     </label>
                                 </li>
@@ -478,13 +521,22 @@
                             <ul class="edit_area_box_parts radio">
                                 <li>
                                     <label for="update_force">
-                                        <input type="radio" name="client_data_1" id="update_force" value="force" checked={client_data[1] === 'force'} />
+                                        <span class="material-icons-outlined force">{client_data[1] === 'force' ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <input type="radio" name="client_data_1" id="update_force" value="force" checked={client_data[1] === 'force'} on:change={(e) => onChangeInputElm(e, 'force')} />
                                         Force
                                     </label>
                                 </li>
                                 <li>
                                     <label for="update_not_force">
-                                        <input type="radio" name="client_data_1" id="update_not_force" value="not_force" checked={client_data[1] === 'not_force'} />
+                                        <span class="material-icons-outlined force">{client_data[1] === 'not_force' ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <input
+                                            type="radio"
+                                            name="client_data_1"
+                                            id="update_not_force"
+                                            value="not_force"
+                                            checked={client_data[1] === 'not_force'}
+                                            on:change={(e) => onChangeInputElm(e, 'force')}
+                                        />
                                         Not Force
                                     </label>
                                 </li>
