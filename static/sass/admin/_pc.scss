@@ -318,6 +318,14 @@
                         .red_btn {
                             margin: 1% 0;
                         }
+
+                        // クランメンバ－一覧
+                        .clan_members {
+                            display: grid;
+                            column-gap: 20px;
+                            row-gap: 20px;
+                            grid-template-columns: repeat(2, 1fr);
+                        }
                     }
                 }
 

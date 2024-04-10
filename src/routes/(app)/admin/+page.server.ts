@@ -2,7 +2,7 @@ import type { Action, Actions, PageServerLoad } from './$types';
 import type { discord, discord_register, launcher_banner, launcher_info, launcher_system, users } from '@prisma/client/edge';
 import { error, fail } from '@sveltejs/kit';
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
-import ServerData, { db, getPaginatedUserData, getPaginationMeta } from '$lib/database';
+import ServerData, { db, getPaginatedClanData, getPaginatedUserData, getPaginationMeta, IsCharLogin } from '$lib/database';
 import type { BinaryTypes } from '$lib/types';
 import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi } from '$lib/utils';
 import { DateTime } from 'luxon';
@@ -348,6 +348,53 @@ const getPaginatedUsers: Action = async ({ request }) => {
     }
 
     return { paginatedUsers, paginationMeta };
+};
+
+const getPaginatedClans: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'clan_name' | 'clan_id'; filter_value: string; status: string; cursor: number };
+
+    if (!filter_value) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        return fail(400, { error: true, message: emptyMsg });
+    }
+
+    const { paginatedClans, paginationMeta } = await (async () => {
+        switch (status) {
+            case 'init': {
+                const paginatedClans = await getPaginatedClanData(filter_param, filter_value, 'init', 5);
+
+                const nextCursor = paginatedClans[4]?.id || 0;
+                const paginationMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
+
+                return { paginatedClans, paginationMeta };
+            }
+
+            case 'back':
+            case 'next': {
+                const paginatedClans = await getPaginatedClanData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1);
+
+                const prevCursor = paginatedClans[0]?.id || 0;
+                const nextCursor = paginatedClans[4]?.id || 0;
+                const paginationMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
+
+                return { paginatedClans, paginationMeta };
+            }
+
+            default: {
+                throw new Error('Invalid Status');
+            }
+        }
+    })();
+
+    if (!paginatedClans.length) {
+        return fail(400, {
+            error: true,
+            message: `The clan with the entered ${filter_param} (${filter_value}) doesn't exist.`,
+        });
+    }
+
+    return { paginatedClans, paginationMeta };
 };
 
 const updateUserData: Action = async ({ request }) => {
@@ -908,6 +955,37 @@ const restoreCharacter: Action = async ({ request }) => {
     }
 };
 
+const rebuildClan: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const { clan_id, clan_name } = data as { clan_id: number; clan_name: string };
+
+    const charIds = (
+        await db.guild_characters.findMany({
+            where: {
+                guild_id: Number(clan_id),
+            },
+            select: {
+                character_id: true,
+            },
+        })
+    ).map((character) => character.character_id!);
+
+    const result = await new IsCharLogin(charIds).checkMulti();
+    if (result.check && !!result.charIds.length) {
+        return fail(400, { error: true, message: `Couldn't process because all characters haven't logged out.<br />Logged-In Character's ID: ${result.charIds}` });
+    }
+
+    const { success, message } = await db.guilds.rebuild(Number(clan_id));
+    if (!success) {
+        return fail(400, { error: true, message });
+    } else {
+        return {
+            success: true,
+            message: `The clan data (Name: ${clan_name}, New ID: ${message}) has been successfully rebuilt.`,
+        };
+    }
+};
+
 export const actions: Actions = {
     updateSystemMode,
     updateAllMaintData,
@@ -916,6 +994,7 @@ export const actions: Actions = {
     deleteInfoData,
     courseControl,
     getPaginatedUsers,
+    getPaginatedClans,
     updateUserData,
     updateCharacterData,
     suspendUser,
@@ -927,4 +1006,5 @@ export const actions: Actions = {
     unlinkDiscord,
     deleteCharacter,
     restoreCharacter,
+    rebuildClan,
 };

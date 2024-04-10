@@ -66,3 +66,22 @@ export interface PaginationMeta {
     prevCursor: number;
     nextCursor: number;
 }
+
+/* Paginated Clan Type
+====================================================*/
+export interface PaginatedClans {
+    id: number;
+    name: string | null;
+    created_at: Date | null;
+    leader_id: number;
+    leader_name: string | null;
+    guild_characters: {
+        characters: {
+            id: number;
+            name: string | null;
+            hrp: number | null;
+            gr: number | null;
+        } | null;
+        order_index: number;
+    }[];
+}

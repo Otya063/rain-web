@@ -1,5 +1,5 @@
-import ServerData, { db } from '.';
-import type { PaginatedUsers, PaginationMeta, BinaryTypes } from '$lib/types';
+import ServerData, { IsCharLogin, db } from '.';
+import type { PaginatedUsers, PaginationMeta, BinaryTypes, PaginatedClans } from '$lib/types';
 import { TextEncoderSJIS } from '$lib/utils';
 import { Buffer } from 'node:buffer';
 
@@ -457,7 +457,7 @@ export const getPaginatedUserData = async (
 /* Get Pagination Meta Data
 ====================================================*/
 export const getPaginationMeta = async (
-    filterParam: 'username' | 'character_name' | 'user_id' | 'character_id',
+    filterParam: 'username' | 'character_name' | 'user_id' | 'character_id' | 'clan_name' | 'clan_id',
     filterValue: string,
     prevCursor: number,
     nextCursor: number
@@ -551,13 +551,231 @@ export const getPaginationMeta = async (
             return { prevCursor, nextCursor, hasPrevPage: !!prevData, hasNextPage: !!nextData };
         }
 
+        case 'clan_name': {
+            const prevData = await db.guilds.findFirst({
+                take: -1,
+                skip: 1,
+                cursor: {
+                    id: prevCursor,
+                },
+                where: {
+                    name: {
+                        contains: filterValue,
+                    },
+                },
+                select: {
+                    id: true,
+                },
+            });
+
+            const nextData = await db.guilds.findFirst({
+                take: 1,
+                skip: 1,
+                cursor: {
+                    id: nextCursor,
+                },
+                where: {
+                    name: {
+                        contains: filterValue,
+                    },
+                },
+                select: {
+                    id: true,
+                },
+            });
+
+            return { prevCursor, nextCursor, hasPrevPage: !!prevData, hasNextPage: !!nextData };
+        }
+
         case 'user_id':
-        case 'character_id': {
+        case 'character_id':
+        case 'clan_id': {
             return { hasPrevPage: false, hasNextPage: false, prevCursor: 0, nextCursor: 0 };
         }
 
         default: {
             throw new Error('Invalid Parameter');
+        }
+    }
+};
+
+/* Get Paginated User(s)
+====================================================*/
+export const getPaginatedClanData = async (
+    filterParam: 'clan_name' | 'clan_id',
+    filterValue: string | number,
+    status: string,
+    take: number,
+    cursor?: number,
+    skip?: number
+): Promise<PaginatedClans[]> => {
+    switch (status) {
+        case 'init': {
+            switch (filterParam) {
+                case 'clan_name': {
+                    return await Promise.all(
+                        (
+                            await db.guilds.findMany({
+                                take,
+                                where: {
+                                    name: {
+                                        contains: filterValue as string,
+                                    },
+                                },
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    created_at: true,
+                                    leader_id: true,
+                                    guild_characters: {
+                                        select: {
+                                            order_index: true,
+                                            characters: {
+                                                select: {
+                                                    id: true,
+                                                    name: true,
+                                                    hrp: true,
+                                                    gr: true,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                                orderBy: {
+                                    id: 'asc',
+                                },
+                            })
+                        ).map(async (clan) => ({
+                            ...clan,
+                            leader_name: (await db.characters.findFirst({
+                                where: {
+                                    id: clan.leader_id,
+                                },
+                                select: {
+                                    name: true,
+                                },
+                            }))!.name,
+                        }))
+                    );
+                }
+
+                case 'clan_id': {
+                    return await Promise.all(
+                        (
+                            await db.guilds.findMany({
+                                take,
+                                where: {
+                                    id: Number(filterValue),
+                                },
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    created_at: true,
+                                    leader_id: true,
+                                    guild_characters: {
+                                        select: {
+                                            order_index: true,
+                                            characters: {
+                                                select: {
+                                                    id: true,
+                                                    name: true,
+                                                    hrp: true,
+                                                    gr: true,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                                orderBy: {
+                                    id: 'asc',
+                                },
+                            })
+                        ).map(async (clan) => ({
+                            ...clan,
+                            leader_name: (await db.characters.findFirst({
+                                where: {
+                                    id: clan.leader_id,
+                                },
+                                select: {
+                                    name: true,
+                                },
+                            }))!.name,
+                        }))
+                    );
+                }
+
+                default: {
+                    throw new Error('Invalid Parameter');
+                }
+            }
+        }
+
+        case 'back':
+        case 'next': {
+            switch (filterParam) {
+                case 'clan_name': {
+                    return await Promise.all(
+                        (
+                            await db.guilds.findMany({
+                                take,
+                                skip,
+                                cursor: {
+                                    id: cursor,
+                                },
+                                where: {
+                                    name: {
+                                        contains: filterValue as string,
+                                    },
+                                },
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    created_at: true,
+                                    leader_id: true,
+                                    guild_characters: {
+                                        select: {
+                                            order_index: true,
+                                            characters: {
+                                                select: {
+                                                    id: true,
+                                                    name: true,
+                                                    hrp: true,
+                                                    gr: true,
+                                                },
+                                            },
+                                        },
+                                    },
+                                },
+                                orderBy: {
+                                    id: 'asc',
+                                },
+                            })
+                        ).map(async (clan) => ({
+                            ...clan,
+                            leader_name: (await db.characters.findFirst({
+                                where: {
+                                    id: clan.leader_id,
+                                },
+                                select: {
+                                    name: true,
+                                },
+                            }))!.name,
+                        }))
+                    );
+                }
+
+                case 'clan_id': {
+                    break;
+                }
+
+                default: {
+                    throw new Error('Invalid Parameter');
+                }
+            }
+        }
+
+        default: {
+            throw new Error('Invalid Status');
         }
     }
 };
@@ -572,6 +790,11 @@ export const editName = async (
     success: boolean;
     message: string;
 }> => {
+    const isLogin = await new IsCharLogin(characterId).checkSingle();
+    if (isLogin) {
+        return { success: false, message: "Can't be processed while the target character is logged in." };
+    }
+
     const encoder = new TextEncoderSJIS();
     const sjisBytes = encoder.encode(setName);
     const hexString = Array.from(sjisBytes)

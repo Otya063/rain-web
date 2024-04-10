@@ -1,4 +1,4 @@
-import type { DeleteBnrData, DeleteCharacterData, DeleteInfoData, LinkDiscordData, SuspendUserData } from '$lib/types';
+import type { DeleteBnrData, DeleteCharacterData, DeleteInfoData, LinkDiscordData, RebuildClanData, SuspendUserData } from '$lib/types';
 import { writable } from 'svelte/store';
 
 export const deleteInfo = writable(false);
@@ -11,10 +11,12 @@ export const deleteChar = writable(false);
 export const deleteCharacterData = writable<DeleteCharacterData>();
 export const linkDiscord = writable(false);
 export const linkDiscordData = writable<LinkDiscordData>();
+export const rebuildClan = writable(false);
+export const rebuildClanData = writable<RebuildClanData>();
 
 /* prepare modal window data
 ====================================================*/
-export const prepareModal = (type: string, data: DeleteInfoData | DeleteBnrData | SuspendUserData | DeleteCharacterData | LinkDiscordData): void => {
+export const prepareModal = (type: 'deleteInfo' | 'deleteBnr' | 'suspendUser' | 'deleteCharacter' | 'linkDiscord' | 'rebuildClan', data: DeleteInfoData | DeleteBnrData | SuspendUserData | DeleteCharacterData | LinkDiscordData | RebuildClanData): void => {
     switch (type) {
         case 'deleteInfo': {
             deleteInfo.set(true);
@@ -51,6 +53,13 @@ export const prepareModal = (type: string, data: DeleteInfoData | DeleteBnrData 
             break;
         }
 
+        case "rebuildClan": {
+            rebuildClan.set(true);
+            rebuildClanData.set(data as RebuildClanData);
+
+            break;
+        }
+
         default: {
             throw new Error('Invalid Type');
         }
@@ -65,4 +74,5 @@ export const closeModal = (): void => {
     deleteBnr.set(false);
     linkDiscord.set(false);
     deleteChar.set(false);
+    rebuildClan.set(false);
 };

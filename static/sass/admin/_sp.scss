@@ -224,6 +224,15 @@
                             }
                         }
                     }
+
+                    // クラン名調整
+                    &.clan_name {
+                        font-size: 1.7rem;
+
+                        @include landscape {
+                            font-size: 2rem;
+                        }
+                    }
                 }
 
                 // キャラクターリスト用スワイパー
@@ -309,6 +318,24 @@
                         .red_btn {
                             margin: 3% 0;
                         }
+
+                        // クランメンバ－一覧
+                        .clan_members {
+                            display: grid;
+                            column-gap: 20px;
+                            row-gap: 20px;
+                            grid-template-columns: repeat(2, 1fr);
+                            width: 85vw;
+                            margin: 8vh calc(50% - 56vw) 0;
+
+                            span {
+                                font-size: 1.3rem;
+
+                                @include landscape {
+                                    font-size: 1.5rem;
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -368,7 +395,7 @@
                 border-left: 40px solid rgb(248, 248, 248);
                 border-top: 33.5px solid transparent;
                 border-bottom: 33.5px solid transparent;
-                transform: translateY(-1px);
+                transform: translateY(40%);
             }
 
             // メニュー本体
@@ -384,12 +411,17 @@
                     width: 100%;
                     padding: 15px 0;
                     display: flex;
+                    display: grid;
+                    column-gap: 30px;
+                    row-gap: 20px;
+                    grid-template-columns: repeat(4, 1fr);
+                    justify-content: center;
+                    justify-items: center;
 
                     // メニュー各項目
                     .console_menu_list_item {
                         width: 30px;
                         height: 35px;
-                        margin: 0 auto;
                         border-bottom: 1px solid gray;
                         cursor: pointer;
 
@@ -498,7 +530,7 @@
                         align-items: center;
                         justify-content: flex-start;
                         padding-bottom: 5%;
-                        
+
                         .material-icons-outlined {
                             font-size: 2.1rem;
                             padding: 0 10px 2px 0;

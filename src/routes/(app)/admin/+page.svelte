@@ -4,6 +4,7 @@
     import DeleteChar from '$lib/admin/modalContents/DeleteChar.svelte';
     import DeleteInfo from '$lib/admin/modalContents/DeleteInfo.svelte';
     import LinkDiscord from '$lib/admin/modalContents/LinkDiscord.svelte';
+    import RebuildClan from '$lib/admin/modalContents/RebuildClan.svelte';
     import SuspendUser from '$lib/admin/modalContents/SuspendUser.svelte';
     import AdminContents from '$lib/admin/AdminContents.svelte';
     import AdminMenu from '$lib/admin/AdminMenu.svelte';
@@ -22,6 +23,7 @@
         toggleMsgDetail,
         timeOut,
         adminTabValue,
+        rebuildClan,
     } from '$lib/utils';
     import _ from 'lodash';
     import { onMount } from 'svelte';
@@ -135,6 +137,10 @@
 
 {#if $deleteChar}
     <DeleteChar />
+{/if}
+
+{#if $rebuildClan}
+    <RebuildClan />
 {/if}
 
 <main class="console_body">
