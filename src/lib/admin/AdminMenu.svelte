@@ -19,12 +19,16 @@
             icon: 'info',
         },
         users: {
-            text: 'Users',
+            text: 'Manage Users',
             icon: 'person',
         },
         bnr: {
             text: 'Launcher Banner',
             icon: 'ad_group',
+        },
+        clan: {
+            text: 'Manage Clans',
+            icon: 'diversity_3',
         },
     };
 </script>

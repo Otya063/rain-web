@@ -16,13 +16,14 @@
         paginatedUsersData,
         paginationMetaData,
         getCourseByObjData,
-        filterValue,
-        filterParam,
+        filterUserValue,
+        filterUserParam,
         userCtrlPanel,
         setSelectedCharacter,
         updateUserCtrlPanel,
         initUserCtrlPanel,
         convHrpToHr,
+        consoleContDisable,
     } from '$lib/utils';
     import type { PaginatedUsers, PaginationMeta } from '$lib/types';
     import _ from 'lodash';
@@ -249,6 +250,7 @@
                         method="POST"
                         use:enhance={() => {
                             // when clicking submit button
+                            consoleContDisable(true);
                             const btnElm = document.getElementById('btn');
                             const inputElm = document.querySelectorAll('#filter_input');
                             switchBtnInAuth(false, btnElm, null, inputElm);
@@ -266,11 +268,13 @@
                                 } else {
                                     msgClosed.set(false);
                                 }
+
+                                consoleContDisable(false);
                             };
                         }}
                     >
-                        <input name="filter_value" type="hidden" value={$filterValue} />
-                        <input name="filter_param" type="hidden" value={$filterParam} />
+                        <input name="filter_value" type="hidden" value={$filterUserValue} />
+                        <input name="filter_param" type="hidden" value={$filterUserParam} />
                         <input name="status" type="hidden" bind:value={status} />
 
                         <input id="filter_input" type="text" placeholder="Filter ..." bind:value={bindedValue} />
@@ -290,8 +294,8 @@
                         form="getPaginatedUsers"
                         on:click={() => {
                             $timeOut && closeMsgDisplay($timeOut);
-                            filterValue.set(bindedValue);
-                            filterParam.set(bindedParam);
+                            filterUserValue.set(bindedValue);
+                            filterUserParam.set(bindedParam);
                             status = 'init';
                         }}
                     >
@@ -450,6 +454,8 @@
                     method="POST"
                     action="?/getPaginatedUsers"
                     use:enhance={() => {
+                        consoleContDisable(true);
+
                         return async ({ result }) => {
                             paginationBackClick = false;
                             paginationNextClick = false;
@@ -460,11 +466,13 @@
                                 paginationMetaData.set(paginationMeta);
                                 initUserCtrlPanel(paginatedUsers);
                             }
+
+                            consoleContDisable(false);
                         };
                     }}
                 >
-                    <input name="filter_value" type="hidden" value={$filterValue} />
-                    <input name="filter_param" type="hidden" value={$filterParam} />
+                    <input name="filter_value" type="hidden" value={$filterUserValue} />
+                    <input name="filter_param" type="hidden" value={$filterUserParam} />
                     <input name="status" type="hidden" bind:value={status} />
                     <input type="hidden" name="cursor" bind:value={cursor} />
 
@@ -478,7 +486,7 @@
                             cursor = $paginationMetaData.prevCursor;
                         }}
                         class:active={paginationBackClick}
-                        class:disabled_elm={!$paginationMetaData.hasPrevPage || paginationBackClick}>Back</button
+                        class:disabled_elm={!$paginationMetaData.hasPrevPage}>Back</button
                     >
                     <button
                         class="pagination_btn_item"
@@ -490,7 +498,7 @@
                             cursor = $paginationMetaData.nextCursor;
                         }}
                         class:active={paginationNextClick}
-                        class:disabled_elm={!$paginationMetaData.hasNextPage || paginationNextClick}>Next</button
+                        class:disabled_elm={!$paginationMetaData.hasNextPage}>Next</button
                     >
                 </form>
             </div>
@@ -1476,7 +1484,7 @@
                                     <dd class="contents_desc">
                                         {$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name || 'None'}
 
-                                        {#if $userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name}
+                                        <!-- {#if $userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name}
                                             {#if $userCtrlPanel[user.id].activeCategories['clan']}
                                                 <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['clan'] = false)}>
                                                     <span class="btn_icon material-icons">close</span>
@@ -1488,7 +1496,7 @@
                                                     <span class="btn_text">Edit</span>
                                                 </button>
                                             {/if}
-                                        {/if}
+                                        {/if} -->
 
                                         {#if $userCtrlPanel[user.id].activeCategories['clan']}
                                             <div transition:slide class="edit_area_box">
@@ -1596,6 +1604,8 @@
                     method="POST"
                     action="?/getPaginatedUsers"
                     use:enhance={() => {
+                        consoleContDisable(true);
+
                         return async ({ result }) => {
                             paginationBackClick = false;
                             paginationNextClick = false;
@@ -1606,11 +1616,13 @@
                                 paginationMetaData.set(paginationMeta);
                                 initUserCtrlPanel(paginatedUsers);
                             }
+
+                            consoleContDisable(false);
                         };
                     }}
                 >
-                    <input name="filter_value" type="hidden" value={$filterValue} />
-                    <input name="filter_param" type="hidden" value={$filterParam} />
+                    <input name="filter_value" type="hidden" value={$filterUserValue} />
+                    <input name="filter_param" type="hidden" value={$filterUserParam} />
                     <input name="status" type="hidden" bind:value={status} />
                     <input type="hidden" name="cursor" bind:value={cursor} />
 

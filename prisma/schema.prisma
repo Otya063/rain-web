@@ -358,7 +358,7 @@ model guild_applications {
   created_at                                             DateTime               @default(now()) @db.Timestamptz(6)
   characters_guild_applications_actor_idTocharacters     characters             @relation("guild_applications_actor_idTocharacters", fields: [actor_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
   characters_guild_applications_character_idTocharacters characters             @relation("guild_applications_character_idTocharacters", fields: [character_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
-  guilds                                                 guilds                 @relation(fields: [guild_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  guilds                                                 guilds                 @relation(fields: [guild_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
   @@unique([guild_id, character_id], map: "guild_application_character_id")
   @@index([application_type], map: "guild_application_type_index")

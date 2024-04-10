@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { ActionData, PageData } from '../../routes/(app)/admin/$types';
+    import Clans from '$lib/admin/Clans.svelte';
     import LauncherBanner from '$lib/admin/LauncherBanner.svelte';
     import LauncherInformation from '$lib/admin/LauncherInformation.svelte';
     import LauncherSystem from '$lib/admin/LauncherSystem.svelte';
@@ -25,4 +26,6 @@
     <Users paginatedUsers={form?.paginatedUsers} paginationMeta={form?.paginationMeta} />
 {:else if $adminTabValue === 'bnr'}
     <LauncherBanner bind:addBnrMode bind:bnrAddMode createdBnr={form?.createdBnr} {launcherBanner} />
+{:else if $adminTabValue === 'clan'}
+    <Clans paginatedClans={form?.paginatedClans} paginationMeta={form?.paginationMeta} />
 {/if}

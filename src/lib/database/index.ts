@@ -227,8 +227,112 @@ export const db = new PrismaClient({
                     }
                 },
             },
+            guilds: {
+                async rebuild(clan_id: number): Promise<{
+                    success: boolean;
+                    message: string | number;
+                }> {
+                    try {
+                        const originClanData = await db.guilds.findFirst({
+                            where: {
+                                id: clan_id,
+                            },
+                        });
+                        if (!originClanData) {
+                            return { success: false, message: 'No clan data found.' };
+                        }
+
+                        const newClanId = (
+                            await db.$queryRaw<
+                                { id: number }[]
+                            >`INSERT INTO guilds (name, created_at, leader_id, main_motto, rank_rp, comment, icon, sub_motto, item_box, event_rp, pugi_name_1, pugi_name_2, pugi_name_3, recruiting, pugi_outfit_1, pugi_outfit_2, pugi_outfit_3, pugi_outfits, tower_mission_page, tower_rp) VALUES (${
+                                originClanData.name
+                            }, ${originClanData.created_at}, ${originClanData.leader_id}, ${originClanData.main_motto}, ${originClanData.rank_rp}, ${originClanData.comment}, decode(${
+                                !originClanData.icon ? null : Buffer.from(Uint8Array.from(originClanData.icon)).toString('base64')
+                            }, 'base64'), ${originClanData.sub_motto}, decode(${
+                                !originClanData.item_box ? null : Buffer.from(Uint8Array.from(originClanData.item_box)).toString('base64')
+                            }, 'base64'), ${originClanData.event_rp}, ${originClanData.pugi_name_1}, ${originClanData.pugi_name_2}, ${originClanData.pugi_name_3}, ${originClanData.recruiting}, ${
+                                originClanData.pugi_outfit_1
+                            }, ${originClanData.pugi_outfit_2}, ${originClanData.pugi_outfit_3}, ${originClanData.pugi_outfits}, ${originClanData.tower_mission_page}, ${
+                                originClanData.tower_rp
+                            }) Returning id`
+                        )[0].id;
+
+                        await db.guild_characters.updateMany({
+                            where: {
+                                guild_id: clan_id,
+                            },
+                            data: {
+                                guild_id: newClanId,
+                            },
+                        });
+
+                        await db.guilds.delete({
+                            where: {
+                                id: clan_id,
+                            },
+                        });
+
+                        return { success: true, message: newClanId };
+                    } catch (err) {
+                        if (err instanceof Error) {
+                            return { success: false, message: err.message };
+                        } else if (typeof err === 'string') {
+                            return { success: false, message: err };
+                        } else {
+                            return { success: false, message: 'Unexpected Error' };
+                        }
+                    }
+                },
+            },
         },
     });
+
+/* Check if the Character(s) Is Logged In
+====================================================*/
+export class IsCharLogin {
+    constructor(private characterId: number | number[]) {}
+
+    public async checkSingle(): Promise<boolean> {
+        if (typeof this.characterId === 'number') {
+            const session = await db.sign_sessions.findFirst({
+                where: {
+                    char_id: this.characterId,
+                },
+            });
+
+            if (!session) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            throw new Error('Can\'t call "checkSingle" with an array of numbers.');
+        }
+    }
+
+    public async checkMulti(): Promise<{
+        check: boolean;
+        charIds: number[];
+    }> {
+        if (Array.isArray(this.characterId)) {
+            const sessions = await db.sign_sessions.findMany({
+                where: {
+                    char_id: { in: this.characterId },
+                },
+            });
+
+            const charIds = sessions.map((session) => session.char_id!);
+            if (!charIds.length) {
+                return { check: false, charIds: [] };
+            } else {
+                return { check: true, charIds };
+            }
+        } else {
+            throw new Error('Can\'t call "checkMulti" with a single number');
+        }
+    }
+}
 
 class ServerDataManager {
     /* Characters

@@ -39,3 +39,10 @@ export interface LinkDiscordData extends ModalCommonData {
     char_name: string;
     discord_id?: string;
 }
+
+export interface RebuildClanData extends ModalCommonData {
+    clan_id: number;
+    clan_name: string;
+    clan_leader: string;
+    created_at: Date | null;
+}

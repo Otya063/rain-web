@@ -1,9 +1,11 @@
-import type { discord, launcher_banner, launcher_info, users } from '@prisma/client/edge';
-import type { PaginatedUsers, PaginatedCharacter, PaginationMeta } from '$lib/types';
+import type { launcher_banner, launcher_info, users } from '@prisma/client/edge';
+import type { PaginatedUsers, PaginatedCharacter, PaginationMeta, PaginatedClans } from '$lib/types';
 import { get, writable } from 'svelte/store';
 
-export const filterValue = writable<string>('');
-export const filterParam = writable<string>('');
+export const filterUserValue = writable<string>('');
+export const filterUserParam = writable<string>('');
+export const filterClanValue = writable<string>('');
+export const filterClanParam = writable<string>('');
 export const adminTabValue = writable<string>('');
 export const userCtrlPanel = writable<{
     [key: number]: {
@@ -20,6 +22,8 @@ export const allInformation = writable<{ [key: string]: launcher_info[] }>();
 export const allBanners = writable<launcher_banner[]>();
 export const paginatedUsersData = writable<PaginatedUsers[]>();
 export const paginationMetaData = writable<PaginationMeta>();
+export const paginatedClansData = writable<PaginatedClans[] | null>();
+export const paginationClansMetaData = writable<PaginationMeta>();
 
 /* Upload File
 ====================================================*/

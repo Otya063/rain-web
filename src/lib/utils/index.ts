@@ -77,3 +77,9 @@ export const switchBtnInAuth = (enable: boolean, btnElm: HTMLElement | null, lab
         });
     }
 };
+
+/* Switching Admin Console Contents Disable
+====================================================*/
+export const consoleContDisable = (enable: boolean) => {
+    enable ? document.getElementsByClassName('console_contents')[0].classList.add('disabled_elm') : document.getElementsByClassName('console_contents')[0].classList.remove('disabled_elm');
+};
