@@ -14,7 +14,7 @@ const L = i18n();
 export const handle: Handle = async ({ event, resolve }) => {
     // basic auth
     const auth = event.request.headers.get('Authorization');
-    if (!event.url.origin.includes('localhost') && event.url.pathname !== '/admin/') {
+    if (!event.url.origin.includes('localhost') && event.url.pathname !== '/admin/' || event.url.pathname !== '/maintenance/') {
         if (auth !== `Basic ${btoa(ADMIN_CREDENTIALS)}`) {
             return new Response('Unauthorized User', {
                 status: 401,
