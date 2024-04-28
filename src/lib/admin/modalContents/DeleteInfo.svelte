@@ -1,6 +1,6 @@
 <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import { allInformation, onSubmit, closeModal, deleteInfoData, msgClosed, conv2DArrayToObject, timeOut, closeMsgDisplay } from '$lib/utils';
+    import { allInformation, onSubmit, closeModal, deleteInfoData, msgClosed, conv2DArrayToObject, timeOut, closeMsgDisplay, errDetailMode } from '$lib/utils';
 </script>
 
 <div class="modal">
@@ -14,6 +14,7 @@
                 
                 return async ({ result }) => {
                     msgClosed.set(false);
+                    errDetailMode.set(false);
                     onSubmit.set(false);
                     await applyAction(result);
                     

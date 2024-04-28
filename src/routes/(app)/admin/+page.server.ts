@@ -2,7 +2,7 @@ import type { Action, Actions, PageServerLoad } from './$types';
 import type { discord, discord_register, launcher_banner, launcher_info, launcher_system, users } from '@prisma/client/edge';
 import { error, fail } from '@sveltejs/kit';
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
-import ServerData, { db, getPaginatedClanData, getPaginatedUserData, getPaginationMeta, IsCharLogin } from '$lib/database';
+import ServerData, { db, getPaginatedAllianceData, getPaginatedClanData, getPaginatedUserData, getPaginationMeta, IsCharLogin } from '$lib/database';
 import type { BinaryTypes } from '$lib/types';
 import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi } from '$lib/utils';
 import { DateTime } from 'luxon';
@@ -300,11 +300,19 @@ const courseControl: Action = async ({ request }) => {
 
 const getPaginatedUsers: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'username' | 'character_name' | 'user_id' | 'character_id'; filter_value: string; status: string; cursor: number };
+    const { filter_param, filter_value, status, cursor } = data as {
+        filter_param: 'username' | 'character_name' | 'user_id' | 'character_id';
+        filter_value: string | number;
+        status: string;
+        cursor: number;
+    };
 
     if (!filter_value) {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
         return fail(400, { error: true, message: emptyMsg });
+    } else if ((filter_param === 'user_id' || filter_param === 'character_id') && isNaN(filter_value as number)) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
     }
 
     const { paginatedUsers, paginationMeta } = await (async () => {
@@ -352,22 +360,25 @@ const getPaginatedUsers: Action = async ({ request }) => {
 
 const getPaginatedClans: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'clan_name' | 'clan_id'; filter_value: string; status: string; cursor: number };
+    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'clan_name' | 'clan_id'; filter_value: string | number; status: string; cursor: number };
 
     if (!filter_value) {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
         return fail(400, { error: true, message: emptyMsg });
+    } else if (filter_param === 'clan_id' && isNaN(filter_value as number)) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
     }
 
-    const { paginatedClans, paginationMeta } = await (async () => {
+    const { paginatedClans, paginationClanMeta } = await (async () => {
         switch (status) {
             case 'init': {
                 const paginatedClans = await getPaginatedClanData(filter_param, filter_value, 'init', 5);
 
                 const nextCursor = paginatedClans[4]?.id || 0;
-                const paginationMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
+                const paginationClanMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
 
-                return { paginatedClans, paginationMeta };
+                return { paginatedClans, paginationClanMeta };
             }
 
             case 'back':
@@ -376,9 +387,9 @@ const getPaginatedClans: Action = async ({ request }) => {
 
                 const prevCursor = paginatedClans[0]?.id || 0;
                 const nextCursor = paginatedClans[4]?.id || 0;
-                const paginationMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
+                const paginationClanMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
 
-                return { paginatedClans, paginationMeta };
+                return { paginatedClans, paginationClanMeta };
             }
 
             default: {
@@ -394,7 +405,67 @@ const getPaginatedClans: Action = async ({ request }) => {
         });
     }
 
-    return { paginatedClans, paginationMeta };
+    return { paginatedClans, paginationClanMeta, paginatedAlliances: [], paginationAllianceMeta: { hasPrevPage: false, hasNextPage: false, prevCursor: 0, nextCursor: 0 }, clanNames: [] };
+};
+
+const getPaginatedAlliances: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'alliance_name' | 'alliance_id'; filter_value: string | number; status: string; cursor: number };
+
+    if (!filter_value) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        return fail(400, { error: true, message: emptyMsg });
+    } else if (filter_param === 'alliance_id' && isNaN(filter_value as number)) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
+    }
+
+    const { paginatedAlliances, paginationAllianceMeta } = await (async () => {
+        switch (status) {
+            case 'init': {
+                const paginatedAlliances = await getPaginatedAllianceData(filter_param, filter_value, 'init', 5);
+
+                const nextCursor = paginatedAlliances[4]?.id || 0;
+                const paginationAllianceMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
+
+                return { paginatedAlliances, paginationAllianceMeta };
+            }
+
+            case 'back':
+            case 'next': {
+                const paginatedAlliances = await getPaginatedAllianceData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1);
+
+                const prevCursor = paginatedAlliances[0]?.id || 0;
+                const nextCursor = paginatedAlliances[4]?.id || 0;
+                const paginationAllianceMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
+
+                return { paginatedAlliances, paginationAllianceMeta };
+            }
+
+            default: {
+                throw new Error('Invalid Status');
+            }
+        }
+    })();
+
+    const clanNames = await db.guilds.findMany({
+        select: {
+            name: true,
+        },
+        orderBy: {
+            id: 'asc',
+        },
+    });
+    const nameArr = clanNames.map((a) => a.name) as string[];
+
+    if (!paginatedAlliances.length) {
+        return fail(400, {
+            error: true,
+            message: `The clan with the entered ${filter_param} (${filter_value}) doesn't exist.`,
+        });
+    }
+
+    return { paginatedClans: [], paginationClanMeta: { hasPrevPage: false, hasNextPage: false, prevCursor: 0, nextCursor: 0 }, paginatedAlliances, paginationAllianceMeta, nameArr };
 };
 
 const updateUserData: Action = async ({ request }) => {
@@ -986,6 +1057,141 @@ const rebuildClan: Action = async ({ request }) => {
     }
 };
 
+const updateAllianceData: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const { alliance_id, first_clan_name, second_clan_name } = data as { alliance_id: number; first_clan_name: string; second_clan_name: string };
+
+    if (first_clan_name && second_clan_name && JSON.parse(first_clan_name).value === JSON.parse(second_clan_name).value) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        return fail(400, { error: true, message: 'The first and second clan must be different.' });
+    } else if (!first_clan_name && second_clan_name) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        return fail(400, { error: true, message: 'Before selecting the second clan, the first clan must be selected.' });
+    }
+
+    try {
+        // get each clan data
+        const firstClanData = await (async () => {
+            if (!first_clan_name) {
+                return null;
+            } else {
+                return await db.guilds.findFirst({
+                    where: {
+                        name: JSON.parse(first_clan_name).value,
+                    },
+                    select: {
+                        id: true,
+                        name: true,
+                        leader_id: true,
+                    },
+                });
+            }
+        })();
+        const secondClanData = await (async () => {
+            if (!second_clan_name) {
+                return null;
+            } else {
+                return await db.guilds.findFirst({
+                    where: {
+                        name: JSON.parse(second_clan_name).value,
+                    },
+                    select: {
+                        id: true,
+                        name: true,
+                        leader_id: true,
+                    },
+                });
+            }
+        })();
+
+        const isExist1 = firstClanData?.id
+            ? await db.guild_alliances.findFirst({
+                  where: {
+                      OR: [{ parent_id: firstClanData.id }, { sub1_id: firstClanData.id }, { sub2_id: firstClanData.id }],
+                  },
+              })
+            : null;
+        const isExist2 = secondClanData?.id
+            ? await db.guild_alliances.findFirst({
+                  where: {
+                    OR: [{ parent_id: secondClanData.id }, { sub1_id: secondClanData.id }, { sub2_id: secondClanData.id }],
+                  },
+              })
+            : null;
+        if (isExist1 && isExist1.id !== Number(alliance_id)) {
+            return fail(400, { error: true, message: `The selected 1st clan has already joined the alliance (Name: ${isExist1.name}).` });
+        } else if (isExist2 && isExist2.id !== Number(alliance_id)) {
+            return fail(400, { error: true, message: `The selected 2nd clan has already joined the alliance (Name: ${isExist2.name}).` });
+        }
+
+        await db.guild_alliances.update({
+            where: {
+                id: Number(alliance_id),
+            },
+            data: {
+                sub1_id: firstClanData?.id || null,
+                sub2_id: secondClanData?.id || null,
+            },
+        });
+
+        // get each clan leader name
+        const firstClanLeader = await (async () => {
+            if (!firstClanData) {
+                return null;
+            } else {
+                return (await db.characters.findFirst({
+                    where: {
+                        id: firstClanData.leader_id,
+                    },
+                    select: {
+                        name: true,
+                    },
+                }))!.name;
+            }
+        })();
+        const secondClanLeader = await (async () => {
+            if (!secondClanData) {
+                return null;
+            } else {
+                return (await db.characters.findFirst({
+                    where: {
+                        id: secondClanData.leader_id,
+                    },
+                    select: {
+                        name: true,
+                    },
+                }))!.name;
+            }
+        })();
+
+        const updatedAllianceData = {
+            id: Number(alliance_id),
+            first_child_clan: {
+                clan_name: firstClanData?.name || null,
+                leader_name: firstClanLeader || null,
+            },
+            second_child_clan: {
+                clan_name: secondClanData?.name || null,
+                leader_name: secondClanLeader || null,
+            },
+        };
+
+        return {
+            success: true,
+            message: `Alliance data (ID: ${alliance_id}) has been successfully updated.`,
+            updatedAllianceData,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
 export const actions: Actions = {
     updateSystemMode,
     updateAllMaintData,
@@ -995,6 +1201,7 @@ export const actions: Actions = {
     courseControl,
     getPaginatedUsers,
     getPaginatedClans,
+    getPaginatedAlliances,
     updateUserData,
     updateCharacterData,
     suspendUser,
@@ -1007,4 +1214,5 @@ export const actions: Actions = {
     deleteCharacter,
     restoreCharacter,
     rebuildClan,
+    updateAllianceData,
 };

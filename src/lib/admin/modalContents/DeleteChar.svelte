@@ -1,6 +1,6 @@
 <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, deleteCharacterData, conv2DArrayToObject, msgClosed, paginatedUsersData } from '$lib/utils';
+    import { onSubmit, closeModal, deleteCharacterData, conv2DArrayToObject, msgClosed, paginatedUsersData, errDetailMode } from '$lib/utils';
 
     let permanent: boolean;
     
@@ -20,6 +20,7 @@
 
                 return async ({ result }) => {
                     msgClosed.set(false);
+                    errDetailMode.set(false);
                     onSubmit.set(false);
                     await applyAction(result);
 

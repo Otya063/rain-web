@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { launcher_info } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { allInformation, prepareModal, underscoreAndLowercase, onSubmit, msgClosed, discordLinkConvertor, conv2DArrayToObject } from '$lib/utils';
+    import { allInformation, prepareModal, underscoreAndLowercase, onSubmit, msgClosed, discordLinkConvertor, conv2DArrayToObject, errDetailMode } from '$lib/utils';
     import _ from 'lodash';
     import { DateTime } from 'luxon';
     import { slide } from 'svelte/transition';
@@ -80,6 +80,7 @@
             use:enhance={() => {
                 return async ({ result }) => {
                     msgClosed.set(false);
+                    errDetailMode.set(false);
                     onSubmit.set(false);
                     await applyAction(result);
 
@@ -153,6 +154,7 @@
 
                             return async ({ result }) => {
                                 msgClosed.set(false);
+                                errDetailMode.set(false);
                                 onSubmit.set(false);
                                 await applyAction(result);
 
@@ -249,7 +251,10 @@
                                                 type="submit"
                                                 on:click={() => {
                                                     onSubmit.set(true);
-                                                    editModeSwitch(0, 'title');
+                                                    // delay the change by 100ms to prevent "0" during submitting
+                                                    setTimeout(() => {
+                                                        editModeSwitch(0, 'title');
+                                                    }, 100);
                                                 }}
                                             >
                                                 <span class="btn_icon material-icons">check</span>
@@ -293,7 +298,10 @@
                                                 type="submit"
                                                 on:click={() => {
                                                     onSubmit.set(true);
-                                                    editModeSwitch(0, 'url');
+                                                    // delay the change by 100ms to prevent "0" during submitting
+                                                    setTimeout(() => {
+                                                        editModeSwitch(0, 'url');
+                                                    }, 100);
                                                 }}
                                             >
                                                 <span class="btn_icon material-icons">check</span>
@@ -342,7 +350,10 @@
                                                 type="submit"
                                                 on:click={() => {
                                                     onSubmit.set(true);
-                                                    editModeSwitch(0, 'created_at');
+                                                    // delay the change by 100ms to prevent "0" during submitting
+                                                    setTimeout(() => {
+                                                        editModeSwitch(0, 'created_at');
+                                                    }, 100);
                                                 }}
                                             >
                                                 <span class="btn_icon material-icons">check</span>
@@ -389,7 +400,10 @@
                                                 type="submit"
                                                 on:click={() => {
                                                     onSubmit.set(true);
-                                                    editModeSwitch(0, 'type');
+                                                    // delay the change by 100ms to prevent "0" during submitting
+                                                    setTimeout(() => {
+                                                        editModeSwitch(0, 'type');
+                                                    }, 100);
                                                 }}
                                             >
                                                 <span class="btn_icon material-icons">check</span>

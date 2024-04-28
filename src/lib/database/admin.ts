@@ -1,10 +1,18 @@
 import ServerData, { IsCharLogin, db } from '.';
-import type { PaginatedUsers, PaginationMeta, BinaryTypes, PaginatedClans } from '$lib/types';
+import type { PaginatedUsers, PaginationMeta, BinaryTypes, PaginatedClans, PaginatedAlliances } from '$lib/types';
 import { TextEncoderSJIS } from '$lib/utils';
 import { Buffer } from 'node:buffer';
 
-/* Get Paginated User(s)
-====================================================*/
+/**
+ * Get paginated user(s) data.
+ * @param {'username' | 'character_name' | 'user_id' | 'character_id'} filterParam Type to filter.
+ * @param {string | number} filterValue Value to filter.
+ * @param {string} status Pegination status at filtering.
+ * @param {number} take Number of data to be obtained.
+ * @param {number} cursor Position for searching for data.
+ * @param {number} skip Number of cursors to skip. (Normally 1 is used.)
+ * @returns {Promise<PaginatedUsers[]>} Return an array of paginated user(s) data.
+ */
 export const getPaginatedUserData = async (
     filterParam: 'username' | 'character_name' | 'user_id' | 'character_id',
     filterValue: string | number,
@@ -454,11 +462,17 @@ export const getPaginatedUserData = async (
     }
 };
 
-/* Get Pagination Meta Data
-====================================================*/
+/**
+ * Get pagination meta data.
+ * @param {'username' | 'character_name' | 'user_id' | 'character_id' | 'clan_name' | 'clan_id' | 'alliance_name' | 'alliance_id'} filterParam
+ * @param {string | number} filterValue Value to filter.
+ * @param {number} prevCursor Position for searching for previous data.
+ * @param {number} nextCursor Position for searching for next data.
+ * @returns {Promise<PaginationMeta>} Return pagination meta object.
+ */
 export const getPaginationMeta = async (
-    filterParam: 'username' | 'character_name' | 'user_id' | 'character_id' | 'clan_name' | 'clan_id',
-    filterValue: string,
+    filterParam: 'username' | 'character_name' | 'user_id' | 'character_id' | 'clan_name' | 'clan_id' | 'alliance_name' | 'alliance_id',
+    filterValue: string | number,
     prevCursor: number,
     nextCursor: number
 ): Promise<PaginationMeta> => {
@@ -472,7 +486,7 @@ export const getPaginationMeta = async (
                 },
                 where: {
                     username: {
-                        contains: filterValue,
+                        contains: filterValue as string,
                     },
                 },
                 select: {
@@ -488,7 +502,7 @@ export const getPaginationMeta = async (
                 },
                 where: {
                     username: {
-                        contains: filterValue,
+                        contains: filterValue as string,
                     },
                 },
                 select: {
@@ -510,7 +524,7 @@ export const getPaginationMeta = async (
                     characters: {
                         some: {
                             name: {
-                                contains: filterValue,
+                                contains: filterValue as string,
                             },
                         },
                     },
@@ -560,7 +574,7 @@ export const getPaginationMeta = async (
                 },
                 where: {
                     name: {
-                        contains: filterValue,
+                        contains: filterValue as string,
                     },
                 },
                 select: {
@@ -576,7 +590,43 @@ export const getPaginationMeta = async (
                 },
                 where: {
                     name: {
-                        contains: filterValue,
+                        contains: filterValue as string,
+                    },
+                },
+                select: {
+                    id: true,
+                },
+            });
+
+            return { prevCursor, nextCursor, hasPrevPage: !!prevData, hasNextPage: !!nextData };
+        }
+
+        case 'alliance_name': {
+            const prevData = await db.guild_alliances.findFirst({
+                take: -1,
+                skip: 1,
+                cursor: {
+                    id: prevCursor,
+                },
+                where: {
+                    name: {
+                        contains: filterValue as string,
+                    },
+                },
+                select: {
+                    id: true,
+                },
+            });
+
+            const nextData = await db.guild_alliances.findFirst({
+                take: 1,
+                skip: 1,
+                cursor: {
+                    id: nextCursor,
+                },
+                where: {
+                    name: {
+                        contains: filterValue as string,
                     },
                 },
                 select: {
@@ -589,7 +639,8 @@ export const getPaginationMeta = async (
 
         case 'user_id':
         case 'character_id':
-        case 'clan_id': {
+        case 'clan_id':
+        case 'alliance_id': {
             return { hasPrevPage: false, hasNextPage: false, prevCursor: 0, nextCursor: 0 };
         }
 
@@ -599,8 +650,346 @@ export const getPaginationMeta = async (
     }
 };
 
-/* Get Paginated User(s)
-====================================================*/
+/**
+ * Get paginated alliance(s) data.
+ * @param {'alliance_name' | 'alliance_id'} filterParam Type to filter.
+ * @param {string | number} filterValue Value to filter.
+ * @param {string} status Pegination status at filtering.
+ * @param {number} take Number of data to be obtained.
+ * @param {number} cursor Position for searching for data.
+ * @param {number} skip Number of cursors to skip. (Normally 1 is used.)
+ * @returns {Promise<PaginatedAlliances[]>} Return an array of paginated alliance(s) data.
+ */
+export const getPaginatedAllianceData = async (
+    filterParam: 'alliance_name' | 'alliance_id',
+    filterValue: string | number,
+    status: string,
+    take: number,
+    cursor?: number,
+    skip?: number
+): Promise<PaginatedAlliances[]> => {
+    switch (status) {
+        case 'init': {
+            switch (filterParam) {
+                case 'alliance_name': {
+                    return await Promise.all(
+                        (
+                            await db.guild_alliances.findMany({
+                                take,
+                                where: {
+                                    name: {
+                                        contains: filterValue as string,
+                                    },
+                                },
+                                orderBy: {
+                                    id: 'asc',
+                                },
+                            })
+                        ).map(async (alliance) => ({
+                            ...alliance,
+                            parent_clan: await (async () => {
+                                const guildData = await db.guilds.findFirst({
+                                    where: {
+                                        id: alliance.parent_id,
+                                    },
+                                    select: {
+                                        name: true,
+                                        leader_id: true,
+                                    },
+                                });
+
+                                const charData = await db.characters.findFirst({
+                                    where: {
+                                        id: guildData!.leader_id,
+                                    },
+                                    select: {
+                                        name: true,
+                                    },
+                                });
+
+                                return { clan_name: guildData!.name, leader_name: charData!.name };
+                            })(),
+                            first_child_clan: await (async () => {
+                                if (!alliance.sub1_id) {
+                                    return { clan_name: null, leader_name: null };
+                                } else {
+                                    const guildData = await db.guilds.findFirst({
+                                        where: {
+                                            id: alliance.sub1_id,
+                                        },
+                                        select: {
+                                            name: true,
+                                            leader_id: true,
+                                        },
+                                    });
+
+                                    const charData = await db.characters.findFirst({
+                                        where: {
+                                            id: guildData!.leader_id,
+                                        },
+                                        select: {
+                                            name: true,
+                                        },
+                                    });
+
+                                    return { clan_name: guildData!.name, leader_name: charData!.name };
+                                }
+                            })(),
+                            second_child_clan: await (async () => {
+                                if (!alliance.sub2_id) {
+                                    return { clan_name: null, leader_name: null };
+                                } else {
+                                    const guildData = await db.guilds.findFirst({
+                                        where: {
+                                            id: alliance.sub2_id,
+                                        },
+                                        select: {
+                                            name: true,
+                                            leader_id: true,
+                                        },
+                                    });
+
+                                    const charData = await db.characters.findFirst({
+                                        where: {
+                                            id: guildData!.leader_id,
+                                        },
+                                        select: {
+                                            name: true,
+                                        },
+                                    });
+
+                                    return { clan_name: guildData!.name, leader_name: charData!.name };
+                                }
+                            })(),
+                        }))
+                    );
+                }
+
+                case 'alliance_id': {
+                    return await Promise.all(
+                        (
+                            await db.guild_alliances.findMany({
+                                take,
+                                where: {
+                                    id: Number(filterValue),
+                                },
+                                orderBy: {
+                                    id: 'asc',
+                                },
+                            })
+                        ).map(async (alliance) => ({
+                            ...alliance,
+                            parent_clan: await (async () => {
+                                const guildData = await db.guilds.findFirst({
+                                    where: {
+                                        id: alliance.parent_id,
+                                    },
+                                    select: {
+                                        name: true,
+                                        leader_id: true,
+                                    },
+                                });
+
+                                const charData = await db.characters.findFirst({
+                                    where: {
+                                        id: guildData!.leader_id,
+                                    },
+                                    select: {
+                                        name: true,
+                                    },
+                                });
+
+                                return { clan_name: guildData!.name, leader_name: charData!.name };
+                            })(),
+                            first_child_clan: await (async () => {
+                                if (!alliance.sub1_id) {
+                                    return { clan_name: null, leader_name: null };
+                                } else {
+                                    const guildData = await db.guilds.findFirst({
+                                        where: {
+                                            id: alliance.sub1_id,
+                                        },
+                                        select: {
+                                            name: true,
+                                            leader_id: true,
+                                        },
+                                    });
+
+                                    const charData = await db.characters.findFirst({
+                                        where: {
+                                            id: guildData!.leader_id,
+                                        },
+                                        select: {
+                                            name: true,
+                                        },
+                                    });
+
+                                    return { clan_name: guildData!.name, leader_name: charData!.name };
+                                }
+                            })(),
+                            second_child_clan: await (async () => {
+                                if (!alliance.sub2_id) {
+                                    return { clan_name: null, leader_name: null };
+                                } else {
+                                    const guildData = await db.guilds.findFirst({
+                                        where: {
+                                            id: alliance.sub2_id,
+                                        },
+                                        select: {
+                                            name: true,
+                                            leader_id: true,
+                                        },
+                                    });
+
+                                    const charData = await db.characters.findFirst({
+                                        where: {
+                                            id: guildData!.leader_id,
+                                        },
+                                        select: {
+                                            name: true,
+                                        },
+                                    });
+
+                                    return { clan_name: guildData!.name, leader_name: charData!.name };
+                                }
+                            })(),
+                        }))
+                    );
+                }
+
+                default: {
+                    throw new Error('Invalid Parameter');
+                }
+            }
+        }
+
+        case 'back':
+        case 'next': {
+            switch (filterParam) {
+                case 'alliance_name': {
+                    return await Promise.all(
+                        (
+                            await db.guild_alliances.findMany({
+                                take,
+                                skip,
+                                cursor: {
+                                    id: cursor,
+                                },
+                                where: {
+                                    name: {
+                                        contains: filterValue as string,
+                                    },
+                                },
+                                orderBy: {
+                                    id: 'asc',
+                                },
+                            })
+                        ).map(async (alliance) => ({
+                            ...alliance,
+                            parent_clan: await (async () => {
+                                const guildData = await db.guilds.findFirst({
+                                    where: {
+                                        id: alliance.parent_id,
+                                    },
+                                    select: {
+                                        name: true,
+                                        leader_id: true,
+                                    },
+                                });
+
+                                const charData = await db.characters.findFirst({
+                                    where: {
+                                        id: guildData!.leader_id,
+                                    },
+                                    select: {
+                                        name: true,
+                                    },
+                                });
+
+                                return { clan_name: guildData!.name, leader_name: charData!.name };
+                            })(),
+                            first_child_clan: await (async () => {
+                                if (!alliance.sub1_id) {
+                                    return { clan_name: null, leader_name: null };
+                                } else {
+                                    const guildData = await db.guilds.findFirst({
+                                        where: {
+                                            id: alliance.sub1_id,
+                                        },
+                                        select: {
+                                            name: true,
+                                            leader_id: true,
+                                        },
+                                    });
+
+                                    const charData = await db.characters.findFirst({
+                                        where: {
+                                            id: guildData!.leader_id,
+                                        },
+                                        select: {
+                                            name: true,
+                                        },
+                                    });
+
+                                    return { clan_name: guildData!.name, leader_name: charData!.name };
+                                }
+                            })(),
+                            second_child_clan: await (async () => {
+                                if (!alliance.sub2_id) {
+                                    return { clan_name: null, leader_name: null };
+                                } else {
+                                    const guildData = await db.guilds.findFirst({
+                                        where: {
+                                            id: alliance.sub2_id,
+                                        },
+                                        select: {
+                                            name: true,
+                                            leader_id: true,
+                                        },
+                                    });
+
+                                    const charData = await db.characters.findFirst({
+                                        where: {
+                                            id: guildData!.leader_id,
+                                        },
+                                        select: {
+                                            name: true,
+                                        },
+                                    });
+
+                                    return { clan_name: guildData!.name, leader_name: charData!.name };
+                                }
+                            })(),
+                        }))
+                    );
+                }
+
+                case 'alliance_id': {
+                    break;
+                }
+
+                default: {
+                    throw new Error('Invalid Parameter');
+                }
+            }
+        }
+
+        default: {
+            throw new Error('Invalid Status');
+        }
+    }
+};
+
+/**
+ * Get paginated clan(s) data.
+ * @param {'clan_name' | 'clan_id'} filterParam Type to filter.
+ * @param {string | number} filterValue Value to filter.
+ * @param {string} status Pegination status at filtering.
+ * @param {number} take Number of data to be obtained.
+ * @param {number} cursor Position for searching for data.
+ * @param {number} skip Number of cursors to skip. (Normally 1 is used.)
+ * @returns {Promise<PaginatedClans[]>} Return an array of paginated clan(s) data.
+ */
 export const getPaginatedClanData = async (
     filterParam: 'clan_name' | 'clan_id',
     filterValue: string | number,
@@ -780,8 +1169,13 @@ export const getPaginatedClanData = async (
     }
 };
 
-/* Edit Character Name
-====================================================*/
+/**
+ * Edit character's name.
+ * @param {number} characterId Character ID to be edited.
+ * @param {string} setName New name after change.
+ * @param bountyCoin Number of bounty coins owned.
+ * @returns {Promise<{success: boolean; message: string;}>} Return the result.
+ */
 export const editName = async (
     characterId: number,
     setName: string,
@@ -854,11 +1248,22 @@ export const editName = async (
     }
 };
 
-/* Manage Character Binary
-====================================================*/
+/**
+ * Manage binary data of the character.
+ * @class
+ */
 export class ManageBinary {
+    /**
+     * Create an instance of ManageBinary.
+     * @param {number} characterId Target character's ID.
+     * @param {{ [key in BinaryTypes]: string }} binaryData Binary data of the target character.
+     */
     constructor(private characterId: number, private binaryData: { [key in BinaryTypes]: string }) {}
 
+    /**
+     * Set binary data.
+     * @returns {Promise<{ success: boolean; message: string; }>} Return the result.
+     */
     public async set(): Promise<{
         success: boolean;
         message: string;

@@ -27,5 +27,5 @@
 {:else if $adminTabValue === 'bnr'}
     <LauncherBanner bind:addBnrMode bind:bnrAddMode createdBnr={form?.createdBnr} {launcherBanner} />
 {:else if $adminTabValue === 'clan'}
-    <Clans paginatedClans={form?.paginatedClans} paginationMeta={form?.paginationMeta} />
+    <Clans paginatedClans={form?.paginatedClans} paginationClanMeta={form?.paginationClanMeta} paginatedAlliances={form?.paginatedAlliances} paginationAllianceMeta={form?.paginationAllianceMeta} clanNames={form?.nameArr} updatedAllianceData={form?.updatedAllianceData} />
 {/if}

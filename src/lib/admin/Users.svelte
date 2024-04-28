@@ -24,6 +24,7 @@
         initUserCtrlPanel,
         convHrpToHr,
         consoleContDisable,
+        errDetailMode,
     } from '$lib/utils';
     import type { PaginatedUsers, PaginationMeta } from '$lib/types';
     import _ from 'lodash';
@@ -267,6 +268,7 @@
                                     initUserCtrlPanel(paginatedUsers);
                                 } else {
                                     msgClosed.set(false);
+                                    errDetailMode.set(false);
                                 }
 
                                 consoleContDisable(false);
@@ -320,6 +322,7 @@
 
                         return async ({ result }) => {
                             msgClosed.set(false);
+                            errDetailMode.set(false);
                             onSubmit.set(false);
                             await applyAction(result);
 
@@ -516,6 +519,7 @@
 
                     return async ({ result }) => {
                         msgClosed.set(false);
+                        errDetailMode.set(false);
                         onSubmit.set(false);
                         await applyAction(result);
 
@@ -1289,6 +1293,7 @@
 
                                     return async ({ result }) => {
                                         msgClosed.set(false);
+                                        errDetailMode.set(false);
                                         onSubmit.set(false);
                                         await applyAction(result);
 

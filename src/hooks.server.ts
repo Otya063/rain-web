@@ -1,6 +1,6 @@
 import type { users } from '@prisma/client/edge';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
-import { ADMIN_CREDENTIALS } from '$env/static/private';
+import { ADMIN_CREDENTIALS, ADMIN_IP } from '$env/static/private';
 import { PUBLIC_MAIN_DOMAIN, PUBLIC_AUTH_DOMAIN } from '$env/static/public';
 import type { Locales } from '$i18n/i18n-types';
 import { loadAllLocales } from '$i18n/i18n-util.sync';
@@ -25,7 +25,7 @@ export const handle: Handle = async ({ event, resolve }) => {
         }
     }
 
-    if (event.platform?.env.MAINTENANCE_MODE === 'true' && event.url.pathname !== '/maintenance/') {
+    if (event.platform?.env.MAINTENANCE_MODE === 'true' && event.url.pathname !== '/maintenance/' && event.getClientAddress() !== ADMIN_IP) {
         return new Response(null, {
             status: 302,
             headers: { Location: '/maintenance' },

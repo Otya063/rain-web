@@ -4,32 +4,24 @@
         onSubmit,
         closeModal,
         rebuildClanData,
-        conv2DArrayToObject,
         msgClosed,
-        paginatedUsersData,
         filterClanValue,
         filterClanParam,
         paginatedClansData,
         paginationClansMetaData,
+        errDetailMode,
     } from '$lib/utils';
     import { DateTime } from 'luxon';
-
-    let permanent: boolean;
-
-    const onChangeInputElm = () => {
-        document.getElementById('permanent')!.textContent = document.getElementById('permanent')?.textContent === 'check_box_outline_blank' ? 'check_box' : 'check_box_outline_blank';
-    };
 </script>
 
 <div class="modal">
     <div class="modal_content">
         <form
             method="POST"
-            use:enhance={({ formData }) => {
-                const data = conv2DArrayToObject([...formData.entries()]);
-
+            use:enhance={() => {
                 return async ({ result }) => {
                     msgClosed.set(false);
+                    errDetailMode.set(false);
                     onSubmit.set(false);
                     await applyAction(result);
 

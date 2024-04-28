@@ -3,6 +3,8 @@
     import {
         paginatedClansData,
         paginationClansMetaData,
+        paginatedAlliancesData,
+        paginationAlliancesMetaData,
         closeMsgDisplay,
         filterClanParam,
         filterClanValue,
@@ -12,30 +14,51 @@
         prepareModal,
         consoleContDisable,
         convHrpToHr,
+        filterAllianceValue,
+        filterAllianceParam,
+        onSubmit,
+        clanNameData,
+        errDetailMode,
     } from '$lib/utils';
-    import type { PaginatedClans, PaginationMeta } from '$lib/types';
+    import type { PaginatedAlliances, PaginatedClans, PaginationMeta } from '$lib/types';
     import _ from 'lodash';
     import { DateTime } from 'luxon';
+    import Select from 'svelte-select';
     import { fade, slide } from 'svelte/transition';
 
+    type UpdatedAllianceData = Pick<PaginatedAlliances, 'id' | 'first_child_clan' | 'second_child_clan'>;
     export let paginatedClans: PaginatedClans[];
-    export let paginationMeta: PaginationMeta;
+    export let paginationClanMeta: PaginationMeta;
+    export let paginatedAlliances: PaginatedAlliances[];
+    export let paginationAllianceMeta: PaginationMeta;
+    export let updatedAllianceData: UpdatedAllianceData;
+    export let clanNames: string[];
     let paginationBackClick = false;
     let paginationNextClick = false;
-    let bindedValue: string = '';
-    let bindedParam: string;
-    let status = 'init';
-    let cursor = 0;
+    let clanBindedValue: string = '';
+    let clanBindedParam: string;
+    let allianceBindedValue: string = '';
+    let allianceBindedParam: string;
+    let clanStatus = 'init';
+    let allianceStatus = 'init';
+    let clanCursor = 0;
+    let allianceCursor = 0;
     let btnStage = 1;
 
     /* Related to Edit Mode
     ====================================================*/
-    const adminCtrlTypes: { [key: string]: boolean } = {
-        filter: false,
+    let editingId: number;
+    let editMode = false;
+    const catTypes: { [key in 'alies']: boolean } = {
+        alies: false,
+    };
+    const adminCtrlTypes: { [key in 'clanFilter' | 'allianceFilter']: boolean } = {
+        clanFilter: false,
+        allianceFilter: false,
     };
 
     // switch admin control contents
-    const adminCtrlSwitch = (type: string): void | false => {
+    const adminCtrlSwitch = (type: 'clanFilter' | 'allianceFilter'): void | false => {
         // check if another cat type is already open
         const activeCat = Object.values(adminCtrlTypes).some((boolean) => boolean === true);
 
@@ -49,7 +72,8 @@
         // if there is an open cat and a different category is cliked (try to open it)
         if (activeCat) {
             // set everything to false (close) in a loop.
-            Object.keys(adminCtrlTypes).forEach((key) => {
+            Object.keys(adminCtrlTypes).forEach((_key) => {
+                const key = _key as 'clanFilter' | 'allianceFilter';
                 adminCtrlTypes[key] = false;
             });
 
@@ -61,6 +85,37 @@
 
         // toggle true <-> false
         adminCtrlTypes[type] = !adminCtrlTypes[type];
+    };
+
+    const editModeSwitch = <T extends number, U extends 'alies'>(id: T, type: U): void | false => {
+        // check if another category type is already in edit mode
+        const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
+
+        // when another normal_btn is pressed while editing, the editing target is switched
+        if (activeCat && id !== 0) {
+            Object.keys(catTypes).forEach((_key) => {
+                const key = _key as 'alies';
+                catTypes[key] = false;
+            });
+
+            catTypes[type] = true;
+            editingId = id;
+
+            return false;
+        }
+
+        // toggle true <-> false
+        if (!editMode) {
+            // when editing
+            editMode = true;
+            editingId = id;
+            catTypes[type] = true;
+        } else {
+            // when finished editing
+            editMode = false;
+            editingId = id;
+            catTypes[type] = false;
+        }
     };
 </script>
 
@@ -78,16 +133,28 @@
                     class="blue_btn"
                     type="button"
                     on:click={() => {
-                        adminCtrlSwitch('filter');
+                        adminCtrlSwitch('clanFilter');
                     }}
-                    class:active={adminCtrlTypes['filter']}
+                    class:active={adminCtrlTypes['clanFilter']}
                 >
                     <span class="btn_icon material-symbols-outlined">search</span>
-                    <span class="btn_text">Filter</span>
+                    <span class="btn_text">Filter Clan</span>
+                </button>
+
+                <button
+                    class="blue_btn"
+                    type="button"
+                    on:click={() => {
+                        adminCtrlSwitch('allianceFilter');
+                    }}
+                    class:active={adminCtrlTypes['allianceFilter']}
+                >
+                    <span class="btn_icon material-symbols-outlined">search</span>
+                    <span class="btn_text">Filter Alliance</span>
                 </button>
             </div>
 
-            {#if adminCtrlTypes['filter']}
+            {#if adminCtrlTypes['clanFilter']}
                 <div transition:slide class="edit_area_box_parts text admin_ctrl">
                     <form
                         id="getPaginatedClans"
@@ -108,10 +175,12 @@
                                 btnStage = 1;
 
                                 if (result.type === 'success') {
+                                    paginatedAlliancesData.set(null);
                                     paginatedClansData.set(paginatedClans);
-                                    paginationClansMetaData.set(paginationMeta);
+                                    paginationClansMetaData.set(paginationClanMeta);
                                 } else {
                                     msgClosed.set(false);
+                                    errDetailMode.set(false);
                                 }
 
                                 consoleContDisable(false);
@@ -120,11 +189,11 @@
                     >
                         <input name="filter_value" type="hidden" value={$filterClanValue} />
                         <input name="filter_param" type="hidden" value={$filterClanParam} />
-                        <input name="status" type="hidden" bind:value={status} />
+                        <input name="status" type="hidden" bind:value={clanStatus} />
 
-                        <input id="filter_input" type="text" placeholder="Filter ..." bind:value={bindedValue} />
+                        <input id="filter_input" type="text" placeholder="Filter ..." bind:value={clanBindedValue} />
                         <span>By</span>
-                        <select class="filter_select" bind:value={bindedParam}>
+                        <select class="filter_select" bind:value={clanBindedParam}>
                             <option value="clan_name">Clan Name</option>
                             <option value="clan_id">Clan ID</option>
                         </select>
@@ -137,9 +206,76 @@
                         form="getPaginatedClans"
                         on:click={() => {
                             $timeOut && closeMsgDisplay($timeOut);
-                            filterClanValue.set(bindedValue);
-                            filterClanParam.set(bindedParam);
-                            status = 'init';
+                            filterClanValue.set(clanBindedValue);
+                            filterClanParam.set(clanBindedParam);
+                            clanStatus = 'init';
+                        }}
+                    >
+                        {#if btnStage === 0}
+                            <span in:fade class="loading"></span>
+                        {:else if btnStage === 1}
+                            <span in:fade={{ delay: 100 }} class="btn_icon material-icons">search</span>
+                            <span in:fade={{ delay: 100 }} class="btn_text">Search</span>
+                        {/if}
+                    </button>
+                </div>
+            {/if}
+
+            {#if adminCtrlTypes['allianceFilter']}
+                <div transition:slide class="edit_area_box_parts text admin_ctrl">
+                    <form
+                        id="getPaginatedAlliances"
+                        class="filter_form"
+                        action="?/getPaginatedAlliances"
+                        method="POST"
+                        use:enhance={() => {
+                            // when clicking submit button
+                            consoleContDisable(true);
+                            const btnElm = document.getElementById('btn');
+                            const inputElm = document.querySelectorAll('#filter_input');
+                            switchBtnInAuth(false, btnElm, null, inputElm);
+                            btnStage = 0;
+
+                            return async ({ result }) => {
+                                await applyAction(result);
+                                switchBtnInAuth(true, btnElm, null, inputElm);
+                                btnStage = 1;
+                                if (result.type === 'success') {
+                                    paginatedClansData.set(null);
+                                    paginatedAlliancesData.set(paginatedAlliances);
+                                    paginationAlliancesMetaData.set(paginationAllianceMeta);
+                                    clanNameData.set(clanNames);
+                                } else {
+                                    msgClosed.set(false);
+                                    errDetailMode.set(false);
+                                }
+
+                                consoleContDisable(false);
+                            };
+                        }}
+                    >
+                        <input name="filter_value" type="hidden" value={$filterAllianceValue} />
+                        <input name="filter_param" type="hidden" value={$filterAllianceParam} />
+                        <input name="status" type="hidden" bind:value={allianceStatus} />
+
+                        <input id="filter_input" type="text" placeholder="Filter ..." bind:value={allianceBindedValue} />
+                        <span>By</span>
+                        <select class="filter_select" bind:value={allianceBindedParam}>
+                            <option value="alliance_name">Alliance Name</option>
+                            <option value="alliance_id">Alliance ID</option>
+                        </select>
+                    </form>
+
+                    <button
+                        id="btn"
+                        class="green_btn"
+                        type="submit"
+                        form="getPaginatedAlliances"
+                        on:click={() => {
+                            $timeOut && closeMsgDisplay($timeOut);
+                            filterAllianceValue.set(allianceBindedValue);
+                            filterAllianceParam.set(allianceBindedParam);
+                            allianceStatus = 'init';
                         }}
                     >
                         {#if btnStage === 0}
@@ -154,174 +290,426 @@
         </div>
     </div>
 
-    {#if !$paginatedClansData}
-        <p class="console_contents_note">Searched clan(s) will be displayed here.</p>
-    {:else}
-        {#if $paginationClansMetaData.hasPrevPage || $paginationClansMetaData.hasNextPage}
-            <div class="pagination_btn_list">
-                <form
-                    method="POST"
-                    action="?/getPaginatedClans"
-                    use:enhance={() => {
-                        consoleContDisable(true);
+    {#if !$paginatedClansData && !$paginatedAlliancesData}
+        <p class="console_contents_note">Searched clan(s) or alliance(s) will be displayed here.</p>
+    {:else if $paginatedClansData || $paginatedAlliancesData}
+        {#if $paginatedClansData}
+            {#if $paginationClansMetaData.hasPrevPage || $paginationClansMetaData.hasNextPage}
+                <div class="pagination_btn_list">
+                    <form
+                        method="POST"
+                        action="?/getPaginatedClans"
+                        use:enhance={() => {
+                            consoleContDisable(true);
 
-                        return async ({ result }) => {
-                            paginationBackClick = false;
-                            paginationNextClick = false;
-                            await applyAction(result);
+                            return async ({ result }) => {
+                                paginationBackClick = false;
+                                paginationNextClick = false;
+                                await applyAction(result);
 
-                            if (result.type === 'success') {
-                                paginatedClansData.set(paginatedClans);
-                                paginationClansMetaData.set(paginationMeta);
-                            }
+                                if (result.type === 'success') {
+                                    paginatedAlliancesData.set(null);
+                                    paginatedClansData.set(paginatedClans);
+                                    paginationClansMetaData.set(paginationClanMeta);
+                                }
 
-                            consoleContDisable(false);
-                        };
-                    }}
-                >
-                    <input name="filter_value" type="hidden" value={$filterClanValue} />
-                    <input name="filter_param" type="hidden" value={$filterClanParam} />
-                    <input name="status" type="hidden" bind:value={status} />
-                    <input type="hidden" name="cursor" bind:value={cursor} />
+                                consoleContDisable(false);
+                            };
+                        }}
+                    >
+                        <input name="filter_value" type="hidden" value={$filterClanValue} />
+                        <input name="filter_param" type="hidden" value={$filterClanParam} />
+                        <input name="status" type="hidden" bind:value={clanStatus} />
+                        <input type="hidden" name="cursor" bind:value={clanCursor} />
+
+                        <button
+                            class="pagination_btn_item"
+                            type="submit"
+                            on:click={() => {
+                                $timeOut && closeMsgDisplay($timeOut);
+                                paginationBackClick = true;
+                                clanStatus = 'back';
+                                clanCursor = $paginationClansMetaData.prevCursor;
+                            }}
+                            class:active={paginationBackClick}
+                            class:disabled_elm={!$paginationClansMetaData.hasPrevPage}>Back</button
+                        >
+                        <button
+                            class="pagination_btn_item"
+                            type="submit"
+                            on:click={() => {
+                                $timeOut && closeMsgDisplay($timeOut);
+                                paginationNextClick = true;
+                                clanStatus = 'next';
+                                clanCursor = $paginationClansMetaData.nextCursor;
+                            }}
+                            class:active={paginationNextClick}
+                            class:disabled_elm={!$paginationClansMetaData.hasNextPage}>Next</button
+                        >
+                    </form>
+                </div>
+            {/if}
+
+            {#each $paginatedClansData as clan}
+                <div class="console_contents_list_title clan_name">
+                    {clan.name}
 
                     <button
-                        class="pagination_btn_item"
-                        type="submit"
-                        on:click={() => {
-                            $timeOut && closeMsgDisplay($timeOut);
-                            paginationBackClick = true;
-                            status = 'back';
-                            cursor = $paginationClansMetaData.prevCursor;
-                        }}
-                        class:active={paginationBackClick}
-                        class:disabled_elm={!$paginationClansMetaData.hasPrevPage}>Back</button
+                        class="red_btn"
+                        type="button"
+                        on:click={() =>
+                            prepareModal('rebuildClan', {
+                                title: 'Rebuild the following clan?',
+                                form_action: 'rebuildClan',
+                                clan_id: clan.id,
+                                clan_name: clan.name || 'NULL',
+                                clan_leader: clan.leader_name || 'NULL',
+                                created_at: clan.created_at,
+                            })}
                     >
-                    <button
-                        class="pagination_btn_item"
-                        type="submit"
-                        on:click={() => {
-                            $timeOut && closeMsgDisplay($timeOut);
-                            paginationNextClick = true;
-                            status = 'next';
-                            cursor = $paginationClansMetaData.nextCursor;
-                        }}
-                        class:active={paginationNextClick}
-                        class:disabled_elm={!$paginationClansMetaData.hasNextPage}>Next</button
-                    >
-                </form>
-            </div>
-        {/if}
+                        <span class="btn_icon material-icons">autorenew</span>
+                        <span class="btn_text">Rebuild</span>
+                    </button>
+                </div>
 
-        {#each $paginatedClansData as clan}
-            <div class="console_contents_list_title clan_name">
-                {clan.name}
+                <dl class="console_contents_list">
+                    <dt class="contents_term">Clan ID</dt>
+                    <dd class="contents_desc">{clan.id}</dd>
 
-                <button
-                    class="red_btn"
-                    type="button"
-                    on:click={() =>
-                        prepareModal('rebuildClan', {
-                            title: 'Rebuild the following clan?',
-                            form_action: 'rebuildClan',
-                            clan_id: clan.id,
-                            clan_name: clan.name || 'NULL',
-                            clan_leader: clan.leader_name || 'NULL',
-                            created_at: clan.created_at,
-                        })}
-                >
-                    <span class="btn_icon material-icons">autorenew</span>
-                    <span class="btn_text">Rebuild</span>
-                </button>
-            </div>
+                    <dt class="contents_term">Clan Name</dt>
+                    <dd class="contents_desc">{clan.name}</dd>
 
-            <dl class="console_contents_list">
-                <dt class="contents_term">Clan ID</dt>
-                <dd class="contents_desc">{clan.id}</dd>
+                    <dt class="contents_term">Est.</dt>
+                    <dd class="contents_desc">
+                        {!clan.created_at
+                            ? 'No Data'
+                            : DateTime.fromJSDate(clan.created_at)
+                                  .setZone(DateTime.local().zoneName)
+                                  .setLocale('en')
+                                  .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                    </dd>
 
-                <dt class="contents_term">Clan Name</dt>
-                <dd class="contents_desc">{clan.name}</dd>
+                    <dt class="contents_term">Clan Leader</dt>
+                    <dd class="contents_desc">{clan.leader_name}</dd>
 
-                <dt class="contents_term">Est.</dt>
-                <dd class="contents_desc">
-                    {!clan.created_at
-                        ? 'No Data'
-                        : DateTime.fromJSDate(clan.created_at)
-                              .setZone(DateTime.local().zoneName)
-                              .setLocale('en')
-                              .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
-                </dd>
-
-                <dt class="contents_term">Clan Leader</dt>
-                <dd class="contents_desc">{clan.leader_name}</dd>
-
-                <dt class="contents_term">Clan Members</dt>
-                <dd class="contents_desc">
-                    <div class="clan_members">
-                        {#each _.sortBy(clan.guild_characters, 'order_index') as charData, i}
-                            {#if charData.characters}
-                                <span>{i + 1}. {charData.characters.name || 'Unknown'} [ HR: {convHrpToHr(charData.characters.hrp || 0)}, GR: {charData.characters.gr || 0} ]<br />Character ID: {charData
-                                        .characters.id}</span
-                                >
+                    <dt class="contents_term">Clan Members</dt>
+                    <dd class="contents_desc">
+                        <div class="clan_members">
+                            {#if !clan.guild_characters.length}
+                                No clan members found.
+                            {:else}
+                                {#each _.sortBy(clan.guild_characters, 'order_index') as charData, i}
+                                    {#if !charData.characters}
+                                        No clan members found.
+                                    {:else}
+                                        <span
+                                            >{i + 1}. {charData.characters.name || 'Unknown'} [ HR: {convHrpToHr(charData.characters.hrp || 0)}, GR: {charData.characters.gr || 0} ]<br />Character ID: {charData
+                                                .characters.id}</span
+                                        >
+                                    {/if}
+                                {/each}
                             {/if}
-                        {/each}
-                    </div>
-                </dd>
-            </dl>
-        {/each}
+                        </div>
+                    </dd>
+                </dl>
+            {/each}
 
-        {#if $paginationClansMetaData.hasPrevPage || $paginationClansMetaData.hasNextPage}
-            <div class="pagination_btn_list">
+            {#if $paginationClansMetaData.hasPrevPage || $paginationClansMetaData.hasNextPage}
+                <div class="pagination_btn_list">
+                    <form
+                        method="POST"
+                        action="?/getPaginatedClans"
+                        use:enhance={() => {
+                            consoleContDisable(true);
+
+                            return async ({ result }) => {
+                                paginationBackClick = false;
+                                paginationNextClick = false;
+                                await applyAction(result);
+
+                                if (result.type === 'success') {
+                                    paginatedAlliancesData.set(null);
+                                    paginatedClansData.set(paginatedClans);
+                                    paginationClansMetaData.set(paginationClanMeta);
+                                }
+
+                                consoleContDisable(false);
+                            };
+                        }}
+                    >
+                        <input name="filter_value" type="hidden" value={$filterClanValue} />
+                        <input name="filter_param" type="hidden" value={$filterClanParam} />
+                        <input name="status" type="hidden" bind:value={clanStatus} />
+                        <input type="hidden" name="cursor" bind:value={clanCursor} />
+
+                        <button
+                            class="pagination_btn_item"
+                            type="submit"
+                            on:click={() => {
+                                $timeOut && closeMsgDisplay($timeOut);
+                                paginationBackClick = true;
+                                clanStatus = 'back';
+                                clanCursor = $paginationClansMetaData.prevCursor;
+                            }}
+                            class:active={paginationBackClick}
+                            class:disabled_elm={!$paginationClansMetaData.hasPrevPage}>Back</button
+                        >
+                        <button
+                            class="pagination_btn_item"
+                            type="submit"
+                            on:click={() => {
+                                $timeOut && closeMsgDisplay($timeOut);
+                                paginationNextClick = true;
+                                clanStatus = 'next';
+                                clanCursor = $paginationClansMetaData.nextCursor;
+                            }}
+                            class:active={paginationNextClick}
+                            class:disabled_elm={!$paginationClansMetaData.hasNextPage}>Next</button
+                        >
+                    </form>
+                </div>
+            {/if}
+        {:else if $paginatedAlliancesData}
+            {#if $paginationAlliancesMetaData.hasPrevPage || $paginationAlliancesMetaData.hasNextPage}
+                <div class="pagination_btn_list">
+                    <form
+                        method="POST"
+                        action="?/getPaginatedAlliances"
+                        use:enhance={() => {
+                            consoleContDisable(true);
+
+                            return async ({ result }) => {
+                                paginationBackClick = false;
+                                paginationNextClick = false;
+                                await applyAction(result);
+
+                                if (result.type === 'success') {
+                                    paginatedClansData.set(null);
+                                    paginatedAlliancesData.set(paginatedAlliances);
+                                    paginationAlliancesMetaData.set(paginationAllianceMeta);
+                                    clanNameData.set(clanNames);
+                                }
+
+                                consoleContDisable(false);
+                            };
+                        }}
+                    >
+                        <input name="filter_value" type="hidden" value={$filterAllianceValue} />
+                        <input name="filter_param" type="hidden" value={$filterAllianceParam} />
+                        <input name="status" type="hidden" bind:value={allianceStatus} />
+                        <input type="hidden" name="cursor" bind:value={allianceCursor} />
+
+                        <button
+                            class="pagination_btn_item"
+                            type="submit"
+                            on:click={() => {
+                                $timeOut && closeMsgDisplay($timeOut);
+                                paginationBackClick = true;
+                                allianceStatus = 'back';
+                                allianceCursor = $paginationAlliancesMetaData.prevCursor;
+                            }}
+                            class:active={paginationBackClick}
+                            class:disabled_elm={!$paginationAlliancesMetaData.hasPrevPage}>Back</button
+                        >
+                        <button
+                            class="pagination_btn_item"
+                            type="submit"
+                            on:click={() => {
+                                $timeOut && closeMsgDisplay($timeOut);
+                                paginationNextClick = true;
+                                allianceStatus = 'next';
+                                allianceCursor = $paginationAlliancesMetaData.nextCursor;
+                            }}
+                            class:active={paginationNextClick}
+                            class:disabled_elm={!$paginationAlliancesMetaData.hasNextPage}>Next</button
+                        >
+                    </form>
+                </div>
+            {/if}
+
+            {#each $paginatedAlliancesData as alliance}
                 <form
+                    action="?/updateAllianceData"
                     method="POST"
-                    action="?/getPaginatedClans"
                     use:enhance={() => {
-                        consoleContDisable(true);
-
                         return async ({ result }) => {
-                            paginationBackClick = false;
-                            paginationNextClick = false;
+                            msgClosed.set(false);
+                            errDetailMode.set(false);
+                            onSubmit.set(false);
                             await applyAction(result);
 
-                            if (result.type === 'success') {
-                                paginatedClansData.set(paginatedClans);
-                                paginationClansMetaData.set(paginationMeta);
-                            }
+                            if (result.type === 'success' && $paginatedAlliancesData) {
+                                $paginatedAlliancesData = $paginatedAlliancesData.map((alliance) => {
+                                    if (alliance.id === updatedAllianceData.id)
+                                        return {
+                                            ...alliance,
+                                            first_child_clan: updatedAllianceData.first_child_clan,
+                                            second_child_clan: updatedAllianceData.second_child_clan,
+                                        };
 
-                            consoleContDisable(false);
+                                    return alliance;
+                                });
+                            }
                         };
                     }}
                 >
-                    <input name="filter_value" type="hidden" value={$filterClanValue} />
-                    <input name="filter_param" type="hidden" value={$filterClanParam} />
-                    <input name="status" type="hidden" bind:value={status} />
-                    <input type="hidden" name="cursor" bind:value={cursor} />
+                    <input type="hidden" name="alliance_id" value={editingId} />
 
-                    <button
-                        class="pagination_btn_item"
-                        type="submit"
-                        on:click={() => {
-                            $timeOut && closeMsgDisplay($timeOut);
-                            paginationBackClick = true;
-                            status = 'back';
-                            cursor = $paginationClansMetaData.prevCursor;
-                        }}
-                        class:active={paginationBackClick}
-                        class:disabled_elm={!$paginationClansMetaData.hasPrevPage}>Back</button
-                    >
-                    <button
-                        class="pagination_btn_item"
-                        type="submit"
-                        on:click={() => {
-                            $timeOut && closeMsgDisplay($timeOut);
-                            paginationNextClick = true;
-                            status = 'next';
-                            cursor = $paginationClansMetaData.nextCursor;
-                        }}
-                        class:active={paginationNextClick}
-                        class:disabled_elm={!$paginationClansMetaData.hasNextPage}>Next</button
-                    >
+                    <div class="console_contents_list_title clan_name">{alliance.name}</div>
+                    <dl class="console_contents_list">
+                        <dt class="contents_term">Alliance ID</dt>
+                        <dd class="contents_desc">{alliance.id}</dd>
+
+                        <dt class="contents_term">Alliance Name</dt>
+                        <dd class="contents_desc">{alliance.name}</dd>
+
+                        <dt class="contents_term">Est.</dt>
+                        <dd class="contents_desc">
+                            {!alliance.created_at
+                                ? 'No Data'
+                                : DateTime.fromJSDate(alliance.created_at)
+                                      .setZone(DateTime.local().zoneName)
+                                      .setLocale('en')
+                                      .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                        </dd>
+
+                        <dt class="contents_term">Alies Info</dt>
+                        <dd class="contents_desc">
+                            <div class="clan_members" style="width: 100%; margin: 0; grid-template-columns: repeat(1, 1fr);">
+                                <p>
+                                    <span style="font-weight: 700;">{'<'} Parent Clan {'>'}</span><br />
+                                    Name: {alliance.parent_clan.clan_name}<br />
+                                    Leader: {alliance.parent_clan.leader_name}
+                                </p>
+
+                                <p>
+                                    <span style="font-weight: 700;">{'<'} 1st Child Clan {'>'}<br /></span>
+                                    {#if alliance.first_child_clan.clan_name && alliance.first_child_clan.leader_name}
+                                        Name: {alliance.first_child_clan.clan_name}<br />
+                                        Leader: {alliance.first_child_clan.leader_name}
+                                    {:else}
+                                        No child clan found.
+                                    {/if}
+                                </p>
+
+                                <p>
+                                    <span style="font-weight: 700;">{'<'} 2nd Child Clan {'>'}<br /></span>
+                                    {#if alliance.second_child_clan.clan_name && alliance.second_child_clan.leader_name}
+                                        Name: {alliance.second_child_clan.clan_name}<br />
+                                        Leader: {alliance.second_child_clan.leader_name}
+                                    {:else}
+                                        No child clan found.
+                                    {/if}
+                                </p>
+                            </div>
+
+                            {#if editingId === alliance.id && catTypes['alies']}
+                                <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'alies')}>
+                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" on:click={() => editModeSwitch(alliance.id, 'alies')}>
+                                    <span class="btn_icon material-icons">checklist_rtl</span>
+                                    <span class="btn_text">Set Alies</span>
+                                </button>
+                            {/if}
+
+                            {#if editingId === alliance.id && catTypes['alies']}
+                                <div transition:slide class="edit_area_box">
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Set Alliance Alies</p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>1st child clan</dt>
+                                            <dd>
+                                                <Select name="first_clan_name" items={$clanNameData} placeholder="Select 1st child clan." value={alliance.first_child_clan.clan_name} />
+                                            </dd>
+                                            <br />
+                                            <br />
+                                            <dt>2nd child clan</dt>
+                                            <dd>
+                                                <Select name="second_clan_name" items={$clanNameData} placeholder="Select 2nd child clan." value={alliance.second_child_clan.clan_name} />
+                                            </dd>
+                                        </dl>
+
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            on:click={() => {
+                                                onSubmit.set(true);
+                                                // delay the change by 100ms to prevent "0" during submitting
+                                                setTimeout(() => {
+                                                    editModeSwitch(0, 'alies');
+                                                }, 100);
+                                            }}
+                                        >
+                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {/if}
+                        </dd>
+                    </dl>
                 </form>
-            </div>
+            {/each}
+
+            {#if $paginationAlliancesMetaData.hasPrevPage || $paginationAlliancesMetaData.hasNextPage}
+                <div class="pagination_btn_list">
+                    <form
+                        method="POST"
+                        action="?/getPaginatedAlliances"
+                        use:enhance={() => {
+                            consoleContDisable(true);
+
+                            return async ({ result }) => {
+                                paginationBackClick = false;
+                                paginationNextClick = false;
+                                await applyAction(result);
+
+                                if (result.type === 'success') {
+                                    paginatedClansData.set(null);
+                                    paginatedAlliancesData.set(paginatedAlliances);
+                                    paginationAlliancesMetaData.set(paginationAllianceMeta);
+                                    clanNameData.set(clanNames);
+                                }
+
+                                consoleContDisable(false);
+                            };
+                        }}
+                    >
+                        <input name="filter_value" type="hidden" value={$filterAllianceValue} />
+                        <input name="filter_param" type="hidden" value={$filterAllianceParam} />
+                        <input name="status" type="hidden" bind:value={allianceStatus} />
+                        <input type="hidden" name="cursor" bind:value={allianceCursor} />
+
+                        <button
+                            class="pagination_btn_item"
+                            type="submit"
+                            on:click={() => {
+                                $timeOut && closeMsgDisplay($timeOut);
+                                paginationBackClick = true;
+                                allianceStatus = 'back';
+                                allianceCursor = $paginationAlliancesMetaData.prevCursor;
+                            }}
+                            class:active={paginationBackClick}
+                            class:disabled_elm={!$paginationAlliancesMetaData.hasPrevPage}>Back</button
+                        >
+                        <button
+                            class="pagination_btn_item"
+                            type="submit"
+                            on:click={() => {
+                                $timeOut && closeMsgDisplay($timeOut);
+                                paginationNextClick = true;
+                                allianceStatus = 'next';
+                                allianceCursor = $paginationAlliancesMetaData.nextCursor;
+                            }}
+                            class:active={paginationNextClick}
+                            class:disabled_elm={!$paginationAlliancesMetaData.hasNextPage}>Next</button
+                        >
+                    </form>
+                </div>
+            {/if}
         {/if}
     {/if}
 </div>

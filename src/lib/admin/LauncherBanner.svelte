@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { launcher_banner } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { prepareModal, onSubmit, msgClosed, allBanners, conv2DArrayToObject, discordLinkConvertor } from '$lib/utils';
+    import { prepareModal, onSubmit, msgClosed, allBanners, conv2DArrayToObject, discordLinkConvertor, errDetailMode } from '$lib/utils';
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
 
@@ -81,6 +81,7 @@
             use:enhance={() => {
                 return async ({ result }) => {
                     msgClosed.set(false);
+                    errDetailMode.set(false);
                     onSubmit.set(false);
                     await applyAction(result);
 
@@ -153,6 +154,7 @@
 
                         return async ({ result }) => {
                             msgClosed.set(false);
+                            errDetailMode.set(false);
                             onSubmit.set(false);
                             await applyAction(result);
 
@@ -234,7 +236,10 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
-                                                editModeSwitch(0, 'ja_img_src');
+                                                // delay the change by 100ms to prevent "0" during submitting
+                                                setTimeout(() => {
+                                                    editModeSwitch(0, 'ja_img_src');
+                                                }, 100);
                                             }}
                                         >
                                             <span class="btn_icon material-icons">check</span>
@@ -281,7 +286,10 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
-                                                editModeSwitch(0, 'en_img_src');
+                                                // delay the change by 100ms to prevent "0" during submitting
+                                                setTimeout(() => {
+                                                    editModeSwitch(0, 'en_img_src');
+                                                }, 100);
                                             }}
                                         >
                                             <span class="btn_icon material-icons">check</span>
@@ -325,7 +333,10 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
-                                                editModeSwitch(0, 'bnr_url');
+                                                // delay the change by 100ms to prevent "0" during submitting
+                                                setTimeout(() => {
+                                                    editModeSwitch(0, 'bnr_url');
+                                                }, 100);
                                             }}
                                         >
                                             <span class="btn_icon material-icons">check</span>

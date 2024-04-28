@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { launcher_system } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, msgClosed, conv2DArrayToObject } from '$lib/utils';
+    import { onSubmit, msgClosed, conv2DArrayToObject, errDetailMode } from '$lib/utils';
     import { slide } from 'svelte/transition';
 
     export let systemData: launcher_system;
@@ -147,6 +147,7 @@
 
             return async ({ result }) => {
                 msgClosed.set(false);
+                errDetailMode.set(false);
                 onSubmit.set(false);
                 await applyAction(result);
 
@@ -369,6 +370,7 @@
 
             return async ({ result }) => {
                 msgClosed.set(false);
+                errDetailMode.set(false);
                 onSubmit.set(false);
                 await applyAction(result);
 

@@ -85,3 +85,26 @@ export interface PaginatedClans {
         order_index: number;
     }[];
 }
+
+/* Paginated Alliance Type
+====================================================*/
+export interface PaginatedAlliances {
+    id: number;
+    name: string;
+    created_at: Date;
+    parent_id: number;
+    sub1_id: number | null;
+    sub2_id: number | null;
+    parent_clan: {
+        clan_name: string | null;
+        leader_name: string | null;
+    };
+    first_child_clan: {
+        clan_name: string | null;
+        leader_name: string | null;
+    };
+    second_child_clan: {
+        clan_name: string | null;
+        leader_name: string | null;
+    };
+}
