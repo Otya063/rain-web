@@ -48,8 +48,8 @@
     ====================================================*/
     let editingId: number;
     let editMode = false;
-    const catTypes: { [key in 'alies']: boolean } = {
-        alies: false,
+    const catTypes: { [key in 'allies']: boolean } = {
+        allies: false,
     };
     const adminCtrlTypes: { [key in 'clanFilter' | 'allianceFilter']: boolean } = {
         clanFilter: false,
@@ -86,14 +86,14 @@
         adminCtrlTypes[type] = !adminCtrlTypes[type];
     };
 
-    const editModeSwitch = <T extends number, U extends 'alies'>(id: T, type: U): void | false => {
+    const editModeSwitch = <T extends number, U extends 'allies'>(id: T, type: U): void | false => {
         // check if another category type is already in edit mode
         const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
 
         // when another normal_btn is pressed while editing, the editing target is switched
         if (activeCat && id !== 0) {
             Object.keys(catTypes).forEach((_key) => {
-                const key = _key as 'alies';
+                const key = _key as 'allies';
                 catTypes[key] = false;
             });
 
@@ -575,7 +575,7 @@
                                       .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
                         </dd>
 
-                        <dt class="contents_term">Alies Info</dt>
+                        <dt class="contents_term">Allies Info</dt>
                         <dd class="contents_desc">
                             <div class="clan_members" style="width: 100%; margin: 0; grid-template-columns: repeat(1, 1fr);">
                                 <p>
@@ -605,22 +605,22 @@
                                 </p>
                             </div>
 
-                            {#if editingId === alliance.id && catTypes['alies']}
-                                <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'alies')}>
+                            {#if editingId === alliance.id && catTypes['allies']}
+                                <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'allies')}>
                                     <span class="btn_icon material-icons">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
-                                <button class="normal_btn" type="button" on:click={() => editModeSwitch(alliance.id, 'alies')}>
+                                <button class="normal_btn" type="button" on:click={() => editModeSwitch(alliance.id, 'allies')}>
                                     <span class="btn_icon material-icons">checklist_rtl</span>
-                                    <span class="btn_text">Set Alies</span>
+                                    <span class="btn_text">Set Allies</span>
                                 </button>
                             {/if}
 
-                            {#if editingId === alliance.id && catTypes['alies']}
+                            {#if editingId === alliance.id && catTypes['allies']}
                                 <div transition:slide class="edit_area_box">
                                     <div class="edit_area enter">
-                                        <p class="edit_area_title">Set Alliance Alies</p>
+                                        <p class="edit_area_title">Set Alliance Allies</p>
                                         <dl class="edit_area_box_parts text">
                                             <dt>1st child clan</dt>
                                             <dd>
@@ -642,7 +642,7 @@
                                                 $timeOut && closeMsgDisplay($timeOut);
                                                 // delay the change by 100ms to prevent "0" during submitting
                                                 setTimeout(() => {
-                                                    editModeSwitch(0, 'alies');
+                                                    editModeSwitch(0, 'allies');
                                                 }, 100);
                                             }}
                                         >
