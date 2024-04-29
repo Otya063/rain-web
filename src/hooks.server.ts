@@ -25,13 +25,15 @@ export const handle: Handle = async ({ event, resolve }) => {
         }
     }
 
-    console.log(event.request.headers.get('x-forwarded-for'));
-    console.log(event.getClientAddress());
-    if (event.platform?.env.MAINTENANCE_MODE === 'true' && event.url.pathname !== '/maintenance/' && event.getClientAddress() !== ADMIN_IP) {
-        return new Response(null, {
-            status: 302,
-            headers: { Location: '/maintenance' },
-        });
+    if (event.platform?.env.MAINTENANCE_MODE === 'true' && event.url.pathname !== '/maintenance/') {
+        const res = await fetch('https://api.ipify.org?format=json');
+        const ip = (await res.json()).ip as string;
+
+        if (ADMIN_IP !== ip)
+            return new Response(null, {
+                status: 302,
+                headers: { Location: '/maintenance' },
+            });
     }
 
     const [, lang] = event.url.pathname.split('/');
