@@ -1,6 +1,6 @@
 import type { users } from '@prisma/client/edge';
 import type { Handle, RequestEvent } from '@sveltejs/kit';
-import { ADMIN_CREDENTIALS } from '$env/static/private';
+import { ADMIN_CREDENTIALS, ADMIN_IP } from '$env/static/private';
 import { PUBLIC_MAIN_DOMAIN, PUBLIC_AUTH_DOMAIN } from '$env/static/public';
 import type { Locales } from '$i18n/i18n-types';
 import { loadAllLocales } from '$i18n/i18n-util.sync';
@@ -14,7 +14,7 @@ const L = i18n();
 export const handle: Handle = async ({ event, resolve }) => {
     // basic auth
     const auth = event.request.headers.get('Authorization');
-    if (!event.url.origin.includes('localhost') && !['/admin/', '/maintenance/', '/img/'].some(path => event.url.pathname.includes(path))) {
+    if (!event.url.origin.includes('localhost') && !['/admin/', '/maintenance/', '/img/'].some((path) => event.url.pathname.includes(path))) {
         if (auth !== `Basic ${btoa(ADMIN_CREDENTIALS)}`) {
             return new Response('Unauthorized User', {
                 status: 401,
@@ -26,10 +26,14 @@ export const handle: Handle = async ({ event, resolve }) => {
     }
 
     if (event.platform?.env.MAINTENANCE_MODE === 'true' && event.url.pathname !== '/maintenance/') {
-        return new Response(null, {
-            status: 302,
-            headers: { Location: '/maintenance' },
-        });
+        const res = await fetch('https://api.ipify.org?format=json');
+        const ip = (await res.json()).ip as string;
+
+        if (ADMIN_IP !== ip)
+            return new Response(null, {
+                status: 302,
+                headers: { Location: '/maintenance' },
+            });
     }
 
     const [, lang] = event.url.pathname.split('/');

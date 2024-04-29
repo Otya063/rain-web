@@ -6,7 +6,7 @@ export const load: PageServerLoad = async ({ platform }) => {
         throw error(404);
     } else {
         // must be utc
-        const date = platform?.env.MAINTENANCE_DATE || "1900,1,1,15,0";
+        const date = platform?.env.MAINTENANCE_DATE;
         return { date };
     }
 };

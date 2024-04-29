@@ -1,9 +1,9 @@
 <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, deleteCharacterData, conv2DArrayToObject, msgClosed, paginatedUsersData } from '$lib/utils';
+    import { onSubmit, closeModal, deleteCharacterData, conv2DArrayToObject, msgClosed, paginatedUsersData, timeOut, closeMsgDisplay } from '$lib/utils';
 
     let permanent: boolean;
-    
+
     const onChangeInputElm = () => {
         document.getElementById('permanent')!.textContent = document.getElementById('permanent')?.textContent === 'check_box_outline_blank' ? 'check_box' : 'check_box_outline_blank';
     };
@@ -84,7 +84,15 @@
                 {/if}
             </div>
             <div class="btn_group">
-                <button class="blue_btn" formaction="?/{$deleteCharacterData.form_action}" type="submit" on:click={() => onSubmit.set(true)}>
+                <button
+                    class="blue_btn"
+                    formaction="?/{$deleteCharacterData.form_action}"
+                    type="submit"
+                    on:click={() => {
+                        onSubmit.set(true);
+                        $timeOut && closeMsgDisplay($timeOut);
+                    }}
+                >
                     <span class="btn_icon material-icons">check</span>
                     <span class="btn_text">Yes</span>
                 </button>
