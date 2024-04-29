@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { launcher_info } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { allInformation, prepareModal, underscoreAndLowercase, onSubmit, msgClosed, discordLinkConvertor, conv2DArrayToObject, errDetailMode } from '$lib/utils';
+    import { allInformation, prepareModal, underscoreAndLowercase, onSubmit, msgClosed, discordLinkConvertor, conv2DArrayToObject, timeOut, closeMsgDisplay } from '$lib/utils';
     import _ from 'lodash';
     import { DateTime } from 'luxon';
     import { slide } from 'svelte/transition';
@@ -80,7 +80,6 @@
             use:enhance={() => {
                 return async ({ result }) => {
                     msgClosed.set(false);
-                    errDetailMode.set(false);
                     onSubmit.set(false);
                     await applyAction(result);
 
@@ -118,7 +117,14 @@
             </dl>
 
             <div class="group_btns">
-                <button class="blue_btn" type="submit" on:click={() => onSubmit.set(true)}>
+                <button
+                    class="blue_btn"
+                    type="submit"
+                    on:click={() => {
+                        onSubmit.set(true);
+                        $timeOut && closeMsgDisplay($timeOut);
+                    }}
+                >
                     <span class="btn_icon material-icons">check</span>
                     <span class="btn_text">Save</span>
                 </button>
@@ -154,7 +160,6 @@
 
                             return async ({ result }) => {
                                 msgClosed.set(false);
-                                errDetailMode.set(false);
                                 onSubmit.set(false);
                                 await applyAction(result);
 
@@ -251,6 +256,7 @@
                                                 type="submit"
                                                 on:click={() => {
                                                     onSubmit.set(true);
+                                                    $timeOut && closeMsgDisplay($timeOut);
                                                     // delay the change by 100ms to prevent "0" during submitting
                                                     setTimeout(() => {
                                                         editModeSwitch(0, 'title');
@@ -298,6 +304,7 @@
                                                 type="submit"
                                                 on:click={() => {
                                                     onSubmit.set(true);
+                                                    $timeOut && closeMsgDisplay($timeOut);
                                                     // delay the change by 100ms to prevent "0" during submitting
                                                     setTimeout(() => {
                                                         editModeSwitch(0, 'url');
@@ -350,6 +357,7 @@
                                                 type="submit"
                                                 on:click={() => {
                                                     onSubmit.set(true);
+                                                    $timeOut && closeMsgDisplay($timeOut);
                                                     // delay the change by 100ms to prevent "0" during submitting
                                                     setTimeout(() => {
                                                         editModeSwitch(0, 'created_at');
@@ -400,6 +408,7 @@
                                                 type="submit"
                                                 on:click={() => {
                                                     onSubmit.set(true);
+                                                    $timeOut && closeMsgDisplay($timeOut);
                                                     // delay the change by 100ms to prevent "0" during submitting
                                                     setTimeout(() => {
                                                         editModeSwitch(0, 'type');

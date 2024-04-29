@@ -24,7 +24,6 @@
         initUserCtrlPanel,
         convHrpToHr,
         consoleContDisable,
-        errDetailMode,
     } from '$lib/utils';
     import type { PaginatedUsers, PaginationMeta } from '$lib/types';
     import _ from 'lodash';
@@ -268,7 +267,6 @@
                                     initUserCtrlPanel(paginatedUsers);
                                 } else {
                                     msgClosed.set(false);
-                                    errDetailMode.set(false);
                                 }
 
                                 consoleContDisable(false);
@@ -322,7 +320,6 @@
 
                         return async ({ result }) => {
                             msgClosed.set(false);
-                            errDetailMode.set(false);
                             onSubmit.set(false);
                             await applyAction(result);
 
@@ -436,6 +433,7 @@
                             style="margin-top: 0;"
                             on:click={() => {
                                 onSubmit.set(true);
+                                $timeOut && closeMsgDisplay($timeOut);
                                 adminCtrlSwitch('courseCtrl');
                             }}
                         >
@@ -468,6 +466,8 @@
                                 paginatedUsersData.set(paginatedUsers);
                                 paginationMetaData.set(paginationMeta);
                                 initUserCtrlPanel(paginatedUsers);
+                            } else {
+                                msgClosed.set(false);
                             }
 
                             consoleContDisable(false);
@@ -519,7 +519,6 @@
 
                     return async ({ result }) => {
                         msgClosed.set(false);
-                        errDetailMode.set(false);
                         onSubmit.set(false);
                         await applyAction(result);
 
@@ -671,6 +670,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 $userCtrlPanel[user.id].activeCategories['username'] = false;
                                             }}
                                         >
@@ -723,6 +723,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 $userCtrlPanel[user.id].activeCategories['password'] = false;
                                             }}
                                         >
@@ -804,6 +805,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 $userCtrlPanel[user.id].activeCategories['rights'] = false;
                                             }}
                                         >
@@ -872,6 +874,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 $userCtrlPanel[user.id].activeCategories['return_expires'] = false;
                                             }}
                                         >
@@ -926,6 +929,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 $userCtrlPanel[user.id].activeCategories['gacha_premium'] = false;
                                             }}
                                         >
@@ -980,6 +984,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 $userCtrlPanel[user.id].activeCategories['gacha_trial'] = false;
                                             }}
                                         >
@@ -1034,6 +1039,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 $userCtrlPanel[user.id].activeCategories['frontier_points'] = false;
                                             }}
                                         >
@@ -1077,6 +1083,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 $userCtrlPanel[user.id].activeCategories['psn_id'] = false;
                                             }}
                                         >
@@ -1120,6 +1127,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 $userCtrlPanel[user.id].activeCategories['wiiu_key'] = false;
                                             }}
                                         >
@@ -1293,7 +1301,6 @@
 
                                     return async ({ result }) => {
                                         msgClosed.set(false);
-                                        errDetailMode.set(false);
                                         onSubmit.set(false);
                                         await applyAction(result);
 
@@ -1420,6 +1427,7 @@
                                                         type="submit"
                                                         on:click={() => {
                                                             $userCtrlPanel[user.id].activeCategories['name'] = false;
+                                                            $timeOut && closeMsgDisplay($timeOut);
                                                             onSubmit.set(true);
                                                         }}
                                                     >
@@ -1473,6 +1481,7 @@
                                                             type="submit"
                                                             on:click={() => {
                                                                 onSubmit.set(true);
+                                                                $timeOut && closeMsgDisplay($timeOut);
                                                                 $userCtrlPanel[user.id].activeCategories['bounty'] = false;
                                                             }}
                                                         >
@@ -1519,6 +1528,7 @@
                                                         type="submit"
                                                         on:click={() => {
                                                             $userCtrlPanel[user.id].activeCategories['clan'] = false;
+                                                            $timeOut && closeMsgDisplay($timeOut);
                                                             onSubmit.set(true);
                                                         }}
                                                     >
@@ -1585,6 +1595,7 @@
                                                         type="submit"
                                                         on:click={() => {
                                                             $userCtrlPanel[user.id].activeCategories['binary'] = false;
+                                                            $timeOut && closeMsgDisplay($timeOut);
                                                             onSubmit.set(true);
                                                         }}
                                                     >
@@ -1620,6 +1631,8 @@
                                 paginatedUsersData.set(paginatedUsers);
                                 paginationMetaData.set(paginationMeta);
                                 initUserCtrlPanel(paginatedUsers);
+                            } else {
+                                msgClosed.set(false);
                             }
 
                             consoleContDisable(false);

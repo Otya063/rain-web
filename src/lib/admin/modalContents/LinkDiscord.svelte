@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { discord } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, linkDiscordData, conv2DArrayToObject, msgClosed, paginatedUsersData, updateUserCtrlPanel, errDetailMode } from '$lib/utils';
+    import { onSubmit, closeModal, linkDiscordData, conv2DArrayToObject, msgClosed, paginatedUsersData, updateUserCtrlPanel, timeOut, closeMsgDisplay } from '$lib/utils';
 
     export let newDiscord: discord;
 </script>
@@ -19,7 +19,6 @@
 
                 return async ({ result }) => {
                     msgClosed.set(false);
-                    errDetailMode.set(false);
                     onSubmit.set(false);
                     await applyAction(result);
 
@@ -109,7 +108,15 @@
                 {/if}
             </div>
             <div class="btn_group">
-                <button class="blue_btn" formaction="?/{$linkDiscordData.form_action}" type="submit" on:click={() => onSubmit.set(true)}>
+                <button
+                    class="blue_btn"
+                    formaction="?/{$linkDiscordData.form_action}"
+                    type="submit"
+                    on:click={() => {
+                        onSubmit.set(true);
+                        $timeOut && closeMsgDisplay($timeOut);
+                    }}
+                >
                     <span class="btn_icon material-icons">check</span>
                     <span class="btn_text">Yes</span>
                 </button>

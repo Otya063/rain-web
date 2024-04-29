@@ -18,7 +18,6 @@
         filterAllianceParam,
         onSubmit,
         clanNameData,
-        errDetailMode,
     } from '$lib/utils';
     import type { PaginatedAlliances, PaginatedClans, PaginationMeta } from '$lib/types';
     import _ from 'lodash';
@@ -179,8 +178,7 @@
                                     paginatedClansData.set(paginatedClans);
                                     paginationClansMetaData.set(paginationClanMeta);
                                 } else {
-                                    msgClosed.set(false);
-                                    errDetailMode.set(false);
+                                    msgClosed.set(false); // set false to display the message
                                 }
 
                                 consoleContDisable(false);
@@ -205,7 +203,7 @@
                         type="submit"
                         form="getPaginatedClans"
                         on:click={() => {
-                            $timeOut && closeMsgDisplay($timeOut);
+                            $timeOut && closeMsgDisplay($timeOut); // close when submit with message details open
                             filterClanValue.set(clanBindedValue);
                             filterClanParam.set(clanBindedParam);
                             clanStatus = 'init';
@@ -247,7 +245,6 @@
                                     clanNameData.set(clanNames);
                                 } else {
                                     msgClosed.set(false);
-                                    errDetailMode.set(false);
                                 }
 
                                 consoleContDisable(false);
@@ -311,6 +308,8 @@
                                     paginatedAlliancesData.set(null);
                                     paginatedClansData.set(paginatedClans);
                                     paginationClansMetaData.set(paginationClanMeta);
+                                } else {
+                                    msgClosed.set(false);
                                 }
 
                                 consoleContDisable(false);
@@ -431,6 +430,8 @@
                                     paginatedAlliancesData.set(null);
                                     paginatedClansData.set(paginatedClans);
                                     paginationClansMetaData.set(paginationClanMeta);
+                                } else {
+                                    msgClosed.set(false);
                                 }
 
                                 consoleContDisable(false);
@@ -488,6 +489,8 @@
                                     paginatedAlliancesData.set(paginatedAlliances);
                                     paginationAlliancesMetaData.set(paginationAllianceMeta);
                                     clanNameData.set(clanNames);
+                                } else {
+                                    msgClosed.set(false);
                                 }
 
                                 consoleContDisable(false);
@@ -533,8 +536,7 @@
                     method="POST"
                     use:enhance={() => {
                         return async ({ result }) => {
-                            msgClosed.set(false);
-                            errDetailMode.set(false);
+                            msgClosed.set(false); // set false to display the message
                             onSubmit.set(false);
                             await applyAction(result);
 
@@ -637,6 +639,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 // delay the change by 100ms to prevent "0" during submitting
                                                 setTimeout(() => {
                                                     editModeSwitch(0, 'alies');
@@ -672,6 +675,8 @@
                                     paginatedAlliancesData.set(paginatedAlliances);
                                     paginationAlliancesMetaData.set(paginationAllianceMeta);
                                     clanNameData.set(clanNames);
+                                } else {
+                                    msgClosed.set(false);
                                 }
 
                                 consoleContDisable(false);

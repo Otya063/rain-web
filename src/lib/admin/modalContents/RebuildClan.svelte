@@ -1,16 +1,6 @@
 <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import {
-        onSubmit,
-        closeModal,
-        rebuildClanData,
-        msgClosed,
-        filterClanValue,
-        filterClanParam,
-        paginatedClansData,
-        paginationClansMetaData,
-        errDetailMode,
-    } from '$lib/utils';
+    import { onSubmit, closeModal, rebuildClanData, msgClosed, filterClanValue, filterClanParam, paginatedClansData, paginationClansMetaData, timeOut, closeMsgDisplay } from '$lib/utils';
     import { DateTime } from 'luxon';
 </script>
 
@@ -21,7 +11,6 @@
             use:enhance={() => {
                 return async ({ result }) => {
                     msgClosed.set(false);
-                    errDetailMode.set(false);
                     onSubmit.set(false);
                     await applyAction(result);
 
@@ -84,7 +73,15 @@
                 <p class="modal_note">* After a successful rebuild, the search results will be reset.</p>
             </div>
             <div class="btn_group">
-                <button class="blue_btn" formaction="?/{$rebuildClanData.form_action}" type="submit" on:click={() => onSubmit.set(true)}>
+                <button
+                    class="blue_btn"
+                    formaction="?/{$rebuildClanData.form_action}"
+                    type="submit"
+                    on:click={() => {
+                        onSubmit.set(true);
+                        $timeOut && closeMsgDisplay($timeOut);
+                    }}
+                >
                     <span class="btn_icon material-icons">check</span>
                     <span class="btn_text">Yes</span>
                 </button>

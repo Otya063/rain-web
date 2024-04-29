@@ -1070,7 +1070,7 @@ const updateAllianceData: Action = async ({ request }) => {
     }
 
     try {
-        // get each clan data
+        // get each selected clan data
         const firstClanData = await (async () => {
             if (!first_clan_name) {
                 return null;
@@ -1114,13 +1114,13 @@ const updateAllianceData: Action = async ({ request }) => {
         const isExist2 = secondClanData?.id
             ? await db.guild_alliances.findFirst({
                   where: {
-                    OR: [{ parent_id: secondClanData.id }, { sub1_id: secondClanData.id }, { sub2_id: secondClanData.id }],
+                      OR: [{ parent_id: secondClanData.id }, { sub1_id: secondClanData.id }, { sub2_id: secondClanData.id }],
                   },
               })
             : null;
-        if (isExist1 && isExist1.id !== Number(alliance_id)) {
+        if (isExist1 && (isExist1.name !== firstClanData?.name)) {
             return fail(400, { error: true, message: `The selected 1st clan has already joined the alliance (Name: ${isExist1.name}).` });
-        } else if (isExist2 && isExist2.id !== Number(alliance_id)) {
+        } else if (isExist2 && (isExist2.name !== secondClanData?.name)) {
             return fail(400, { error: true, message: `The selected 2nd clan has already joined the alliance (Name: ${isExist2.name}).` });
         }
 

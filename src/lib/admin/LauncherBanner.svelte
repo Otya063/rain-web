@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { launcher_banner } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { prepareModal, onSubmit, msgClosed, allBanners, conv2DArrayToObject, discordLinkConvertor, errDetailMode } from '$lib/utils';
+    import { prepareModal, onSubmit, msgClosed, allBanners, conv2DArrayToObject, discordLinkConvertor, timeOut, closeMsgDisplay } from '$lib/utils';
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
 
@@ -81,7 +81,6 @@
             use:enhance={() => {
                 return async ({ result }) => {
                     msgClosed.set(false);
-                    errDetailMode.set(false);
                     onSubmit.set(false);
                     await applyAction(result);
 
@@ -121,7 +120,14 @@
             </dl>
 
             <div class="group_btns">
-                <button on:click={() => onSubmit.set(true)} class="blue_btn" type="submit">
+                <button
+                    on:click={() => {
+                        onSubmit.set(true);
+                        $timeOut && closeMsgDisplay($timeOut);
+                    }}
+                    class="blue_btn"
+                    type="submit"
+                >
                     <span class="btn_icon material-icons">check</span>
                     <span class="btn_text">Save</span>
                 </button>
@@ -154,7 +160,6 @@
 
                         return async ({ result }) => {
                             msgClosed.set(false);
-                            errDetailMode.set(false);
                             onSubmit.set(false);
                             await applyAction(result);
 
@@ -236,6 +241,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 // delay the change by 100ms to prevent "0" during submitting
                                                 setTimeout(() => {
                                                     editModeSwitch(0, 'ja_img_src');
@@ -286,6 +292,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 // delay the change by 100ms to prevent "0" during submitting
                                                 setTimeout(() => {
                                                     editModeSwitch(0, 'en_img_src');
@@ -333,6 +340,7 @@
                                             type="submit"
                                             on:click={() => {
                                                 onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
                                                 // delay the change by 100ms to prevent "0" during submitting
                                                 setTimeout(() => {
                                                     editModeSwitch(0, 'bnr_url');

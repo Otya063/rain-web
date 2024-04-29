@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { suspended_account } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, suspendUserData, conv2DArrayToObject, msgClosed, paginatedUsersData, timeOut, closeMsgDisplay, userCtrlPanel, errDetailMode } from '$lib/utils';
+    import { onSubmit, closeModal, suspendUserData, conv2DArrayToObject, msgClosed, paginatedUsersData, timeOut, closeMsgDisplay, userCtrlPanel } from '$lib/utils';
     import { DateTime } from 'luxon';
 
     export let suspendedAccount: suspended_account;
@@ -23,7 +23,6 @@
 
                 return async ({ result }) => {
                     msgClosed.set(false);
-                    errDetailMode.set(false);
                     onSubmit.set(false);
                     await applyAction(result);
 

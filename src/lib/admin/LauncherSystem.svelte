@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { launcher_system } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, msgClosed, conv2DArrayToObject, errDetailMode } from '$lib/utils';
+    import { onSubmit, msgClosed, conv2DArrayToObject, timeOut, closeMsgDisplay } from '$lib/utils';
     import { slide } from 'svelte/transition';
 
     export let systemData: launcher_system;
@@ -147,7 +147,6 @@
 
             return async ({ result }) => {
                 msgClosed.set(false);
-                errDetailMode.set(false);
                 onSubmit.set(false);
                 await applyAction(result);
 
@@ -200,6 +199,7 @@
                                 type="submit"
                                 on:click={() => {
                                     onSubmit.set(true);
+                                    $timeOut && closeMsgDisplay($timeOut);
                                     editModeSwitch('RainJP');
                                 }}
                             >
@@ -253,6 +253,7 @@
                                 type="submit"
                                 on:click={() => {
                                     onSubmit.set(true);
+                                    $timeOut && closeMsgDisplay($timeOut);
                                     editModeSwitch('RainUS');
                                 }}
                             >
@@ -306,6 +307,7 @@
                                 type="submit"
                                 on:click={() => {
                                     onSubmit.set(true);
+                                    $timeOut && closeMsgDisplay($timeOut);
                                     editModeSwitch('RainEU');
                                 }}
                             >
@@ -345,6 +347,7 @@
                     formaction="?/updateAllMaintData"
                     on:click={() => {
                         onSubmit.set(true);
+                        $timeOut && closeMsgDisplay($timeOut);
                     }}
                 >
                     <span class="btn_icon material-icons">check</span>
@@ -370,7 +373,6 @@
 
             return async ({ result }) => {
                 msgClosed.set(false);
-                errDetailMode.set(false);
                 onSubmit.set(false);
                 await applyAction(result);
 
@@ -423,6 +425,7 @@
                                 type="submit"
                                 on:click={() => {
                                     onSubmit.set(true);
+                                    $timeOut && closeMsgDisplay($timeOut);
                                     editModeSwitch('update');
                                 }}
                             >
@@ -476,6 +479,7 @@
                                 type="submit"
                                 on:click={() => {
                                     onSubmit.set(true);
+                                    $timeOut && closeMsgDisplay($timeOut);
                                     editModeSwitch('debug');
                                 }}
                             >
@@ -549,6 +553,7 @@
                                 type="submit"
                                 on:click={() => {
                                     onSubmit.set(true);
+                                    $timeOut && closeMsgDisplay($timeOut);
                                     editModeSwitch('client_data');
                                 }}
                             >
@@ -593,6 +598,7 @@
                                 type="submit"
                                 on:click={() => {
                                     onSubmit.set(true);
+                                    $timeOut && closeMsgDisplay($timeOut);
                                     editModeSwitch('rain_admins');
                                 }}
                             >
