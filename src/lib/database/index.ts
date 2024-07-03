@@ -1,4 +1,5 @@
 import { ManageBinary, editName } from './admin';
+import { Buffer } from 'node:buffer';
 import {
     PrismaClient,
     type characters,
