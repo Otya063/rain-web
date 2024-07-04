@@ -38,7 +38,7 @@
                 <li>
                     {$LL.maintenance['message2']()}
                     {#if !date}
-                        TBD
+                        Unknown Date
                     {:else}
                         <!-- UTC -->
                         {DateTime.utc(arrNum[0], arrNum[1], arrNum[2], arrNum[3], arrNum[4]).setZone(DateTime.local().zoneName).toLocaleString(DateTime.DATETIME_FULL)}
