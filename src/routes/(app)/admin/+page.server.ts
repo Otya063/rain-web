@@ -662,6 +662,48 @@ const updateCharacterData: Action = async ({ request }) => {
     }
 };
 
+const deleteUser: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const { user_id, username } = data as { user_id: number, username: string };
+
+    const charIds = (
+        await db.characters.findMany({
+            where: {
+                user_id: Number(user_id),
+            },
+            select: {
+                id: true,
+            },
+        })
+    ).map((char) => char.id);
+
+    const result = await new IsCharLogin(charIds).checkMulti();
+    if (result.check && result.charIds.length) {
+        return fail(400, { error: true, message: `Couldn't process because all characters haven't logged out.<br />Logged-In Character's ID: ${result.charIds}` });
+    }
+
+    try {
+        await db.users.delete({
+            where: {
+                id: Number(user_id),
+            },
+        });
+
+        return {
+            success: true,
+            message: `The user account (Username: ${username}) was successfully deleted.`,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
 const suspendUser: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const { user_id, username, reason_type, permanently_del, until_at, zoneName } = data as {
@@ -1118,9 +1160,9 @@ const updateAllianceData: Action = async ({ request }) => {
                   },
               })
             : null;
-        if (isExist1 && (isExist1.name !== firstClanData?.name)) {
+        if (isExist1 && isExist1.name !== firstClanData?.name) {
             return fail(400, { error: true, message: `The selected 1st clan has already joined the alliance (Name: ${isExist1.name}).` });
-        } else if (isExist2 && (isExist2.name !== secondClanData?.name)) {
+        } else if (isExist2 && isExist2.name !== secondClanData?.name) {
             return fail(400, { error: true, message: `The selected 2nd clan has already joined the alliance (Name: ${isExist2.name}).` });
         }
 
@@ -1204,6 +1246,7 @@ export const actions: Actions = {
     getPaginatedAlliances,
     updateUserData,
     updateCharacterData,
+    deleteUser,
     suspendUser,
     unsuspendUser,
     createBnrData,

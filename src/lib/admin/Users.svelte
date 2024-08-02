@@ -593,15 +593,15 @@
                         type="button"
                         on:click={() =>
                             prepareModal('suspendUser', {
-                                title: 'Suspend the following user?',
-                                form_action: 'suspendUser',
+                                title: '',
+                                form_action: '',
                                 user_id: user.id,
                                 username: user.username,
                                 char_name: user.characters.map((character) => character.name || 'Ready to Hunt'),
                             })}
                     >
                         <span class="btn_icon material-icons">delete</span>
-                        <span class="btn_text">Suspend</span>
+                        <span class="btn_text">Action</span>
                     </button>
                 </div>
 
