@@ -70,7 +70,7 @@
                 </ul>
 
                 <p class="modal_note">* All members of the clan must be logged out from the game to rebuild clan data.</p>
-                <p class="modal_note">* After a successful rebuild, the search results will be reset.</p>
+                <p class="modal_note">* After a successful process, the search results will be reset.</p>
             </div>
             <div class="btn_group">
                 <button
