@@ -664,7 +664,7 @@ const updateCharacterData: Action = async ({ request }) => {
 
 const deleteUser: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { user_id, username } = data as { user_id: number, username: string };
+    const { user_id, username } = data as { user_id: number; username: string };
 
     const charIds = (
         await db.characters.findMany({

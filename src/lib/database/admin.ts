@@ -1,7 +1,8 @@
 import ServerData, { IsCharLogin, db } from '.';
 import type { PaginatedUsers, PaginationMeta, BinaryTypes, PaginatedClans, PaginatedAlliances } from '$lib/types';
-import { TextEncoderSJIS } from '$lib/utils';
+//import { TextEncoderSJIS } from '$lib/utils';
 import { Buffer } from 'node:buffer';
+import { encodeToShiftJIS } from '$lib/utils';
 
 /**
  * Get paginated user(s) data.
@@ -1189,8 +1190,12 @@ export const editName = async (
         return { success: false, message: "Can't be processed while the target character is logged in." };
     }
 
-    const encoder = new TextEncoderSJIS();
+    //const encoded = new TextEncoder().encode(setName);
+    //console.log(encoded);
+    /* const encoder = new TextEncoderSJIS();
     const sjisBytes = encoder.encode(setName);
+    console.log(sjisBytes); */
+    const sjisBytes = encodeToShiftJIS(setName);
     const hexString = Array.from(sjisBytes)
         .map((byte) => byte.toString(16).padStart(2, '0'))
         .join('');
@@ -1227,6 +1232,7 @@ export const editName = async (
 
     try {
         await db.$queryRaw`UPDATE characters SET savedata = decode(${base64}, 'base64'), name = ${setName} WHERE id = ${characterId}`;
+
         await db.discord.update({
             where: {
                 char_id: characterId,

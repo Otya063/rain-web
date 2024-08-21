@@ -1,6 +1,7 @@
 import { courseJa } from '$i18n/ja/courseData';
 import { courseEn } from '$i18n/en/courseData';
 import type { WeaponType, CourseJaData, CourseEnData } from '$lib/types';
+import Encoding from 'encoding-japanese';
 
 /* Get Course by Decimal
 ====================================================*/
@@ -273,7 +274,7 @@ export const discordLinkConvertor = (url: string): string => {
     }
 };
 
-export class TextEncoderSJIS {
+/* export class TextEncoderSJIS {
     static mapping: Uint16Array;
     constructor() {
         if (TextEncoderSJIS.mapping !== undefined) {
@@ -327,7 +328,7 @@ export class TextEncoderSJIS {
         }
         return new Uint8Array(sjis);
     }
-}
+} */
 
 /* Convert Hrp Into True HR
 ====================================================*/
@@ -362,4 +363,14 @@ export const convHrpToHr = (hrp: number | null): number => {
             return 0;
         }
     }
+};
+
+export const encodeToShiftJIS = (value: string): Uint8Array => {
+    const unicodeArray = Encoding.stringToCode(value);
+    const encoded = Encoding.convert(unicodeArray, {
+        to: 'SJIS',
+        from: 'UNICODE',
+    });
+
+    return new Uint8Array(encoded);
 };
