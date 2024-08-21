@@ -1196,9 +1196,11 @@ export const editName = async (
     const sjisBytes = encoder.encode(setName);
     console.log(sjisBytes); */
     const sjisBytes = encodeToShiftJIS(setName);
+    console.log(sjisBytes);
     const hexString = Array.from(sjisBytes)
         .map((byte) => byte.toString(16).padStart(2, '0'))
         .join('');
+    console.log(hexString);
     if (hexString.length > 24 || hexString.length === 0) {
         return { success: false, message: 'Character name must be 1-12 characters (1-6 characters in Japanese).' };
     }
