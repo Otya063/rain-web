@@ -83,3 +83,26 @@ export const switchBtnInAuth = (enable: boolean, btnElm: HTMLElement | null, lab
 export const consoleContDisable = (enable: boolean) => {
     enable ? document.getElementsByClassName('console_contents')[0].classList.add('disabled_elm') : document.getElementsByClassName('console_contents')[0].classList.remove('disabled_elm');
 };
+
+/**
+ * Validates the input value to ensure it only contains allowed characters.
+ * - Japanese: Hiragana, Katakana, Kanji
+ * - English: Uppercase, Lowercase, and Half-width digits
+ * - Symbols: ! " # $ % & ' ( ) * + , - . / : ; < = > ? @ [ \ ] ^ _ ` { | } ~
+ *
+ * @param {Event} event
+ * @returns {boolean} Verification result
+ */
+export const validateInput = (event: Event): boolean => {
+    const target = event.target as HTMLInputElement;
+    const value = target.value;
+
+    const allowedCharsRegex = /^[\u3040-\u30FF\u4E00-\u9FFFa-zA-Z0-9!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~]*$/;
+
+    // check if the value is not empty and matches the allowed characters
+    if (value && allowedCharsRegex.test(value)) {
+        return true;
+    } else {
+        return false;
+    }
+};

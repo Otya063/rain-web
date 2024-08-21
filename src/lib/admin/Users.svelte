@@ -24,6 +24,7 @@
         initUserCtrlPanel,
         convHrpToHr,
         consoleContDisable,
+        validateInput,
     } from '$lib/utils';
     import type { PaginatedUsers, PaginationMeta } from '$lib/types';
     import _ from 'lodash';
@@ -120,6 +121,7 @@
         'scenariodata.bin': null,
         'savefavoritequest.bin': null,
     };
+    let validName = true;
 
     const convFileToUint8 = (e: Event): void => {
         const target = e.target as HTMLInputElement;
@@ -1400,7 +1402,14 @@
                                                 <span class="btn_text">Cancel</span>
                                             </button>
                                         {:else}
-                                            <button type="button" class="normal_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['name'] = true)}>
+                                            <button
+                                                type="button"
+                                                class="normal_btn"
+                                                on:click={() => {
+                                                    $userCtrlPanel[user.id].activeCategories['name'] = true;
+                                                    validName = true;
+                                                }}
+                                            >
                                                 <span class="btn_icon material-icons">mode_edit</span>
                                                 <span class="btn_text">Edit</span>
                                             </button>
@@ -1410,13 +1419,27 @@
                                             <div transition:slide class="edit_area_box">
                                                 <div class="edit_area enter">
                                                     <p class="edit_area_title">Change Character Name</p>
-                                                    <p class="console_contents_note">* Empty isn't allowed.</p>
-                                                    <p class="console_contents_note">* 50,000 coins are automatically cut from the user's bounty coin owned.</p>
+                                                    <p class="console_contents_note">* 50K coins are automatically cut from the user's bounty coin owned.</p>
+                                                    <p class="console_contents_note">
+                                                        * Empty isn't allowed, and only name containing the following characters is allowed:<br />
+                                                        <span style="color: rgb(125, 125, 125); border-bottom: 1px solid black;">
+                                                            ー Japanese: Hiragana, Katakana, Kanji<br />
+                                                            ー English: Uppercase, Lowercase, and Half-width digits<br />
+                                                            ー Symbols: &#33; &quot; &#35; &#36; &#37; &#38; &#39; &#40; &#41; &#42; &#43; &#44; &#45; &#46; &#47; &#58; &#59; &#60; &#61; &#62; &#63; &#64;
+                                                            &#91; &#92; &#93; &#94; &#95; &#96; &#123; &#124; &#125; &#126;<br />
+                                                        </span>
+                                                    </p>
 
                                                     <dl class="edit_area_box_parts text">
                                                         <dt>Enter new name</dt>
                                                         <dd>
-                                                            <input type="text" name="name" value={$userCtrlPanel[user.id].selectedChar.name || 'Ready to Hunt'} autocomplete="off" />
+                                                            <input
+                                                                type="text"
+                                                                name="name"
+                                                                value={$userCtrlPanel[user.id].selectedChar.name || 'Ready to Hunt'}
+                                                                on:input={(e) => (validName = validateInput(e))}
+                                                                autocomplete="off"
+                                                            />
                                                             <input type="hidden" name="not_linked" value={!$userCtrlPanel[user.id].selectedChar.discord} />
                                                             <input type="hidden" name="bounty_coin" value={$userCtrlPanel[user.id].selectedChar.discord?.bounty} />
                                                         </dd>
@@ -1424,6 +1447,7 @@
 
                                                     <button
                                                         class="blue_btn"
+                                                        class:disabled_elm={!validName}
                                                         type="submit"
                                                         on:click={() => {
                                                             $userCtrlPanel[user.id].activeCategories['name'] = false;
@@ -1586,7 +1610,7 @@
                                                             <input name="minidata" type="hidden" bind:value={binaryData['minidata.bin']} />
                                                             <input name="scenariodata" type="hidden" bind:value={binaryData['scenariodata.bin']} />
                                                             <input name="savefavoritequest" type="hidden" bind:value={binaryData['savefavoritequest.bin']} />
-                                                            <input type="file" name="file" on:change={(e) => convFileToUint8(e)} accept=".bin" bind:this={input} multiple />
+                                                            <input type="file" name="file" on:change={convFileToUint8} accept=".bin" bind:this={input} multiple />
                                                         </dd>
                                                     </dl>
 
