@@ -1196,14 +1196,14 @@ export const editName = async (
     const sjisBytes = encoder.encode(setName);
     console.log(sjisBytes); */
     const sjisBytes = encodeToShiftJIS(setName);
-    const hexString = String(Array.from(sjisBytes)
-        .map((byte) => byte.toString(16).padStart(2, '0'))
-        .join(''));
-    console.log(`1 ${hexString?.length}`);
-    if (hexString?.length > 24 || hexString?.length === 0) {
+    const hexString = String(
+        Array.from(sjisBytes)
+            .map((byte) => byte.toString(16).padStart(2, '0'))
+            .join('')
+    );
+    if (hexString.length > 24 || hexString.length === 0) {
         return { success: false, message: 'Character name must be 1-12 characters (1-6 characters in Japanese).' };
     }
-    console.log(`2 ${hexString?.length}`);
 
     const savedata = (
         await db.characters.findFirst({
@@ -1220,11 +1220,17 @@ export const editName = async (
     }
 
     const uint8Arr = Uint8Array.from(savedata);
+    console.log(uint8Arr);
     const index255 = uint8Arr.indexOf(255);
+    console.log(index255);
     const index0 = uint8Arr.indexOf(0, index255);
+    console.log(index0);
     const array1 = uint8Arr.slice(0, index255 + 1);
+    console.log(array1);
     const oldNameArr = uint8Arr.slice(index255 + 1, index0);
+    console.log(oldNameArr);
     const array2 = uint8Arr.slice(index0 + 1);
+    console.log(array2);
 
     const nameArr = (hexString + '0').match(/.{1,2}/g)?.map((hex) => parseInt(hex, 16))!;
     array2[0] = array2[0] - (sjisBytes.length - oldNameArr.length);
