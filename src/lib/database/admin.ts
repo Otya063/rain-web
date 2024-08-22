@@ -1,6 +1,5 @@
 import ServerData, { IsCharLogin, db } from '.';
 import type { PaginatedUsers, PaginationMeta, BinaryTypes, PaginatedClans, PaginatedAlliances } from '$lib/types';
-//import { TextEncoderSJIS } from '$lib/utils';
 import { Buffer } from 'node:buffer';
 import { encodeToShiftJIS } from '$lib/utils';
 
