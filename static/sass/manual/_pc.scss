@@ -52,8 +52,8 @@
 
             // ヘッダーロゴ
             .header_logo {
-                display: flex;
                 @include right_left;
+                display: flex;
 
                 .header_logo_button {
                     width: 130px;
@@ -132,13 +132,13 @@
 
                 // 各言語
                 .language_names {
+                    @include flex_center;
                     flex-direction: column;
                     color: #fff;
                     margin-top: 15%;
                     padding-bottom: 2%;
                     position: relative;
                     will-change: opacity;
-                    @include flex_center;
 
                     // 言語名初めのみ上部余白なし
                     &:first-child {
@@ -214,6 +214,7 @@
 
         // トップページマニュアルタイトル
         &::after {
+            @include right_left;
             display: block;
             top: auto;
             bottom: 3%;
@@ -223,14 +224,13 @@
             width: 80%;
             height: 35%;
             z-index: 4;
-            @include right_left;
         }
 
         // トップページ画像位置調整
         .top_img {
+            @include right_left;
             width: 87.3vw;
             z-index: -1;
-            @include right_left;
         }
     }
 
@@ -344,12 +344,12 @@
 
                     // サブカテゴリー内部装飾
                     .sub_categories_list {
+                        @include flex_center;
                         flex-direction: column;
                         justify-content: space-around;
                         border: 2px solid #b2b5cb;
                         border-top: none;
                         line-height: 3;
-                        @include flex_center;
 
                         // サブカテゴリー内部テキスト
                         .sub_category {
@@ -399,6 +399,7 @@
 
                 // カテゴリータイトル
                 .category_title {
+                    @include flex_center;
                     position: relative;
                     width: 100%;
                     border: none;
@@ -408,7 +409,6 @@
                     transition-property: background-color, color;
                     transition-duration: 0.3s, 0.2s;
                     transition-timing-function: ease;
-                    @include flex_center;
 
                     // メインカテゴリーオープン時
                     &.open {
@@ -520,6 +520,7 @@
 
         // サブタイトル上部装飾
         &::before {
+            @include right_left;
             content: '';
             top: -90%;
             width: 90%;
@@ -528,11 +529,11 @@
             background-size: 100%;
             -webkit-filter: drop-shadow(0px 2px 5px rgb(50, 50, 50));
             filter: drop-shadow(0px 2px 5px rgb(50, 50, 50));
-            @include right_left;
         }
 
         // サブタイトル下部装飾
         &::after {
+            @include right_left;
             content: '';
             top: auto;
             bottom: -97%;
@@ -542,7 +543,6 @@
             background-size: 100%;
             -webkit-filter: drop-shadow(0px -2px 5px rgb(50, 50, 50));
             filter: drop-shadow(0px -2px 5px rgb(50, 50, 50));
-            @include right_left;
         }
     }
 
@@ -948,6 +948,7 @@
         z-index: 1;
 
         &::before {
+            @include flex_center;
             content: '';
             top: -90%;
             width: 46%;
@@ -956,7 +957,6 @@
             background-size: 100%;
             transition: 0.5s;
             opacity: 0.7;
-            @include flex_center;
 
             &:hover {
                 opacity: 1;
@@ -1155,9 +1155,9 @@
             // 更新日及びバージョン位置調整
             .content_list {
                 .news_date {
+                    @include flex_center;
                     border-bottom: solid 2px #000;
                     align-items: flex-start;
-                    @include flex_center;
 
                     span {
                         // 更新日
@@ -1204,9 +1204,9 @@
 
     // 注目リスト上部余白
     .featured_list {
+        @include flex_center;
         align-items: flex-start;
         flex-wrap: wrap;
-        @include flex_center;
 
         // リスト内アイテム個別
         li {
@@ -1222,8 +1222,8 @@
             button {
                 // アイテム位置調整
                 .featured_items {
-                    flex-direction: column;
                     @include flex_center;
+                    flex-direction: column;
 
                     // アイテム画像
                     .featured_img {
@@ -1306,8 +1306,8 @@
 
     // 外部リスト
     .extlink_list {
-        flex-direction: column;
         @include flex_center;
+        flex-direction: column;
 
         // 外部リスト内アイテム個別
         .extlink_items {
@@ -1322,17 +1322,18 @@
 
                 // タイトル左側マーク
                 &::before {
+                    @include up_down;
                     display: block;
                     content: '';
                     left: 15%;
                     width: 40px;
                     aspect-ratio: 1 / 1;
                     z-index: 5;
-                    @include up_down;
                 }
 
                 // タイトル右側矢印
                 &::after {
+                    @include up_down;
                     display: block;
                     content: '';
                     background: url(#{$path_img}/common/extlink/extlink_arrow.webp) center no-repeat;
@@ -1342,7 +1343,6 @@
                     left: auto;
                     right: 4%;
                     z-index: 6;
-                    @include up_down;
                 }
 
                 // 初心者ガイド
@@ -1383,6 +1383,7 @@
 
                 // アイテム内部配置調整及び背景画像
                 .extlink_text_adj {
+                    @include flex_center;
                     justify-content: flex-start;
                     position: absolute;
                     top: 0;
@@ -1391,7 +1392,6 @@
                     bottom: 0;
                     padding: 0 15% 0 27%;
                     background-size: 95% 96%;
-                    @include flex_center;
 
                     // アイテム内部テキスト調整
                     .extlink_text_content {
@@ -1451,8 +1451,8 @@
 
             // リンクリスト
             .footer_link_list {
-                justify-content: space-evenly;
                 @include flex_center;
+                justify-content: space-evenly;
 
                 // リスト間隔調整
                 li {
@@ -1472,11 +1472,11 @@
 
                         // アイテム画像
                         .footer_list_img {
+                            @include flex_center;
                             position: relative;
                             max-width: 90px;
                             margin: 0px 5%;
                             aspect-ratio: 1 / 1;
-                            @include flex_center;
                         }
 
                         // アイテムタイトル
@@ -1487,6 +1487,7 @@
 
                         // アイテム矢印
                         &::after {
+                            @include up_down;
                             left: auto;
                             right: 3%;
                             content: '';
@@ -1494,7 +1495,6 @@
                             background-size: cover;
                             width: 35px;
                             aspect-ratio: 1 / 1;
-                            @include up_down;
                         }
                     }
                 }

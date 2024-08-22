@@ -25,11 +25,11 @@
 
         // ヘッダー内部
         .header_inner {
+            @include flex_center;
             width: 100%;
             height: 67px;
             align-items: flex-start;
             justify-content: space-between;
-            @include flex_center;
 
             // プラットフォーム
             .header_platform {
@@ -57,8 +57,8 @@
 
             // ヘッダーロゴ
             .header_logo {
-                display: flex;
                 @include pos_center;
+                display: flex;
 
                 .header_logo_button {
                     width: 110px;
@@ -136,13 +136,13 @@
 
                 // 各言語
                 .language_names {
+                    @include flex_center;
                     flex-direction: column;
                     color: #fff;
                     margin-top: 35%;
                     padding-bottom: 2%;
                     position: relative;
                     will-change: opacity;
-                    @include flex_center;
 
                     // 言語名初めのみ上部余白なし
                     &:first-child {
@@ -209,6 +209,7 @@
 
         // トップページマニュアルタイトル
         &::after {
+            @include right_left;
             display: block;
             top: auto;
             bottom: 3%;
@@ -218,15 +219,14 @@
             width: 105%;
             aspect-ratio: 63 / 10;
             z-index: 4;
-            @include right_left;
         }
 
         // トップページ画像位置調整
         .top_img {
+            @include right_left;
             width: 100vw;
             top: -10%;
             z-index: -1;
-            @include right_left;
         }
     }
 
@@ -350,12 +350,12 @@
 
                     // サブカテゴリー内部装飾
                     .sub_categories_list {
+                        @include flex_center;
                         flex-direction: column;
                         justify-content: space-around;
                         border: 2px solid #b2b5cb;
                         border-top: none;
                         line-height: 3;
-                        @include flex_center;
                         
                         // サブカテゴリー内部テキスト
                         .sub_category {
@@ -406,6 +406,7 @@
 
                 // カテゴリータイトル
                 .category_title {
+                    @include flex_center;
                     position: relative;
                     width: 100%;
                     border: none;
@@ -415,7 +416,6 @@
                     transition-property: background-color, color;
                     transition-duration: 0.3s, 0.2s;
                     transition-timing-function: ease;
-                    @include flex_center;
                     
                     @include landscape {
                         font-size: 1.8rem;
@@ -510,7 +510,6 @@
         margin: 2%;
         color: black;
         font-weight: 600;
-        //font-size: 2rem;
         font-size: 2.2rem;
         text-align: center;
 
@@ -523,7 +522,6 @@
     // サブタイトルh2
     h2 {
         position: relative;
-        //font-size: 1.8rem;
         font-size: 2rem;
         font-weight: 600;
         text-align: center;
@@ -537,6 +535,7 @@
 
         // サブタイトル上部装飾
         &::before {
+            @include right_left;
             content: '';
             top: -4.5vw;
             width: 90%;
@@ -545,11 +544,11 @@
             background-size: 100%;
             -webkit-filter: drop-shadow(0px 2px 5px rgb(50, 50, 50));
             filter: drop-shadow(0px 2px 5px rgb(50, 50, 50));
-            @include right_left;
         }
 
         // サブタイトル下部装飾
         &::after {
+            @include right_left;
             content: '';
             top: auto;
             bottom: -5vw;
@@ -559,7 +558,6 @@
             background-size: 100%;
             -webkit-filter: drop-shadow(0px -2px 5px rgb(50, 50, 50));
             filter: drop-shadow(0px -2px 5px rgb(50, 50, 50));
-            @include right_left;
         }
     }
 
@@ -1155,8 +1153,8 @@
             // 更新日及びバージョン位置調整
             .content_list {
                 .news_date {
-                    border-bottom: solid 2px #000;
                     @include flex_center;
+                    border-bottom: solid 2px #000;
 
                     // 更新日
                     span {
@@ -1365,13 +1363,13 @@
 
                 // タイトル左側マーク
                 &::before {
+                    @include up_down;
                     display: block;
                     content: '';
                     left: 15%;
                     width: 9%;
                     aspect-ratio: 1 / 1;
                     z-index: 5;
-                    @include up_down;
 
                     @include landscape {
                         width: 7%;
@@ -1380,6 +1378,7 @@
 
                 // タイトル右側矢印
                 &::after {
+                    @include up_down;
                     display: block;
                     content: '';
                     background: url(#{$path_img}/common/extlink/extlink_arrow.webp) center no-repeat;
@@ -1389,7 +1388,6 @@
                     left: auto;
                     right: 4%;
                     z-index: 6;
-                    @include up_down;
 
                     @include landscape {
                         width: 7%;
@@ -1434,6 +1432,7 @@
 
                 // アイテム内部配置調整及び背景画像
                 .extlink_text_adj {
+                    @include flex_center;
                     justify-content: flex-start;
                     position: absolute;
                     top: 0;
@@ -1442,7 +1441,6 @@
                     bottom: 0;
                     padding: 0 15% 0 29%;
                     background-size: 95% 96%;
-                    @include flex_center;
 
                     // アイテム内部テキスト調整
                     .extlink_text_content {
@@ -1646,11 +1644,11 @@
 
                         // アイテム画像
                         .footer_list_img {
+                            @include flex_center;
                             position: relative;
                             max-width: 70px;
                             margin: 0px 4%;
                             aspect-ratio: 1 / 1;
-                            @include flex_center;
 
                             @include landscape {
                                 width: 18%;
@@ -1671,6 +1669,7 @@
 
                         // アイテム矢印
                         &::after {
+                            @include up_down;
                             left: auto;
                             right: 3%;
                             content: '';
@@ -1678,7 +1677,6 @@
                             background-size: cover;
                             width: 10%;
                             aspect-ratio: 1 / 1;
-                            @include up_down;
                         }
                     }
                 }

@@ -26,10 +26,10 @@
 
         // ヘッダー内部
         .header_inner {
+            @include flex_center;
             width: 100%;
             height: 67px;
             justify-content: space-between;
-            @include flex_center;
 
             // プラットフォーム
             .header_platform {
@@ -54,8 +54,8 @@
 
             // ヘッダーロゴ
             .header_logo {
-                display: flex;
                 @include right_left;
+                display: flex;
 
                 .header_logo_button {
                     width: 130px;
@@ -827,11 +827,11 @@
 
         // キャラクター名
         .name {
+            @include right_left;
             top: 13px;
             font-size: 3rem;
             font-weight: 700;
             width: fit-content;
-            @include right_left;
         }
 
         // 削除済みアカウント表示
@@ -1179,22 +1179,22 @@
 
             // 閉じるボタン
             .msg_close_btn {
+                @include up_down;
                 left: auto;
                 right: 20px;
                 color: #333333;
                 font-size: 3.5rem;
-                @include up_down;
             }
 
             // エラー詳細表示ボタン
             .error_view_btn {
+                @include up_down;
                 left: auto;
                 right: 65px;
                 color: #333333;
                 font-size: 3.5rem;
                 transition: all 0.5s;
                 transform: translateY(-50%) rotate(0deg);
-                @include up_down;
 
                 &.open {
                     transform: translateY(-50%) rotate(-180deg);
