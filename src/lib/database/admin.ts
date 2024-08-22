@@ -1195,7 +1195,7 @@ export const editName = async (
     /* const encoder = new TextEncoderSJIS();
     const sjisBytes = encoder.encode(setName);
     console.log(sjisBytes); */
-    const sjisBytes = Uint8Array.from(encodeToShiftJIS(setName)); // Uint8Array.from 追加
+    const sjisBytes = encodeToShiftJIS(setName);
     const hexString = String(
         Array.from(sjisBytes)
             .map((byte) => byte.toString(16).padStart(2, '0'))
@@ -1220,17 +1220,13 @@ export const editName = async (
     }
 
     const uint8Arr = Uint8Array.from(savedata);
-    console.log(uint8Arr);
     const index255 = uint8Arr.indexOf(255);
-    console.log(index255);
     const index0 = uint8Arr.indexOf(0, index255);
-    console.log(index0);
     const array1 = uint8Arr.slice(0, index255 + 1);
-    console.log(array1);
-    const oldNameArr = Uint8Array.from(uint8Arr.slice(index255 + 1, index0)); // Uint8Array.from 追加
-    console.log(oldNameArr);
+    const oldNameArr = uint8Arr.slice(index255 + 1, index0);
     const array2 = uint8Arr.slice(index0 + 1);
-    console.log(array2);
+    console.log(sjisBytes?.length);
+    console.log(oldNameArr?.length);
 
     const nameArr = (hexString + '0').match(/.{1,2}/g)?.map((hex) => parseInt(hex, 16))!;
     array2[0] = array2[0] - (sjisBytes?.length - oldNameArr?.length); // ? 追加
