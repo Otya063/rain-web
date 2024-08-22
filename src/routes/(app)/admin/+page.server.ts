@@ -556,6 +556,7 @@ const updateCharacterData: Action = async ({ request }) => {
             }
 
             const { success, message } = await db.characters.editName(id, String(value), bountyCoin);
+            console.log(success, message);
             if (!success) {
                 return fail(400, { error: true, message });
             } else {
