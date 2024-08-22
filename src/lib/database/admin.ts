@@ -1228,7 +1228,7 @@ export const editName = async (
     const base64 = Buffer.from(finalArr).toString('base64');
 
     try {
-        //await db.$queryRaw`UPDATE characters SET savedata = decode(${base64}, 'base64'), name = ${setName} WHERE id = ${characterId}`;
+        await db.$executeRaw`UPDATE characters SET savedata = decode(${base64}, 'base64'), name = ${setName} WHERE id = ${characterId}`;
 
         await db.discord.update({
             where: {
