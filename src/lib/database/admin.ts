@@ -1185,56 +1185,54 @@ export const editName = async (
     success: boolean;
     message: string;
 }> => {
-    const isLogin = await new IsCharLogin(characterId).checkSingle();
-    if (isLogin) {
-        return { success: false, message: "Can't be processed while the target character is logged in." };
-    }
+    try {
+        const isLogin = await new IsCharLogin(characterId).checkSingle();
+        if (isLogin) {
+            return { success: false, message: "Can't be processed while the target character is logged in." };
+        }
 
-    //const encoded = new TextEncoder().encode(setName);
-    //console.log(encoded);
-    /* const encoder = new TextEncoderSJIS();
+        //const encoded = new TextEncoder().encode(setName);
+        //console.log(encoded);
+        /* const encoder = new TextEncoderSJIS();
     const sjisBytes = encoder.encode(setName);
     console.log(sjisBytes); */
-    const sjisBytes = encodeToShiftJIS(setName);
-    const hexString = String(
-        Array.from(sjisBytes)
-            .map((byte) => byte.toString(16).padStart(2, '0'))
-            .join('')
-    );
-    if (hexString.length > 24 || hexString.length === 0) {
-        return { success: false, message: 'Character name must be 1-12 characters (1-6 characters in Japanese).' };
-    }
+        const sjisBytes = encodeToShiftJIS(setName);
+        const hexString = String(
+            Array.from(sjisBytes)
+                .map((byte) => byte.toString(16).padStart(2, '0'))
+                .join('')
+        );
+        if (hexString.length > 24 || hexString.length === 0) {
+            return { success: false, message: 'Character name must be 1-12 characters (1-6 characters in Japanese).' };
+        }
 
-    const savedata = (
-        await db.characters.findFirst({
-            where: {
-                id: characterId,
-            },
-            select: {
-                savedata: true,
-            },
-        })
-    )?.savedata;
-    if (!savedata) {
-        return { success: false, message: 'Savedata not found.' };
-    }
+        const savedata = (
+            await db.characters.findFirst({
+                where: {
+                    id: characterId,
+                },
+                select: {
+                    savedata: true,
+                },
+            })
+        )?.savedata;
+        if (!savedata) {
+            return { success: false, message: 'Savedata not found.' };
+        }
 
-    const uint8Arr = Uint8Array.from(savedata);
-    const index255 = uint8Arr.indexOf(255);
-    const index0 = uint8Arr.indexOf(0, index255);
-    const array1 = uint8Arr.slice(0, index255 + 1);
-    const oldNameArr = uint8Arr.slice(index255 + 1, index0);
-    const array2 = uint8Arr.slice(index0 + 1);
-    console.log(sjisBytes?.length);
-    console.log(oldNameArr?.length);
+        const uint8Arr = Uint8Array.from(savedata);
+        const index255 = uint8Arr.indexOf(255);
+        const index0 = uint8Arr.indexOf(0, index255);
+        const array1 = uint8Arr.slice(0, index255 + 1);
+        const oldNameArr = uint8Arr.slice(index255 + 1, index0);
+        const array2 = uint8Arr.slice(index0 + 1);
 
-    const nameArr = (hexString + '0').match(/.{1,2}/g)?.map((hex) => parseInt(hex, 16))!;
-    array2[0] = array2[0] - (sjisBytes?.length - oldNameArr?.length); // ? 追加
-    const finalArr = new Uint8Array([...array1, ...nameArr, ...array2]);
+        const nameArr = (hexString + '0').match(/.{1,2}/g)?.map((hex) => parseInt(hex, 16))!;
+        array2[0] = array2[0] - (sjisBytes?.length - oldNameArr?.length); // ? 追加
+        const finalArr = new Uint8Array([...array1, ...nameArr, ...array2]);
 
-    const base64 = Buffer.from(finalArr).toString('base64');
+        const base64 = Buffer.from(finalArr).toString('base64');
 
-    try {
         await db.$queryRaw`UPDATE characters SET savedata = decode(${base64}, 'base64'), name = ${setName} WHERE id = ${characterId}`;
 
         await db.discord.update({
@@ -1249,6 +1247,8 @@ export const editName = async (
         return { success: true, message: '' };
     } catch (err) {
         if (err instanceof Error) {
+            console.error(`stack ${err.stack}`);
+            
             return { success: false, message: err.message };
         } else if (typeof err === 'string') {
             return { success: false, message: err };
