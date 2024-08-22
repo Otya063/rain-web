@@ -32,9 +32,9 @@
         .header_inner {
             width: 100%;
             height: 67px;
-            @include flex_center;
             align-items: flex-start;
             justify-content: space-between;
+            @include flex_center;
 
             // プラットフォーム
             .header_platform {
@@ -841,11 +841,11 @@
 
         // キャラクター名
         .name {
-            @include right_left;
             top: 9%;
             font-size: 5.5vw;
             font-weight: 700;
             width: fit-content;
+            @include right_left;
 
             @include landscape {
                 font-size: 4vw;
@@ -1339,11 +1339,11 @@
 
             // 閉じるボタン
             .msg_close_btn {
-                @include up_down;
                 left: auto;
                 right: 10px;
                 color: #333333;
                 font-size: 3.5rem;
+                @include up_down;
 
                 @include landscape {
                     right: 15px;
