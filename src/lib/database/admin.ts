@@ -1,7 +1,7 @@
 import ServerData, { IsCharLogin, db } from '.';
 import type { PaginatedUsers, PaginationMeta, BinaryTypes, PaginatedClans, PaginatedAlliances } from '$lib/types';
-import { TextEncoderSJIS } from '$lib/utils';
 import { Buffer } from 'node:buffer';
+import { encodeToShiftJIS } from '$lib/utils';
 
 /**
  * Get paginated user(s) data.
@@ -1189,11 +1189,12 @@ export const editName = async (
         return { success: false, message: "Can't be processed while the target character is logged in." };
     }
 
-    const encoder = new TextEncoderSJIS();
-    const sjisBytes = encoder.encode(setName);
-    const hexString = Array.from(sjisBytes)
-        .map((byte) => byte.toString(16).padStart(2, '0'))
-        .join('');
+    const sjisBytes = encodeToShiftJIS(setName);
+    const hexString = String(
+        Array.from(sjisBytes)
+            .map((byte) => byte.toString(16).padStart(2, '0'))
+            .join('')
+    );
     if (hexString.length > 24 || hexString.length === 0) {
         return { success: false, message: 'Character name must be 1-12 characters (1-6 characters in Japanese).' };
     }
@@ -1226,7 +1227,8 @@ export const editName = async (
     const base64 = Buffer.from(finalArr).toString('base64');
 
     try {
-        await db.$queryRaw`UPDATE characters SET savedata = decode(${base64}, 'base64'), name = ${setName} WHERE id = ${characterId}`;
+        await db.$executeRaw`UPDATE characters SET savedata = decode(${base64}, 'base64'), name = ${setName} WHERE id = ${characterId}`;
+
         await db.discord.update({
             where: {
                 char_id: characterId,
@@ -1286,7 +1288,7 @@ export class ManageBinary {
                 savefavoritequest: !this.binaryData.savefavoritequest ? 'NULL' : 'NOT_NULL',
             };
 
-            await db.$queryRaw`UPDATE characters SET savedata = CASE ${isNull.savedata} WHEN 'NULL' THEN decode((SELECT encode(savedata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.savedata}, 'base64') END, decomyset = CASE ${isNull.decomyset} WHEN 'NULL' THEN decode((SELECT encode(decomyset, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.decomyset}, 'base64') END, hunternavi = CASE ${isNull.hunternavi} WHEN 'NULL' THEN decode((SELECT encode(hunternavi, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.hunternavi}, 'base64') END, otomoairou = CASE ${isNull.otomoairou} WHEN 'NULL' THEN decode((SELECT encode(otomoairou, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.otomoairou}, 'base64') END, partner = CASE ${isNull.partner} WHEN 'NULL' THEN decode((SELECT encode(partner, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.partner}, 'base64') END, platebox = CASE ${isNull.platebox} WHEN 'NULL' THEN decode((SELECT encode(platebox, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.platebox}, 'base64') END, platedata = CASE ${isNull.platedata} WHEN 'NULL' THEN decode((SELECT encode(platedata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.platedata}, 'base64') END, platemyset = CASE ${isNull.platemyset} WHEN 'NULL' THEN decode((SELECT encode(platemyset, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.platemyset}, 'base64') END, rengokudata = CASE ${isNull.rengokudata} WHEN 'NULL' THEN decode((SELECT encode(rengokudata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.rengokudata}, 'base64') END, savemercenary = CASE ${isNull.savemercenary} WHEN 'NULL' THEN decode((SELECT encode(savemercenary, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.savemercenary}, 'base64') END, skin_hist = CASE ${isNull.skin_hist} WHEN 'NULL' THEN decode((SELECT encode(skin_hist, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.skin_hist}, 'base64') END, minidata = CASE ${isNull.minidata} WHEN 'NULL' THEN decode((SELECT encode(minidata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.minidata}, 'base64') END, scenariodata = CASE ${isNull.scenariodata} WHEN 'NULL' THEN decode((SELECT encode(scenariodata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.scenariodata}, 'base64') END, savefavoritequest = CASE ${isNull.savefavoritequest} WHEN 'NULL' THEN decode((SELECT encode(savefavoritequest, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.savefavoritequest}, 'base64') END WHERE id = ${this.characterId}`;
+            await db.$executeRaw`UPDATE characters SET savedata = CASE ${isNull.savedata} WHEN 'NULL' THEN decode((SELECT encode(savedata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.savedata}, 'base64') END, decomyset = CASE ${isNull.decomyset} WHEN 'NULL' THEN decode((SELECT encode(decomyset, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.decomyset}, 'base64') END, hunternavi = CASE ${isNull.hunternavi} WHEN 'NULL' THEN decode((SELECT encode(hunternavi, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.hunternavi}, 'base64') END, otomoairou = CASE ${isNull.otomoairou} WHEN 'NULL' THEN decode((SELECT encode(otomoairou, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.otomoairou}, 'base64') END, partner = CASE ${isNull.partner} WHEN 'NULL' THEN decode((SELECT encode(partner, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.partner}, 'base64') END, platebox = CASE ${isNull.platebox} WHEN 'NULL' THEN decode((SELECT encode(platebox, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.platebox}, 'base64') END, platedata = CASE ${isNull.platedata} WHEN 'NULL' THEN decode((SELECT encode(platedata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.platedata}, 'base64') END, platemyset = CASE ${isNull.platemyset} WHEN 'NULL' THEN decode((SELECT encode(platemyset, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.platemyset}, 'base64') END, rengokudata = CASE ${isNull.rengokudata} WHEN 'NULL' THEN decode((SELECT encode(rengokudata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.rengokudata}, 'base64') END, savemercenary = CASE ${isNull.savemercenary} WHEN 'NULL' THEN decode((SELECT encode(savemercenary, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.savemercenary}, 'base64') END, skin_hist = CASE ${isNull.skin_hist} WHEN 'NULL' THEN decode((SELECT encode(skin_hist, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.skin_hist}, 'base64') END, minidata = CASE ${isNull.minidata} WHEN 'NULL' THEN decode((SELECT encode(minidata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.minidata}, 'base64') END, scenariodata = CASE ${isNull.scenariodata} WHEN 'NULL' THEN decode((SELECT encode(scenariodata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.scenariodata}, 'base64') END, savefavoritequest = CASE ${isNull.savefavoritequest} WHEN 'NULL' THEN decode((SELECT encode(savefavoritequest, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.savefavoritequest}, 'base64') END WHERE id = ${this.characterId}`;
 
             return { success: true, message: '' };
         } catch (err) {

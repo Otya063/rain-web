@@ -52,8 +52,8 @@
 
             // ヘッダーロゴ
             .header_logo {
-                display: flex;
                 @include right_left;
+                display: flex;
 
                 .header_logo_button {
                     width: 130px;
@@ -214,8 +214,8 @@
 
         // トップページマニュアルタイトル
         &::after {
-            display: block;
             @include right_left;
+            display: block;
             top: auto;
             bottom: 3%;
             content: '';
@@ -228,8 +228,8 @@
 
         // トップページ画像位置調整
         .top_img {
-            width: 87.3vw;
             @include right_left;
+            width: 87.3vw;
             z-index: -1;
         }
     }
@@ -520,8 +520,8 @@
 
         // サブタイトル上部装飾
         &::before {
-            content: '';
             @include right_left;
+            content: '';
             top: -90%;
             width: 90%;
             height: 28px;
@@ -533,8 +533,8 @@
 
         // サブタイトル下部装飾
         &::after {
-            content: '';
             @include right_left;
+            content: '';
             top: auto;
             bottom: -97%;
             width: 90%;
@@ -948,8 +948,8 @@
         z-index: 1;
 
         &::before {
-            content: '';
             @include flex_center;
+            content: '';
             top: -90%;
             width: 46%;
             aspect-ratio: 1 / 1;
@@ -982,8 +982,8 @@
         border-radius: 50%;
         margin: 72px auto;
         transform: translateZ(0);
-        @include loaderKey;
         animation: loaderAni1 1.7s infinite ease, loaderAni2 1.7s infinite ease;
+        @include loaderKey;
     }
 
     // SPボトムメニュー非表示
@@ -1322,8 +1322,8 @@
 
                 // タイトル左側マーク
                 &::before {
-                    display: block;
                     @include up_down;
+                    display: block;
                     content: '';
                     left: 15%;
                     width: 40px;
