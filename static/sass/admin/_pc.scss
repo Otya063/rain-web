@@ -738,7 +738,6 @@
 
     // ボタンロード中
     .loading {
-        @include authLoaderKey;
         width: 24px;
         height: 24px;
         margin: 10px;
@@ -746,6 +745,7 @@
         border: 0.25rem solid rgb(79 79 79 / 20%);
         border-top-color: black;
         animation: authLoaderAni 1s infinite linear;
+        @include authLoaderKey;
     }
 
     // ボタングループ
@@ -1274,8 +1274,8 @@
             border-radius: 50%;
             margin: 72px auto;
             transform: translateZ(0);
-            @include loaderKey;
             animation: loaderAni1 1.7s infinite ease, loaderAni2 1.7s infinite ease;
+            @include loaderKey;
         }
 
         .saving_overlay_text {

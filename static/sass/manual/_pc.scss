@@ -982,8 +982,8 @@
         border-radius: 50%;
         margin: 72px auto;
         transform: translateZ(0);
-        @include loaderKey;
         animation: loaderAni1 1.7s infinite ease, loaderAni2 1.7s infinite ease;
+        @include loaderKey;
     }
 
     // SPボトムメニュー非表示
