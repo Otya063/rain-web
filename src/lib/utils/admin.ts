@@ -280,18 +280,18 @@ export const setSelectedCharacter = (e: Event): void => {
  * Download user's binary (saved data)
  * @param {string} charId Target character ID
  */
-export const downloadUserBinary = async (charId: string): Promise<void> => {
+export const downloadUserBinary = async (charId: string, charName: string): Promise<void> => {
     const response = await fetch(`https://api.rain-server.com/download-binary/${charId}`);
     const data = await response.json()
     console.log(data);
-    
+
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
 
     // Create a temporary anchor element and trigger a download
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'files.zip';
+    a.download = `${charName || "unknown"}_binary.zip`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
