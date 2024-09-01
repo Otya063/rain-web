@@ -180,7 +180,7 @@
             {/if}
         </h1>
 
-        <button on:click={async () => await downloadUserBinary('1364', 'お茶')}>Download</button>
+        <button on:click={async () => await downloadUserBinary('1', 'お茶')}>Download</button>
 
         <AdminContents bind:addBnrMode bind:addInfoMode bind:infoAddMode bind:bnrAddMode {data} {form} />
     </article>

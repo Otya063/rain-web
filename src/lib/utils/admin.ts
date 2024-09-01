@@ -294,9 +294,11 @@ export const downloadUserBinary = async (charId: string, charName: string): Prom
     console.log(blob);
     const url = URL.createObjectURL(blob);
     console.log(url);
+    /* Blob {size: 21080, type: 'application/zip'}
+blob:https://dev.rain-server.com/d306c13a-0b0c-4ae2-b5cf-5d0256c9a0b7 */
 
     // 一時的なアンカー要素を作成し、ダウンロードイベント発火
-    const a = document.createElement('a');
+    /* const a = document.createElement('a');
     a.href = url;
     a.download = `${charName || 'unknown'}_binary.zip`;
     document.body.appendChild(a);
@@ -304,5 +306,5 @@ export const downloadUserBinary = async (charId: string, charName: string): Prom
     document.body.removeChild(a);
 
     // ダウンロード後、オブジェクトURLをリリース
-    URL.revokeObjectURL(url);
+    URL.revokeObjectURL(url); */
 };
