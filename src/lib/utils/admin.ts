@@ -285,13 +285,15 @@ export const downloadUserBinary = async (charId: string, charName: string): Prom
     const response = await fetch(`https://api.rain-server.com/download-binary/${charId}`);
 
     // セーブデータの取得に失敗
-    const data = await response.json();
+    /* const data = await response.json();
     if (data.message === 'NO_CHARACTERS') {
         return;
-    }
+    } */
 
     const blob = await response.blob();
+    console.log(blob);
     const url = URL.createObjectURL(blob);
+    console.log(url);
 
     // 一時的なアンカー要素を作成し、ダウンロードイベント発火
     const a = document.createElement('a');
