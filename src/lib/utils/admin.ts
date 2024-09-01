@@ -282,7 +282,9 @@ export const setSelectedCharacter = (e: Event): void => {
  */
 export const downloadUserBinary = async (charId: string): Promise<void> => {
     const response = await fetch(`https://api.rain-server.com/download-binary/${charId}`);
-    console.log(response);
+    const data = await response.json()
+    console.log(data);
+    
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
 
