@@ -277,25 +277,30 @@ export const setSelectedCharacter = (e: Event): void => {
 };
 
 /**
- * Download user's binary (saved data)
- * @param {string} charId Target character ID
+ * ユーザーのバイナリデータ（セーブデータ）をダウンロードする\
+ * ダウンロードファイルの形式は「(キャラクター名)_binary.zip」
+ * @param {string} charId 対象のキャラクターID
  */
 export const downloadUserBinary = async (charId: string, charName: string): Promise<void> => {
     const response = await fetch(`https://api.rain-server.com/download-binary/${charId}`);
-    const data = await response.json()
-    console.log(data);
+
+    // セーブデータの取得に失敗
+    const data = await response.json();
+    if (data.message === 'NO_CHARACTERS') {
+        return;
+    }
 
     const blob = await response.blob();
     const url = URL.createObjectURL(blob);
 
-    // Create a temporary anchor element and trigger a download
+    // 一時的なアンカー要素を作成し、ダウンロードイベント発火
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${charName || "unknown"}_binary.zip`;
+    a.download = `${charName || 'unknown'}_binary.zip`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 
-    // Release the object URL after download
+    // ダウンロード後、オブジェクトURLをリリース
     URL.revokeObjectURL(url);
 };
