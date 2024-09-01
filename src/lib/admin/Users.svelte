@@ -25,6 +25,7 @@
         convHrpToHr,
         consoleContDisable,
         validateInput,
+        downloadUserBinary,
     } from '$lib/utils';
     import type { PaginatedUsers, PaginationMeta } from '$lib/types';
     import _ from 'lodash';
@@ -1566,6 +1567,7 @@
 
                                     <dt class="contents_term">Binary Data</dt>
                                     <dd class="contents_desc">
+                                        <!-- re-upload binary -->
                                         {#if $userCtrlPanel[user.id].activeCategories['binary']}
                                             <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['binary'] = false)}>
                                                 <span class="btn_icon material-icons">close</span>
@@ -1629,6 +1631,8 @@
                                                 </div>
                                             </div>
                                         {/if}
+
+                                        <!-- download binary -->
                                     </dd>
                                 </dl>
                             </form>

@@ -275,3 +275,25 @@ export const setSelectedCharacter = (e: Event): void => {
         updateUserCtrlPanel(userId, charId);
     }, 100);
 };
+
+/**
+ * Download user's binary (saved data)
+ * @param {string} charId Target character ID
+ */
+export const downloadUserBinary = async (charId: string): Promise<void> => {
+    const response = await fetch(`https://api.rain-server.com/download-binary/${charId}`);
+    console.log(response);
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+
+    // Create a temporary anchor element and trigger a download
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'files.zip';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+    // Release the object URL after download
+    URL.revokeObjectURL(url);
+};

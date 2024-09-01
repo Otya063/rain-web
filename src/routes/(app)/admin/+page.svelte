@@ -24,6 +24,7 @@
         timeOut,
         adminTabValue,
         rebuildClan,
+        downloadUserBinary,
     } from '$lib/utils';
     import _ from 'lodash';
     import { onMount } from 'svelte';
@@ -178,6 +179,8 @@
                 </button>
             {/if}
         </h1>
+        
+        <button on:click={async () => await downloadUserBinary('1')}>Download</button>
 
         <AdminContents bind:addBnrMode bind:addInfoMode bind:infoAddMode bind:bnrAddMode {data} {form} />
     </article>
