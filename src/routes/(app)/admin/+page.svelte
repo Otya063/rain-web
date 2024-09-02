@@ -26,7 +26,6 @@
         adminTabValue,
         rebuildClan,
         downloadBinary,
-        downloadMessage,
     } from '$lib/utils';
     import _ from 'lodash';
     import { onMount } from 'svelte';
@@ -103,7 +102,7 @@
             <span class="msg_display_left_bar" />
             {#if form?.success}
                 <span class="msg_display_icon material-icons-outlined">check_circle</span>
-                <p class="msg_display_status">{downloadMessage || form?.message}</p>
+                <p class="msg_display_status">{form?.message}</p>
             {:else if form?.error}
                 <span class="msg_display_icon material-icons-outlined">warning</span>
                 <p class="msg_display_status">Error occurred.</p>
@@ -116,7 +115,7 @@
         {#if $errDetailMode}
             <div transition:slide class="msg_detail">
                 Message Details:
-                <p>{@html downloadMessage || form?.message}</p>
+                <p>{@html form?.message}</p>
             </div>
         {/if}
     </div>

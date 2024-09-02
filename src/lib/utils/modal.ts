@@ -16,7 +16,6 @@ export const rebuildClan = writable(false);
 export const rebuildClanData = writable<RebuildClanData>();
 export const downloadBinary = writable(false);
 export const downloadBinaryData = writable<DeleteCharacterData>();
-export const downloadMessage = writable<string>('');
 
 /* prepare modal window data
 ====================================================*/
@@ -80,7 +79,6 @@ export const prepareModal = (type: ModalType, data: ModalCommonData | DeleteInfo
 /* close modal window
 ====================================================*/
 export const closeModal = (): void => {
-    downloadMessage.set('');
     deleteInfo.set(false);
     suspendUser.set(false);
     deleteBnr.set(false);
@@ -97,13 +95,13 @@ export const closeModal = (): void => {
  * @param {string} charName 対象のキャラクター名
  * @returns {Promise<boolean>} ダウンロードに成功したか否か
  */
-export const downloadUserBinary = async (charId: string, charName: string): Promise<void> => {
+export const downloadUserBinary = async (charId: string, charName: string): Promise<boolean> => {
     const response = await fetch(`https://api.rain-server.com/download-binary/${charId}`);
 
     const blob = await response.blob();
     if (blob.size === 0) {
         // キャラクターがいないもしくは、全セーブデータのサイズが０
-        downloadMessage.set("The character doesn't exist or all binary data are NULL.");
+        return false;
     }
 
     // 一時的なアンカー要素を作成し、ダウンロードイベント発火
@@ -117,5 +115,5 @@ export const downloadUserBinary = async (charId: string, charName: string): Prom
     // ダウンロード後、オブジェクトURLをリリース
     URL.revokeObjectURL(url);
 
-    downloadMessage.set('The binary data has been successfully downloaded.');
+    return true;
 };

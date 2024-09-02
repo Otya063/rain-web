@@ -1234,6 +1234,19 @@ const updateAllianceData: Action = async ({ request }) => {
     }
 };
 
+const downloadBinary: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+
+    if (data.result) {
+        return {
+            success: true,
+            message: 'The binary data has been successfully downloaded.',
+        };
+    } else {
+        return fail(400, { error: true, message: "The character doesn't exist or all binary data are NULL." });
+    }
+};
+
 export const actions: Actions = {
     updateSystemMode,
     updateAllMaintData,
@@ -1258,4 +1271,5 @@ export const actions: Actions = {
     restoreCharacter,
     rebuildClan,
     updateAllianceData,
+    downloadBinary,
 };
