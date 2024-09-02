@@ -27,7 +27,7 @@
                 };
             }}
         >
-            <input type="hidden" name="result" value={result} />
+            <input type="hidden" name="result" bind:value={result} />
 
             <div class="modal_header">
                 <h1>Download Binary</h1>
@@ -47,7 +47,6 @@
                         $timeOut && closeMsgDisplay($timeOut);
 
                         result = (await downloadUserBinary(String($downloadBinaryData.char_id), $downloadBinaryData.char_name || 'unknown')) ? 'S' : 'E';
-                        console.log(result);
                         submitForm();
                     }}
                 >
