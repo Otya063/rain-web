@@ -3,6 +3,7 @@
     import DeleteBnr from '$lib/admin/modalContents/DeleteBnr.svelte';
     import DeleteChar from '$lib/admin/modalContents/DeleteChar.svelte';
     import DeleteInfo from '$lib/admin/modalContents/DeleteInfo.svelte';
+    import DownloadBinary from '$lib/admin/modalContents/DownloadBinary.svelte';
     import LinkDiscord from '$lib/admin/modalContents/LinkDiscord.svelte';
     import RebuildClan from '$lib/admin/modalContents/RebuildClan.svelte';
     import SuspendUser from '$lib/admin/modalContents/SuspendUser.svelte';
@@ -24,7 +25,7 @@
         timeOut,
         adminTabValue,
         rebuildClan,
-        downloadUserBinary,
+        downloadBinary,
     } from '$lib/utils';
     import _ from 'lodash';
     import { onMount } from 'svelte';
@@ -144,6 +145,10 @@
     <RebuildClan />
 {/if}
 
+{#if $downloadBinary}
+    <DownloadBinary downloadLink={form?.downloadLink} />
+{/if}
+
 <main class="console_body">
     {#if isMobile}
         <swiper-container class="console_menu_swiper" direction={'horizontal'} dir="rtl">
@@ -180,8 +185,6 @@
             {/if}
         </h1>
 
-        <button on:click={async () => await downloadUserBinary('1', 'お茶')}>Download</button>
-
         <AdminContents bind:addBnrMode bind:addInfoMode bind:infoAddMode bind:bnrAddMode {data} {form} />
     </article>
 </main>
@@ -216,7 +219,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes" />
     <!-- font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />

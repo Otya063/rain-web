@@ -338,7 +338,7 @@ const getPaginatedUsers: Action = async ({ request }) => {
             }
 
             default: {
-                throw new Error('Invalid Status');
+                error(400, { message: '', message1: '', message2: ['Invalid status.'], message3: undefined });
             }
         }
     })();
@@ -393,7 +393,7 @@ const getPaginatedClans: Action = async ({ request }) => {
             }
 
             default: {
-                throw new Error('Invalid Status');
+                error(400, { message: '', message1: '', message2: ['Invalid status.'], message3: undefined });
             }
         }
     })();
@@ -443,7 +443,7 @@ const getPaginatedAlliances: Action = async ({ request }) => {
             }
 
             default: {
-                throw new Error('Invalid Status');
+                error(400, { message: '', message1: '', message2: ['Invalid status.'], message3: undefined });
             }
         }
     })();
@@ -542,8 +542,9 @@ const updateUserData: Action = async ({ request }) => {
 const updateCharacterData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.character_id);
-    const column = Object.keys(data)[2] as 'name' | 'bounty' | 'clan' | 'binary';
+    const column = Object.keys(data)[2] as 'name' | 'bounty' | 'clan' | 'reupload_binary' | 'download_binary';
     const value = Object.values(data)[2] as string | number;
+    console.log(data);
 
     switch (column) {
         case 'name': {
@@ -627,7 +628,7 @@ const updateCharacterData: Action = async ({ request }) => {
             }
         }
 
-        case 'binary': {
+        case 'reupload_binary': {
             const file = data.file as File;
             if (file.size === 0) {
                 return fail(400, { error: true, message: 'No file selected.' });
@@ -656,8 +657,26 @@ const updateCharacterData: Action = async ({ request }) => {
             }
         }
 
+        case 'download_binary': {
+            const response = await fetch(`http://localhost:5174/download-binary/${id}`);
+
+            const blob = await response.blob();
+            if (blob.size === 0) {
+                return fail(400, { error: true, message: "The character doesn't exist or all binary data are NULL." });
+            }
+            console.log(blob);
+            
+            const url = URL.createObjectURL(blob);
+            console.log(url);
+            return {
+                success: true,
+                message: `The binary data have been successfully downloaded.`,
+                downloadLink: url,
+            };
+        }
+
         default: {
-            throw new Error('Invalid Column');
+            error(400, { message: '', message1: '', message2: ['Invalid column.'], message3: undefined });
         }
     }
 };

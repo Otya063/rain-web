@@ -15,7 +15,7 @@ export const userCtrlPanel = writable<{
         userData: PaginatedUsers;
         selectedChar: PaginatedCharacter;
         activeCategories: {
-            [key in keyof Omit<users, 'id' | 'item_box' | 'last_character' | 'last_login' | 'web_login_key' | 'web_login_key_mobile'> | 'name' | 'bounty' | 'clan' | 'binary']: boolean;
+            [key in keyof Omit<users, 'id' | 'item_box' | 'last_character' | 'last_login' | 'web_login_key' | 'web_login_key_mobile'> | 'name' | 'bounty' | 'clan' | 'reupload_binary']: boolean;
         };
     };
 }>({});
@@ -122,7 +122,7 @@ export const initUserCtrlPanel = (paginatedUsers: PaginatedUsers[]): void => {
                     name: false,
                     bounty: false,
                     clan: false,
-                    binary: false,
+                    reupload_binary: false,
                 },
             },
         });
@@ -153,7 +153,7 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                         name: false,
                         bounty: false,
                         clan: false,
-                        binary: false,
+                        reupload_binary: false,
                     },
                 },
             };
@@ -186,7 +186,7 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                             name: false,
                             bounty: false,
                             clan: false,
-                            binary: false,
+                            reupload_binary: false,
                         },
                     },
                 };
@@ -215,7 +215,7 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                             name: false,
                             bounty: false,
                             clan: false,
-                            binary: false,
+                            reupload_binary: false,
                         },
                     },
                 };
@@ -241,7 +241,7 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                             name: false,
                             bounty: false,
                             clan: false,
-                            binary: false,
+                            reupload_binary: false,
                         },
                     },
                 };
@@ -274,37 +274,4 @@ export const setSelectedCharacter = (e: Event): void => {
         // update object
         updateUserCtrlPanel(userId, charId);
     }, 100);
-};
-
-/**
- * ユーザーのバイナリデータ（セーブデータ）をダウンロードする\
- * ダウンロードファイルの形式は「(キャラクター名)_binary.zip」
- * @param {string} charId 対象のキャラクターID
- */
-export const downloadUserBinary = async (charId: string, charName: string): Promise<void> => {
-    const response = await fetch(`https://api.rain-server.com/download-binary/${charId}`);
-
-    // セーブデータの取得に失敗
-    /* const data = await response.json();
-    if (data.message === 'NO_CHARACTERS') {
-        return;
-    } */
-
-    const blob = await response.blob();
-    console.log(blob);
-    const url = URL.createObjectURL(blob);
-    console.log(url);
-    /* Blob {size: 21080, type: 'application/zip'}
-blob:https://dev.rain-server.com/d306c13a-0b0c-4ae2-b5cf-5d0256c9a0b7 */
-
-    // 一時的なアンカー要素を作成し、ダウンロードイベント発火
-    /* const a = document.createElement('a');
-    a.href = url;
-    a.download = `${charName || 'unknown'}_binary.zip`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    // ダウンロード後、オブジェクトURLをリリース
-    URL.revokeObjectURL(url); */
 };
