@@ -666,12 +666,10 @@ const updateCharacterData: Action = async ({ request }) => {
             }
             console.log(blob);
             
-            const url = URL.createObjectURL(blob);
-            console.log(url);
             return {
                 success: true,
                 message: `The binary data have been successfully downloaded.`,
-                downloadLink: url,
+                blob,
             };
         }
 

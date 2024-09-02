@@ -2,7 +2,7 @@
     import { applyAction, enhance } from '$app/forms';
     import { onSubmit, closeModal, msgClosed, timeOut, closeMsgDisplay, downloadBinaryData, conv2DArrayToObject } from '$lib/utils';
 
-    export let downloadLink: string;
+    export let blob: Blob;
 </script>
 
 <div class="modal">
@@ -11,22 +11,23 @@
             method="POST"
             use:enhance={({ formData }) => {
                 const data = conv2DArrayToObject([...formData.entries()]);
-                
+
                 return async ({ result }) => {
                     msgClosed.set(false);
                     onSubmit.set(false);
                     await applyAction(result);
 
                     if (result.type === 'success') {
+                        const url = URL.createObjectURL(blob);
                         const a = document.createElement('a');
-                        a.href = downloadLink;
+                        a.href = url;
                         a.download = `${data.character_name}_binary.zip`;
                         document.body.appendChild(a);
                         a.click();
                         document.body.removeChild(a);
 
                         // ダウンロード後、オブジェクトURLをリリース
-                        URL.revokeObjectURL(downloadLink);
+                        URL.revokeObjectURL(url);
                     }
 
                     closeModal();
