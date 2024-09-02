@@ -2,11 +2,11 @@
     import { applyAction, enhance } from '$app/forms';
     import { onSubmit, closeModal, msgClosed, timeOut, closeMsgDisplay, downloadBinaryData, downloadUserBinary } from '$lib/utils';
 
-    let isDownloaded: boolean = false;
+    let success: boolean = false;
     const submitForm = (): void => {
         const form = document.querySelector<HTMLFormElement>('form[name="download"]');
         if (form) {
-            form.submit();
+            form.requestSubmit();
         }
     };
 </script>
@@ -27,7 +27,7 @@
                 };
             }}
         >
-            <input type="hidden" name="result" value={isDownloaded} />
+            <input type="hidden" name="result" value={success} />
 
             <div class="modal_header">
                 <h1>Download Binary</h1>
@@ -46,8 +46,7 @@
                         onSubmit.set(true);
                         $timeOut && closeMsgDisplay($timeOut);
 
-                        const success = await downloadUserBinary(String($downloadBinaryData.char_id), $downloadBinaryData.char_name || 'unknown');
-                        isDownloaded = success;
+                        success = await downloadUserBinary(String($downloadBinaryData.char_id), $downloadBinaryData.char_name || 'unknown');
                         submitForm();
                     }}
                 >

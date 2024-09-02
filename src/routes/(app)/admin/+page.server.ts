@@ -1237,7 +1237,7 @@ const updateAllianceData: Action = async ({ request }) => {
 const downloadBinary: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
 
-    if (data.result) {
+    if (data.result === 'true') {
         return {
             success: true,
             message: 'The binary data has been successfully downloaded.',
