@@ -1237,13 +1237,16 @@ const updateAllianceData: Action = async ({ request }) => {
 const downloadBinary: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     console.log(data.result);
+    console.log(data.result === 'S');
 
-    if (data.result === '1') {
+    if (data.result === 'S') {
+        console.log(1);
         return {
             success: true,
             message: 'The binary data has been successfully downloaded.',
         };
     } else {
+        console.log(2);
         return fail(400, { error: true, message: "The character doesn't exist or all binary data are NULL." });
     }
 };
