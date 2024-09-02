@@ -6,7 +6,10 @@
     const submitForm = (): void => {
         const form = document.querySelector<HTMLFormElement>('form[name="download"]');
         if (form) {
-            form.requestSubmit();
+            // result値更新のため、少し待つ
+            setTimeout(() => {
+                form.requestSubmit();
+            }, 1000);
         }
     };
 </script>
