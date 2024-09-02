@@ -2,10 +2,6 @@
 @use '../global/' as *;
 
 @include sp() {
-    body {
-        font-size: 1.5rem !important;
-    }
-
     /* ヘッダー
 ====================================================*/
 
@@ -376,7 +372,11 @@
         bottom: 2%;
         z-index: 2;
         filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
-
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        
         @include landscape {
             bottom: 4%;
         }
@@ -401,10 +401,8 @@
             // メニュー本体
             .console_menu {
                 width: 100%;
-                //border-radius: 20px 0 0 20px;
                 border-right: 1px rgb(80, 80, 80) solid;
                 background: rgb(248, 248, 248);
-                user-select: none;
 
                 // メニューリスト
                 .console_menu_list {
