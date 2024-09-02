@@ -1638,7 +1638,7 @@
                                             on:click={() =>
                                                 prepareModal('downloadBinary', {
                                                     title: 'Are you sure you want to download the binary data?',
-                                                    form_action: 'updateCharacterData',
+                                                    form_action: '', // formアクションは使用しない
                                                     char_id: $userCtrlPanel[user.id].selectedChar.id,
                                                     char_name: $userCtrlPanel[user.id].selectedChar.name,
                                                 })}

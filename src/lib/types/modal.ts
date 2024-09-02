@@ -2,7 +2,7 @@ export type ModalType = 'deleteInfo' | 'deleteBnr' | 'suspendUser' | 'deleteChar
 
 /* Modal in Admin Console
 ====================================================*/
-interface ModalCommonData {
+export interface ModalCommonData {
     title: string;
     form_action: string;
 }

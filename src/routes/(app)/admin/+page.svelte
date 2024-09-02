@@ -146,7 +146,7 @@
 {/if}
 
 {#if $downloadBinary}
-    <DownloadBinary blob={form?.blob} />
+    <DownloadBinary />
 {/if}
 
 <main class="console_body">

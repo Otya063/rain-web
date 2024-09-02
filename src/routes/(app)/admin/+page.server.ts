@@ -542,9 +542,8 @@ const updateUserData: Action = async ({ request }) => {
 const updateCharacterData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.character_id);
-    const column = Object.keys(data)[2] as 'name' | 'bounty' | 'clan' | 'reupload_binary' | 'download_binary';
+    const column = Object.keys(data)[2] as 'name' | 'bounty' | 'clan' | 'reupload_binary';
     const value = Object.values(data)[2] as string | number;
-    console.log(data);
 
     switch (column) {
         case 'name': {
@@ -655,22 +654,6 @@ const updateCharacterData: Action = async ({ request }) => {
                     message: `The binary data of the character (ID: ${id}) has been successfully updated.`,
                 };
             }
-        }
-
-        case 'download_binary': {
-            const response = await fetch(`http://localhost:5174/download-binary/${id}`);
-
-            const blob = await response.blob();
-            if (blob.size === 0) {
-                return fail(400, { error: true, message: "The character doesn't exist or all binary data are NULL." });
-            }
-            console.log(blob);
-            
-            return {
-                success: true,
-                message: `The binary data have been successfully downloaded.`,
-                blob,
-            };
         }
 
         default: {

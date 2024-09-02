@@ -1,4 +1,4 @@
-import type { DeleteBnrData, DeleteCharacterData, DeleteInfoData, LinkDiscordData, ModalType, RebuildClanData, SuspendUserData } from '$lib/types';
+import type { DeleteBnrData, DeleteCharacterData, DeleteInfoData, LinkDiscordData, ModalCommonData, ModalType, RebuildClanData, SuspendUserData } from '$lib/types';
 import { error } from '@sveltejs/kit';
 import { writable } from 'svelte/store';
 
@@ -19,7 +19,7 @@ export const downloadBinaryData = writable<DeleteCharacterData>();
 
 /* prepare modal window data
 ====================================================*/
-export const prepareModal = (type: ModalType, data: DeleteInfoData | DeleteBnrData | SuspendUserData | DeleteCharacterData | LinkDiscordData | RebuildClanData): void => {
+export const prepareModal = (type: ModalType, data: ModalCommonData | DeleteInfoData | DeleteBnrData | SuspendUserData | DeleteCharacterData | LinkDiscordData | RebuildClanData): void => {
     switch (type) {
         case 'deleteInfo': {
             deleteInfo.set(true);
@@ -86,4 +86,34 @@ export const closeModal = (): void => {
     deleteChar.set(false);
     rebuildClan.set(false);
     downloadBinary.set(false);
+};
+
+/**
+ * ユーザーのバイナリデータ（セーブデータ）をダウンロードする\
+ * ダウンロードファイルの形式は「(キャラクター名)_binary.zip」
+ * @param {string} charId 対象のキャラクターID
+ * @param {string} charName 対象のキャラクター名
+ * @returns {Promise<boolean>} ダウンロードに成功したか否か
+ */
+export const downloadUserBinary = async (charId: string, charName: string): Promise<boolean> => {
+    const response = await fetch(`https://api.rain-server.com/download-binary/${charId}`);
+
+    const blob = await response.blob();
+    if (blob.size === 0) {
+        // キャラクターがいない、全セーブデータのサイズが０
+        return false;
+    }
+
+    // 一時的なアンカー要素を作成し、ダウンロードイベント発火
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${charName}_binary.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    // ダウンロード後、オブジェクトURLをリリース
+    URL.revokeObjectURL(url);
+
+    return true;
 };
