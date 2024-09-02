@@ -21,13 +21,10 @@
                     onSubmit.set(true);
                     $timeOut && closeMsgDisplay($timeOut);
 
-                    const success = await downloadUserBinary(String($downloadBinaryData.char_id), $downloadBinaryData.char_name || 'unknown');
-                    if (!success) {
-                        alert('failed');
-                    } else {
-                        onSubmit.set(false);
-                        closeModal();
-                    }
+                    await downloadUserBinary(String($downloadBinaryData.char_id), $downloadBinaryData.char_name || 'unknown');
+                    msgClosed.set(false);
+                    onSubmit.set(false);
+                    closeModal();
                 }}
             >
                 <span class="btn_icon material-icons">check</span>
