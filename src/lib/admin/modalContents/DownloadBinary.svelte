@@ -2,7 +2,7 @@
     import { applyAction, enhance } from '$app/forms';
     import { onSubmit, closeModal, msgClosed, timeOut, closeMsgDisplay, downloadBinaryData, downloadUserBinary } from '$lib/utils';
 
-    let success: boolean = false;
+    let success: string = '0';
     const submitForm = (): void => {
         const form = document.querySelector<HTMLFormElement>('form[name="download"]');
         if (form) {
@@ -46,7 +46,8 @@
                         onSubmit.set(true);
                         $timeOut && closeMsgDisplay($timeOut);
 
-                        success = await downloadUserBinary(String($downloadBinaryData.char_id), $downloadBinaryData.char_name || 'unknown');
+                        success = (await downloadUserBinary(String($downloadBinaryData.char_id), $downloadBinaryData.char_name || 'unknown')) ? '1' : '0';
+                        console.log(success);
                         submitForm();
                     }}
                 >
