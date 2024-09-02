@@ -90,7 +90,13 @@
 {#if $onSubmit}
     <div class="saving_overlay">
         <div class="loader" />
-        <p class="saving_overlay_text">Saving...</p>
+        <p class="saving_overlay_text">
+            {#if downloadBinary}
+                Downloading...
+            {:else}
+                Saving...
+            {/if}
+        </p>
     </div>
 {/if}
 
