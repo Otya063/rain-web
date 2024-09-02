@@ -1243,7 +1243,7 @@ const downloadBinary: Action = async ({ request }) => {
             message: 'The binary data has been successfully downloaded.',
         };
     } else {
-        return fail(400, { error: true, message: "The character doesn't exist or all binary data are NULL." });
+        return fail(400, { error: true, message: "The download failed for one of the following reasons:<br />ー The character doesn't exist.<br />ー All binary data are NULL.<br />ー Couldn't access API server." });
     }
 };
 

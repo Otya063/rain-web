@@ -91,7 +91,7 @@
     <div class="saving_overlay">
         <div class="loader" />
         <p class="saving_overlay_text">
-            {#if downloadBinary}
+            {#if $downloadBinary}
                 Downloading...
             {:else}
                 Saving...

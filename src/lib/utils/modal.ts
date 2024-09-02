@@ -96,24 +96,28 @@ export const closeModal = (): void => {
  * @returns {Promise<boolean>} ダウンロードに成功したか否か
  */
 export const downloadUserBinary = async (charId: string, charName: string): Promise<boolean> => {
-    const response = await fetch(`https://api.rain-server.com/download-binary/${charId}`);
+    try {
+        const response = await fetch(`https://api.rain-server.com/download-binary/${charId}`);
 
-    const blob = await response.blob();
-    if (blob.size === 0) {
-        // キャラクターがいないもしくは、全セーブデータのサイズが０
+        const blob = await response.blob();
+        if (blob.size === 0) {
+            // キャラクターがいないもしくは、全セーブデータのサイズが０
+            return false;
+        }
+
+        // 一時的なアンカー要素を作成し、ダウンロードイベント発火
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${charName}_binary.zip`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        // ダウンロード後、オブジェクトURLをリリース
+        URL.revokeObjectURL(url);
+
+        return true;
+    } catch (err) {
         return false;
     }
-
-    // 一時的なアンカー要素を作成し、ダウンロードイベント発火
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `${charName}_binary.zip`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    // ダウンロード後、オブジェクトURLをリリース
-    URL.revokeObjectURL(url);
-
-    return true;
 };
