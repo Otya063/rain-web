@@ -366,94 +366,97 @@
 
     /* コンソールメニュー
 ====================================================*/
-    .console_menu_swiper {
+    // モバイル用ナブメニュー背景
+    .mobile_menu_cover {
         position: fixed;
+        background: rgba(0, 0, 0, 0.5);
         width: 100%;
-        bottom: 2%;
+        height: 100%;
+        top: 0;
+        left: 0;
         z-index: 2;
-        filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.5));
-        -moz-user-select: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        
+    }
+
+    // モバイル用ナブメニュー表示用要素
+    .mobile_menu_switch {
+        position: fixed;
+        width: 60vw;
+        height: 100vh;
+        top: 0;
+        right: 0;
+        z-index: 2;
+
         @include landscape {
-            bottom: 4%;
+            width: 40vw;
+        }
+    }
+
+    // メニュー本体
+    .console_menu {
+        position: fixed;
+        width: 60vw;
+        height: 100dvh;
+        background: rgba(248, 248, 248, 0.95);
+        top: 0;
+        right: -120%;
+        padding: 10% 0;
+        // paddingの箇所と要素本体の背景を区別して色付け
+        background-image: linear-gradient(to bottom, rgba(248, 248, 248, 0.95) 0%, rgba(248, 248, 248, 0.95) 100%), linear-gradient(to bottom, rgb(154 172 181 / 95%) 0%, rgb(154 172 181 / 95%) 100%);
+        background-clip: content-box, padding-box;
+        transition: all 0.2s;
+        user-select: none;
+        z-index: 2;
+
+        // 開いている時
+        &.open {
+            right: 0;
         }
 
-        swiper-slide {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        // 横画面調整
+        @include landscape {
+            width: 40vw;
+            padding: 5% 0;
+        }
 
-            // メニュー矢印
-            .console_menu_arrow {
-                position: absolute;
-                width: 0;
-                height: 0;
-                left: -2px;
-                border-left: 40px solid rgb(248, 248, 248);
-                border-top: 33.5px solid transparent;
-                border-bottom: 33.5px solid transparent;
-                transform: translateY(40%);
-            }
+        // メニューリスト
+        .console_menu_list {
+            width: 100%;
 
-            // メニュー本体
-            .console_menu {
+            // メニュー各項目
+            .console_menu_list_item {
                 width: 100%;
-                border-right: 1px rgb(80, 80, 80) solid;
-                background: rgb(248, 248, 248);
+                height: 40px;
+                margin: 10% auto;
+                border-bottom: 1px solid gray;
+                display: inline-block;
+                cursor: pointer;
 
-                // メニューリスト
-                .console_menu_list {
+                .console_menu_list_link {
+                    position: relative;
                     width: 100%;
-                    padding: 15px 0;
                     display: flex;
-                    display: grid;
-                    column-gap: 30px;
-                    row-gap: 20px;
-                    grid-template-columns: repeat(4, 1fr);
                     justify-content: center;
-                    justify-items: center;
+                    align-items: center;
 
-                    // メニュー各項目
-                    .console_menu_list_item {
-                        width: 30px;
-                        height: 35px;
-                        border-bottom: 1px solid gray;
-                        cursor: pointer;
+                    // リンクテキスト（ホバー時に出現）
+                    .console_menu_list_text {
+                        padding-left: 10px;
+                        line-height: 20px;
+                    }
 
-                        .console_menu_list_link {
-                            position: relative;
-                            width: 100%;
-                            display: flex;
-                            justify-content: center;
+                    // リンクアイコン
+                    .material-symbols-outlined {
+                        font-size: 3rem;
+                    }
+                }
 
-                            // リンクテキスト（ホバー時に出現）
-                            .console_menu_list_text {
-                                display: none;
-                            }
+                &.active {
+                    .material-symbols-outlined {
+                        color: #0aa0d2;
+                    }
 
-                            // リンクアイコン
-                            .material-symbols-outlined {
-                                font-size: 3rem;
-                            }
-                        }
-
-                        // メニュー最後、下部余白なし
-                        &:last-child {
-                            margin: 0 auto;
-                        }
-
-                        &.active {
-                            .material-symbols-outlined {
-                                color: #0aa0d2;
-                            }
-
-                            .console_menu_list_text {
-                                color: #0a61d2;
-                            }
-                        }
+                    .console_menu_list_text {
+                        color: #0a61d2;
                     }
                 }
             }

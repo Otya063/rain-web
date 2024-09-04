@@ -2,6 +2,8 @@
     import { adminTabValue } from '$lib/utils';
     import { onMount } from 'svelte';
 
+    export let closeMenu: () => void;
+
     // added "active" class to the first list item when first loaded
     onMount(() => {
         const firstListItem = document.getElementsByClassName('console_menu_list_item')[0] as HTMLLIElement;
@@ -37,7 +39,14 @@
     {#each Object.entries(menuList) as [type, { text, icon }]}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
         <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-        <li class="console_menu_list_item" class:active={type === $adminTabValue} on:click={() => adminTabValue.set(type)}>
+        <li
+            class="console_menu_list_item"
+            class:active={type === $adminTabValue}
+            on:click={() => {
+                adminTabValue.set(type);
+                closeMenu();
+            }}
+        >
             <p class="console_menu_list_link">
                 <span class="material-symbols-outlined">{icon}</span>
                 <span class="console_menu_list_text">{text}</span>

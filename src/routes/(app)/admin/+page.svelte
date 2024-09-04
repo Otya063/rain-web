@@ -31,7 +31,7 @@
     import { onMount } from 'svelte';
     import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
-    import { register } from 'swiper/element/bundle';
+    import { Svroller } from 'svrollbar';
     import '$scss/style_admin.scss';
 
     // data from the server
@@ -41,13 +41,9 @@
     const origin = url.origin;
     let width: Tweened<number>;
     let loaded = false;
-    let isMobile: boolean;
 
     onMount(() => {
         loaded = true;
-        const regex = /iphone;|(android|nokia|blackberry|bb10;).+mobile|android.+fennec|opera.+mobi|windows phone|symbianos/i;
-        isMobile = regex.test(navigator.userAgent);
-        isMobile && register();
     });
 
     // message display timer bar
@@ -71,6 +67,67 @@
     let addInfoMode: (enable: boolean) => void;
     let infoAddMode: boolean;
     let bnrAddMode: boolean;
+
+    let openMobileNav = false;
+    let count = 0;
+    let scrollPosition = 0;
+
+    /**
+     * ダブルタップを検知し、ナビゲーションメニューに関する操作を制御
+     *
+     * @param {TouchEvent} e タップイベント
+     */
+    const handleNavMenuByDoubleTouch = (e: TouchEvent): void => {
+        if (!count) {
+            // 初め
+            // タップ回数インクリメント
+            ++count;
+
+            // 250ミリ秒以内に2回目のタップが行われなかった場合、カウントリセット
+            setTimeout(() => {
+                count = 0;
+            }, 250);
+        } else {
+            // ダブルタップと判定
+            // 拡大禁止
+            e.preventDefault();
+
+            openMenu();
+
+            // カウントリセット
+            count = 0;
+        }
+    };
+
+    /**
+     * ナビゲーションメニューを開き、画面のスクロールを固定
+     */
+    const openMenu = (): void => {
+        // 現在のスクロール位置を保存
+        scrollPosition = window.scrollY;
+
+        // bodyをfixedし、スクロール位置で動かないように
+        document.body.style.position = 'fixed';
+        document.body.style.top = `-${scrollPosition}px`;
+        document.body.style.width = '100%';
+
+        openMobileNav = true;
+    };
+
+    /**
+     * ナビゲーションメニューを閉じ、画面のスクロールを元に戻す
+     */
+    let closeMenu = (): void => {
+        // bodyから各スタイルを削除
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+
+        // スクロール位置を元に戻す
+        window.scrollTo(0, scrollPosition);
+
+        openMobileNav = false;
+    };
 </script>
 
 {#if !loaded}
@@ -156,22 +213,18 @@
 {/if}
 
 <main class="console_body">
-    {#if isMobile}
-        <swiper-container class="console_menu_swiper" direction={'horizontal'} dir="rtl">
-            <swiper-slide>
-                <div class="console_menu_arrow"></div>
-            </swiper-slide>
-            <swiper-slide>
-                <nav class="console_menu" dir="ltr">
-                    <AdminMenu />
-                </nav>
-            </swiper-slide>
-        </swiper-container>
+    {#if openMobileNav}
+        <!-- 黒いところタッチでメニュー閉じるが、その下のボタンやラジオ等を触らないようpreventDefault必要 -->
+        <div transition:fade={{ duration: 200 }} class="mobile_menu_cover" on:touchend|preventDefault={() => closeMenu()}></div>
     {:else}
-        <nav class="console_menu">
-            <AdminMenu />
-        </nav>
+        <div class="mobile_menu_switch" on:touchstart={handleNavMenuByDoubleTouch}></div>
     {/if}
+
+    <nav class="console_menu" class:open={openMobileNav}>
+        <Svroller width="100%" height="100%" alwaysVisible={true}>
+            <AdminMenu bind:closeMenu />
+        </Svroller>
+    </nav>
 
     <article class="console_article">
         <h1>
