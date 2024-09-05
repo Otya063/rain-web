@@ -44,6 +44,14 @@
 
     onMount(() => {
         loaded = true;
+        window.addEventListener('touchstart', handleTouchStart);
+        window.addEventListener('touchend', handleTouchEnd);
+
+        // クリーンアップ処理
+        return () => {
+            window.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchend', handleTouchEnd);
+        };
     });
 
     // message display timer bar
@@ -68,34 +76,45 @@
     let infoAddMode: boolean;
     let bnrAddMode: boolean;
 
+    /* モバイル用ナビゲーションメニュー制御
+    ========================================================= */
     let openMobileNav = false;
-    let count = 0;
     let scrollPosition = 0;
+    let touchStartX: number = 0;
+    let touchEndX: number = 0;
+    const swipeThreshold: number = 70; // メニューを起動するための最小スワイプ距離（ピクセル単位）
 
     /**
-     * ダブルタップを検知し、ナビゲーションメニューに関する操作を制御
+     * スワイプの開始位置を記録
      *
-     * @param {TouchEvent} e タップイベント
+     * @param {TouchEvent} e タッチ開始イベント
      */
-    const handleNavMenuByDoubleTouch = (e: TouchEvent): void => {
-        if (!count) {
-            // 初め
-            // タップ回数インクリメント
-            ++count;
+    const handleTouchStart = (e: TouchEvent): void => {
+        touchStartX = e.changedTouches[0].screenX;
+    };
 
-            // 250ミリ秒以内に2回目のタップが行われなかった場合、カウントリセット
-            setTimeout(() => {
-                count = 0;
-            }, 250);
-        } else {
-            // ダブルタップと判定
-            // 拡大禁止
-            e.preventDefault();
+    /**
+     * スワイプの終了位置を記録し、右から左へのスワイプを検出してナビゲーションメニューを開く
+     *
+     * @param {TouchEvent} e タッチ終了イベント
+     */
+    const handleTouchEnd = (e: TouchEvent): void => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipeGesture();
+    };
 
+    /**
+     * スワイプを検出し、メニューを制御
+     */
+    const handleSwipeGesture = (): void => {
+        const swipeDistance = touchStartX - touchEndX;
+
+        if (swipeDistance > swipeThreshold) {
+            // 右から左へのスワイプならメニュー開く
             openMenu();
-
-            // カウントリセット
-            count = 0;
+        } else if (swipeDistance < -swipeThreshold) {
+            // 左から右へのスワイプならメニュー閉じる
+            closeMenu();
         }
     };
 
@@ -103,30 +122,34 @@
      * ナビゲーションメニューを開き、画面のスクロールを固定
      */
     const openMenu = (): void => {
-        // 現在のスクロール位置を保存
-        scrollPosition = window.scrollY;
+        if (!openMobileNav) {
+            // 現在のスクロール位置を保存
+            scrollPosition = window.scrollY;
 
-        // bodyをfixedし、スクロール位置で動かないように
-        document.body.style.position = 'fixed';
-        document.body.style.top = `-${scrollPosition}px`;
-        document.body.style.width = '100%';
+            // bodyをfixedし、スクロール位置で動かないように
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollPosition}px`;
+            document.body.style.width = '100%';
 
-        openMobileNav = true;
+            openMobileNav = true;
+        }
     };
 
     /**
      * ナビゲーションメニューを閉じ、画面のスクロールを元に戻す
      */
     let closeMenu = (): void => {
-        // bodyから各スタイルを削除
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
+        if (openMobileNav) {
+            // bodyから各スタイルを削除
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
 
-        // スクロール位置を元に戻す
-        window.scrollTo(0, scrollPosition);
+            // スクロール位置を元に戻す
+            window.scrollTo(0, scrollPosition);
 
-        openMobileNav = false;
+            openMobileNav = false;
+        }
     };
 </script>
 
@@ -214,10 +237,8 @@
 
 <main class="console_body">
     {#if openMobileNav}
-        <!-- 黒いところタッチでメニュー閉じるが、その下のボタンやラジオ等を触らないようpreventDefault必要 -->
-        <div transition:fade={{ duration: 200 }} class="mobile_menu_cover" on:touchend|preventDefault={() => closeMenu()}></div>
-    {:else}
-        <div class="mobile_menu_switch" on:touchstart={handleNavMenuByDoubleTouch}></div>
+        <!-- モバイル用ナビゲーションメニューが開いている時、背景黒 -->
+        <div transition:fade={{ duration: 200 }} class="mobile_menu_cover"></div>
     {/if}
 
     <nav class="console_menu" class:open={openMobileNav}>

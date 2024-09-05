@@ -377,20 +377,6 @@
         z-index: 2;
     }
 
-    // モバイル用ナブメニュー表示用要素
-    .mobile_menu_switch {
-        position: fixed;
-        width: 60vw;
-        height: 100vh;
-        top: 0;
-        right: 0;
-        z-index: 2;
-
-        @include landscape {
-            width: 40vw;
-        }
-    }
-
     // メニュー本体
     .console_menu {
         position: fixed;
