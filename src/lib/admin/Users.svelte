@@ -24,7 +24,7 @@
         initUserCtrlPanel,
         convHrpToHr,
         consoleContDisable,
-        validateInput,
+        validateInput
     } from '$lib/utils';
     import type { PaginatedUsers, PaginationMeta } from '$lib/types';
     import _ from 'lodash';
@@ -582,7 +582,7 @@
                                             name: false,
                                             bounty: false,
                                             clan: false,
-                                            binary: false,
+                                            reupload_binary: false,
                                         });
                                 }}
                                 type="button">{icon}</button
@@ -1376,7 +1376,7 @@
                                                     break;
                                                 }
 
-                                                case 'binary': {
+                                                case 'reupload_binary': {
                                                     break;
                                                 }
 
@@ -1566,19 +1566,20 @@
 
                                     <dt class="contents_term">Binary Data</dt>
                                     <dd class="contents_desc">
-                                        {#if $userCtrlPanel[user.id].activeCategories['binary']}
-                                            <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['binary'] = false)}>
+                                        <!-- re-upload binary -->
+                                        {#if $userCtrlPanel[user.id].activeCategories['reupload_binary']}
+                                            <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['reupload_binary'] = false)}>
                                                 <span class="btn_icon material-icons">close</span>
                                                 <span class="btn_text">Cancel</span>
                                             </button>
                                         {:else}
-                                            <button type="button" class="normal_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['binary'] = true)}>
+                                            <button type="button" class="normal_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['reupload_binary'] = true)}>
                                                 <span class="btn_icon material-icons">upload_file</span>
                                                 <span class="btn_text">Re-upload</span>
                                             </button>
                                         {/if}
 
-                                        {#if $userCtrlPanel[user.id].activeCategories['binary']}
+                                        {#if $userCtrlPanel[user.id].activeCategories['reupload_binary']}
                                             <div transition:slide class="edit_area_box">
                                                 <div class="edit_area enter">
                                                     <p class="edit_area_title">Re-upload Binary Data</p>
@@ -1595,7 +1596,7 @@
                                                     <dl class="edit_area_box_parts text">
                                                         <dt>Select new files</dt>
                                                         <dd>
-                                                            <input type="hidden" name="binary" />
+                                                            <input type="hidden" name="reupload_binary" />
                                                             <input name="savedata" type="hidden" bind:value={binaryData['savedata.bin']} />
                                                             <input name="decomyset" type="hidden" bind:value={binaryData['decomyset.bin']} />
                                                             <input name="hunternavi" type="hidden" bind:value={binaryData['hunternavi.bin']} />
@@ -1618,7 +1619,7 @@
                                                         class="blue_btn"
                                                         type="submit"
                                                         on:click={() => {
-                                                            $userCtrlPanel[user.id].activeCategories['binary'] = false;
+                                                            $userCtrlPanel[user.id].activeCategories['reupload_binary'] = false;
                                                             $timeOut && closeMsgDisplay($timeOut);
                                                             onSubmit.set(true);
                                                         }}
@@ -1629,6 +1630,22 @@
                                                 </div>
                                             </div>
                                         {/if}
+
+                                        <!-- download binary -->
+                                        <button
+                                            type="button"
+                                            class="normal_btn"
+                                            on:click={() =>
+                                                prepareModal('downloadBinary', {
+                                                    title: `Are you sure you want to download ${$userCtrlPanel[user.id].selectedChar.name}'s binary data?`,
+                                                    form_action: '', // formアクションは使用しない
+                                                    char_id: $userCtrlPanel[user.id].selectedChar.id,
+                                                    char_name: $userCtrlPanel[user.id].selectedChar.name,
+                                                })}
+                                        >
+                                            <span class="btn_icon material-icons">cloud_download</span>
+                                            <span class="btn_text">Download</span>
+                                        </button>
                                     </dd>
                                 </dl>
                             </form>

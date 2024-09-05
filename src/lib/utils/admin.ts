@@ -15,7 +15,7 @@ export const userCtrlPanel = writable<{
         userData: PaginatedUsers;
         selectedChar: PaginatedCharacter;
         activeCategories: {
-            [key in keyof Omit<users, 'id' | 'item_box' | 'last_character' | 'last_login' | 'web_login_key' | 'web_login_key_mobile'> | 'name' | 'bounty' | 'clan' | 'binary']: boolean;
+            [key in keyof Omit<users, 'id' | 'item_box' | 'last_character' | 'last_login' | 'web_login_key' | 'web_login_key_mobile'> | 'name' | 'bounty' | 'clan' | 'reupload_binary']: boolean;
         };
     };
 }>({});
@@ -122,7 +122,7 @@ export const initUserCtrlPanel = (paginatedUsers: PaginatedUsers[]): void => {
                     name: false,
                     bounty: false,
                     clan: false,
-                    binary: false,
+                    reupload_binary: false,
                 },
             },
         });
@@ -153,7 +153,7 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                         name: false,
                         bounty: false,
                         clan: false,
-                        binary: false,
+                        reupload_binary: false,
                     },
                 },
             };
@@ -186,7 +186,7 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                             name: false,
                             bounty: false,
                             clan: false,
-                            binary: false,
+                            reupload_binary: false,
                         },
                     },
                 };
@@ -215,7 +215,7 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                             name: false,
                             bounty: false,
                             clan: false,
-                            binary: false,
+                            reupload_binary: false,
                         },
                     },
                 };
@@ -241,7 +241,7 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
                             name: false,
                             bounty: false,
                             clan: false,
-                            binary: false,
+                            reupload_binary: false,
                         },
                     },
                 };

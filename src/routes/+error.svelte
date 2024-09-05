@@ -142,7 +142,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes">
     <!-- font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />

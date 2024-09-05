@@ -3,6 +3,7 @@
     import DeleteBnr from '$lib/admin/modalContents/DeleteBnr.svelte';
     import DeleteChar from '$lib/admin/modalContents/DeleteChar.svelte';
     import DeleteInfo from '$lib/admin/modalContents/DeleteInfo.svelte';
+    import DownloadBinary from '$lib/admin/modalContents/DownloadBinary.svelte';
     import LinkDiscord from '$lib/admin/modalContents/LinkDiscord.svelte';
     import RebuildClan from '$lib/admin/modalContents/RebuildClan.svelte';
     import SuspendUser from '$lib/admin/modalContents/SuspendUser.svelte';
@@ -24,12 +25,13 @@
         timeOut,
         adminTabValue,
         rebuildClan,
+        downloadBinary,
     } from '$lib/utils';
     import _ from 'lodash';
     import { onMount } from 'svelte';
     import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
-    import { register } from 'swiper/element/bundle';
+    import { Svroller } from 'svrollbar';
     import '$scss/style_admin.scss';
 
     // data from the server
@@ -39,13 +41,17 @@
     const origin = url.origin;
     let width: Tweened<number>;
     let loaded = false;
-    let isMobile: boolean;
 
     onMount(() => {
         loaded = true;
-        const regex = /iphone;|(android|nokia|blackberry|bb10;).+mobile|android.+fennec|opera.+mobi|windows phone|symbianos/i;
-        isMobile = regex.test(navigator.userAgent);
-        isMobile && register();
+        window.addEventListener('touchstart', handleTouchStart);
+        window.addEventListener('touchend', handleTouchEnd);
+
+        // クリーンアップ処理
+        return () => {
+            window.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchend', handleTouchEnd);
+        };
     });
 
     // message display timer bar
@@ -69,6 +75,82 @@
     let addInfoMode: (enable: boolean) => void;
     let infoAddMode: boolean;
     let bnrAddMode: boolean;
+
+    /* モバイル用ナビゲーションメニュー制御
+    ========================================================= */
+    let openMobileNav = false;
+    let scrollPosition = 0;
+    let touchStartX: number = 0;
+    let touchEndX: number = 0;
+    const swipeThreshold: number = 70; // メニューを起動するための最小スワイプ距離（ピクセル単位）
+
+    /**
+     * スワイプの開始位置を記録
+     *
+     * @param {TouchEvent} e タッチ開始イベント
+     */
+    const handleTouchStart = (e: TouchEvent): void => {
+        touchStartX = e.changedTouches[0].screenX;
+    };
+
+    /**
+     * スワイプの終了位置を記録し、右から左へのスワイプを検出してナビゲーションメニューを開く
+     *
+     * @param {TouchEvent} e タッチ終了イベント
+     */
+    const handleTouchEnd = (e: TouchEvent): void => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipeGesture();
+    };
+
+    /**
+     * スワイプを検出し、メニューを制御
+     */
+    const handleSwipeGesture = (): void => {
+        const swipeDistance = touchStartX - touchEndX;
+
+        if (swipeDistance > swipeThreshold) {
+            // 右から左へのスワイプならメニュー開く
+            openMenu();
+        } else if (swipeDistance < -swipeThreshold) {
+            // 左から右へのスワイプならメニュー閉じる
+            closeMenu();
+        }
+    };
+
+    /**
+     * ナビゲーションメニューを開き、画面のスクロールを固定
+     */
+    const openMenu = (): void => {
+        if (!openMobileNav) {
+            // 現在のスクロール位置を保存
+            scrollPosition = window.scrollY;
+
+            // bodyをfixedし、スクロール位置で動かないように
+            document.body.style.position = 'fixed';
+            document.body.style.top = `-${scrollPosition}px`;
+            document.body.style.width = '100%';
+
+            openMobileNav = true;
+        }
+    };
+
+    /**
+     * ナビゲーションメニューを閉じ、画面のスクロールを元に戻す
+     */
+    let closeMenu = (): void => {
+        if (openMobileNav) {
+            // bodyから各スタイルを削除
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.width = '';
+
+            // スクロール位置を元に戻す
+            window.scrollTo(0, scrollPosition);
+
+            openMobileNav = false;
+        }
+    };
 </script>
 
 {#if !loaded}
@@ -88,7 +170,13 @@
 {#if $onSubmit}
     <div class="saving_overlay">
         <div class="loader" />
-        <p class="saving_overlay_text">Saving...</p>
+        <p class="saving_overlay_text">
+            {#if $downloadBinary}
+                Downloading...
+            {:else}
+                Saving...
+            {/if}
+        </p>
     </div>
 {/if}
 
@@ -143,23 +231,21 @@
     <RebuildClan />
 {/if}
 
+{#if $downloadBinary}
+    <DownloadBinary />
+{/if}
+
 <main class="console_body">
-    {#if isMobile}
-        <swiper-container class="console_menu_swiper" direction={'horizontal'} dir="rtl">
-            <swiper-slide>
-                <div class="console_menu_arrow"></div>
-            </swiper-slide>
-            <swiper-slide>
-                <nav class="console_menu" dir="ltr">
-                    <AdminMenu />
-                </nav>
-            </swiper-slide>
-        </swiper-container>
-    {:else}
-        <nav class="console_menu">
-            <AdminMenu />
-        </nav>
+    {#if openMobileNav}
+        <!-- モバイル用ナビゲーションメニューが開いている時、背景黒 -->
+        <div transition:fade={{ duration: 200 }} class="mobile_menu_cover"></div>
     {/if}
+
+    <nav class="console_menu" class:open={openMobileNav}>
+        <Svroller width="100%" height="100%" alwaysVisible={true}>
+            <AdminMenu bind:closeMenu />
+        </Svroller>
+    </nav>
 
     <article class="console_article">
         <h1>
@@ -213,7 +299,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
     <!-- font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />

@@ -1,7 +1,8 @@
+export type ModalType = 'deleteInfo' | 'deleteBnr' | 'suspendUser' | 'deleteCharacter' | 'linkDiscord' | 'rebuildClan' | 'downloadBinary';
 
 /* Modal in Admin Console
 ====================================================*/
-interface ModalCommonData {
+export interface ModalCommonData {
     title: string;
     form_action: string;
 }

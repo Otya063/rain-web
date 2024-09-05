@@ -338,7 +338,7 @@ const getPaginatedUsers: Action = async ({ request }) => {
             }
 
             default: {
-                throw new Error('Invalid Status');
+                error(400, { message: '', message1: '', message2: ['Invalid status.'], message3: undefined });
             }
         }
     })();
@@ -393,7 +393,7 @@ const getPaginatedClans: Action = async ({ request }) => {
             }
 
             default: {
-                throw new Error('Invalid Status');
+                error(400, { message: '', message1: '', message2: ['Invalid status.'], message3: undefined });
             }
         }
     })();
@@ -443,7 +443,7 @@ const getPaginatedAlliances: Action = async ({ request }) => {
             }
 
             default: {
-                throw new Error('Invalid Status');
+                error(400, { message: '', message1: '', message2: ['Invalid status.'], message3: undefined });
             }
         }
     })();
@@ -542,7 +542,7 @@ const updateUserData: Action = async ({ request }) => {
 const updateCharacterData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.character_id);
-    const column = Object.keys(data)[2] as 'name' | 'bounty' | 'clan' | 'binary';
+    const column = Object.keys(data)[2] as 'name' | 'bounty' | 'clan' | 'reupload_binary';
     const value = Object.values(data)[2] as string | number;
 
     switch (column) {
@@ -627,7 +627,7 @@ const updateCharacterData: Action = async ({ request }) => {
             }
         }
 
-        case 'binary': {
+        case 'reupload_binary': {
             const file = data.file as File;
             if (file.size === 0) {
                 return fail(400, { error: true, message: 'No file selected.' });
@@ -657,7 +657,7 @@ const updateCharacterData: Action = async ({ request }) => {
         }
 
         default: {
-            throw new Error('Invalid Column');
+            error(400, { message: '', message1: '', message2: ['Invalid column.'], message3: undefined });
         }
     }
 };
@@ -1234,6 +1234,19 @@ const updateAllianceData: Action = async ({ request }) => {
     }
 };
 
+const downloadBinary: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+
+    if (data.result === 'S') {
+        return {
+            success: true,
+            message: 'The binary data has been successfully downloaded.',
+        };
+    } else {
+        return fail(400, { error: true, message: "The download failed for one of the following reasons:<br />ー The character doesn't exist.<br />ー All binary data are NULL.<br />ー Couldn't access API server." });
+    }
+};
+
 export const actions: Actions = {
     updateSystemMode,
     updateAllMaintData,
@@ -1258,4 +1271,5 @@ export const actions: Actions = {
     restoreCharacter,
     rebuildClan,
     updateAllianceData,
+    downloadBinary,
 };

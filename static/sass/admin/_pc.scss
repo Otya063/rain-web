@@ -352,6 +352,9 @@
 
     /* コンソールメニュー
 ====================================================*/
+    .mobile_menu_cover {
+        display: none;
+    }
 
     // メニュー本体
     .console_menu {
@@ -365,74 +368,79 @@
         user-select: none;
         z-index: 2;
 
-        // メニューリスト
-        .console_menu_list {
-            padding: 40px 0;
-            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+        // 「console_menu_list_text」が隠れないようにvisible
+        .svlr-viewport {
+            overflow: visible !important;
 
-            // メニュー各項目
-            .console_menu_list_item {
-                width: 40px;
-                height: 40px;
-                margin: 0 auto 40px;
-                border-bottom: 1px solid gray;
-                cursor: pointer;
+            // メニューリスト
+            .console_menu_list {
+                padding: 40px 0;
+                box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
 
-                .console_menu_list_link {
-                    position: relative;
-                    width: 100%;
-                    display: flex;
-                    justify-content: center;
+                // メニュー各項目
+                .console_menu_list_item {
+                    width: 40px;
+                    height: 40px;
+                    margin: 0 auto 40px;
+                    border-bottom: 1px solid gray;
+                    cursor: pointer;
 
-                    // リンクテキスト（ホバー時に出現）
-                    .console_menu_list_text {
-                        position: absolute;
-                        top: 50%;
-                        left: 0;
+                    .console_menu_list_link {
+                        position: relative;
+                        width: 100%;
                         display: flex;
                         justify-content: center;
-                        align-items: center;
-                        color: #333333;
-                        font-weight: 700;
-                        font-size: 1.4rem;
-                        width: 200px;
-                        height: 50px;
-                        border-radius: 10px;
-                        background: #f9f9f9;
-                        box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
-                        transition: all 0.2s;
-                        transform: translate(20%, -50%);
-                        opacity: 0;
-                        pointer-events: none;
-                        user-select: none;
-                    }
 
-                    // リンクアイコン
-                    .material-symbols-outlined {
-                        font-size: 3.5rem;
-                    }
-
-                    // リンクアイコンホバー時
-                    &:hover {
+                        // リンクテキスト（ホバー時に出現）
                         .console_menu_list_text {
-                            transform: translate(40%, -50%);
-                            opacity: 1;
+                            position: absolute;
+                            top: 50%;
+                            left: 0;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            color: #333333;
+                            font-weight: 700;
+                            font-size: 1.4rem;
+                            width: 200px;
+                            height: 50px;
+                            border-radius: 10px;
+                            background: #f9f9f9;
+                            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+                            transition: all 0.2s;
+                            transform: translate(20%, -50%);
+                            opacity: 0;
+                            pointer-events: none;
+                            user-select: none;
+                        }
+
+                        // リンクアイコン
+                        .material-symbols-outlined {
+                            font-size: 3.5rem;
+                        }
+
+                        // リンクアイコンホバー時
+                        &:hover {
+                            .console_menu_list_text {
+                                transform: translate(40%, -50%);
+                                opacity: 1;
+                            }
                         }
                     }
-                }
 
-                // メニュー最後、下部余白なし
-                &:last-child {
-                    margin: 0 auto;
-                }
-
-                &.active {
-                    .material-symbols-outlined {
-                        color: #0aa0d2;
+                    // メニュー最後、下部余白なし
+                    &:last-child {
+                        margin: 0 auto;
                     }
 
-                    .console_menu_list_text {
-                        color: #0a61d2;
+                    &.active {
+                        .material-symbols-outlined {
+                            color: #0aa0d2;
+                        }
+
+                        .console_menu_list_text {
+                            color: #0a61d2;
+                        }
                     }
                 }
             }
@@ -1223,7 +1231,7 @@
             // 内部テキスト
             p {
                 margin: 1%;
-                max-height: 60px;
+                //max-height: 60px;
                 overflow-y: scroll;
                 -ms-overflow-style: none;
                 scrollbar-width: none;
