@@ -39,7 +39,7 @@
                 <p style="padding-bottom: 3%;">{$downloadBinaryData.title}</p>
 
                 <p class="modal_note">* The binary data to be downloaded is output in zip format.</p>
-                <p class="modal_note">* The total number of data is 14, but if the data size is “0” (doesn't exist in the database), it won't be included in the zip file.</p>
+                <p class="modal_note">* The total number of data is 14, but if the data size is "0" (doesn't exist in the database), it won't be included in the zip file.</p>
             </div>
             <div class="btn_group">
                 <button

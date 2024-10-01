@@ -323,8 +323,8 @@ export class IsCharLogin {
                 },
             });
 
-            const charIds = sessions.map((session) => session.char_id!);
-            if (!charIds.length) {
+            const charIds: number[] = sessions.map((session) => session.char_id).filter((id): id is number => id !== null);
+            if (!charIds.length || !charIds) {
                 return { check: false, charIds: [] };
             } else {
                 return { check: true, charIds };
