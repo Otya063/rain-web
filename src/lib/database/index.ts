@@ -244,7 +244,7 @@ export const db = new PrismaClient({
                         }
 
                         const newClanId = (
-                            await db.$queryRaw<
+                            await db.$executeRaw<
                                 { id: number }[]
                             >`INSERT INTO guilds (name, created_at, leader_id, main_motto, rank_rp, comment, icon, sub_motto, item_box, event_rp, pugi_name_1, pugi_name_2, pugi_name_3, recruiting, pugi_outfit_1, pugi_outfit_2, pugi_outfit_3, pugi_outfits, tower_mission_page, tower_rp) VALUES (${
                                 originClanData.name
@@ -323,8 +323,8 @@ export class IsCharLogin {
                 },
             });
 
-            const charIds: number[] = sessions.map((session) => session.char_id).filter((id): id is number => id !== null);
-            if (!charIds.length || !charIds) {
+            const charIds: number[] = sessions.map((session) => session.char_id!);
+            if (!charIds.length) {
                 return { check: false, charIds: [] };
             } else {
                 return { check: true, charIds };
