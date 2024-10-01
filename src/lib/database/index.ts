@@ -243,10 +243,8 @@ export const db = new PrismaClient({
                             return { success: false, message: 'No clan data found.' };
                         }
 
-                        const newClanId = (
-                            await db.$executeRaw<
-                                [number]
-                            >`INSERT INTO guilds (name, created_at, leader_id, main_motto, rank_rp, comment, icon, sub_motto, item_box, event_rp, pugi_name_1, pugi_name_2, pugi_name_3, recruiting, pugi_outfit_1, pugi_outfit_2, pugi_outfit_3, pugi_outfits, tower_mission_page, tower_rp) VALUES (${
+                        const newClanId =
+                            await db.$executeRaw`INSERT INTO guilds (name, created_at, leader_id, main_motto, rank_rp, comment, icon, sub_motto, item_box, event_rp, pugi_name_1, pugi_name_2, pugi_name_3, recruiting, pugi_outfit_1, pugi_outfit_2, pugi_outfit_3, pugi_outfits, tower_mission_page, tower_rp) VALUES (${
                                 originClanData.name
                             }, ${originClanData.created_at}, ${originClanData.leader_id}, ${originClanData.main_motto}, ${originClanData.rank_rp}, ${originClanData.comment}, decode(${
                                 !originClanData.icon ? null : Buffer.from(Uint8Array.from(originClanData.icon)).toString('base64')
@@ -256,9 +254,8 @@ export const db = new PrismaClient({
                                 originClanData.pugi_outfit_1
                             }, ${originClanData.pugi_outfit_2}, ${originClanData.pugi_outfit_3}, ${originClanData.pugi_outfits}, ${originClanData.tower_mission_page}, ${
                                 originClanData.tower_rp
-                            }) Returning id`
-                        )[0];
-                        console.log(newClanId);
+                            }) Returning id`;
+                        console.log(typeof newClanId);
 
                         await db.guild_characters.updateMany({
                             where: {
