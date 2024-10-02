@@ -269,14 +269,16 @@ export const db = new PrismaClient({
                             })
                         )[0].id;
 
-                        await db.guilds.update({
+                        // ユニークフィールドを更新するため、executeRawを使用しないといけない
+                        await db.$executeRaw`UPDATE guilds SET id = ${newClanId} WHERE id = ${clanId}`;
+                        /* await db.guilds.update({
                             where: {
                                 id: clanId,
                             },
                             data: {
                                 id: newClanId,
                             },
-                        });
+                        }); */
 
                         /* await db.guilds.delete({
                             where: {
