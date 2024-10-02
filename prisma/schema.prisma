@@ -382,6 +382,7 @@ model guild_characters {
     box_claimed      DateTime?   @default(now()) @db.Timestamptz(6)
     treasure_hunt    Int?
     characters       characters? @relation(fields: [character_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
+    guilds           guilds?     @relation(fields: [guild_id], references: [id], onDelete: Cascade, onUpdate: NoAction)
 }
 
 model guild_hunts {
@@ -450,6 +451,7 @@ model guilds {
     pugi_outfits       Int                @default(0)
     tower_mission_page Int?               @default(1)
     tower_rp           Int?               @default(0)
+    guild_characters   guild_characters[]
 }
 
 model kill_logs {
