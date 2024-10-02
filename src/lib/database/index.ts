@@ -243,18 +243,17 @@ export const db = new PrismaClient({
                             return { success: false, message: 'No clan data found.' };
                         }
 
-                        const newClanId: any =
-                            await db.$queryRaw`INSERT INTO guilds (name, created_at, leader_id, main_motto, rank_rp, comment, icon, sub_motto, item_box, event_rp, pugi_name_1, pugi_name_2, pugi_name_3, recruiting, pugi_outfit_1, pugi_outfit_2, pugi_outfit_3, pugi_outfits, tower_mission_page, tower_rp) VALUES (${
-                                originClanData.name
-                            }, ${originClanData.created_at}, ${originClanData.leader_id}, ${originClanData.main_motto}, ${originClanData.rank_rp}, ${originClanData.comment}, decode(${
-                                !originClanData.icon ? null : Buffer.from(Uint8Array.from(originClanData.icon)).toString('base64')
-                            }, 'base64'), ${originClanData.sub_motto}, decode(${
-                                !originClanData.item_box ? null : Buffer.from(Uint8Array.from(originClanData.item_box)).toString('base64')
-                            }, 'base64'), ${originClanData.event_rp}, ${originClanData.pugi_name_1}, ${originClanData.pugi_name_2}, ${originClanData.pugi_name_3}, ${originClanData.recruiting}, ${
-                                originClanData.pugi_outfit_1
-                            }, ${originClanData.pugi_outfit_2}, ${originClanData.pugi_outfit_3}, ${originClanData.pugi_outfits}, ${originClanData.tower_mission_page}, ${
-                                originClanData.tower_rp
-                            }) Returning id`;
+                        // 「Cannot read properties of undefined (reading 'length')」エラーによりqueryRawが使用できない理由はおそらく、bufferかutin8arrayを使用しているため。
+                        // executeRawでは「Returning id」でidを取得できない
+                        await db.$executeRaw`INSERT INTO guilds (name, created_at, leader_id, main_motto, rank_rp, comment, icon, sub_motto, item_box, event_rp, pugi_name_1, pugi_name_2, pugi_name_3, recruiting, pugi_outfit_1, pugi_outfit_2, pugi_outfit_3, pugi_outfits, tower_mission_page, tower_rp) VALUES (${
+                            originClanData.name
+                        }, ${originClanData.created_at}, ${originClanData.leader_id}, ${originClanData.main_motto}, ${originClanData.rank_rp}, ${originClanData.comment}, decode(${
+                            !originClanData.icon ? null : Buffer.from(Uint8Array.from(originClanData.icon)).toString('base64')
+                        }, 'base64'), ${originClanData.sub_motto}, decode(${!originClanData.item_box ? null : Buffer.from(Uint8Array.from(originClanData.item_box)).toString('base64')}, 'base64'), ${
+                            originClanData.event_rp
+                        }, ${originClanData.pugi_name_1}, ${originClanData.pugi_name_2}, ${originClanData.pugi_name_3}, ${originClanData.recruiting}, ${originClanData.pugi_outfit_1}, ${
+                            originClanData.pugi_outfit_2
+                        }, ${originClanData.pugi_outfit_3}, ${originClanData.pugi_outfits}, ${originClanData.tower_mission_page}, ${originClanData.tower_rp})`;
 
                         /* await db.guild_characters.updateMany({
                             where: {
@@ -264,17 +263,18 @@ export const db = new PrismaClient({
                                 guild_id: newClanId,
                             },
                         }); */
-                        console.log(`newClanId: ${newClanId}`);
+                        const newId = await db.$queryRaw`SELECT currval('guilds_id_seq')`;
+                        console.log(`last id: ${newId}`);
                         console.log(`clan_id: ${clan_id}`);
 
-                        await db.guilds.update({
+                        /* await db.guilds.update({
                             where: {
                                 id: clan_id,
                             },
                             data: {
                                 id: newClanId.id,
                             },
-                        });
+                        }); */
 
                         /* await db.guilds.delete({
                             where: {
@@ -282,7 +282,7 @@ export const db = new PrismaClient({
                             },
                         }); */
 
-                        return { success: true, message: newClanId };
+                        return { success: true, message: "newClanId" };
                     } catch (err) {
                         if (err instanceof Error) {
                             return { success: false, message: err.message };
