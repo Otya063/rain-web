@@ -229,48 +229,54 @@ export const db = new PrismaClient({
                 },
             },
             guilds: {
-                async rebuild(clan_id: number): Promise<{
+                async rebuild(
+                    clanId: number,
+                    clanName: string
+                ): Promise<{
                     success: boolean;
                     message: string | number;
                 }> {
                     try {
                         const originClanData = await db.guilds.findFirst({
                             where: {
-                                id: clan_id,
+                                id: clanId,
                             },
                         });
                         if (!originClanData) {
                             return { success: false, message: 'No clan data found.' };
                         }
 
+                        // 「Cannot read properties of undefined (reading 'length')」エラーによりqueryRawは使用できない（cloudflareとの相性？）
+                        // executeRawでは「Returning id」でidを取得できない
+                        await db.$executeRaw`INSERT INTO guilds (name, created_at, leader_id, main_motto, rank_rp, comment, icon, sub_motto, item_box, event_rp, pugi_name_1, pugi_name_2, pugi_name_3, recruiting, pugi_outfit_1, pugi_outfit_2, pugi_outfit_3, pugi_outfits, tower_mission_page, tower_rp) VALUES (${
+                            originClanData.name
+                        }, ${new Date()}, ${originClanData.leader_id}, ${originClanData.main_motto}, ${originClanData.rank_rp}, ${originClanData.comment}, decode(${
+                            !originClanData.icon ? null : Buffer.from(Uint8Array.from(originClanData.icon)).toString('base64')
+                        }, 'base64'), ${originClanData.sub_motto}, decode(${!originClanData.item_box ? null : Buffer.from(Uint8Array.from(originClanData.item_box)).toString('base64')}, 'base64'), ${
+                            originClanData.event_rp
+                        }, ${originClanData.pugi_name_1}, ${originClanData.pugi_name_2}, ${originClanData.pugi_name_3}, ${originClanData.recruiting}, ${originClanData.pugi_outfit_1}, ${
+                            originClanData.pugi_outfit_2
+                        }, ${originClanData.pugi_outfit_3}, ${originClanData.pugi_outfits}, ${originClanData.tower_mission_page}, ${originClanData.tower_rp})`;
+
+                        // インサートしたレコードのidを取得する
                         const newClanId = (
-                            await db.$queryRaw<
-                                { id: number }[]
-                            >`INSERT INTO guilds (name, created_at, leader_id, main_motto, rank_rp, comment, icon, sub_motto, item_box, event_rp, pugi_name_1, pugi_name_2, pugi_name_3, recruiting, pugi_outfit_1, pugi_outfit_2, pugi_outfit_3, pugi_outfits, tower_mission_page, tower_rp) VALUES (${
-                                originClanData.name
-                            }, ${originClanData.created_at}, ${originClanData.leader_id}, ${originClanData.main_motto}, ${originClanData.rank_rp}, ${originClanData.comment}, decode(${
-                                !originClanData.icon ? null : Buffer.from(Uint8Array.from(originClanData.icon)).toString('base64')
-                            }, 'base64'), ${originClanData.sub_motto}, decode(${
-                                !originClanData.item_box ? null : Buffer.from(Uint8Array.from(originClanData.item_box)).toString('base64')
-                            }, 'base64'), ${originClanData.event_rp}, ${originClanData.pugi_name_1}, ${originClanData.pugi_name_2}, ${originClanData.pugi_name_3}, ${originClanData.recruiting}, ${
-                                originClanData.pugi_outfit_1
-                            }, ${originClanData.pugi_outfit_2}, ${originClanData.pugi_outfit_3}, ${originClanData.pugi_outfits}, ${originClanData.tower_mission_page}, ${
-                                originClanData.tower_rp
-                            }) Returning id`
+                            await db.guilds.findMany({
+                                where: {
+                                    name: clanName,
+                                },
+                                orderBy: {
+                                    id: 'desc',
+                                },
+                            })
                         )[0].id;
 
-                        await db.guild_characters.updateMany({
-                            where: {
-                                guild_id: clan_id,
-                            },
-                            data: {
-                                guild_id: newClanId,
-                            },
-                        });
+                        const oneDayLater = new Date(Date.now() + 24 * 60 * 60 * 1000); // 現在時刻から1日後の日時
+                        await db.$executeRaw`UPDATE guild_characters SET guild_id = ${newClanId}, joined_at = ${oneDayLater} WHERE guild_id = ${clanId}`;
 
+                        // 旧クランデータ削除
                         await db.guilds.delete({
                             where: {
-                                id: clan_id,
+                                id: clanId,
                             },
                         });
 
@@ -323,7 +329,7 @@ export class IsCharLogin {
                 },
             });
 
-            const charIds = sessions.map((session) => session.char_id!);
+            const charIds: number[] = sessions.map((session) => session.char_id!);
             if (!charIds.length) {
                 return { check: false, charIds: [] };
             } else {

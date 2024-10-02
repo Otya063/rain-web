@@ -1088,7 +1088,7 @@ const rebuildClan: Action = async ({ request }) => {
         return fail(400, { error: true, message: `Couldn't process because all characters haven't logged out.<br />Logged-In Character's ID: ${result.charIds}` });
     }
 
-    const { success, message } = await db.guilds.rebuild(Number(clan_id));
+    const { success, message } = await db.guilds.rebuild(Number(clan_id), clan_name);
     if (!success) {
         return fail(400, { error: true, message });
     } else {
