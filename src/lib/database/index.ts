@@ -263,8 +263,7 @@ export const db = new PrismaClient({
                                 guild_id: newClanId,
                             },
                         }); */
-                        const newId = await db.$queryRaw`SELECT currval('guilds_id_seq')`;
-                        console.log(`last id: ${newId}`);
+
                         console.log(`clan_id: ${clan_id}`);
 
                         /* await db.guilds.update({
