@@ -250,7 +250,7 @@ export const db = new PrismaClient({
                         // executeRawでは「Returning id」でidを取得できない
                         await db.$executeRaw`INSERT INTO guilds (name, created_at, leader_id, main_motto, rank_rp, comment, icon, sub_motto, item_box, event_rp, pugi_name_1, pugi_name_2, pugi_name_3, recruiting, pugi_outfit_1, pugi_outfit_2, pugi_outfit_3, pugi_outfits, tower_mission_page, tower_rp) VALUES (${
                             originClanData.name
-                        }, ${originClanData.created_at}, ${originClanData.leader_id}, ${originClanData.main_motto}, ${originClanData.rank_rp}, ${originClanData.comment}, decode(${
+                        }, ${new Date()}, ${originClanData.leader_id}, ${originClanData.main_motto}, ${originClanData.rank_rp}, ${originClanData.comment}, decode(${
                             !originClanData.icon ? null : Buffer.from(Uint8Array.from(originClanData.icon)).toString('base64')
                         }, 'base64'), ${originClanData.sub_motto}, decode(${!originClanData.item_box ? null : Buffer.from(Uint8Array.from(originClanData.item_box)).toString('base64')}, 'base64'), ${
                             originClanData.event_rp
@@ -258,6 +258,7 @@ export const db = new PrismaClient({
                             originClanData.pugi_outfit_2
                         }, ${originClanData.pugi_outfit_3}, ${originClanData.pugi_outfits}, ${originClanData.tower_mission_page}, ${originClanData.tower_rp})`;
 
+                        // インサートしたレコードのidを取得する
                         const newClanId = (
                             await db.guilds.findMany({
                                 where: {
@@ -270,20 +271,12 @@ export const db = new PrismaClient({
                         )[0].id;
 
                         await db.$executeRaw`UPDATE guild_characters SET guild_id = ${newClanId} WHERE guild_id = ${clanId}`;
-                        /* await db.guilds.update({
-                            where: {
-                                id: clanId,
-                            },
-                            data: {
-                                id: newClanId,
-                            },
-                        }); */
 
-                        /* await db.guilds.delete({
+                        await db.guilds.delete({
                             where: {
                                 id: clanId,
                             },
-                        }); */
+                        });
 
                         return { success: true, message: newClanId };
                     } catch (err) {
