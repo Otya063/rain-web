@@ -229,21 +229,24 @@ export const db = new PrismaClient({
                 },
             },
             guilds: {
-                async rebuild(clan_id: number): Promise<{
+                async rebuild(
+                    clanId: number,
+                    clanName: string
+                ): Promise<{
                     success: boolean;
                     message: string | number;
                 }> {
                     try {
                         const originClanData = await db.guilds.findFirst({
                             where: {
-                                id: clan_id,
+                                id: clanId,
                             },
                         });
                         if (!originClanData) {
                             return { success: false, message: 'No clan data found.' };
                         }
 
-                        // 「Cannot read properties of undefined (reading 'length')」エラーによりqueryRawが使用できない理由はおそらく、bufferかutin8arrayを使用しているため。
+                        // 「Cannot read properties of undefined (reading 'length')」エラーによりqueryRawは使用できない（cloudflareとの相性？）
                         // executeRawでは「Returning id」でidを取得できない
                         await db.$executeRaw`INSERT INTO guilds (name, created_at, leader_id, main_motto, rank_rp, comment, icon, sub_motto, item_box, event_rp, pugi_name_1, pugi_name_2, pugi_name_3, recruiting, pugi_outfit_1, pugi_outfit_2, pugi_outfit_3, pugi_outfits, tower_mission_page, tower_rp) VALUES (${
                             originClanData.name
@@ -255,33 +258,33 @@ export const db = new PrismaClient({
                             originClanData.pugi_outfit_2
                         }, ${originClanData.pugi_outfit_3}, ${originClanData.pugi_outfits}, ${originClanData.tower_mission_page}, ${originClanData.tower_rp})`;
 
-                        /* await db.guild_characters.updateMany({
+                        const newClanId = (
+                            await db.guilds.findMany({
+                                where: {
+                                    name: clanName,
+                                },
+                                orderBy: {
+                                    id: 'desc',
+                                },
+                            })
+                        )[0].id;
+
+                        await db.guilds.update({
                             where: {
-                                guild_id: clan_id,
+                                id: clanId,
                             },
                             data: {
-                                guild_id: newClanId,
+                                id: newClanId,
                             },
-                        }); */
-
-                        console.log(`clan_id: ${clan_id}`);
-
-                        /* await db.guilds.update({
-                            where: {
-                                id: clan_id,
-                            },
-                            data: {
-                                id: newClanId.id,
-                            },
-                        }); */
+                        });
 
                         /* await db.guilds.delete({
                             where: {
-                                id: clan_id,
+                                id: clanId,
                             },
                         }); */
 
-                        return { success: true, message: "newClanId" };
+                        return { success: true, message: newClanId };
                     } catch (err) {
                         if (err instanceof Error) {
                             return { success: false, message: err.message };
