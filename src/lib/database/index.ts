@@ -270,8 +270,10 @@ export const db = new PrismaClient({
                             })
                         )[0].id;
 
-                        await db.$executeRaw`UPDATE guild_characters SET guild_id = ${newClanId} WHERE guild_id = ${clanId}`;
+                        const oneDayLater = new Date(Date.now() + 24 * 60 * 60 * 1000); // 現在時刻から1日後の日時
+                        await db.$executeRaw`UPDATE guild_characters SET guild_id = ${newClanId}, joined_at = ${oneDayLater} WHERE guild_id = ${clanId}`;
 
+                        // 旧クランデータ削除
                         await db.guilds.delete({
                             where: {
                                 id: clanId,
