@@ -269,8 +269,7 @@ export const db = new PrismaClient({
                             })
                         )[0].id;
 
-                        // ユニークフィールドを更新するため、executeRawを使用しないといけない
-                        await db.$executeRaw`UPDATE guilds SET id = ${newClanId} WHERE id = ${clanId}`;
+                        await db.$executeRaw`UPDATE guild_characters SET guild_id = ${newClanId} WHERE guild_id = ${clanId}`;
                         /* await db.guilds.update({
                             where: {
                                 id: clanId,
