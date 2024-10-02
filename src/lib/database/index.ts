@@ -255,7 +255,6 @@ export const db = new PrismaClient({
                             }, ${originClanData.pugi_outfit_2}, ${originClanData.pugi_outfit_3}, ${originClanData.pugi_outfits}, ${originClanData.tower_mission_page}, ${
                                 originClanData.tower_rp
                             }) Returning id`;
-                        console.log(typeof newClanId);
 
                         await db.guild_characters.updateMany({
                             where: {
