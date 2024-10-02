@@ -264,6 +264,8 @@ export const db = new PrismaClient({
                                 guild_id: newClanId,
                             },
                         }); */
+                        console.log(`newClanId: ${newClanId}`);
+                        console.log(`clan_id: ${clan_id}`);
 
                         await db.guilds.update({
                             where: {
@@ -274,11 +276,11 @@ export const db = new PrismaClient({
                             },
                         });
 
-                        await db.guilds.delete({
+                        /* await db.guilds.delete({
                             where: {
                                 id: clan_id,
                             },
-                        });
+                        }); */
 
                         return { success: true, message: newClanId };
                     } catch (err) {
