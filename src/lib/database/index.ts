@@ -256,12 +256,21 @@ export const db = new PrismaClient({
                                 originClanData.tower_rp
                             }) Returning id`;
 
-                        await db.guild_characters.updateMany({
+                        /* await db.guild_characters.updateMany({
                             where: {
                                 guild_id: clan_id,
                             },
                             data: {
                                 guild_id: newClanId,
+                            },
+                        }); */
+
+                        await db.guilds.update({
+                            where: {
+                                id: clan_id,
+                            },
+                            data: {
+                                id: newClanId,
                             },
                         });
 
