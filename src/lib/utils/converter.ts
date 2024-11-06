@@ -1,6 +1,6 @@
-import { courseJa } from '$i18n/ja/courseData';
-import { courseEn } from '$i18n/en/courseData';
-import type { WeaponType, CourseJaData, CourseEnData } from '$lib/types';
+import { courseJa } from '$i18n/ja/course';
+import { courseEn } from '$i18n/en/course';
+import { type WeaponType, type CourseJaData, type CourseEnData, type DistributionContentsType, DistributionContentsTypeObj, type DistributionType, DistributionTypeObj } from '$lib/types';
 import Encoding from 'encoding-japanese';
 
 /* Get Course by Decimal
@@ -134,7 +134,7 @@ export const getWpnTypeByDec = (dec: number | null, lang: string): WeaponType =>
                     return 'Light Bowgun';
 
                 case 6:
-                    return 'Dual Swords';
+                    return 'Dual Blades';
 
                 case 7:
                     return 'Long Sword';
@@ -178,13 +178,13 @@ export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang:
             // language select
             switch (lang) {
                 case 'ja': {
-                    const { rangedJa } = await import('$i18n/ja/rangedData');
+                    const { rangedJa } = await import('$i18n/ja/ranged');
                     return rangedJa[hex];
                 }
 
                 case 'en': {
-                    const { rangedEn } = await import('$i18n/en/rangedData');
-                    return !rangedEn[hex] ? (await import('$i18n/ja/rangedData')).rangedJa[hex] : rangedEn[hex];
+                    const { rangedEn } = await import('$i18n/en/ranged');
+                    return rangedEn[hex];
                 }
 
                 default: {
@@ -198,13 +198,13 @@ export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang:
             // language select
             switch (lang) {
                 case 'ja': {
-                    const { meleeJa } = await import('$i18n/ja/meleeData');
+                    const { meleeJa } = await import('$i18n/ja/melee');
                     return meleeJa[hex];
                 }
 
                 case 'en': {
-                    const { meleeEn } = await import('$i18n/en/meleeData');
-                    return !meleeEn[hex] ? (await import('$i18n/ja/meleeData')).meleeJa[hex] : meleeEn[hex];
+                    const { meleeEn } = await import('$i18n/en/melee');
+                    return meleeEn[hex];
                 }
 
                 default: {
@@ -310,9 +310,9 @@ export const convHrpToHr = (hrp: number | null): number => {
 };
 
 /**
- * Encode strings in SJIS
- * @param {string} value Character string to be converted
- * @returns {Uint8Array} Uint8Array after conversion
+ * SJISで文字列をエンコードする
+ * @param {string} value 変換対象の文字列
+ * @returns {Uint8Array} 変換後のUint8Array
  */
 export const encodeToShiftJIS = (value: string): Uint8Array => {
     const unicodeArray = Encoding.stringToCode(value);
@@ -322,4 +322,65 @@ export const encodeToShiftJIS = (value: string): Uint8Array => {
     });
 
     return new Uint8Array(encoded);
+};
+
+export const getDistItemsData = async (
+    contentsType: DistributionContentsType
+): Promise<{
+    [key: string]: string;
+}> => {
+    switch (contentsType) {
+        case DistributionContentsTypeObj.Leg: {
+            const { legEn } = await import('$i18n/en/leg');
+            return legEn;
+        }
+
+        case DistributionContentsTypeObj.Head: {
+            const { headEn } = await import('$i18n/en/head');
+            return headEn;
+        }
+
+        case DistributionContentsTypeObj.Chest: {
+            const { chestEn } = await import('$i18n/en/chest');
+            return chestEn;
+        }
+
+        case DistributionContentsTypeObj.Arm: {
+            const { armEn } = await import('$i18n/en/arm');
+            return armEn;
+        }
+
+        case DistributionContentsTypeObj.Waist: {
+            const { waistEn } = await import('$i18n/en/waist');
+            return waistEn;
+        }
+
+        case DistributionContentsTypeObj.Melee: {
+            const { meleeEn } = await import('$i18n/en/melee');
+            return meleeEn;
+        }
+
+        case DistributionContentsTypeObj.Ranged: {
+            const { rangedEn } = await import('$i18n/en/ranged');
+            return rangedEn;
+        }
+
+        case DistributionContentsTypeObj.Item: {
+            const { itemEn } = await import('$i18n/en/item');
+            return itemEn;
+        }
+
+        default: {
+            throw new Error('Invalid contents type.');
+        }
+    }
+};
+
+export const getDistributionType = (type: DistributionType): string => {
+    const entry = Object.entries(DistributionTypeObj).find(([_, value]) => value === type);
+    if (entry) {
+        return entry[0];
+    } else {
+        throw new Error('Invalid distribution type.');
+    }
 };

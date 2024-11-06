@@ -1,6 +1,7 @@
 <script lang="ts">
     import type { ActionData, PageData } from '../../routes/(app)/admin/$types';
     import Clans from '$lib/admin/Clans.svelte';
+    import Distribution from '$lib/admin/Distribution.svelte';
     import LauncherBanner from '$lib/admin/LauncherBanner.svelte';
     import LauncherInformation from '$lib/admin/LauncherInformation.svelte';
     import LauncherSystem from '$lib/admin/LauncherSystem.svelte';
@@ -16,6 +17,7 @@
     const systemData = data.launcherSystem;
     const informationData = data.launcherInformation;
     const launcherBanner = data.launcherBanner;
+    const distributions = data.distributions;
 </script>
 
 {#if $adminTabValue === '' || $adminTabValue === 'system'}
@@ -27,5 +29,14 @@
 {:else if $adminTabValue === 'bnr'}
     <LauncherBanner bind:addBnrMode bind:bnrAddMode createdBnr={form?.createdBnr} {launcherBanner} />
 {:else if $adminTabValue === 'clan'}
-    <Clans paginatedClans={form?.paginatedClans} paginationClanMeta={form?.paginationClanMeta} paginatedAlliances={form?.paginatedAlliances} paginationAllianceMeta={form?.paginationAllianceMeta} clanNames={form?.nameArr} updatedAllianceData={form?.updatedAllianceData} />
+    <Clans
+        paginatedClans={form?.paginatedClans}
+        paginationClanMeta={form?.paginationClanMeta}
+        paginatedAlliances={form?.paginatedAlliances}
+        paginationAllianceMeta={form?.paginationAllianceMeta}
+        clanNames={form?.nameArr}
+        updatedAllianceData={form?.updatedAllianceData}
+    />
+{:else if $adminTabValue === 'distribution'}
+    <Distribution {distributions} />
 {/if}

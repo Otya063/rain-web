@@ -32,6 +32,10 @@
             text: 'Manage Clans',
             icon: 'diversity_3',
         },
+        distribution: {
+            text: 'Manage Distributions',
+            icon: 'package_2',
+        },
     };
 </script>
 

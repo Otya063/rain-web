@@ -209,7 +209,7 @@
 </script>
 
 <h2>
-    <span class="material-icons">person</span>
+    <span class="material-symbols-outlined">person</span>
     User List
 </h2>
 
@@ -304,7 +304,7 @@
                         {#if btnStage === 0}
                             <span in:fade class="loading"></span>
                         {:else if btnStage === 1}
-                            <span in:fade={{ delay: 100 }} class="btn_icon material-icons">search</span>
+                            <span in:fade={{ delay: 100 }} class="btn_icon material-symbols-outlined">search</span>
                             <span in:fade={{ delay: 100 }} class="btn_text">Search</span>
                         {/if}
                     </button>
@@ -360,7 +360,7 @@
                         <dt class="course_list_title">Target User Type (Single Select)</dt>
                         <dd class="course_list">
                             <label class="course_item">
-                                <span class="material-icons-outlined select">radio_button_unchecked</span>
+                                <span class="material-symbols-outlined select">radio_button_unchecked</span>
                                 <input
                                     type="radio"
                                     name="target_u_radio"
@@ -374,7 +374,7 @@
 
                             <div style="width: calc(50% - 20px); margin: 0 10px 6%;">
                                 <label style="cursor: pointer; white-space: nowrap;">
-                                    <span class="material-icons-outlined select" style="font-size: 2.1rem; padding: 0 10px 2px 0;">radio_button_unchecked</span>
+                                    <span class="material-symbols-outlined select" style="font-size: 2.1rem; padding: 0 10px 2px 0;">radio_button_unchecked</span>
                                     <input
                                         type="radio"
                                         name="target_u_radio"
@@ -398,7 +398,7 @@
                             {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
                                 {#if code === 'hlc' || code === 'rhlc' || code === 'frc'}
                                     <label class="course_item">
-                                        <span class="material-icons-outlined hl1">radio_button_unchecked</span>
+                                        <span class="material-symbols-outlined hl1">radio_button_unchecked</span>
                                         <input type="radio" name="hl" value={code} on:change={(e) => onChangeInputElm(e, 'hl1')} />{courseName}
                                     </label>
                                 {/if}
@@ -410,7 +410,7 @@
                             {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
                                 {#if code === 'exc' || code === 'rexc'}
                                     <label class="course_item">
-                                        <span class="material-icons-outlined ex1">radio_button_unchecked</span>
+                                        <span class="material-symbols-outlined ex1">radio_button_unchecked</span>
                                         <input type="radio" name="ex" value={code} on:change={(e) => onChangeInputElm(e, 'ex1')} />{courseName}
                                     </label>
                                 {/if}
@@ -422,7 +422,7 @@
                             {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
                                 {#if code !== 'hlc' && code !== 'rhlc' && code !== 'frc' && code !== 'exc' && code !== 'rexc'}
                                     <label class="course_item" class:disabled_elm={courseName.includes('[Deprecated]')}>
-                                        <span class="material-icons-outlined">check_box_outline_blank</span>
+                                        <span class="material-symbols-outlined">check_box_outline_blank</span>
                                         <input type="checkbox" name={code} on:change={(e) => onChangeInputElm(e)} />{courseName}
                                     </label>
                                 {/if}
@@ -439,7 +439,7 @@
                                 adminCtrlSwitch('courseCtrl');
                             }}
                         >
-                            <span class="btn_icon material-icons">check</span>
+                            <span class="btn_icon material-symbols-outlined">check</span>
                             <span class="btn_text">Save</span>
                         </button>
                     </dl>
@@ -602,7 +602,7 @@
                                 char_name: user.characters.map((character) => character.name || 'Ready to Hunt'),
                             })}
                     >
-                        <span class="btn_icon material-icons">delete</span>
+                        <span class="btn_icon material-symbols-outlined">delete</span>
                         <span class="btn_text">Action</span>
                     </button>
                 </div>
@@ -629,7 +629,7 @@
                                         })}
                                 >
                                     {#if !user.suspended_account.permanent}
-                                        <span class="btn_icon material-icons">restore_from_trash</span>
+                                        <span class="btn_icon material-symbols-outlined">restore_from_trash</span>
                                         <span class="btn_text">Unsuspend</span>
                                     {/if}
                                 </button>
@@ -645,12 +645,12 @@
 
                             {#if $userCtrlPanel[user.id].activeCategories['username']}
                                 <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['username'] = false)}>
-                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['username'] = true)}>
-                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                     <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
@@ -676,7 +676,7 @@
                                                 $userCtrlPanel[user.id].activeCategories['username'] = false;
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>
@@ -690,12 +690,12 @@
 
                             {#if $userCtrlPanel[user.id].activeCategories['password']}
                                 <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['password'] = false)}>
-                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['password'] = true)}>
-                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                     <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
@@ -729,7 +729,7 @@
                                                 $userCtrlPanel[user.id].activeCategories['password'] = false;
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>
@@ -749,12 +749,12 @@
 
                             {#if $userCtrlPanel[user.id].activeCategories['rights']}
                                 <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['rights'] = false)}>
-                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['rights'] = true)}>
-                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                     <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
@@ -770,7 +770,7 @@
                                                 {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
                                                     {#if code === 'hlc' || code === 'rhlc' || code === 'frc'}
                                                         <label class="course_item">
-                                                            <span class="material-icons-outlined hl2">{enabled ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                                            <span class="material-symbols-outlined hl2">{enabled ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                                             <input type="radio" name="hl" value={code} checked={enabled} on:change={(e) => onChangeInputElm(e, 'hl2')} />{courseName}
                                                         </label>
                                                     {/if}
@@ -782,7 +782,7 @@
                                                 {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
                                                     {#if code === 'exc' || code === 'rexc'}
                                                         <label class="course_item">
-                                                            <span class="material-icons-outlined ex2">{enabled ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                                            <span class="material-symbols-outlined ex2">{enabled ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                                             <input type="radio" name="ex" value={code} checked={enabled} on:change={(e) => onChangeInputElm(e, 'ex2')} />{courseName}
                                                         </label>
                                                     {/if}
@@ -794,7 +794,7 @@
                                                 {#each _.sortBy(Object.entries(getCourseByDecimal(user.rights, 'en')), 'id') as [courseName, { enabled, code }]}
                                                     {#if code !== 'hlc' && code !== 'rhlc' && code !== 'frc' && code !== 'exc' && code !== 'rexc'}
                                                         <label class="course_item" class:disabled_elm={courseName.includes('[Deprecated]')}>
-                                                            <span class="material-icons-outlined">{enabled ? 'check_box' : 'check_box_outline_blank'}</span>
+                                                            <span class="material-symbols-outlined">{enabled ? 'check_box' : 'check_box_outline_blank'}</span>
                                                             <input type="checkbox" name={code} checked={enabled} on:change={(e) => onChangeInputElm(e)} />{courseName}
                                                         </label>
                                                     {/if}
@@ -811,7 +811,7 @@
                                                 $userCtrlPanel[user.id].activeCategories['rights'] = false;
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>
@@ -843,12 +843,12 @@
 
                             {#if $userCtrlPanel[user.id].activeCategories['return_expires']}
                                 <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['return_expires'] = false)}>
-                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['return_expires'] = true)}>
-                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                     <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
@@ -880,7 +880,7 @@
                                                 $userCtrlPanel[user.id].activeCategories['return_expires'] = false;
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>
@@ -898,12 +898,12 @@
 
                             {#if $userCtrlPanel[user.id].activeCategories['gacha_premium']}
                                 <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['gacha_premium'] = false)}>
-                                    <span style="margin: 1% 0%;" class="btn_icon material-icons">close</span>
+                                    <span style="margin: 1% 0%;" class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['gacha_premium'] = true)}>
-                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                     <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
@@ -935,7 +935,7 @@
                                                 $userCtrlPanel[user.id].activeCategories['gacha_premium'] = false;
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>
@@ -953,12 +953,12 @@
 
                             {#if $userCtrlPanel[user.id].activeCategories['gacha_trial']}
                                 <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['gacha_trial'] = false)}>
-                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['gacha_trial'] = true)}>
-                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                     <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
@@ -990,7 +990,7 @@
                                                 $userCtrlPanel[user.id].activeCategories['gacha_trial'] = false;
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>
@@ -1008,12 +1008,12 @@
 
                             {#if $userCtrlPanel[user.id].activeCategories['frontier_points']}
                                 <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['frontier_points'] = false)}>
-                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button type="button" class="normal_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['frontier_points'] = true)}>
-                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                     <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
@@ -1045,7 +1045,7 @@
                                                 $userCtrlPanel[user.id].activeCategories['frontier_points'] = false;
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>
@@ -1059,12 +1059,12 @@
 
                             {#if $userCtrlPanel[user.id].activeCategories['psn_id']}
                                 <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['psn_id'] = false)}>
-                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['psn_id'] = true)}>
-                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                     <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
@@ -1089,7 +1089,7 @@
                                                 $userCtrlPanel[user.id].activeCategories['psn_id'] = false;
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>
@@ -1103,12 +1103,12 @@
 
                             {#if $userCtrlPanel[user.id].activeCategories['wiiu_key']}
                                 <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['wiiu_key'] = false)}>
-                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['wiiu_key'] = true)}>
-                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                     <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
@@ -1133,7 +1133,7 @@
                                                 $userCtrlPanel[user.id].activeCategories['wiiu_key'] = false;
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>
@@ -1183,7 +1183,7 @@
                                                         discord_id: character.discord?.discord_id,
                                                     })}
                                             >
-                                                <span class="btn_icon material-icons">link</span>
+                                                <span class="btn_icon material-symbols-outlined">link</span>
                                                 <span class="btn_text">Linked</span>
                                             </button>
                                         {:else}
@@ -1200,7 +1200,7 @@
                                                         char_name: character.name,
                                                     })}
                                             >
-                                                <span class="btn_icon material-icons">link</span>
+                                                <span class="btn_icon material-symbols-outlined">link</span>
                                                 <span class="btn_text">Link</span>
                                             </button>
                                         {/if}
@@ -1243,7 +1243,7 @@
                                                             char_name: character.name,
                                                         })}
                                                 >
-                                                    <span class="btn_icon material-icons">delete</span>
+                                                    <span class="btn_icon material-symbols-outlined">delete</span>
                                                     <span class="btn_text">Deleted</span>
                                                 </button>
                                             {:else}
@@ -1259,7 +1259,7 @@
                                                         })}
                                                     class:disabled_elm={user.characters.length === 1}
                                                 >
-                                                    <span class="btn_icon material-icons">delete</span>
+                                                    <span class="btn_icon material-symbols-outlined">delete</span>
                                                     <span class="btn_text">Delete</span>
                                                 </button>
                                             {/if}
@@ -1398,7 +1398,7 @@
 
                                         {#if $userCtrlPanel[user.id].activeCategories['name']}
                                             <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['name'] = false)}>
-                                                <span class="btn_icon material-icons">close</span>
+                                                <span class="btn_icon material-symbols-outlined">close</span>
                                                 <span class="btn_text">Cancel</span>
                                             </button>
                                         {:else}
@@ -1410,7 +1410,7 @@
                                                     validName = true;
                                                 }}
                                             >
-                                                <span class="btn_icon material-icons">mode_edit</span>
+                                                <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                                 <span class="btn_text">Edit</span>
                                             </button>
                                         {/if}
@@ -1455,7 +1455,7 @@
                                                             onSubmit.set(true);
                                                         }}
                                                     >
-                                                        <span class="btn_icon material-icons">check</span>
+                                                        <span class="btn_icon material-symbols-outlined">check</span>
                                                         <span class="btn_text">Save</span>
                                                     </button>
                                                 </div>
@@ -1472,12 +1472,12 @@
 
                                             {#if $userCtrlPanel[user.id].activeCategories['bounty']}
                                                 <button class="red_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['bounty'] = false)}>
-                                                    <span class="btn_icon material-icons">close</span>
+                                                    <span class="btn_icon material-symbols-outlined">close</span>
                                                     <span class="btn_text">Cancel</span>
                                                 </button>
                                             {:else}
                                                 <button class="normal_btn" type="button" on:click={() => ($userCtrlPanel[user.id].activeCategories['bounty'] = true)}>
-                                                    <span class="btn_icon material-icons">mode_edit</span>
+                                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                                     <span class="btn_text">Edit</span>
                                                 </button>
                                             {/if}
@@ -1509,7 +1509,7 @@
                                                                 $userCtrlPanel[user.id].activeCategories['bounty'] = false;
                                                             }}
                                                         >
-                                                            <span class="btn_icon material-icons">check</span>
+                                                            <span class="btn_icon material-symbols-outlined">check</span>
                                                             <span class="btn_text">Save</span>
                                                         </button>
                                                     </div>
@@ -1525,12 +1525,12 @@
                                         <!-- {#if $userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name}
                                             {#if $userCtrlPanel[user.id].activeCategories['clan']}
                                                 <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['clan'] = false)}>
-                                                    <span class="btn_icon material-icons">close</span>
+                                                    <span class="btn_icon material-symbols-outlined">close</span>
                                                     <span class="btn_text">Cancel</span>
                                                 </button>
                                             {:else}
                                                 <button type="button" class="normal_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['clan'] = true)}>
-                                                    <span class="btn_icon material-icons">mode_edit</span>
+                                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                                     <span class="btn_text">Edit</span>
                                                 </button>
                                             {/if}
@@ -1556,7 +1556,7 @@
                                                             onSubmit.set(true);
                                                         }}
                                                     >
-                                                        <span class="btn_icon material-icons">check</span>
+                                                        <span class="btn_icon material-symbols-outlined">check</span>
                                                         <span class="btn_text">Leave</span>
                                                     </button>
                                                 </div>
@@ -1569,12 +1569,12 @@
                                         <!-- re-upload binary -->
                                         {#if $userCtrlPanel[user.id].activeCategories['reupload_binary']}
                                             <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['reupload_binary'] = false)}>
-                                                <span class="btn_icon material-icons">close</span>
+                                                <span class="btn_icon material-symbols-outlined">close</span>
                                                 <span class="btn_text">Cancel</span>
                                             </button>
                                         {:else}
                                             <button type="button" class="normal_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['reupload_binary'] = true)}>
-                                                <span class="btn_icon material-icons">upload_file</span>
+                                                <span class="btn_icon material-symbols-outlined">upload_file</span>
                                                 <span class="btn_text">Re-upload</span>
                                             </button>
                                         {/if}
@@ -1624,7 +1624,7 @@
                                                             onSubmit.set(true);
                                                         }}
                                                     >
-                                                        <span class="btn_icon material-icons">check</span>
+                                                        <span class="btn_icon material-symbols-outlined">check</span>
                                                         <span class="btn_text">Save</span>
                                                     </button>
                                                 </div>
@@ -1643,7 +1643,7 @@
                                                     char_name: $userCtrlPanel[user.id].selectedChar.name,
                                                 })}
                                         >
-                                            <span class="btn_icon material-icons">cloud_download</span>
+                                            <span class="btn_icon material-symbols-outlined">cloud_download</span>
                                             <span class="btn_text">Download</span>
                                         </button>
                                     </dd>

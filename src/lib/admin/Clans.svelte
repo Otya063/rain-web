@@ -119,7 +119,7 @@
 </script>
 
 <h2>
-    <span class="material-icons">diversity_3</span>
+    <span class="material-symbols-outlined">diversity_3</span>
     Clan List
 </h2>
 
@@ -212,7 +212,7 @@
                         {#if btnStage === 0}
                             <span in:fade class="loading"></span>
                         {:else if btnStage === 1}
-                            <span in:fade={{ delay: 100 }} class="btn_icon material-icons">search</span>
+                            <span in:fade={{ delay: 100 }} class="btn_icon material-symbols-outlined">search</span>
                             <span in:fade={{ delay: 100 }} class="btn_text">Search</span>
                         {/if}
                     </button>
@@ -278,7 +278,7 @@
                         {#if btnStage === 0}
                             <span in:fade class="loading"></span>
                         {:else if btnStage === 1}
-                            <span in:fade={{ delay: 100 }} class="btn_icon material-icons">search</span>
+                            <span in:fade={{ delay: 100 }} class="btn_icon material-symbols-outlined">search</span>
                             <span in:fade={{ delay: 100 }} class="btn_text">Search</span>
                         {/if}
                     </button>
@@ -366,7 +366,7 @@
                                 created_at: clan.created_at,
                             })}
                     >
-                        <span class="btn_icon material-icons">autorenew</span>
+                        <span class="btn_icon material-symbols-outlined">autorenew</span>
                         <span class="btn_text">Rebuild</span>
                     </button>
                 </div>
@@ -607,12 +607,12 @@
 
                             {#if editingId === alliance.id && catTypes['allies']}
                                 <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'allies')}>
-                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button class="normal_btn" type="button" on:click={() => editModeSwitch(alliance.id, 'allies')}>
-                                    <span class="btn_icon material-icons">checklist_rtl</span>
+                                    <span class="btn_icon material-symbols-outlined">checklist_rtl</span>
                                     <span class="btn_text">Set Allies</span>
                                 </button>
                             {/if}
@@ -646,7 +646,7 @@
                                                 }, 100);
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>

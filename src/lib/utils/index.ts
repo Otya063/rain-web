@@ -2,6 +2,7 @@ import type { Locales } from '$i18n/i18n-types';
 
 export * from './admin';
 export * from './converter';
+export * from './distribution';
 export * from './message';
 export * from './modal';
 export * from './scroll';

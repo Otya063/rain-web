@@ -133,7 +133,7 @@
 </script>
 
 <h2>
-    <span class="material-icons">engineering</span>
+    <span class="material-symbols-outlined">engineering</span>
     Servers Maintenance Settings
 </h2>
 <div class="console_contents">
@@ -163,12 +163,12 @@
 
                 {#if catTypes['RainJP']}
                     <button class="red_btn" type="button" on:click={() => editModeSwitch('RainJP')}>
-                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_icon material-symbols-outlined">close</span>
                         <span class="btn_text">Cancel</span>
                     </button>
                 {:else}
                     <button class="normal_btn" type="button" on:click={() => editModeSwitch('RainJP')}>
-                        <span class="btn_icon material-icons">mode_edit</span>
+                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
                         <span class="btn_text">Edit</span>
                     </button>
                 {/if}
@@ -180,14 +180,14 @@
                             <ul class="edit_area_box_parts radio">
                                 <li>
                                     <label for="rain_jp_enable">
-                                        <span class="material-icons-outlined jp">{RainJP ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <span class="material-symbols-outlined jp">{RainJP ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                         <input type="radio" name="RainJP" id="rain_jp_enable" value="true" checked={RainJP} on:change={(e) => onChangeInputElm(e, 'jp')} />
                                         Enable
                                     </label>
                                 </li>
                                 <li>
                                     <label for="rain_jp_disable">
-                                        <span class="material-icons-outlined jp">{!RainJP ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <span class="material-symbols-outlined jp">{!RainJP ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                         <input type="radio" name="RainJP" id="rain_jp_disable" value="false" checked={!RainJP} on:change={(e) => onChangeInputElm(e, 'jp')} />
                                         Disable
                                     </label>
@@ -203,7 +203,7 @@
                                     editModeSwitch('RainJP');
                                 }}
                             >
-                                <span class="btn_icon material-icons">check</span>
+                                <span class="btn_icon material-symbols-outlined">check</span>
                                 <span class="btn_text">Save</span>
                             </button>
                         </div>
@@ -217,12 +217,12 @@
 
                 {#if catTypes['RainUS']}
                     <button class="red_btn" type="button" on:click={() => editModeSwitch('RainUS')}>
-                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_icon material-symbols-outlined">close</span>
                         <span class="btn_text">Cancel</span>
                     </button>
                 {:else}
                     <button class="normal_btn" type="button" on:click={() => editModeSwitch('RainUS')}>
-                        <span class="btn_icon material-icons">mode_edit</span>
+                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
                         <span class="btn_text">Edit</span>
                     </button>
                 {/if}
@@ -234,14 +234,14 @@
                             <ul class="edit_area_box_parts radio">
                                 <li>
                                     <label for="rain_us_enable">
-                                        <span class="material-icons-outlined us">{RainUS ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <span class="material-symbols-outlined us">{RainUS ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                         <input type="radio" name="RainUS" id="rain_us_enable" value="true" checked={RainUS} on:change={(e) => onChangeInputElm(e, 'us')} />
                                         Enable
                                     </label>
                                 </li>
                                 <li>
                                     <label for="rain_us_disable">
-                                        <span class="material-icons-outlined us">{!RainUS ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <span class="material-symbols-outlined us">{!RainUS ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                         <input type="radio" name="RainUS" id="rain_us_disable" value="false" checked={!RainUS} on:change={(e) => onChangeInputElm(e, 'us')} />
                                         Disable
                                     </label>
@@ -257,7 +257,7 @@
                                     editModeSwitch('RainUS');
                                 }}
                             >
-                                <span class="btn_icon material-icons">check</span>
+                                <span class="btn_icon material-symbols-outlined">check</span>
                                 <span class="btn_text">Save</span>
                             </button>
                         </div>
@@ -271,12 +271,12 @@
 
                 {#if catTypes['RainEU']}
                     <button class="red_btn" type="button" on:click={() => editModeSwitch('RainEU')}>
-                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_icon material-symbols-outlined">close</span>
                         <span class="btn_text">Cancel</span>
                     </button>
                 {:else}
                     <button class="normal_btn" type="button" on:click={() => editModeSwitch('RainEU')}>
-                        <span class="btn_icon material-icons">mode_edit</span>
+                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
                         <span class="btn_text">Edit</span>
                     </button>
                 {/if}
@@ -288,14 +288,14 @@
                             <ul class="edit_area_box_parts radio">
                                 <li>
                                     <label for="rain_eu_enable">
-                                        <span class="material-icons-outlined eu">{RainEU ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <span class="material-symbols-outlined eu">{RainEU ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                         <input type="radio" name="RainEU" id="rain_eu_enable" value="true" checked={RainEU} on:change={(e) => onChangeInputElm(e, 'eu')} />
                                         Enable
                                     </label>
                                 </li>
                                 <li>
                                     <label for="rain_eu_disable">
-                                        <span class="material-icons-outlined eu">{!RainEU ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <span class="material-symbols-outlined eu">{!RainEU ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                         <input type="radio" name="RainEU" id="rain_eu_disable" value="false" checked={!RainEU} on:change={(e) => onChangeInputElm(e, 'eu')} />
                                         Disable
                                     </label>
@@ -311,7 +311,7 @@
                                     editModeSwitch('RainEU');
                                 }}
                             >
-                                <span class="btn_icon material-icons">check</span>
+                                <span class="btn_icon material-symbols-outlined">check</span>
                                 <span class="btn_text">Save</span>
                             </button>
                         </div>
@@ -326,14 +326,14 @@
                 <ul class="edit_area_box_parts radio" class:disabled_elm={catTypes.RainJP || catTypes.RainEU || catTypes.RainUS}>
                     <li>
                         <label style="width: 110px;" for="enable_all">
-                            <span class="material-icons-outlined all">radio_button_unchecked</span>
+                            <span class="material-symbols-outlined all">radio_button_unchecked</span>
                             <input type="radio" name="maint_all" id="enable_all" value="true" on:change={(e) => onChangeInputElm(e, 'all')} />
                             Enable All
                         </label>
                     </li>
                     <li>
                         <label style="width: 110px;" for="disable_all">
-                            <span class="material-icons-outlined all">radio_button_checked</span>
+                            <span class="material-symbols-outlined all">radio_button_checked</span>
                             <input type="radio" name="maint_all" id="disable_all" value="false" checked on:change={(e) => onChangeInputElm(e, 'all')} />
                             Disable All
                         </label>
@@ -350,7 +350,7 @@
                         $timeOut && closeMsgDisplay($timeOut);
                     }}
                 >
-                    <span class="btn_icon material-icons">check</span>
+                    <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Save</span>
                 </button>
             </div>
@@ -359,7 +359,7 @@
 </div>
 
 <h2>
-    <span class="material-icons">update</span>
+    <span class="material-symbols-outlined">update</span>
     Launcher Update & Other Settings
 </h2>
 <div class="console_contents">
@@ -389,12 +389,12 @@
 
                 {#if catTypes['update']}
                     <button class="red_btn" type="button" on:click={() => editModeSwitch('update')}>
-                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_icon material-symbols-outlined">close</span>
                         <span class="btn_text">Cancel</span>
                     </button>
                 {:else}
                     <button class="normal_btn" type="button" on:click={() => editModeSwitch('update')}>
-                        <span class="btn_icon material-icons">mode_edit</span>
+                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
                         <span class="btn_text">Edit</span>
                     </button>
                 {/if}
@@ -406,14 +406,14 @@
                             <ul class="edit_area_box_parts radio">
                                 <li>
                                     <label for="update_enable">
-                                        <span class="material-icons-outlined update">{update ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <span class="material-symbols-outlined update">{update ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                         <input type="radio" name="update" id="update_enable" value="true" checked={update} on:change={(e) => onChangeInputElm(e, 'update')} />
                                         Enable
                                     </label>
                                 </li>
                                 <li>
                                     <label for="update_disable">
-                                        <span class="material-icons-outlined update">{!update ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <span class="material-symbols-outlined update">{!update ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                         <input type="radio" name="update" id="update_disable" value="false" checked={!update} on:change={(e) => onChangeInputElm(e, 'update')} />
                                         Disable
                                     </label>
@@ -429,7 +429,7 @@
                                     editModeSwitch('update');
                                 }}
                             >
-                                <span class="btn_icon material-icons">check</span>
+                                <span class="btn_icon material-symbols-outlined">check</span>
                                 <span class="btn_text">Save</span>
                             </button>
                         </div>
@@ -443,12 +443,12 @@
 
                 {#if catTypes['debug']}
                     <button class="red_btn" type="button" on:click={() => editModeSwitch('debug')}>
-                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_icon material-symbols-outlined">close</span>
                         <span class="btn_text">Cancel</span>
                     </button>
                 {:else}
                     <button class="normal_btn" type="button" on:click={() => editModeSwitch('debug')}>
-                        <span class="btn_icon material-icons">mode_edit</span>
+                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
                         <span class="btn_text">Edit</span>
                     </button>
                 {/if}
@@ -460,14 +460,14 @@
                             <ul class="edit_area_box_parts radio">
                                 <li>
                                     <label for="debug_enable">
-                                        <span class="material-icons-outlined debug">{debug ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <span class="material-symbols-outlined debug">{debug ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                         <input type="radio" name="debug" id="debug_enable" value="true" checked={debug} on:change={(e) => onChangeInputElm(e, 'debug')} />
                                         Enable
                                     </label>
                                 </li>
                                 <li>
                                     <label for="debug_disable">
-                                        <span class="material-icons-outlined debug">{!debug ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <span class="material-symbols-outlined debug">{!debug ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                         <input type="radio" name="debug" id="debug_disable" value="false" checked={!debug} on:change={(e) => onChangeInputElm(e, 'debug')} />
                                         Disable
                                     </label>
@@ -483,7 +483,7 @@
                                     editModeSwitch('debug');
                                 }}
                             >
-                                <span class="btn_icon material-icons">check</span>
+                                <span class="btn_icon material-symbols-outlined">check</span>
                                 <span class="btn_text">Save</span>
                             </button>
                         </div>
@@ -499,12 +499,12 @@
 
                 {#if catTypes['client_data']}
                     <button class="red_btn" type="button" on:click={() => editModeSwitch('client_data')}>
-                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_icon material-symbols-outlined">close</span>
                         <span class="btn_text">Cancel</span>
                     </button>
                 {:else}
                     <button class="normal_btn" type="button" on:click={() => editModeSwitch('client_data')}>
-                        <span class="btn_icon material-icons">mode_edit</span>
+                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
                         <span class="btn_text">Edit</span>
                     </button>
                 {/if}
@@ -527,14 +527,14 @@
                             <ul class="edit_area_box_parts radio">
                                 <li>
                                     <label for="update_force">
-                                        <span class="material-icons-outlined force">{client_data[1] === 'force' ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <span class="material-symbols-outlined force">{client_data[1] === 'force' ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                         <input type="radio" name="client_data_1" id="update_force" value="force" checked={client_data[1] === 'force'} on:change={(e) => onChangeInputElm(e, 'force')} />
                                         Force
                                     </label>
                                 </li>
                                 <li>
                                     <label for="update_not_force">
-                                        <span class="material-icons-outlined force">{client_data[1] === 'not_force' ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                                        <span class="material-symbols-outlined force">{client_data[1] === 'not_force' ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
                                         <input
                                             type="radio"
                                             name="client_data_1"
@@ -557,7 +557,7 @@
                                     editModeSwitch('client_data');
                                 }}
                             >
-                                <span class="btn_icon material-icons">check</span>
+                                <span class="btn_icon material-symbols-outlined">check</span>
                                 <span class="btn_text">Save</span>
                             </button>
                         </div>
@@ -571,12 +571,12 @@
 
                 {#if catTypes['rain_admins']}
                     <button class="red_btn" type="button" on:click={() => editModeSwitch('rain_admins')}>
-                        <span class="btn_icon material-icons">close</span>
+                        <span class="btn_icon material-symbols-outlined">close</span>
                         <span class="btn_text">Cancel</span>
                     </button>
                 {:else}
                     <button class="normal_btn" type="button" on:click={() => editModeSwitch('rain_admins')}>
-                        <span class="btn_icon material-icons">mode_edit</span>
+                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
                         <span class="btn_text">Edit</span>
                     </button>
                 {/if}
@@ -602,7 +602,7 @@
                                     editModeSwitch('rain_admins');
                                 }}
                             >
-                                <span class="btn_icon material-icons">check</span>
+                                <span class="btn_icon material-symbols-outlined">check</span>
                                 <span class="btn_text">Save</span>
                             </button>
                         </div>

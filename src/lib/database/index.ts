@@ -5,6 +5,7 @@ import {
     type characters,
     type discord,
     type discord_register,
+    type distribution,
     type launcher_banner,
     type launcher_info,
     type launcher_system,
@@ -619,6 +620,28 @@ class ServerDataManager {
                       web_login_key_mobile: login_key,
                   },
               });
+    }
+
+    /* Distributions
+    ========================================================= */
+    public async getDistributions(): Promise<Omit<distribution, 'data' | 'bot'>[]> {
+        return await db.distribution.findMany({
+            select: {
+                id: true,
+                character_id: true,
+                type: true,
+                deadline: true,
+                event_name: true,
+                description: true,
+                times_acceptable: true,
+                min_hr: true,
+                max_hr: true,
+                min_sr: true,
+                max_sr: true,
+                min_gr: true,
+                max_gr: true,
+            },
+        });
     }
 }
 

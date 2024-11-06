@@ -69,7 +69,7 @@
 
 {#if infoAddMode}
     <h2>
-        <span class="material-icons">post_add</span>
+        <span class="material-symbols-outlined">post_add</span>
         Add New Information Form
     </h2>
     <div class="console_contents">
@@ -139,7 +139,7 @@
 {:else}
     {#each Object.entries($allInformation) as [typename, infoList]}
         <h2 class={underscoreAndLowercase(typename)}>
-            <span class="material-icons">info</span>
+            <span class="material-symbols-outlined">info</span>
             {typename} Information
         </h2>
 

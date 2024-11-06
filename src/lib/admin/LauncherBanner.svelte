@@ -69,7 +69,7 @@
 
 {#if bnrAddMode}
     <h2>
-        <span class="material-icons">post_add</span>
+        <span class="material-symbols-outlined">post_add</span>
         Add New Banner
     </h2>
     <div class="console_contents">
@@ -128,12 +128,12 @@
                     class="blue_btn"
                     type="submit"
                 >
-                    <span class="btn_icon material-icons">check</span>
+                    <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Save</span>
                 </button>
 
                 <button class="red_btn" type="button" on:click={() => addBnrMode(false)}>
-                    <span class="btn_icon material-icons">close</span>
+                    <span class="btn_icon material-symbols-outlined">close</span>
                     <span class="btn_text">Cancel</span>
                 </button>
             </div>
@@ -141,7 +141,7 @@
     </div>
 {:else}
     <h2>
-        <span class="material-icons">newspaper</span>
+        <span class="material-symbols-outlined">newspaper</span>
         Launcher Banner
     </h2>
     <div class="console_contents">
@@ -194,7 +194,7 @@
                                         bnr_name: bnr.bnr_name,
                                     })}
                             >
-                                <span class="btn_icon material-icons">delete</span>
+                                <span class="btn_icon material-symbols-outlined">delete</span>
                                 <span class="btn_text">Delete</span>
                             </button>
                             Banner Data
@@ -211,12 +211,12 @@
 
                             {#if editingId === bnr.id && catTypes['ja_img_src']}
                                 <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'ja_img_src')}>
-                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button class="normal_btn" type="button" on:click={() => editModeSwitch(bnr.id, 'ja_img_src')}>
-                                    <span class="btn_icon material-icons">upload_file</span>
+                                    <span class="btn_icon material-symbols-outlined">upload_file</span>
                                     <span class="btn_text">Re-upload</span>
                                 </button>
                             {/if}
@@ -248,7 +248,7 @@
                                                 }, 100);
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>
@@ -262,12 +262,12 @@
 
                             {#if editingId === bnr.id && catTypes['en_img_src']}
                                 <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'en_img_src')}>
-                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button class="normal_btn" type="button" on:click={() => editModeSwitch(bnr.id, 'en_img_src')}>
-                                    <span class="btn_icon material-icons">upload_file</span>
+                                    <span class="btn_icon material-symbols-outlined">upload_file</span>
                                     <span class="btn_text">Re-upload</span>
                                 </button>
                             {/if}
@@ -299,7 +299,7 @@
                                                 }, 100);
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>
@@ -313,12 +313,12 @@
 
                             {#if editingId === bnr.id && catTypes['bnr_url']}
                                 <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'bnr_url')}>
-                                    <span class="btn_icon material-icons">close</span>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
                                     <span class="btn_text">Cancel</span>
                                 </button>
                             {:else}
                                 <button class="normal_btn" type="button" on:click={() => editModeSwitch(bnr.id, 'bnr_url')}>
-                                    <span class="btn_icon material-icons">mode_edit</span>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                     <span class="btn_text">Edit</span>
                                 </button>
                             {/if}
@@ -347,7 +347,7 @@
                                                 }, 100);
                                             }}
                                         >
-                                            <span class="btn_icon material-icons">check</span>
+                                            <span class="btn_icon material-symbols-outlined">check</span>
                                             <span class="btn_text">Save</span>
                                         </button>
                                     </div>

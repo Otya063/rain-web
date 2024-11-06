@@ -27,10 +27,13 @@ export const load: PageServerLoad = async ({ url, locals: { LL, authUser } }) =>
 
     const launcherBanner: launcher_banner[] = await ServerData.getBannerData();
 
+    const distributions = await ServerData.getDistributions();
+
     return {
         launcherSystem,
         launcherInformation,
         launcherBanner,
+        distributions,
     };
 };
 
@@ -1243,7 +1246,10 @@ const downloadBinary: Action = async ({ request }) => {
             message: 'The binary data has been successfully downloaded.',
         };
     } else {
-        return fail(400, { error: true, message: "The download failed for one of the following reasons:<br />ー The character doesn't exist.<br />ー All binary data are NULL.<br />ー Couldn't access API server." });
+        return fail(400, {
+            error: true,
+            message: "The download failed for one of the following reasons:<br />ー The character doesn't exist.<br />ー All binary data are NULL.<br />ー Couldn't access API server.",
+        });
     }
 };
 
