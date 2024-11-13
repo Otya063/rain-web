@@ -1,7 +1,7 @@
 import type { Articles } from "$lib/types";
 
 export const articles: Articles[] = [
-    // Sign-up Procedure (Discord)
+    // 会員登録手順 (ディスコード)
     {
         lang: 'ja',
         maindir: 'register',
@@ -15,7 +15,7 @@ export const articles: Articles[] = [
         metaTitle: `Register Procedure (Discord)`,
     },
 
-    // Sign-up Procedure (Member Site)
+    // 会員登録手順 (メンバーサイト)
     {
         lang: 'ja',
         maindir: 'register',
@@ -29,7 +29,7 @@ export const articles: Articles[] = [
         metaTitle: `Register Procedure (Member Site)`,
     },
 
-    // How to Start the Game
+    // ゲームの始め方
     {
         lang: 'ja',
         maindir: 'begin',

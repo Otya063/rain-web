@@ -15,10 +15,12 @@
                     {$LL.manual['article'].home['newsDate']()}
                 </span>
             </li>
+
             <li class="news_text">
                 {@html $LL.manual['article'].home['newsText']()}
             </li>
         </ul>
+
         <button class="news_more">
             <span>&#9650;</span>
             {$LL.manual['article'].home['newsMore']()}
@@ -28,10 +30,11 @@
 
 <section class="featured">
     <h2>{$LL.manual['article'].home['featuredTitle']()}</h2>
+
     <ul class="featured_list">
         {#each Object.entries($LL.manual['article'].home['featuredContents']) as [item, { maindir, subdir, alt, text }]}
             <li>
-                <button on:click={(e) => loadArticle(e, $page.url, $locale, `${maindir()}${subdir()}`)}>
+                <button onclick={(e) => loadArticle(e, $page.url, $locale, `${maindir()}${subdir()}`)}>
                     <dl class="featured_items">
                         <dt class="featured_img {item}">
                             <img src="/img/{$locale}/featured/featured_{item}_chara.webp" alt={alt()} />
@@ -46,6 +49,7 @@
 
 <section class="extlink">
     <h2>{$LL.manual['article'].home['extlinkTitle']()}</h2>
+
     <ul class="extlink_list">
         {#each Object.entries($LL.manual['article'].home['extlinkContents']) as [item, { title, alt, target, rel, href, imgChara }]}
             <li class="extlink_items">
@@ -53,11 +57,13 @@
                     <figure class="extlink_frame">
                         <img src="/img/common/extlink/extlink_frame.webp" alt="" />
                     </figure>
+
                     <div class="extlink_text_adj">
                         <div class="extlink_text_content">
                             <p class="extlink_text_title">{title()}</p>
                         </div>
                     </div>
+
                     <figure class="extlink_chara">
                         <img src="/img/common/extlink/{imgChara()}.webp" alt={alt()} />
                     </figure>

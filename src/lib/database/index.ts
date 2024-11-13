@@ -1,5 +1,3 @@
-import { ManageBinary, editName } from './admin';
-import { Buffer } from 'node:buffer';
 import {
     PrismaClient,
     type characters,
@@ -13,12 +11,17 @@ import {
     type users,
 } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
-import { DATABASE_URL } from '$env/static/private';
-import type { InformationType, BinaryTypes } from '$lib/types';
+import { error } from '@sveltejs/kit';
 import _ from 'lodash';
 import { DateTime } from 'luxon';
+import { Buffer } from 'node:buffer';
+import { DATABASE_URL } from '$env/static/private';
+import type { InformationType } from '$lib/types';
 
+/* utils内に定義できない処理をここに書く */
 export * from './admin';
+export * from './binary';
+
 export const db = new PrismaClient({
     datasources: {
         db: {
@@ -36,7 +39,7 @@ export const db = new PrismaClient({
                     reasonType: number,
                     permanent: boolean,
                     zonename: string,
-                    until_at?: string
+                    until_at?: string,
                 ): Promise<{
                     success: boolean;
                     message: string;
@@ -147,29 +150,9 @@ export const db = new PrismaClient({
                 },
             },
             characters: {
-                async editName(
-                    characterId: number,
-                    setName: string,
-                    bountyCoin: number
-                ): Promise<{
-                    success: boolean;
-                    message: string;
-                }> {
-                    return await editName(characterId, setName, bountyCoin);
-                },
-                async setBinary(
-                    characterId: number,
-                    binaryData: { [key in BinaryTypes]: string }
-                ): Promise<{
-                    success: boolean;
-                    message: string;
-                }> {
-                    const manageBinary = new ManageBinary(characterId, binaryData);
-                    return await manageBinary.set();
-                },
                 async remove(
                     characterId: number,
-                    permanent: boolean
+                    permanent: boolean,
                 ): Promise<{
                     success: boolean;
                     message: string;
@@ -232,7 +215,7 @@ export const db = new PrismaClient({
             guilds: {
                 async rebuild(
                     clanId: number,
-                    clanName: string
+                    clanName: string,
                 ): Promise<{
                     success: boolean;
                     message: string | number;
@@ -296,11 +279,16 @@ export const db = new PrismaClient({
         },
     });
 
-/* Check if the Character(s) Is Logged In
-====================================================*/
+/**
+ * キャラクターがログインしているかどうかを確認する
+ */
 export class IsCharLogin {
     constructor(private characterId: number | number[]) {}
 
+    /**
+     * 単一のキャラクターIDに対してログイン状態を確認する
+     * @returns {Promise<boolean>} ログインしている場合はtrue、していない場合はfalseを返す
+     */
     public async checkSingle(): Promise<boolean> {
         if (typeof this.characterId === 'number') {
             const session = await db.sign_sessions.findFirst({
@@ -315,10 +303,14 @@ export class IsCharLogin {
                 return true;
             }
         } else {
-            throw new Error('Can\'t call "checkSingle" with an array of numbers.');
+            error(400, { message: '', message1: undefined, message2: ['Can\'t call "checkSingle" with an array of numbers.'], message3: undefined });
         }
     }
 
+    /**
+     * 複数のキャラクターIDに対してログイン状態を確認する
+     * @returns {Promise<{check: boolean; charIds: number[]}>} ログインしているキャラクターIDの配列と状態を返す
+     */
     public async checkMulti(): Promise<{
         check: boolean;
         charIds: number[];
@@ -337,14 +329,21 @@ export class IsCharLogin {
                 return { check: true, charIds };
             }
         } else {
-            throw new Error('Can\'t call "checkMulti" with a single number');
+            error(400, { message: '', message1: undefined, message2: ['Can\'t call "checkMulti" with a single number'], message3: undefined });
         }
     }
 }
 
+/**
+ *
+ */
 class ServerDataManager {
-    /* Characters
+    /* Character
     ====================================================*/
+    /**
+     * 全てのキャラクターを取得する
+     * @returns {Promise<characters[]>} キャラクターオブジェクトの配列を返す
+     */
     public async getAllCharacters(): Promise<characters[]> {
         return await db.characters.findMany({
             orderBy: {
@@ -353,6 +352,11 @@ class ServerDataManager {
         });
     }
 
+    /**
+     * ユーザーIDに基づいてキャラクターを取得する
+     * @param {number} user_id ユーザーID
+     * @returns {Promise<characters[]>} 指定されたユーザーIDのキャラクター配列を返す
+     */
     public async getCharactersByUserId(user_id: number): Promise<characters[]> {
         return await db.characters.findMany({
             where: {
@@ -366,6 +370,10 @@ class ServerDataManager {
 
     /* Discord (Character)
     ====================================================*/
+    /**
+     * 連携済みの全てのキャラクターを取得する
+     * @returns {Promise<discord[]>} 連携されたキャラクターオブジェクトの配列を返す
+     */
     public async getAllLinkedCharacters(): Promise<discord[]> {
         return await db.discord.findMany({
             orderBy: {
@@ -374,6 +382,11 @@ class ServerDataManager {
         });
     }
 
+    /**
+     * Discord IDに基づいて連携キャラクターを取得する
+     * @param {string} discord_id Discord ID
+     * @returns {Promise<discord | null>} キャラクターが見つかった場合はそのオブジェクト、見つからなかった場合はnullを返す
+     */
     public async getLinkedCharactersByDiscordId(discord_id: string): Promise<discord | null> {
         return await db.discord.findFirst({
             where: {
@@ -382,6 +395,11 @@ class ServerDataManager {
         });
     }
 
+    /**
+     * キャラクターIDに基づいて連携キャラクターを取得する
+     * @param {number} char_id キャラクターID
+     * @returns {Promise<discord | null>} キャラクターが見つかった場合はそのオブジェクト、見つからなかった場合はnullを返す
+     */
     public async getLinkedCharacterByCharId(char_id: number): Promise<discord | null> {
         return await db.discord.findFirst({
             where: {
@@ -392,6 +410,11 @@ class ServerDataManager {
 
     /* Discord Register (User Account)
     ====================================================*/
+    /**
+     * ユーザーIDに基づいて連携されたユーザーを取得する
+     * @param {number} user_id ユーザーID
+     * @returns {Promise<discord_register | null>} ユーザーが見つかった場合はそのオブジェクト、見つからなかった場合はnullを返す
+     */
     public async getLinkedUserByUserId(user_id: number): Promise<discord_register | null> {
         return await db.discord_register.findFirst({
             where: {
@@ -400,6 +423,11 @@ class ServerDataManager {
         });
     }
 
+    /**
+     * Discord IDに基づいて連携されたユーザーを取得する
+     * @param {string} discord_id Discord ID
+     * @returns {Promise<discord_register | null>} ユーザーが見つかった場合はそのオブジェクト、見つからなかった場合はnullを返す
+     */
     public async getLinkedUserByDiscordId(discord_id: string): Promise<discord_register | null> {
         return await db.discord_register.findFirst({
             where: {
@@ -410,6 +438,10 @@ class ServerDataManager {
 
     /* Launcher Banner
     ====================================================*/
+    /**
+     * ランチャーのバナーデータを取得する
+     * @returns {Promise<launcher_banner[]>} バナーオブジェクトの配列を返す
+     */
     public async getBannerData(): Promise<launcher_banner[]> {
         return await db.launcher_banner.findMany({
             orderBy: {
@@ -420,9 +452,14 @@ class ServerDataManager {
 
     /* Launcher Information
     ====================================================*/
+    /**
+     * ランチャーインフォを取得する
+     * @param {InformationType} type インフォの種類
+     * @returns {Promise<launcher_info[] | { [key: string]: launcher_info[] }>} 指定されたインフォのオブジェクトを返す
+     */
     public async getInformation(type: InformationType): Promise<launcher_info[] | { [key: string]: launcher_info[] }> {
+        // 各タイプごとにインフォを取得する
         switch (type) {
-            // important info
             case 'IMP': {
                 return await db.launcher_info.findMany({
                     where: {
@@ -434,7 +471,6 @@ class ServerDataManager {
                 });
             }
 
-            // defects and trobles info
             case 'DNT': {
                 return await db.launcher_info.findMany({
                     where: {
@@ -446,7 +482,6 @@ class ServerDataManager {
                 });
             }
 
-            // management and service info
             case 'MAS': {
                 return await db.launcher_info.findMany({
                     where: {
@@ -458,7 +493,6 @@ class ServerDataManager {
                 });
             }
 
-            // in-game events info
             case 'IGE': {
                 return await db.launcher_info.findMany({
                     where: {
@@ -470,7 +504,6 @@ class ServerDataManager {
                 });
             }
 
-            // updates and maintenance info
             case 'UAM': {
                 return await db.launcher_info.findMany({
                     where: {
@@ -482,7 +515,6 @@ class ServerDataManager {
                 });
             }
 
-            // all info
             case 'ALL': {
                 return {
                     Important: await db.launcher_info.findMany({
@@ -547,6 +579,10 @@ class ServerDataManager {
 
     /* Launcher System
     ====================================================*/
+    /**
+     * ランチャーシステムデータを取得する
+     * @returns {Promise<launcher_system | null>} ランチャーシステムのオブジェクトを返す
+     */
     public async getLauncherSystem(): Promise<launcher_system | null> {
         return await db.launcher_system.findUnique({
             where: {
@@ -557,10 +593,19 @@ class ServerDataManager {
 
     /* Suspended Account
     ====================================================*/
+    /**
+     * 全ての凍結されたアカウントを取得する
+     * @returns {Promise<suspended_account[]>} 凍結アカウントオブジェクトの配列を返す
+     */
     public async getAllSuspendedUsers(): Promise<suspended_account[]> {
         return await db.suspended_account.findMany({});
     }
 
+    /**
+     * ユーザー名に基づいて、凍結されたアカウントを取得する
+     * @param {string} username ユーザー名
+     * @returns {Promise<suspended_account[] | null>} 凍結アカウントオブジェクトの配列を返す
+     */
     public async getSuspendedUsersByUsername(username: string): Promise<suspended_account | null> {
         return await db.suspended_account.findFirst({
             where: {
@@ -569,6 +614,11 @@ class ServerDataManager {
         });
     }
 
+    /**
+     * ユーザーIDに基づいて、凍結されたアカウントを取得する
+     * @param {string} user_id ユーザーID
+     * @returns {Promise<suspended_account[] | null>} 凍結アカウントオブジェクトの配列を返す
+     */
     public async getSuspendedUsersByUserId(user_id: number): Promise<suspended_account | null> {
         return await db.suspended_account.findFirst({
             where: {
@@ -579,6 +629,10 @@ class ServerDataManager {
 
     /* Users
     ====================================================*/
+    /**
+     * 全てのユーザー情報を取得する
+     * @returns {Promise<users[]>} ユーザーオブジェクトの配列を返す
+     */
     public async getAllUsers(): Promise<{ id: number }[]> {
         return await db.users.findMany({
             orderBy: {
@@ -590,6 +644,11 @@ class ServerDataManager {
         });
     }
 
+    /**
+     * ユーザー名に基づいて特定のユーザーを取得する
+     * @param username - 検索するユーザーのユーザー名
+     * @returns 指定されたユーザー名を持つユーザーオブジェクト、存在しない場合はnull
+     */
     public async getUserByUsername(username: string): Promise<users | null> {
         return await db.users.findUnique({
             where: {
@@ -598,6 +657,11 @@ class ServerDataManager {
         });
     }
 
+    /**
+     * ユーザーIDに基づいて特定のユーザーを取得する
+     * @param id - 検索するユーザーのID
+     * @returns 指定されたIDを持つユーザーオブジェクト、存在しない場合はnull
+     */
     public async getUserByUserId(id: number): Promise<users | null> {
         return await db.users.findUnique({
             where: {
@@ -606,6 +670,12 @@ class ServerDataManager {
         });
     }
 
+    /**
+     * 認証トークンに基づいてユーザーを取得する
+     * @param login_key - 認証トークン
+     * @param isMobile - モバイルかどうかを示すフラグ
+     * @returns 指定された認証トークンを持つユーザーオブジェクト、存在しない場合はnull
+     */
     public async getUserByAuthToken(login_key: string, isMobile: boolean): Promise<users | null> {
         return !isMobile
             ? // pc
@@ -624,6 +694,10 @@ class ServerDataManager {
 
     /* Distributions
     ========================================================= */
+    /**
+     * 配布情報のリストを取得する
+     * @returns dataフィールドとbotフィールドを除いた配布情報の配列
+     */
     public async getDistributions(): Promise<Omit<distribution, 'data' | 'bot'>[]> {
         return await db.distribution.findMany({
             select: {

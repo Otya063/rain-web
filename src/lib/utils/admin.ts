@@ -1,6 +1,6 @@
 import type { launcher_banner, launcher_info, users } from '@prisma/client/edge';
-import type { PaginatedUsers, PaginatedCharacter, PaginationMeta, PaginatedClans, PaginatedAlliances } from '$lib/types';
 import { get, writable } from 'svelte/store';
+import type { PaginatedUsers, PaginatedCharacter, PaginationMeta, PaginatedClans, PaginatedAlliances } from '$lib/types';
 
 export const filterUserValue = writable<string>('');
 export const filterUserParam = writable<string>('');
@@ -30,8 +30,13 @@ export const paginatedAlliancesData = writable<PaginatedAlliances[] | null>();
 export const paginationAlliancesMetaData = writable<PaginationMeta>();
 export const clanNameData = writable<string[]>();
 
-/* Upload File
-====================================================*/
+/**
+ * Rain APIを介してファイルをアップロードする
+ * @param {string} origin オリジン（リクエストの発信元）
+ * @param {File} file アップロードするファイル
+ * @param {string} lang 言語コード
+ * @returns {Promise<boolean>} アップロードが成功した場合はtrue、失敗した場合はfalse
+ */
 export const uploadFileViaApi = async (origin: string, file: File, lang: string): Promise<boolean> => {
     const getPresignedUrlResponse = await fetch('https://api.rain-server.com/banner', {
         method: 'POST',
@@ -59,8 +64,13 @@ export const uploadFileViaApi = async (origin: string, file: File, lang: string)
     return uploadToR2Response.ok ? true : false;
 };
 
-/* Delete File
-====================================================*/
+/**
+ * Rain APIを介してファイルを削除する
+ * @param {string} origin オリジン（リクエストの発信元）
+ * @param {string} fileName 削除するファイルの名前
+ * @param {string} lang 言語コード
+ * @returns {Promise<boolean>} 削除が成功した場合はtrue、失敗した場合はfalse
+ */
 export const deleteFileViaApi = async (origin: string, fileName: string, lang: string): Promise<boolean> => {
     const getPresignedUrlResponse = await fetch('https://api.rain-server.com/banner', {
         method: 'DELETE',
@@ -83,23 +93,10 @@ export const deleteFileViaApi = async (origin: string, fileName: string, lang: s
     return deleteToR2Response.ok ? true : false;
 };
 
-/* Show Tooltip When Hovering Weapon Name
-====================================================*/
-export const showTipHoverWpn = (c_id: number): void | false => {
-    const toolTipElm = document.getElementById(String(c_id));
-
-    // for on:mouseleave
-    if (toolTipElm?.classList.contains('wpn_name_hover')) {
-        toolTipElm?.classList.remove('wpn_name_hover');
-
-        return false;
-    }
-
-    toolTipElm?.classList.add('wpn_name_hover');
-};
-
-/* User Control
-====================================================*/
+/**
+ * ユーザー管理パネルを初期化する
+ * @param {PaginatedUsers[]} paginatedUsers ページングされたユーザーリスト
+ */
 export const initUserCtrlPanel = (paginatedUsers: PaginatedUsers[]): void => {
     userCtrlPanel.set({});
     paginatedUsers.forEach((user) => {
@@ -129,6 +126,13 @@ export const initUserCtrlPanel = (paginatedUsers: PaginatedUsers[]): void => {
     });
 };
 
+/**
+ * ユーザー管理パネルを更新する
+ * @param {number} userId 更新対象のユーザーID
+ * @param {number} charId 更新対象のキャラクターID
+ * @param {string} [column] 更新するカラム（任意）
+ * @param {any} [value] 設定する値（任意）
+ */
 export const updateUserCtrlPanel = (userId: number, charId: number, column?: string, value?: any): void => {
     userCtrlPanel.update((data) => {
         const userData = data[userId].userData;
@@ -262,16 +266,4 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
             }
         }
     });
-};
-
-export const setSelectedCharacter = (e: Event): void => {
-    setTimeout(() => {
-        const target = e.target as HTMLElement;
-        const activeChar = target.getElementsByClassName('swiper-slide-active')[0].lastElementChild! as HTMLDivElement;
-        const userId = Number(activeChar.dataset.userid);
-        const charId = Number(activeChar.dataset.charid);
-
-        // update object
-        updateUserCtrlPanel(userId, charId);
-    }, 100);
 };

@@ -1,17 +1,16 @@
 <script lang="ts">
     import type { suspended_account } from '@prisma/client/edge';
+    import { DateTime } from 'luxon';
     import { applyAction, enhance } from '$app/forms';
     import { onSubmit, closeModal, suspendUserData, conv2DArrayToObject, msgClosed, paginatedUsersData, paginationMetaData, timeOut, closeMsgDisplay, userCtrlPanel } from '$lib/utils';
-    import { DateTime } from 'luxon';
 
-    export let suspendedAccount: suspended_account;
-    let permanent: boolean;
-    let stage = $suspendUserData.form_action === 'unsuspendUser' ? 2 : 1;
-    let actionType = 'suspend';
-
-    const onChangeInputElm = () => {
-        document.getElementById('permanent')!.textContent = document.getElementById('permanent')?.textContent === 'check_box_outline_blank' ? 'check_box' : 'check_box_outline_blank';
-    };
+    interface Props {
+        suspendedAccount: suspended_account;
+    }
+    let { suspendedAccount }: Props = $props();
+    let permanent: boolean = $state(false);
+    let stage = $state($suspendUserData.form_action === 'unsuspendUser' ? 2 : 1);
+    let actionType = $state('suspend');
 </script>
 
 <div class="modal">
@@ -25,16 +24,16 @@
                 <ul class="modal_list" style="width: 90%; justify-content: center; justify-items: center;">
                     <li class="modal_list_item">
                         <label style="display: flex; justify-content: center; width: fit-content;">
-                            <span class="material-icons-outlined" style="margin-right: 7px;">{actionType === 'suspend' ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
-                            <input type="radio" checked={actionType === 'suspend'} on:change={() => (actionType = 'suspend')} />
+                            <span class="material-symbols-outlined" style="margin-right: 7px;">{actionType === 'suspend' ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                            <input type="radio" checked={actionType === 'suspend'} onchange={() => (actionType = 'suspend')} />
                             Suspend
                         </label>
                     </li>
 
                     <li class="modal_list_item">
                         <label style="display: flex; justify-content: center; width: fit-content;">
-                            <span class="material-icons-outlined" style="margin-right: 7px;">{actionType !== 'suspend' ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
-                            <input type="radio" checked={actionType !== 'suspend'} on:change={() => (actionType = 'delete')} />
+                            <span class="material-symbols-outlined" style="margin-right: 7px;">{actionType !== 'suspend' ? 'radio_button_checked' : 'radio_button_unchecked'}</span>
+                            <input type="radio" checked={actionType !== 'suspend'} onchange={() => (actionType = 'delete')} />
                             Delete
                         </label>
                     </li>
@@ -45,7 +44,7 @@
                 <button
                     class="blue_btn"
                     type="button"
-                    on:click={() => {
+                    onclick={() => {
                         if (actionType === 'suspend') {
                             $suspendUserData.title = 'Suspend the following user?';
                             $suspendUserData.form_action = 'suspendUser';
@@ -57,11 +56,11 @@
                         stage = 2;
                     }}
                 >
-                    <span class="btn_icon material-icons">check</span>
+                    <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Confirm</span>
                 </button>
-                <button class="red_btn" type="button" on:click={() => closeModal()}>
-                    <span class="btn_icon material-icons">close</span>
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
                     <span class="btn_text">Close</span>
                 </button>
             </div>
@@ -154,8 +153,16 @@
                             <li class="modal_list_item">
                                 <label>
                                     <p>Permanently Suspend</p>
-                                    <span id="permanent" class="material-icons-outlined" style="font-size: 2.1rem;">check_box_outline_blank</span>
-                                    <input type="checkbox" name="permanently_del" on:change={() => onChangeInputElm()} bind:checked={permanent} />
+                                    <span id="permanent" class="material-symbols-outlined" style="font-size: 2.1rem;">check_box_outline_blank</span>
+                                    <input
+                                        type="checkbox"
+                                        name="permanently_del"
+                                        onchange={() => {
+                                            document.getElementById('permanent')!.textContent =
+                                                document.getElementById('permanent')?.textContent === 'check_box_outline_blank' ? 'check_box' : 'check_box_outline_blank';
+                                        }}
+                                        bind:checked={permanent}
+                                    />
                                 </label>
                             </li>
 
@@ -172,7 +179,13 @@
                                     {DateTime.fromJSDate(!$suspendUserData.until_at ? new Date(0) : $suspendUserData.until_at)
                                         .setZone(DateTime.local().zoneName)
                                         .setLocale('en')
-                                        .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                                        .toLocaleString({
+                                            year: 'numeric',
+                                            month: 'long',
+                                            day: '2-digit',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                        })}
                                 </span>
                             </li>
                         {/if}
@@ -192,16 +205,16 @@
                         class="blue_btn"
                         formaction="?/{$suspendUserData.form_action}"
                         type="submit"
-                        on:click={() => {
+                        onclick={() => {
                             onSubmit.set(true);
                             $timeOut && closeMsgDisplay($timeOut);
                         }}
                     >
-                        <span class="btn_icon material-icons">check</span>
+                        <span class="btn_icon material-symbols-outlined">check</span>
                         <span class="btn_text">Yes</span>
                     </button>
-                    <button class="red_btn" type="button" on:click={() => (stage = 1)}>
-                        <span class="btn_icon material-icons">arrow_back</span>
+                    <button class="red_btn" type="button" onclick={() => (stage = 1)}>
+                        <span class="btn_icon material-symbols-outlined">arrow_back</span>
                         <span class="btn_text">Back</span>
                     </button>
                 </div>
@@ -221,7 +234,7 @@
                         if (result.type === 'success') {
                             $userCtrlPanel[id].icon = 'description';
 
-                            // reset search data
+                            // 検索結果リセット
                             paginatedUsersData.set([]);
                             paginationMetaData.set({
                                 hasPrevPage: false,
@@ -263,16 +276,16 @@
                         class="blue_btn"
                         formaction="?/{$suspendUserData.form_action}"
                         type="submit"
-                        on:click={() => {
+                        onclick={() => {
                             onSubmit.set(true);
                             $timeOut && closeMsgDisplay($timeOut);
                         }}
                     >
-                        <span class="btn_icon material-icons">check</span>
+                        <span class="btn_icon material-symbols-outlined">check</span>
                         <span class="btn_text">Yes</span>
                     </button>
-                    <button class="red_btn" type="button" on:click={() => (stage = 1)}>
-                        <span class="btn_icon material-icons">arrow_back</span>
+                    <button class="red_btn" type="button" onclick={() => (stage = 1)}>
+                        <span class="btn_icon material-symbols-outlined">arrow_back</span>
                         <span class="btn_text">Back</span>
                     </button>
                 </div>

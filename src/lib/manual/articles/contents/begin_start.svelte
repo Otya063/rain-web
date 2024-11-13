@@ -1,14 +1,13 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import LL, { locale } from '$i18n/i18n-svelte';
+    import { loadArticle, scrollToElm } from '$lib/utils';
     import HGE from './parts/HGE.svelte';
     import Original from './parts/Original.svelte';
-    import { loadArticle, scrollToElm } from '$lib/utils';
 
+    let activeTabValue = $state('original');
     const articleData = $LL.manual['article'].begin['start'];
     const { 1: spec, 2: install, 3: launcher, 4: start, 5: option } = articleData.section;
-
-    let activeTabValue = 'original';
 </script>
 
 <h1>{articleData.title()}</h1>
@@ -17,10 +16,7 @@
     <ul>
         {#each Object.entries(articleData.outlineContents) as [data_target, text]}
             <li>
-                <!-- svelte-ignore a11y-missing-attribute -->
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <a on:click={(e) => scrollToElm(e)} data-target={data_target}>{text()}</a>
+                <button onclick={(e) => scrollToElm(e)} data-target={data_target}>{text()}</button>
             </li>
         {/each}
     </ul>
@@ -43,11 +39,9 @@
 
     <div class="table_tabs">
         {#each Object.entries(spec.tableData['tabName']) as [arg, text]}
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
-            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-            <p class="table_tabs_item pointer no_select" class:active={activeTabValue === arg} on:click={() => activeTabValue = arg}>
+            <button class="table_tabs_item pointer no_select" class:active={activeTabValue === arg} onclick={() => (activeTabValue = arg)}>
                 {text()}
-            </p>
+            </button>
         {/each}
     </div>
 
@@ -92,7 +86,7 @@
         <p class="intro_box_img"><img src="/img/{$locale}/articles/begin/start/{launcher.introBox['img']()}.png" alt={launcher.introBox['img']()} /></p>
     </div>
 
-    <!-- login area -->
+    <!-- ランチャーメインセクション -->
     <h3>{launcher.h3[1].title()}</h3>
     <div class="half_box">
         <p class="half_box_text">{@html launcher.h3[1].text()}</p>
@@ -107,7 +101,7 @@
         </li>
     </ul>
 
-    <!-- preferences -->
+    <!-- 環境設定 -->
     <h3>{launcher.h3[2].title()}</h3>
     <div class="half_box">
         <p class="half_box_text">{launcher.h3[2].text()}</p>
@@ -131,7 +125,7 @@
         {/each}
     </ul>
 
-    <!-- side_contents -->
+    <!-- ランチャーサイドコンテンツ -->
     <h3>{launcher.h3[3].title()}</h3>
     <div class="half_box">
         <p class="half_box_text">{launcher.h3[3].text()}</p>
@@ -150,10 +144,8 @@
                     <span class="check_contents_list_arrow">＞</span>
                     <span class="check_contents_list_arrow">＞</span>
                 </div>
-                <!-- svelte-ignore a11y-missing-attribute -->
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <a on:click={(e) => loadArticle(e, $page.url, $locale, 'manual/begin/multiple/')} class="check_contents_list_link">{start.checkContents['link']()}</a>
+                
+                <button onclick={(e) => loadArticle(e, $page.url, $locale, 'manual/begin/multiple/')} class="check_contents_list_link">{start.checkContents['link']()}</button>
             </li>
         </ul>
     </div>

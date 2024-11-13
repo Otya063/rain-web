@@ -1,16 +1,11 @@
 <script lang="ts">
-    import { adminTabValue } from '$lib/utils';
     import { onMount } from 'svelte';
+    import { adminTabValue } from '$lib/utils';
 
-    export let closeMenu: () => void;
-
-    // added "active" class to the first list item when first loaded
-    onMount(() => {
-        const firstListItem = document.getElementsByClassName('console_menu_list_item')[0] as HTMLLIElement;
-        firstListItem.classList.add('active');
-    });
-
-    // menu list items for looping
+    interface Props {
+        closeMenu: () => void;
+    }
+    let { closeMenu }: Props = $props();
     const menuList: Record<string, { [key: string]: string }> = {
         system: {
             text: 'Launcher System',
@@ -36,17 +31,21 @@
             text: 'Manage Distributions',
             icon: 'package_2',
         },
-    };
+    }; // メニューリスト
+
+    // 初回ロード時に最初のリスト項目にactiveクラスを追加
+    onMount(() => {
+        const firstListItem = document.getElementsByClassName('console_menu_list_item')[0] as HTMLLIElement;
+        firstListItem.classList.add('active');
+    });
 </script>
 
-<ul class="console_menu_list">
+<div class="console_menu_list">
     {#each Object.entries(menuList) as [type, { text, icon }]}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-        <li
+        <button
             class="console_menu_list_item"
             class:active={type === $adminTabValue}
-            on:click={() => {
+            onclick={() => {
                 adminTabValue.set(type);
                 closeMenu();
             }}
@@ -55,6 +54,6 @@
                 <span class="material-symbols-outlined">{icon}</span>
                 <span class="console_menu_list_text">{text}</span>
             </p>
-        </li>
+        </button>
     {/each}
-</ul>
+</div>

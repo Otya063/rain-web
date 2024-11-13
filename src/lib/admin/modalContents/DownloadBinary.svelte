@@ -2,16 +2,7 @@
     import { applyAction, enhance } from '$app/forms';
     import { onSubmit, closeModal, msgClosed, timeOut, closeMsgDisplay, downloadBinaryData, downloadUserBinary } from '$lib/utils';
 
-    let result: string = 'E';
-    const submitForm = (): void => {
-        const form = document.querySelector<HTMLFormElement>('form[name="download"]');
-        if (form) {
-            // result値更新のため、少し待つ
-            setTimeout(() => {
-                form.requestSubmit();
-            }, 1000);
-        }
-    };
+    let result: string = $state('E');
 </script>
 
 <div class="modal">
@@ -45,19 +36,26 @@
                 <button
                     class="blue_btn"
                     type="button"
-                    on:click={async () => {
+                    onclick={async () => {
                         onSubmit.set(true);
                         $timeOut && closeMsgDisplay($timeOut);
 
                         result = (await downloadUserBinary(String($downloadBinaryData.char_id), $downloadBinaryData.char_name || 'unknown')) ? 'S' : 'E';
-                        submitForm();
+
+                        const form = document.querySelector<HTMLFormElement>('form[name="download"]');
+                        if (form) {
+                            // result値更新のため、少し待つ
+                            setTimeout(() => {
+                                form.requestSubmit();
+                            }, 1000);
+                        }
                     }}
                 >
-                    <span class="btn_icon material-icons">check</span>
+                    <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Yes</span>
                 </button>
-                <button class="red_btn" type="button" on:click={() => closeModal()}>
-                    <span class="btn_icon material-icons">close</span>
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
                     <span class="btn_text">No</span>
                 </button>
             </div>

@@ -1,43 +1,51 @@
 <script lang="ts">
-    import LangSelectArea from './LangSelectArea.svelte';
     import { page } from '$app/stores';
     import LL, { locale } from '$i18n/i18n-svelte';
     import { loadArticle } from '$lib/utils';
+    import LangSelectArea from './LangSelectArea.svelte';
 
-    export let pathname: string;
-    let list = false;
-
-    const onClickLangSel = () => {
-        const btn = document.getElementById('sel_btn') as HTMLButtonElement;
-
-        btn.disabled = true;
-        btn.classList.toggle('lang_arrow_open');
-
-        if (list) {
-            setTimeout(() => {
-                btn.disabled = false;
-            }, 1000);
-            list = false;
-        } else {
-            setTimeout(() => {
-                list = true;
-                btn.disabled = false;
-            }, 700);
-        }
-    };
+    interface Props {
+        pathname: string;
+    }
+    let { pathname }: Props = $props();
+    let list = $state(false);
 </script>
 
 <div class="header_inner">
-    <!-- svelte-ignore a11y-label-has-associated-control -->
-    <label class="header_platform" />
+    <label class="header_platform" for=""></label>
+
     <p class="header_logo">
-        <button class="header_logo_button" on:click={(e) => loadArticle(e, $page.url, $locale, pathname.includes('/manual/') ? 'manual/' : 'root')} />
+        <button class="header_logo_button" aria-label="Back to Home" onclick={(e) => loadArticle(e, $page.url, $locale, pathname.includes('/manual/') ? 'manual/' : 'root')}></button>
     </p>
-    <button id="sel_btn" on:click={() => onClickLangSel()} class="header_language_selector">
-        <span class="global_mark material-icons">public</span>
+
+    <button
+        id="sel_btn"
+        onclick={() => {
+            const btn = document.getElementById('sel_btn') as HTMLButtonElement;
+
+            btn.disabled = true;
+            btn.classList.toggle('lang_arrow_open');
+
+            if (list) {
+                setTimeout(() => {
+                    btn.disabled = false;
+                }, 1000);
+                list = false;
+            } else {
+                setTimeout(() => {
+                    list = true;
+                    btn.disabled = false;
+                }, 700);
+            }
+        }}
+        class="header_language_selector"
+    >
+        <span class="global_mark material-symbols-outlined">public</span>
+        
         <span class="current_language">
             {$LL.header['currentLang']()}
         </span>
+
         <span class="lang_arrow material-symbols-outlined">expand_more</span>
 
         {#if list}

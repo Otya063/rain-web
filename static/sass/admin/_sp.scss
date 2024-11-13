@@ -110,16 +110,21 @@
                 font-weight: 700;
                 user-select: none;
 
-                .material-symbols-outlined {
+                > .material-symbols-outlined {
                     position: absolute;
                     left: 0;
                     bottom: 0;
                     font-size: 4.5rem;
                 }
 
-                // 緑ボタン調整
+                // 緑ボタン調整（インフォ/バナー追加ボタン）
                 .green_btn {
-                    bottom: -140%;
+                    bottom: -120%;
+
+                    // ボタンテキスト（h1のフォントが適応されているので戻す）
+                    .btn_text {
+                        font-family: $font_en;
+                    }
                 }
             }
 
@@ -254,16 +259,13 @@
                 // コンテンツ内リスト
                 .console_contents_list {
                     position: relative;
-                    display: flex;
-                    flex-wrap: wrap;
+                    display: grid;
                     margin-bottom: 3%;
 
                     // コンテンツアイテムタイトル
                     .contents_term {
-                        width: 35%;
                         font-weight: 700;
                         padding: 3% 2% 2%;
-                        border-bottom: 1px gray dashed;
                         user-select: none;
                         overflow-wrap: break-word;
 
@@ -276,15 +278,14 @@
                     // コンテンツアイテム説明
                     .contents_desc {
                         position: relative;
-                        display: flex;
-                        flex-direction: column;
-                        width: 65%;
-                        padding: 3% 2% 2% 0;
+                        padding: 3% 5% 2%;
                         border-bottom: 1px gray dashed;
                         overflow-wrap: break-word;
+                        width: 84vw;
 
                         // 編集モード切り替えボタン
                         .edit_btn {
+                            grid-area: button;
                             position: relative;
                             right: 0;
                             color: darkslategray;
@@ -305,14 +306,14 @@
                             }
                         }
 
-                        // ノーマルボタン調整
+                        // ノーマルボタン調整（右下に）
                         .normal_btn {
-                            margin: 3% 0;
+                            margin: 0 0 3% auto;
                         }
 
-                        // 赤ボタン調整
+                        // 赤ボタン調整（右下に）
                         .red_btn {
-                            margin: 3% 0;
+                            margin: 0 0 3% auto;
                         }
 
                         // クランメンバ－一覧
@@ -321,8 +322,6 @@
                             column-gap: 20px;
                             row-gap: 20px;
                             grid-template-columns: repeat(2, 1fr);
-                            width: 85vw;
-                            margin: 8vh calc(50% - 56vw) 0;
 
                             span {
                                 font-size: 1.3rem;
@@ -331,6 +330,11 @@
                                     font-size: 1.5rem;
                                 }
                             }
+                        }
+
+                        // バナー追加のページでファイル選択inputがオーバフローしないようwidthを親に合わせる
+                        input {
+                            width: 100%;
                         }
                     }
                 }
@@ -352,14 +356,6 @@
                 position: absolute;
                 right: 0;
                 z-index: 1;
-
-                .btn_icon {
-                    padding: 5px;
-                }
-
-                .btn_text {
-                    display: none;
-                }
             }
         }
     }
@@ -452,158 +448,145 @@
     /* フォームスタイル
 ====================================================*/
 
-    // 編集フォーム本体
-    .edit_area_box {
-        margin: 0px calc(50% - 57vw);
-        width: 85vw;
+    .edit_area_box_wrapper {
+        overflow: hidden; // svelte5のバグ？でslideアニメーションがおかしいので、応急措置としてhiddenを適用。PCでは発生しないので不要
 
-        &#change_all_settings,
-        &#admin_control {
-            margin: auto;
-            width: 100%;
-        }
-
-        // フォームdivタグ
-        .edit_area {
-            display: flex;
-            justify-content: space-around;
-            background-color: #f0f1f2;
-
-            // ラジオボタン
-            &.select {
-                align-items: center;
-                padding: 4% 2%;
-
-                // フォーム内タイトル
-                .edit_area_title {
-                    font-size: 1.8rem;
-                }
-            }
-
-            // 通常
-            &.enter {
-                flex-direction: column;
-                padding: 5%;
-
-                // フォーム内タイトル
-                .edit_area_title {
-                    border-bottom: #333333 1px solid;
-                    padding-left: 2%;
-                    margin-bottom: 3%;
-                    font-size: 2.2rem;
-                }
-
-                // 青ボタン調整
-                .blue_btn {
-                    margin: 5% auto 0;
-                }
-            }
-
-            // フォームタイトル
-            .edit_area_title {
-                display: none;
-                font-weight: 700;
-                user-select: none;
-            }
-
-            // フォーム部品
-            .edit_area_box_parts {
-                user-select: none;
+        // 編集フォーム本体
+        .edit_area_box {
+            // フォームdivタグ
+            .edit_area {
+                display: flex;
+                justify-content: space-around;
+                background-color: #f0f1f2;
 
                 // ラジオボタン
-                &.radio {
-                    label {
-                        display: flex;
-                        align-items: center;
-                        justify-content: flex-start;
-                        padding-bottom: 5%;
+                &.select {
+                    align-items: center;
+                    padding: 4% 2%;
 
-                        .material-symbols-outlined {
-                            font-size: 2.1rem;
-                            padding: 0 10px 2px 0;
-                        }
+                    // フォーム内タイトル
+                    .edit_area_title {
+                        font-size: 1.8rem;
+                    }
+                }
+
+                // 通常
+                &.enter {
+                    flex-direction: column;
+                    padding: 5%;
+
+                    // フォーム内タイトル
+                    .edit_area_title {
+                        border-bottom: #333333 1px solid;
+                        padding-left: 2%;
+                        margin-bottom: 3%;
+                        font-size: 2.2rem;
                     }
 
-                    //利用権リストタイトル
-                    .course_list_title {
-                        border-left: 3px solid #808080;
-                        padding: 0 0 0.5% 2%;
-                        border-bottom: 1px dotted;
-                        margin: 0 0 2% 2%;
+                    // 青ボタン調整
+                    .blue_btn {
+                        margin: 5% auto 0;
                     }
+                }
 
-                    // 利用権選択リスト
-                    .course_list {
-                        display: flex;
-                        flex-wrap: wrap;
+                // フォームタイトル
+                .edit_area_title {
+                    display: none;
+                    font-weight: 700;
+                    user-select: none;
+                }
 
-                        // 利用権各項目
-                        .course_item {
-                            width: calc(50% - 20px);
-                            margin: 0 10px 10%;
+                // フォーム部品
+                .edit_area_box_parts {
+                    user-select: none;
+
+                    // ラジオボタン
+                    &.radio {
+                        label {
+                            display: flex;
+                            align-items: center;
+                            justify-content: flex-start;
+                            padding-bottom: 5%;
 
                             .material-symbols-outlined {
                                 font-size: 2.1rem;
                                 padding: 0 10px 2px 0;
                             }
                         }
-                    }
-                }
 
-                // テキスト
-                &.text {
-                    display: flex;
-                    flex-direction: column;
-                    flex-wrap: wrap;
-                    align-items: center;
-                    justify-content: center;
-                    margin: 5% 0;
-
-                    dd {
-                        width: 100%;
-
-                        input {
-                            width: 100%;
+                        //利用権リストタイトル
+                        .course_list_title {
+                            border-left: 3px solid #808080;
+                            padding: 0 0 0.5% 2%;
+                            border-bottom: 1px dotted;
+                            margin: 0 0 2% 2%;
                         }
 
-                        select {
-                            width: 100%;
+                        // 利用権選択リスト
+                        .course_list {
+                            display: flex;
+                            flex-wrap: wrap;
+
+                            // 利用権各項目
+                            .course_item {
+                                width: calc(50% - 20px);
+                                margin: 0 10px 10%;
+
+                                .material-symbols-outlined {
+                                    font-size: 2.1rem;
+                                    padding: 0 10px 2px 0;
+                                }
+                            }
                         }
                     }
-                }
 
-                &.admin_ctrl {
-                    justify-content: space-between;
-                    flex-direction: row;
-                    margin: 0 auto;
+                    // テキスト
+                    &.text {
+                        display: grid;
+                        justify-items: center;
+                        margin-top: 15px;
 
+                        dd {
+                            width: 100%;
+
+                            input {
+                                width: 100%;
+                            }
+
+                            select {
+                                width: 100%;
+                            }
+                        }
+                    }
+
+                    // 管理者コントロールパネル
+                    &.admin_ctrl {
+                        gap: 25px;
+
+                        .filter_form {
+                            #filter_input {
+                                width: 50%;
+                                margin-right: 5%;
+                            }
+
+                            .filter_select {
+                                width: 60%;
+                                margin-left: 3%;
+                            }
+                        }
+
+                        .green_btn {
+                            position: static;
+                            height: 37px;
+                        }
+                    }
+
+                    // ユーザー内コントロールフォーム
                     .filter_form {
-                        width: 80%;
-
-                        #filter_input {
-                            width: 50%;
-                            margin-right: 5%;
-                        }
-
-                        .filter_select {
-                            width: 70%;
-                            margin-left: 3%;
-                        }
+                        position: relative;
+                        display: flex;
+                        justify-content: center;
                     }
-
-                    .green_btn {
-                        position: static;
-                    }
-                }
-
-                // ユーザー内コントロールフォーム
-                .filter_form {
-                    position: relative;
-                    display: flex;
-                    width: 70%;
-                    height: 50px;
-                    justify-content: flex-start;
-                    align-items: center;
                 }
             }
         }
@@ -625,17 +608,18 @@
         font-size: 1.5rem;
         border-radius: 4px;
         transition: all 0.3s;
+        height: 35px;
+        padding: 0 10px 0 8px;
 
         // ボタンアイコン
         .btn_icon {
-            font-size: 2rem;
-            padding: 5px 5px 5px 10px;
+            margin-right: 4px;
         }
 
         // ボタンテキスト
         .btn_text {
-            padding-right: 13px;
-            padding-top: 2px;
+            line-height: 21px;
+            padding-top: 1px; // 一部テキストが上気味なので、下に調整
         }
     }
 
@@ -652,17 +636,18 @@
         font-size: 1.5rem;
         border-radius: 4px;
         transition: all 0.3s;
-        padding: 5px 11px;
+        height: 35px;
+        padding: 0 10px 0 8px;
 
         // ボタンアイコン
         .btn_icon {
-            font-size: 2rem;
-            padding-right: 5px;
+            margin-right: 4px;
         }
 
         // ボタンテキスト
         .btn_text {
-            line-height: 16px;
+            line-height: 21px;
+            padding-top: 1px; // 一部テキストが上気味なので、下に調整
         }
 
         // アクティブ時
@@ -686,17 +671,18 @@
         font-size: 1.5rem;
         border-radius: 4px;
         transition: all 0.3s;
+        height: 35px;
+        padding: 0 10px 0 8px;
 
         // ボタンアイコン
         .btn_icon {
-            font-size: 2rem;
-            padding: 5px 5px 5px 10px;
+            margin-right: 4px;
         }
 
         // ボタンテキスト
         .btn_text {
-            padding-right: 13px;
-            padding-top: 2px;
+            line-height: 21px;
+            padding-top: 1px; // 一部テキストが上気味なので、下に調整
         }
     }
 
@@ -713,20 +699,27 @@
         font-size: 1.6rem;
         border-radius: 4px;
         transition: all 0.3s;
+        height: 35px;
+        padding: 0 10px 0 8px;
+
+        @include landscape {
+            height: 37px;
+        }
 
         // ボタンアイコン
         .btn_icon {
-            padding: 5px 5px 5px 10px;
+            margin-right: 4px;
         }
 
         // ボタンテキスト
         .btn_text {
-            padding-right: 13px;
-            padding-top: 3px;
+            line-height: 21px;
+            padding-top: 1px; // 一部テキストが上気味なので、下に調整
         }
 
         // ロード中
         &.loading_btn {
+            padding: 0; // そのままだと楕円形になってしまうのでpaddingはなし
             border-radius: 50%;
         }
     }
@@ -756,6 +749,7 @@
 
     /* Ban関連
 ====================================================*/
+
     // Ban済ユーザー表示
     .banned_user_container {
         position: absolute;
@@ -844,10 +838,13 @@
             top: 10% !important;
             left: 5% !important;
             z-index: 1;
+            height: auto;
+            padding: 0;
 
             .btn_icon {
                 font-size: 4.6vw;
                 padding: 1vw;
+                margin: 0;
             }
 
             .btn_text {
@@ -872,10 +869,13 @@
             color: #fff;
             background: #de6161;
             border: 1px solid #de6161;
+            height: auto;
+            padding: 0;
 
             .btn_icon {
                 font-size: 4.6vw;
                 padding: 1vw;
+                margin: 0;
             }
 
             .btn_text {
@@ -897,10 +897,13 @@
             top: 10% !important;
             right: 5% !important;
             z-index: 1;
+            height: auto;
+            padding: 0;
 
             .btn_icon {
                 font-size: 4.6vw;
                 padding: 1vw !important;
+                margin: 0;
             }
 
             .btn_text {
@@ -925,10 +928,13 @@
             color: #fff;
             background: #0ad275;
             border: 1px solid #0ad275;
+            height: auto;
+            padding: 0;
 
             .btn_icon {
                 font-size: 4.6vw;
                 padding: 1vw !important;
+                margin: 0;
             }
 
             .btn_text {
@@ -950,12 +956,11 @@
             position: absolute;
             width: 10%;
             height: 35%;
-            top: 46%;
+            top: 47%;
             left: 7%;
             background: url(#{$path_img}/common/char_wpn_icon/NoData.png) no-repeat center center/100%;
 
             @include landscape {
-                width: 10%;
                 top: 42%;
                 left: 6%;
                 background-size: 90% !important;
@@ -974,104 +979,37 @@
         .wpn_text {
             position: absolute;
             font-weight: 700;
-            width: 20%;
+            width: 25%;
             left: 19%;
-            top: 48%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            font-size: 2.6vw;
-
-            @include landscape {
-                width: 23%;
-                left: 18%;
-                top: 44%;
-                font-size: 2.2vw;
-            }
-
-            &.wpn_name_hover {
-                overflow: visible;
-            }
-
-            .wpn_name {
-                transition: all 0.3s;
-
-                &.active {
-                    color: #ffffff;
-                }
-            }
-        }
-
-        // 武器詳細
-        .little_endian {
-            position: absolute;
-            top: 0%;
-            left: -18%;
-            font-weight: 800;
+            top: 46%;
             font-size: 3vw;
-            color: #fb3737;
-            background: #fffbf7;
-            padding: 1% 2%;
-            box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            text-shadow: 0px 2px 8px #a7a7a7;
-            transition: all 0.2s;
-            transform: translate(55%, -100%);
-            opacity: 0;
-            z-index: 2;
 
-            @include landscape {
-                font-size: 2.2vw;
+            p:nth-child(2) {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
 
-            &.wpn_name_hover {
-                transform: translate(55%, 0);
-                opacity: 1;
+            @include landscape {
+                width: 28%;
+                left: 18%;
+                top: 43%;
+                font-size: 2.3vw;
             }
         }
 
-        // プレイヤーHR/GR
-        .rank {
+        // その他情報（HR/GR/プレイ時間）
+        .other_info {
             position: absolute;
-            top: 44%;
-            left: 40%;
+            top: 46%;
+            right: 10%;
             font-weight: 700;
-            font-size: 2.6vw;
+            text-align: right;
+            font-size: 3vw;
 
             @include landscape {
-                top: 41%;
-                left: 42%;
-                font-size: 2.1vw;
-            }
-        }
-
-        // キャラクターID
-        .char_id {
-            position: absolute;
-            top: 57.5%;
-            left: 40%;
-            font-weight: 700;
-            font-size: 2.6vw;
-
-            @include landscape {
-                top: 52.5%;
-                left: 42%;
-                font-size: 2.1vw;
-            }
-        }
-
-        // 最終ログイン日時（UTC）
-        .last_login {
-            position: absolute;
-            top: 70%;
-            left: 40%;
-            font-weight: 700;
-            font-size: 2.6vw;
-
-            @include landscape {
-                top: 64%;
-                left: 42%;
-                font-size: 2.1vw;
+                top: 43%;
+                font-size: 2.3vw;
             }
         }
     }
@@ -1096,7 +1034,9 @@
             transform: translate(-50%, -50%);
             width: 90%;
             background-color: #f4f4f4;
-            box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 7px 20px 0 rgba(0, 0, 0, 0.17);
+            box-shadow:
+                0 5px 8px 0 rgba(0, 0, 0, 0.2),
+                0 7px 20px 0 rgba(0, 0, 0, 0.17);
 
             @include landscape {
                 width: 70%;
@@ -1429,7 +1369,9 @@
             border-radius: 50%;
             margin: 72px auto;
             transform: translateZ(0);
-            animation: loaderAni1 1.7s infinite ease, loaderAni2 1.7s infinite ease;
+            animation:
+                loaderAni1 1.7s infinite ease,
+                loaderAni2 1.7s infinite ease;
             @include loaderKey;
         }
 
@@ -1441,7 +1383,9 @@
             font-weight: 700;
             font-family: 'Noto Serif', serif;
             color: #63ebeb;
-            text-shadow: 0 0 10px rgba(0, 0, 0, 1), 0 0 10px rgba(0, 0, 0, 1);
+            text-shadow:
+                0 0 10px rgba(0, 0, 0, 1),
+                0 0 10px rgba(0, 0, 0, 1);
             transform: translate(-50%, -50%);
         }
     }

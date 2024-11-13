@@ -1,5 +1,10 @@
 <script lang="ts">
     import type { ActionData, PageData } from './$types';
+    import _ from 'lodash';
+    import { onMount } from 'svelte';
+    import { tweened, type Tweened } from 'svelte/motion';
+    import { slide, fade } from 'svelte/transition';
+    import { Svroller } from 'svrollbar';
     import DeleteBnr from '$lib/admin/modalContents/DeleteBnr.svelte';
     import DeleteChar from '$lib/admin/modalContents/DeleteChar.svelte';
     import DeleteInfo from '$lib/admin/modalContents/DeleteInfo.svelte';
@@ -27,25 +32,26 @@
         rebuildClan,
         downloadBinary,
     } from '$lib/utils';
-    import _ from 'lodash';
-    import { onMount } from 'svelte';
-    import { tweened, type Tweened } from 'svelte/motion';
-    import { slide, fade } from 'svelte/transition';
-    import { Svroller } from 'svrollbar';
     import '$scss/style_admin.scss';
 
-    // data from the server
-    export let data: PageData;
-    export let form: ActionData;
-    const { url } = data;
-    const origin = url.origin;
-    let width: Tweened<number>;
-    let loaded = false;
+    interface Props {
+        data: PageData;
+        form: ActionData;
+    }
+    let { data, form }: Props = $props();
+    let loaded = $state(false);
+    let infoAddMode = $state(false);
+    let bnrAddMode = $state(false);
+    let isMobile = $state(false);
+    const width: Tweened<number> = tweened(100);
 
     onMount(() => {
         loaded = true;
         window.addEventListener('touchstart', handleTouchStart);
         window.addEventListener('touchend', handleTouchEnd);
+
+        const mobileDevices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+        isMobile = mobileDevices.test(navigator.userAgent);
 
         // クリーンアップ処理
         return () => {
@@ -54,31 +60,31 @@
         };
     });
 
-    // message display timer bar
-    $: if (form?.success || form?.error) {
-        width = tweened(100);
-        width.set(0, { duration: 5000 });
-        timeOut.set(
-            new Timeout(() => {
-                msgClosed.set(true);
-            }, 5000)
-        );
-    }
+    // メッセージ表示タイマーバー
+    $effect(() => {
+        if (form?.success || form?.error) {
+            width.set(100, { duration: 0 }); // 表示前に再度バー値をマックスにしておく
+            width.set(0, { duration: 5000 });
 
-    // reset display when on:submit is performed while a message is being displayed
-    $: if ($onSubmit && $timeOut && $timeOut.time !== 0) {
-        msgClosed.set(true);
-        $timeOut.stop();
-    }
+            timeOut.set(
+                new Timeout(() => {
+                    msgClosed.set(true);
+                }, 5000),
+            );
+        }
+    });
 
-    let addBnrMode: (enable: boolean) => void;
-    let addInfoMode: (enable: boolean) => void;
-    let infoAddMode: boolean;
-    let bnrAddMode: boolean;
+    // メッセージ表示中にonsubmitが実行された場合、表示をリセット
+    $effect(() => {
+        if ($onSubmit && $timeOut && $timeOut.time !== 0) {
+            msgClosed.set(true);
+            $timeOut.stop();
+        }
+    });
 
     /* モバイル用ナビゲーションメニュー制御
     ========================================================= */
-    let openMobileNav = false;
+    let openMobileNav = $state(false);
     let scrollPosition = 0;
     let touchStartX: number = 0;
     let touchEndX: number = 0;
@@ -90,6 +96,9 @@
      * @param {TouchEvent} e タッチ開始イベント
      */
     const handleTouchStart = (e: TouchEvent): void => {
+        // <swiper-container>内でのタッチ開始の場合はスキップ
+        if (e.target && (e.target as HTMLElement).closest('swiper-container')) return;
+
         touchStartX = e.changedTouches[0].screenX;
     };
 
@@ -99,6 +108,9 @@
      * @param {TouchEvent} e タッチ終了イベント
      */
     const handleTouchEnd = (e: TouchEvent): void => {
+        // <swiper-container>内でのタッチ終了の場合はスキップ
+        if (e.target && (e.target as HTMLElement).closest('swiper-container')) return;
+
         touchEndX = e.changedTouches[0].screenX;
         handleSwipeGesture();
     };
@@ -136,7 +148,7 @@
     };
 
     /**
-     * ナビゲーションメニューを閉じ、画面のスクロールを元に戻す
+     * ナビゲーションメニューを閉じ、画面のスクロールを元に戻す（モバイル限定）
      */
     let closeMenu = (): void => {
         if (openMobileNav) {
@@ -159,17 +171,16 @@
 
 <header>
     <div class="header_inner">
-        <!-- svelte-ignore a11y-label-has-associated-control -->
-        <label class="header_platform" />
+        <label class="header_platform" for=""></label>
         <p class="header_logo">
-            <button class="header_logo_button" on:click={(e) => loadArticle(e, url, 'en', 'root')} />
+            <button class="header_logo_button" aria-label="Back to Home" onclick={(e) => loadArticle(e, data.url, 'en', 'root')}></button>
         </p>
     </div>
 </header>
 
 {#if $onSubmit}
     <div class="saving_overlay">
-        <div class="loader" />
+        <div class="loader"></div>
         <p class="saving_overlay_text">
             {#if $downloadBinary}
                 Downloading...
@@ -180,22 +191,22 @@
     </div>
 {/if}
 
-<div class="background_img" />
+<div class="background_img"></div>
 
 {#if !$msgClosed}
     <div transition:fade class="msg_display" class:success={form?.success} class:error={form?.error}>
         <div class="msg_display_contents">
-            <span class="msg_display_left_bar" />
+            <span class="msg_display_left_bar"></span>
             {#if form?.success}
-                <span class="msg_display_icon material-icons-outlined">check_circle</span>
+                <span class="msg_display_icon material-symbols-outlined">check_circle</span>
                 <p class="msg_display_status">{form?.message}</p>
             {:else if form?.error}
-                <span class="msg_display_icon material-icons-outlined">warning</span>
+                <span class="msg_display_icon material-symbols-outlined">warning</span>
                 <p class="msg_display_status">Error occurred.</p>
-                <button id="error_view_btn" class="error_view_btn material-icons-outlined" class:open={$errDetailMode} on:click={(e) => toggleMsgDetail(e, $timeOut, width)}>expand_more</button>
+                <button id="error_view_btn" class="error_view_btn material-symbols-outlined" class:open={$errDetailMode} onclick={(e) => toggleMsgDetail(e, $timeOut, width)}>expand_more</button>
             {/if}
-            <button id="msg_close_btn" class="msg_close_btn material-icons-outlined" on:click={() => closeMsgDisplay($timeOut)}>highlight_off</button>
-            <div class="timer_bar" style={`width: ${$width}%;`} />
+            <button id="msg_close_btn" class="msg_close_btn material-symbols-outlined" onclick={() => closeMsgDisplay($timeOut)}>highlight_off</button>
+            <div class="timer_bar" style={`width: ${$width}%;`}></div>
         </div>
 
         {#if $errDetailMode}
@@ -243,7 +254,7 @@
 
     <nav class="console_menu" class:open={openMobileNav}>
         <Svroller width="100%" height="100%" alwaysVisible={true}>
-            <AdminMenu bind:closeMenu />
+            <AdminMenu {closeMenu} />
         </Svroller>
     </nav>
 
@@ -253,19 +264,19 @@
             Admin Console
 
             {#if $adminTabValue === 'bnr' && !bnrAddMode}
-                <button class="green_btn" on:click={() => addBnrMode(true)}>
-                    <span class="btn_icon material-icons">add</span>
+                <button class="green_btn" onclick={() => (bnrAddMode = true)}>
+                    <span class="btn_icon material-symbols-outlined">add</span>
                     <span class="btn_text">Add Banner</span>
                 </button>
             {:else if $adminTabValue === 'info' && !infoAddMode}
-                <button class="green_btn" type="button" on:click={() => addInfoMode(true)}>
-                    <span class="btn_icon material-icons">add</span>
-                    <span class="btn_text">Add Information</span>
+                <button class="green_btn" type="button" onclick={() => (infoAddMode = true)}>
+                    <span class="btn_icon material-symbols-outlined">add</span>
+                    <span class="btn_text">Add Info</span>
                 </button>
             {/if}
         </h1>
 
-        <AdminContents bind:addBnrMode bind:addInfoMode bind:infoAddMode bind:bnrAddMode {data} {form} />
+        <AdminContents bind:infoAddMode bind:bnrAddMode {data} {form} bind:isMobile />
     </article>
 </main>
 
@@ -277,36 +288,3 @@
         </p>
     </section>
 </footer>
-
-<svelte:head>
-    <title>Admin Console</title>
-    <meta name="robots" content="noindex,nofollow,noarchive" />
-    <meta name="description" content="This page is for Rain Server administrators only." />
-    <!-- ogp -->
-    <meta property="og:title" content="Admin Console | Rain Server" />
-    <meta property="og:description" content="This page is for Rain Server administrators only." />
-    <meta property="og:image" content="{origin}/img/common/sns_share.webp" />
-    <meta property="og:url" content={String(url)} />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Rain Server" />
-    <!-- twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <!-- favicon -->
-    <link rel="icon" href="/rain-favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <!-- mobile -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <!-- font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" />
-    <!-- icon -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons%7CMaterial+Icons+Outlined" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0..1,0" />
-</svelte:head>

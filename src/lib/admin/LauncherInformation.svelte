@@ -1,45 +1,42 @@
 <script lang="ts">
     import type { launcher_info } from '@prisma/client/edge';
-    import { applyAction, enhance } from '$app/forms';
-    import { allInformation, prepareModal, underscoreAndLowercase, onSubmit, msgClosed, discordLinkConvertor, conv2DArrayToObject, timeOut, closeMsgDisplay } from '$lib/utils';
     import _ from 'lodash';
     import { DateTime } from 'luxon';
     import { slide } from 'svelte/transition';
+    import { applyAction, enhance } from '$app/forms';
+    import { allInformation, prepareModal, underscoreAndLowercase, onSubmit, msgClosed, discordLinkConvertor, conv2DArrayToObject, timeOut, closeMsgDisplay } from '$lib/utils';
 
-    export let informationData: { [key: string]: launcher_info[] };
-    export let createdInfo: launcher_info;
-    export let updatedInfo: launcher_info;
-    allInformation.set(informationData);
-
-    /* Below is the add mode script
-    ====================================================*/
-    export let infoAddMode: boolean;
-    export const addInfoMode = (enable: boolean): void => {
-        if (enable) {
-            // when editing
-            infoAddMode = true;
-        } else {
-            // when finished editing
-            infoAddMode = false;
-        }
-    };
-
-    /* Below is the edit mode script
-    ====================================================*/
-    let editingId: number;
+    interface Props {
+        informationData: { [key: string]: launcher_info[] };
+        createdInfo: launcher_info;
+        updatedInfo: launcher_info;
+        infoAddMode: boolean;
+        isMobile: boolean;
+    }
+    let { informationData, createdInfo, updatedInfo, infoAddMode = $bindable(), isMobile = $bindable() }: Props = $props();
+    let editingId: number = $state(0); // 編集対象のインフォID
     let editMode = false;
-    const catTypes: { [key in keyof Omit<launcher_info, 'id'>]: boolean } = {
+    const catTypes: { [key in keyof Omit<launcher_info, 'id'>]: boolean } = $state({
         title: false,
         url: false,
         type: false,
         created_at: false,
-    };
+    }); // 編集中モードカテゴリー、stateで各項目間を自動で折りたためるように
+    allInformation.set(informationData); // サーバーから取得したインフォデータをストアで管理
 
-    const editModeSwitch = <T extends number, U extends keyof Omit<launcher_info, 'id'>>(id: T, type: U): void | false => {
-        // check if another category type is already in edit mode
+    /**
+     * 編集モードを切り替える
+     *
+     * @template T 編集対象のIDの型（数値）
+     * @template U 切り替え対象のカテゴリのタイプ、`launcher_info`から`id`フィールドを除いたキー
+     * @param {T} id 編集対象のID
+     * @param {U} type 切り替えたいカテゴリのタイプ
+     */
+    const editModeSwitch = <T extends number, U extends keyof Omit<launcher_info, 'id'>>(id: T, type: U): void => {
+        // 別のカテゴリがすでに編集モードかどうかを確認
         const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
 
-        // when another normal_btn is pressed while editing, the editing target is switched
+        // 編集中に別の通常ボタンが押された場合、編集対象を切り替える
         if (activeCat && id !== 0) {
             Object.keys(catTypes).forEach((_key) => {
                 const key = _key as keyof Omit<launcher_info, 'id'>;
@@ -49,17 +46,17 @@
             catTypes[type] = true;
             editingId = id;
 
-            return false;
+            return;
         }
 
-        // toggle true <-> false
+        // 開閉をトグルする（true ⇔ false）
         if (!editMode) {
-            // when editing
+            // 編集を開始する場合
             editMode = true;
             editingId = id;
             catTypes[type] = true;
         } else {
-            // when finished editing
+            // 編集を終了する場合
             editMode = false;
             editingId = id;
             catTypes[type] = false;
@@ -72,6 +69,7 @@
         <span class="material-symbols-outlined">post_add</span>
         Add New Information Form
     </h2>
+
     <div class="console_contents">
         <form
             class="info_add_form"
@@ -85,24 +83,37 @@
 
                     if (result.type === 'success') {
                         $allInformation[createdInfo.type].push(createdInfo);
-                        addInfoMode(false);
+                        infoAddMode = false;
                     }
                 };
             }}
         >
             <dl class="console_contents_list">
-                <dt class="contents_term">Title<br /><span class="contents_term_required">[Required]</span></dt>
+                {#if isMobile}
+                    <dt class="contents_term">Title <span class="contents_term_required">[Required]</span></dt>
+                {:else}
+                    <dt class="contents_term">Title<br /><span class="contents_term_required">[Required]</span></dt>
+                {/if}
+
                 <dd class="contents_desc">
                     <input type="text" name="title" autocomplete="off" />
                 </dd>
 
-                <dt class="contents_term">URL</dt>
+                <dt class="contents_term">Hyperlink</dt>
                 <dd class="contents_desc">
-                    <p class="console_contents_note">* If the domain is "discord.com," the URL will be converted so that the discord app will open automatically.</p>
+                    <p class="console_contents_note">* If the domain is "discord.com," the url will be converted so that the discord app will open automatically.</p>
                     <input type="text" name="url" autocomplete="off" />
                 </dd>
 
-                <dt class="contents_term">Info Type<br /><span class="contents_term_required">[Required]</span></dt>
+                <dt class="contents_term">Date</dt>
+                <dd class="contents_desc">Your local time is automatically converted to UTC and set in the database.</dd>
+
+                {#if isMobile}
+                    <dt class="contents_term">Type <span class="contents_term_required">[Required]</span></dt>
+                {:else}
+                    <dt class="contents_term">Type<br /><span class="contents_term_required">[Required]</span></dt>
+                {/if}
+
                 <dd class="contents_desc">
                     <select name="type">
                         <option hidden disabled selected>Select the type of information here.</option>
@@ -111,135 +122,137 @@
                         {/each}
                     </select>
                 </dd>
-
-                <dt class="contents_term">Date</dt>
-                <dd class="contents_desc">Your local time is automatically converted to UTC and set in the database.</dd>
             </dl>
 
             <div class="group_btns">
                 <button
                     class="blue_btn"
                     type="submit"
-                    on:click={() => {
+                    onclick={() => {
                         onSubmit.set(true);
                         $timeOut && closeMsgDisplay($timeOut);
                     }}
                 >
-                    <span class="btn_icon material-icons">check</span>
+                    <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Save</span>
                 </button>
 
-                <button class="red_btn" type="button" on:click={() => addInfoMode(false)}>
-                    <span class="btn_icon material-icons">close</span>
+                <button class="red_btn" type="button" onclick={() => (infoAddMode = false)}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
                     <span class="btn_text">Cancel</span>
                 </button>
             </div>
         </form>
     </div>
 {:else}
-    {#each Object.entries($allInformation) as [typename, infoList]}
+    {#each Object.entries($allInformation) as [typename, infoArr]}
         <h2 class={underscoreAndLowercase(typename)}>
             <span class="material-symbols-outlined">info</span>
-            {typename} Information
+            {typename} Info
         </h2>
 
         <div class="console_contents">
-            {#if infoList.length === 0}
-                <p class="console_contents_note">No Information Data</p>
-            {:else}
-                {#each _.sortBy(infoList, 'id') as infoItem}
-                    <form
-                        action="?/updateInfoData"
-                        method="POST"
-                        use:enhance={({ formData }) => {
-                            const data = conv2DArrayToObject([...formData.entries()]);
-                            const id = Number(data.info_id);
-                            const type = String(data.info_type);
-                            const column = Object.keys(data)[2];
-                            const value = Object.values(data)[2];
+            {#each _.sortBy(infoArr, 'id') as info}
+                <form
+                    action="?/updateInfoData"
+                    method="POST"
+                    use:enhance={({ formData }) => {
+                        const data = conv2DArrayToObject([...formData.entries()]);
+                        const id = Number(data.info_id);
+                        const type = String(data.info_type);
+                        const column = Object.keys(data)[2];
+                        const value = Object.values(data)[2];
 
-                            return async ({ result }) => {
-                                msgClosed.set(false);
-                                onSubmit.set(false);
-                                await applyAction(result);
+                        return async ({ result }) => {
+                            msgClosed.set(false);
+                            onSubmit.set(false);
+                            await applyAction(result);
 
-                                if (result.type === 'success') {
-                                    // update each value of edited info
-                                    $allInformation[type] = $allInformation[type].map((info) => {
-                                        if (info.id === id)
-                                            return {
-                                                ...info,
-                                                [column]:
-                                                    column !== 'url'
-                                                        ? column === 'created_at'
-                                                            ? DateTime.fromISO(String(value)).toJSDate()
-                                                            : value
-                                                        : !value
-                                                          ? null
-                                                          : value.indexOf('discord.com')
-                                                            ? discordLinkConvertor(value)
-                                                            : value,
-                                            };
+                            if (result.type === 'success') {
+                                // 編集したインフォの各値を更新する
+                                $allInformation[type] = $allInformation[type].map((info) => {
+                                    if (info.id === id)
+                                        return {
+                                            ...info,
+                                            [column]:
+                                                column !== 'url'
+                                                    ? column === 'created_at'
+                                                        ? DateTime.fromISO(String(value)).toJSDate()
+                                                        : value
+                                                    : !value
+                                                      ? null
+                                                      : value.indexOf('discord.com')
+                                                        ? discordLinkConvertor(value)
+                                                        : value,
+                                        };
 
-                                        return info;
-                                    });
+                                    return info;
+                                });
 
-                                    // re-render info based on its type
-                                    if (column === 'type') {
-                                        // delete
-                                        $allInformation[type] = $allInformation[type].filter((i) => i.id !== id);
-                                        // add
-                                        $allInformation[value].push(updatedInfo);
-                                    }
+                                // インフォをタイプに基づいて再レンダリングする
+                                if (column === 'type') {
+                                    // 削除時
+                                    $allInformation[type] = $allInformation[type].filter((i) => i.id !== id);
+                                    // 追加時
+                                    $allInformation[value].push(updatedInfo);
                                 }
-                            };
-                        }}
-                    >
-                        <input type="hidden" name="info_id" value={editingId} />
-                        <input type="hidden" name="info_type" value={infoItem.type} />
-                        <dl class="console_contents_list">
-                            <p class="console_contents_list_title">
-                                <button
-                                    class="red_btn"
-                                    type="button"
-                                    on:click={() =>
-                                        prepareModal('deleteInfo', {
-                                            title: 'Delete the following information?',
-                                            form_action: 'deleteInfoData',
-                                            info_id: infoItem.id,
-                                            info_title: infoItem.title,
-                                            info_url: infoItem.url,
-                                            info_created_at: DateTime.fromJSDate(infoItem.created_at)
-                                                .setZone(DateTime.local().zoneName)
-                                                .setLocale('en')
-                                                .toLocaleString({ year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
-                                            info_type: infoItem.type,
-                                        })}
-                                >
-                                    <span class="btn_icon material-icons">delete</span>
-                                    <span class="btn_text">Delete</span>
+                            }
+                        };
+                    }}
+                >
+                    <input type="hidden" name="info_id" value={editingId} />
+                    <input type="hidden" name="info_type" value={info.type} />
+
+                    <dl class="console_contents_list">
+                        <p class="console_contents_list_title">
+                            <button
+                                class="red_btn"
+                                type="button"
+                                onclick={() =>
+                                    prepareModal('deleteInfo', {
+                                        title: 'Delete the following information?',
+                                        form_action: 'deleteInfoData',
+                                        info_id: info.id,
+                                        info_title: info.title,
+                                        info_url: info.url,
+                                        info_created_at: DateTime.fromJSDate(info.created_at)
+                                            .setZone(DateTime.local().zoneName)
+                                            .setLocale('en')
+                                            .toLocaleString({ year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                                        info_type: info.type,
+                                    })}
+                            >
+                                <span class="btn_icon material-symbols-outlined">delete</span>
+                                <span class="btn_text">Delete</span>
+                            </button>
+
+                            Info Data ({info.id})
+
+                            <input type="hidden" name="info_id" value={info.id} />
+                        </p>
+
+                        <dt class="contents_term">ID</dt>
+                        <dd class="contents_desc">{info.id}</dd>
+
+                        <dt class="contents_term">Title</dt>
+                        <dd class="contents_desc">
+                            {info.title}
+
+                            {#if editingId === info.id && catTypes['title']}
+                                <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'title')}>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
+                                    <span class="btn_text">Cancel</span>
                                 </button>
-                                Information Data
-                                <input type="hidden" name="info_id" value={infoItem.id} />
-                            </p>
+                            {:else}
+                                <button class="normal_btn" type="button" onclick={() => editModeSwitch(info.id, 'title')}>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
 
-                            <dt class="contents_term">Title</dt>
-                            <dd class="contents_desc">
-                                {infoItem.title}
-
-                                {#if editingId === infoItem.id && catTypes['title']}
-                                    <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'title')}>
-                                        <span class="btn_icon material-icons">close</span>
-                                        <span class="btn_text">Cancel</span>
-                                    </button>
-                                {:else}
-                                    <button class="normal_btn" type="button" on:click={() => editModeSwitch(infoItem.id, 'title')}>
-                                        <span class="btn_icon material-icons">mode_edit</span>
-                                        <span class="btn_text">Edit</span>
-                                    </button>
-                                {/if}
-
-                                {#if editingId === infoItem.id && catTypes['title']}
+                            <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+                            <div class="edit_area_box_wrapper">
+                                {#if editingId === info.id && catTypes['title']}
                                     <div transition:slide class="edit_area_box">
                                         <div class="edit_area enter">
                                             <p class="edit_area_title">Change Title</p>
@@ -247,98 +260,98 @@
                                             <dl class="edit_area_box_parts text">
                                                 <dt>Enter new title</dt>
                                                 <dd>
-                                                    <input type="text" name="title" value={infoItem.title} autocomplete="off" />
+                                                    <input type="text" name="title" value={info.title} autocomplete="off" />
                                                 </dd>
                                             </dl>
 
                                             <button
                                                 class="blue_btn"
                                                 type="submit"
-                                                on:click={() => {
+                                                onclick={() => {
                                                     onSubmit.set(true);
                                                     $timeOut && closeMsgDisplay($timeOut);
-                                                    // delay the change by 100ms to prevent "0" during submitting
-                                                    setTimeout(() => {
-                                                        editModeSwitch(0, 'title');
-                                                    }, 100);
+                                                    editModeSwitch(0, 'title');
                                                 }}
                                             >
-                                                <span class="btn_icon material-icons">check</span>
+                                                <span class="btn_icon material-symbols-outlined">check</span>
                                                 <span class="btn_text">Save</span>
                                             </button>
                                         </div>
                                     </div>
                                 {/if}
-                            </dd>
+                            </div>
+                        </dd>
 
-                            <dt class="contents_term">URL</dt>
-                            <dd class="contents_desc">
-                                {infoItem.url}
+                        <dt class="contents_term">Hyperlink</dt>
+                        <dd class="contents_desc">
+                            {info.url ?? 'null'}
 
-                                {#if editingId === infoItem.id && catTypes['url']}
-                                    <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'url')}>
-                                        <span class="btn_icon material-icons">close</span>
-                                        <span class="btn_text">Cancel</span>
-                                    </button>
-                                {:else}
-                                    <button class="normal_btn" type="button" on:click={() => editModeSwitch(infoItem.id, 'url')}>
-                                        <span class="btn_icon material-icons">mode_edit</span>
-                                        <span class="btn_text">Edit</span>
-                                    </button>
-                                {/if}
+                            {#if editingId === info.id && catTypes['url']}
+                                <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'url')}>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" onclick={() => editModeSwitch(info.id, 'url')}>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
 
-                                {#if editingId === infoItem.id && catTypes['url']}
+                            <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+                            <div class="edit_area_box_wrapper">
+                                {#if editingId === info.id && catTypes['url']}
                                     <div transition:slide class="edit_area_box">
                                         <div class="edit_area enter">
-                                            <p class="edit_area_title">Change URL</p>
-                                            <p class="console_contents_note">* If the domain is "discord.com," the URL will be converted so that the discord app will open automatically.</p>
+                                            <p class="edit_area_title">Change Hyperlink</p>
+                                            <p class="console_contents_note">* If the domain is "discord.com," the url will be converted so that the discord app will open automatically.</p>
                                             <dl class="edit_area_box_parts text">
-                                                <dt>Enter new URL</dt>
+                                                <dt>Enter new Hyperlink</dt>
                                                 <dd>
-                                                    <input type="text" name="url" value={infoItem.url} autocomplete="off" />
+                                                    <input type="text" name="url" value={info.url} autocomplete="off" />
                                                 </dd>
                                             </dl>
 
                                             <button
                                                 class="blue_btn"
                                                 type="submit"
-                                                on:click={() => {
+                                                onclick={() => {
                                                     onSubmit.set(true);
                                                     $timeOut && closeMsgDisplay($timeOut);
-                                                    // delay the change by 100ms to prevent "0" during submitting
-                                                    setTimeout(() => {
-                                                        editModeSwitch(0, 'url');
-                                                    }, 100);
+                                                    editModeSwitch(0, 'url');
                                                 }}
                                             >
-                                                <span class="btn_icon material-icons">check</span>
+                                                <span class="btn_icon material-symbols-outlined">check</span>
                                                 <span class="btn_text">Save</span>
                                             </button>
                                         </div>
                                     </div>
                                 {/if}
-                            </dd>
+                            </div>
+                        </dd>
 
-                            <dt class="contents_term">Created At</dt>
-                            <dd class="contents_desc">
-                                {DateTime.fromJSDate(infoItem.created_at)
-                                    .setZone(DateTime.local().zoneName)
-                                    .setLocale('en')
-                                    .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                        <dt class="contents_term">Created At</dt>
+                        <dd class="contents_desc">
+                            {DateTime.fromJSDate(info.created_at)
+                                .setZone(DateTime.local().zoneName)
+                                .setLocale('en')
+                                .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
 
-                                {#if editingId === infoItem.id && catTypes['created_at']}
-                                    <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'created_at')}>
-                                        <span class="btn_icon material-icons">close</span>
-                                        <span class="btn_text">Cancel</span>
-                                    </button>
-                                {:else}
-                                    <button class="normal_btn" type="button" on:click={() => editModeSwitch(infoItem.id, 'created_at')}>
-                                        <span class="btn_icon material-icons">mode_edit</span>
-                                        <span class="btn_text">Edit</span>
-                                    </button>
-                                {/if}
+                            {#if editingId === info.id && catTypes['created_at']}
+                                <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'created_at')}>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" onclick={() => editModeSwitch(info.id, 'created_at')}>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
 
-                                {#if editingId === infoItem.id && catTypes['created_at']}
+                            <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+                            <div class="edit_area_box_wrapper">
+                                {#if editingId === info.id && catTypes['created_at']}
                                     <div transition:slide class="edit_area_box">
                                         <div class="edit_area enter">
                                             <p class="edit_area_title">Change Date</p>
@@ -347,7 +360,7 @@
                                             <dl class="edit_area_box_parts text">
                                                 <dt>Set new date</dt>
                                                 <dd>
-                                                    <input type="datetime-local" name="created_at" value={DateTime.fromJSDate(infoItem.created_at).toFormat("yyyy-MM-dd'T'HH:mm")} />
+                                                    <input type="datetime-local" name="created_at" value={DateTime.fromJSDate(info.created_at).toFormat("yyyy-MM-dd'T'HH:mm")} />
                                                     <input type="hidden" name="zonename" value={DateTime.local().zoneName} />
                                                 </dd>
                                             </dl>
@@ -355,40 +368,40 @@
                                             <button
                                                 class="blue_btn"
                                                 type="submit"
-                                                on:click={() => {
+                                                onclick={() => {
                                                     onSubmit.set(true);
                                                     $timeOut && closeMsgDisplay($timeOut);
-                                                    // delay the change by 100ms to prevent "0" during submitting
-                                                    setTimeout(() => {
-                                                        editModeSwitch(0, 'created_at');
-                                                    }, 100);
+                                                    editModeSwitch(0, 'created_at');
                                                 }}
                                             >
-                                                <span class="btn_icon material-icons">check</span>
+                                                <span class="btn_icon material-symbols-outlined">check</span>
                                                 <span class="btn_text">Save</span>
                                             </button>
                                         </div>
                                     </div>
                                 {/if}
-                            </dd>
+                            </div>
+                        </dd>
 
-                            <dt class="contents_term">Info Type</dt>
-                            <dd class="contents_desc">
-                                {infoItem.type}
+                        <dt class="contents_term">Type</dt>
+                        <dd class="contents_desc">
+                            {info.type}
 
-                                {#if editingId === infoItem.id && catTypes['type']}
-                                    <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'type')}>
-                                        <span class="btn_icon material-icons">close</span>
-                                        <span class="btn_text">Cancel</span>
-                                    </button>
-                                {:else}
-                                    <button class="normal_btn" type="button" on:click={() => editModeSwitch(infoItem.id, 'type')}>
-                                        <span class="btn_icon material-icons">mode_edit</span>
-                                        <span class="btn_text">Edit</span>
-                                    </button>
-                                {/if}
+                            {#if editingId === info.id && catTypes['type']}
+                                <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'type')}>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" onclick={() => editModeSwitch(info.id, 'type')}>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
 
-                                {#if editingId === infoItem.id && catTypes['type']}
+                            <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+                            <div class="edit_area_box_wrapper">
+                                {#if editingId === info.id && catTypes['type']}
                                     <div transition:slide class="edit_area_box">
                                         <div class="edit_area enter">
                                             <p class="edit_area_title">Change Information Type</p>
@@ -406,26 +419,25 @@
                                             <button
                                                 class="blue_btn"
                                                 type="submit"
-                                                on:click={() => {
+                                                onclick={() => {
                                                     onSubmit.set(true);
                                                     $timeOut && closeMsgDisplay($timeOut);
-                                                    // delay the change by 100ms to prevent "0" during submitting
-                                                    setTimeout(() => {
-                                                        editModeSwitch(0, 'type');
-                                                    }, 100);
+                                                    editModeSwitch(0, 'type');
                                                 }}
                                             >
-                                                <span class="btn_icon material-icons">check</span>
+                                                <span class="btn_icon material-symbols-outlined">check</span>
                                                 <span class="btn_text">Save</span>
                                             </button>
                                         </div>
                                     </div>
                                 {/if}
-                            </dd>
-                        </dl>
-                    </form>
-                {/each}
-            {/if}
+                            </div>
+                        </dd>
+                    </dl>
+                </form>
+            {:else}
+                <p class="console_contents_note">No Information Data</p>
+            {/each}
         </div>
     {/each}
 {/if}

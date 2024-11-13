@@ -1,6 +1,6 @@
-import type { DeleteBnrData, DeleteCharacterData, DeleteInfoData, LinkDiscordData, ModalCommonData, ModalType, RebuildClanData, SuspendUserData } from '$lib/types';
 import { error } from '@sveltejs/kit';
 import { writable } from 'svelte/store';
+import type { DeleteBnrData, DeleteCharacterData, DeleteInfoData, LinkDiscordData, ModalCommonData, ModalType, RebuildClanData, SuspendUserData } from '$lib/types';
 
 export const deleteInfo = writable(false);
 export const deleteInfoData = writable<DeleteInfoData>();
@@ -17,8 +17,12 @@ export const rebuildClanData = writable<RebuildClanData>();
 export const downloadBinary = writable(false);
 export const downloadBinaryData = writable<DeleteCharacterData>();
 
-/* prepare modal window data
-====================================================*/
+/**
+ * モーダルウィンドウに表示するデータを準備する
+ *
+ * @param {ModalType} type モーダルの種類
+ * @param {ModalCommonData | DeleteInfoData | DeleteBnrData | SuspendUserData | DeleteCharacterData | LinkDiscordData | RebuildClanData} data モーダルに渡すデータ
+ */
 export const prepareModal = (type: ModalType, data: ModalCommonData | DeleteInfoData | DeleteBnrData | SuspendUserData | DeleteCharacterData | LinkDiscordData | RebuildClanData): void => {
     switch (type) {
         case 'deleteInfo': {
@@ -76,8 +80,9 @@ export const prepareModal = (type: ModalType, data: ModalCommonData | DeleteInfo
     }
 };
 
-/* close modal window
-====================================================*/
+/**
+ * モーダルウィンドウを閉じる
+ */
 export const closeModal = (): void => {
     deleteInfo.set(false);
     suspendUser.set(false);

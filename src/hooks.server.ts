@@ -12,7 +12,7 @@ loadAllLocales();
 const L = i18n();
 
 export const handle: Handle = async ({ event, resolve }) => {
-    // basic auth
+    // Basic認証
     const auth = event.request.headers.get('Authorization');
     if (!event.url.origin.includes('localhost') && !['/admin/', '/maintenance/', '/img/'].some((path) => event.url.pathname.includes(path))) {
         if (auth !== `Basic ${btoa(ADMIN_CREDENTIALS)}`) {
@@ -55,7 +55,7 @@ export const handle: Handle = async ({ event, resolve }) => {
     if (event.url.pathname === '/admin/') {
         console.log('[Admins Normal Browsing.]');
 
-        // when prod env, check if the user is an admin
+        // 本番環境の時、ユーザーが管理者か確認
         if (!event.url.origin.includes('localhost')) {
             const session = event.cookies.get('rainLoginKey');
             if (!session) {

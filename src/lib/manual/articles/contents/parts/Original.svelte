@@ -7,7 +7,7 @@
 </script>
 
 <tr class="table_row">
-    <th class="table_header" scope="row" />
+    <th class="table_header" scope="row"></th>
     <td style="border-left: black solid 2px" class="table_data table_data_center table_header_original">{columnName.min()}</td>
     <td class="table_data table_data_center no_border_right table_header_original">{columnName.rec()}</td>
 </tr>
@@ -33,14 +33,14 @@
     <td class="table_data">
         <ul class="table_data_list">
             {#each Object.values(rowData.cpu['dataMin']) as text}
-                <li class="table_data_list_item">{text()}<span class="table_data_list_item_part" /></li>
+                <li class="table_data_list_item">{text()}<span class="table_data_list_item_part"></span></li>
             {/each}
         </ul>
     </td>
     <td class="table_data no_border_right">
         <ul class="table_data_list">
             {#each Object.values(rowData.cpu['dataRec']) as text}
-                <li class="table_data_list_item">{text()}<span class="table_data_list_item_part" /></li>
+                <li class="table_data_list_item">{text()}<span class="table_data_list_item_part"></span></li>
             {/each}
         </ul>
     </td>
@@ -61,14 +61,14 @@
     <td class="table_data">
         <ul class="table_data_list">
             {#each Object.values(rowData.card['dataMin']) as text}
-                <li class="table_data_list_item">{text()}<span class="table_data_list_item_part" /></li>
+                <li class="table_data_list_item">{text()}<span class="table_data_list_item_part"></span></li>
             {/each}
         </ul>
     </td>
     <td class="table_data no_border_right">
         <ul class="table_data_list">
             {#each Object.values(rowData.card['dataRec']) as text}
-                <li class="table_data_list_item">{text()}<span class="table_data_list_item_part" /></li>
+                <li class="table_data_list_item">{text()}<span class="table_data_list_item_part"></span></li>
             {/each}
         </ul>
     </td>

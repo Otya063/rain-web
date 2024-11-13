@@ -1,7 +1,7 @@
 <script lang="ts">
+    import { DateTime } from 'luxon';
     import { applyAction, enhance } from '$app/forms';
     import { onSubmit, closeModal, rebuildClanData, msgClosed, filterClanValue, filterClanParam, paginatedClansData, paginationClansMetaData, timeOut, closeMsgDisplay } from '$lib/utils';
-    import { DateTime } from 'luxon';
 </script>
 
 <div class="modal">
@@ -15,7 +15,7 @@
                     await applyAction(result);
 
                     if (result.type === 'success') {
-                        // reset clan result
+                        // クラン検索結果をリセット
                         paginatedClansData.set(null);
                         paginationClansMetaData.set({
                             hasPrevPage: false,
@@ -42,17 +42,17 @@
 
                 <ul class="modal_list">
                     <li class="modal_list_item">
-                        <p>Clan ID</p>
+                        <p>ID</p>
                         <span>{$rebuildClanData.clan_id}</span>
                     </li>
 
                     <li class="modal_list_item">
-                        <p>Clan Name</p>
+                        <p>Name</p>
                         <span>{$rebuildClanData.clan_name}</span>
                     </li>
 
                     <li class="modal_list_item">
-                        <p>Clan Leader</p>
+                        <p>Leader</p>
                         <span>{$rebuildClanData.clan_leader}</span>
                     </li>
 
@@ -77,16 +77,16 @@
                     class="blue_btn"
                     formaction="?/{$rebuildClanData.form_action}"
                     type="submit"
-                    on:click={() => {
+                    onclick={() => {
                         onSubmit.set(true);
                         $timeOut && closeMsgDisplay($timeOut);
                     }}
                 >
-                    <span class="btn_icon material-icons">check</span>
+                    <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Yes</span>
                 </button>
-                <button class="red_btn" type="button" on:click={() => closeModal()}>
-                    <span class="btn_icon material-icons">close</span>
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
                     <span class="btn_text">No</span>
                 </button>
             </div>

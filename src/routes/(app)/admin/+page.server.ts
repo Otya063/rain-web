@@ -1,12 +1,12 @@
 import type { Action, Actions, PageServerLoad } from './$types';
 import type { discord, discord_register, launcher_banner, launcher_info, launcher_system, users } from '@prisma/client/edge';
 import { error, fail } from '@sveltejs/kit';
-import { R2_BNR_UNIQUE_URL } from '$env/static/private';
-import ServerData, { db, getPaginatedAllianceData, getPaginatedClanData, getPaginatedUserData, getPaginationMeta, IsCharLogin } from '$lib/database';
-import type { BinaryTypes } from '$lib/types';
-import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi } from '$lib/utils';
 import { DateTime } from 'luxon';
 import { Buffer } from 'node:buffer';
+import { R2_BNR_UNIQUE_URL } from '$env/static/private';
+import ServerData, { db, editName, getPaginatedAllianceData, getPaginatedClanData, getPaginatedUserData, getPaginationMeta, IsCharLogin, ManageBinaryDB } from '$lib/database';
+import type { BinaryTypes } from '$lib/types';
+import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi } from '$lib/utils';
 
 const emptyMsg = 'Input value is empty.';
 const requiredMsg = 'Required field is empty.';
@@ -14,12 +14,12 @@ const requiredMsg = 'Required field is empty.';
 export const load: PageServerLoad = async ({ url, locals: { LL, authUser } }) => {
     const launcherSystem = (await ServerData.getLauncherSystem()) as launcher_system;
 
-    // check rain admin
+    // 管理者確認
     if (!url.origin.includes('localhost')) {
         const isAdmin: boolean = launcherSystem['rain_admins'].includes(authUser.username);
 
         if (!isAdmin) {
-            throw error(403, { message: '', message1: undefined, message2: undefined, message3: LL.error['adminForbidden']() });
+            error(403, { message: '', message1: undefined, message2: undefined, message3: LL.error['adminForbidden']() });
         }
     }
 
@@ -43,11 +43,11 @@ const updateSystemMode: Action = async ({ request }) => {
     let value = Object.values(data)[0] as string;
 
     if ((column === 'client_data_0' || column === 'rain_admins') && !value) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: emptyMsg });
     }
 
-    // client_data column
+    // client_dataカラム
     column === 'client_data_0' && Object.keys(data)[1] === 'client_data_1' && (column = 'client_data');
 
     try {
@@ -115,7 +115,7 @@ const createInfoData: Action = async ({ request }) => {
     let url = data.url as string | null;
 
     if (type === 'Select the type of information here.' || !title) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: requiredMsg });
     }
 
@@ -155,7 +155,7 @@ const updateInfoData: Action = async ({ request }) => {
             case 'title':
             case 'type':
             case 'created_at': {
-                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
                 return fail(400, { error: true, message: emptyMsg });
             }
 
@@ -177,10 +177,10 @@ const updateInfoData: Action = async ({ request }) => {
                             ? DateTime.fromISO(String(value), { zone: zonename }).toString()!
                             : value
                         : !value
-                        ? null
-                        : value.indexOf('discord.com')
-                        ? discordLinkConvertor(value)
-                        : value,
+                          ? null
+                          : value.indexOf('discord.com')
+                            ? discordLinkConvertor(value)
+                            : value,
             },
         });
 
@@ -238,7 +238,7 @@ const courseControl: Action = async ({ request }) => {
                 delete data.specified_u_text;
 
                 if (!Object.keys(data).length) {
-                    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                    await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
                     return fail(400, { error: true, message: 'You must choose at least one course.' });
                 }
 
@@ -252,7 +252,7 @@ const courseControl: Action = async ({ request }) => {
 
             case 'specified': {
                 if (!data.specified_u_text) {
-                    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                    await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
                     return fail(400, { error: true, message: 'Specify the user ID.' });
                 }
 
@@ -260,12 +260,12 @@ const courseControl: Action = async ({ request }) => {
                 delete data.specified_u_text;
 
                 if (!Object.keys(data).length) {
-                    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                    await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
                     return fail(400, { error: true, message: 'You must select at least one course.' });
                 }
 
                 if (ids.length > 10) {
-                    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                    await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
                     return fail(400, { error: true, message: 'No more than 10 users can be specified.' });
                 }
 
@@ -310,11 +310,11 @@ const getPaginatedUsers: Action = async ({ request }) => {
         cursor: number;
     };
 
-    if (!filter_value) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+    if (!filter_value || !filter_param) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: emptyMsg });
     } else if ((filter_param === 'user_id' || filter_param === 'character_id') && isNaN(filter_value as number)) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
     }
 
@@ -353,8 +353,8 @@ const getPaginatedUsers: Action = async ({ request }) => {
                 filter_param === 'username'
                     ? `The user(s) with the entered username (${filter_value}) doesn't exist.`
                     : filter_param === 'character_name'
-                    ? `The character(s) with the entered character name (${filter_value}) doesn't exist.`
-                    : `The account with the entered ${filter_param} (${filter_value}) doesn't exist.`,
+                      ? `The character(s) with the entered character name (${filter_value}) doesn't exist.`
+                      : `The account with the entered ${filter_param} (${filter_value}) doesn't exist.`,
         });
     }
 
@@ -365,11 +365,11 @@ const getPaginatedClans: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const { filter_param, filter_value, status, cursor } = data as { filter_param: 'clan_name' | 'clan_id'; filter_value: string | number; status: string; cursor: number };
 
-    if (!filter_value) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+    if (!filter_value || !filter_param) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: emptyMsg });
     } else if (filter_param === 'clan_id' && isNaN(filter_value as number)) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
     }
 
@@ -415,11 +415,11 @@ const getPaginatedAlliances: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const { filter_param, filter_value, status, cursor } = data as { filter_param: 'alliance_name' | 'alliance_id'; filter_value: string | number; status: string; cursor: number };
 
-    if (!filter_value) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+    if (!filter_value || !filter_param) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: emptyMsg });
     } else if (filter_param === 'alliance_id' && isNaN(filter_value as number)) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
     }
 
@@ -484,7 +484,7 @@ const updateUserData: Action = async ({ request }) => {
             case 'username':
             case 'password':
             case 'return_expires': {
-                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
                 return fail(400, { error: true, message: emptyMsg });
             }
 
@@ -516,14 +516,14 @@ const updateUserData: Action = async ({ request }) => {
                     column === 'rights'
                         ? getCourseByObjData(rightsData)
                         : column === 'return_expires'
-                        ? DateTime.fromISO(String(value), { zone: zonename }).toString()!
-                        : column === 'frontier_points' || column === 'gacha_premium' || column === 'gacha_trial'
-                        ? !value
-                            ? null
-                            : Number(value)
-                        : (column === 'psn_id' || column === 'wiiu_key') && !value
-                        ? null
-                        : value,
+                          ? DateTime.fromISO(String(value), { zone: zonename }).toString()!
+                          : column === 'frontier_points' || column === 'gacha_premium' || column === 'gacha_trial'
+                            ? !value
+                                ? null
+                                : Number(value)
+                            : (column === 'psn_id' || column === 'wiiu_key') && !value
+                              ? null
+                              : value,
             },
         });
 
@@ -558,7 +558,7 @@ const updateCharacterData: Action = async ({ request }) => {
                 return fail(400, { error: true, message: `Insufficient bounty coins (Owned: ${bountyCoin}).` });
             }
 
-            const { success, message } = await db.characters.editName(id, String(value), bountyCoin);
+            const { success, message } = await editName(id, String(value), bountyCoin);
             if (!success) {
                 return fail(400, { error: true, message });
             } else {
@@ -648,7 +648,7 @@ const updateCharacterData: Action = async ({ request }) => {
                 binaryData[value] = base64 === 'AA==' ? '' : base64;
             });
 
-            const { success, message } = await db.characters.setBinary(id, binaryData);
+            const { success, message } = await ManageBinaryDB.setBinary(id, binaryData);
             if (!success) {
                 return fail(400, { error: true, message });
             } else {
@@ -719,7 +719,7 @@ const suspendUser: Action = async ({ request }) => {
     };
 
     if (!reason_type || (permanently_del !== 'on' && !until_at)) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: emptyMsg });
     }
 
@@ -755,25 +755,25 @@ const createBnrData: Action = async ({ request, url }) => {
     const { ja_file, en_file, bnr_name } = data as { ja_file: File; en_file: File; bnr_name: string };
     let bnr_url = data.bnr_url as string | null;
 
-    // file check
+    // ファイル存在確認
     if (ja_file.size === 0 || en_file.size === 0 || !bnr_name) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: `Failed to upload the files. ${requiredMsg} ` });
     }
 
-    // file name validation
+    // ファイル名検証
     if (ja_file.name !== `${bnr_name}_ja.png` || en_file.name !== `${bnr_name}_en.png`) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: 'Failed to upload the files. Invalid file name' });
     }
 
-    // file type validation
+    // ファイル対応検証
     if (ja_file.type !== 'image/png' || en_file.type !== 'image/png') {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: 'Failed to upload the files. Invalid type of file.' });
     }
 
-    // url convertor
+    // url変換
     bnr_url = !bnr_url ? null : bnr_url.indexOf('discord.com') ? discordLinkConvertor(bnr_url) : bnr_url;
 
     const uploadJa: Promise<boolean> = uploadFileViaApi(url.origin, ja_file, 'ja');
@@ -826,25 +826,25 @@ const updateBnrData: Action = async ({ request, url }) => {
 
             return { success: true, message: `The banner data (ID: ${bnr_id} / Type: ${column}) has been successfully updated.` };
         } else {
-            // file check
+            // ファイル存在確認
             if (file.size === 0 || !bnr_name || !lang) {
-                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
                 return fail(400, { error: true, message: "Failed to re-upload the files. You haven't selected an image to update." });
             }
 
-            // file name validation
+            // ファイル名検証
             if (file.name !== `${bnr_name}_${lang}.png`) {
-                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
                 return fail(400, { error: true, message: 'Failed to re-upload the files. Invalid file name' });
             }
 
-            // file type validation
+            // ファイル対応検証
             if (file.type !== 'image/png') {
-                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
                 return fail(400, { error: true, message: 'Failed to re-upload the files. Invalid type of file.' });
             }
 
-            // delete and upload file
+            // ファイル削除/アップロード
             const result = Promise.resolve()
                 .then(() => deleteFileViaApi(url.origin, file.name, lang))
                 .then(() => uploadFileViaApi(url.origin, file, lang))
@@ -903,7 +903,7 @@ const linkDiscord: Action = async ({ request }) => {
     const { user_id, char_id, discord_id } = data as { user_id: number; char_id: number; discord_id: string };
 
     if (!discord_id) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: emptyMsg });
     }
 
@@ -1107,15 +1107,15 @@ const updateAllianceData: Action = async ({ request }) => {
     const { alliance_id, first_clan_name, second_clan_name } = data as { alliance_id: number; first_clan_name: string; second_clan_name: string };
 
     if (first_clan_name && second_clan_name && JSON.parse(first_clan_name).value === JSON.parse(second_clan_name).value) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: 'The first and second clan must be different.' });
     } else if (!first_clan_name && second_clan_name) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: 'Before selecting the second clan, the first clan must be selected.' });
     }
 
     try {
-        // get each selected clan data
+        // 選択された各クランデータ取得
         const firstClanData = await (async () => {
             if (!first_clan_name) {
                 return null;
@@ -1179,7 +1179,7 @@ const updateAllianceData: Action = async ({ request }) => {
             },
         });
 
-        // get each clan leader name
+        // 各クランのリーダー名取得
         const firstClanLeader = await (async () => {
             if (!firstClanData) {
                 return null;

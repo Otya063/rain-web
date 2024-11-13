@@ -7,7 +7,7 @@ export class BinaryOpration {
     /**
      * @param items 処理対象の選択されたアイテムデータ
      */
-    constructor(public items: SelectedItemData[]) {}
+    constructor(private items: SelectedItemData[]) {}
 
     /**
      * 16進数表記にして、指定された桁数まで0埋めする
@@ -32,7 +32,7 @@ export class BinaryOpration {
      * 選択されたアイテムを16進数文字列に変換
      * @returns アイテムデータを含む16進数文字列、選択されたアイテムがない場合は無効化される
      */
-    private getHexString() {
+    private getHexString(): string | undefined {
         // アイテム未選択の場合、処理を無効化
         if (this.items.length === 0) {
             return;
@@ -53,9 +53,9 @@ export class BinaryOpration {
      * @param character_id キャラクターID
      * @returns distributionテーブルに挿入するためのSQLクエリ文字列、アイテムが選択されていない場合は無効
      */
-    getSqlQuery(name: string, distType: DistributionType, description: string, character_id: number) {
+    public getSqlQuery(name: string, distType: DistributionType, description: string, character_id: number): string | undefined {
         const hex = this.getHexString();
-        if (hex === undefined) {
+        if (!hex) {
             return;
         }
 

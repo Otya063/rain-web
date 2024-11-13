@@ -1,17 +1,18 @@
-import ServerData, { IsCharLogin, db } from '.';
-import type { PaginatedUsers, PaginationMeta, BinaryTypes, PaginatedClans, PaginatedAlliances } from '$lib/types';
+import { error } from '@sveltejs/kit';
 import { Buffer } from 'node:buffer';
-import { encodeToShiftJIS } from '$lib/utils';
+import type { PaginatedUsers, PaginationMeta, PaginatedClans, PaginatedAlliances } from '$lib/types';
+import { ManageBinary, encodeToShiftJIS } from '$lib/utils';
+import ServerData, { IsCharLogin, db } from '.';
 
 /**
- * Get paginated user(s) data.
- * @param {'username' | 'character_name' | 'user_id' | 'character_id'} filterParam Type to filter.
- * @param {string | number} filterValue Value to filter.
- * @param {string} status Pegination status at filtering.
- * @param {number} take Number of data to be obtained.
- * @param {number} cursor Position for searching for data.
- * @param {number} skip Number of cursors to skip. (Normally 1 is used.)
- * @returns {Promise<PaginatedUsers[]>} Return an array of paginated user(s) data.
+ * ページングされたユーザーのデータを取得する
+ * @param {'username' | 'character_name' | 'user_id' | 'character_id'} filterParam フィルターの種類
+ * @param {string | number} filterValue フィルターに使用する値
+ * @param {string} status フィルタリング時のページングの状態
+ * @param {number} take 取得するデータの数
+ * @param {number} cursor データ検索の開始位置
+ * @param {number} skip スキップするカーソルの数（通常は1を使用）
+ * @returns {Promise<PaginatedUsers[]>} ページングされたユーザーデータの配列を返す
  */
 export const getPaginatedUserData = async (
     filterParam: 'username' | 'character_name' | 'user_id' | 'character_id',
@@ -19,7 +20,7 @@ export const getPaginatedUserData = async (
     status: string,
     take: number,
     cursor?: number,
-    skip?: number
+    skip?: number,
 ): Promise<PaginatedUsers[]> => {
     switch (status) {
         case 'init': {
@@ -53,6 +54,7 @@ export const getPaginatedUserData = async (
                                         select: {
                                             id: true,
                                             user_id: true,
+                                            is_female: true,
                                             is_new_character: true,
                                             name: true,
                                             gr: true,
@@ -83,10 +85,34 @@ export const getPaginatedUserData = async (
                                     id: 'asc',
                                 },
                             })
-                        ).map(async (user) => ({
-                            ...user,
-                            suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
-                        }))
+                        ).map(async (user) => {
+                            // 各ユーザーのキャラクターにplaytimeを追加
+                            const charactersWithPlaytime = await Promise.all(
+                                user.characters.map(async (character) => {
+                                    const savedata = (
+                                        await db.characters.findFirst({
+                                            where: {
+                                                id: character.id,
+                                            },
+                                            select: {
+                                                savedata: true,
+                                            },
+                                        })
+                                    )?.savedata;
+
+                                    return {
+                                        ...character,
+                                        playtime: !savedata ? 0 : ManageBinary.getDataFromSavedata('playtime', savedata),
+                                    };
+                                }),
+                            );
+
+                            return {
+                                ...user,
+                                characters: charactersWithPlaytime,
+                                suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
+                            };
+                        }),
                     );
                 }
 
@@ -123,6 +149,7 @@ export const getPaginatedUserData = async (
                                         select: {
                                             id: true,
                                             user_id: true,
+                                            is_female: true,
                                             is_new_character: true,
                                             name: true,
                                             gr: true,
@@ -153,10 +180,34 @@ export const getPaginatedUserData = async (
                                     id: 'asc',
                                 },
                             })
-                        ).map(async (user) => ({
-                            ...user,
-                            suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
-                        }))
+                        ).map(async (user) => {
+                            // 各ユーザーのキャラクターにplaytimeを追加
+                            const charactersWithPlaytime = await Promise.all(
+                                user.characters.map(async (character) => {
+                                    const savedata = (
+                                        await db.characters.findFirst({
+                                            where: {
+                                                id: character.id,
+                                            },
+                                            select: {
+                                                savedata: true,
+                                            },
+                                        })
+                                    )?.savedata;
+
+                                    return {
+                                        ...character,
+                                        playtime: !savedata ? 0 : ManageBinary.getDataFromSavedata('playtime', savedata),
+                                    };
+                                }),
+                            );
+
+                            return {
+                                ...user,
+                                characters: charactersWithPlaytime,
+                                suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
+                            };
+                        }),
                     );
                 }
 
@@ -187,6 +238,7 @@ export const getPaginatedUserData = async (
                                         select: {
                                             id: true,
                                             user_id: true,
+                                            is_female: true,
                                             is_new_character: true,
                                             name: true,
                                             gr: true,
@@ -217,10 +269,34 @@ export const getPaginatedUserData = async (
                                     id: 'asc',
                                 },
                             })
-                        ).map(async (user) => ({
-                            ...user,
-                            suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
-                        }))
+                        ).map(async (user) => {
+                            // 各ユーザーのキャラクターにplaytimeを追加
+                            const charactersWithPlaytime = await Promise.all(
+                                user.characters.map(async (character) => {
+                                    const savedata = (
+                                        await db.characters.findFirst({
+                                            where: {
+                                                id: character.id,
+                                            },
+                                            select: {
+                                                savedata: true,
+                                            },
+                                        })
+                                    )?.savedata;
+
+                                    return {
+                                        ...character,
+                                        playtime: !savedata ? 0 : ManageBinary.getDataFromSavedata('playtime', savedata),
+                                    };
+                                }),
+                            );
+
+                            return {
+                                ...user,
+                                characters: charactersWithPlaytime,
+                                suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
+                            };
+                        }),
                     );
                 }
 
@@ -255,6 +331,7 @@ export const getPaginatedUserData = async (
                                         select: {
                                             id: true,
                                             user_id: true,
+                                            is_female: true,
                                             is_new_character: true,
                                             name: true,
                                             gr: true,
@@ -285,15 +362,39 @@ export const getPaginatedUserData = async (
                                     id: 'asc',
                                 },
                             })
-                        ).map(async (user) => ({
-                            ...user,
-                            suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
-                        }))
+                        ).map(async (user) => {
+                            // 各ユーザーのキャラクターにplaytimeを追加
+                            const charactersWithPlaytime = await Promise.all(
+                                user.characters.map(async (character) => {
+                                    const savedata = (
+                                        await db.characters.findFirst({
+                                            where: {
+                                                id: character.id,
+                                            },
+                                            select: {
+                                                savedata: true,
+                                            },
+                                        })
+                                    )?.savedata;
+
+                                    return {
+                                        ...character,
+                                        playtime: !savedata ? 0 : ManageBinary.getDataFromSavedata('playtime', savedata),
+                                    };
+                                }),
+                            );
+
+                            return {
+                                ...user,
+                                characters: charactersWithPlaytime,
+                                suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
+                            };
+                        }),
                     );
                 }
 
                 default: {
-                    throw new Error('Invalid Parameter');
+                    error(400, { message: '', message1: undefined, message2: [`Invalid parameter: ${filterParam}.`], message3: undefined });
                 }
             }
         }
@@ -334,6 +435,7 @@ export const getPaginatedUserData = async (
                                         select: {
                                             id: true,
                                             user_id: true,
+                                            is_female: true,
                                             is_new_character: true,
                                             name: true,
                                             gr: true,
@@ -364,10 +466,34 @@ export const getPaginatedUserData = async (
                                     id: 'asc',
                                 },
                             })
-                        ).map(async (user) => ({
-                            ...user,
-                            suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
-                        }))
+                        ).map(async (user) => {
+                            // 各ユーザーのキャラクターにplaytimeを追加
+                            const charactersWithPlaytime = await Promise.all(
+                                user.characters.map(async (character) => {
+                                    const savedata = (
+                                        await db.characters.findFirst({
+                                            where: {
+                                                id: character.id,
+                                            },
+                                            select: {
+                                                savedata: true,
+                                            },
+                                        })
+                                    )?.savedata;
+
+                                    return {
+                                        ...character,
+                                        playtime: !savedata ? 0 : ManageBinary.getDataFromSavedata('playtime', savedata),
+                                    };
+                                }),
+                            );
+
+                            return {
+                                ...user,
+                                characters: charactersWithPlaytime,
+                                suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
+                            };
+                        }),
                     );
                 }
 
@@ -408,6 +534,7 @@ export const getPaginatedUserData = async (
                                         select: {
                                             id: true,
                                             user_id: true,
+                                            is_female: true,
                                             is_new_character: true,
                                             name: true,
                                             gr: true,
@@ -438,10 +565,34 @@ export const getPaginatedUserData = async (
                                     id: 'asc',
                                 },
                             })
-                        ).map(async (user) => ({
-                            ...user,
-                            suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
-                        }))
+                        ).map(async (user) => {
+                            // 各ユーザーのキャラクターにplaytimeを追加
+                            const charactersWithPlaytime = await Promise.all(
+                                user.characters.map(async (character) => {
+                                    const savedata = (
+                                        await db.characters.findFirst({
+                                            where: {
+                                                id: character.id,
+                                            },
+                                            select: {
+                                                savedata: true,
+                                            },
+                                        })
+                                    )?.savedata;
+
+                                    return {
+                                        ...character,
+                                        playtime: !savedata ? 0 : ManageBinary.getDataFromSavedata('playtime', savedata),
+                                    };
+                                }),
+                            );
+
+                            return {
+                                ...user,
+                                characters: charactersWithPlaytime,
+                                suspended_account: await ServerData.getSuspendedUsersByUserId(user.id),
+                            };
+                        }),
                     );
                 }
 
@@ -451,30 +602,30 @@ export const getPaginatedUserData = async (
                 }
 
                 default: {
-                    throw new Error('Invalid Parameter');
+                    error(400, { message: '', message1: undefined, message2: [`Invalid parameter: ${filterParam}.`], message3: undefined });
                 }
             }
         }
 
         default: {
-            throw new Error('Invalid Status');
+            error(400, { message: '', message1: undefined, message2: [`Invalid status: ${status}.`], message3: undefined });
         }
     }
 };
 
 /**
- * Get pagination meta data.
- * @param {'username' | 'character_name' | 'user_id' | 'character_id' | 'clan_name' | 'clan_id' | 'alliance_name' | 'alliance_id'} filterParam
- * @param {string | number} filterValue Value to filter.
- * @param {number} prevCursor Position for searching for previous data.
- * @param {number} nextCursor Position for searching for next data.
- * @returns {Promise<PaginationMeta>} Return pagination meta object.
+ * ページングのメタデータを取得する
+ * @param {'username' | 'character_name' | 'user_id' | 'character_id' | 'clan_name' | 'clan_id' | 'alliance_name' | 'alliance_id'} filterParam フィルターの種類
+ * @param {string | number} filterValue フィルターに使用する値
+ * @param {number} prevCursor 前のデータを検索する位置
+ * @param {number} nextCursor 次のデータを検索する位置
+ * @returns {Promise<PaginationMeta>} ページングメタデータのオブジェクトを返す
  */
 export const getPaginationMeta = async (
     filterParam: 'username' | 'character_name' | 'user_id' | 'character_id' | 'clan_name' | 'clan_id' | 'alliance_name' | 'alliance_id',
     filterValue: string | number,
     prevCursor: number,
-    nextCursor: number
+    nextCursor: number,
 ): Promise<PaginationMeta> => {
     switch (filterParam) {
         case 'username': {
@@ -645,20 +796,20 @@ export const getPaginationMeta = async (
         }
 
         default: {
-            throw new Error('Invalid Parameter');
+            error(400, { message: '', message1: undefined, message2: [`Invalid parameter: ${filterParam}.`], message3: undefined });
         }
     }
 };
 
 /**
- * Get paginated alliance(s) data.
- * @param {'alliance_name' | 'alliance_id'} filterParam Type to filter.
- * @param {string | number} filterValue Value to filter.
- * @param {string} status Pegination status at filtering.
- * @param {number} take Number of data to be obtained.
- * @param {number} cursor Position for searching for data.
- * @param {number} skip Number of cursors to skip. (Normally 1 is used.)
- * @returns {Promise<PaginatedAlliances[]>} Return an array of paginated alliance(s) data.
+ * ページングされた同盟データを取得する
+ * @param {'alliance_name' | 'alliance_id'} filterParam フィルターの種類
+ * @param {string | number} filterValue フィルターに使用する値
+ * @param {string} status フィルタリング時のページングの状態
+ * @param {number} take 取得するデータの数
+ * @param {number} cursor データ検索の開始位置
+ * @param {number} skip スキップするカーソルの数（通常は1を使用）
+ * @returns {Promise<PaginatedAlliances[]>} ページングされた同盟データの配列を返す
  */
 export const getPaginatedAllianceData = async (
     filterParam: 'alliance_name' | 'alliance_id',
@@ -666,7 +817,7 @@ export const getPaginatedAllianceData = async (
     status: string,
     take: number,
     cursor?: number,
-    skip?: number
+    skip?: number,
 ): Promise<PaginatedAlliances[]> => {
     switch (status) {
         case 'init': {
@@ -761,7 +912,7 @@ export const getPaginatedAllianceData = async (
                                     return { clan_name: guildData!.name, leader_name: charData!.name };
                                 }
                             })(),
-                        }))
+                        })),
                     );
                 }
 
@@ -853,12 +1004,12 @@ export const getPaginatedAllianceData = async (
                                     return { clan_name: guildData!.name, leader_name: charData!.name };
                                 }
                             })(),
-                        }))
+                        })),
                     );
                 }
 
                 default: {
-                    throw new Error('Invalid Parameter');
+                    error(400, { message: '', message1: undefined, message2: [`Invalid parameter: ${filterParam}.`], message3: undefined });
                 }
             }
         }
@@ -960,7 +1111,7 @@ export const getPaginatedAllianceData = async (
                                     return { clan_name: guildData!.name, leader_name: charData!.name };
                                 }
                             })(),
-                        }))
+                        })),
                     );
                 }
 
@@ -969,26 +1120,26 @@ export const getPaginatedAllianceData = async (
                 }
 
                 default: {
-                    throw new Error('Invalid Parameter');
+                    error(400, { message: '', message1: undefined, message2: [`Invalid parameter: ${filterParam}.`], message3: undefined });
                 }
             }
         }
 
         default: {
-            throw new Error('Invalid Status');
+            error(400, { message: '', message1: undefined, message2: [`Invalid status: ${status}.`], message3: undefined });
         }
     }
 };
 
 /**
- * Get paginated clan(s) data.
- * @param {'clan_name' | 'clan_id'} filterParam Type to filter.
- * @param {string | number} filterValue Value to filter.
- * @param {string} status Pegination status at filtering.
- * @param {number} take Number of data to be obtained.
- * @param {number} cursor Position for searching for data.
- * @param {number} skip Number of cursors to skip. (Normally 1 is used.)
- * @returns {Promise<PaginatedClans[]>} Return an array of paginated clan(s) data.
+ * ページングされたクランデータを取得する
+ * @param {'clan_name' | 'clan_id'} filterParam フィルターの種類
+ * @param {string | number} filterValue フィルターに使用する値
+ * @param {string} status フィルタリング時のページングの状態
+ * @param {number} take 取得するデータの数
+ * @param {number} cursor データ検索の開始位置
+ * @param {number} skip スキップするカーソルの数（通常は1を使用）
+ * @returns {Promise<PaginatedClans[]>} ページングされたクランデータの配列を返す
  */
 export const getPaginatedClanData = async (
     filterParam: 'clan_name' | 'clan_id',
@@ -996,7 +1147,7 @@ export const getPaginatedClanData = async (
     status: string,
     take: number,
     cursor?: number,
-    skip?: number
+    skip?: number,
 ): Promise<PaginatedClans[]> => {
     switch (status) {
         case 'init': {
@@ -1044,7 +1195,7 @@ export const getPaginatedClanData = async (
                                     name: true,
                                 },
                             }))!.name,
-                        }))
+                        })),
                     );
                 }
 
@@ -1089,12 +1240,12 @@ export const getPaginatedClanData = async (
                                     name: true,
                                 },
                             }))!.name,
-                        }))
+                        })),
                     );
                 }
 
                 default: {
-                    throw new Error('Invalid Parameter');
+                    error(400, { message: '', message1: undefined, message2: [`Invalid parameter: ${filterParam}.`], message3: undefined });
                 }
             }
         }
@@ -1149,7 +1300,7 @@ export const getPaginatedClanData = async (
                                     name: true,
                                 },
                             }))!.name,
-                        }))
+                        })),
                     );
                 }
 
@@ -1158,28 +1309,28 @@ export const getPaginatedClanData = async (
                 }
 
                 default: {
-                    throw new Error('Invalid Parameter');
+                    error(400, { message: '', message1: undefined, message2: [`Invalid parameter: ${filterParam}.`], message3: undefined });
                 }
             }
         }
 
         default: {
-            throw new Error('Invalid Status');
+            error(400, { message: '', message1: undefined, message2: [`Invalid status: ${status}.`], message3: undefined });
         }
     }
 };
 
 /**
- * Edit character's name.
- * @param {number} characterId Character ID to be edited.
- * @param {string} setName New name after change.
- * @param bountyCoin Number of bounty coins owned.
- * @returns {Promise<{success: boolean; message: string;}>} Return the result.
+ * キャラクターの名前を編集する
+ * @param {number} characterId 編集するキャラクターID
+ * @param {string} newName 変更後の新しい名前
+ * @param bountyCoin 保有しているバウンティコイン数
+ * @returns {Promise<{success: boolean; message: string;}>} 成功したか否か、結果を返す
  */
 export const editName = async (
     characterId: number,
-    setName: string,
-    bountyCoin: number
+    newName: string,
+    bountyCoin: number,
 ): Promise<{
     success: boolean;
     message: string;
@@ -1189,15 +1340,15 @@ export const editName = async (
         return { success: false, message: "Can't be processed while the target character is logged in." };
     }
 
-    const sjisBytes = encodeToShiftJIS(setName);
-    const hexString = String(
-        Array.from(sjisBytes)
-            .map((byte) => byte.toString(16).padStart(2, '0'))
-            .join('')
-    );
-    if (hexString.length > 24 || hexString.length === 0) {
+    // 名前のbuffer生成（12バイト以下でないといけない、2文字で1バイト扱いなのでlengthは24）
+    const nameBuffer = encodeToShiftJIS(newName);
+    if (nameBuffer.toString('hex').length > 24 || nameBuffer.toString('hex').length === 0) {
         return { success: false, message: 'Character name must be 1-12 characters (1-6 characters in Japanese).' };
     }
+
+    // 名前のbufferの残りを「0」で埋めて12バイトにする
+    const paddedNameBuffer = Buffer.alloc(24);
+    nameBuffer.copy(paddedNameBuffer);
 
     const savedata = (
         await db.characters.findFirst({
@@ -1213,21 +1364,10 @@ export const editName = async (
         return { success: false, message: 'Savedata not found.' };
     }
 
-    const uint8Arr = Uint8Array.from(savedata);
-    const index255 = uint8Arr.indexOf(255);
-    const index0 = uint8Arr.indexOf(0, index255);
-    const array1 = uint8Arr.slice(0, index255 + 1);
-    const oldNameArr = uint8Arr.slice(index255 + 1, index0);
-    const array2 = uint8Arr.slice(index0 + 1);
-
-    const nameArr = (hexString + '0').match(/.{1,2}/g)?.map((hex) => parseInt(hex, 16))!;
-    array2[0] = array2[0] - (sjisBytes.length - oldNameArr.length);
-    const finalArr = new Uint8Array([...array1, ...nameArr, ...array2]);
-
-    const base64 = Buffer.from(finalArr).toString('base64');
+    const base64 = ManageBinary.exportEditedSavedata('name', savedata, paddedNameBuffer);
 
     try {
-        await db.$executeRaw`UPDATE characters SET savedata = decode(${base64}, 'base64'), name = ${setName} WHERE id = ${characterId}`;
+        await db.$executeRaw`UPDATE characters SET savedata = decode(${base64}, 'base64'), name = ${newName} WHERE id = ${characterId}`;
 
         await db.discord.update({
             where: {
@@ -1249,56 +1389,3 @@ export const editName = async (
         }
     }
 };
-
-/**
- * Manage binary data of the character.
- * @class
- */
-export class ManageBinary {
-    /**
-     * Create an instance of ManageBinary.
-     * @param {number} characterId Target character's ID.
-     * @param {{ [key in BinaryTypes]: string }} binaryData Binary data of the target character.
-     */
-    constructor(private characterId: number, private binaryData: { [key in BinaryTypes]: string }) {}
-
-    /**
-     * Set binary data.
-     * @returns {Promise<{ success: boolean; message: string; }>} Return the result.
-     */
-    public async set(): Promise<{
-        success: boolean;
-        message: string;
-    }> {
-        try {
-            const isNull = {
-                savedata: !this.binaryData.savedata ? 'NULL' : 'NOT_NULL',
-                decomyset: !this.binaryData.decomyset ? 'NULL' : 'NOT_NULL',
-                hunternavi: !this.binaryData.hunternavi ? 'NULL' : 'NOT_NULL',
-                otomoairou: !this.binaryData.otomoairou ? 'NULL' : 'NOT_NULL',
-                partner: !this.binaryData.partner ? 'NULL' : 'NOT_NULL',
-                platebox: !this.binaryData.platebox ? 'NULL' : 'NOT_NULL',
-                platedata: !this.binaryData.platedata ? 'NULL' : 'NOT_NULL',
-                platemyset: !this.binaryData.platemyset ? 'NULL' : 'NOT_NULL',
-                rengokudata: !this.binaryData.rengokudata ? 'NULL' : 'NOT_NULL',
-                savemercenary: !this.binaryData.savemercenary ? 'NULL' : 'NOT_NULL',
-                skin_hist: !this.binaryData.skin_hist ? 'NULL' : 'NOT_NULL',
-                minidata: !this.binaryData.minidata ? 'NULL' : 'NOT_NULL',
-                scenariodata: !this.binaryData.scenariodata ? 'NULL' : 'NOT_NULL',
-                savefavoritequest: !this.binaryData.savefavoritequest ? 'NULL' : 'NOT_NULL',
-            };
-
-            await db.$executeRaw`UPDATE characters SET savedata = CASE ${isNull.savedata} WHEN 'NULL' THEN decode((SELECT encode(savedata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.savedata}, 'base64') END, decomyset = CASE ${isNull.decomyset} WHEN 'NULL' THEN decode((SELECT encode(decomyset, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.decomyset}, 'base64') END, hunternavi = CASE ${isNull.hunternavi} WHEN 'NULL' THEN decode((SELECT encode(hunternavi, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.hunternavi}, 'base64') END, otomoairou = CASE ${isNull.otomoairou} WHEN 'NULL' THEN decode((SELECT encode(otomoairou, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.otomoairou}, 'base64') END, partner = CASE ${isNull.partner} WHEN 'NULL' THEN decode((SELECT encode(partner, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.partner}, 'base64') END, platebox = CASE ${isNull.platebox} WHEN 'NULL' THEN decode((SELECT encode(platebox, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.platebox}, 'base64') END, platedata = CASE ${isNull.platedata} WHEN 'NULL' THEN decode((SELECT encode(platedata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.platedata}, 'base64') END, platemyset = CASE ${isNull.platemyset} WHEN 'NULL' THEN decode((SELECT encode(platemyset, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.platemyset}, 'base64') END, rengokudata = CASE ${isNull.rengokudata} WHEN 'NULL' THEN decode((SELECT encode(rengokudata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.rengokudata}, 'base64') END, savemercenary = CASE ${isNull.savemercenary} WHEN 'NULL' THEN decode((SELECT encode(savemercenary, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.savemercenary}, 'base64') END, skin_hist = CASE ${isNull.skin_hist} WHEN 'NULL' THEN decode((SELECT encode(skin_hist, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.skin_hist}, 'base64') END, minidata = CASE ${isNull.minidata} WHEN 'NULL' THEN decode((SELECT encode(minidata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.minidata}, 'base64') END, scenariodata = CASE ${isNull.scenariodata} WHEN 'NULL' THEN decode((SELECT encode(scenariodata, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.scenariodata}, 'base64') END, savefavoritequest = CASE ${isNull.savefavoritequest} WHEN 'NULL' THEN decode((SELECT encode(savefavoritequest, 'base64') FROM characters WHERE id = ${this.characterId}), 'base64') WHEN 'NOT_NULL' THEN decode(${this.binaryData.savefavoritequest}, 'base64') END WHERE id = ${this.characterId}`;
-
-            return { success: true, message: '' };
-        } catch (err) {
-            if (err instanceof Error) {
-                return { success: false, message: err.message };
-            } else if (typeof err === 'string') {
-                return { success: false, message: err };
-            } else {
-                return { success: false, message: 'Unexpected Error' };
-            }
-        }
-    }
-}

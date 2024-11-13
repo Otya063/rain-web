@@ -1,20 +1,20 @@
 <script lang="ts">
     import type { LayoutData } from './$types';
+    import { onMount } from 'svelte';
     import { page } from '$app/stores';
     import LL, { setLocale } from '$i18n/i18n-svelte';
-    import { onMount } from 'svelte';
     import '$scss/style_error.scss';
 
-    export let data: LayoutData;
-    const { url } = data;
-    const origin = url.origin;
+    interface Props {
+        data: LayoutData;
+    }
+    let { data }: Props = $props();
     const status = $page.status;
     setLocale(data.locale);
 
-    // break out of the application-side layout
+    // エラーページでないメイン側のレイアウトが、こちらのレイアウトに影響を及ぼさないよう調整
     onMount(() => {
-        const wrapper = document.getElementById('wrapper');
-        wrapper?.classList.add('disable_default_wrapper');
+        document.getElementById('wrapper')!.classList.add('disable_default_wrapper');
     });
 </script>
 
@@ -131,7 +131,7 @@
 
     <meta name="robots" content="noindex,nofollow" />
     <!-- ogp -->
-    <meta property="og:image" content="{origin}/img/common/sns_share.webp" />
+    <meta property="og:image" content="{data.url.origin}/img/common/sns_share.webp" />
     <!-- twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <!-- favicon -->
@@ -142,10 +142,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes" />
     <!-- font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
     {#if data.locale === 'ja'}
         <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;500;700&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;500;700&display=swap" />

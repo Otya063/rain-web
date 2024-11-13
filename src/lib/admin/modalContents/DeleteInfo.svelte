@@ -11,16 +11,16 @@
                 const data = conv2DArrayToObject([...formData.entries()]);
                 const id = Number(data.info_id);
                 const type = String(data.info_type);
-                
+
                 return async ({ result }) => {
                     msgClosed.set(false);
                     onSubmit.set(false);
                     await applyAction(result);
-                    
+
                     if (result.type === 'success') {
                         $allInformation[type] = $allInformation[type].filter((info) => info.id !== id);
                     }
-                    
+
                     closeModal();
                 };
             }}
@@ -33,13 +33,13 @@
                 <p>{$deleteInfoData.title}</p>
                 <ul class="modal_list">
                     <li class="modal_list_item">
-                        <p>Information Title</p>
+                        <p>Title</p>
                         <span>{$deleteInfoData.info_title}</span>
                     </li>
 
                     <li class="modal_list_item">
-                        <p>Information URL</p>
-                        <span>{$deleteInfoData.info_url}</span>
+                        <p>Hyperlink</p>
+                        <span>{$deleteInfoData.info_url ?? 'null'}</span>
                     </li>
 
                     <li class="modal_list_item">
@@ -49,7 +49,7 @@
 
                     <li class="modal_list_item">
                         <input type="hidden" name="info_type" value={$deleteInfoData.info_type} />
-                        <p>Information Type</p>
+                        <p>Type</p>
                         <span>{$deleteInfoData.info_type}</span>
                     </li>
                 </ul>
@@ -59,16 +59,16 @@
                     class="blue_btn"
                     type="submit"
                     formaction="?/{$deleteInfoData.form_action}"
-                    on:click={() => {
+                    onclick={() => {
                         onSubmit.set(true);
                         $timeOut && closeMsgDisplay($timeOut);
                     }}
                 >
-                    <span class="btn_icon material-icons">check</span>
+                    <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Yes</span>
                 </button>
-                <button class="red_btn" type="button" on:click={() => closeModal()}>
-                    <span class="btn_icon material-icons">close</span>
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
                     <span class="btn_text">No</span>
                 </button>
             </div>

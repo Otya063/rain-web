@@ -1,21 +1,22 @@
 <script lang="ts">
     import type { PageData } from './$types';
-    import LL, { setLocale } from '$i18n/i18n-svelte';
-    import { onMount } from 'svelte';
     import { DateTime } from 'luxon';
+    import { onMount } from 'svelte';
+    import LL, { setLocale } from '$i18n/i18n-svelte';
     import '$scss/style_error.scss';
 
-    export let data: PageData;
-    const { date, url } = data;
+    interface Props {
+        data: PageData;
+    }
+    let { data }: Props = $props();
+    const { date } = data;
     const arrStr: string[] = date.split(',');
     const arrNum: number[] = arrStr.map((str) => parseInt(str, 10));
-    const origin = url.origin;
     setLocale(data.locale);
 
-    // break out of the application-side layout
+    // メンテナンスページでないメイン側のレイアウトが、こちらのレイアウトに影響を及ぼさないよう調整
     onMount(() => {
-        const wrapper = document.getElementById('wrapper');
-        wrapper?.classList.add('disable_default_wrapper');
+        document.getElementById('wrapper')!.classList.add('disable_default_wrapper');
     });
 </script>
 
@@ -65,7 +66,7 @@
     <title>{$LL.maintenance['title']()} | {$LL.serverTitle()}</title>
     <meta name="robots" content="noindex,nofollow" />
     <!-- ogp -->
-    <meta property="og:image" content="{origin}/img/common/sns_share.webp" />
+    <meta property="og:image" content="{data.url.origin}/img/common/sns_share.webp" />
     <!-- twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <!-- favicon -->
@@ -78,8 +79,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <!-- font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
     {#if data.locale === 'ja'}
         <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;500;700&display=swap" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Noto+Serif+JP:wght@400;500;700&display=swap" />

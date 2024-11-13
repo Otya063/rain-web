@@ -8,12 +8,14 @@
     import Users from '$lib/admin/Users.svelte';
     import { adminTabValue } from '$lib/utils';
 
-    export let data: PageData;
-    export let form: ActionData;
-    export let addBnrMode: (enable: boolean) => void;
-    export let addInfoMode: (enable: boolean) => void;
-    export let infoAddMode: boolean;
-    export let bnrAddMode: boolean;
+    interface Props {
+        data: PageData;
+        form: ActionData;
+        infoAddMode: boolean;
+        bnrAddMode: boolean;
+        isMobile: boolean;
+    }
+    let { data, form, infoAddMode = $bindable(), bnrAddMode = $bindable(), isMobile = $bindable() }: Props = $props(); // bindableにしないと動かない
     const systemData = data.launcherSystem;
     const informationData = data.launcherInformation;
     const launcherBanner = data.launcherBanner;
@@ -23,11 +25,11 @@
 {#if $adminTabValue === '' || $adminTabValue === 'system'}
     <LauncherSystem {systemData} />
 {:else if $adminTabValue === 'info'}
-    <LauncherInformation bind:addInfoMode bind:infoAddMode createdInfo={form?.createdInfo} updatedInfo={form?.updatedInfo} {informationData} />
+    <LauncherInformation bind:infoAddMode createdInfo={form?.createdInfo} updatedInfo={form?.updatedInfo} {informationData} bind:isMobile />
 {:else if $adminTabValue === 'users'}
-    <Users paginatedUsers={form?.paginatedUsers} paginationMeta={form?.paginationMeta} />
+    <Users paginatedUsers={form?.paginatedUsers} paginationMeta={form?.paginationMeta} bind:isMobile />
 {:else if $adminTabValue === 'bnr'}
-    <LauncherBanner bind:addBnrMode bind:bnrAddMode createdBnr={form?.createdBnr} {launcherBanner} />
+    <LauncherBanner bind:bnrAddMode createdBnr={form?.createdBnr} {launcherBanner} bind:isMobile />
 {:else if $adminTabValue === 'clan'}
     <Clans
         paginatedClans={form?.paginatedClans}

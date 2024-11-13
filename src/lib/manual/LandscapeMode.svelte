@@ -2,12 +2,17 @@
     import { browser } from '$app/environment';
     import LL from '$i18n/i18n-svelte';
 
-    // prohibit users from using landscape mode
+    // ランドスケープモード使用禁止
     const mobileDevices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
-    let innerWidth: number = 0;
-    let innerHeight: number = 0;
-    $: landscape = innerWidth > innerHeight && mobileDevices.test(navigator.userAgent);
-    $: if (browser) document.body.classList.toggle('noscroll', landscape);
+    let innerWidth: number = $state(0);
+    let innerHeight: number = $state(0);
+    let landscape = $derived(innerWidth > innerHeight && mobileDevices.test(navigator.userAgent));
+
+    $effect(() => {
+        if (browser) {
+            document.body.classList.toggle('noscroll', landscape);
+        }
+    });
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
@@ -16,7 +21,9 @@
     <span class="rotate_text">
         {$LL.landscapeMode()}
     </span>
+
     <img src="/img/common/landscape/rotate_device.webp" alt="rotate" class="rotate_device" />
+
     <div class="now_waiting">
         <img src="/img/common/landscape/now_waiting_N1.webp" alt="N" />
         <img src="/img/common/landscape/now_waiting_O.webp" alt="O" />

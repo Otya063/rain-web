@@ -2,11 +2,7 @@
     import { applyAction, enhance } from '$app/forms';
     import { onSubmit, closeModal, deleteCharacterData, conv2DArrayToObject, msgClosed, paginatedUsersData, timeOut, closeMsgDisplay } from '$lib/utils';
 
-    let permanent: boolean;
-
-    const onChangeInputElm = () => {
-        document.getElementById('permanent')!.textContent = document.getElementById('permanent')?.textContent === 'check_box_outline_blank' ? 'check_box' : 'check_box_outline_blank';
-    };
+    let permanent: boolean = $state(false);
 </script>
 
 <div class="modal">
@@ -25,10 +21,10 @@
 
                     if (result.type === 'success') {
                         $paginatedUsersData = $paginatedUsersData.map((user) => {
-                            // delete character
+                            // キャラクター削除
                             type === 'deleteCharacter' && permanent && (user.characters = user.characters.filter((character) => character.id !== char_id));
 
-                            // update deleted
+                            // deletedカラム更新
                             user.characters = user.characters.map((character) => {
                                 if (character.id === char_id)
                                     return {
@@ -71,8 +67,16 @@
                         <li class="modal_list_item">
                             <label>
                                 <p>Permanently Delete</p>
-                                <span id="permanent" class="material-icons-outlined" style="font-size: 2.1rem;">check_box_outline_blank</span>
-                                <input type="checkbox" name="permanently_del" on:change={() => onChangeInputElm()} bind:checked={permanent} />
+                                <span id="permanent" class="material-symbols-outlined" style="font-size: 2.1rem;">check_box_outline_blank</span>
+                                <input
+                                    type="checkbox"
+                                    name="permanently_del"
+                                    onchange={() => {
+                                        document.getElementById('permanent')!.textContent =
+                                            document.getElementById('permanent')?.textContent === 'check_box_outline_blank' ? 'check_box' : 'check_box_outline_blank';
+                                    }}
+                                    bind:checked={permanent}
+                                />
                             </label>
                         </li>
                     {/if}
@@ -88,16 +92,16 @@
                     class="blue_btn"
                     formaction="?/{$deleteCharacterData.form_action}"
                     type="submit"
-                    on:click={() => {
+                    onclick={() => {
                         onSubmit.set(true);
                         $timeOut && closeMsgDisplay($timeOut);
                     }}
                 >
-                    <span class="btn_icon material-icons">check</span>
+                    <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Yes</span>
                 </button>
-                <button class="red_btn" type="button" on:click={() => closeModal()}>
-                    <span class="btn_icon material-icons">close</span>
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
                     <span class="btn_text">No</span>
                 </button>
             </div>

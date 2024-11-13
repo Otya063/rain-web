@@ -3,9 +3,9 @@ import { error } from '@sveltejs/kit';
 
 export const load: PageServerLoad = async ({ platform }) => {
     if (platform?.env.MAINTENANCE_MODE !== 'true') {
-        throw error(404);
+        error(404);
     } else {
-        // must be utc
+        // UTC表記
         const date = platform?.env.MAINTENANCE_DATE;
         return { date };
     }

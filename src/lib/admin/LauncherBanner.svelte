@@ -1,65 +1,61 @@
 <script lang="ts">
     import type { launcher_banner } from '@prisma/client/edge';
-    import { applyAction, enhance } from '$app/forms';
-    import { prepareModal, onSubmit, msgClosed, allBanners, conv2DArrayToObject, discordLinkConvertor, timeOut, closeMsgDisplay } from '$lib/utils';
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
+    import { applyAction, enhance } from '$app/forms';
+    import { prepareModal, onSubmit, msgClosed, allBanners, conv2DArrayToObject, discordLinkConvertor, timeOut, closeMsgDisplay } from '$lib/utils';
 
-    export let launcherBanner: launcher_banner[];
-    export let createdBnr: launcher_banner;
-    allBanners.set(launcherBanner);
-
-    /* Below is the add mode script
-    ====================================================*/
-    export let bnrAddMode: boolean;
-    export const addBnrMode = (enable: boolean): void => {
-        if (enable) {
-            // when editing
-            bnrAddMode = true;
-        } else {
-            // when finished editing
-            bnrAddMode = false;
-        }
-    };
-
-    /* Below is the edit mode script
-    ====================================================*/
-    let editingId: number;
+    interface Props {
+        launcherBanner: launcher_banner[];
+        createdBnr: launcher_banner;
+        bnrAddMode: boolean;
+        isMobile: boolean;
+    }
+    let { launcherBanner, createdBnr, bnrAddMode = $bindable(), isMobile = $bindable() }: Props = $props();
+    let editingId: number = $state(0); // 編集対象のバナーID
     let editMode = false;
-    const catTypes: { [key in keyof Omit<launcher_banner, 'id' | 'bnr_name'>]: boolean } = {
+    const catTypes: { [key in keyof Omit<launcher_banner, 'id' | 'bnr_name'>]: boolean } = $state({
         bnr_url: false,
         ja_img_src: false,
         en_img_src: false,
-    };
+    }); // 編集中モードカテゴリー、stateで各項目間を自動で折りたためるように
+    allBanners.set(launcherBanner); // サーバーから取得したバナーデータをストアで管理
 
-    // switch edit contents
-    const editModeSwitch = <T extends number, U extends keyof Omit<launcher_banner, 'id' | 'bnr_name'>>(id: T, type: U): void | false => {
-        // check if another cat type is already open
+    /**
+     * 編集モードを切り替える
+     *
+     * @template T 編集対象のIDの型（数値）
+     * @template U 切り替え対象のカテゴリのタイプ。`launcher_banner` から `id` と `bnr_name` フィールドを除いたキー
+     * @param {T} id 編集対象のID
+     * @param {U} type 切り替えたいカテゴリのタイプ
+     */
+    const editModeSwitch = <T extends number, U extends keyof Omit<launcher_banner, 'id' | 'bnr_name'>>(id: T, type: U): void => {
+        // 別のカテゴリがすでに開かれているかを確認
         const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
 
-        // if there is an open cat and a different category is cliked (try to open it) + not cancel btn
+        // 既に開かれているカテゴリがあり、異なるカテゴリがクリックされた場合 + キャンセルボタンでない場合
         if (activeCat && id !== 0) {
-            // set everything to false (close) in a loop.
+            // 全てのカテゴリを閉じる
             Object.keys(catTypes).forEach((_key) => {
                 const key = _key as keyof Omit<launcher_banner, 'id' | 'bnr_name'>;
                 catTypes[key] = false;
             });
 
-            // set the category clicked to true (open), adn set editting u_id
+            // クリックされたカテゴリを開き、編集対象のIDを設定
             catTypes[type] = true;
             editingId = id;
 
-            return false;
+            return;
         }
 
-        // toggle true <-> false
+        // 編集モードをトグルする（true ⇔ false）
         if (!editMode) {
-            // open a cat
+            // カテゴリを開く
             editMode = true;
             editingId = id;
             catTypes[type] = true;
         } else {
-            // close a cat
+            // カテゴリを閉じる
             editMode = false;
             editingId = id;
             catTypes[type] = false;
@@ -86,7 +82,7 @@
 
                     if (result.type === 'success') {
                         $allBanners.push(createdBnr);
-                        addBnrMode(false);
+                        bnrAddMode = false;
                     }
                 };
             }}
@@ -95,33 +91,48 @@
             <p class="console_contents_note">* Banner width is 515px and height is 120px.</p>
 
             <dl class="console_contents_list">
-                <dt class="contents_term">Banner URL</dt>
-                <dd class="contents_desc">
-                    <input type="text" name="bnr_url" autocomplete="off" />
-                    <p class="console_contents_note">* The URL of the site to be displayed when the banner is clicked.</p>
-                </dd>
+                {#if isMobile}
+                    <dt class="contents_term">Japanese Banner <span class="contents_term_required">[Required]</span></dt>
+                {:else}
+                    <dt class="contents_term">Japanese Banner<br /><span class="contents_term_required">[Required]</span></dt>
+                {/if}
 
-                <dt class="contents_term">Japanese Banner<br /><span class="contents_term_required">[Required]</span></dt>
                 <dd class="contents_desc">
                     <input name="ja_file" type="file" accept=".png" />
                 </dd>
 
-                <dt class="contents_term">English Banner<br /><span class="contents_term_required">[Required]</span></dt>
+                {#if isMobile}
+                    <dt class="contents_term">English Banner <span class="contents_term_required">[Required]</span></dt>
+                {:else}
+                    <dt class="contents_term">English Banner<br /><span class="contents_term_required">[Required]</span></dt>
+                {/if}
+
                 <dd class="contents_desc">
                     <input name="en_file" type="file" accept=".png" />
                 </dd>
 
-                <dt class="contents_term">Banner Name<br /><span class="contents_term_required">[Required]</span></dt>
+                <dt class="contents_term">Hyperlink</dt>
+                <dd class="contents_desc">
+                    <input type="text" name="bnr_url" autocomplete="off" />
+                    <p class="console_contents_note">* The site url to which the banner is redirected when clicked.</p>
+                </dd>
+
+                {#if isMobile}
+                    <dt class="contents_term">Name <span class="contents_term_required">[Required]</span></dt>
+                {:else}
+                    <dt class="contents_term">Name<br /><span class="contents_term_required">[Required]</span></dt>
+                {/if}
+                
                 <dd class="contents_desc">
                     <input type="text" name="bnr_name" autocomplete="off" />
-                    <p class="console_contents_note">* Banner names must be all lowercase, and if two words are combined, use underscores.</p>
+                    <p class="console_contents_note">* Banner name must be in lowercase, and underscores must be used when combining two words.</p>
                     <p class="console_contents_note">* Banner name is permanent.</p>
                 </dd>
             </dl>
 
             <div class="group_btns">
                 <button
-                    on:click={() => {
+                    onclick={() => {
                         onSubmit.set(true);
                         $timeOut && closeMsgDisplay($timeOut);
                     }}
@@ -132,7 +143,7 @@
                     <span class="btn_text">Save</span>
                 </button>
 
-                <button class="red_btn" type="button" on:click={() => addBnrMode(false)}>
+                <button class="red_btn" type="button" onclick={() => (bnrAddMode = false)}>
                     <span class="btn_icon material-symbols-outlined">close</span>
                     <span class="btn_text">Cancel</span>
                 </button>
@@ -145,82 +156,79 @@
         Launcher Banner
     </h2>
     <div class="console_contents">
-        {#if $allBanners.length === 0}
-            <p class="console_contents_note">No Banner Data</p>
-        {:else}
-            {#each _.sortBy($allBanners, 'id') as bnr}
-                <form
-                    action="?/updateBnrData"
-                    method="POST"
-                    enctype="multipart/form-data"
-                    use:enhance={({ formData }) => {
-                        const data = conv2DArrayToObject([...formData.entries()]);
-                        const column = Object.keys(data)[1];
-                        const id = Number(data.bnr_id);
+        {#each _.sortBy($allBanners, 'id') as bnr}
+            <form
+                action="?/updateBnrData"
+                method="POST"
+                enctype="multipart/form-data"
+                use:enhance={({ formData }) => {
+                    const data = conv2DArrayToObject([...formData.entries()]);
+                    const column = Object.keys(data)[1];
+                    const id = Number(data.bnr_id);
 
-                        return async ({ result }) => {
-                            msgClosed.set(false);
-                            onSubmit.set(false);
-                            await applyAction(result);
+                    return async ({ result }) => {
+                        msgClosed.set(false);
+                        onSubmit.set(false);
+                        await applyAction(result);
 
-                            if (result.type === 'success' && column === 'bnr_url') {
-                                const bnr_url = data.bnr_url;
+                        if (result.type === 'success' && column === 'bnr_url') {
+                            const bnr_url = data.bnr_url;
 
-                                // update bnr_url
-                                $allBanners = $allBanners.map((bnr) => {
-                                    if (bnr.id === id)
-                                        return {
-                                            ...bnr,
-                                            bnr_url: !bnr_url ? null : bnr_url.indexOf('discord.com') ? discordLinkConvertor(bnr_url) : bnr_url,
-                                        };
+                            // bnr_url更新
+                            $allBanners = $allBanners.map((bnr) => {
+                                if (bnr.id === id)
+                                    return {
+                                        ...bnr,
+                                        bnr_url: !bnr_url ? null : bnr_url.indexOf('discord.com') ? discordLinkConvertor(bnr_url) : bnr_url,
+                                    };
 
-                                    return bnr;
-                                });
-                            }
-                        };
-                    }}
-                >
-                    <dl class="console_contents_list">
-                        <p class="console_contents_list_title">
-                            <button
-                                class="red_btn"
-                                type="button"
-                                on:click={() =>
-                                    prepareModal('deleteBnr', {
-                                        title: 'Delete the following banner data?',
-                                        form_action: 'deleteBnrData',
-                                        bnr_id: bnr.id,
-                                        bnr_url: bnr.en_img_src,
-                                        bnr_name: bnr.bnr_name,
-                                    })}
-                            >
-                                <span class="btn_icon material-symbols-outlined">delete</span>
-                                <span class="btn_text">Delete</span>
+                                return bnr;
+                            });
+                        }
+                    };
+                }}
+            >
+                <dl class="console_contents_list">
+                    <p class="console_contents_list_title">
+                        <button
+                            class="red_btn"
+                            type="button"
+                            onclick={() =>
+                                prepareModal('deleteBnr', {
+                                    title: 'Delete the following banner data?',
+                                    form_action: 'deleteBnrData',
+                                    bnr_id: bnr.id,
+                                    bnr_url: bnr.en_img_src,
+                                    bnr_name: bnr.bnr_name,
+                                })}
+                        >
+                            <span class="btn_icon material-symbols-outlined">delete</span>
+                            <span class="btn_text">Delete</span>
+                        </button>
+                        Banner Data ({bnr.id})
+                    </p>
+
+                    <dt class="contents_term">ID</dt>
+                    <dd class="contents_desc">{bnr.id}</dd>
+
+                    <dt class="contents_term">Japanese Source</dt>
+                    <dd class="contents_desc">
+                        {bnr.ja_img_src}
+
+                        {#if editingId === bnr.id && catTypes['ja_img_src']}
+                            <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'ja_img_src')}>
+                                <span class="btn_icon material-symbols-outlined">close</span>
+                                <span class="btn_text">Cancel</span>
                             </button>
-                            Banner Data
-                        </p>
+                        {:else}
+                            <button class="normal_btn" type="button" onclick={() => editModeSwitch(bnr.id, 'ja_img_src')}>
+                                <span class="btn_icon material-symbols-outlined">upload_file</span>
+                                <span class="btn_text">Re-upload</span>
+                            </button>
+                        {/if}
 
-                        <dt class="contents_term">Banner ID</dt>
-                        <dd class="contents_desc">
-                            {bnr.id}
-                        </dd>
-
-                        <dt class="contents_term">Ja Banner Source</dt>
-                        <dd class="contents_desc">
-                            {bnr.ja_img_src}
-
-                            {#if editingId === bnr.id && catTypes['ja_img_src']}
-                                <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'ja_img_src')}>
-                                    <span class="btn_icon material-symbols-outlined">close</span>
-                                    <span class="btn_text">Cancel</span>
-                                </button>
-                            {:else}
-                                <button class="normal_btn" type="button" on:click={() => editModeSwitch(bnr.id, 'ja_img_src')}>
-                                    <span class="btn_icon material-symbols-outlined">upload_file</span>
-                                    <span class="btn_text">Re-upload</span>
-                                </button>
-                            {/if}
-
+                        <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+                        <div class="edit_area_box_wrapper">
                             {#if editingId === bnr.id && catTypes['ja_img_src']}
                                 <div transition:slide class="edit_area_box">
                                     <input type="hidden" name="lang" value="ja" />
@@ -239,13 +247,10 @@
                                         <button
                                             class="blue_btn"
                                             type="submit"
-                                            on:click={() => {
+                                            onclick={() => {
                                                 onSubmit.set(true);
                                                 $timeOut && closeMsgDisplay($timeOut);
-                                                // delay the change by 100ms to prevent "0" during submitting
-                                                setTimeout(() => {
-                                                    editModeSwitch(0, 'ja_img_src');
-                                                }, 100);
+                                                editModeSwitch(0, 'ja_img_src');
                                             }}
                                         >
                                             <span class="btn_icon material-symbols-outlined">check</span>
@@ -254,24 +259,27 @@
                                     </div>
                                 </div>
                             {/if}
-                        </dd>
+                        </div>
+                    </dd>
 
-                        <dt class="contents_term">En Banner Source</dt>
-                        <dd class="contents_desc">
-                            {bnr.en_img_src}
+                    <dt class="contents_term">English Source</dt>
+                    <dd class="contents_desc">
+                        {bnr.en_img_src}
 
-                            {#if editingId === bnr.id && catTypes['en_img_src']}
-                                <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'en_img_src')}>
-                                    <span class="btn_icon material-symbols-outlined">close</span>
-                                    <span class="btn_text">Cancel</span>
-                                </button>
-                            {:else}
-                                <button class="normal_btn" type="button" on:click={() => editModeSwitch(bnr.id, 'en_img_src')}>
-                                    <span class="btn_icon material-symbols-outlined">upload_file</span>
-                                    <span class="btn_text">Re-upload</span>
-                                </button>
-                            {/if}
+                        {#if editingId === bnr.id && catTypes['en_img_src']}
+                            <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'en_img_src')}>
+                                <span class="btn_icon material-symbols-outlined">close</span>
+                                <span class="btn_text">Cancel</span>
+                            </button>
+                        {:else}
+                            <button class="normal_btn" type="button" onclick={() => editModeSwitch(bnr.id, 'en_img_src')}>
+                                <span class="btn_icon material-symbols-outlined">upload_file</span>
+                                <span class="btn_text">Re-upload</span>
+                            </button>
+                        {/if}
 
+                        <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+                        <div class="edit_area_box_wrapper">
                             {#if editingId === bnr.id && catTypes['en_img_src']}
                                 <div transition:slide class="edit_area_box">
                                     <div class="edit_area enter">
@@ -290,13 +298,10 @@
                                         <button
                                             class="blue_btn"
                                             type="submit"
-                                            on:click={() => {
+                                            onclick={() => {
                                                 onSubmit.set(true);
                                                 $timeOut && closeMsgDisplay($timeOut);
-                                                // delay the change by 100ms to prevent "0" during submitting
-                                                setTimeout(() => {
-                                                    editModeSwitch(0, 'en_img_src');
-                                                }, 100);
+                                                editModeSwitch(0, 'en_img_src');
                                             }}
                                         >
                                             <span class="btn_icon material-symbols-outlined">check</span>
@@ -305,31 +310,34 @@
                                     </div>
                                 </div>
                             {/if}
-                        </dd>
+                        </div>
+                    </dd>
 
-                        <dt class="contents_term">Banner URL</dt>
-                        <dd class="contents_desc">
-                            {bnr.bnr_url}
+                    <dt class="contents_term">Hyperlink</dt>
+                    <dd class="contents_desc">
+                        {bnr.bnr_url ?? 'null'}
 
-                            {#if editingId === bnr.id && catTypes['bnr_url']}
-                                <button class="red_btn" type="button" on:click={() => editModeSwitch(0, 'bnr_url')}>
-                                    <span class="btn_icon material-symbols-outlined">close</span>
-                                    <span class="btn_text">Cancel</span>
-                                </button>
-                            {:else}
-                                <button class="normal_btn" type="button" on:click={() => editModeSwitch(bnr.id, 'bnr_url')}>
-                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                    <span class="btn_text">Edit</span>
-                                </button>
-                            {/if}
+                        {#if editingId === bnr.id && catTypes['bnr_url']}
+                            <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'bnr_url')}>
+                                <span class="btn_icon material-symbols-outlined">close</span>
+                                <span class="btn_text">Cancel</span>
+                            </button>
+                        {:else}
+                            <button class="normal_btn" type="button" onclick={() => editModeSwitch(bnr.id, 'bnr_url')}>
+                                <span class="btn_icon material-symbols-outlined">mode_edit</span>
+                                <span class="btn_text">Edit</span>
+                            </button>
+                        {/if}
 
+                        <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+                        <div class="edit_area_box_wrapper">
                             {#if editingId === bnr.id && catTypes['bnr_url']}
                                 <div transition:slide class="edit_area_box">
                                     <input type="hidden" name="bnr_id" value={editingId} />
                                     <div class="edit_area enter">
-                                        <p class="edit_area_title">Change URL</p>
+                                        <p class="edit_area_title">Change Hyperlink</p>
                                         <dl class="edit_area_box_parts text">
-                                            <dt>Enter new URL</dt>
+                                            <dt>Enter new Hyperlink</dt>
                                             <dd>
                                                 <input type="text" name="bnr_url" value={bnr.bnr_url} autocomplete="off" />
                                             </dd>
@@ -338,13 +346,10 @@
                                         <button
                                             class="blue_btn"
                                             type="submit"
-                                            on:click={() => {
+                                            onclick={() => {
                                                 onSubmit.set(true);
                                                 $timeOut && closeMsgDisplay($timeOut);
-                                                // delay the change by 100ms to prevent "0" during submitting
-                                                setTimeout(() => {
-                                                    editModeSwitch(0, 'bnr_url');
-                                                }, 100);
+                                                editModeSwitch(0, 'bnr_url');
                                             }}
                                         >
                                             <span class="btn_icon material-symbols-outlined">check</span>
@@ -353,15 +358,17 @@
                                     </div>
                                 </div>
                             {/if}
-                        </dd>
+                        </div>
+                    </dd>
 
-                        <dt class="contents_term">Banner Name</dt>
-                        <dd class="contents_desc">
-                            {bnr.bnr_name}
-                        </dd>
-                    </dl>
-                </form>
-            {/each}
-        {/if}
+                    <dt class="contents_term">Name</dt>
+                    <dd class="contents_desc">
+                        {bnr.bnr_name}
+                    </dd>
+                </dl>
+            </form>
+        {:else}
+            <p class="console_contents_note">No Banner Data</p>
+        {/each}
     </div>
 {/if}

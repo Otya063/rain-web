@@ -3,7 +3,10 @@
     import { applyAction, enhance } from '$app/forms';
     import { onSubmit, closeModal, linkDiscordData, conv2DArrayToObject, msgClosed, paginatedUsersData, updateUserCtrlPanel, timeOut, closeMsgDisplay } from '$lib/utils';
 
-    export let newDiscord: discord;
+    interface Props {
+        newDiscord: discord;
+    }
+    let { newDiscord }: Props = $props();
 </script>
 
 <div class="modal">
@@ -26,14 +29,14 @@
                         updateUserCtrlPanel(userId, charId, 'link', newDiscord);
 
                         $paginatedUsersData = $paginatedUsersData.map((user) => {
-                            // delete same discord data
+                            // 同じdiscordデータを削除
                             type === 'linkDiscord' &&
                                 (user.characters = user.characters.map((character) => ({
                                     ...character,
                                     discord: character.discord && character.discord.discord_id === discord_id ? null : character.discord,
                                 })));
 
-                            // update discord data
+                            // udiscordデータ更新
                             if (user.id === userId) {
                                 user.characters = user.characters.map((character) => {
                                     if (character.id === charId)
@@ -112,16 +115,16 @@
                     class="blue_btn"
                     formaction="?/{$linkDiscordData.form_action}"
                     type="submit"
-                    on:click={() => {
+                    onclick={() => {
                         onSubmit.set(true);
                         $timeOut && closeMsgDisplay($timeOut);
                     }}
                 >
-                    <span class="btn_icon material-icons">check</span>
+                    <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Yes</span>
                 </button>
-                <button class="red_btn" type="button" on:click={() => closeModal()}>
-                    <span class="btn_icon material-icons">close</span>
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
                     <span class="btn_text">No</span>
                 </button>
             </div>

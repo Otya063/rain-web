@@ -4,13 +4,16 @@
     import Menu from '$lib/manual/Menu.svelte';
     import { scrollToTop, sideMenuSwitch } from '$lib/utils';
 
-    export let data: PageData;
+    interface Props {
+        data: PageData;
+    }
+    let { data }: Props = $props();
     const { article } = data;
     const { url } = data;
     const pathname = url.pathname;
 </script>
 
-<button class="menu_btn" on:click={() => sideMenuSwitch()}>
+<button class="menu_btn" aria-label="Side Menu Btn" onclick={() => sideMenuSwitch()}>
     <span class="menu_btn_line"></span>
     <span class="menu_btn_line"></span>
     <span class="menu_btn_line"></span>
@@ -18,17 +21,15 @@
 
 <div class="bg">
     <main class="main_inner">
-        <!-- side_menu -->
         <nav class="side_menu slidable_on_mobile">
             <Menu {pathname} />
         </nav>
 
-        <!-- article -->
         <article class="contents">
             {#await import(`../../../../../../../lib/manual/articles/contents/${article.maindir}_${article.subdir}.svelte`)}
                 <p class="article_loader">Loading</p>
             {:then component}
-                <svelte:component this={component.default} />
+                <component.default />
             {:catch error}
                 <p style="color: red">{error}</p>
             {/await}
@@ -36,8 +37,8 @@
     </main>
 </div>
 
-<!-- scroll to top button for PC -->
-<button on:click={scrollToTop} id="scroll_to_top" />
+<!-- PC用上まで戻るボタン -->
+<button onclick={scrollToTop} id="scroll_to_top" aria-label="Scroll to Top"></button>
 
 <svelte:head>
     <title>{article.metaTitle} | {$LL.manual['manualLabel']()}</title>

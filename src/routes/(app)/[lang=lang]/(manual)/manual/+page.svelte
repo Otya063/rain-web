@@ -5,9 +5,11 @@
     import Menu from '$lib/manual/Menu.svelte';
     import { scrollToTop, sideMenuSwitch } from '$lib/utils';
 
-    // random select for top images (1 ≦ rad ≦ 4)
-    export let data: PageData;
-    const rad: number = data.r;
+    interface Props {
+        data: PageData;
+    }
+    let { data }: Props = $props();
+    const rad: number = data.r; // トップ画像をランダム選択 (１から４)
     const { url } = data;
     const pathname = url.pathname;
 </script>
@@ -19,7 +21,7 @@
     </picture>
 </div>
 
-<button class="menu_btn" on:click={() => sideMenuSwitch()}>
+<button class="menu_btn" aria-label="Side Menu Btn" onclick={() => sideMenuSwitch()}>
     <span class="menu_btn_line"></span>
     <span class="menu_btn_line"></span>
     <span class="menu_btn_line"></span>
@@ -28,19 +30,17 @@
 <div class="bg">
     <main class="main_inner">
         <nav class="side_menu">
-            <!-- side_menu -->
             <Menu {pathname} />
         </nav>
 
         <article class="contents">
-            <!-- article -->
             <Home />
         </article>
     </main>
 </div>
 
-<!-- scroll to top button for PC -->
-<button on:click={scrollToTop} id="scroll_to_top" />
+<!-- PC用上まで戻るボタン -->
+<button onclick={scrollToTop} id="scroll_to_top" aria-label="Scroll to Top"></button>
 
 <svelte:head>
     <title>{$LL.manual['manualLabel']()} | {$LL.serverTitle()}</title>

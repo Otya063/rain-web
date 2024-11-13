@@ -7,7 +7,7 @@ export const load: PageServerLoad = async ({ params }) => {
     const article = articles.find((article) => article.lang === lang && article.maindir === maindir && article.subdir === subdir);
 
     if (!article) {
-        throw error(404);
+        error(404);
     }
 
     return { article };

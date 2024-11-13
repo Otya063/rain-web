@@ -1,5 +1,5 @@
-import type { Locales, TranslationFunctions } from '$i18n/i18n-types';
 import type { users } from '@prisma/client';
+import type { Locales, TranslationFunctions } from '$i18n/i18n-types';
 
 declare global {
     namespace App {

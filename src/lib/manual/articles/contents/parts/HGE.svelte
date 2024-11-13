@@ -7,7 +7,7 @@
 </script>
 
 <tr class="table_row">
-    <th class="table_header" scope="row" />
+    <th class="table_header" scope="row"></th>
     <td style="border-left: black solid 2px" class="table_data table_data_center no_border_right table_header_hge">{columnName()}</td>
 </tr>
 

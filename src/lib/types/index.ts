@@ -1,10 +1,11 @@
 export * from './admin';
+export * from './binary';
 export * from './course';
 export * from './distribution';
 export * from './modal';
 export * from './weapon';
 
-/* Manual Article
+/* マニュアル記事
 ====================================================*/
 export interface Articles {
     lang: string;
@@ -13,6 +14,6 @@ export interface Articles {
     metaTitle: string;
 }
 
-/* Rain Web Information Type
+/* インフォ短縮形
 ====================================================*/
 export type InformationType = 'IMP' | 'DNT' | 'MAS' | 'IGE' | 'UAM' | 'ALL';

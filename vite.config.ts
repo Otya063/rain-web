@@ -9,6 +9,13 @@ const config: UserConfig = {
             allow: ['..'],
         },
     },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                api: 'modern-compiler',
+            },
+        },
+    },
 };
 
 export default config;

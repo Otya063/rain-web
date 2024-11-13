@@ -1,10 +1,35 @@
+import { error } from '@sveltejs/kit';
+import Encoding from 'encoding-japanese';
 import { courseJa } from '$i18n/ja/course';
 import { courseEn } from '$i18n/en/course';
 import { type WeaponType, type CourseJaData, type CourseEnData, type DistributionContentsType, DistributionContentsTypeObj, type DistributionType, DistributionTypeObj } from '$lib/types';
-import Encoding from 'encoding-japanese';
 
-/* Get Course by Decimal
-====================================================*/
+/**
+ * URLのロケールスラグを置き換える
+ * @param {URL} url 操作対象のURLオブジェクト
+ * @param {string} locale 置き換えるロケールの文字列
+ * @param {boolean} [full=false] `true`の場合、新しいURLからクエリパラメータを削除する
+ * @returns {string} 更新されたURL文字列
+ */
+export const replaceLocaleInUrl = (url: URL, locale: string, full: boolean = false): string => {
+    const [, , ...rest] = url.pathname.split('/');
+    const new_pathname = `/${[locale, ...rest].join('/')}`;
+    if (!full) {
+        return `${new_pathname}${url.search}`;
+    }
+    const newUrl = new URL(url.toString());
+    newUrl.pathname = new_pathname;
+    newUrl.search = '';
+
+    return newUrl.toString();
+};
+
+/**
+ * 10進数の値に基づいてコース情報を取得する
+ * @param {number} dec コース情報の10進数表現
+ * @param {string} lang 言語コード
+ * @returns {CourseJaData | CourseEnData} コースデータオブジェクト
+ */
 export const getCourseByDecimal = (dec: number, lang: string): CourseJaData | CourseEnData => {
     const bin: string[] = dec.toString(2).padStart(30, '0').split('').reverse();
 
@@ -18,15 +43,18 @@ export const getCourseByDecimal = (dec: number, lang: string): CourseJaData | Co
         }
 
         default: {
-            throw new Error('Invalid Language');
+            error(400, { message: '', message1: undefined, message2: [`Unsupported language: ${lang}.`], message3: undefined });
         }
     }
 };
 
-/* Get Course (decimal) from Object Data
-====================================================*/
+/**
+ * コースデータオブジェクトから10進数のコース情報を取得する
+ * @param {Record<string, any>} courseData コースデータのオブジェクト
+ * @returns {number} 10進数のコース情報
+ */
 export const getCourseByObjData = (courseData: Record<string, any>): number => {
-    // change the values to boolean
+    // 文字列をブール値に変換
     Object.keys(courseData).forEach((name) => {
         courseData[name] === 'on' && (courseData[name] = true);
     });
@@ -63,8 +91,12 @@ export const getCourseByObjData = (courseData: Record<string, any>): number => {
     return dec;
 };
 
-/* Get Weapon Type by Dec
-====================================================*/
+/**
+ * 10進数の値に基づいて武器タイプを取得する
+ * @param {number | null} dec 武器タイプを表す10進数
+ * @param {string} lang 言語コード
+ * @returns {WeaponType} 武器タイプの文字列
+ */
 export const getWpnTypeByDec = (dec: number | null, lang: string): WeaponType => {
     switch (lang) {
         case 'ja': {
@@ -165,17 +197,21 @@ export const getWpnTypeByDec = (dec: number | null, lang: string): WeaponType =>
     }
 };
 
-/* Get Weapon Name by Dec
-====================================================*/
+/**
+ * 武器ID（10進数）から武器の名前を取得する
+ * @param {number} dec 武器IDの10進数表現
+ * @param {number | null} wpnType - 武器タイプ
+ * @param {string} lang 言語コード
+ * @returns {Promise<string>} 武器の名前
+ */
 export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang: string): Promise<string> => {
     const hex: string = decToLittleEndian(dec);
 
     switch (wpnType) {
-        // ranged
+        // 遠距離武器
         case 1:
         case 5:
         case 10: {
-            // language select
             switch (lang) {
                 case 'ja': {
                     const { rangedJa } = await import('$i18n/ja/ranged');
@@ -188,14 +224,13 @@ export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang:
                 }
 
                 default: {
-                    throw new Error('Invalid Language');
+                    error(400, { message: '', message1: undefined, message2: [`Unsupported language: ${lang}.`], message3: undefined });
                 }
             }
         }
 
-        // melee
+        // 近距離武器
         default: {
-            // language select
             switch (lang) {
                 case 'ja': {
                     const { meleeJa } = await import('$i18n/ja/melee');
@@ -208,15 +243,18 @@ export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang:
                 }
 
                 default: {
-                    throw new Error('Invalid Language');
+                    error(400, { message: '', message1: undefined, message2: [`Unsupported language: ${lang}.`], message3: undefined });
                 }
             }
         }
     }
 };
 
-/* Convert 2-Dimensional Array into Object
-====================================================*/
+/**
+ * 2次元配列をオブジェクトに変換する
+ * @param {[string, FormDataEntryValue][]} arr 変換する2次元配列
+ * @returns {Record<string, any>} キーと値のペアからなるオブジェクト
+ */
 export const conv2DArrayToObject = (arr: [string, FormDataEntryValue][]): Record<string, any> => {
     let obj: { [key: string]: any } = {};
 
@@ -230,42 +268,51 @@ export const conv2DArrayToObject = (arr: [string, FormDataEntryValue][]): Record
     return obj;
 };
 
-/* Generate Underscore and Lowercase Strings
-====================================================*/
+/**
+ * 文字列をアンダースコア付き小文字の文字列に変換する
+ * @param {string} string 変換対象の文字列
+ * @returns {string} アンダースコア付き小文字の文字列
+ */
 export const underscoreAndLowercase = (string: string): string => {
-    // convert uppercase to lowercase
+    // 大文字を小文字に変換
     const lowercaseString = string.toLowerCase();
 
-    // underscore
+    // アンダースコアつける
     const underscoreLowercaseString = lowercaseString.replace(/\s/g, '_');
 
     return underscoreLowercaseString;
 };
 
-/* Endian Conversion
-====================================================*/
+/**
+ * 10進数をリトルエンディアンの16進数に変換する
+ * @param {number} dec 10進数
+ * @returns {string} リトルエンディアン形式の16進数
+ */
 export const decToLittleEndian = (dec: number): string => {
-    // convert decimal to hexadecimal as a big-endian string with a minimum width of 4 digits
+    // 最小幅4桁のビッグエンディアン文字列として10進数から16進数に変換
     const bigEndianHex: string = dec.toString(16).padStart(4, '0');
 
-    // split the big-endian hex string into pairs of two characters
+    // ビッグエンディアンの16進文字列を2文字のペアに分割
     const pairs = bigEndianHex.match(/.{1,2}/g);
 
     if (pairs) {
-        // reverse the order of the pairs to get little-endian representation
+        // ペアの順序を逆にしてリトルエンディアン表現へ
         const littleEndianHex: string = pairs.reverse().join('');
 
-        // convert alphabetic characters to uppercase
+        // アルファベットを大文字に変換する
         const uppercaseLittleEndianHex: string = littleEndianHex.replace(/[a-f]/g, (match) => match.toUpperCase());
 
         return uppercaseLittleEndianHex;
     } else {
-        throw new Error('Invalid Input');
+        error(400, { message: '', message1: undefined, message2: [`Invalid input: ${dec}.`], message3: undefined });
     }
 };
 
-/* Discord Link Conversion
-====================================================*/
+/**
+ * DiscordのURLをアプリ用のURLに変換する
+ * @param {string} url 変換するURL
+ * @returns {string} Discordアプリ用のURL
+ */
 export const discordLinkConvertor = (url: string): string => {
     if (url.indexOf('discord.com')) {
         return url.replace('https://discord.com/', 'discord://discordapp.com/');
@@ -274,8 +321,11 @@ export const discordLinkConvertor = (url: string): string => {
     }
 };
 
-/* Convert Hrp Into True HR
-====================================================*/
+/**
+ * HRポイントを対応するHRランクに変換する
+ * @param {number | null} hrp HRポイント
+ * @returns {number} 対応するHRランク
+ */
 export const convHrpToHr = (hrp: number | null): number => {
     switch (hrp) {
         case 999: {
@@ -312,20 +362,25 @@ export const convHrpToHr = (hrp: number | null): number => {
 /**
  * SJISで文字列をエンコードする
  * @param {string} value 変換対象の文字列
- * @returns {Uint8Array} 変換後のUint8Array
+ * @returns {Buffer} 変換後のBufferデータ
  */
-export const encodeToShiftJIS = (value: string): Uint8Array => {
+export const encodeToShiftJIS = (value: string): Buffer => {
     const unicodeArray = Encoding.stringToCode(value);
     const encoded = Encoding.convert(unicodeArray, {
         to: 'SJIS',
         from: 'UNICODE',
     });
 
-    return new Uint8Array(encoded);
+    return Buffer.from(new Uint8Array(encoded));
 };
 
+/**
+ * 配布コンテンツの種類に基づいてデータを取得する
+ * @param {DistributionContentsType} contentsType コンテンツの種類
+ * @returns {Promise<{[key: string]: string}>} 取得したデータ
+ */
 export const getDistItemsData = async (
-    contentsType: DistributionContentsType
+    contentsType: DistributionContentsType,
 ): Promise<{
     [key: string]: string;
 }> => {
@@ -371,16 +426,47 @@ export const getDistItemsData = async (
         }
 
         default: {
-            throw new Error('Invalid contents type.');
+            error(400, { message: '', message1: undefined, message2: [`Unsupported contents type: ${contentsType}.`], message3: undefined });
         }
     }
 };
 
+/**
+ * 配布タイプを取得する
+ * @param {DistributionType} type 配布タイプ
+ * @returns {string} 配布タイプの文字列
+ */
 export const getDistributionType = (type: DistributionType): string => {
     const entry = Object.entries(DistributionTypeObj).find(([_, value]) => value === type);
+
     if (entry) {
         return entry[0];
     } else {
-        throw new Error('Invalid distribution type.');
+        error(400, { message: '', message1: undefined, message2: [`Unsupported distribution type: ${type}.`], message3: undefined });
     }
+};
+
+/**
+ * 秒数を時分秒に変換する
+ * @param {number} seconds 変換元の秒数
+ * @returns {string} 変換後の時分秒（`00h 00m 00s`の形式）
+ */
+export const secToTime = (seconds: number): string => {
+    const hour = Math.floor(seconds / 3600);
+    const min = Math.floor((seconds % 3600) / 60);
+    const sec = seconds % 60;
+
+    // 時間が3桁以上の場合にカンマを挿入
+    const hourStr = hour >= 1000 ? hour.toLocaleString() : hour.toString();
+
+    let time = '';
+    if (hour !== 0) {
+        time = `${hourStr}h ${min}m ${sec}s`;
+    } else if (min !== 0) {
+        time = `${min}m ${sec}s`;
+    } else {
+        time = `${sec}s`;
+    }
+
+    return time;
 };

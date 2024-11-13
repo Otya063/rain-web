@@ -32,16 +32,13 @@
             <div class="modal_body">
                 <p>{$deleteBnrData.title}</p>
                 <ul class="modal_list">
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <!-- svelte-ignore a11y-click-events-have-key-events -->
-                    <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
-                    <li class="modal_list_item" style="cursor: pointer;" on:click={() => window.open($deleteBnrData.bnr_url, '_blank')}>
-                        <p>Bnr Preview<span class="material-symbols-outlined">open_in_new</span></p>
+                    <button class="modal_list_item" type="button" onclick={() => window.open($deleteBnrData.bnr_url, '_blank')}>
+                        <p>Preview<span class="material-symbols-outlined">open_in_new</span></p>
                         <img src={$deleteBnrData.bnr_url} alt={$deleteBnrData.bnr_name} />
-                    </li>
+                    </button>
 
                     <li class="modal_list_item">
-                        <p>Bnr Name</p>
+                        <p>Name</p>
                         <span>{$deleteBnrData.bnr_name}</span>
                     </li>
                 </ul>
@@ -51,16 +48,16 @@
                     class="blue_btn"
                     type="submit"
                     formaction="?/{$deleteBnrData.form_action}"
-                    on:click={() => {
+                    onclick={() => {
                         onSubmit.set(true);
                         $timeOut && closeMsgDisplay($timeOut);
                     }}
                 >
-                    <span class="btn_icon material-icons">check</span>
+                    <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Yes</span>
                 </button>
-                <button class="red_btn" type="button" on:click={() => closeModal()}>
-                    <span class="btn_icon material-icons">close</span>
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
                     <span class="btn_text">No</span>
                 </button>
             </div>
