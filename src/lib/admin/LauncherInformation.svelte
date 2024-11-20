@@ -4,7 +4,7 @@
     import { DateTime } from 'luxon';
     import { slide } from 'svelte/transition';
     import { applyAction, enhance } from '$app/forms';
-    import { allInformation, prepareModal, underscoreAndLowercase, onSubmit, msgClosed, discordLinkConvertor, conv2DArrayToObject, timeOut, closeMsgDisplay } from '$lib/utils';
+    import { allInformation, prepareModal, underscoreAndLowercase, onSubmit, msgClosed, discordLinkConvertor, conv2DArrayToObject, timeOut, closeMsgDisplay, tooltip } from '$utils/client';
 
     interface Props {
         informationData: { [key: string]: launcher_info[] };
@@ -99,9 +99,11 @@
                     <input type="text" name="title" autocomplete="off" />
                 </dd>
 
-                <dt class="contents_term">Hyperlink</dt>
+                <dt class="contents_term">
+                    Hyperlink
+                    <span class="help_btn material-symbols-outlined" use:tooltip={'If the domain is “discord.com”, the url will be automatically converted to open the discord app.'}>help</span>
+                </dt>
                 <dd class="contents_desc">
-                    <p class="console_contents_note">* If the domain is "discord.com," the url will be converted so that the discord app will open automatically.</p>
                     <input type="text" name="url" autocomplete="off" />
                 </dd>
 
@@ -284,7 +286,7 @@
 
                         <dt class="contents_term">Hyperlink</dt>
                         <dd class="contents_desc">
-                            {info.url ?? 'null'}
+                            {info.url || 'None'}
 
                             {#if editingId === info.id && catTypes['url']}
                                 <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'url')}>
@@ -306,7 +308,7 @@
                                             <p class="edit_area_title">Change Hyperlink</p>
                                             <p class="console_contents_note">* If the domain is "discord.com," the url will be converted so that the discord app will open automatically.</p>
                                             <dl class="edit_area_box_parts text">
-                                                <dt>Enter new Hyperlink</dt>
+                                                <dt>Enter new hyperlink</dt>
                                                 <dd>
                                                     <input type="text" name="url" value={info.url} autocomplete="off" />
                                                 </dd>
@@ -406,7 +408,7 @@
                                         <div class="edit_area enter">
                                             <p class="edit_area_title">Change Information Type</p>
                                             <dl class="edit_area_box_parts text">
-                                                <dt>Select new info type</dt>
+                                                <dt>Select new type</dt>
                                                 <dd>
                                                     <select name="type">
                                                         {#each Object.keys($allInformation) as key}

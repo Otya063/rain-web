@@ -8639,7 +8639,7 @@ export const itemEn: { [key: string]: string } = {
     '0023': 'Deep Sea Chub',
     '0123': 'Lava King Crab',
     '0223': 'Arctic Salmon',
-    '0323': 'Golden Coin G',
+    '0323': 'Premium Coin G',
     '0423': 'Trial Coin G',
     '0523': 'Aniv. Memory Coin',
     '0623': 'Gacha Lucky Charm',

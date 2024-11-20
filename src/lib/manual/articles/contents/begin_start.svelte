@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import LL, { locale } from '$i18n/i18n-svelte';
-    import { loadArticle, scrollToElm } from '$lib/utils';
+    import { loadArticle, scrollToElm } from '$utils/client';
     import HGE from './parts/HGE.svelte';
     import Original from './parts/Original.svelte';
 
@@ -144,7 +144,7 @@
                     <span class="check_contents_list_arrow">＞</span>
                     <span class="check_contents_list_arrow">＞</span>
                 </div>
-                
+
                 <button onclick={(e) => loadArticle(e, $page.url, $locale, 'manual/begin/multiple/')} class="check_contents_list_link">{start.checkContents['link']()}</button>
             </li>
         </ul>

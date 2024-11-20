@@ -3,7 +3,7 @@
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
     import { applyAction, enhance } from '$app/forms';
-    import { prepareModal, onSubmit, msgClosed, allBanners, conv2DArrayToObject, discordLinkConvertor, timeOut, closeMsgDisplay } from '$lib/utils';
+    import { prepareModal, onSubmit, msgClosed, allBanners, conv2DArrayToObject, discordLinkConvertor, timeOut, closeMsgDisplay, tooltip } from '$utils/client';
 
     interface Props {
         launcherBanner: launcher_banner[];
@@ -111,22 +111,37 @@
                     <input name="en_file" type="file" accept=".png" />
                 </dd>
 
-                <dt class="contents_term">Hyperlink</dt>
+                <dt class="contents_term">
+                    Hyperlink
+                    <span class="help_btn material-symbols-outlined" use:tooltip={'The site url to which the banner is redirected when clicked.'}>help</span>
+                </dt>
                 <dd class="contents_desc">
                     <input type="text" name="bnr_url" autocomplete="off" />
-                    <p class="console_contents_note">* The site url to which the banner is redirected when clicked.</p>
                 </dd>
 
                 {#if isMobile}
-                    <dt class="contents_term">Name <span class="contents_term_required">[Required]</span></dt>
+                    <dt class="contents_term">
+                        Name
+                        <span class="contents_term_required">[Required]</span>
+                        <span
+                            class="help_btn material-symbols-outlined"
+                            use:tooltip={'Banner name must be in lowercase, and underscores must be used when combining two words.<br />Name is permanent.'}>help</span
+                        >
+                    </dt>
                 {:else}
-                    <dt class="contents_term">Name<br /><span class="contents_term_required">[Required]</span></dt>
+                    <dt class="contents_term">
+                        Name
+                        <span
+                            class="help_btn material-symbols-outlined"
+                            use:tooltip={'- Banner name must be in lowercase, and underscores must be used when combining two words.<br />- Name is permanent.'}>help</span
+                        >
+                        <br />
+                        <span class="contents_term_required">[Required]</span>
+                    </dt>
                 {/if}
-                
+
                 <dd class="contents_desc">
                     <input type="text" name="bnr_name" autocomplete="off" />
-                    <p class="console_contents_note">* Banner name must be in lowercase, and underscores must be used when combining two words.</p>
-                    <p class="console_contents_note">* Banner name is permanent.</p>
                 </dd>
             </dl>
 
@@ -315,7 +330,7 @@
 
                     <dt class="contents_term">Hyperlink</dt>
                     <dd class="contents_desc">
-                        {bnr.bnr_url ?? 'null'}
+                        {bnr.bnr_url || 'None'}
 
                         {#if editingId === bnr.id && catTypes['bnr_url']}
                             <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'bnr_url')}>
@@ -337,7 +352,7 @@
                                     <div class="edit_area enter">
                                         <p class="edit_area_title">Change Hyperlink</p>
                                         <dl class="edit_area_box_parts text">
-                                            <dt>Enter new Hyperlink</dt>
+                                            <dt>Enter new hyperlink</dt>
                                             <dd>
                                                 <input type="text" name="bnr_url" value={bnr.bnr_url} autocomplete="off" />
                                             </dd>

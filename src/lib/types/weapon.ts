@@ -1,4 +1,4 @@
-export type WeaponType = WeaponJapanse | WeaponEnglish | 'Invalid Input';
+export type WeaponType = WeaponJapanse | WeaponEnglish;
 
 type WeaponJapanse =
     | '大剣'

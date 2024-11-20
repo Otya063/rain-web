@@ -2,7 +2,7 @@
     import { slide } from 'svelte/transition';
     import { page } from '$app/stores';
     import LL, { locale } from '$i18n/i18n-svelte';
-    import { loadArticle } from '$lib/utils';
+    import { loadArticle } from '$utils/client';
 
     interface Props {
         pathname: string;

@@ -1,6 +1,6 @@
 <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, msgClosed, timeOut, closeMsgDisplay, downloadBinaryData, downloadUserBinary } from '$lib/utils';
+    import { onSubmit, closeModal, msgClosed, timeOut, closeMsgDisplay, downloadBinaryData, downloadUserBinary } from '$utils/client';
 
     let result: string = $state('E');
 </script>

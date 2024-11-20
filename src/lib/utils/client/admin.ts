@@ -1,6 +1,6 @@
 import type { launcher_banner, launcher_info, users } from '@prisma/client/edge';
 import { get, writable } from 'svelte/store';
-import type { PaginatedUsers, PaginatedCharacter, PaginationMeta, PaginatedClans, PaginatedAlliances } from '$lib/types';
+import type { PaginatedUsers, PaginatedCharacter, PaginationMeta, PaginatedClans, PaginatedAlliances, Distribution } from '$types';
 
 export const filterUserValue = writable<string>('');
 export const filterUserParam = writable<string>('');
@@ -29,6 +29,8 @@ export const paginationClansMetaData = writable<PaginationMeta>();
 export const paginatedAlliancesData = writable<PaginatedAlliances[] | null>();
 export const paginationAlliancesMetaData = writable<PaginationMeta>();
 export const clanNameData = writable<string[]>();
+//export const commonDistributionData = writable<Distribution[]>();
+//export const individualDistributionData = writable<Distribution[]>();
 
 /**
  * Rain APIを介してファイルをアップロードする
@@ -266,4 +268,47 @@ export const updateUserCtrlPanel = (userId: number, charId: number, column?: str
             }
         }
     });
+};
+
+/**
+ * 管理コンソールのコンテンツを有効または無効にする
+ * @param {boolean} enable コンテンツを有効にするか無効にするかのフラグ
+ */
+export const consoleContDisable = (enable: boolean): void => {
+    enable ? document.getElementsByClassName('console_contents')[0].classList.add('disabled_elm') : document.getElementsByClassName('console_contents')[0].classList.remove('disabled_elm');
+};
+
+/**
+ * 認証中のボタンの状態を切り替える
+ * @param {boolean} enable ボタンを有効化するか無効化するかのフラグ
+ * @param {HTMLElement | null} btnElm 対象のボタン要素
+ * @param {HTMLCollectionOf<Element> | null} [labelElm] 対象のラベル要素
+ * @param {NodeListOf<Element> | null} [inputElm] 対象の入力フィールド要素
+ */
+export const switchBtnInAuth = (enable: boolean, btnElm: HTMLElement | null, labelElm: HTMLCollectionOf<Element> | null = null, inputElm: NodeListOf<Element> | null = null): void => {
+    if (enable) {
+        btnElm?.classList.remove('loading_btn', 'disabled_elm');
+
+        if (labelElm) {
+            Array.from(labelElm).forEach((elm) => {
+                elm.classList.remove('disabled_elm');
+            });
+        }
+
+        inputElm?.forEach((elm) => {
+            elm.classList.remove('disabled_elm');
+        });
+    } else {
+        btnElm?.classList.add('loading_btn', 'disabled_elm');
+
+        if (labelElm) {
+            Array.from(labelElm).forEach((elm) => {
+                elm.classList.add('disabled_elm');
+            });
+        }
+
+        inputElm?.forEach((elm) => {
+            elm.classList.add('disabled_elm');
+        });
+    }
 };

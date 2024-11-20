@@ -285,8 +285,8 @@
                     // コンテンツアイテム説明
                     .contents_desc {
                         position: relative;
-                        display: flex;
-                        flex-direction: column;
+                        //display: flex;
+                        //flex-direction: column;
                         width: 75%;
                         padding: 2.5% 0 1%;
                         border-bottom: 1px gray dashed;
@@ -331,12 +331,45 @@
                             row-gap: 20px;
                             grid-template-columns: repeat(2, 1fr);
                         }
-                    }
-                }
 
-                // コンテンツ注意事項
-                .console_contents_note {
-                    color: red;
+                        // 主にカラーコードを含む文字列編集用に使用する（Distribution.svelte）
+                        .contenteditable {
+                            color: #ffffff; // デフォルト色
+                            background: #4d4d4dba;
+
+                            .white {
+                                color: #ffffff;
+                            }
+
+                            .black {
+                                color: #323232;
+                            }
+
+                            .red {
+                                color: #ff435d;
+                            }
+
+                            .green {
+                                color: #56ff56;
+                            }
+
+                            .cyan {
+                                color: #57ffff;
+                            }
+
+                            .yellow {
+                                color: #ffff50;
+                            }
+
+                            .orange {
+                                color: #fea461;
+                            }
+
+                            .pink {
+                                color: #ff84ff;
+                            }
+                        }
+                    }
                 }
 
                 // ボタングループ化
@@ -512,6 +545,7 @@
                         align-items: center;
                         justify-content: flex-start;
 
+                        // 丸アイコン
                         .material-symbols-outlined {
                             font-size: 2.1rem;
                             padding: 0 10px 2px 0;
@@ -528,17 +562,33 @@
 
                     // 利用権選択リスト
                     .course_list {
-                        display: flex;
-                        flex-wrap: wrap;
+                        display: grid;
+                        column-gap: 10px;
+                        row-gap: 20px;
+                        grid-template-columns: repeat(2, 1fr);
+                        margin: 3% 4%;
 
                         // 利用権各項目
                         .course_item {
-                            width: calc(50% - 20px);
-                            margin: 0 10px 6%;
-
+                            // 丸/チェックアイコン
                             .material-symbols-outlined {
                                 font-size: 2.1rem;
                                 padding: 0 10px 2px 0;
+                            }
+                        }
+
+                        // ユーザーID複数選択input
+                        &_user_ids {
+                            position: relative;
+
+                            input {
+                                width: 100%;
+                            }
+
+                            .help_btn {
+                                position: absolute !important;
+                                top: 0;
+                                right: 0;
                             }
                         }
                     }
@@ -558,7 +608,54 @@
                         }
 
                         select {
-                            width: 90%;
+                            width: 100%;
+                        }
+                    }
+
+                    // カラーパレット（Distribution.svelte）
+                    .color_palette {
+                        display: grid;
+                        column-gap: 10px;
+                        grid-auto-flow: column;
+                        margin-bottom: 15px;
+
+                        &_btn {
+                            width: 30px;
+                            height: 30px;
+                            border-radius: 20px;
+                            border: 2px solid black;
+
+                            &.white {
+                                background: #ffffff;
+                            }
+
+                            &.black {
+                                background: #323232;
+                            }
+
+                            &.red {
+                                background: #ff435d;
+                            }
+
+                            &.green {
+                                background: #56ff56;
+                            }
+
+                            &.cyan {
+                                background: #57ffff;
+                            }
+
+                            &.yellow {
+                                background: #ffff50;
+                            }
+
+                            &.orange {
+                                background: #fea461;
+                            }
+
+                            &.pink {
+                                background: #ff84ff;
+                            }
                         }
                     }
                 }
@@ -1253,6 +1350,49 @@
                 0 0 10px rgba(0, 0, 0, 1),
                 0 0 10px rgba(0, 0, 0, 1);
             transform: translate(-50%, -50%);
+        }
+    }
+
+    /* 配布セクション
+========================================================= */
+    // 個人別配布セクションのinput要素
+    .indiv_dist_input {
+        font-size: 1.6rem;
+        width: 60px;
+    }
+
+    // 配布物を追加するセクション
+    .dist_section {
+        display: flex;
+        align-items: center;
+
+        // 配布物選択
+        .dist_select_area {
+            position: relative;
+
+            // svrollbar用スクロール調整
+            .svlr-viewport,
+            .svlr-wrapper {
+                height: auto !important;
+                max-height: 250px !important;
+            }
+
+            // 配布物リスト
+            &_list {
+                width: 100%;
+                box-shadow: 0 2px 3px 0 rgba(44, 62, 80, 0.24);
+                border-radius: 4px;
+                background: #fdfdfd;
+                position: absolute;
+                z-index: 2;
+                border: 1px solid black;
+
+                // 各アイテム
+                &_item {
+                    padding: 10px 20px;
+                    transition: all 0.2s;
+                }
+            }
         }
     }
 }

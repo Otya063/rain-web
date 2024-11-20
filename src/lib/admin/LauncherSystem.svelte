@@ -3,7 +3,7 @@
     import { error } from '@sveltejs/kit';
     import { slide } from 'svelte/transition';
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, msgClosed, conv2DArrayToObject, timeOut, closeMsgDisplay } from '$lib/utils';
+    import { onSubmit, msgClosed, conv2DArrayToObject, timeOut, closeMsgDisplay } from '$utils/client';
 
     interface Props {
         systemData: launcher_system;
@@ -158,8 +158,6 @@
 </h2>
 
 <div class="console_contents">
-    <p class="console_contents_note">* These data will be fetched when users run the Rain launcher.</p>
-
     <form
         action="?/updateSystemMode"
         method="POST"
@@ -396,8 +394,6 @@
     Launcher Update & Other Settings
 </h2>
 <div class="console_contents">
-    <p class="console_contents_note">* These data will be fetched when users run the Rain launcher.</p>
-
     <form
         action="?/updateSystemMode"
         method="POST"

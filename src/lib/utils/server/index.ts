@@ -2,25 +2,21 @@ import {
     PrismaClient,
     type characters,
     type discord,
-    type discord_register,
-    type distribution,
     type launcher_banner,
-    type launcher_info,
-    type launcher_system,
     type suspended_account,
-    type users,
 } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 import { error } from '@sveltejs/kit';
 import _ from 'lodash';
 import { DateTime } from 'luxon';
-import { Buffer } from 'node:buffer';
+import { Buffer } from 'node:buffer'; // Node.jsとの互換性により、追加しないと「ReferenceError: Buffer is not defined」が発生する
 import { DATABASE_URL } from '$env/static/private';
-import type { InformationType } from '$lib/types';
+import type { InformationType, Distribution, Discord, DiscordRegister, LauncherInfo, LauncherSystem, Users } from '$types';
 
 /* utils内に定義できない処理をここに書く */
 export * from './admin';
 export * from './binary';
+export * from './converter';
 
 export const db = new PrismaClient({
     datasources: {
@@ -335,7 +331,7 @@ export class IsCharLogin {
 }
 
 /**
- *
+ * データベース操作
  */
 class ServerDataManager {
     /* Character
@@ -385,9 +381,9 @@ class ServerDataManager {
     /**
      * Discord IDに基づいて連携キャラクターを取得する
      * @param {string} discord_id Discord ID
-     * @returns {Promise<discord | null>} キャラクターが見つかった場合はそのオブジェクト、見つからなかった場合はnullを返す
+     * @returns {Promise<Discord>} キャラクターが見つかった場合はそのオブジェクト、見つからなかった場合はnullを返す
      */
-    public async getLinkedCharactersByDiscordId(discord_id: string): Promise<discord | null> {
+    public async getLinkedCharactersByDiscordId(discord_id: string): Promise<Discord> {
         return await db.discord.findFirst({
             where: {
                 discord_id,
@@ -398,9 +394,9 @@ class ServerDataManager {
     /**
      * キャラクターIDに基づいて連携キャラクターを取得する
      * @param {number} char_id キャラクターID
-     * @returns {Promise<discord | null>} キャラクターが見つかった場合はそのオブジェクト、見つからなかった場合はnullを返す
+     * @returns {Promise<Discord>} キャラクターが見つかった場合はそのオブジェクト、見つからなかった場合はnullを返す
      */
-    public async getLinkedCharacterByCharId(char_id: number): Promise<discord | null> {
+    public async getLinkedCharacterByCharId(char_id: number): Promise<Discord> {
         return await db.discord.findFirst({
             where: {
                 char_id,
@@ -413,9 +409,9 @@ class ServerDataManager {
     /**
      * ユーザーIDに基づいて連携されたユーザーを取得する
      * @param {number} user_id ユーザーID
-     * @returns {Promise<discord_register | null>} ユーザーが見つかった場合はそのオブジェクト、見つからなかった場合はnullを返す
+     * @returns {Promise<DiscordRegister>} ユーザーが見つかった場合はそのオブジェクト、見つからなかった場合はnullを返す
      */
-    public async getLinkedUserByUserId(user_id: number): Promise<discord_register | null> {
+    public async getLinkedUserByUserId(user_id: number): Promise<DiscordRegister> {
         return await db.discord_register.findFirst({
             where: {
                 user_id,
@@ -426,9 +422,9 @@ class ServerDataManager {
     /**
      * Discord IDに基づいて連携されたユーザーを取得する
      * @param {string} discord_id Discord ID
-     * @returns {Promise<discord_register | null>} ユーザーが見つかった場合はそのオブジェクト、見つからなかった場合はnullを返す
+     * @returns {Promise<DiscordRegister>} ユーザーが見つかった場合はそのオブジェクト、見つからなかった場合はnullを返す
      */
-    public async getLinkedUserByDiscordId(discord_id: string): Promise<discord_register | null> {
+    public async getLinkedUserByDiscordId(discord_id: string): Promise<DiscordRegister> {
         return await db.discord_register.findFirst({
             where: {
                 discord_id,
@@ -455,9 +451,9 @@ class ServerDataManager {
     /**
      * ランチャーインフォを取得する
      * @param {InformationType} type インフォの種類
-     * @returns {Promise<launcher_info[] | { [key: string]: launcher_info[] }>} 指定されたインフォのオブジェクトを返す
+     * @returns {Promise<LauncherInfo>} 指定されたインフォのオブジェクトを返す
      */
-    public async getInformation(type: InformationType): Promise<launcher_info[] | { [key: string]: launcher_info[] }> {
+    public async getInformation(type: InformationType): Promise<LauncherInfo> {
         // 各タイプごとにインフォを取得する
         switch (type) {
             case 'IMP': {
@@ -565,15 +561,7 @@ class ServerDataManager {
             }
 
             default:
-                return [
-                    {
-                        id: 0,
-                        title: '',
-                        url: '',
-                        type: '',
-                        created_at: new Date(),
-                    },
-                ];
+                error(400, { message: '', message1: undefined, message2: [`Unsupported type: ${type}.`], message3: undefined });
         }
     }
 
@@ -581,9 +569,9 @@ class ServerDataManager {
     ====================================================*/
     /**
      * ランチャーシステムデータを取得する
-     * @returns {Promise<launcher_system | null>} ランチャーシステムのオブジェクトを返す
+     * @returns {Promise<LauncherSystem>} ランチャーシステムのオブジェクトを返す
      */
-    public async getLauncherSystem(): Promise<launcher_system | null> {
+    public async getLauncherSystem(): Promise<LauncherSystem> {
         return await db.launcher_system.findUnique({
             where: {
                 id: 1,
@@ -630,10 +618,10 @@ class ServerDataManager {
     /* Users
     ====================================================*/
     /**
-     * 全てのユーザー情報を取得する
-     * @returns {Promise<users[]>} ユーザーオブジェクトの配列を返す
+     * 全てのユーザーID情報を取得する
+     * @returns {Promise<{ id: number }[]>} ユーザーIDオブジェクトの配列を返す
      */
-    public async getAllUsers(): Promise<{ id: number }[]> {
+    public async getAllUsersID(): Promise<{ id: number }[]> {
         return await db.users.findMany({
             orderBy: {
                 id: 'asc',
@@ -646,10 +634,10 @@ class ServerDataManager {
 
     /**
      * ユーザー名に基づいて特定のユーザーを取得する
-     * @param username - 検索するユーザーのユーザー名
-     * @returns 指定されたユーザー名を持つユーザーオブジェクト、存在しない場合はnull
+     * @param {string} username 検索するユーザーのユーザー名
+     * @returns {Promise<Users>} 指定されたユーザー名を持つユーザーオブジェクト、存在しない場合はnull
      */
-    public async getUserByUsername(username: string): Promise<users | null> {
+    public async getUserByUsername(username: string): Promise<Users> {
         return await db.users.findUnique({
             where: {
                 username,
@@ -659,10 +647,10 @@ class ServerDataManager {
 
     /**
      * ユーザーIDに基づいて特定のユーザーを取得する
-     * @param id - 検索するユーザーのID
-     * @returns 指定されたIDを持つユーザーオブジェクト、存在しない場合はnull
+     * @param {number} id 検索するユーザーのID
+     * @returns {Promise<Users>} 指定されたIDを持つユーザーオブジェクト、存在しない場合はnull
      */
-    public async getUserByUserId(id: number): Promise<users | null> {
+    public async getUserByUserId(id: number): Promise<Users> {
         return await db.users.findUnique({
             where: {
                 id,
@@ -672,11 +660,11 @@ class ServerDataManager {
 
     /**
      * 認証トークンに基づいてユーザーを取得する
-     * @param login_key - 認証トークン
-     * @param isMobile - モバイルかどうかを示すフラグ
-     * @returns 指定された認証トークンを持つユーザーオブジェクト、存在しない場合はnull
+     * @param {string} login_key 認証トークン
+     * @param {boolean} isMobile モバイルかどうかを示すフラグ
+     * @returns {Promise<Users>} 指定された認証トークンを持つユーザーオブジェクト、存在しない場合はnull
      */
-    public async getUserByAuthToken(login_key: string, isMobile: boolean): Promise<users | null> {
+    public async getUserByAuthToken(login_key: string, isMobile: boolean): Promise<Users> {
         return !isMobile
             ? // pc
               await db.users.findFirst({
@@ -696,10 +684,10 @@ class ServerDataManager {
     ========================================================= */
     /**
      * 配布情報のリストを取得する
-     * @returns dataフィールドとbotフィールドを除いた配布情報の配列
+     * @returns {Distribution[]} dataフィールドとbotフィールドを除いた配布情報の配列
      */
-    public async getDistributions(): Promise<Omit<distribution, 'data' | 'bot'>[]> {
-        return await db.distribution.findMany({
+    public async getDistributions(): Promise<Distribution[]> {
+        const distributions = await db.distribution.findMany({
             select: {
                 id: true,
                 character_id: true,
@@ -714,7 +702,18 @@ class ServerDataManager {
                 max_sr: true,
                 min_gr: true,
                 max_gr: true,
+                data: true,
             },
+        });
+
+        // dataをhex文字列に変換
+        return distributions.map((distribution) => {
+            const { data, ...rest } = distribution; // Buffer型のdataを削除
+
+            return {
+                ...rest,
+                data: data.toString('hex'), // dataをhex文字列に変換
+            };
         });
     }
 }

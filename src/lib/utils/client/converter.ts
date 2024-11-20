@@ -1,8 +1,7 @@
 import { error } from '@sveltejs/kit';
-import Encoding from 'encoding-japanese';
 import { courseJa } from '$i18n/ja/course';
 import { courseEn } from '$i18n/en/course';
-import { type WeaponType, type CourseJaData, type CourseEnData, type DistributionContentsType, DistributionContentsTypeObj, type DistributionType, DistributionTypeObj } from '$lib/types';
+import { type WeaponType, type CourseJaData, type CourseEnData, type DistributionContentsType, DistributionContentsTypeObj, type DistributionType, DistributionTypeObj } from '$types';
 
 /**
  * URLのロケールスラグを置き換える
@@ -101,98 +100,134 @@ export const getWpnTypeByDec = (dec: number | null, lang: string): WeaponType =>
     switch (lang) {
         case 'ja': {
             switch (dec) {
-                case 0:
+                case 0: {
                     return '大剣';
+                }
 
-                case 1:
+                case 1: {
                     return 'ヘビィボウガン';
+                }
 
-                case 2:
+                case 2: {
                     return 'ハンマー';
+                }
 
-                case 3:
+                case 3: {
                     return 'ランス';
+                }
 
-                case 4:
+                case 4: {
                     return '片手剣';
+                }
 
-                case 5:
+                case 5: {
                     return 'ライトボウガン';
+                }
 
-                case 6:
+                case 6: {
                     return '双剣';
+                }
 
-                case 7:
+                case 7: {
                     return '太刀';
+                }
 
-                case 8:
+                case 8: {
                     return '狩猟笛';
+                }
 
-                case 9:
+                case 9: {
                     return 'ガンランス';
+                }
 
-                case 10:
+                case 10: {
                     return '弓';
+                }
 
-                case 11:
+                case 11: {
                     return '穿龍棍';
+                }
 
-                case 12:
+                case 12: {
                     return 'スラッシュアックスF';
+                }
 
-                case 13:
+                case 13: {
                     return 'マグネットスパイク';
+                }
+
+                default: {
+                    error(400, { message: '', message1: undefined, message2: [`Unsupported weapon type: ${dec}.`], message3: undefined });
+                }
             }
         }
 
         case 'en': {
             switch (dec) {
-                case 0:
+                case 0: {
                     return 'Great Sword';
+                }
 
-                case 1:
+                case 1: {
                     return 'Heavy Bowgun';
+                }
 
-                case 2:
+                case 2: {
                     return 'Hammer';
+                }
 
-                case 3:
+                case 3: {
                     return 'Lance';
+                }
 
-                case 4:
+                case 4: {
                     return 'Sword & Shield';
+                }
 
-                case 5:
+                case 5: {
                     return 'Light Bowgun';
+                }
 
-                case 6:
+                case 6: {
                     return 'Dual Blades';
+                }
 
-                case 7:
+                case 7: {
                     return 'Long Sword';
+                }
 
-                case 8:
+                case 8: {
                     return 'Hunting Horn';
+                }
 
-                case 9:
+                case 9: {
                     return 'Gunlance';
+                }
 
-                case 10:
+                case 10: {
                     return 'Bow';
+                }
 
-                case 11:
+                case 11: {
                     return 'Tonfa';
+                }
 
-                case 12:
+                case 12: {
                     return 'Switch Axe F';
+                }
 
-                case 13:
+                case 13: {
                     return 'Magnet Spike';
+                }
+
+                default: {
+                    error(400, { message: '', message1: undefined, message2: [`Unsupported weapon type: ${dec}.`], message3: undefined });
+                }
             }
         }
 
         default: {
-            return 'Invalid Input';
+            error(400, { message: '', message1: undefined, message2: [`Unsupported language: ${lang}.`], message3: undefined });
         }
     }
 };
@@ -360,21 +395,6 @@ export const convHrpToHr = (hrp: number | null): number => {
 };
 
 /**
- * SJISで文字列をエンコードする
- * @param {string} value 変換対象の文字列
- * @returns {Buffer} 変換後のBufferデータ
- */
-export const encodeToShiftJIS = (value: string): Buffer => {
-    const unicodeArray = Encoding.stringToCode(value);
-    const encoded = Encoding.convert(unicodeArray, {
-        to: 'SJIS',
-        from: 'UNICODE',
-    });
-
-    return Buffer.from(new Uint8Array(encoded));
-};
-
-/**
  * 配布コンテンツの種類に基づいてデータを取得する
  * @param {DistributionContentsType} contentsType コンテンツの種類
  * @returns {Promise<{[key: string]: string}>} 取得したデータ
@@ -425,6 +445,11 @@ export const getDistItemsData = async (
             return itemEn;
         }
 
+        case DistributionContentsTypeObj['Poogie Outfit']: {
+            const { poogieEn } = await import('$i18n/en/poogie');
+            return poogieEn;
+        }
+
         default: {
             error(400, { message: '', message1: undefined, message2: [`Unsupported contents type: ${contentsType}.`], message3: undefined });
         }
@@ -432,17 +457,32 @@ export const getDistItemsData = async (
 };
 
 /**
- * 配布タイプを取得する
- * @param {DistributionType} type 配布タイプ
- * @returns {string} 配布タイプの文字列
+ * 配布扱い方法の種類名を取得する
+ * @param {DistributionType} type 配布扱い方法の種類
+ * @returns {string} 配布扱い方法タイプの文字列
  */
-export const getDistributionType = (type: DistributionType): string => {
+export const getDistributionTypeName = (type: DistributionType): string => {
     const entry = Object.entries(DistributionTypeObj).find(([_, value]) => value === type);
 
     if (entry) {
         return entry[0];
     } else {
         error(400, { message: '', message1: undefined, message2: [`Unsupported distribution type: ${type}.`], message3: undefined });
+    }
+};
+
+/**
+ * 配布コンテンツの種類名を取得する
+ * @param {DistributionContentsType} type 配布コンテンツの種類
+ * @returns {string} 配布コンテンツタイプの文字列
+ */
+export const getDistributionContentsTypeName = (type: DistributionContentsType): string => {
+    const entry = Object.entries(DistributionContentsTypeObj).find(([_, value]) => value === type);
+
+    if (entry) {
+        return entry[0];
+    } else {
+        error(400, { message: '', message1: undefined, message2: [`Unsupported distribution contents type: ${type}.`], message3: undefined });
     }
 };
 
@@ -469,4 +509,185 @@ export const secToTime = (seconds: number): string => {
     }
 
     return time;
+};
+
+/**
+ * カラーコード付き文字列をtypeに応じて変換する
+ * @param {'colorCode' | 'colorTag' | 'html'} type 文字列がどのように変換されるか
+ * @param {string} input 変換対象の文字列
+ * @returns {string} 変換後の文字列
+ */
+export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', input: string): string => {
+    if (type === 'html' && input.includes('<Color')) {
+        // colorTag形式をhtml形式に変換
+        const regex = /<Color(\d{2}) \/>/g;
+
+        let result = '';
+        let lastIndex = 0;
+        let currentSpan = ''; // 現在の<span>タグを追跡
+
+        let match: RegExpExecArray | null;
+        while ((match = regex.exec(input)) !== null) {
+            const [_, code] = match;
+            const spanClass = getColorNameByColorCode(code);
+            const textStart = regex.lastIndex; // タグの直後がテキストの開始位置
+
+            // 前回のマッチ後のテキストを処理
+            result += input.slice(lastIndex, match.index);
+
+            // 既存の<span>を閉じる
+            if (currentSpan) {
+                result += '</span>';
+            }
+
+            // 新しい<span>を開く
+            currentSpan = `<span class='${spanClass}'>`;
+            result += currentSpan;
+
+            // 次の処理用にインデックスを更新
+            lastIndex = textStart;
+        }
+
+        // 最後のテキストを追加
+        result += input.slice(lastIndex);
+
+        // 開いた<span>を閉じる
+        if (currentSpan) {
+            result += '</span>';
+        }
+
+        return result;
+    } else if ((type === 'html' && !input.includes('<Color')) || type === 'colorTag') {
+        // colorCode形式をhtml形式もしくはcolorTag形式に変換
+        // 正規表現を用いて ~C○○ を抽出する
+        const regex = /~C(\d{2})([^\~]*)/g;
+
+        let match: RegExpExecArray | null;
+        let lastIndex = 0;
+        let result = '';
+
+        // 先頭に「~C○○」がない場合、自動的に「~C00」があるものとして扱う
+        if (!input.startsWith('~C')) {
+            input = `~C00${input}`;
+        }
+
+        // 「~C○○」パターンを処理
+        while ((match = regex.exec(input)) !== null) {
+            const [_, code, text] = match;
+            const spanClass = getColorNameByColorCode(code);
+
+            // テキストが存在する場合のみ処理
+            if (text.trim()) {
+                // 前回のマッチ後の文字を追加
+                if (lastIndex < match.index) {
+                    result += input.slice(lastIndex, match.index);
+                }
+
+                // 現在のマッチ部分を追加
+                result += type === 'html' ? `<span class='${spanClass}'>${text}</span>` : `<Color${code} />${text}`;
+            }
+
+            lastIndex = regex.lastIndex;
+        }
+
+        // 最後のマッチ後の文字を処理
+        if (lastIndex < input.length) {
+            result += input.slice(lastIndex);
+        }
+
+        return result;
+    } else if (type === 'colorCode') {
+        // colorTag形式をcolorCode形式に変換
+        const regex = /<Color(\d{2}) \/>/g;
+
+        let result = '';
+        let lastCode: string | null = null; // 前回のカラーコード
+        let lastIndex = 0; // 前回のマッチ位置
+
+        let match: RegExpExecArray | null;
+        while ((match = regex.exec(input)) !== null) {
+            const [_, code] = match;
+            const textStart = match.index; // タグ直前のテキスト終了位置
+
+            // タグの直前のテキストを処理
+            const text = input.slice(lastIndex, textStart);
+
+            if (text.trim()) {
+                // テキストが存在する場合、現在のカラーコードで追加
+                if (lastCode !== null) {
+                    result += `~C${lastCode}`;
+                }
+                result += text;
+            }
+
+            // 現在のカラーコードを更新
+            lastCode = code;
+
+            // 次の処理のためにインデックスを更新
+            lastIndex = regex.lastIndex;
+        }
+
+        // 最後のテキストを処理
+        const remainingText = input.slice(lastIndex);
+        if (remainingText.trim()) {
+            if (lastCode !== null) {
+                result += `~C${lastCode}`;
+            }
+            result += remainingText;
+        }
+
+        // 必ず末尾に~C00を追加（この配布物より下のもののテキスト色に影響を及ぼすため白に）
+        if (!result.endsWith('~C00')) {
+            result += '~C00';
+        }
+
+        return result;
+    } else {
+        return '';
+    }
+};
+
+/**
+ * ゲーム内で使用されるカラーコードから各色のクラス名を取得する
+ * @param {string} code カラーコード
+ * @returns {string} 色を示すクラス名
+ */
+export const getColorNameByColorCode = (code: string): string => {
+    switch (code) {
+        case '00': {
+            return 'white'; // ffffff
+        }
+
+        case '01': {
+            return 'black'; // 323232
+        }
+
+        case '02': {
+            return 'red'; // ff435d
+        }
+
+        case '03': {
+            return 'green'; // 56ff56
+        }
+
+        case '04': {
+            return 'cyan'; // 57ffff
+        }
+
+        case '05': {
+            return 'yellow'; // ffff50
+        }
+
+        case '06': {
+            return 'orange'; // fea461
+        }
+
+        case '07': {
+            return 'pink'; // ff84ff
+        }
+
+        default: {
+            return 'white'; // ffffff
+        }
+    }
 };

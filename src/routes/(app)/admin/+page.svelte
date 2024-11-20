@@ -31,7 +31,7 @@
         adminTabValue,
         rebuildClan,
         downloadBinary,
-    } from '$lib/utils';
+    } from '$utils/client';
     import '$scss/style_admin.scss';
 
     interface Props {
@@ -96,8 +96,10 @@
      * @param {TouchEvent} e タッチ開始イベント
      */
     const handleTouchStart = (e: TouchEvent): void => {
-        // <swiper-container>内でのタッチ開始の場合はスキップ
-        if (e.target && (e.target as HTMLElement).closest('swiper-container')) return;
+        // <swiper-container>内と編集エリア内でのタッチ開始の場合はスキップ
+        if ((e.target && (e.target as HTMLElement).closest('swiper-container')) || (e.target as HTMLElement).closest('.edit_area_box_wrapper')) {
+            return;
+        }
 
         touchStartX = e.changedTouches[0].screenX;
     };
@@ -108,8 +110,10 @@
      * @param {TouchEvent} e タッチ終了イベント
      */
     const handleTouchEnd = (e: TouchEvent): void => {
-        // <swiper-container>内でのタッチ終了の場合はスキップ
-        if (e.target && (e.target as HTMLElement).closest('swiper-container')) return;
+        // <swiper-container>内と編集エリア内でのタッチ終了の場合はスキップ
+        if ((e.target && (e.target as HTMLElement).closest('swiper-container')) || (e.target as HTMLElement).closest('.edit_area_box_wrapper')) {
+            return;
+        }
 
         touchEndX = e.changedTouches[0].screenX;
         handleSwipeGesture();

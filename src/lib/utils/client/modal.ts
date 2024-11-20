@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { writable } from 'svelte/store';
-import type { DeleteBnrData, DeleteCharacterData, DeleteInfoData, LinkDiscordData, ModalCommonData, ModalType, RebuildClanData, SuspendUserData } from '$lib/types';
+import type { DeleteBnrData, DeleteCharacterData, DeleteInfoData, LinkDiscordData, ModalCommonData, ModalType, RebuildClanData, SuspendUserData } from '$types';
 
 export const deleteInfo = writable(false);
 export const deleteInfoData = writable<DeleteInfoData>();

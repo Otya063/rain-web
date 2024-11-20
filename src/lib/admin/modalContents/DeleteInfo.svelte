@@ -1,6 +1,6 @@
 <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import { allInformation, onSubmit, closeModal, deleteInfoData, msgClosed, conv2DArrayToObject, timeOut, closeMsgDisplay } from '$lib/utils';
+    import { allInformation, onSubmit, closeModal, deleteInfoData, msgClosed, conv2DArrayToObject, timeOut, closeMsgDisplay } from '$utils/client';
 </script>
 
 <div class="modal">
@@ -39,7 +39,7 @@
 
                     <li class="modal_list_item">
                         <p>Hyperlink</p>
-                        <span>{$deleteInfoData.info_url ?? 'null'}</span>
+                        <span>{$deleteInfoData.info_url || 'None'}</span>
                     </li>
 
                     <li class="modal_list_item">

@@ -1,8 +1,8 @@
-import type { CourseJaData } from '$lib/types';
+import type { CourseJaData } from '$types';
 
 export const courseJa = (bin: string[]): CourseJaData => {
     return {
-        'トライアルコース [非推奨]': {
+        'トライアルコース [未使用]': {
             id: 1,
             enabled: bin[1] === '1',
             code: 'tlc',
@@ -17,7 +17,7 @@ export const courseJa = (bin: string[]): CourseJaData => {
             enabled: bin[28] !== '1' && bin[3] === '1',
             code: 'exc',
         },
-        'エクストラBコース [非推奨]': {
+        'エクストラBコース [未使用]': {
             id: 4,
             enabled: bin[4] === '1',
             code: 'exbc',
@@ -32,7 +32,7 @@ export const courseJa = (bin: string[]): CourseJaData => {
             enabled: bin[6] === '1',
             code: 'prc',
         },
-        'パローネコース（エクストラCコース） [非推奨]': {
+        'パローネコース（エクストラCコース） [未使用]': {
             id: 7,
             enabled: bin[7] === '1',
             code: 'plc',
@@ -63,32 +63,32 @@ export const courseJa = (bin: string[]): CourseJaData => {
             code: 'nbc',
         },
         // [13]-[19] nothing
-        'デバッグ [非推奨]': {
+        'デバッグ [未使用]': {
             id: 20,
             enabled: bin[20] === '1',
             code: 'dbg',
         },
-        'COG連携失効 [非推奨]': {
+        'COG連携失効 [未使用]': {
             id: 21,
             enabled: bin[21] === '1',
             code: 'cle',
         },
-        'Xbox LIVE ゴールド メンバーシップ [非推奨]': {
+        'Xbox LIVE ゴールド メンバーシップ [未使用]': {
             id: 22,
             enabled: bin[22] === '1',
             code: 'xgm',
         },
-        'PS3/Vita トロフィー獲得条件 [非推奨]': {
+        'PS3/Vita トロフィー獲得条件 [未使用]': {
             id: 23,
             enabled: bin[23] === '1',
             code: 'trq',
         },
-        'COG連携確認 [非推奨]': {
+        'COG連携確認 [未使用]': {
             id: 24,
             enabled: bin[24] === '1',
             code: 'clc',
         },
-        'ネットカフェ [非推奨]': {
+        'ネットカフェ [未使用]': {
             id: 25,
             enabled: bin[25] === '1',
             code: 'nc',

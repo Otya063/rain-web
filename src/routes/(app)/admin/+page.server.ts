@@ -2,11 +2,11 @@ import type { Action, Actions, PageServerLoad } from './$types';
 import type { discord, discord_register, launcher_banner, launcher_info, launcher_system, users } from '@prisma/client/edge';
 import { error, fail } from '@sveltejs/kit';
 import { DateTime } from 'luxon';
-import { Buffer } from 'node:buffer';
+import { Buffer } from 'node:buffer'; // Node.jsとの互換性により、追加しないと「ReferenceError: Buffer is not defined」が発生する
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
-import ServerData, { db, editName, getPaginatedAllianceData, getPaginatedClanData, getPaginatedUserData, getPaginationMeta, IsCharLogin, ManageBinaryDB } from '$lib/database';
-import type { BinaryTypes } from '$lib/types';
-import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi } from '$lib/utils';
+import { DistributionTypeObj, type BinaryTypes, type Distribution, type DistributionTypeName } from '$types';
+import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi, isNumber, convertColorCodeString } from '$utils/client';
+import ServerData, { db, editName, getPaginatedAllianceData, getPaginatedClanData, getPaginatedUserData, getPaginationMeta, IsCharLogin, ManageBinary } from '$utils/server';
 
 const emptyMsg = 'Input value is empty.';
 const requiredMsg = 'Required field is empty.';
@@ -186,7 +186,7 @@ const updateInfoData: Action = async ({ request }) => {
 
         return {
             success: true,
-            message: `The information data (ID: ${id}, Type: ${column}) has been successfully updated.`,
+            message: `The information data (ID: ${id}, Column: ${column}) has been successfully updated.`,
             updatedInfo,
         };
     } catch (err) {
@@ -305,7 +305,7 @@ const getPaginatedUsers: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const { filter_param, filter_value, status, cursor } = data as {
         filter_param: 'username' | 'character_name' | 'user_id' | 'character_id';
-        filter_value: string | number;
+        filter_value: string;
         status: string;
         cursor: number;
     };
@@ -313,7 +313,8 @@ const getPaginatedUsers: Action = async ({ request }) => {
     if (!filter_value || !filter_param) {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: emptyMsg });
-    } else if ((filter_param === 'user_id' || filter_param === 'character_id') && isNaN(filter_value as number)) {
+    } else if ((filter_param === 'user_id' || filter_param === 'character_id') && !isNumber(filter_value)) {
+        // 数値に変換可能かどうか確認
         await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
     }
@@ -363,12 +364,13 @@ const getPaginatedUsers: Action = async ({ request }) => {
 
 const getPaginatedClans: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'clan_name' | 'clan_id'; filter_value: string | number; status: string; cursor: number };
+    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'clan_name' | 'clan_id'; filter_value: string; status: string; cursor: number };
 
     if (!filter_value || !filter_param) {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: emptyMsg });
-    } else if (filter_param === 'clan_id' && isNaN(filter_value as number)) {
+    } else if (filter_param === 'clan_id' && !isNumber(filter_value)) {
+        // 数値に変換可能かどうか確認
         await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
     }
@@ -413,12 +415,13 @@ const getPaginatedClans: Action = async ({ request }) => {
 
 const getPaginatedAlliances: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'alliance_name' | 'alliance_id'; filter_value: string | number; status: string; cursor: number };
+    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'alliance_name' | 'alliance_id'; filter_value: string; status: string; cursor: number };
 
     if (!filter_value || !filter_param) {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: emptyMsg });
-    } else if (filter_param === 'alliance_id' && isNaN(filter_value as number)) {
+    } else if (filter_param === 'alliance_id' && !isNumber(filter_value)) {
+        // 数値に変換可能かどうか確認
         await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
     }
@@ -529,7 +532,7 @@ const updateUserData: Action = async ({ request }) => {
 
         return {
             success: true,
-            message: `The user data (Type: ${column}) has been successfully updated.`,
+            message: `The user data (Column: ${column}) has been successfully updated.`,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -648,7 +651,7 @@ const updateCharacterData: Action = async ({ request }) => {
                 binaryData[value] = base64 === 'AA==' ? '' : base64;
             });
 
-            const { success, message } = await ManageBinaryDB.setBinary(id, binaryData);
+            const { success, message } = await ManageBinary.setBinary(id, binaryData);
             if (!success) {
                 return fail(400, { error: true, message });
             } else {
@@ -824,7 +827,7 @@ const updateBnrData: Action = async ({ request, url }) => {
                 },
             });
 
-            return { success: true, message: `The banner data (ID: ${bnr_id} / Type: ${column}) has been successfully updated.` };
+            return { success: true, message: `The banner data (ID: ${bnr_id}, Column: ${column}) has been successfully updated.` };
         } else {
             // ファイル存在確認
             if (file.size === 0 || !bnr_name || !lang) {
@@ -1253,6 +1256,50 @@ const downloadBinary: Action = async ({ request }) => {
     }
 };
 
+const updateDistributionData: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const id = Number(data.dist_id);
+    const column = Object.keys(data)[1] as keyof Omit<Distribution, 'id' | 'character_id'>;
+    const value = Object.values(data)[1] as string | null;
+
+    if (!value) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
+        return fail(400, { error: true, message: emptyMsg });
+    }
+
+    try {
+        await db.distribution.update({
+            where: {
+                id,
+            },
+            data: {
+                [column]:
+                    column === 'type'
+                        ? (() => {
+                              const _value = value as DistributionTypeName;
+                              return DistributionTypeObj[_value];
+                          })()
+                        : column === 'event_name'
+                          ? convertColorCodeString('colorCode', value) // ゲーム内カラーコードに変換
+                          : value,
+            },
+        });
+
+        return {
+            success: true,
+            message: `The distribution data (ID: ${id}, Column: ${column}) has been successfully updated.`,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
 export const actions: Actions = {
     updateSystemMode,
     updateAllMaintData,
@@ -1278,4 +1325,5 @@ export const actions: Actions = {
     rebuildClan,
     updateAllianceData,
     downloadBinary,
+    updateDistributionData,
 };

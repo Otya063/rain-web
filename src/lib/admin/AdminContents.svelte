@@ -6,7 +6,7 @@
     import LauncherInformation from '$lib/admin/LauncherInformation.svelte';
     import LauncherSystem from '$lib/admin/LauncherSystem.svelte';
     import Users from '$lib/admin/Users.svelte';
-    import { adminTabValue } from '$lib/utils';
+    import { adminTabValue } from '$utils/client';
 
     interface Props {
         data: PageData;

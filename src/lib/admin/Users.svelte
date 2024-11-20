@@ -4,6 +4,7 @@
     import { fade, slide } from 'svelte/transition';
     import { register } from 'swiper/element/bundle';
     import { applyAction, enhance } from '$app/forms';
+    import type { PaginatedUsers, PaginationMeta } from '$types';
     import {
         prepareModal,
         onSubmit,
@@ -21,8 +22,8 @@
         userCtrlPanel,
         initUserCtrlPanel,
         consoleContDisable,
-    } from '$lib/utils';
-    import type { PaginatedUsers, PaginationMeta } from '$lib/types';
+        tooltip,
+    } from '$utils/client';
     import Characters from './Characters.svelte';
 
     interface Props {
@@ -315,9 +316,9 @@
                                         />All Users
                                     </label>
 
-                                    <div style="width: calc(50% - 20px); margin: 0 10px 6%;">
-                                        <label style="cursor: pointer; white-space: nowrap;">
-                                            <span class="material-symbols-outlined select" style="font-size: 2.1rem; padding: 0 10px 2px 0;">radio_button_unchecked</span>
+                                    <div class="course_list_user_ids">
+                                        <label class="course_item">
+                                            <span class="material-symbols-outlined select">radio_button_unchecked</span>
                                             <input
                                                 type="radio"
                                                 name="target_u_radio"
@@ -326,14 +327,15 @@
                                                     specifiedUser = false;
                                                     handleCourseInput(e, 'select');
                                                 }}
-                                            />Specify User(s)
+                                            />User ID(s)
                                         </label>
-                                        <input class:disabled_elm={specifiedUser} style="margin-left: 7%; width: 95%;" type="text" name="specified_u_text" placeholder="1364+1489+ ..." />
+                                        <span
+                                            class="help_btn material-symbols-outlined"
+                                            use:tooltip={'<p class="console_contents_note">* When specifying multiple user-ids in a text box, be sure to concatenate the ids with “+” and don\'t exceed 10 users.</p>'}
+                                            >help</span
+                                        >
+                                        <input class:disabled_elm={specifiedUser} type="text" name="specified_u_text" placeholder="1364+1489+ ..." />
                                     </div>
-
-                                    <p class="console_contents_note" style="margin: 0px 0px 3% 4%; text-indent: -1.2rem;">
-                                        * When specifying multiple users in the "Specify User(s)" text box, concatenate the IDs of those users with "+" and be careful not to exceed 10 users.
-                                    </p>
                                 </dd>
 
                                 <dt class="course_list_title">HL (Single Select)</dt>
@@ -364,7 +366,7 @@
                                 <dd class="course_list">
                                     {#each _.sortBy(Object.entries(getCourseByDecimal(0, 'en')), 'id') as [courseName, { code }]}
                                         {#if code !== 'hlc' && code !== 'rhlc' && code !== 'frc' && code !== 'exc' && code !== 'rexc'}
-                                            <label class="course_item" class:disabled_elm={courseName.includes('[Deprecated]')}>
+                                            <label class="course_item" class:disabled_elm={courseName.includes('[Unused]')}>
                                                 <span class="material-symbols-outlined">check_box_outline_blank</span>
                                                 <input type="checkbox" name={code} onchange={(e) => handleCourseInput(e)} />{courseName}
                                             </label>
@@ -783,7 +785,7 @@
 
                         <dt class="contents_term">Last Login Time</dt>
                         <dd class="contents_desc">
-                            {DateTime.fromJSDate(user.last_login ?? new Date(0))
+                            {DateTime.fromJSDate(user.last_login || new Date(0))
                                 .setZone(DateTime.local().zoneName)
                                 .setLocale('en')
                                 .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
@@ -796,7 +798,7 @@
                         {/if}
 
                         <dd class="contents_desc">
-                            {DateTime.fromJSDate(user.return_expires ?? new Date(0))
+                            {DateTime.fromJSDate(user.return_expires || new Date(0))
                                 .setZone(DateTime.local().zoneName)
                                 .setLocale('en')
                                 .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
@@ -853,7 +855,7 @@
 
                         <dt class="contents_term">Premium Coin G</dt>
                         <dd class="contents_desc">
-                            {user.gacha_premium ?? 0} Coin(s)
+                            {user.gacha_premium || 0} Coin(s)
 
                             {#if $userCtrlPanel[user.id].activeCategories['gacha_premium']}
                                 <button class="red_btn" type="button" onclick={() => ($userCtrlPanel[user.id].activeCategories['gacha_premium'] = false)}>
@@ -907,7 +909,7 @@
 
                         <dt class="contents_term">Trial Coin G</dt>
                         <dd class="contents_desc">
-                            {user.gacha_trial ?? 0} Coin(s)
+                            {user.gacha_trial || 0} Coin(s)
 
                             {#if $userCtrlPanel[user.id].activeCategories['gacha_trial']}
                                 <button class="red_btn" type="button" onclick={() => ($userCtrlPanel[user.id].activeCategories['gacha_trial'] = false)}>
@@ -961,7 +963,7 @@
 
                         <dt class="contents_term">Frontier Points</dt>
                         <dd class="contents_desc">
-                            {user.frontier_points ?? 0} Point(s)
+                            {user.frontier_points || 0} Point(s)
 
                             {#if $userCtrlPanel[user.id].activeCategories['frontier_points']}
                                 <button type="button" class="red_btn" onclick={() => ($userCtrlPanel[user.id].activeCategories['frontier_points'] = false)}>
@@ -1015,7 +1017,7 @@
 
                         <dt class="contents_term">PlayStation Network ID</dt>
                         <dd class="contents_desc">
-                            {user.psn_id ?? 'null'}
+                            {user.psn_id || 'None'}
 
                             {#if $userCtrlPanel[user.id].activeCategories['psn_id']}
                                 <button class="red_btn" type="button" onclick={() => ($userCtrlPanel[user.id].activeCategories['psn_id'] = false)}>
@@ -1062,7 +1064,7 @@
 
                         <dt class="contents_term">Wii U Key</dt>
                         <dd class="contents_desc">
-                            {user.wiiu_key ?? 'null'}
+                            {user.wiiu_key || 'None'}
 
                             {#if $userCtrlPanel[user.id].activeCategories['wiiu_key']}
                                 <button class="red_btn" type="button" onclick={() => ($userCtrlPanel[user.id].activeCategories['wiiu_key'] = false)}>

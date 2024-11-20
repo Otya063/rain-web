@@ -3,7 +3,7 @@
     import LL from '$i18n/i18n-svelte';
     import Home from '$lib/manual/articles/Home.svelte';
     import Menu from '$lib/manual/Menu.svelte';
-    import { scrollToTop, sideMenuSwitch } from '$lib/utils';
+    import { scrollToTop, sideMenuSwitch } from '$utils/client';
 
     interface Props {
         data: PageData;

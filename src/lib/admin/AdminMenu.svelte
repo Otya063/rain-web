@@ -1,6 +1,6 @@
 <script lang="ts">
     import { onMount } from 'svelte';
-    import { adminTabValue } from '$lib/utils';
+    import { adminTabValue } from '$utils/client';
 
     interface Props {
         closeMenu: () => void;

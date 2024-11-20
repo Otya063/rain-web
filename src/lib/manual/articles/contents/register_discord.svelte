@@ -1,6 +1,6 @@
 <script lang="ts">
     import LL, { locale } from '$i18n/i18n-svelte';
-    import { scrollToElm } from '$lib/utils';
+    import { scrollToElm } from '$utils/client';
 
     const articleData = $LL.manual['article'].register['discord'];
     const { 1: discord } = articleData.section;

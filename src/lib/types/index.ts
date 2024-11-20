@@ -1,6 +1,7 @@
 export * from './admin';
 export * from './binary';
 export * from './course';
+export * from './database';
 export * from './distribution';
 export * from './modal';
 export * from './weapon';

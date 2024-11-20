@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import LL, { locale } from '$i18n/i18n-svelte';
-    import { loadArticle } from '$lib/utils';
+    import { loadArticle } from '$utils/client';
     import LangSelectArea from './LangSelectArea.svelte';
 
     interface Props {

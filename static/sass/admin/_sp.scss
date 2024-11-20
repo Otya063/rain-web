@@ -308,12 +308,12 @@
 
                         // ノーマルボタン調整（右下に）
                         .normal_btn {
-                            margin: 0 0 3% auto;
+                            margin: 3% 0 3% auto;
                         }
 
                         // 赤ボタン調整（右下に）
                         .red_btn {
-                            margin: 0 0 3% auto;
+                            margin: 3% 0 3% auto;
                         }
 
                         // クランメンバ－一覧
@@ -336,12 +336,45 @@
                         input {
                             width: 100%;
                         }
-                    }
-                }
 
-                // コンテンツ注意事項
-                .console_contents_note {
-                    color: red;
+                        // 主にカラーコードを含む文字列編集用に使用する（Distribution.svelte）
+                        .contenteditable {
+                            color: #ffffff; // デフォルト色
+                            background: #4d4d4dba;
+
+                            .white {
+                                color: #ffffff;
+                            }
+
+                            .black {
+                                color: #323232;
+                            }
+
+                            .red {
+                                color: #ff435d;
+                            }
+
+                            .green {
+                                color: #56ff56;
+                            }
+
+                            .cyan {
+                                color: #57ffff;
+                            }
+
+                            .yellow {
+                                color: #ffff50;
+                            }
+
+                            .orange {
+                                color: #fea461;
+                            }
+
+                            .pink {
+                                color: #ff84ff;
+                            }
+                        }
+                    }
                 }
 
                 // ボタングループ化
@@ -468,6 +501,11 @@
                     .edit_area_title {
                         font-size: 1.8rem;
                     }
+
+                    // フォームタイトル（ラジオボタン用は無し）
+                    .edit_area_title {
+                        display: none;
+                    }
                 }
 
                 // 通常
@@ -487,13 +525,13 @@
                     .blue_btn {
                         margin: 5% auto 0;
                     }
-                }
 
-                // フォームタイトル
-                .edit_area_title {
-                    display: none;
-                    font-weight: 700;
-                    user-select: none;
+                    // フォームタイトル
+                    .edit_area_title {
+                        font-size: 1.9rem;
+                        font-weight: 700;
+                        user-select: none;
+                    }
                 }
 
                 // フォーム部品
@@ -506,8 +544,8 @@
                             display: flex;
                             align-items: center;
                             justify-content: flex-start;
-                            padding-bottom: 5%;
 
+                            // 丸アイコン
                             .material-symbols-outlined {
                                 font-size: 2.1rem;
                                 padding: 0 10px 2px 0;
@@ -524,17 +562,33 @@
 
                         // 利用権選択リスト
                         .course_list {
-                            display: flex;
-                            flex-wrap: wrap;
+                            display: grid;
+                            column-gap: 10px;
+                            row-gap: 10px;
+                            grid-template-columns: repeat(2, 1fr);
+                            margin: 5% 3%;
 
                             // 利用権各項目
                             .course_item {
-                                width: calc(50% - 20px);
-                                margin: 0 10px 10%;
-
+                                // 丸/チェックアイコン
                                 .material-symbols-outlined {
                                     font-size: 2.1rem;
-                                    padding: 0 10px 2px 0;
+                                    padding: 0 5px 2px 0;
+                                }
+                            }
+
+                            // ユーザーID複数選択input
+                            &_user_ids {
+                                position: relative;
+
+                                input {
+                                    width: 100%;
+                                }
+
+                                .help_btn {
+                                    position: absolute !important;
+                                    top: 0;
+                                    right: 0;
                                 }
                             }
                         }
@@ -555,6 +609,54 @@
 
                             select {
                                 width: 100%;
+                            }
+                        }
+
+                        // カラーパレット（Distribution.svelte）
+                        .color_palette {
+                            display: grid;
+                            column-gap: 10px;
+                            grid-template-columns: repeat(4, 1fr);
+                            row-gap: 10px;
+                            margin-bottom: 15px;
+
+                            &_btn {
+                                width: 30px;
+                                height: 30px;
+                                border-radius: 20px;
+                                border: 2px solid black;
+
+                                &.white {
+                                    background: #ffffff;
+                                }
+
+                                &.black {
+                                    background: #323232;
+                                }
+
+                                &.red {
+                                    background: #ff435d;
+                                }
+
+                                &.green {
+                                    background: #56ff56;
+                                }
+
+                                &.cyan {
+                                    background: #57ffff;
+                                }
+
+                                &.yellow {
+                                    background: #ffff50;
+                                }
+
+                                &.orange {
+                                    background: #fea461;
+                                }
+
+                                &.pink {
+                                    background: #ff84ff;
+                                }
                             }
                         }
                     }
@@ -1110,7 +1212,7 @@
                 // モーダル注意文
                 .modal_note {
                     text-align: center;
-                    color: red;
+                    color: #ff4b4b;
                     font-weight: 700;
                     font-size: 1.4rem;
                 }
@@ -1387,6 +1489,49 @@
                 0 0 10px rgba(0, 0, 0, 1),
                 0 0 10px rgba(0, 0, 0, 1);
             transform: translate(-50%, -50%);
+        }
+    }
+
+    /* 配布セクション
+========================================================= */
+    // 個人別配布セクションのinput要素
+    .indiv_dist_input {
+        font-size: 1.6rem;
+        width: 60px;
+    }
+
+    // 配布物を追加するセクション
+    .dist_section {
+        display: flex;
+        align-items: center;
+
+        // 配布物選択
+        .dist_select_area {
+            position: relative;
+
+            // svrollbar用スクロール調整
+            .svlr-viewport,
+            .svlr-wrapper {
+                height: auto !important;
+                max-height: 250px !important;
+            }
+
+            // 配布物リスト
+            &_list {
+                width: 100%;
+                box-shadow: 0 2px 3px 0 rgba(44, 62, 80, 0.24);
+                border-radius: 4px;
+                background: #fdfdfd;
+                position: absolute;
+                z-index: 2;
+                border: 1px solid black;
+
+                // 各アイテム
+                &_item {
+                    padding: 10px 20px;
+                    transition: all 0.2s;
+                }
+            }
         }
     }
 }

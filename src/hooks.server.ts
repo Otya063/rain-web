@@ -5,7 +5,7 @@ import { PUBLIC_MAIN_DOMAIN, PUBLIC_AUTH_DOMAIN } from '$env/static/public';
 import type { Locales } from '$i18n/i18n-types';
 import { loadAllLocales } from '$i18n/i18n-util.sync';
 import { detectLocale, i18n, isLocale } from '$i18n/i18n-util';
-import ServerData from '$lib/database';
+import ServerData from '$utils/server';
 import { initAcceptLanguageHeaderDetector } from 'typesafe-i18n/detectors';
 
 loadAllLocales();

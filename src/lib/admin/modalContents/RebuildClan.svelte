@@ -1,7 +1,7 @@
 <script lang="ts">
     import { DateTime } from 'luxon';
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, rebuildClanData, msgClosed, filterClanValue, filterClanParam, paginatedClansData, paginationClansMetaData, timeOut, closeMsgDisplay } from '$lib/utils';
+    import { onSubmit, closeModal, rebuildClanData, msgClosed, filterClanValue, filterClanParam, paginatedClansData, paginationClansMetaData, timeOut, closeMsgDisplay } from '$utils/client';
 </script>
 
 <div class="modal">

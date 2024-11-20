@@ -2,7 +2,7 @@
     import type { suspended_account } from '@prisma/client/edge';
     import { DateTime } from 'luxon';
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, suspendUserData, conv2DArrayToObject, msgClosed, paginatedUsersData, paginationMetaData, timeOut, closeMsgDisplay, userCtrlPanel } from '$lib/utils';
+    import { onSubmit, closeModal, suspendUserData, conv2DArrayToObject, msgClosed, paginatedUsersData, paginationMetaData, timeOut, closeMsgDisplay, userCtrlPanel } from '$utils/client';
 
     interface Props {
         suspendedAccount: suspended_account;

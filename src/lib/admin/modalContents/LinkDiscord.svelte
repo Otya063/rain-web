@@ -1,7 +1,7 @@
 <script lang="ts">
     import type { discord } from '@prisma/client/edge';
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, linkDiscordData, conv2DArrayToObject, msgClosed, paginatedUsersData, updateUserCtrlPanel, timeOut, closeMsgDisplay } from '$lib/utils';
+    import { onSubmit, closeModal, linkDiscordData, conv2DArrayToObject, msgClosed, paginatedUsersData, updateUserCtrlPanel, timeOut, closeMsgDisplay } from '$utils/client';
 
     interface Props {
         newDiscord: discord;

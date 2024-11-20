@@ -1,6 +1,6 @@
 <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import { allBanners, onSubmit, closeModal, deleteBnrData, conv2DArrayToObject, msgClosed, timeOut, closeMsgDisplay } from '$lib/utils';
+    import { allBanners, onSubmit, closeModal, deleteBnrData, conv2DArrayToObject, msgClosed, timeOut, closeMsgDisplay } from '$utils/client';
 </script>
 
 <div class="modal">

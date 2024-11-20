@@ -4,6 +4,7 @@
     import { fade, slide } from 'svelte/transition';
     import Select from 'svelte-select';
     import { applyAction, enhance } from '$app/forms';
+    import type { PaginatedAlliances, PaginatedClans, PaginationMeta } from '$types';
     import {
         paginatedClansData,
         paginationClansMetaData,
@@ -21,8 +22,8 @@
         filterAllianceParam,
         onSubmit,
         clanNameData,
-    } from '$lib/utils';
-    import type { PaginatedAlliances, PaginatedClans, PaginationMeta } from '$lib/types';
+        tooltip,
+    } from '$utils/client';
 
     type UpdatedAllianceData = Pick<PaginatedAlliances, 'id' | 'first_child_clan' | 'second_child_clan'>;
     interface Props {
@@ -400,7 +401,7 @@
 
                     <dt class="contents_term">Est.</dt>
                     <dd class="contents_desc">
-                        {DateTime.fromJSDate(clan.created_at ?? new Date(0))
+                        {DateTime.fromJSDate(clan.created_at || new Date(0))
                             .setZone(DateTime.local().zoneName)
                             .setLocale('en')
                             .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
@@ -409,7 +410,10 @@
                     <dt class="contents_term">Leader</dt>
                     <dd class="contents_desc">{clan.leader_name}</dd>
 
-                    <dt class="contents_term">Members</dt>
+                    <dt class="contents_term">
+                        Members
+                        <span class="help_btn material-symbols-outlined" use:tooltip={'Format: Name (Character ID)'}>help</span>
+                    </dt>
                     <dd class="contents_desc">
                         <div class="clan_members">
                             {#each _.sortBy(clan.guild_characters, 'order_index') as charData, i}

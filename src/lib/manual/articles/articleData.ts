@@ -1,4 +1,4 @@
-import type { Articles } from "$lib/types";
+import type { Articles } from '$types';
 
 export const articles: Articles[] = [
     // 会員登録手順 (ディスコード)

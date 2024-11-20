@@ -1,7 +1,7 @@
 <script lang="ts">
     import { page } from '$app/stores';
     import { locales, baseLocale } from '$i18n/i18n-util';
-    import { replaceLocaleInUrl } from '$lib/utils';
+    import { replaceLocaleInUrl } from '$utils/client';
 </script>
 
 {#each locales as l}

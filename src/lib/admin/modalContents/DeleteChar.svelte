@@ -1,6 +1,6 @@
 <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, deleteCharacterData, conv2DArrayToObject, msgClosed, paginatedUsersData, timeOut, closeMsgDisplay } from '$lib/utils';
+    import { onSubmit, closeModal, deleteCharacterData, conv2DArrayToObject, msgClosed, paginatedUsersData, timeOut, closeMsgDisplay } from '$utils/client';
 
     let permanent: boolean = $state(false);
 </script>

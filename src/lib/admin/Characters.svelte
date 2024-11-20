@@ -3,7 +3,7 @@
     import { DateTime } from 'luxon';
     import { slide } from 'svelte/transition';
     import { applyAction, enhance } from '$app/forms';
-    import type { PaginatedUsers } from '$lib/types';
+    import type { PaginatedUsers } from '$types';
     import {
         prepareModal,
         onSubmit,
@@ -18,9 +18,9 @@
         userCtrlPanel,
         updateUserCtrlPanel,
         convHrpToHr,
-        validateInput,
+        validateCharName,
         secToTime,
-    } from '$lib/utils';
+    } from '$utils/client';
 
     let { user }: { user: PaginatedUsers } = $props();
     let validName = $state(true);
@@ -119,7 +119,7 @@
                 data-userId={user.id}
                 data-charId={character.id}
             >
-                <span class="name">{character.name ?? 'Ready to Hunt'}</span>
+                <span class="name">{character.name || 'Ready to Hunt'}</span>
 
                 {#if character.discord}
                     <button
@@ -219,118 +219,116 @@
     {/each}
 </swiper-container>
 
-{#if $userCtrlPanel[user.id].selectedChar.is_new_character}
-    <p style="color: #ff8100; padding-top: 1%;">New character can't be edited.</p>
-{:else}
-    <form
-        action="?/updateCharacterData"
-        method="POST"
-        enctype="multipart/form-data"
-        use:enhance={({ formData }) => {
-            const data = conv2DArrayToObject([...formData.entries()]);
-            const userId = Number(data.user_id);
-            const charId = Number(data.character_id);
-            const column = Object.keys(data)[2];
-            const value = Object.values(data)[2];
+<form
+    action="?/updateCharacterData"
+    method="POST"
+    enctype="multipart/form-data"
+    use:enhance={({ formData }) => {
+        const data = conv2DArrayToObject([...formData.entries()]);
+        const userId = Number(data.user_id);
+        const charId = Number(data.character_id);
+        const column = Object.keys(data)[2];
+        const value = Object.values(data)[2];
 
-            return async ({ result }) => {
-                msgClosed.set(false);
-                onSubmit.set(false);
-                await applyAction(result);
+        return async ({ result }) => {
+            msgClosed.set(false);
+            onSubmit.set(false);
+            await applyAction(result);
 
-                if (result.type === 'success') {
-                    updateUserCtrlPanel(userId, charId, column, value);
+            if (result.type === 'success') {
+                updateUserCtrlPanel(userId, charId, column, value);
 
-                    switch (column) {
-                        case 'name': {
-                            $paginatedUsersData = $paginatedUsersData.map((user) => {
-                                // 名前更新
-                                user.characters = user.characters.map((character) => {
-                                    const bounty = !character.discord?.bounty ? 0 : character.discord?.bounty - 50000;
+                switch (column) {
+                    case 'name': {
+                        $paginatedUsersData = $paginatedUsersData.map((user) => {
+                            // 名前更新
+                            user.characters = user.characters.map((character) => {
+                                const bounty = !character.discord?.bounty ? 0 : character.discord?.bounty - 50000;
 
-                                    if (character.id === charId && character.discord)
-                                        return {
-                                            ...character,
-                                            name: value,
-                                            discord: {
-                                                ...character.discord,
-                                                bounty,
-                                            },
-                                        };
+                                if (character.id === charId && character.discord)
+                                    return {
+                                        ...character,
+                                        name: value,
+                                        discord: {
+                                            ...character.discord,
+                                            bounty,
+                                        },
+                                    };
 
-                                    return character;
-                                });
-
-                                return user;
+                                return character;
                             });
 
-                            break;
-                        }
+                            return user;
+                        });
 
-                        case 'bounty': {
-                            $paginatedUsersData = $paginatedUsersData.map((user) => {
-                                // バウンティコイン量を更新
-                                user.characters = user.characters.map((character) => {
-                                    if (character.id === charId && character.discord)
-                                        return {
-                                            ...character,
-                                            discord: {
-                                                ...character.discord,
-                                                bounty: value,
-                                            },
-                                        };
+                        break;
+                    }
 
-                                    return character;
-                                });
+                    case 'bounty': {
+                        $paginatedUsersData = $paginatedUsersData.map((user) => {
+                            // バウンティコイン量を更新
+                            user.characters = user.characters.map((character) => {
+                                if (character.id === charId && character.discord)
+                                    return {
+                                        ...character,
+                                        discord: {
+                                            ...character.discord,
+                                            bounty: value,
+                                        },
+                                    };
 
-                                return user;
+                                return character;
                             });
 
-                            break;
-                        }
+                            return user;
+                        });
 
-                        case 'clan': {
-                            $paginatedUsersData = $paginatedUsersData.map((user) => {
-                                // ギルドキャラクターデータ削除
-                                user.characters = user.characters.map((character) => {
-                                    if (character.id === charId)
-                                        return {
-                                            ...character,
-                                            guild_characters: null,
-                                        };
+                        break;
+                    }
 
-                                    return character;
-                                });
+                    case 'clan': {
+                        $paginatedUsersData = $paginatedUsersData.map((user) => {
+                            // ギルドキャラクターデータ削除
+                            user.characters = user.characters.map((character) => {
+                                if (character.id === charId)
+                                    return {
+                                        ...character,
+                                        guild_characters: null,
+                                    };
 
-                                return user;
+                                return character;
                             });
 
-                            break;
-                        }
+                            return user;
+                        });
 
-                        case 'reupload_binary': {
-                            break;
-                        }
+                        break;
+                    }
 
-                        default: {
-                            error(400, { message: '', message1: '', message2: [`Invalid column: ${column}.`], message3: undefined });
-                        }
+                    case 'reupload_binary': {
+                        break;
+                    }
+
+                    default: {
+                        error(400, { message: '', message1: '', message2: [`Invalid column: ${column}.`], message3: undefined });
                     }
                 }
-            };
-        }}
-    >
-        <input type="hidden" name="user_id" value={user.id} />
-        <input type="hidden" name="character_id" value={$userCtrlPanel[user.id].selectedChar.id} />
+            }
+        };
+    }}
+>
+    <input type="hidden" name="user_id" value={user.id} />
+    <input type="hidden" name="character_id" value={$userCtrlPanel[user.id].selectedChar.id} />
 
-        <dl class="console_contents_list">
-            <dt class="contents_term">Character ID</dt>
-            <dd class="contents_desc">{$userCtrlPanel[user.id].selectedChar.id}</dd>
+    <dl class="console_contents_list">
+        <dt class="contents_term">Character ID</dt>
+        <dd class="contents_desc">{$userCtrlPanel[user.id].selectedChar.id}</dd>
 
-            <dt class="contents_term">Name</dt>
-            <dd class="contents_desc">
-                {$userCtrlPanel[user.id].selectedChar.name ?? 'Ready to Hunt'}
+        <dt class="contents_term">Name</dt>
+        <dd class="contents_desc">
+            {$userCtrlPanel[user.id].selectedChar.name || 'Ready to Hunt'}
 
+            {#if !$userCtrlPanel[user.id].selectedChar.is_new_character}
                 {#if $userCtrlPanel[user.id].activeCategories['name']}
                     <button type="button" class="red_btn" onclick={() => ($userCtrlPanel[user.id].activeCategories['name'] = false)}>
                         <span class="btn_icon material-symbols-outlined">close</span>
@@ -349,69 +347,73 @@
                         <span class="btn_text">Edit</span>
                     </button>
                 {/if}
+            {/if}
 
-                <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
-                <div class="edit_area_box_wrapper">
-                    {#if $userCtrlPanel[user.id].activeCategories['name']}
-                        <div transition:slide class="edit_area_box">
-                            <div class="edit_area enter">
-                                <p class="edit_area_title">Change Character Name</p>
-                                <p class="console_contents_note">* 50K coins are automatically cut from the user's bounty coin owned.</p>
-                                <p class="console_contents_note">
-                                    * Empty isn't allowed, and only name containing the following characters is allowed:<br />
-                                    <span style="color: rgb(125, 125, 125); border-bottom: 1px solid black;">
-                                        ー Japanese: Hiragana, Katakana, Kanji<br />
-                                        ー English: Uppercase, Lowercase, and Half-width digits<br />
-                                        ー Symbols: &#33; &quot; &#35; &#36; &#37; &#38; &#39; &#40; &#41; &#42; &#43; &#44; &#45; &#46; &#47; &#58; &#59; &#60; &#61; &#62; &#63; &#64; &#91; &#92; &#93;
-                                        &#94; &#95; &#96; &#123; &#124; &#125; &#126;<br />
-                                    </span>
-                                </p>
+            <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+            <div class="edit_area_box_wrapper">
+                {#if $userCtrlPanel[user.id].activeCategories['name']}
+                    <div transition:slide class="edit_area_box">
+                        <div class="edit_area enter">
+                            <p class="edit_area_title">Change Character Name</p>
+                            <p class="console_contents_note">* 50K coins are automatically cut from the user's bounty coin owned.</p>
+                            <p class="console_contents_note">
+                                * Empty isn't allowed, and only name containing the following characters is allowed:<br />
+                                <span style="color: rgb(125, 125, 125); border-bottom: 1px solid black;">
+                                    ー Japanese: Hiragana, Katakana, Kanji<br />
+                                    ー English: Uppercase, Lowercase, and Half-width digits<br />
+                                    ー Symbols: &#33; &quot; &#35; &#36; &#37; &#38; &#39; &#40; &#41; &#42; &#43; &#44; &#45; &#46; &#47; &#58; &#59; &#60; &#61; &#62; &#63; &#64; &#91; &#92; &#93; &#94;
+                                    &#95; &#96; &#123; &#124; &#125; &#126;<br />
+                                </span>
+                            </p>
 
-                                <dl class="edit_area_box_parts text">
-                                    <dt>Enter new name</dt>
-                                    <dd>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            value={$userCtrlPanel[user.id].selectedChar.name ?? 'Ready to Hunt'}
-                                            oninput={(e) => (validName = validateInput(e))}
-                                            autocomplete="off"
-                                        />
-                                        <input type="hidden" name="not_linked" value={!$userCtrlPanel[user.id].selectedChar.discord} />
-                                        <input type="hidden" name="bounty_coin" value={$userCtrlPanel[user.id].selectedChar.discord?.bounty} />
-                                    </dd>
-                                </dl>
+                            <dl class="edit_area_box_parts text">
+                                <dt>Enter new name</dt>
+                                <dd>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={$userCtrlPanel[user.id].selectedChar.name || 'Ready to Hunt'}
+                                        oninput={(e) => (validName = validateCharName(e))}
+                                        autocomplete="off"
+                                    />
+                                    <input type="hidden" name="not_linked" value={!$userCtrlPanel[user.id].selectedChar.discord} />
+                                    <input type="hidden" name="bounty_coin" value={$userCtrlPanel[user.id].selectedChar.discord?.bounty} />
+                                </dd>
+                            </dl>
 
-                                <button
-                                    class="blue_btn"
-                                    class:disabled_elm={!validName}
-                                    type="submit"
-                                    onclick={() => {
-                                        $userCtrlPanel[user.id].activeCategories['name'] = false;
-                                        $timeOut && closeMsgDisplay($timeOut);
-                                        onSubmit.set(true);
-                                    }}
-                                >
-                                    <span class="btn_icon material-symbols-outlined">check</span>
-                                    <span class="btn_text">Save</span>
-                                </button>
-                            </div>
+                            <button
+                                class="blue_btn"
+                                class:disabled_elm={!validName}
+                                type="submit"
+                                onclick={() => {
+                                    $userCtrlPanel[user.id].activeCategories['name'] = false;
+                                    $timeOut && closeMsgDisplay($timeOut);
+                                    onSubmit.set(true);
+                                }}
+                            >
+                                <span class="btn_icon material-symbols-outlined">check</span>
+                                <span class="btn_text">Save</span>
+                            </button>
                         </div>
-                    {/if}
-                </div>
-            </dd>
+                    </div>
+                {/if}
+            </div>
+        </dd>
 
-            <dt class="contents_term">Gender</dt>
-            <dd class="contents_desc">{$userCtrlPanel[user.id].selectedChar.is_female ? 'Female' : 'Male'}</dd>
+        <dt class="contents_term">Gender</dt>
+        <dd class="contents_desc">{$userCtrlPanel[user.id].selectedChar.is_female ? 'Female' : 'Male'}</dd>
 
-            <dt class="contents_term">HR</dt>
-            <dd class="contents_desc">{convHrpToHr($userCtrlPanel[user.id].selectedChar.hrp)}</dd>
+        <dt class="contents_term">HR</dt>
+        <dd class="contents_desc">{convHrpToHr($userCtrlPanel[user.id].selectedChar.hrp)}</dd>
 
-            <dt class="contents_term">GR</dt>
-            <dd class="contents_desc">{$userCtrlPanel[user.id].selectedChar.gr}</dd>
+        <dt class="contents_term">GR</dt>
+        <dd class="contents_desc">{$userCtrlPanel[user.id].selectedChar.gr}</dd>
 
-            <dt class="contents_term">Weapon</dt>
-            <dd class="contents_desc">
+        <dt class="contents_term">Weapon</dt>
+        <dd class="contents_desc">
+            {#if $userCtrlPanel[user.id].selectedChar.is_new_character}
+                No Data
+            {:else}
                 [ {getWpnTypeByDec($userCtrlPanel[user.id].selectedChar.weapon_type, 'en')} ]
                 <br />
                 {#await getWpnNameByDec($userCtrlPanel[user.id].selectedChar.weapon_id, $userCtrlPanel[user.id].selectedChar.weapon_type, 'en')}
@@ -419,26 +421,28 @@
                 {:then wpnName}
                     {wpnName} ({decToLittleEndian($userCtrlPanel[user.id].selectedChar.weapon_id)})
                 {/await}
-            </dd>
+            {/if}
+        </dd>
 
-            <dt class="contents_term">Last Login</dt>
-            <dd class="contents_desc">
-                {DateTime.fromSeconds($userCtrlPanel[user.id].selectedChar.last_login ?? 0)
-                    .setZone(DateTime.local().zoneName)
-                    .setLocale('en')
-                    .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
-            </dd>
+        <dt class="contents_term">Last Login</dt>
+        <dd class="contents_desc">
+            {DateTime.fromSeconds($userCtrlPanel[user.id].selectedChar.last_login || 0)
+                .setZone(DateTime.local().zoneName)
+                .setLocale('en')
+                .toLocaleString({ year: 'numeric', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+        </dd>
 
-            <dt class="contents_term">Playtime</dt>
-            <dd class="contents_desc">{secToTime($userCtrlPanel[user.id].selectedChar.playtime)}</dd>
+        <dt class="contents_term">Playtime</dt>
+        <dd class="contents_desc">{secToTime($userCtrlPanel[user.id].selectedChar.playtime)}</dd>
 
-            <dt class="contents_term">Bounty Coin</dt>
-            <dd class="contents_desc">
-                {#if !$userCtrlPanel[user.id].selectedChar.discord}
-                    No account linked.
-                {:else}
-                    {$userCtrlPanel[user.id].selectedChar.discord?.bounty === 0 ? 'No coins.' : `${$userCtrlPanel[user.id].selectedChar.discord?.bounty} Coin(s)`}
+        <dt class="contents_term">Bounty Coin</dt>
+        <dd class="contents_desc">
+            {#if !$userCtrlPanel[user.id].selectedChar.discord}
+                No account linked.
+            {:else}
+                {$userCtrlPanel[user.id].selectedChar.discord?.bounty === 0 ? 'No coins.' : `${$userCtrlPanel[user.id].selectedChar.discord?.bounty} Coin(s)`}
 
+                {#if !$userCtrlPanel[user.id].selectedChar.is_new_character}
                     {#if $userCtrlPanel[user.id].activeCategories['bounty']}
                         <button class="red_btn" type="button" onclick={() => ($userCtrlPanel[user.id].activeCategories['bounty'] = false)}>
                             <span class="btn_icon material-symbols-outlined">close</span>
@@ -450,51 +454,52 @@
                             <span class="btn_text">Edit</span>
                         </button>
                     {/if}
-
-                    <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
-                    <div class="edit_area_box_wrapper">
-                        {#if $userCtrlPanel[user.id].activeCategories['bounty']}
-                            <div transition:slide class="edit_area_box">
-                                <div class="edit_area enter">
-                                    <p class="edit_area_title">Change the Quantity of Coins</p>
-                                    <dl class="edit_area_box_parts text">
-                                        <dt>Enter the quantity</dt>
-                                        <dd>
-                                            <input
-                                                type="text"
-                                                name="bounty"
-                                                inputmode="numeric"
-                                                pattern="\d*"
-                                                value={!$userCtrlPanel[user.id].selectedChar.discord?.bounty ? null : $userCtrlPanel[user.id].selectedChar.discord?.bounty}
-                                                placeholder="Enter the quantity"
-                                            />
-                                        </dd>
-                                    </dl>
-
-                                    <button
-                                        class="blue_btn"
-                                        type="submit"
-                                        onclick={() => {
-                                            onSubmit.set(true);
-                                            $timeOut && closeMsgDisplay($timeOut);
-                                            $userCtrlPanel[user.id].activeCategories['bounty'] = false;
-                                        }}
-                                    >
-                                        <span class="btn_icon material-symbols-outlined">check</span>
-                                        <span class="btn_text">Save</span>
-                                    </button>
-                                </div>
-                            </div>
-                        {/if}
-                    </div>
                 {/if}
-            </dd>
 
-            <dt class="contents_term">Clan Name</dt>
-            <dd class="contents_desc">
-                {$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name ?? 'None'}
+                <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+                <div class="edit_area_box_wrapper">
+                    {#if $userCtrlPanel[user.id].activeCategories['bounty']}
+                        <div transition:slide class="edit_area_box">
+                            <div class="edit_area enter">
+                                <p class="edit_area_title">Change the Quantity of Coins</p>
+                                <dl class="edit_area_box_parts text">
+                                    <dt>Enter the quantity</dt>
+                                    <dd>
+                                        <input
+                                            type="text"
+                                            name="bounty"
+                                            inputmode="numeric"
+                                            pattern="\d*"
+                                            value={!$userCtrlPanel[user.id].selectedChar.discord?.bounty ? null : $userCtrlPanel[user.id].selectedChar.discord?.bounty}
+                                            placeholder="Enter the quantity"
+                                        />
+                                    </dd>
+                                </dl>
 
-                <!-- {#if $userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name}
+                                <button
+                                    class="blue_btn"
+                                    type="submit"
+                                    onclick={() => {
+                                        onSubmit.set(true);
+                                        $timeOut && closeMsgDisplay($timeOut);
+                                        $userCtrlPanel[user.id].activeCategories['bounty'] = false;
+                                    }}
+                                >
+                                    <span class="btn_icon material-symbols-outlined">check</span>
+                                    <span class="btn_text">Save</span>
+                                </button>
+                            </div>
+                        </div>
+                    {/if}
+                </div>
+            {/if}
+        </dd>
+
+        <dt class="contents_term">Clan Name</dt>
+        <dd class="contents_desc">
+            {$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name || 'None'}
+
+            <!-- {#if $userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name}
                     {#if $userCtrlPanel[user.id].activeCategories['clan']}
                         <button type="button" class="red_btn" on:click={() => ($userCtrlPanel[user.id].activeCategories['clan'] = false)}>
                             <span class="btn_icon material-symbols-outlined">close</span>
@@ -508,39 +513,40 @@
                     {/if}
                 {/if} -->
 
-                <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
-                <div class="edit_area_box_wrapper">
-                    {#if $userCtrlPanel[user.id].activeCategories['clan']}
-                        <div transition:slide class="edit_area_box">
-                            <div class="edit_area enter">
-                                <p class="edit_area_title">Leave the Clan</p>
-                                <p class="console_contents_note">* If this character is the last one in the clan, the clan itself will also be automatically deleted.</p>
+            <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+            <div class="edit_area_box_wrapper">
+                {#if $userCtrlPanel[user.id].activeCategories['clan']}
+                    <div transition:slide class="edit_area_box">
+                        <div class="edit_area enter">
+                            <p class="edit_area_title">Leave the Clan</p>
+                            <p class="console_contents_note">* If this character is the last one in the clan, the clan itself will also be automatically deleted.</p>
 
-                                <input type="hidden" name="clan" />
-                                <input type="hidden" name="clan_length" value={$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.guild_characters?.length} />
-                                <input type="hidden" name="clan_id" value={$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.id} />
-                                <input type="hidden" name="clan_name" value={$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name} />
+                            <input type="hidden" name="clan" />
+                            <input type="hidden" name="clan_length" value={$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.guild_characters?.length} />
+                            <input type="hidden" name="clan_id" value={$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.id} />
+                            <input type="hidden" name="clan_name" value={$userCtrlPanel[user.id].selectedChar.guild_characters?.guilds?.name} />
 
-                                <button
-                                    class="blue_btn"
-                                    type="submit"
-                                    onclick={() => {
-                                        $userCtrlPanel[user.id].activeCategories['clan'] = false;
-                                        $timeOut && closeMsgDisplay($timeOut);
-                                        onSubmit.set(true);
-                                    }}
-                                >
-                                    <span class="btn_icon material-symbols-outlined">check</span>
-                                    <span class="btn_text">Leave</span>
-                                </button>
-                            </div>
+                            <button
+                                class="blue_btn"
+                                type="submit"
+                                onclick={() => {
+                                    $userCtrlPanel[user.id].activeCategories['clan'] = false;
+                                    $timeOut && closeMsgDisplay($timeOut);
+                                    onSubmit.set(true);
+                                }}
+                            >
+                                <span class="btn_icon material-symbols-outlined">check</span>
+                                <span class="btn_text">Leave</span>
+                            </button>
                         </div>
-                    {/if}
-                </div>
-            </dd>
+                    </div>
+                {/if}
+            </div>
+        </dd>
 
+        {#if !$userCtrlPanel[user.id].selectedChar.is_new_character}
             <dt class="contents_term">Binary Data</dt>
-            <dd class="contents_desc">
+            <dd class="contents_desc" style="padding: 1% 0 1%;">
                 <!-- バイナリ再アップロード-->
                 {#if $userCtrlPanel[user.id].activeCategories['reupload_binary']}
                     <button type="button" class="red_btn" onclick={() => ($userCtrlPanel[user.id].activeCategories['reupload_binary'] = false)}>
@@ -625,6 +631,6 @@
                     <span class="btn_text">Download</span>
                 </button>
             </dd>
-        </dl>
-    </form>
-{/if}
+        {/if}
+    </dl>
+</form>
