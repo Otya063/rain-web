@@ -14,9 +14,14 @@ Generate prisma client for accelerate.
 npx prisma generate --no-engine
 ```
 
+Put file to local R2 env.
+```bash
+npx wrangler r2 object put bucket_name/file_name --local --file=file_name
+```
+
 Start a local server for developing Worker.
 ```bash
-wrangler dev
+npx wrangler dev
 ```
 
 ### Deploy the website.

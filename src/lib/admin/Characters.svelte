@@ -163,11 +163,7 @@
 
                     <div class="wpn_text">
                         <p>{getWpnTypeByDec(character.weapon_type, 'en')}</p>
-                        {#await getWpnNameByDec(character.weapon_id, character.weapon_type, 'en')}
-                            Loading...
-                        {:then wpnName}
-                            <p>{wpnName}</p>
-                        {/await}
+                        <p>{getWpnNameByDec(character.weapon_id, character.weapon_type)}</p>
                     </div>
 
                     {#if character.deleted}
@@ -416,11 +412,10 @@
             {:else}
                 [ {getWpnTypeByDec($userCtrlPanel[user.id].selectedChar.weapon_type, 'en')} ]
                 <br />
-                {#await getWpnNameByDec($userCtrlPanel[user.id].selectedChar.weapon_id, $userCtrlPanel[user.id].selectedChar.weapon_type, 'en')}
-                    Loading...
-                {:then wpnName}
-                    {wpnName} ({decToLittleEndian($userCtrlPanel[user.id].selectedChar.weapon_id)})
-                {/await}
+
+                {getWpnNameByDec($userCtrlPanel[user.id].selectedChar.weapon_id, $userCtrlPanel[user.id].selectedChar.weapon_type)} ({decToLittleEndian(
+                    $userCtrlPanel[user.id].selectedChar.weapon_id,
+                )})
             {/if}
         </dd>
 

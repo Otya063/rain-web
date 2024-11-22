@@ -404,36 +404,32 @@
 
                     <dt class="contents_term">Contents Data</dt>
                     <dd class="contents_desc" style="padding: 1% 0 1%;">
-                        {#await ManageDistribution.parseHexString(distribution.data)}
-                            Loading...
-                        {:then contents}
-                            {#if editingId === distribution.id && catTypes['data']}
-                                <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'data')}>
-                                    <span class="btn_icon material-symbols-outlined">collapse_all</span>
-                                    <span class="btn_text">Hide</span>
-                                </button>
-                            {:else}
-                                <button class="normal_btn" type="button" onclick={() => editModeSwitch(distribution.id, 'data')}>
-                                    <span class="btn_icon material-symbols-outlined">expand_all</span>
-                                    <span class="btn_text">Show</span>
-                                </button>
-                            {/if}
+                        {#if editingId === distribution.id && catTypes['data']}
+                            <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'data')}>
+                                <span class="btn_icon material-symbols-outlined">collapse_all</span>
+                                <span class="btn_text">Hide</span>
+                            </button>
+                        {:else}
+                            <button class="normal_btn" type="button" onclick={() => editModeSwitch(distribution.id, 'data')}>
+                                <span class="btn_icon material-symbols-outlined">expand_all</span>
+                                <span class="btn_text">Show</span>
+                            </button>
+                        {/if}
 
-                            <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
-                            <div class="edit_area_box_wrapper">
-                                {#if editingId === distribution.id && catTypes['data']}
-                                    <div transition:slide class="edit_area_box">
-                                        {#each contents as content}
-                                            <hr />
-                                            <p>Type: {content.types}</p>
-                                            <p>Code: {content.item_data.code}</p>
-                                            <p>Name: {content.item_data.name}</p>
-                                            <p>Amount: {content.amount}</p>
-                                        {/each}
-                                    </div>
-                                {/if}
-                            </div>
-                        {/await}
+                        <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+                        <div class="edit_area_box_wrapper">
+                            {#if editingId === distribution.id && catTypes['data']}
+                                <div transition:slide class="edit_area_box">
+                                    {#each ManageDistribution.parseHexString(distribution.data) as content}
+                                        <hr />
+                                        <p>Type: {content.types}</p>
+                                        <p>Code: {content.item_data.code}</p>
+                                        <p>Name: {content.item_data.name}</p>
+                                        <p>Amount: {content.amount}</p>
+                                    {/each}
+                                </div>
+                            {/if}
+                        </div>
                     </dd>
                 </dl>
             </form>

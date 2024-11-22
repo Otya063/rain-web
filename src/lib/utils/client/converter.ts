@@ -1,7 +1,9 @@
 import { error } from '@sveltejs/kit';
+import { get } from 'svelte/store';
 import { courseJa } from '$i18n/ja/course';
 import { courseEn } from '$i18n/en/course';
-import { type WeaponType, type CourseJaData, type CourseEnData, type DistributionContentsType, DistributionContentsTypeObj, type DistributionType, DistributionTypeObj } from '$types';
+import { type WeaponType, type CourseJaData, type CourseEnData, type DistributionContentsType, DistributionContentsTypeObj, type DistributionType, DistributionTypeObj, type JsonData } from '$types';
+import { armJson, chestJson, headJson, itemJson, legJson, meleeJson, poogieJson, rangedJson, waistJson } from '.';
 
 /**
  * URLのロケールスラグを置き換える
@@ -235,11 +237,10 @@ export const getWpnTypeByDec = (dec: number | null, lang: string): WeaponType =>
 /**
  * 武器ID（10進数）から武器の名前を取得する
  * @param {number} dec 武器IDの10進数表現
- * @param {number | null} wpnType - 武器タイプ
- * @param {string} lang 言語コード
- * @returns {Promise<string>} 武器の名前
+ * @param {number | null} wpnType 武器タイプ
+ * @returns {string} 武器の名前
  */
-export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang: string): Promise<string> => {
+export const getWpnNameByDec = (dec: number, wpnType: number | null): string => {
     const hex: string = decToLittleEndian(dec);
 
     switch (wpnType) {
@@ -247,40 +248,14 @@ export const getWpnNameByDec = async (dec: number, wpnType: number | null, lang:
         case 1:
         case 5:
         case 10: {
-            switch (lang) {
-                case 'ja': {
-                    const { rangedJa } = await import('$i18n/ja/ranged');
-                    return rangedJa[hex];
-                }
-
-                case 'en': {
-                    const { rangedEn } = await import('$i18n/en/ranged');
-                    return rangedEn[hex];
-                }
-
-                default: {
-                    error(400, { message: '', message1: undefined, message2: [`Unsupported language: ${lang}.`], message3: undefined });
-                }
-            }
+            const jsonData = get(rangedJson);
+            return jsonData[hex] || 'Unknown Weapon';
         }
 
         // 近距離武器
         default: {
-            switch (lang) {
-                case 'ja': {
-                    const { meleeJa } = await import('$i18n/ja/melee');
-                    return meleeJa[hex];
-                }
-
-                case 'en': {
-                    const { meleeEn } = await import('$i18n/en/melee');
-                    return meleeEn[hex];
-                }
-
-                default: {
-                    error(400, { message: '', message1: undefined, message2: [`Unsupported language: ${lang}.`], message3: undefined });
-                }
-            }
+            const jsonData = get(meleeJson);
+            return jsonData[hex] || 'Unknown Weapon';
         }
     }
 };
@@ -370,9 +345,11 @@ export const convHrpToHr = (hrp: number | null): number => {
         case 998: {
             return 6;
         }
+
         case 299: {
             return 5;
         }
+
         case 99: {
             return 4;
         }
@@ -384,6 +361,7 @@ export const convHrpToHr = (hrp: number | null): number => {
         case 30: {
             return 2;
         }
+
         case 1: {
             return 1;
         }
@@ -397,57 +375,53 @@ export const convHrpToHr = (hrp: number | null): number => {
 /**
  * 配布コンテンツの種類に基づいてデータを取得する
  * @param {DistributionContentsType} contentsType コンテンツの種類
- * @returns {Promise<{[key: string]: string}>} 取得したデータ
+ * @returns {JsonData} 取得したデータ
  */
-export const getDistItemsData = async (
-    contentsType: DistributionContentsType,
-): Promise<{
-    [key: string]: string;
-}> => {
+export const getDistItemsData = (contentsType: DistributionContentsType): JsonData => {
     switch (contentsType) {
         case DistributionContentsTypeObj.Leg: {
-            const { legEn } = await import('$i18n/en/leg');
-            return legEn;
+            const legData = get(legJson);
+            return legData;
         }
 
         case DistributionContentsTypeObj.Head: {
-            const { headEn } = await import('$i18n/en/head');
-            return headEn;
+            const headData = get(headJson);
+            return headData;
         }
 
         case DistributionContentsTypeObj.Chest: {
-            const { chestEn } = await import('$i18n/en/chest');
-            return chestEn;
+            const chestData = get(chestJson);
+            return chestData;
         }
 
         case DistributionContentsTypeObj.Arm: {
-            const { armEn } = await import('$i18n/en/arm');
-            return armEn;
+            const armData = get(armJson);
+            return armData;
         }
 
         case DistributionContentsTypeObj.Waist: {
-            const { waistEn } = await import('$i18n/en/waist');
-            return waistEn;
+            const waistData = get(waistJson);
+            return waistData;
         }
 
         case DistributionContentsTypeObj.Melee: {
-            const { meleeEn } = await import('$i18n/en/melee');
-            return meleeEn;
+            const meleeData = get(meleeJson);
+            return meleeData;
         }
 
         case DistributionContentsTypeObj.Ranged: {
-            const { rangedEn } = await import('$i18n/en/ranged');
-            return rangedEn;
+            const rangedData = get(rangedJson);
+            return rangedData;
         }
 
         case DistributionContentsTypeObj.Item: {
-            const { itemEn } = await import('$i18n/en/item');
-            return itemEn;
+            const itemData = get(itemJson);
+            return itemData;
         }
 
         case DistributionContentsTypeObj['Poogie Outfit']: {
-            const { poogieEn } = await import('$i18n/en/poogie');
-            return poogieEn;
+            const poogieData = get(poogieJson);
+            return poogieData;
         }
 
         default: {

@@ -14,3 +14,7 @@ mode = "smart"
 [vars]
 MAINTENANCE_MODE = "false"
 MAINTENANCE_DATE = ""
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "rain-web-assets"

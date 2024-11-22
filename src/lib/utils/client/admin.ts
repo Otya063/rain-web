@@ -1,6 +1,6 @@
 import type { launcher_banner, launcher_info, users } from '@prisma/client/edge';
 import { get, writable } from 'svelte/store';
-import type { PaginatedUsers, PaginatedCharacter, PaginationMeta, PaginatedClans, PaginatedAlliances, Distribution } from '$types';
+import type { PaginatedUsers, PaginatedCharacter, PaginationMeta, PaginatedClans, PaginatedAlliances } from '$types';
 
 export const filterUserValue = writable<string>('');
 export const filterUserParam = writable<string>('');

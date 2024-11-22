@@ -1,4 +1,5 @@
 export * from './admin';
+export * from './assets';
 export * from './binary';
 export * from './course';
 export * from './database';

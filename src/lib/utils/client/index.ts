@@ -4,6 +4,7 @@ import { replaceLocaleInUrl } from '.';
 /* utils/client内においては如何なるファイルであっても、databaseのものをimportしてはならない（Cannot import $env/static/private into client-side code）*/
 /* ここはクライアントサイドに露出するため、サーバーサイドで使用するデータベース関連の処理は使えない（utils/serverからimportする） */
 export * from './admin';
+export * from './assets';
 export * from './converter';
 export * from './distribution';
 export * from './message';

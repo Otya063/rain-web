@@ -32,8 +32,8 @@
         name=""
         id=""
         bind:value={selectedContentsType}
-        onchange={async () => {
-            selectedContentsData = Object.entries(await getDistItemsData(Number(selectedContentsType) as DistributionContentsType)).map(([key, value]) => `${key} - ${value}`);
+        onchange={() => {
+            selectedContentsData = Object.entries(getDistItemsData(Number(selectedContentsType) as DistributionContentsType)).map(([key, value]) => `${key} - ${value}`);
         }}
     >
         <option value="" disabled selected style="display:none;">Select contents-type.</option>

@@ -1,66 +1,58 @@
+import { get } from 'svelte/store';
 import { DistributionContentsTypeObj, type DistributionContentsType, type DistributionType, type SelectedItemData } from '$types';
-import { getDistributionContentsTypeName } from '.';
+import { getDistributionContentsTypeName, armJson, chestJson, headJson, itemJson, legJson, meleeJson, poogieJson, rangedJson, waistJson } from '.';
 
 /**
- * アイテムのtypeに応じてnameを動的にロードする
- * @param {DistributionContentsType} type DistributionContentsTypeの値
- * @param {string} code item_data.codeの値
- * @returns {Promise<string>} 該当するname文字列または空文字列
+ * 配布コンテンツの種類に応じたデータ名を取得する
+ * @param {DistributionContentsType} type 配布コンテンツの種類
+ * @param {string} code 各データのLE
+ * @returns {string} 該当するデータ名文字列
  */
-const getDistContentsNameByType = async (type: DistributionContentsType, code: string): Promise<string> => {
+const getDistContentsNameByType = (type: DistributionContentsType, code: string): string => {
     switch (type) {
         case DistributionContentsTypeObj.Leg: {
-            const { legEn } = await import('$i18n/en/leg');
-
-            return legEn[code];
+            const legData = get(legJson);
+            return legData[code] || 'Unknown Armor';
         }
 
         case DistributionContentsTypeObj.Head: {
-            const { headEn } = await import('$i18n/en/head');
-
-            return headEn[code];
+            const headData = get(headJson);
+            return headData[code] || 'Unknown Armor';
         }
 
         case DistributionContentsTypeObj.Chest: {
-            const { chestEn } = await import('$i18n/en/chest');
-
-            return chestEn[code];
+            const chestData = get(chestJson);
+            return chestData[code] || 'Unknown Armor';
         }
 
         case DistributionContentsTypeObj.Arm: {
-            const { armEn } = await import('$i18n/en/arm');
-
-            return armEn[code];
+            const armData = get(armJson);
+            return armData[code] || 'Unknown Armor';
         }
 
         case DistributionContentsTypeObj.Waist: {
-            const { waistEn } = await import('$i18n/en/waist');
-
-            return waistEn[code];
+            const waistData = get(waistJson);
+            return waistData[code] || 'Unknown Armor';
         }
 
         case DistributionContentsTypeObj.Melee: {
-            const { meleeEn } = await import('$i18n/en/melee');
-
-            return meleeEn[code];
+            const meleeData = get(meleeJson);
+            return meleeData[code] || 'Unknown Weapon';
         }
 
         case DistributionContentsTypeObj.Ranged: {
-            const { rangedEn } = await import('$i18n/en/ranged');
-
-            return rangedEn[code];
+            const rangedData = get(rangedJson);
+            return rangedData[code] || 'Unknown Weapon';
         }
 
         case DistributionContentsTypeObj.Item: {
-            const { itemEn } = await import('$i18n/en/item');
-
-            return itemEn[code];
+            const itemData = get(itemJson);
+            return itemData[code] || 'Unknown Item';
         }
 
         case DistributionContentsTypeObj['Poogie Outfit']: {
-            const { poogieEn } = await import('$i18n/en/poogie');
-
-            return poogieEn[code];
+            const poogieData = get(poogieJson);
+            return poogieData[code] || 'Unknown Outfit';
         }
 
         default: {
@@ -118,9 +110,9 @@ export class ManageDistribution {
     /**
      * hex文字列を解析し、各データ値を取得する
      * @param {string} hexString 解析対象の16進数文字列
-     * @returns {Promise<SelectedItemData[]>} SelectedItemDataの配列
+     * @returns {SelectedItemData[]} SelectedItemDataの配列
      */
-    public static async parseHexString(hexString: string): Promise<SelectedItemData[]> {
+    public static parseHexString(hexString: string): SelectedItemData[] {
         const items: SelectedItemData[] = [];
         let currentIndex = 0;
 
@@ -162,7 +154,7 @@ export class ManageDistribution {
                 amount,
             };
 
-            itemData.item_data.name = await getDistContentsNameByType(types, code);
+            itemData.item_data.name = getDistContentsNameByType(types, code);
 
             items.push(itemData);
         }

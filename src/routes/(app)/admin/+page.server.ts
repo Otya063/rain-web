@@ -4,14 +4,21 @@ import { error, fail } from '@sveltejs/kit';
 import { DateTime } from 'luxon';
 import { Buffer } from 'node:buffer'; // Node.jsとの互換性により、追加しないと「ReferenceError: Buffer is not defined」が発生する
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
-import { DistributionTypeObj, type BinaryTypes, type Distribution, type DistributionTypeName } from '$types';
-import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi, isNumber, convertColorCodeString } from '$utils/client';
+import { DistributionTypeObj, type BinaryTypes, type Distribution, type DistributionTypeName, type R2AssetsJsonData } from '$types';
+import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi, isNumber, convertColorCodeString, headJson } from '$utils/client';
 import ServerData, { db, editName, getPaginatedAllianceData, getPaginatedClanData, getPaginatedUserData, getPaginationMeta, IsCharLogin, ManageBinary } from '$utils/server';
 
 const emptyMsg = 'Input value is empty.';
 const requiredMsg = 'Required field is empty.';
 
-export const load: PageServerLoad = async ({ url, locals: { LL, authUser } }) => {
+export const load: PageServerLoad = async ({ url, locals: { LL, authUser }, platform }) => {
+    const r2Response = await platform?.env.R2.get('EquipItemsEn.json');
+    if (!r2Response) {
+        error(404, { message: '', message1: undefined, message2: ['No r2-assets found.'], message3: undefined });
+    }
+
+    const r2JsonData = (await r2Response.json()) as R2AssetsJsonData;
+
     const launcherSystem = (await ServerData.getLauncherSystem()) as launcher_system;
 
     // 管理者確認
@@ -34,6 +41,7 @@ export const load: PageServerLoad = async ({ url, locals: { LL, authUser } }) =>
         launcherInformation,
         launcherBanner,
         distributions,
+        r2JsonData
     };
 };
 

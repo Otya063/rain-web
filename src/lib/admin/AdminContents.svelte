@@ -6,7 +6,7 @@
     import LauncherInformation from '$lib/admin/LauncherInformation.svelte';
     import LauncherSystem from '$lib/admin/LauncherSystem.svelte';
     import Users from '$lib/admin/Users.svelte';
-    import { adminTabValue } from '$utils/client';
+    import { adminTabValue, armJson, chestJson, headJson, itemJson, legJson, meleeJson, poogieJson, rangedJson, waistJson } from '$utils/client';
 
     interface Props {
         data: PageData;
@@ -20,6 +20,17 @@
     const informationData = data.launcherInformation;
     const launcherBanner = data.launcherBanner;
     const distributions = data.distributions;
+
+    // 各種アセットデータをjsonからストアへ格納
+    headJson.set(data.r2JsonData.head);
+    chestJson.set(data.r2JsonData.chest);
+    armJson.set(data.r2JsonData.arm);
+    waistJson.set(data.r2JsonData.waist);
+    legJson.set(data.r2JsonData.leg);
+    meleeJson.set(data.r2JsonData.melee);
+    rangedJson.set(data.r2JsonData.ranged);
+    itemJson.set(data.r2JsonData.item);
+    poogieJson.set(data.r2JsonData.poogie);
 </script>
 
 {#if $adminTabValue === '' || $adminTabValue === 'system'}
