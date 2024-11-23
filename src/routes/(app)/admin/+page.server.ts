@@ -41,7 +41,7 @@ export const load: PageServerLoad = async ({ url, locals: { LL, authUser }, plat
         launcherInformation,
         launcherBanner,
         distributions,
-        r2JsonData
+        r2JsonData,
     };
 };
 
@@ -1267,6 +1267,7 @@ const downloadBinary: Action = async ({ request }) => {
 const updateDistributionData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.dist_id);
+    const zonename = data.zonename;
     const column = Object.keys(data)[1] as keyof Omit<Distribution, 'id' | 'character_id'>;
     const value = Object.values(data)[1] as string | null;
 
@@ -1275,6 +1276,7 @@ const updateDistributionData: Action = async ({ request }) => {
         return fail(400, { error: true, message: emptyMsg });
     }
 
+    console.log(DateTime.fromISO(value, { zone: zonename }).toString());
     try {
         await db.distribution.update({
             where: {
@@ -1289,7 +1291,9 @@ const updateDistributionData: Action = async ({ request }) => {
                           })()
                         : column === 'event_name'
                           ? convertColorCodeString('colorCode', value) // ゲーム内カラーコードに変換
-                          : value,
+                          : column === 'deadline'
+                            ? DateTime.fromISO(value, { zone: zonename }).toString()!
+                            : value,
             },
         });
 

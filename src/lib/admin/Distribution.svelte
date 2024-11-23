@@ -1,6 +1,6 @@
 <script lang="ts">
     import { Svroller } from 'svrollbar';
-    import { type Distribution, type DistributionContentsType } from '$types';
+    import type { Distribution, DistributionContentsType } from '$types';
     import { getDistItemsData } from '$utils/client';
     import DistributionList from './DistributionList.svelte';
 

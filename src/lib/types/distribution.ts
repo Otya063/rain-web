@@ -31,14 +31,14 @@ export type DistributionContentsTypeName = keyof typeof DistributionContentsType
 
 // 配布扱い方法の種類
 export const DistributionTypeObj = {
-    'Bought': 0, // アイテム販売商品
-    'Event': 1, // イベント報酬
-    'Compensation': 2, // お詫びアイテム
-    'Promotion': 4, // キャンペーン
-    'Subscription': 6, // 各種利用権
-    'Event Item': 7,
-    'Promotion Item': 8,
-    'Subscription Item': 9,
+    'Paid Item': 0, // アイテム販売商品の受取（各種特典の受取）
+    'Event Item': 1, // イベント報酬の受取（各種特典の受取）
+    'Compensation Item': 2, // お詫びアイテムの受取（各種特典の受取）
+    'Promotion Item': 4, // キャンペーンの受取（各種特典の受取）
+    'Subscription': 6, // 各種利用権の受取
+    'Event Exchange': 7, // イベントの交換（アイテム・利用権交換）
+    'Promotion Exchange': 8, // キャンペーンの交換（アイテム・利用権交換）
+    'Subscription Exchange': 9, // 各種利用権の交換（アイテム・利用権交換）
 };
 export type DistributionType = (typeof DistributionTypeObj)[keyof typeof DistributionTypeObj];
 export type DistributionTypeName = keyof typeof DistributionTypeObj;

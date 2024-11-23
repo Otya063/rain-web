@@ -16,7 +16,8 @@
     let filterCharId = $state('');
     let editingId: number = $state(0); // 編集対象の配布ID
     let editMode = false;
-    const catTypes: { [key in keyof Omit<Distribution, 'id' | 'character_id'>]: boolean } = $state({
+    const catTypes: { [key in keyof Omit<Distribution, 'id'>]: boolean } = $state({
+        character_id: false,
         type: false,
         deadline: false,
         event_name: false,
@@ -43,6 +44,7 @@
         'Yellow': '05',
         'Orange': '06',
         'Pink': '07',
+        'Blue': '16',
     };
 
     /**
@@ -53,14 +55,14 @@
      * @param {T} id 編集対象のID
      * @param {U} type 切り替えたいカテゴリのタイプ
      */
-    const editModeSwitch = <T extends number, U extends keyof Omit<Distribution, 'id' | 'character_id'>>(id: T, type: U): void => {
+    const editModeSwitch = <T extends number, U extends keyof Omit<Distribution, 'id'>>(id: T, type: U): void => {
         // 別のカテゴリがすでに編集モードかどうかを確認
         const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
 
         // 編集中に別の通常ボタンが押された場合、編集対象を切り替える
         if (activeCat && id !== 0) {
             Object.keys(catTypes).forEach((_key) => {
-                const key = _key as keyof Omit<Distribution, 'id' | 'character_id'>;
+                const key = _key as keyof Omit<Distribution, 'id'>;
                 catTypes[key] = false;
             });
 
@@ -148,21 +150,6 @@
     }
 </script>
 
-<!-- 
-<DistributionList
-    title="Common"
-    helpText="Shows what was distributed to all characters."
-    {distributions}
-/>
-
-<DistributionList
-    title="Individual"
-    helpText="Shows what was distributed for each character.<br />(Filter by character-id, excluding Common distributions.)"
-    {distributions}
-    showCharacterId={true}
-/>
--->
-
 <h2>
     <span class="material-symbols-outlined">package_2</span>
     {title}
@@ -202,14 +189,21 @@
                         await applyAction(result);
 
                         if (result.type === 'success') {
-                            sortedDistributions = sortedDistributions!.map((d) => {
-                                if (d.id === id) {
+                            sortedDistributions = sortedDistributions!.map((distribution) => {
+                                if (distribution.id === id) {
                                     return {
-                                        ...d,
-                                        [column]: column === 'type' ? DistributionTypeObj[value as DistributionTypeName] : column === 'event_name' ? previewTitle : value,
+                                        ...distribution,
+                                        [column]:
+                                            column === 'type'
+                                                ? DistributionTypeObj[value as DistributionTypeName]
+                                                : column === 'event_name'
+                                                  ? convertColorCodeString('colorTag', convertColorCodeString('colorCode', value)) // 無効なカラー番号上書きのため、一度カラーコードに戻してからカラータグに再変換
+                                                  : column === 'deadline'
+                                                    ? DateTime.fromISO(value).toJSDate()
+                                                    : value,
                                     };
                                 }
-                                return d;
+                                return distribution;
                             });
                         }
                     };
@@ -222,6 +216,11 @@
                 <dl class="console_contents_list">
                     <dt class="contents_term">ID</dt>
                     <dd class="contents_desc">{distribution.id}</dd>
+
+                    {#if showCharacterId}
+                        <dt class="contents_term">Character ID of<br />Distribution Target</dt>
+                        <dd class="contents_desc">{distribution.character_id}</dd>
+                    {/if}
 
                     <dt class="contents_term">Type</dt>
                     <dd class="contents_desc">
@@ -265,6 +264,68 @@
                                                 setTimeout(() => {
                                                     // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
                                                     editModeSwitch(0, 'type');
+                                                }, 100);
+                                            }}
+                                        >
+                                            <span class="btn_icon material-symbols-outlined">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {/if}
+                        </div>
+                    </dd>
+
+                    <dt class="contents_term">Deadline</dt>
+                    <dd class="contents_desc">
+                        {!distribution.deadline
+                            ? 'No Deadline'
+                            : DateTime.fromJSDate(distribution.deadline)
+                                  .setZone(DateTime.local().zoneName)
+                                  .setLocale('en')
+                                  .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+
+                        {#if editingId === distribution.id && catTypes['deadline']}
+                            <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'deadline')}>
+                                <span class="btn_icon material-symbols-outlined">close</span>
+                                <span class="btn_text">Cancel</span>
+                            </button>
+                        {:else}
+                            <button class="normal_btn" type="button" onclick={() => editModeSwitch(distribution.id, 'deadline')}>
+                                <span class="btn_icon material-symbols-outlined">mode_edit</span>
+                                <span class="btn_text">Edit</span>
+                            </button>
+                        {/if}
+
+                        <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+                        <div class="edit_area_box_wrapper">
+                            {#if editingId === distribution.id && catTypes['deadline']}
+                                <div transition:slide class="edit_area_box">
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">Change Date</p>
+                                        <p class="console_contents_note">* The date and time to be set are automatically converted to UTC.</p>
+                                        <p class="console_contents_note">* Empty isn't allowed.</p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Set new date</dt>
+                                            <dd>
+                                                <input
+                                                    type="datetime-local"
+                                                    name="deadline"
+                                                    value={!distribution.deadline ? '' : DateTime.fromJSDate(distribution.deadline).toFormat("yyyy-MM-dd'T'HH:mm")}
+                                                />
+                                                <input type="hidden" name="zonename" value={DateTime.local().zoneName} />
+                                            </dd>
+                                        </dl>
+
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            onclick={() => {
+                                                onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
+                                                setTimeout(() => {
+                                                    // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
+                                                    editModeSwitch(0, 'deadline');
                                                 }, 100);
                                             }}
                                         >
@@ -384,23 +445,11 @@
                         </div>
                     </dd>
 
-                    {#if showCharacterId}
-                        <dt class="contents_term">Character ID of<br />Distribution Target</dt>
-                        <dd class="contents_desc">{distribution.character_id}</dd>
-                    {/if}
-
-                    <dt class="contents_term">Deadline</dt>
-                    <dd class="contents_desc">
-                        {!distribution.deadline
-                            ? 'No Deadline'
-                            : DateTime.fromJSDate(distribution.deadline)
-                                  .setZone(DateTime.local().zoneName)
-                                  .setLocale('en')
-                                  .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
-                    </dd>
-
                     <dt class="contents_term">Description</dt>
                     <dd class="contents_desc">{distribution.description}</dd>
+
+                    <dt class="contents_term">Remaining Claims</dt>
+                    <dd class="contents_desc">{distribution.times_acceptable}</dd>
 
                     <dt class="contents_term">Contents Data</dt>
                     <dd class="contents_desc" style="padding: 1% 0 1%;">

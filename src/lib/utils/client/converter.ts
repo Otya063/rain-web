@@ -558,7 +558,8 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
                 }
 
                 // 現在のマッチ部分を追加
-                result += type === 'html' ? `<span class='${spanClass}'>${text}</span>` : `<Color${code} />${text}`;
+                const validColorCodes = ['00', '01', '02', '03', '04', '05', '06', '07', '16'];
+                result += type === 'html' ? `<span class='${spanClass}'>${text}</span>` : `<Color${validColorCodes.includes(code) ? code : '00'} />${text}`;
             }
 
             lastIndex = regex.lastIndex;
@@ -575,7 +576,7 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
         const regex = /<Color(\d{2}) \/>/g;
 
         let result = '';
-        let lastCode: string | null = null; // 前回のカラーコード
+        let colorCode: string | null = null; // カラーコード
         let lastIndex = 0; // 前回のマッチ位置
 
         let match: RegExpExecArray | null;
@@ -588,14 +589,16 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
 
             if (text.trim()) {
                 // テキストが存在する場合、現在のカラーコードで追加
-                if (lastCode !== null) {
-                    result += `~C${lastCode}`;
+                if (colorCode !== null) {
+                    result += `~C${colorCode}`;
                 }
+
                 result += text;
             }
 
-            // 現在のカラーコードを更新
-            lastCode = code;
+            // カラーコード設定
+            const validColorCodes = ['00', '01', '02', '03', '04', '05', '06', '07', '16'];
+            colorCode = validColorCodes.includes(code) ? code : '00'; // 無効なカラーコードの場合、デフォルトの白に
 
             // 次の処理のためにインデックスを更新
             lastIndex = regex.lastIndex;
@@ -604,9 +607,10 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
         // 最後のテキストを処理
         const remainingText = input.slice(lastIndex);
         if (remainingText.trim()) {
-            if (lastCode !== null) {
-                result += `~C${lastCode}`;
+            if (colorCode !== null) {
+                result += `~C${colorCode}`;
             }
+
             result += remainingText;
         }
 
@@ -658,6 +662,10 @@ export const getColorNameByColorCode = (code: string): string => {
 
         case '07': {
             return 'pink'; // ff84ff
+        }
+
+        case '16': {
+            return 'blue'; // 4c49ef
         }
 
         default: {
