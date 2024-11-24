@@ -36,12 +36,25 @@ export const load: PageServerLoad = async ({ url, locals: { LL, authUser }, plat
 
     const distributions = await ServerData.getDistributions();
 
+    // IDと名前ペアの文字列配列（「ID - 名前」の形式）
+    const charactersIdName = (
+        await db.characters.findMany({
+            select: {
+                id: true,
+                name: true,
+            },
+        })
+    ).map((character) => {
+        return `[${character.id}] ${character.name || 'Ready to Hunt'}`;
+    });
+
     return {
         launcherSystem,
         launcherInformation,
         launcherBanner,
         distributions,
         r2JsonData,
+        charactersIdName,
     };
 };
 
@@ -1268,15 +1281,15 @@ const updateDistributionData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.dist_id);
     const zonename = data.zonename;
-    const column = Object.keys(data)[1] as keyof Omit<Distribution, 'id' | 'character_id'>;
+    const column = Object.keys(data)[1] as keyof Omit<Distribution, 'id'>;
     const value = Object.values(data)[1] as string | null;
 
-    if (!value) {
+    // deadline以外は空不許可
+    if (!value && column !== 'deadline') {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: emptyMsg });
     }
 
-    console.log(DateTime.fromISO(value, { zone: zonename }).toString());
     try {
         await db.distribution.update({
             where: {
@@ -1290,10 +1303,14 @@ const updateDistributionData: Action = async ({ request }) => {
                               return DistributionTypeObj[_value];
                           })()
                         : column === 'event_name'
-                          ? convertColorCodeString('colorCode', value) // ゲーム内カラーコードに変換
+                          ? convertColorCodeString('colorCode', value!) // ゲーム内カラーコードに変換
                           : column === 'deadline'
-                            ? DateTime.fromISO(value, { zone: zonename }).toString()!
-                            : value,
+                            ? !value
+                                ? null // 無期限
+                                : DateTime.fromISO(value, { zone: zonename }).toString() // UTCとして保存（ゲーム内では+9日本時間に変換される）
+                            : column === 'times_acceptable'
+                              ? Number(value) // number型なので変換必要
+                              : value,
             },
         });
 

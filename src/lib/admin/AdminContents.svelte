@@ -20,6 +20,7 @@
     const informationData = data.launcherInformation;
     const launcherBanner = data.launcherBanner;
     const distributions = data.distributions;
+    const charactersIdName = data.charactersIdName;
 
     // 各種アセットデータをjsonからストアへ格納
     headJson.set(data.r2JsonData.head);
@@ -51,5 +52,5 @@
         updatedAllianceData={form?.updatedAllianceData}
     />
 {:else if $adminTabValue === 'distribution'}
-    <Distribution {distributions} />
+    <Distribution {distributions} {charactersIdName} />
 {/if}

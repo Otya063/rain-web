@@ -6,8 +6,9 @@
 
     interface Props {
         distributions: Distribution[];
+        charactersIdName: string[];
     }
-    let { distributions }: Props = $props();
+    let { distributions, charactersIdName }: Props = $props();
     let filterText = $state('');
     let showDropdown = $state(false);
     let selectedContentsData = $state(['']);
@@ -77,6 +78,12 @@
     </div>
 </section>
 
-<DistributionList title="Common" helpText="Shows what was distributed to all characters." {distributions} />
+<DistributionList title="Common" helpText="Shows what was distributed to all characters." {distributions} {charactersIdName} />
 
-<DistributionList title="Individual" helpText="Shows what was distributed for each character.<br />(Filter by character-id, excluding Common distributions.)" {distributions} showCharacterId={true} />
+<DistributionList
+    title="Individual"
+    helpText="Shows what was distributed for each character.<br />(Filter by character-id, excluding Common distributions.)"
+    {distributions}
+    {charactersIdName}
+    showCharacterId={true}
+/>

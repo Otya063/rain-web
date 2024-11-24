@@ -1,10 +1,4 @@
-import {
-    PrismaClient,
-    type characters,
-    type discord,
-    type launcher_banner,
-    type suspended_account,
-} from '@prisma/client/edge';
+import { PrismaClient, type characters, type discord, type launcher_banner, type suspended_account } from '@prisma/client/edge';
 import { withAccelerate } from '@prisma/extension-accelerate';
 import { error } from '@sveltejs/kit';
 import _ from 'lodash';

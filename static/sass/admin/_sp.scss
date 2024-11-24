@@ -536,6 +536,42 @@
                         font-weight: 700;
                         user-select: none;
                     }
+
+                    // 数値入力エリア
+                    .number_input_wrapper {
+                        display: flex;
+                        align-items: center;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                        overflow: hidden;
+                        width: fit-content;
+
+                        // 増加減少ボタン
+                        .decrement_btn,
+                        .increment_btn {
+                            background-color: #f9f9f9;
+                            border: none;
+                            width: 30px;
+                            height: 30px;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+
+                            // ボタン無効
+                            &:disabled {
+                                cursor: not-allowed;
+                                opacity: 0.3;
+                            }
+                        }
+
+                        // input要素
+                        .number_input_text {
+                            width: 50px;
+                            text-align: center;
+                            border: none;
+                            outline: none;
+                        }
+                    }
                 }
 
                 // フォーム部品
@@ -620,7 +656,7 @@
                         .color_palette {
                             display: grid;
                             column-gap: 10px;
-                            grid-template-columns: repeat(4, 1fr);
+                            grid-template-columns: repeat(3, 1fr);
                             row-gap: 10px;
                             margin-bottom: 15px;
 

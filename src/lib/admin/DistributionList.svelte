@@ -1,17 +1,20 @@
 <script lang="ts">
     import { DateTime } from 'luxon';
     import { slide } from 'svelte/transition';
+    import { Svroller } from 'svrollbar';
     import { applyAction, enhance } from '$app/forms';
     import { DistributionTypeObj, type Distribution, type DistributionTypeName } from '$types';
     import { closeMsgDisplay, tooltip, convertColorCodeString, conv2DArrayToObject, msgClosed, onSubmit, getDistributionTypeName, ManageDistribution, timeOut } from '$utils/client';
+    import NumberInput from '$lib/common/NumberInput.svelte';
 
     interface Props {
         title: string;
         helpText: string;
         distributions: Distribution[];
         showCharacterId?: boolean; // Individual用
+        charactersIdName: string[];
     }
-    let { title, helpText, distributions, showCharacterId }: Props = $props();
+    let { title, helpText, distributions, showCharacterId = false, charactersIdName }: Props = $props();
     let sortedDistributions: Distribution[] | undefined = $state();
     let filterCharId = $state('');
     let editingId: number = $state(0); // 編集対象の配布ID
@@ -32,6 +35,8 @@
         data: false,
     }); // 編集中モードカテゴリー、stateで各項目間を自動で折りたためるように
     let previewTitle = $state('');
+    let previewDeadline = $state('');
+    let previewRemaining = $state(0);
     let isValidPreviewTitle = $state(true);
     let inputElement: HTMLInputElement | undefined = $state();
     let isInputFocused = $state(false);
@@ -46,6 +51,9 @@
         'Pink': '07',
         'Blue': '16',
     };
+    let filterText = $state('');
+    let showDropdown = $state(false);
+    let filteredOption = $state(['']);
 
     /**
      * 編集モードを切り替える
@@ -110,6 +118,18 @@
         inputElement.setSelectionRange(start + text.length, start + text.length);
         previewTitle = newValue;
     };
+
+    // 配布コンテンツ検索時ドロップダウンフィルター
+    $effect(() => {
+        if (filterText && charactersIdName) {
+            filteredOption = charactersIdName.filter((e) => e.toLowerCase().includes(filterText.toLowerCase())).slice(0, 10);
+        }
+    });
+
+    // 入力フィールド欄空白になったら選択肢消す
+    $effect(() => {
+        !filterText && (filteredOption = []);
+    });
 
     // 配布物配列を変数sortedDistributionsへ格納
     // 別ファイルで使用する際は、$commonDistributionData、$individualDistributionDataにその都度代入すること
@@ -180,8 +200,8 @@
                 use:enhance={({ formData }) => {
                     const data = conv2DArrayToObject([...formData.entries()]);
                     const id = Number(data.dist_id);
-                    const column = Object.keys(data)[1];
-                    const value = Object.values(data)[1];
+                    const column = Object.keys(data)[1] as keyof Omit<Distribution, 'id'>;
+                    const value = Object.values(data)[1] as string | null;
 
                     return async ({ result }) => {
                         msgClosed.set(false);
@@ -197,10 +217,14 @@
                                             column === 'type'
                                                 ? DistributionTypeObj[value as DistributionTypeName]
                                                 : column === 'event_name'
-                                                  ? convertColorCodeString('colorTag', convertColorCodeString('colorCode', value)) // 無効なカラー番号上書きのため、一度カラーコードに戻してからカラータグに再変換
+                                                  ? convertColorCodeString('colorTag', convertColorCodeString('colorCode', value!)) // 無効なカラー番号上書きのため、一度カラーコードに戻してからカラータグに再変換
                                                   : column === 'deadline'
-                                                    ? DateTime.fromISO(value).toJSDate()
-                                                    : value,
+                                                    ? !value
+                                                        ? null // 無期限
+                                                        : DateTime.fromISO(value).toJSDate()
+                                                    : column === 'times_acceptable'
+                                                      ? Number(value) // number型なので変換必要
+                                                      : value,
                                     };
                                 }
                                 return distribution;
@@ -218,8 +242,103 @@
                     <dd class="contents_desc">{distribution.id}</dd>
 
                     {#if showCharacterId}
-                        <dt class="contents_term">Character ID of<br />Distribution Target</dt>
-                        <dd class="contents_desc">{distribution.character_id}</dd>
+                        <dt class="contents_term">Character of<br />Distribution Target</dt>
+                        <dd class="contents_desc">
+                            {charactersIdName.filter((e) => e.toLowerCase().includes(`[${distribution.character_id}] `))[0] || 'Unknown Character'}
+
+                            {#if editingId === distribution.id && catTypes['character_id']}
+                                <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'character_id')}>
+                                    <span class="btn_icon material-symbols-outlined">close</span>
+                                    <span class="btn_text">Cancel</span>
+                                </button>
+                            {:else}
+                                <button class="normal_btn" type="button" onclick={() => editModeSwitch(distribution.id, 'character_id')}>
+                                    <span class="btn_icon material-symbols-outlined">mode_edit</span>
+                                    <span class="btn_text">Edit</span>
+                                </button>
+                            {/if}
+
+                            <!-- svelte5のバグ？でslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
+                            <div class="edit_area_box_wrapper">
+                                {#if editingId === distribution.id && catTypes['character_id']}
+                                    <div transition:slide class="edit_area_box">
+                                        <div class="edit_area enter">
+                                            <p class="edit_area_title">Change Distribution Target</p>
+                                            <dl class="edit_area_box_parts text">
+                                                <dt>Select new target</dt>
+                                                <dd>
+                                                    <!-- Distribution.svelte内のセレクションを流用 -->
+                                                    <!-- slideアニメーションバグのせいでhiddenにしているものをリスト表示のため、一時的にvisibleにする必要がある -->
+                                                    <section class="dist_section" style="display: block;">
+                                                        <div class="dist_select_area">
+                                                            <input
+                                                                type="text"
+                                                                bind:value={filterText}
+                                                                oninput={(e) => {
+                                                                    showDropdown = true;
+                                                                    const wrapper = e.currentTarget.closest('.edit_area_box_wrapper') as HTMLDivElement | null;
+                                                                    if (wrapper) {
+                                                                        wrapper.style.overflow = 'visible';
+                                                                    }
+                                                                }}
+                                                                onfocus={(e) => {
+                                                                    showDropdown = true;
+                                                                    const wrapper = e.currentTarget.closest('.edit_area_box_wrapper') as HTMLDivElement | null;
+                                                                    if (wrapper) {
+                                                                        wrapper.style.overflow = 'visible';
+                                                                    }
+                                                                }}
+                                                                onblur={(e) => {
+                                                                    showDropdown = false;
+                                                                    const wrapper = e.currentTarget.closest('.edit_area_box_wrapper') as HTMLDivElement | null;
+                                                                    if (wrapper) {
+                                                                        wrapper.style.overflow = 'hidden';
+                                                                    }
+                                                                }}
+                                                                placeholder="Filter value..."
+                                                            />
+
+                                                            <!-- TODO: リストオプションクリックでキャラクター名を表示する、それまではsubmitボタン無効 -->
+                                                            {#if showDropdown}
+                                                                <ul class="dist_select_area_list">
+                                                                    {#if filteredOption.length > 0}
+                                                                        <Svroller width="100%" alwaysVisible={true}>
+                                                                            {#each filteredOption as option}
+                                                                                <li class="dist_select_area_list_item">
+                                                                                    {option}
+                                                                                </li>
+                                                                            {/each}
+                                                                        </Svroller>
+                                                                    {:else}
+                                                                        <li style="padding: 10px 20px;">No option.</li>
+                                                                    {/if}
+                                                                </ul>
+                                                            {/if}
+                                                        </div>
+                                                    </section>
+                                                </dd>
+                                            </dl>
+
+                                            <button
+                                                class="blue_btn"
+                                                type="submit"
+                                                onclick={() => {
+                                                    onSubmit.set(true);
+                                                    $timeOut && closeMsgDisplay($timeOut);
+                                                    setTimeout(() => {
+                                                        // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
+                                                        editModeSwitch(0, 'character_id');
+                                                    }, 100);
+                                                }}
+                                            >
+                                                <span class="btn_icon material-symbols-outlined">check</span>
+                                                <span class="btn_text">Save</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                {/if}
+                            </div>
+                        </dd>
                     {/if}
 
                     <dt class="contents_term">Type</dt>
@@ -276,7 +395,10 @@
                         </div>
                     </dd>
 
-                    <dt class="contents_term">Deadline</dt>
+                    <dt class="contents_term">
+                        Deadline
+                        <span class="help_btn material-symbols-outlined" use:tooltip={`The date is shown in your local time.<br />Time Zone: ${DateTime.local().zoneName}`}>help</span>
+                    </dt>
                     <dd class="contents_desc">
                         {!distribution.deadline
                             ? 'No Deadline'
@@ -291,7 +413,14 @@
                                 <span class="btn_text">Cancel</span>
                             </button>
                         {:else}
-                            <button class="normal_btn" type="button" onclick={() => editModeSwitch(distribution.id, 'deadline')}>
+                            <button
+                                class="normal_btn"
+                                type="button"
+                                onclick={() => {
+                                    editModeSwitch(distribution.id, 'deadline');
+                                    previewDeadline = !distribution.deadline ? '' : DateTime.fromJSDate(distribution.deadline).toFormat("yyyy-MM-dd'T'HH:mm");
+                                }}
+                            >
                                 <span class="btn_icon material-symbols-outlined">mode_edit</span>
                                 <span class="btn_text">Edit</span>
                             </button>
@@ -302,18 +431,32 @@
                             {#if editingId === distribution.id && catTypes['deadline']}
                                 <div transition:slide class="edit_area_box">
                                     <div class="edit_area enter">
-                                        <p class="edit_area_title">Change Date</p>
-                                        <p class="console_contents_note">* The date and time to be set are automatically converted to UTC.</p>
-                                        <p class="console_contents_note">* Empty isn't allowed.</p>
+                                        <p class="edit_area_title">
+                                            Change Date
+                                            <span
+                                                class="help_btn material-symbols-outlined"
+                                                use:tooltip={'The date you set here should be based on "your local time." The date will be converted to UTC and stored in the database and displayed in the game as UTC+9 (Japan Standard Time).<br />The converted date actually used in the game is the "True date" below.'}
+                                                >help</span
+                                            >
+                                        </p>
                                         <dl class="edit_area_box_parts text">
                                             <dt>Set new date</dt>
                                             <dd>
-                                                <input
-                                                    type="datetime-local"
-                                                    name="deadline"
-                                                    value={!distribution.deadline ? '' : DateTime.fromJSDate(distribution.deadline).toFormat("yyyy-MM-dd'T'HH:mm")}
-                                                />
+                                                <input type="datetime-local" name="deadline" bind:value={previewDeadline} />
                                                 <input type="hidden" name="zonename" value={DateTime.local().zoneName} />
+                                            </dd>
+                                        </dl>
+
+                                        <dl class="edit_area_box_parts text">
+                                            <!-- UTC変換してから日本時間+9される処理を再現 -->
+                                            <dt>True date used in-game</dt>
+                                            <dd>
+                                                <input
+                                                    style="pointer-events: none;"
+                                                    type="datetime-local"
+                                                    value={DateTime.fromISO(previewDeadline).setZone('utc').plus({ hours: 9 }).toFormat("yyyy-MM-dd'T'HH:mm")}
+                                                    readonly
+                                                />
                                             </dd>
                                         </dl>
 
@@ -370,7 +513,7 @@
                                             Change Title
                                             <span
                                                 class="help_btn material-symbols-outlined"
-                                                use:tooltip={'<p>Enter "&lt;Color** /&gt;" or select a color from the color-palette below to color the text after the color-tag. "**" will contain the following numbers. If any other number is specified or only text is entered, the color will be marked as white (default).</p><p style="display: grid; row-gap: 10px; grid-template-columns: repeat(3, 1fr);"><span>00 - White</span><span>01 - Black</span><span>02 - Red</span><span>03 - Green</span><span>04 - Cyan</span><span>05 - Yellow</span><span>06 - Orange</span><span>07 - Pink</span></p><hr /><p class="console_contents_note">* Empty isn\'t allowed.</p><p class="console_contents_note">* Text must be 32 characters or less.</p><p class="console_contents_note">* Only uppercase and lowercase letters, single-byte numbers, and symbols (&#33; &quot; &#35; &#36; &#37; &#38; &#39; &#40; &#41; &#42; &#43; &#44; &#45; &#46; &#47; &#58; &#59; &#60; &#61; &#62; &#63; &#64; &#91; &#92; &#93; &#94; &#95; &#96; &#123; &#124; &#125; &#126;) can be entered.</p><p class="console_contents_note">* Before selecting a color from the color-palette, move the text cursor position just before the text to be colored.</p>'}
+                                                use:tooltip={'<p>Enter "&lt;Color** /&gt;" or select a color from the color-palette below to color the text after the color-tag. "**" will contain the following numbers. If any other number is specified or only text is entered, the color will be marked as white (default).</p><p style="display: grid; row-gap: 10px; grid-template-columns: repeat(3, 1fr);"><span>00 - White</span><span>01 - Black</span><span>02 - Red</span><span>03 - Green</span><span>04 - Cyan</span><span>05 - Yellow</span><span>06 - Orange</span><span>07 - Pink</span><span>16 - Blue</span></p><hr /><p class="console_contents_note">* Empty isn\'t allowed.</p><p class="console_contents_note">* Text must be 32 characters or less.</p><p class="console_contents_note">* Only uppercase and lowercase letters, single-byte numbers, and symbols (&#33; &quot; &#35; &#36; &#37; &#38; &#39; &#40; &#41; &#42; &#43; &#44; &#45; &#46; &#47; &#58; &#59; &#60; &#61; &#62; &#63; &#64; &#91; &#92; &#93; &#94; &#95; &#96; &#123; &#124; &#125; &#126;) can be entered.</p><p class="console_contents_note">* Before selecting a color from the color-palette, move the text cursor position just before the text to be colored.</p>'}
                                                 >help</span
                                             >
                                         </p>
@@ -449,7 +592,79 @@
                     <dd class="contents_desc">{distribution.description}</dd>
 
                     <dt class="contents_term">Remaining Claims</dt>
-                    <dd class="contents_desc">{distribution.times_acceptable}</dd>
+                    <dd class="contents_desc">
+                        {distribution.times_acceptable}
+
+                        {#if editingId === distribution.id && catTypes['times_acceptable']}
+                            <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'times_acceptable')}>
+                                <span class="btn_icon material-symbols-outlined">close</span>
+                                <span class="btn_text">Cancel</span>
+                            </button>
+                        {:else}
+                            <button
+                                class="normal_btn"
+                                type="button"
+                                onclick={() => {
+                                    editModeSwitch(distribution.id, 'times_acceptable');
+                                    previewRemaining = distribution.times_acceptable;
+                                }}
+                            >
+                                <span class="btn_icon material-symbols-outlined">mode_edit</span>
+                                <span class="btn_text">Edit</span>
+                            </button>
+                        {/if}
+
+                        <div class="edit_area_box_wrapper">
+                            {#if editingId === distribution.id && catTypes['times_acceptable']}
+                                <div transition:slide class="edit_area_box">
+                                    <div class="edit_area enter">
+                                        <p class="edit_area_title">
+                                            Change Remaining Claims
+                                            <span class="help_btn material-symbols-outlined" use:tooltip={'TODO'}>help</span>
+                                        </p>
+                                        <dl class="edit_area_box_parts text">
+                                            <dt>Set new remaining count</dt>
+                                            <dd style="width: auto;"><NumberInput bind:value={previewRemaining} max={999} name="times_acceptable" input={(value) => (previewRemaining = value)} /></dd>
+                                        </dl>
+
+                                        <button
+                                            class="blue_btn"
+                                            type="submit"
+                                            onclick={() => {
+                                                onSubmit.set(true);
+                                                $timeOut && closeMsgDisplay($timeOut);
+                                                setTimeout(() => {
+                                                    // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
+                                                    editModeSwitch(0, 'times_acceptable');
+                                                }, 100);
+                                            }}
+                                        >
+                                            <span class="btn_icon material-symbols-outlined">check</span>
+                                            <span class="btn_text">Save</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            {/if}
+                        </div>
+                    </dd>
+
+                    <dt class="contents_term">Minimum HR</dt>
+                    <dd class="contents_desc">{distribution.min_hr}</dd>
+
+                    <dt class="contents_term">Maximum HR</dt>
+                    <dd class="contents_desc">{distribution.max_hr}</dd>
+
+                    <dt class="contents_term">Minimum SR</dt>
+                    <dd class="contents_desc">{distribution.min_hr}</dd>
+
+                    <dt class="contents_term">Maximum SR</dt>
+                    <dd class="contents_desc">{distribution.min_sr}</dd>
+
+                    <dt class="contents_term">Minimum GR</dt>
+                    <dd class="contents_desc">{distribution.min_gr}</dd>
+
+                    <dt class="contents_term">Maximum GR</dt>
+                    <dd class="contents_desc">{distribution.max_gr}</dd>
 
                     <dt class="contents_term">Contents Data</dt>
                     <dd class="contents_desc" style="padding: 1% 0 1%;">
