@@ -1,6 +1,8 @@
-import { get } from 'svelte/store';
-import { DistributionContentsTypeObj, type DistributionContentsType, type DistributionType, type SelectedItemData } from '$types';
-import { getDistributionContentsTypeName, armJson, chestJson, headJson, itemJson, legJson, meleeJson, poogieJson, rangedJson, waistJson } from '.';
+import { get, writable } from 'svelte/store';
+import { DistributionContentsTypeObj, type DistributionContentsType, type DistributionType, type DistContentsData } from '$types';
+import { getDistributionContentsTypeName, armJson, chestJson, headJson, itemJson, legJson, meleeJson, poogieJson, rangedJson, waistJson, getDistItemsData } from '.';
+
+export const distributionContentsData = writable<DistContentsData[]>([]);
 
 /**
  * 配布コンテンツの種類に応じたデータ名を取得する
@@ -62,46 +64,98 @@ const getDistContentsNameByType = (type: DistributionContentsType, code: string)
 };
 
 /**
- * 文字列を逆順にする補助関数
- * @param {string} hex 逆順にしたい16進数文字列
- * @returns {string} 逆順にした16進数文字列
- */
-const reverseHex = (hex: string): string => {
-    return hex.match(/../g)?.reverse().join('') || hex;
-};
-
-/**
  * 配布物を処理するためのクラス
  */
 export class ManageDistribution {
-    /**
-     * @param {SelectedItemData[]} items 処理対象の選択されたアイテムデータ
-     */
-    constructor(private items: SelectedItemData[]) {}
-
     /**
      * 16進数表記にして、指定された桁数まで0埋めする
      * @param {number} num 変換する数値
      * @param {number} padding 0埋めする桁数
      * @returns {string} 0埋めされた16進数の文字列
      */
-    private formatHex(num: number, padding: number): string {
+    private static formatHex(num: number, padding: number): string {
         return num.toString(16).toUpperCase().padStart(padding, '0');
     }
+    /**
+     * 16進数のエンディアン変換を行う
+     * @param {string} hex エンディアン変換対象の16進数
+     * @returns {string} 変換後の16進数
+     */
+
+    private static reverseHex = (hex: string): string => {
+        return hex.match(/../g)?.reverse().join('') || hex;
+    };
+
+    private static sortContentsDataArray = (contDataArr: DistContentsData[]): DistContentsData[] => {
+        return contDataArr
+            .slice() // 元の配列が変化しないよう、浅いコピー作成
+            .sort((a, b) => {
+                // まずはtypesを基に昇順
+                if (a.types !== b.types) {
+                    return a.types - b.types;
+                }
+
+                // 同じtypess同士の中で更にitem_data.codeを10進数に変換して昇順にする
+                const aDecimal = parseInt(this.reverseHex(a.item_data.code), 16);
+                const bDecimal = parseInt(this.reverseHex(b.item_data.code), 16);
+
+                return aDecimal - bDecimal;
+            });
+    };
 
     /**
      * 選択されたアイテムを16進数文字列に変換
+     * @param {Record<string, any>} data クライアントから送られてきた変換元データ
      * @returns {string} アイテムデータを含む16進数文字列、選択されたアイテムがない場合は空文字を返す
      */
-    private getHexString(): string {
-        // アイテム未選択の場合、空文字を返す
-        if (this.items.length === 0) {
+    public static getHexString(data: Record<string, any>): string {
+        let contDataArr: DistContentsData[] = Object.entries(data).map(([key, amount]) => {
+            const match = key.match(/^(\d{1,2})-(\w{4})-\[(.+)\]$/);
+            if (!match) {
+                // マッチしないもの（適切な形式で送信されなかった）は無効とする
+                return {
+                    item_data: {
+                        code: '0000',
+                        name: '',
+                    },
+                    types: 0,
+                    amount: 0,
+                    disabled: false,
+                    showDropdown: false,
+                    selectedContentsType: 65535,
+                };
+            }
+
+            const [, types, code, name] = match;
+            return {
+                item_data: {
+                    code,
+                    name,
+                },
+                types: Number(types) as DistributionContentsType,
+                amount: Number(amount),
+                disabled: false,
+                showDropdown: false,
+                selectedContentsType: 65535,
+            };
+        });
+
+        // 一要素でもitem_data.codeが「0000」であった場合、空文字列を返す
+        if (contDataArr.some((item) => item.item_data.code === '0000')) {
             return '';
         }
 
-        let result = this.formatHex(this.items.length, 4);
-        for (const item of this.items) {
-            result += `${this.formatHex(item.types, 2)}0000${reverseHex(item.item_data.code)}0000${this.formatHex(item.amount, 4)}00000000`;
+        // アイテム空の場合、空文字を返す
+        if (contDataArr.length === 0) {
+            return '';
+        }
+
+        // 配列を昇順にソートする
+        contDataArr = this.sortContentsDataArray(contDataArr);
+        
+        let result = this.formatHex(contDataArr.length, 4);
+        for (const item of contDataArr) {
+            result += `${this.formatHex(item.types, 2)}0000${this.reverseHex(item.item_data.code)}0000${this.formatHex(item.amount, 4)}00000000`;
         }
 
         return result;
@@ -110,10 +164,10 @@ export class ManageDistribution {
     /**
      * hex文字列を解析し、各データ値を取得する
      * @param {string} hexString 解析対象の16進数文字列
-     * @returns {SelectedItemData[]} SelectedItemDataの配列
+     * @returns {DistContentsData[]} SelectedItemDataの配列
      */
-    public static parseHexString(hexString: string): SelectedItemData[] {
-        const items: SelectedItemData[] = [];
+    public static parseHexString(hexString: string): DistContentsData[] {
+        const items: DistContentsData[] = [];
         let currentIndex = 0;
 
         // アイテムの数を取得（最初の4文字）
@@ -131,9 +185,9 @@ export class ManageDistribution {
             //「0000」のプレースホルダ部分をスキップ
             currentIndex += 4;
 
-            // item_data.code（4文字）を逆順で取得
+            // item_data.code（4文字、BE -> LE）をLE形式で取得
             const codeHex = hexString.slice(currentIndex, currentIndex + 4);
-            const code = reverseHex(codeHex).toUpperCase();
+            const code = this.reverseHex(codeHex).toUpperCase();
             currentIndex += 4;
 
             //「0000」のプレースホルダ部分をスキップ
@@ -148,10 +202,13 @@ export class ManageDistribution {
             currentIndex += 8;
 
             // データをSelectedItemDataとして追加
-            const itemData: SelectedItemData = {
+            const itemData: DistContentsData = {
                 types,
                 item_data: { code, name: '' },
                 amount,
+                disabled: false, // アイテム無効化フラグ
+                showDropdown: false, // アイテムリスト表示フラグ
+                selectedContentsType: 65535, // セレクトボックスから選んだ時に設定
             };
 
             itemData.item_data.name = getDistContentsNameByType(types, code);
@@ -163,19 +220,30 @@ export class ManageDistribution {
     }
 
     /**
+     *
+     * @param {DistributionContentsType} contentsType 配布コンテンツタイプ
+     * @param {string} value アイテム名
+     * @returns {string} 配布アイテムの16進数コード
+     */
+    public static getCodeFromItemName = (contentsType: DistributionContentsType, value: string): string => {
+        const object = getDistItemsData(contentsType);
+        return Object.keys(object).find((key) => object[key] === value) || '';
+    };
+
+    /**
      * sqlクエリを生成する
-     * @param {string} name イベント名
+     * @param {string} title イベントタイトル
      * @param {DistributionType} distType 配布扱い方法の種類
      * @param {string} description イベントの説明
      * @param {number} character_id キャラクターID
      * @returns {string} distributionテーブルに挿入するためのSQLクエリ文字列、hex文字列が存在しない場合は空文字を返す
      */
-    public getSqlQuery(name: string, distType: DistributionType, description: string, character_id: number): string {
+    /* public getSqlQuery(title: string, distType: DistributionType, description: string, character_id: number): string {
         const hex = this.getHexString();
         if (!hex) {
             return '';
         }
 
-        return `INSERT INTO distribution (character_id,data,type,bot,event_name,description) VALUES (${character_id},DECODE(${hex},'hex'),${distType},false,"${name}","~C05 ${description}")`;
-    }
+        return `INSERT INTO distribution (character_id,data,type,bot,event_name,description) VALUES (${character_id},DECODE(${hex},'hex'),${distType},false,"${title}","~C05 ${description}")`;
+    } */
 }

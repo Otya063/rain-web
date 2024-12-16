@@ -16,7 +16,7 @@
             icon: 'info',
         },
         users: {
-            text: 'Manage Users',
+            text: 'Users & Characters',
             icon: 'person',
         },
         bnr: {
@@ -24,11 +24,11 @@
             icon: 'ad_group',
         },
         clan: {
-            text: 'Manage Clans',
+            text: 'Clans & Alliances',
             icon: 'diversity_3',
         },
         distribution: {
-            text: 'Manage Distributions',
+            text: 'Distributions',
             icon: 'package_2',
         },
     }; // メニューリスト

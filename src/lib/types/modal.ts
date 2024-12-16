@@ -1,8 +1,9 @@
-export type ModalType = 'deleteInfo' | 'deleteBnr' | 'suspendUser' | 'deleteCharacter' | 'linkDiscord' | 'rebuildClan' | 'downloadBinary';
+export type ModalType = 'deleteInfo' | 'deleteBnr' | 'suspendUser' | 'deleteCharacter' | 'linkDiscord' | 'rebuildClan' | 'downloadBinary' | 'deleteDistribution';
+export type ModalUnionData = DeleteInfoData | DeleteBnrData | SuspendUserData | DeleteCharacterData | LinkDiscordData | RebuildClanData | DeleteDistributionData;
 
 /* Admin Consoleにおけるモーダルデータ
 ====================================================*/
-export interface ModalCommonData {
+interface ModalCommonData {
     title: string;
     form_action: string;
 }
@@ -46,4 +47,10 @@ export interface RebuildClanData extends ModalCommonData {
     clan_name: string;
     clan_leader: string;
     created_at: Date | null;
+}
+
+export interface DeleteDistributionData extends ModalCommonData {
+    dist_id: number;
+    dist_title: string;
+    dist_type: number;
 }

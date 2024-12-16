@@ -15,7 +15,7 @@
         bnrAddMode: boolean;
         isMobile: boolean;
     }
-    let { data, form, infoAddMode = $bindable(), bnrAddMode = $bindable(), isMobile = $bindable() }: Props = $props(); // bindableにしないと動かない
+    let { data, form, infoAddMode = $bindable(), bnrAddMode = $bindable(), isMobile }: Props = $props(); // bindableにしないと動かない
     const systemData = data.launcherSystem;
     const informationData = data.launcherInformation;
     const launcherBanner = data.launcherBanner;
@@ -37,11 +37,11 @@
 {#if $adminTabValue === '' || $adminTabValue === 'system'}
     <LauncherSystem {systemData} />
 {:else if $adminTabValue === 'info'}
-    <LauncherInformation bind:infoAddMode createdInfo={form?.createdInfo} updatedInfo={form?.updatedInfo} {informationData} bind:isMobile />
+    <LauncherInformation bind:infoAddMode createdInfo={form?.createdInfo} updatedInfo={form?.updatedInfo} {informationData} {isMobile} />
 {:else if $adminTabValue === 'users'}
-    <Users paginatedUsers={form?.paginatedUsers} paginationMeta={form?.paginationMeta} bind:isMobile />
+    <Users paginatedUsers={form?.paginatedUsers} paginationMeta={form?.paginationMeta} {isMobile} />
 {:else if $adminTabValue === 'bnr'}
-    <LauncherBanner bind:bnrAddMode createdBnr={form?.createdBnr} {launcherBanner} bind:isMobile />
+    <LauncherBanner bind:bnrAddMode createdBnr={form?.createdBnr} {launcherBanner} {isMobile} />
 {:else if $adminTabValue === 'clan'}
     <Clans
         paginatedClans={form?.paginatedClans}
@@ -50,7 +50,8 @@
         paginationAllianceMeta={form?.paginationAllianceMeta}
         clanNames={form?.nameArr}
         updatedAllianceData={form?.updatedAllianceData}
+        {isMobile}
     />
 {:else if $adminTabValue === 'distribution'}
-    <Distribution {distributions} {charactersIdName} />
+    <Distribution {distributions} {charactersIdName} {isMobile} updatedContentsData={form?.updatedContentsData} />
 {/if}

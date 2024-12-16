@@ -23,7 +23,7 @@ export class ManageBinary {
      * @param {{ [key in BinaryTypes]: string }} binaryData 保存したいバイナリデータを持つオブジェクト
      * @returns {Promise<{ success: boolean; message: string; }>} 成功時には`{ success: true; message: '' }`、失敗時には`{ success: false; message: 'error message' }`を返す`
      */
-    static async setBinary(
+    public static async setBinary(
         characterId: number,
         binaryData: { [key in BinaryTypes]: string },
     ): Promise<{
@@ -197,7 +197,7 @@ export class ManageBinary {
      * @param {Buffer | null} savedata 読み取る対象のセーブデータ（解凍前）
      * @returns {number} 指定された位置から取得した数値データ
      */
-    static getDataFromSavedata(type: GetDataFromSaveDataType, savedata: Buffer | null): number {
+    public static getDataFromSavedata(type: GetDataFromSaveDataType, savedata: Buffer | null): number {
         if (!savedata) {
             return 0;
         }
@@ -220,7 +220,7 @@ export class ManageBinary {
      * @param {Buffer} srcBuffer 上書きに使用する素材
      * @returns {string} base64形式の新しいセーブデータ
      */
-    static exportEditedSavedata(type: ExportEditedSaveDataType, savedata: Buffer, srcBuffer: Buffer): string {
+    public static exportEditedSavedata(type: ExportEditedSaveDataType, savedata: Buffer, srcBuffer: Buffer): string {
         switch (type) {
             case 'name': {
                 const rawSavedata = ManageBinary.decompress(savedata);

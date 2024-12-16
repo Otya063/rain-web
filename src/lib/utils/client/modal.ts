@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { writable } from 'svelte/store';
-import type { DeleteBnrData, DeleteCharacterData, DeleteInfoData, LinkDiscordData, ModalCommonData, ModalType, RebuildClanData, SuspendUserData } from '$types';
+import type { ModalType, ModalUnionData, DeleteBnrData, DeleteCharacterData, DeleteInfoData, LinkDiscordData, RebuildClanData, SuspendUserData, DeleteDistributionData } from '$types';
 
 export const deleteInfo = writable(false);
 export const deleteInfoData = writable<DeleteInfoData>();
@@ -16,14 +16,16 @@ export const rebuildClan = writable(false);
 export const rebuildClanData = writable<RebuildClanData>();
 export const downloadBinary = writable(false);
 export const downloadBinaryData = writable<DeleteCharacterData>();
+export const deleteDistribution = writable(false);
+export const deleteDistributionData = writable<DeleteDistributionData>();
 
 /**
  * モーダルウィンドウに表示するデータを準備する
  *
  * @param {ModalType} type モーダルの種類
- * @param {ModalCommonData | DeleteInfoData | DeleteBnrData | SuspendUserData | DeleteCharacterData | LinkDiscordData | RebuildClanData} data モーダルに渡すデータ
+ * @param {ModalUnionData} data モーダルに渡すデータ
  */
-export const prepareModal = (type: ModalType, data: ModalCommonData | DeleteInfoData | DeleteBnrData | SuspendUserData | DeleteCharacterData | LinkDiscordData | RebuildClanData): void => {
+export const prepareModal = (type: ModalType, data: ModalUnionData): void => {
     switch (type) {
         case 'deleteInfo': {
             deleteInfo.set(true);
@@ -74,6 +76,11 @@ export const prepareModal = (type: ModalType, data: ModalCommonData | DeleteInfo
             break;
         }
 
+        case 'deleteDistribution': {
+            deleteDistribution.set(true);
+            deleteDistributionData.set(data as DeleteDistributionData);
+        }
+
         default: {
             error(400, { message: '', message1: '', message2: ['Invalid type.'], message3: undefined });
         }
@@ -91,6 +98,7 @@ export const closeModal = (): void => {
     deleteChar.set(false);
     rebuildClan.set(false);
     downloadBinary.set(false);
+    deleteDistribution.set(false);
 };
 
 /**

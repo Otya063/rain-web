@@ -99,16 +99,7 @@ export interface PaginatedAlliances {
     parent_id: number;
     sub1_id: number | null;
     sub2_id: number | null;
-    parent_clan: {
-        clan_name: string | null;
-        leader_name: string | null;
-    };
-    first_child_clan: {
-        clan_name: string | null;
-        leader_name: string | null;
-    };
-    second_child_clan: {
-        clan_name: string | null;
-        leader_name: string | null;
-    };
+    parentClan: string | null;
+    firstChildClan: string | null;
+    secondChildClan: string | null;
 }

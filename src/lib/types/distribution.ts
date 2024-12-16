@@ -25,9 +25,10 @@ export const DistributionContentsTypeObj = {
     'Song Note': 29,
     'Item Box Page': 30,
     'Equipment Box Page': 31,
+    'None': 65535,
 } as const;
 export type DistributionContentsType = (typeof DistributionContentsTypeObj)[keyof typeof DistributionContentsTypeObj];
-export type DistributionContentsTypeName = keyof typeof DistributionContentsTypeObj
+export type DistributionContentsTypeName = keyof typeof DistributionContentsTypeObj;
 
 // 配布扱い方法の種類
 export const DistributionTypeObj = {
@@ -43,12 +44,15 @@ export const DistributionTypeObj = {
 export type DistributionType = (typeof DistributionTypeObj)[keyof typeof DistributionTypeObj];
 export type DistributionTypeName = keyof typeof DistributionTypeObj;
 
-// 選択されたアイテムデータ
-export interface SelectedItemData {
+// 配布コンテンツデータ
+export interface DistContentsData {
     item_data: {
         code: string; // リトルエンディアン
         name: string;
     };
     types: DistributionContentsType;
     amount: number;
+    disabled: boolean; // アイテム無効化フラグ
+    showDropdown: boolean; // アイテムリスト表示フラグ
+    selectedContentsType: DistributionContentsType; // セレクトボックスから選んだ時に設定
 }

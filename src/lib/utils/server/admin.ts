@@ -275,32 +275,24 @@ export const getPaginatedAllianceData = async (
 };
 
 /**
- * クラン情報を取得する共通関数
+ * クランIDからクラン名を取得する
  * @param {number | null} clanId クランID
- * @returns {Promise<{ clan_name: string | null; leader_name: string | null }>} クラン名とリーダー名を含むオブジェクト
+ * @returns {Promise<string | null>} クラン名
  */
-const getClanInfo = async (clanId: number | null): Promise<{ clan_name: string | null; leader_name: string | null }> => {
+const getClanNameByClanId = async (clanId: number | null): Promise<string | null> => {
     if (!clanId) {
-        return { clan_name: null, leader_name: null };
+        return '';
     }
 
     const guildData = await db.guilds.findFirst({
         where: { id: clanId },
-        select: { name: true, leader_id: true },
-    });
-    if (!guildData) {
-        return { clan_name: null, leader_name: null };
-    }
-
-    const charData = await db.characters.findFirst({
-        where: { id: guildData.leader_id },
         select: { name: true },
     });
+    if (!guildData) {
+        return '';
+    }
 
-    return {
-        clan_name: guildData.name,
-        leader_name: charData?.name || null,
-    };
+    return guildData.name;
 };
 
 /**
@@ -311,9 +303,9 @@ const getClanInfo = async (clanId: number | null): Promise<{ clan_name: string |
 const moddedAllianceData = async (alliance: any): Promise<any> => {
     return {
         ...alliance,
-        parent_clan: await getClanInfo(alliance.parent_id),
-        first_child_clan: await getClanInfo(alliance.sub1_id),
-        second_child_clan: await getClanInfo(alliance.sub2_id),
+        parentClan: await getClanNameByClanId(alliance.parent_id),
+        firstChildClan: await getClanNameByClanId(alliance.sub1_id),
+        secondChildClan: await getClanNameByClanId(alliance.sub2_id),
     };
 };
 

@@ -332,9 +332,9 @@ export const discordLinkConvertor = (url: string): string => {
 };
 
 /**
- * HRポイントを対応するHRランクに変換する
- * @param {number | null} hrp HRポイント
- * @returns {number} 対応するHRランク
+ * ハンターランクポイントを対応するハンターランクに変換する
+ * @param {number | null} hrp ハンターランクポイント
+ * @returns {number} 対応するハンターランク
  */
 export const convHrpToHr = (hrp: number | null): number => {
     switch (hrp) {
@@ -368,6 +368,47 @@ export const convHrpToHr = (hrp: number | null): number => {
 
         default: {
             return 0;
+        }
+    }
+};
+
+/**
+ * ハンターランクを対応するハンターランクポイントに変換する
+ * @param {number | null} hr ハンターランク
+ * @returns {number} 対応するハンターランクポイント
+ */
+export const convHrToHrp = (hr: number): number => {
+    switch (hr) {
+        case 7: {
+            return 999;
+        }
+
+        case 6: {
+            return 998;
+        }
+
+        case 5: {
+            return 299;
+        }
+
+        case 4: {
+            return 99;
+        }
+
+        case 3: {
+            return 50;
+        }
+
+        case 2: {
+            return 30;
+        }
+
+        case 1: {
+            return 1;
+        }
+
+        default: {
+            return 65535;
         }
     }
 };

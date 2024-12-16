@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import { Buffer } from 'node:buffer'; // Node.jsとの互換性により、追加しないと「ReferenceError: Buffer is not defined」が発生する
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
 import { DistributionTypeObj, type BinaryTypes, type Distribution, type DistributionTypeName, type R2AssetsJsonData } from '$types';
-import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi, isNumber, convertColorCodeString, headJson } from '$utils/client';
+import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi, isNumber, convertColorCodeString, convHrToHrp, ManageDistribution } from '$utils/client';
 import ServerData, { db, editName, getPaginatedAllianceData, getPaginatedClanData, getPaginatedUserData, getPaginationMeta, IsCharLogin, ManageBinary } from '$utils/server';
 
 const emptyMsg = 'Input value is empty.';
@@ -477,13 +477,14 @@ const getPaginatedAlliances: Action = async ({ request }) => {
 
     const clanNames = await db.guilds.findMany({
         select: {
+            id: true,
             name: true,
         },
         orderBy: {
             id: 'asc',
         },
     });
-    const nameArr = clanNames.map((a) => a.name) as string[];
+    const nameArr = clanNames.map((clan) => `[${clan.id}] - ${clan.name}`) as string[];
 
     if (!paginatedAlliances.length) {
         return fail(400, {
@@ -1128,69 +1129,72 @@ const rebuildClan: Action = async ({ request }) => {
 
 const updateAllianceData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { alliance_id, first_clan_name, second_clan_name } = data as { alliance_id: number; first_clan_name: string; second_clan_name: string };
+    const { alliance_id, first_clan, second_clan } = data as { alliance_id: number; first_clan: string | null; second_clan: string | null };
+    let clan1Id: number, clan1Name: string, clan2Id: number, clan2Name: string;
 
-    if (first_clan_name && second_clan_name && JSON.parse(first_clan_name).value === JSON.parse(second_clan_name).value) {
+    if (!first_clan && !second_clan) {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
-        return fail(400, { error: true, message: 'The first and second clan must be different.' });
-    } else if (!first_clan_name && second_clan_name) {
+        return fail(400, { error: true, message: 'The first clan must be set at least.' });
+    } else if (first_clan === second_clan) {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
-        return fail(400, { error: true, message: 'Before selecting the second clan, the first clan must be selected.' });
+        return fail(400, { error: true, message: 'The first and second clans must be different from each other.' });
+    } else if (!first_clan && second_clan) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
+        return fail(400, { error: true, message: 'Before setting the second clan, the first clan must be set.' });
+    }
+
+    // 第１加入猟団
+    const match1 = first_clan!.match(/\[(\d+)\] - (.+)/);
+    if (match1) {
+        clan1Id = Number(match1[1]);
+        clan1Name = match1[2];
+    } else {
+        // 第１加入猟団はセット必須であり、正規表現には必ずマッチすると想定する
+        // マッチしないということは通常起こりえないため、エラーを返す
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
+        return fail(400, { error: true, message: `String format is invalid: ${first_clan}` });
+    }
+
+    // 第２加入猟団
+    const match2 = second_clan?.match(/\[(\d+)\] - (.+)/);
+    if (match2) {
+        clan2Id = Number(match2[1]);
+        clan2Name = match2[2];
+    } else {
+        // 第２加入猟団はセットしない可能性があり、その際は正規表現にマッチしないため、初期値を代入
+        clan2Id = 0;
+        clan2Name = '';
     }
 
     try {
-        // 選択された各クランデータ取得
-        const firstClanData = await (async () => {
-            if (!first_clan_name) {
-                return null;
-            } else {
-                return await db.guilds.findFirst({
-                    where: {
-                        name: JSON.parse(first_clan_name).value,
-                    },
-                    select: {
-                        id: true,
-                        name: true,
-                        leader_id: true,
-                    },
-                });
-            }
-        })();
-        const secondClanData = await (async () => {
-            if (!second_clan_name) {
-                return null;
-            } else {
-                return await db.guilds.findFirst({
-                    where: {
-                        name: JSON.parse(second_clan_name).value,
-                    },
-                    select: {
-                        id: true,
-                        name: true,
-                        leader_id: true,
-                    },
-                });
-            }
-        })();
+        // 第１加入猟団が所属している同盟データ
+        const clan1JoinedAll = await db.guild_alliances.findFirst({
+            where: {
+                OR: [{ parent_id: clan1Id }, { sub1_id: clan1Id }, { sub2_id: clan1Id }],
+            },
+            select: {
+                id: true,
+                name: true,
+            },
+        });
 
-        const isExist1 = firstClanData?.id
-            ? await db.guild_alliances.findFirst({
-                  where: {
-                      OR: [{ parent_id: firstClanData.id }, { sub1_id: firstClanData.id }, { sub2_id: firstClanData.id }],
-                  },
-              })
-            : null;
-        const isExist2 = secondClanData?.id
-            ? await db.guild_alliances.findFirst({
-                  where: {
-                      OR: [{ parent_id: secondClanData.id }, { sub1_id: secondClanData.id }, { sub2_id: secondClanData.id }],
-                  },
-              })
-            : null;
-        if (isExist1 && isExist1.name !== firstClanData?.name) {
-            return fail(400, { error: true, message: `The selected 1st clan has already joined the alliance (Name: ${isExist1.name}).` });
-        } else if (isExist2 && isExist2.name !== secondClanData?.name) {
-            return fail(400, { error: true, message: `The selected 2nd clan has already joined the alliance (Name: ${isExist2.name}).` });
+        // 第２加入猟団が所属している同盟データ
+        const clan2JoinedAll = await db.guild_alliances.findFirst({
+            where: {
+                OR: [{ parent_id: clan2Id }, { sub1_id: clan2Id }, { sub2_id: clan2Id }],
+            },
+            select: {
+                id: true,
+                name: true,
+            },
+        });
+
+        // 所属同盟重複チェック
+        // 各加入猟団がどこかの同盟に所属していて、それが現在編集中の同盟でない場合は重複所属になるのでエラー
+        if (clan1JoinedAll && clan1JoinedAll.id !== Number(alliance_id)) {
+            return fail(400, { error: true, message: `The selected 1st clan has already joined the alliance (Name: ${clan1JoinedAll.name}).` });
+        } else if (clan2JoinedAll && clan2JoinedAll.id !== Number(alliance_id)) {
+            return fail(400, { error: true, message: `The selected 2nd clan has already joined the alliance (Name: ${clan2JoinedAll.name}).` });
         }
 
         await db.guild_alliances.update({
@@ -1198,51 +1202,15 @@ const updateAllianceData: Action = async ({ request }) => {
                 id: Number(alliance_id),
             },
             data: {
-                sub1_id: firstClanData?.id || null,
-                sub2_id: secondClanData?.id || null,
+                sub1_id: clan1Id,
+                sub2_id: clan2Id || null, // 第２加入猟団はnullの可能性がある
             },
         });
 
-        // 各クランのリーダー名取得
-        const firstClanLeader = await (async () => {
-            if (!firstClanData) {
-                return null;
-            } else {
-                return (await db.characters.findFirst({
-                    where: {
-                        id: firstClanData.leader_id,
-                    },
-                    select: {
-                        name: true,
-                    },
-                }))!.name;
-            }
-        })();
-        const secondClanLeader = await (async () => {
-            if (!secondClanData) {
-                return null;
-            } else {
-                return (await db.characters.findFirst({
-                    where: {
-                        id: secondClanData.leader_id,
-                    },
-                    select: {
-                        name: true,
-                    },
-                }))!.name;
-            }
-        })();
-
         const updatedAllianceData = {
             id: Number(alliance_id),
-            first_child_clan: {
-                clan_name: firstClanData?.name || null,
-                leader_name: firstClanLeader || null,
-            },
-            second_child_clan: {
-                clan_name: secondClanData?.name || null,
-                leader_name: secondClanLeader || null,
-            },
+            firstChildClan: clan1Name,
+            secondChildClan: clan2Name,
         };
 
         return {
@@ -1284,40 +1252,75 @@ const updateDistributionData: Action = async ({ request }) => {
     const column = Object.keys(data)[1] as keyof Omit<Distribution, 'id'>;
     const value = Object.values(data)[1] as string | null;
 
-    // deadline以外は空不許可
-    if (!value && column !== 'deadline') {
+    // deadlineとcharacter_id以外は空不許可
+    if (!value && column !== 'deadline' && column !== 'character_id') {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: emptyMsg });
     }
 
-    try {
-        await db.distribution.update({
-            where: {
-                id,
-            },
-            data: {
-                [column]:
-                    column === 'type'
-                        ? (() => {
-                              const _value = value as DistributionTypeName;
-                              return DistributionTypeObj[_value];
-                          })()
-                        : column === 'event_name'
-                          ? convertColorCodeString('colorCode', value!) // ゲーム内カラーコードに変換
-                          : column === 'deadline'
-                            ? !value
-                                ? null // 無期限
-                                : DateTime.fromISO(value, { zone: zonename }).toString() // UTCとして保存（ゲーム内では+9日本時間に変換される）
-                            : column === 'times_acceptable'
-                              ? Number(value) // number型なので変換必要
-                              : value,
-            },
-        });
+    // 配布データの場合、データのみにする
+    if (column === 'data') {
+        delete data.dist_id;
+        delete data.data;
+    }
 
-        return {
-            success: true,
-            message: `The distribution data (ID: ${id}, Column: ${column}) has been successfully updated.`,
-        };
+    try {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
+        if (column !== 'data') {
+            await db.distribution.update({
+                where: {
+                    id,
+                },
+                data: {
+                    [column]:
+                        column === 'type'
+                            ? (() => {
+                                  const _value = value as DistributionTypeName;
+                                  return DistributionTypeObj[_value];
+                              })()
+                            : column === 'event_name'
+                              ? convertColorCodeString('colorCode', value!) // ゲーム内カラーコードに変換
+                              : column === 'deadline'
+                                ? !value
+                                    ? null // 無期限
+                                    : DateTime.fromISO(value, { zone: zonename }).toString() // UTCとして保存（ゲーム内では+9日本時間に変換される）
+                                : column === 'times_acceptable'
+                                  ? Number(value!) // number型なので変換必要
+                                  : column === 'min_hr' || column === 'max_hr'
+                                    ? convHrToHrp(Number(value!))
+                                    : column === 'min_sr' || column === 'max_sr' || column === 'min_gr' || column === 'max_gr'
+                                      ? Number(value!) === 0
+                                          ? 65535 // 0の時は無条件なので65535
+                                          : Number(value!) // それ以外はそのままgr
+                                      : column === 'character_id'
+                                        ? !value
+                                            ? null // 特定キャラクター指定なし
+                                            : Number(value!) // number型なので変換必要
+                                        : value,
+                },
+            });
+
+            return {
+                success: true,
+                message: `The distribution data (ID: ${id}, Column: ${column}) has been successfully updated.`,
+            };
+        } else {
+            // dataカラムの時は、executeRawを使用する
+            let contentsData = ManageDistribution.getHexString(data);
+            if (!contentsData) {
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
+                return fail(400, { error: true, message: 'Failed to get contents data.<br />Source data format is invalid.' });
+            }
+
+            const base64 = Buffer.from(contentsData, 'hex').toString('base64');
+            await db.$executeRaw`UPDATE distribution SET data = decode(${base64}, 'base64') WHERE id = ${id}`;
+
+            return {
+                success: true,
+                message: `The distribution data (ID: ${id}, Column: ${column}) has been successfully updated.`,
+                updatedContentsData: contentsData,
+            };
+        }
     } catch (err) {
         if (err instanceof Error) {
             return fail(400, { error: true, message: err.message });
@@ -1327,6 +1330,10 @@ const updateDistributionData: Action = async ({ request }) => {
             return fail(400, { error: true, message: 'Unexpected Error' });
         }
     }
+};
+
+export const _deleteDistribution: Action = async ({ request }) => {
+    // TODO: 削除処理
 };
 
 export const actions: Actions = {
@@ -1355,4 +1362,5 @@ export const actions: Actions = {
     updateAllianceData,
     downloadBinary,
     updateDistributionData,
+    _deleteDistribution,
 };

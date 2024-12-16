@@ -5,33 +5,10 @@
     import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
     import { Svroller } from 'svrollbar';
-    import DeleteBnr from '$lib/admin/modalContents/DeleteBnr.svelte';
-    import DeleteChar from '$lib/admin/modalContents/DeleteChar.svelte';
-    import DeleteInfo from '$lib/admin/modalContents/DeleteInfo.svelte';
-    import DownloadBinary from '$lib/admin/modalContents/DownloadBinary.svelte';
-    import LinkDiscord from '$lib/admin/modalContents/LinkDiscord.svelte';
-    import RebuildClan from '$lib/admin/modalContents/RebuildClan.svelte';
-    import SuspendUser from '$lib/admin/modalContents/SuspendUser.svelte';
-    import AdminContents from '$lib/admin/AdminContents.svelte';
-    import AdminMenu from '$lib/admin/AdminMenu.svelte';
-    import {
-        suspendUser,
-        deleteInfo,
-        deleteBnr,
-        linkDiscord,
-        deleteChar,
-        loadArticle,
-        Timeout,
-        msgClosed,
-        errDetailMode,
-        onSubmit,
-        closeMsgDisplay,
-        toggleMsgDetail,
-        timeOut,
-        adminTabValue,
-        rebuildClan,
-        downloadBinary,
-    } from '$utils/client';
+    import Main from '$lib/admin/Main.svelte';
+    import Modals from '$lib/admin/Modals.svelte';
+    import SideMenu from '$lib/admin/SideMenu.svelte';
+    import { loadArticle, Timeout, msgClosed, errDetailMode, onSubmit, closeMsgDisplay, toggleMsgDetail, timeOut, adminTabValue, downloadBinary } from '$utils/client';
     import '$scss/style_admin.scss';
 
     interface Props {
@@ -222,33 +199,7 @@
     </div>
 {/if}
 
-{#if $suspendUser}
-    <SuspendUser suspendedAccount={form?.suspendedAccount} />
-{/if}
-
-{#if $deleteInfo}
-    <DeleteInfo />
-{/if}
-
-{#if $deleteBnr}
-    <DeleteBnr />
-{/if}
-
-{#if $linkDiscord}
-    <LinkDiscord newDiscord={form?.newDiscord} />
-{/if}
-
-{#if $deleteChar}
-    <DeleteChar />
-{/if}
-
-{#if $rebuildClan}
-    <RebuildClan />
-{/if}
-
-{#if $downloadBinary}
-    <DownloadBinary />
-{/if}
+<Modals {form} />
 
 <main class="console_body">
     {#if openMobileNav}
@@ -258,7 +209,7 @@
 
     <nav class="console_menu" class:open={openMobileNav}>
         <Svroller width="100%" height="100%" alwaysVisible={true}>
-            <AdminMenu {closeMenu} />
+            <SideMenu {closeMenu} />
         </Svroller>
     </nav>
 
@@ -280,7 +231,7 @@
             {/if}
         </h1>
 
-        <AdminContents bind:infoAddMode bind:bnrAddMode {data} {form} bind:isMobile />
+        <Main bind:infoAddMode bind:bnrAddMode {data} {form} {isMobile} />
     </article>
 </main>
 

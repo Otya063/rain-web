@@ -22,7 +22,11 @@
         secToTime,
     } from '$utils/client';
 
-    let { user }: { user: PaginatedUsers } = $props();
+    interface Props {
+        user: PaginatedUsers
+        isMobile: boolean;
+    }
+    let { user, isMobile }: Props = $props();
     let validName = $state(true);
     const validFileName = [
         'savedata.bin',
@@ -541,7 +545,7 @@
 
         {#if !$userCtrlPanel[user.id].selectedChar.is_new_character}
             <dt class="contents_term">Binary Data</dt>
-            <dd class="contents_desc" style="padding: 1% 0 1%;">
+            <dd class="contents_desc" style={isMobile ? '' : 'padding: 1% 0 1%;'}>
                 <!-- バイナリ再アップロード-->
                 {#if $userCtrlPanel[user.id].activeCategories['reupload_binary']}
                     <button type="button" class="red_btn" onclick={() => ($userCtrlPanel[user.id].activeCategories['reupload_binary'] = false)}>

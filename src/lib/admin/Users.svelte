@@ -31,7 +31,7 @@
         paginationMeta: PaginationMeta;
         isMobile: boolean;
     }
-    let { paginatedUsers, paginationMeta, isMobile = $bindable() }: Props = $props();
+    let { paginatedUsers, paginationMeta, isMobile }: Props = $props();
     let paginationBackClick = $state(false);
     let paginationNextClick = $state(false);
     let specifiedUser = $state(true);
@@ -506,7 +506,7 @@
                 }}
             >
                 <div class="console_contents_list_title">
-                    User Data ({user.id})
+                    User Data
 
                     <div class="user_ctrl_panel">
                         {#each userCtrlIconList as icon}
@@ -1113,7 +1113,7 @@
                     {#if user.characters.length === 0}
                         <p style="color: #ff8100; margin: 1% 0 3%;">This user doesn't have any characters.</p>
                     {:else}
-                        <Characters {user} />
+                        <Characters {user} {isMobile} />
                     {/if}
                 {/if}
             </form>

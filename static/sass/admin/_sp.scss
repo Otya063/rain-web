@@ -285,7 +285,6 @@
 
                         // 編集モード切り替えボタン
                         .edit_btn {
-                            grid-area: button;
                             position: relative;
                             right: 0;
                             color: darkslategray;
@@ -379,6 +378,25 @@
                             }
                         }
                     }
+
+                    // コンテンツがネストしたバージョン
+                    .nested {
+                        // 初めの要素以外、上部仕切り付ける
+                        &:not(:first-child) {
+                            .contents_term {
+                                border-top: 1px gray dashed;
+                            }
+                        }
+
+                        .contents_term {
+                            border-bottom: 0px;
+                        }
+
+                        .contents_desc {
+                            width: 80vw;
+                            border-bottom: 0px;
+                        }
+                    }
                 }
 
                 // ボタングループ化
@@ -444,7 +462,6 @@
             // メニュー各項目
             .console_menu_list_item {
                 width: 100%;
-                height: 40px;
                 margin: 10% auto;
                 border-bottom: 1px solid gray;
                 display: inline-block;
@@ -456,6 +473,7 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    padding: 0 5% 2%;
 
                     // リンクテキスト（ホバー時に出現）
                     .console_menu_list_text {
@@ -536,42 +554,6 @@
                         font-weight: 700;
                         user-select: none;
                     }
-
-                    // 数値入力エリア
-                    .number_input_wrapper {
-                        display: flex;
-                        align-items: center;
-                        border: 1px solid #ddd;
-                        border-radius: 4px;
-                        overflow: hidden;
-                        width: fit-content;
-
-                        // 増加減少ボタン
-                        .decrement_btn,
-                        .increment_btn {
-                            background-color: #f9f9f9;
-                            border: none;
-                            width: 30px;
-                            height: 30px;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-
-                            // ボタン無効
-                            &:disabled {
-                                cursor: not-allowed;
-                                opacity: 0.3;
-                            }
-                        }
-
-                        // input要素
-                        .number_input_text {
-                            width: 50px;
-                            text-align: center;
-                            border: none;
-                            outline: none;
-                        }
-                    }
                 }
 
                 // フォーム部品
@@ -649,6 +631,11 @@
 
                             select {
                                 width: 100%;
+                            }
+
+                            // 数値入力コンポーネントを持つもの
+                            &:has(.number_input_wrapper) {
+                                width: 40%;
                             }
                         }
 
@@ -830,6 +817,13 @@
             line-height: 21px;
             padding-top: 1px; // 一部テキストが上気味なので、下に調整
         }
+
+        // アクティブ時
+        &.active {
+            color: #fff;
+            background: #de6161;
+            border: 1px solid #de6161;
+        }
     }
 
     // 緑ボタンデフォルト
@@ -867,6 +861,24 @@
         &.loading_btn {
             padding: 0; // そのままだと楕円形になってしまうのでpaddingはなし
             border-radius: 50%;
+        }
+
+        // DistributionList.svelte内アイテム追加ボタン用
+        &.add_item {
+            position: relative !important;
+            margin-left: auto;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px #0ad275 solid;
+            padding: 0;
+
+            .btn_icon {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin: -12px 0 0 -12px;
+            }
         }
     }
 
@@ -1270,7 +1282,6 @@
         width: 100%;
         position: relative;
         background: #000;
-        grid-area: footer;
 
         // フッター帯上部装飾
         &::before {
@@ -1544,37 +1555,149 @@
         width: 60px;
     }
 
-    // 配布物を追加するセクション
+    // 配布物タイプselect/input要素グループ
     .dist_section {
         display: flex;
         align-items: center;
+        flex-direction: column;
 
-        // 配布物選択
-        .dist_select_area {
-            position: relative;
+        select {
+            width: 100%;
+        }
 
-            // svrollbar用スクロール調整
-            .svlr-viewport,
-            .svlr-wrapper {
-                height: auto !important;
-                max-height: 250px !important;
+        // 配布セクション内のみリストの幅を拡張
+        &_list {
+            width: 150%;
+        }
+    }
+
+    // 配布コンテンツデータ
+    .dist_contents_data {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 2px dashed #a49b95;
+        height: 14vh;
+
+        @include landscape {
+            height: 25vh;
+            padding: 3% 0;
+        }
+
+        // 最初の要素はボーダーなし（実際には追加ボタンが初めに来るのでfirst-childは使えない）
+        &:nth-child(2) {
+            border: none;
+        }
+
+        // ボタン要素類グループ
+        .dist_contents_data_btn_group {
+            display: flex;
+            padding-left: 10px;
+
+            .number_input_wrapper {
+                .number_input_text {
+                    width: 35px !important;
+                    padding: 0;
+                }
             }
 
-            // 配布物リスト
-            &_list {
-                width: 100%;
-                box-shadow: 0 2px 3px 0 rgba(44, 62, 80, 0.24);
-                border-radius: 4px;
-                background: #fdfdfd;
-                position: absolute;
-                z-index: 2;
-                border: 1px solid black;
+            // アイテム削除ボタン
+            .delete_btn {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                border: 2px #de6161 solid;
+                position: relative;
+                margin: 0 0 0 10px !important; // red_btnのmarginに上書きされないようにimportant
+                padding: 0; // red_btnのpadding無効化
 
-                // 各アイテム
-                &_item {
-                    padding: 10px 20px;
-                    transition: all 0.2s;
+                @include landscape {
+                    margin: 0 0 0 20px !important; // red_btnのmarginに上書きされないようにimportant
                 }
+
+                .btn_icon {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    margin: -12px 0 0 -12px;
+                }
+            }
+        }
+    }
+
+    /* 数値入力カスタムコンポーネント
+========================================================= */
+    // 数値入力エリア
+    .number_input_wrapper {
+        display: flex;
+        align-items: center;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+        width: fit-content;
+
+        // 増加減少ボタン
+        .decrement_btn,
+        .increment_btn {
+            background-color: #f9f9f9;
+            border: none;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            // ボタン無効
+            &:disabled {
+                cursor: not-allowed;
+                opacity: 0.3;
+            }
+        }
+
+        // input要素
+        .number_input_text {
+            width: 50px !important; // edit_area_box_parts.text dd内のinputスタイルが適用されてしまうため、上書きさせない
+            text-align: center;
+            border: none;
+            outline: none;
+        }
+    }
+
+    /* カスタム選択リスト
+========================================================= */
+    // 選択エリア
+    .select_area {
+        position: relative;
+
+        // svrollbar用スクロール調整
+        .svlr-viewport,
+        .svlr-wrapper {
+            height: auto !important;
+            max-height: 250px !important;
+        }
+
+        // svrollbar用リストアイテム並び調整
+        .svlr-contents {
+            display: flex;
+            flex-direction: column;
+        }
+
+        // リスト
+        &_list {
+            width: 100%;
+            box-shadow: 0 2px 3px 0 rgba(44, 62, 80, 0.24);
+            border-radius: 4px;
+            background: #fdfdfd;
+            position: absolute;
+            z-index: 2;
+            border: 1px solid black;
+
+            // 各アイテム
+            &_item {
+                width: 100%;
+                text-align: left;
+                padding: 10px 20px;
+                transition: all 0.2s;
             }
         }
     }

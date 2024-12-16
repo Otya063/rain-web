@@ -11,7 +11,7 @@
         bnrAddMode: boolean;
         isMobile: boolean;
     }
-    let { launcherBanner, createdBnr, bnrAddMode = $bindable(), isMobile = $bindable() }: Props = $props();
+    let { launcherBanner, createdBnr, bnrAddMode = $bindable(), isMobile }: Props = $props();
     let editingId: number = $state(0); // 編集対象のバナーID
     let editMode = false;
     const catTypes: { [key in keyof Omit<launcher_banner, 'id' | 'bnr_name'>]: boolean } = $state({
@@ -220,7 +220,7 @@
                             <span class="btn_icon material-symbols-outlined">delete</span>
                             <span class="btn_text">Delete</span>
                         </button>
-                        Banner Data ({bnr.id})
+                        Banner Data
                     </p>
 
                     <dt class="contents_term">ID</dt>

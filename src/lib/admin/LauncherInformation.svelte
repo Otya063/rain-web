@@ -13,7 +13,7 @@
         infoAddMode: boolean;
         isMobile: boolean;
     }
-    let { informationData, createdInfo, updatedInfo, infoAddMode = $bindable(), isMobile = $bindable() }: Props = $props();
+    let { informationData, createdInfo, updatedInfo, infoAddMode = $bindable(), isMobile }: Props = $props();
     let editingId: number = $state(0); // 編集対象のインフォID
     let editMode = false;
     const catTypes: { [key in keyof Omit<launcher_info, 'id'>]: boolean } = $state({
@@ -228,7 +228,7 @@
                                 <span class="btn_text">Delete</span>
                             </button>
 
-                            Info Data ({info.id})
+                            Info Data
 
                             <input type="hidden" name="info_id" value={info.id} />
                         </p>

@@ -2,7 +2,6 @@
     import _ from 'lodash';
     import { DateTime } from 'luxon';
     import { fade, slide } from 'svelte/transition';
-    import Select from 'svelte-select';
     import { applyAction, enhance } from '$app/forms';
     import type { PaginatedAlliances, PaginatedClans, PaginationMeta } from '$types';
     import {
@@ -24,8 +23,9 @@
         clanNameData,
         tooltip,
     } from '$utils/client';
+    import AllianceAllies from './AllianceAllies.svelte';
 
-    type UpdatedAllianceData = Pick<PaginatedAlliances, 'id' | 'first_child_clan' | 'second_child_clan'>;
+    type UpdatedAllianceData = Pick<PaginatedAlliances, 'id' | 'firstChildClan' | 'secondChildClan'>;
     interface Props {
         paginatedClans: PaginatedClans[];
         paginationClanMeta: PaginationMeta;
@@ -33,8 +33,9 @@
         paginationAllianceMeta: PaginationMeta;
         updatedAllianceData: UpdatedAllianceData;
         clanNames: string[];
+        isMobile: boolean;
     }
-    let { paginatedClans, paginationClanMeta, paginatedAlliances, paginationAllianceMeta, updatedAllianceData, clanNames }: Props = $props();
+    let { paginatedClans, paginationClanMeta, paginatedAlliances, paginationAllianceMeta, updatedAllianceData, clanNames, isMobile }: Props = $props();
     let paginationBackClick = $state(false);
     let paginationNextClick = $state(false);
     let clanBindedValue: string = $state('');
@@ -372,7 +373,7 @@
 
             {#each $paginatedClansData as clan}
                 <div class="console_contents_list_title clan_name">
-                    Clan Data ({clan.id})
+                    Clan Data
 
                     <button
                         class="red_btn"
@@ -560,8 +561,8 @@
                                     if (alliance.id === updatedAllianceData.id)
                                         return {
                                             ...alliance,
-                                            first_child_clan: updatedAllianceData.first_child_clan,
-                                            second_child_clan: updatedAllianceData.second_child_clan,
+                                            firstChildClan: updatedAllianceData.firstChildClan,
+                                            secondChildClan: updatedAllianceData.secondChildClan,
                                         };
 
                                     return alliance;
@@ -590,33 +591,28 @@
 
                         <dt class="contents_term">Allies</dt>
                         <dd class="contents_desc">
-                            <div class="clan_members" style="width: 100%; margin: 0; grid-template-columns: repeat(1, 1fr);">
-                                <p>
-                                    <span style="font-weight: 700;">{'<'} Parent Clan {'>'}</span><br />
-                                    Name: {alliance.parent_clan.clan_name}<br />
-                                    Leader: {alliance.parent_clan.leader_name}
-                                </p>
+                            <dl class="console_contents_list nested">
+                                <dt class="contents_term">Parent Clan</dt>
+                                <dd class="contents_desc">{alliance.parentClan}</dd>
 
-                                <p>
-                                    <span style="font-weight: 700;">{'<'} 1st Child Clan {'>'}<br /></span>
-                                    {#if alliance.first_child_clan.clan_name && alliance.first_child_clan.leader_name}
-                                        Name: {alliance.first_child_clan.clan_name}<br />
-                                        Leader: {alliance.first_child_clan.leader_name}
+                                <dt class="contents_term">1st Child Clan</dt>
+                                <dd class="contents_desc">
+                                    {#if alliance.firstChildClan}
+                                        {alliance.firstChildClan}
                                     {:else}
-                                        No child clan found.
+                                        No Clan
                                     {/if}
-                                </p>
+                                </dd>
 
-                                <p>
-                                    <span style="font-weight: 700;">{'<'} 2nd Child Clan {'>'}<br /></span>
-                                    {#if alliance.second_child_clan.clan_name && alliance.second_child_clan.leader_name}
-                                        Name: {alliance.second_child_clan.clan_name}<br />
-                                        Leader: {alliance.second_child_clan.leader_name}
+                                <dt class="contents_term">2nd Child Clan</dt>
+                                <dd class="contents_desc">
+                                    {#if alliance.secondChildClan}
+                                        {alliance.secondChildClan}
                                     {:else}
-                                        No child clan found.
+                                        No Clan
                                     {/if}
-                                </p>
-                            </div>
+                                </dd>
+                            </dl>
 
                             {#if editingId === alliance.id && catTypes['allies']}
                                 <button class="red_btn" type="button" onclick={() => editModeSwitch(0, 'allies')}>
@@ -635,17 +631,24 @@
                                 {#if editingId === alliance.id && catTypes['allies']}
                                     <div transition:slide class="edit_area_box">
                                         <div class="edit_area enter">
-                                            <p class="edit_area_title">Set Alliance Allies</p>
+                                            <p class="edit_area_title">
+                                                Set Alliance Allies<span
+                                                    class="help_btn material-symbols-outlined"
+                                                    use:tooltip={'<p>Option Format: [Clan ID] - Clan Name</p><p class="console_contents_note">* Due to site resource constraints, filter results are limited to 10 cases.</p>'}
+                                                    >help</span
+                                                >
+                                            </p>
+
                                             <dl class="edit_area_box_parts text">
                                                 <dt>1st child clan</dt>
                                                 <dd>
-                                                    <Select name="first_clan_name" items={$clanNameData} placeholder="Select 1st child clan." value={alliance.first_child_clan.clan_name} />
+                                                    <AllianceAllies name="first_clan" clanNames={$clanNameData} {isMobile} initClanName={alliance.firstChildClan} />
                                                 </dd>
                                                 <br />
                                                 <br />
                                                 <dt>2nd child clan</dt>
                                                 <dd>
-                                                    <Select name="second_clan_name" items={$clanNameData} placeholder="Select 2nd child clan." value={alliance.second_child_clan.clan_name} />
+                                                    <AllianceAllies name="second_clan" clanNames={$clanNameData} {isMobile} initClanName={alliance.secondChildClan} />
                                                 </dd>
                                             </dl>
 
@@ -655,7 +658,10 @@
                                                 onclick={() => {
                                                     onSubmit.set(true);
                                                     $timeOut && closeMsgDisplay($timeOut);
-                                                    editModeSwitch(0, 'allies');
+                                                    setTimeout(() => {
+                                                        // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
+                                                        editModeSwitch(0, 'allies');
+                                                    }, 100);
                                                 }}
                                             >
                                                 <span class="btn_icon material-symbols-outlined">check</span>
