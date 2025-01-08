@@ -1,5 +1,6 @@
 <script lang="ts">
     import Editor from '@tinymce/tinymce-svelte';
+    import { PUBLIC_TINY_API } from "$env/static/public";
     import type { ActionData, PageData } from './$types';
     import _ from 'lodash';
     import { onMount } from 'svelte';
@@ -254,6 +255,6 @@
 <!-- DistributionEditor.svelte用、エディター事前読み込み -->
 {#if !isMobile}
     <div hidden>
-        <Editor apiKey="51d2rj7t18vzap70f8gvcrrkeuigsrtlke8xckmwk455ozjw" />
+        <Editor apiKey={PUBLIC_TINY_API} />
     </div>
 {/if}

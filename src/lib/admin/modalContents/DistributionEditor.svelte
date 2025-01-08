@@ -166,7 +166,7 @@
             </div>
 
             <div class={`modal_body ${editorType}_editor`}>
-                <img class={`${editorType}_bg`} src={`/static/img/common/${editorType}_draft.png`} alt={`${editorType}_bg`} />
+                <img class={`${editorType}_bg`} src={`/img/common/${editorType}_draft.png`} alt={`${editorType}_bg`} />
                 <Editor apiKey={PUBLIC_TINY_API} inline={true} channel="7" bind:value={previewHtml} {conf} />
             </div>
 
