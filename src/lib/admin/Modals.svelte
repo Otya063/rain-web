@@ -4,11 +4,12 @@
     import DeleteChar from './modalContents/DeleteChar.svelte';
     import DeleteDistribution from './modalContents/DeleteDistribution.svelte';
     import DeleteInfo from './modalContents/DeleteInfo.svelte';
+    import DistributionEditor from './modalContents/DistributionEditor.svelte';
     import DownloadBinary from './modalContents/DownloadBinary.svelte';
     import LinkDiscord from './modalContents/LinkDiscord.svelte';
     import RebuildClan from './modalContents/RebuildClan.svelte';
     import SuspendUser from './modalContents/SuspendUser.svelte';
-    import { suspendUser, deleteInfo, deleteBnr, linkDiscord, deleteChar, rebuildClan, downloadBinary, deleteDistribution } from '$utils/client';
+    import { suspendUser, deleteInfo, deleteBnr, linkDiscord, deleteChar, rebuildClan, downloadBinary, deleteDistribution, distDescEditor, distTitleEditor } from '$utils/client';
 
     interface Props {
         form: ActionData;
@@ -46,4 +47,12 @@
 
 {#if $deleteDistribution}
     <DeleteDistribution />
+{/if}
+
+{#if $distDescEditor}
+    <DistributionEditor modalTitle={'Description Editor'} editorType={'description'} />
+{/if}
+
+{#if $distTitleEditor}
+    <DistributionEditor modalTitle={'Title Editor'} editorType={'event_name'} />
 {/if}

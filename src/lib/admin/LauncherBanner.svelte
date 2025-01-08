@@ -68,9 +68,9 @@
         <span class="material-symbols-outlined">post_add</span>
         Add New Banner
     </h2>
+
     <div class="console_contents">
         <form
-            class="info_add_form"
             action="?/createBnrData"
             method="POST"
             enctype="multipart/form-data"
@@ -146,6 +146,11 @@
             </dl>
 
             <div class="group_btns">
+                <button class="red_btn" type="button" onclick={() => (bnrAddMode = false)}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
+                    <span class="btn_text">Cancel</span>
+                </button>
+
                 <button
                     onclick={() => {
                         onSubmit.set(true);
@@ -156,11 +161,6 @@
                 >
                     <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Save</span>
-                </button>
-
-                <button class="red_btn" type="button" onclick={() => (bnrAddMode = false)}>
-                    <span class="btn_icon material-symbols-outlined">close</span>
-                    <span class="btn_text">Cancel</span>
                 </button>
             </div>
         </form>
@@ -211,10 +211,10 @@
                             onclick={() =>
                                 prepareModal('deleteBnr', {
                                     title: 'Delete the following banner data?',
-                                    form_action: 'deleteBnrData',
-                                    bnr_id: bnr.id,
-                                    bnr_url: bnr.en_img_src,
-                                    bnr_name: bnr.bnr_name,
+                                    formAction: 'deleteBnrData',
+                                    bnrId: bnr.id,
+                                    bnrUrl: bnr.en_img_src,
+                                    bnrName: bnr.bnr_name,
                                 })}
                         >
                             <span class="btn_icon material-symbols-outlined">delete</span>

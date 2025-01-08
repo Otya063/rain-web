@@ -1,6 +1,6 @@
 import type { launcher_banner, launcher_info, users } from '@prisma/client/edge';
 import { get, writable } from 'svelte/store';
-import type { PaginatedUsers, PaginatedCharacter, PaginationMeta, PaginatedClans, PaginatedAlliances } from '$types';
+import type { PaginatedUsers, PaginatedCharacter, PaginationMeta, PaginatedClans, PaginatedAlliances, Distribution } from '$types';
 
 export const filterUserValue = writable<string>('');
 export const filterUserParam = writable<string>('');
@@ -20,17 +20,32 @@ export const userCtrlPanel = writable<{
     };
 }>({});
 export const onSubmit = writable(false);
-export const allInformation = writable<{ [key: string]: launcher_info[] }>();
-export const allBanners = writable<launcher_banner[]>();
-export const paginatedUsersData = writable<PaginatedUsers[]>();
-export const paginationMetaData = writable<PaginationMeta>();
-export const paginatedClansData = writable<PaginatedClans[] | null>();
-export const paginationClansMetaData = writable<PaginationMeta>();
-export const paginatedAlliancesData = writable<PaginatedAlliances[] | null>();
-export const paginationAlliancesMetaData = writable<PaginationMeta>();
-export const clanNameData = writable<string[]>();
-//export const commonDistributionData = writable<Distribution[]>();
-//export const individualDistributionData = writable<Distribution[]>();
+export const allInformation = writable<{ [key: string]: launcher_info[] }>({});
+export const allBanners = writable<launcher_banner[]>([]);
+export const paginatedUsersData = writable<PaginatedUsers[]>([]);
+export const paginationMetaData = writable<PaginationMeta>({
+    hasPrevPage: false,
+    hasNextPage: false,
+    prevCursor: 0,
+    nextCursor: 0
+});
+export const paginatedClansData = writable<PaginatedClans[]>([]);
+export const paginationClansMetaData = writable<PaginationMeta>({
+    hasPrevPage: false,
+    hasNextPage: false,
+    prevCursor: 0,
+    nextCursor: 0,
+});
+export const paginatedAlliancesData = writable<PaginatedAlliances[]>([]);
+export const paginationAlliancesMetaData = writable<PaginationMeta>({
+    hasPrevPage: false,
+    hasNextPage: false,
+    prevCursor: 0,
+    nextCursor: 0,
+});
+export const clanNameData = writable<string[]>(['']);
+export const commonDistributionData = writable<Distribution[]>([]);
+export const specificDistributionData = writable<Distribution[]>([]);
 
 /**
  * Rain APIを介してファイルをアップロードする

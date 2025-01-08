@@ -132,12 +132,12 @@
                         onclick={() =>
                             prepareModal('linkDiscord', {
                                 title: 'Unlink the following characters?',
-                                form_action: 'unlinkDiscord',
-                                user_id: user.id,
+                                formAction: 'unlinkDiscord',
+                                userId: user.id,
                                 username: user.username,
-                                char_id: character.id,
-                                char_name: character.name,
-                                discord_id: character.discord?.discord_id,
+                                charId: character.id,
+                                charName: character.name,
+                                discordId: character.discord?.discord_id,
                             })}
                     >
                         <span class="btn_icon material-symbols-outlined">link</span>
@@ -150,11 +150,11 @@
                         onclick={() =>
                             prepareModal('linkDiscord', {
                                 title: 'Execute the linking process with the following user and character. Please confirm the target ID and Username, and enter the ID (18-digit) of Discord to be linked.',
-                                form_action: 'linkDiscord',
-                                user_id: user.id,
+                                formAction: 'linkDiscord',
+                                userId: user.id,
                                 username: user.username,
-                                char_id: character.id,
-                                char_name: character.name,
+                                charId: character.id,
+                                charName: character.name,
                             })}
                     >
                         <span class="btn_icon material-symbols-outlined">link</span>
@@ -177,9 +177,9 @@
                             onclick={() =>
                                 prepareModal('deleteCharacter', {
                                     title: 'Restore the following character?',
-                                    form_action: 'restoreCharacter',
-                                    char_id: character.id,
-                                    char_name: character.name,
+                                    formAction: 'restoreCharacter',
+                                    charId: character.id,
+                                    charName: character.name,
                                 })}
                         >
                             <span class="btn_icon material-symbols-outlined">delete</span>
@@ -192,9 +192,9 @@
                             onclick={() =>
                                 prepareModal('deleteCharacter', {
                                     title: 'Delete the following character?',
-                                    form_action: 'deleteCharacter',
-                                    char_id: character.id,
-                                    char_name: character.name,
+                                    formAction: 'deleteCharacter',
+                                    charId: character.id,
+                                    charName: character.name,
                                 })}
                             class:disabled_elm={user.characters.length === 1}
                         >
@@ -621,9 +621,9 @@
                     onclick={() =>
                         prepareModal('downloadBinary', {
                             title: `Are you sure you want to download ${$userCtrlPanel[user.id].selectedChar.name}'s binary data?`,
-                            form_action: '', // formアクションは使用しない
-                            char_id: $userCtrlPanel[user.id].selectedChar.id,
-                            char_name: $userCtrlPanel[user.id].selectedChar.name,
+                            formAction: '', // formアクションは使用しない
+                            charId: $userCtrlPanel[user.id].selectedChar.id,
+                            charName: $userCtrlPanel[user.id].selectedChar.name,
                         })}
                 >
                     <span class="btn_icon material-symbols-outlined">cloud_download</span>

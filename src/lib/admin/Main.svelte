@@ -14,8 +14,9 @@
         infoAddMode: boolean;
         bnrAddMode: boolean;
         isMobile: boolean;
+        distAddMode: boolean;
     }
-    let { data, form, infoAddMode = $bindable(), bnrAddMode = $bindable(), isMobile }: Props = $props(); // bindableにしないと動かない
+    let { data, form, infoAddMode = $bindable(), bnrAddMode = $bindable(), isMobile, distAddMode = $bindable() }: Props = $props(); // bindableにしないと動かない
     const systemData = data.launcherSystem;
     const informationData = data.launcherInformation;
     const launcherBanner = data.launcherBanner;
@@ -40,7 +41,7 @@
     <LauncherInformation bind:infoAddMode createdInfo={form?.createdInfo} updatedInfo={form?.updatedInfo} {informationData} {isMobile} />
 {:else if $adminTabValue === 'users'}
     <Users paginatedUsers={form?.paginatedUsers} paginationMeta={form?.paginationMeta} {isMobile} />
-{:else if $adminTabValue === 'bnr'}
+{:else if $adminTabValue === 'banner'}
     <LauncherBanner bind:bnrAddMode createdBnr={form?.createdBnr} {launcherBanner} {isMobile} />
 {:else if $adminTabValue === 'clan'}
     <Clans
@@ -53,5 +54,5 @@
         {isMobile}
     />
 {:else if $adminTabValue === 'distribution'}
-    <Distribution {distributions} {charactersIdName} {isMobile} updatedContentsData={form?.updatedContentsData} />
+    <Distribution {distributions} {charactersIdName} {isMobile} updatedContentsData={form?.updatedContentsData} bind:distAddMode />
 {/if}

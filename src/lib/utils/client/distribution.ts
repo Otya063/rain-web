@@ -1,8 +1,11 @@
 import { get, writable } from 'svelte/store';
-import { DistributionContentsTypeObj, type DistributionContentsType, type DistributionType, type DistContentsData } from '$types';
-import { getDistributionContentsTypeName, armJson, chestJson, headJson, itemJson, legJson, meleeJson, poogieJson, rangedJson, waistJson, getDistItemsData } from '.';
+import { DistributionContentsTypeObj, type DistributionContentsType, type DistributionType, type DistContentsData, DistributionTypeObj, type DistributionTypeName, type Distribution } from '$types';
+import { getDistributionContentsTypeName, armJson, chestJson, headJson, itemJson, legJson, meleeJson, poogieJson, rangedJson, waistJson, getDistItemsData, convertColorString, convHrToHrp } from '.';
+import { DateTime } from 'luxon';
 
 export const distributionContentsData = writable<DistContentsData[]>([]);
+export const createDistDataTitle = writable<string>('');
+export const createDistDataDesc = writable<string>('');
 
 /**
  * 配布コンテンツの種類に応じたデータ名を取得する
@@ -152,7 +155,7 @@ export class ManageDistribution {
 
         // 配列を昇順にソートする
         contDataArr = this.sortContentsDataArray(contDataArr);
-        
+
         let result = this.formatHex(contDataArr.length, 4);
         for (const item of contDataArr) {
             result += `${this.formatHex(item.types, 2)}0000${this.reverseHex(item.item_data.code)}0000${this.formatHex(item.amount, 4)}00000000`;
@@ -247,3 +250,48 @@ export class ManageDistribution {
         return `INSERT INTO distribution (character_id,data,type,bot,event_name,description) VALUES (${character_id},DECODE(${hex},'hex'),${distType},false,"${title}","~C05 ${description}")`;
     } */
 }
+
+/**
+ * 指定された配布物データを更新する
+ * @param {Distribution[]} data 更新対象の配布物配列
+ * @param {number} distId 更新する配布物ID
+ * @param {keyof Omit<Distribution, 'id'>} column 更新するカラム名
+ * @param {string | null} value カラム名に代入する値
+ * @param {string} updatedContentsData カラム名が`data`の場合に使用される更新された配布コンテンツデータ
+ * @returns {Distribution[]} 更新後の配列
+ */
+export const updateDistributionData = (data: Distribution[], distId: number, column: keyof Omit<Distribution, 'id'>, value: string | null, updatedContentsData: string): Distribution[] => {
+    return data.map((distribution) => {
+        if (distribution.id === distId) {
+            return {
+                ...distribution,
+                [column]:
+                    column === 'type'
+                        ? DistributionTypeObj[value as DistributionTypeName]
+                        : column === 'event_name' || column === 'description'
+                          ? convertColorString('colorNum', value!, column) // ゲーム内カラーコードに変換
+                          : column === 'deadline'
+                            ? !value
+                                ? null // 無期限
+                                : DateTime.fromISO(value).toJSDate()
+                            : column === 'times_acceptable'
+                              ? Number(value!) // number型なので変換必要
+                              : column === 'min_hr' || column === 'max_hr'
+                                ? convHrToHrp(Number(value!))
+                                : column === 'min_sr' || column === 'max_sr' || column === 'min_gr' || column === 'max_gr'
+                                  ? Number(value!) === 0
+                                      ? 65535 // 0の時は無条件なので65535
+                                      : Number(value!) // それ以外はそのままgr
+                                  : column === 'data'
+                                    ? updatedContentsData // サーバー側からformData経由で取得
+                                    : column === 'character_id'
+                                      ? !value
+                                          ? null // 特定キャラクター指定なし
+                                          : Number(value!) // number型なので変換必要
+                                      : value,
+            };
+        }
+
+        return distribution;
+    });
+};

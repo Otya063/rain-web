@@ -16,7 +16,7 @@
 
                     if (result.type === 'success') {
                         // クラン検索結果をリセット
-                        paginatedClansData.set(null);
+                        paginatedClansData.set([]);
                         paginationClansMetaData.set({
                             hasPrevPage: false,
                             hasNextPage: false,
@@ -29,8 +29,8 @@
                 };
             }}
         >
-            <input type="hidden" name="clan_id" value={$rebuildClanData.clan_id} />
-            <input type="hidden" name="clan_name" value={$rebuildClanData.clan_name} />
+            <input type="hidden" name="clan_id" value={$rebuildClanData.clanId} />
+            <input type="hidden" name="clan_name" value={$rebuildClanData.clanName} />
             <input name="filter_value" type="hidden" value={$filterClanValue} />
             <input name="filter_param" type="hidden" value={$filterClanParam} />
 
@@ -43,25 +43,25 @@
                 <ul class="modal_list">
                     <li class="modal_list_item">
                         <p>ID</p>
-                        <span>{$rebuildClanData.clan_id}</span>
+                        <span>{$rebuildClanData.clanId}</span>
                     </li>
 
                     <li class="modal_list_item">
                         <p>Name</p>
-                        <span>{$rebuildClanData.clan_name}</span>
+                        <span>{$rebuildClanData.clanName}</span>
                     </li>
 
                     <li class="modal_list_item">
                         <p>Leader</p>
-                        <span>{$rebuildClanData.clan_leader}</span>
+                        <span>{$rebuildClanData.clanLeader}</span>
                     </li>
 
                     <li class="modal_list_item">
                         <p>Est.</p>
                         <span
-                            >{!$rebuildClanData.created_at
+                            >{!$rebuildClanData.createdAt
                                 ? 'No Data'
-                                : DateTime.fromJSDate($rebuildClanData.created_at)
+                                : DateTime.fromJSDate($rebuildClanData.createdAt)
                                       .setZone(DateTime.local().zoneName)
                                       .setLocale('en')
                                       .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span
@@ -73,9 +73,14 @@
                 <p class="modal_note">* After a successful process, the search results will be reset.</p>
             </div>
             <div class="btn_group">
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
+                    <span class="btn_text">Close</span>
+                </button>
+
                 <button
                     class="blue_btn"
-                    formaction="?/{$rebuildClanData.form_action}"
+                    formaction="?/{$rebuildClanData.formAction}"
                     type="submit"
                     onclick={() => {
                         onSubmit.set(true);
@@ -83,11 +88,7 @@
                     }}
                 >
                     <span class="btn_icon material-symbols-outlined">check</span>
-                    <span class="btn_text">Yes</span>
-                </button>
-                <button class="red_btn" type="button" onclick={() => closeModal()}>
-                    <span class="btn_icon material-symbols-outlined">close</span>
-                    <span class="btn_text">No</span>
+                    <span class="btn_text">Rebuild</span>
                 </button>
             </div>
         </form>

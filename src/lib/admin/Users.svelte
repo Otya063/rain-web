@@ -395,7 +395,7 @@
         </div>
     </div>
 
-    {#if !$paginatedUsersData}
+    {#if !$paginatedUsersData.length}
         <p class="console_contents_note">Searched user(s) will be displayed here.</p>
     {:else}
         {#if $paginationMetaData.hasPrevPage || $paginationMetaData.hasNextPage}
@@ -543,10 +543,10 @@
                         onclick={() =>
                             prepareModal('suspendUser', {
                                 title: '',
-                                form_action: '',
-                                user_id: user.id,
+                                formAction: '',
+                                userId: user.id,
                                 username: user.username,
-                                char_name: user.characters.map((character) => character.name || 'Ready to Hunt'),
+                                charName: user.characters.map((character) => character.name || 'Ready to Hunt'),
                             })}
                     >
                         <span class="btn_icon material-symbols-outlined">delete</span>
@@ -568,11 +568,11 @@
                                     onclick={() =>
                                         prepareModal('suspendUser', {
                                             title: 'Unsuspend the following user?',
-                                            form_action: 'unsuspendUser',
-                                            user_id: user.id,
+                                            formAction: 'unsuspendUser',
+                                            userId: user.id,
                                             username: user.username,
-                                            char_name: user.characters.map((character) => character.name || 'Ready to Hunt'),
-                                            until_at: user.suspended_account?.until_at,
+                                            charName: user.characters.map((character) => character.name || 'Ready to Hunt'),
+                                            untilAt: user.suspended_account?.until_at,
                                         })}
                                 >
                                     {#if !user.suspended_account.permanent}

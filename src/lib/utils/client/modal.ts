@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit';
 import { writable } from 'svelte/store';
-import type { ModalType, ModalUnionData, DeleteBnrData, DeleteCharacterData, DeleteInfoData, LinkDiscordData, RebuildClanData, SuspendUserData, DeleteDistributionData } from '$types';
+import type { ModalType, ModalUnionData, DeleteBnrData, DeleteCharacterData, DeleteInfoData, LinkDiscordData, RebuildClanData, SuspendUserData, DeleteDistributionData, DistEditorData } from '$types';
 
 export const deleteInfo = writable(false);
 export const deleteInfoData = writable<DeleteInfoData>();
@@ -18,6 +18,9 @@ export const downloadBinary = writable(false);
 export const downloadBinaryData = writable<DeleteCharacterData>();
 export const deleteDistribution = writable(false);
 export const deleteDistributionData = writable<DeleteDistributionData>();
+export const distDescEditor = writable(false);
+export const distEditorData = writable<DistEditorData>();
+export const distTitleEditor = writable(false);
 
 /**
  * モーダルウィンドウに表示するデータを準備する
@@ -25,7 +28,7 @@ export const deleteDistributionData = writable<DeleteDistributionData>();
  * @param {ModalType} type モーダルの種類
  * @param {ModalUnionData} data モーダルに渡すデータ
  */
-export const prepareModal = (type: ModalType, data: ModalUnionData): void => {
+export const prepareModal = (type: ModalType, data?: ModalUnionData): void => {
     switch (type) {
         case 'deleteInfo': {
             deleteInfo.set(true);
@@ -79,6 +82,22 @@ export const prepareModal = (type: ModalType, data: ModalUnionData): void => {
         case 'deleteDistribution': {
             deleteDistribution.set(true);
             deleteDistributionData.set(data as DeleteDistributionData);
+
+            break;
+        }
+
+        case 'distDescEditor': {
+            distDescEditor.set(true);
+            distEditorData.set(data as DistEditorData);
+
+            break;
+        }
+
+        case 'distTitleEditor': {
+            distTitleEditor.set(true);
+            distEditorData.set(data as DistEditorData);
+
+            break;
         }
 
         default: {
@@ -99,6 +118,8 @@ export const closeModal = (): void => {
     rebuildClan.set(false);
     downloadBinary.set(false);
     deleteDistribution.set(false);
+    distDescEditor.set(false);
+    distTitleEditor.set(false);
 };
 
 /**

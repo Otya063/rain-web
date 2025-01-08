@@ -1,5 +1,5 @@
 import type { users } from '@prisma/client/edge';
-import type { Handle, RequestEvent } from '@sveltejs/kit';
+import type { Handle, HandleServerError, RequestEvent } from '@sveltejs/kit';
 import { ADMIN_CREDENTIALS, ADMIN_IP } from '$env/static/private';
 import { PUBLIC_MAIN_DOMAIN, PUBLIC_AUTH_DOMAIN } from '$env/static/public';
 import type { Locales } from '$i18n/i18n-types';
@@ -10,6 +10,15 @@ import { initAcceptLanguageHeaderDetector } from 'typesafe-i18n/detectors';
 
 loadAllLocales();
 const L = i18n();
+
+export const handleError: HandleServerError = async ({ error }) => {
+    const _error = error as any;
+    console.error(_error.stack);
+
+    return {
+        message: _error.stack?.split('\n')[0],
+    };
+};
 
 export const handle: Handle = async ({ event, resolve }) => {
     // Basic認証
@@ -25,15 +34,17 @@ export const handle: Handle = async ({ event, resolve }) => {
         }
     }
 
+    console.log(ADMIN_IP);
     if (event.platform?.env.MAINTENANCE_MODE === 'true' && event.url.pathname !== '/maintenance/') {
         const res = await fetch('https://api.ipify.org?format=json');
         const ip = (await res.json()).ip as string;
 
-        if (ADMIN_IP !== ip)
+        if (ADMIN_IP !== ip) {
             return new Response(null, {
                 status: 302,
                 headers: { Location: '/maintenance' },
             });
+        }
     }
 
     const [, lang] = event.url.pathname.split('/');

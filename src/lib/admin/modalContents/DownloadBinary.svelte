@@ -33,6 +33,11 @@
                 <p class="modal_note">* The total number of data is 14, but if the data size is "0" (doesn't exist in the database), it won't be included in the zip file.</p>
             </div>
             <div class="btn_group">
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
+                    <span class="btn_text">Close</span>
+                </button>
+
                 <button
                     class="blue_btn"
                     type="button"
@@ -40,7 +45,7 @@
                         onSubmit.set(true);
                         $timeOut && closeMsgDisplay($timeOut);
 
-                        result = (await downloadUserBinary(String($downloadBinaryData.char_id), $downloadBinaryData.char_name || 'unknown')) ? 'S' : 'E';
+                        result = (await downloadUserBinary(String($downloadBinaryData.charId), $downloadBinaryData.charName || 'unknown')) ? 'S' : 'E';
 
                         const form = document.querySelector<HTMLFormElement>('form[name="download"]');
                         if (form) {
@@ -52,11 +57,7 @@
                     }}
                 >
                     <span class="btn_icon material-symbols-outlined">check</span>
-                    <span class="btn_text">Yes</span>
-                </button>
-                <button class="red_btn" type="button" onclick={() => closeModal()}>
-                    <span class="btn_icon material-symbols-outlined">close</span>
-                    <span class="btn_text">No</span>
+                    <span class="btn_text">Download</span>
                 </button>
             </div>
         </form>

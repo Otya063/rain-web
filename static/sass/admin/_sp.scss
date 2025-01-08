@@ -136,6 +136,7 @@
                 margin: 12% 0 0 5%;
                 user-select: none;
 
+                // アイコン
                 .material-symbols-outlined {
                     position: absolute;
                     left: 0;
@@ -148,6 +149,11 @@
                     &.#{$infotype} {
                         color: $color;
                     }
+                }
+
+                // ボタン要素のヘルプボタン（カーソル調整）
+                button.help_btn {
+                    cursor: pointer;
                 }
             }
 
@@ -336,46 +342,10 @@
                             width: 100%;
                         }
 
-                        // 主にカラーコードを含む文字列編集用に使用する（Distribution.svelte）
-                        .contenteditable {
+                        // 主にカラーコードを含む文字列編集用に使用する（DistributionList.svelte）
+                        .preview_title {
                             color: #ffffff; // デフォルト色
                             background: #4d4d4dba;
-
-                            .white {
-                                color: #ffffff;
-                            }
-
-                            .black {
-                                color: #323232;
-                            }
-
-                            .red {
-                                color: #ff435d;
-                            }
-
-                            .green {
-                                color: #56ff56;
-                            }
-
-                            .cyan {
-                                color: #57ffff;
-                            }
-
-                            .yellow {
-                                color: #ffff50;
-                            }
-
-                            .orange {
-                                color: #fea461;
-                            }
-
-                            .pink {
-                                color: #ff84ff;
-                            }
-
-                            .blue {
-                                color: #4c49ef;
-                            }
                         }
                     }
 
@@ -638,58 +608,6 @@
                                 width: 40%;
                             }
                         }
-
-                        // カラーパレット（Distribution.svelte）
-                        .color_palette {
-                            display: grid;
-                            column-gap: 10px;
-                            grid-template-columns: repeat(3, 1fr);
-                            row-gap: 10px;
-                            margin-bottom: 15px;
-
-                            &_btn {
-                                width: 30px;
-                                height: 30px;
-                                border-radius: 20px;
-                                border: 2px solid black;
-
-                                &.white {
-                                    background: #ffffff;
-                                }
-
-                                &.black {
-                                    background: #323232;
-                                }
-
-                                &.red {
-                                    background: #ff435d;
-                                }
-
-                                &.green {
-                                    background: #56ff56;
-                                }
-
-                                &.cyan {
-                                    background: #57ffff;
-                                }
-
-                                &.yellow {
-                                    background: #ffff50;
-                                }
-
-                                &.orange {
-                                    background: #fea461;
-                                }
-
-                                &.pink {
-                                    background: #ff84ff;
-                                }
-
-                                &.blue {
-                                    background: #4c49ef;
-                                }
-                            }
-                        }
                     }
 
                     // 管理者コントロールパネル
@@ -720,6 +638,24 @@
                         display: flex;
                         justify-content: center;
                     }
+                }
+            }
+
+            // 配布コンテンツ編集用（DistributionList.svelte）
+            &.dist_list {
+                height: 60vh;
+                padding: 4px 11px;
+                box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5) inset;
+                margin: 10px 0;
+                user-select: none;
+
+                // スクロールバー非表示
+                .v-scrollbar {
+                    display: none;
+                }
+
+                @include landscape {
+                    height: 70vh;
                 }
             }
         }
@@ -1574,18 +1510,22 @@
     // 配布コンテンツデータ
     .dist_contents_data {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        justify-content: space-evenly;
         align-items: center;
         border-top: 2px dashed #a49b95;
-        height: 14vh;
+        height: 20vh;
 
         @include landscape {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
             height: 25vh;
             padding: 3% 0;
         }
 
-        // 最初の要素はボーダーなし（実際には追加ボタンが初めに来るのでfirst-childは使えない）
-        &:nth-child(2) {
+        // 最初の要素はボーダーなし
+        &:first-child {
             border: none;
         }
 
@@ -1625,6 +1565,57 @@
         }
     }
 
+    // カラーパレット（DistributionList.svelte）
+    .color_palette {
+        display: grid;
+        column-gap: 10px;
+        grid-template-columns: repeat(5, 1fr);
+        row-gap: 10px;
+        margin-bottom: 15px;
+
+        &_btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 20px;
+            border: 2px solid black;
+
+            &.white {
+                background: #ffffff;
+            }
+
+            &.black {
+                background: #323232;
+            }
+
+            &.red {
+                background: #ff435d;
+            }
+
+            &.green {
+                background: #56ff56;
+            }
+
+            &.cyan {
+                background: #57ffff;
+            }
+
+            &.yellow {
+                background: #ffff50;
+            }
+
+            &.orange {
+                background: #fea461;
+            }
+
+            &.pink {
+                background: #ff84ff;
+            }
+
+            &.blue {
+                background: #4c49ef;
+            }
+        }
+    }
     /* 数値入力カスタムコンポーネント
 ========================================================= */
     // 数値入力エリア
@@ -1698,6 +1689,19 @@
                 text-align: left;
                 padding: 10px 20px;
                 transition: all 0.2s;
+            }
+
+            // svrollbar用スクロール調整（配布物追加）
+            .svlr-viewport,
+            .svlr-wrapper {
+                height: auto !important;
+                max-height: 250px !important;
+            }
+
+            // svrollbar用リストアイテム並び調整（配布物追加）
+            .svlr-contents {
+                display: flex;
+                flex-direction: column;
             }
         }
     }

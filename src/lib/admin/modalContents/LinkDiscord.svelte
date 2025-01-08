@@ -57,9 +57,9 @@
                 };
             }}
         >
-            <input type="hidden" name="user_id" value={$linkDiscordData.user_id} />
-            <input type="hidden" name="char_id" value={$linkDiscordData.char_id} />
-            <input type="hidden" name="type" value={$linkDiscordData.form_action} />
+            <input type="hidden" name="user_id" value={$linkDiscordData.userId} />
+            <input type="hidden" name="char_id" value={$linkDiscordData.charId} />
+            <input type="hidden" name="type" value={$linkDiscordData.formAction} />
 
             <div class="modal_header">
                 <h1>Link / Unlink Discord</h1>
@@ -74,36 +74,36 @@
 
                     <li class="modal_list_item">
                         <p>Character ID</p>
-                        <span>{$linkDiscordData.char_id}</span>
+                        <span>{$linkDiscordData.charId}</span>
                     </li>
 
                     <li class="modal_list_item">
                         <p>Character Name</p>
-                        <span>{$linkDiscordData.char_name || 'Ready to Hunt'}</span>
+                        <span>{$linkDiscordData.charName || 'Ready to Hunt'}</span>
                     </li>
 
-                    {#if $linkDiscordData.form_action === 'linkDiscord'}
+                    {#if $linkDiscordData.formAction === 'linkDiscord'}
                         <li class="modal_list_item">
                             <p>Discord ID</p>
                             <input type="text" name="discord_id" />
                         </li>
-                    {:else if $linkDiscordData.form_action === 'unlinkDiscord'}
-                        <input type="hidden" name="discord_id" value={$linkDiscordData.discord_id} />
+                    {:else if $linkDiscordData.formAction === 'unlinkDiscord'}
+                        <input type="hidden" name="discord_id" value={$linkDiscordData.discordId} />
                         <li class="modal_list_item">
                             <p>Discord ID</p>
-                            <span>{$linkDiscordData.discord_id}</span>
+                            <span>{$linkDiscordData.discordId}</span>
                         </li>
                     {/if}
                 </ul>
 
-                {#if $linkDiscordData.form_action === 'linkDiscord'}
+                {#if $linkDiscordData.formAction === 'linkDiscord'}
                     <p class="modal_note">
                         * If discord ID you entered is already linked to another character and account, the internal data (bounty coins, bounty progress, etc.) will be transferred and re-linked to the
                         target character and account.
                     </p>
                     <p class="modal_note">* To switch/re-link character within a linked user account, the same discord ID must be entered.</p>
                     <p class="modal_note">* Empty isn't allowed for "Discord ID."</p>
-                {:else if $linkDiscordData.form_action === 'unlinkDiscord'}
+                {:else if $linkDiscordData.formAction === 'unlinkDiscord'}
                     <p class="modal_note">
                         * Once the account is unlinked, all internal data (bounty coins, bounty progress, etc.) will be deleted completely. If you want to re-link another character and account, please
                         execute the process from the "Link" button.
@@ -111,9 +111,14 @@
                 {/if}
             </div>
             <div class="btn_group">
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
+                    <span class="btn_text">Close</span>
+                </button>
+
                 <button
                     class="blue_btn"
-                    formaction="?/{$linkDiscordData.form_action}"
+                    formaction="?/{$linkDiscordData.formAction}"
                     type="submit"
                     onclick={() => {
                         onSubmit.set(true);
@@ -121,11 +126,7 @@
                     }}
                 >
                     <span class="btn_icon material-symbols-outlined">check</span>
-                    <span class="btn_text">Yes</span>
-                </button>
-                <button class="red_btn" type="button" onclick={() => closeModal()}>
-                    <span class="btn_icon material-symbols-outlined">close</span>
-                    <span class="btn_text">No</span>
+                    <span class="btn_text">{$linkDiscordData.formAction === 'linkDiscord' ? 'Link' : 'Unlink'}</span>
                 </button>
             </div>
         </form>

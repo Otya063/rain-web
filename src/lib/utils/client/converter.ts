@@ -527,12 +527,13 @@ export const secToTime = (seconds: number): string => {
 };
 
 /**
- * カラーコード付き文字列をtypeに応じて変換する
- * @param {'colorCode' | 'colorTag' | 'html'} type 文字列がどのように変換されるか
+ * カラー付き文字列をtypeに応じて変換する
+ * @param {'colorNum' | 'colorTag' | 'html'} type 文字列がどのように変換されるか
  * @param {string} input 変換対象の文字列
+ * @param {'event_name' | 'description'} useFor 何用に使用するのか（タイトルと説明文でカラーパレットの使用可能領域が異なるため）
  * @returns {string} 変換後の文字列
  */
-export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', input: string): string => {
+export const convertColorString = (type: 'colorNum' | 'colorTag' | 'html', input: string, useFor: 'event_name' | 'description'): string => {
     if (type === 'html' && input.includes('<Color')) {
         // colorTag形式をhtml形式に変換
         const regex = /<Color(\d{2}) \/>/g;
@@ -544,7 +545,7 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
         let match: RegExpExecArray | null;
         while ((match = regex.exec(input)) !== null) {
             const [_, code] = match;
-            const spanClass = getColorNameByColorCode(code);
+            const colorCode = getColorCodeByColorNum(code);
             const textStart = regex.lastIndex; // タグの直後がテキストの開始位置
 
             // 前回のマッチ後のテキストを処理
@@ -556,7 +557,7 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
             }
 
             // 新しい<span>を開く
-            currentSpan = `<span class='${spanClass}'>`;
+            currentSpan = `<span style='color: #${colorCode};'>`;
             result += currentSpan;
 
             // 次の処理用にインデックスを更新
@@ -573,7 +574,7 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
 
         return result;
     } else if ((type === 'html' && !input.includes('<Color')) || type === 'colorTag') {
-        // colorCode形式をhtml形式もしくはcolorTag形式に変換
+        // colorNum形式をhtml形式もしくはcolorTag形式に変換
         // 正規表現を用いて ~C○○ を抽出する
         const regex = /~C(\d{2})([^\~]*)/g;
 
@@ -589,7 +590,7 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
         // 「~C○○」パターンを処理
         while ((match = regex.exec(input)) !== null) {
             const [_, code, text] = match;
-            const spanClass = getColorNameByColorCode(code);
+            const colorCode = getColorCodeByColorNum(code);
 
             // テキストが存在する場合のみ処理
             if (text.trim()) {
@@ -599,8 +600,11 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
                 }
 
                 // 現在のマッチ部分を追加
-                const validColorCodes = ['00', '01', '02', '03', '04', '05', '06', '07', '16'];
-                result += type === 'html' ? `<span class='${spanClass}'>${text}</span>` : `<Color${validColorCodes.includes(code) ? code : '00'} />${text}`;
+                const validColorNum =
+                    useFor === 'event_name'
+                        ? ['00', '01', '02', '03', '04', '05', '06', '07', '16']
+                        : ['00', '32', '01', '33', '02', '34', '03', '35', '04', '36', '05', '37', '06', '38', '07', '39', '16', '48'];
+                result += type === 'html' ? `<span style='color: #${colorCode};'>${text}</span>` : `<Color${validColorNum.includes(code) ? code : '00'} />${text}`;
             }
 
             lastIndex = regex.lastIndex;
@@ -611,14 +615,25 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
             result += input.slice(lastIndex);
         }
 
+        // 改行コードは<br>に変換
+        result = result.replace(/(\r\n|\r|\n)/g, '<br>');
+
+        // HTML文字列内のテキスト部分のみ半角スペースを「&nbsp;」に置換（エディター内部での半角スペース非表示問題対応のため）
+        type === 'html' && (result = replaceSpacesInTextNodes(result));
+
         return result;
-    } else if (type === 'colorCode') {
-        // colorTag形式をcolorCode形式に変換
+    } else if (type === 'colorNum' && input.includes('<Color')) {
+        // colorTag形式をcolorNum形式に変換
         const regex = /<Color(\d{2}) \/>/g;
 
         let result = '';
-        let colorCode: string | null = null; // カラーコード
+        let colorNum: string | null = null; // カラーコード
         let lastIndex = 0; // 前回のマッチ位置
+
+        // 先頭に「<Color○○ />」がない場合（エディターがないモバイル端末からの操作で想定される）、自動的に「<Color00 />」があるものとして扱う
+        if (!input.startsWith('<Color')) {
+            input = `<Color00 />${input}`;
+        }
 
         let match: RegExpExecArray | null;
         while ((match = regex.exec(input)) !== null) {
@@ -630,16 +645,19 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
 
             if (text.trim()) {
                 // テキストが存在する場合、現在のカラーコードで追加
-                if (colorCode !== null) {
-                    result += `~C${colorCode}`;
+                if (colorNum !== null) {
+                    result += `~C${colorNum}`;
                 }
 
                 result += text;
             }
 
             // カラーコード設定
-            const validColorCodes = ['00', '01', '02', '03', '04', '05', '06', '07', '16'];
-            colorCode = validColorCodes.includes(code) ? code : '00'; // 無効なカラーコードの場合、デフォルトの白に
+            const validColorNum =
+                useFor === 'event_name'
+                    ? ['00', '01', '02', '03', '04', '05', '06', '07', '16']
+                    : ['00', '32', '01', '33', '02', '34', '03', '35', '04', '36', '05', '37', '06', '38', '07', '39', '16', '48'];
+            colorNum = validColorNum.includes(code) ? code : '00'; // 無効なカラーコードの場合、デフォルトの白に
 
             // 次の処理のためにインデックスを更新
             lastIndex = regex.lastIndex;
@@ -648,8 +666,8 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
         // 最後のテキストを処理
         const remainingText = input.slice(lastIndex);
         if (remainingText.trim()) {
-            if (colorCode !== null) {
-                result += `~C${colorCode}`;
+            if (colorNum !== null) {
+                result += `~C${colorNum}`;
             }
 
             result += remainingText;
@@ -661,56 +679,147 @@ export const convertColorCodeString = (type: 'colorCode' | 'colorTag' | 'html', 
         }
 
         return result;
+    } else if (type === 'colorNum' && !input.includes('<Color')) {
+        // html形式をcolorNum形式に変換
+
+        // 先頭に「~C○○」がない場合（エディターがないモバイル端末からの操作で想定される）、自動的に「~C00」があるものとして扱う
+        if (!input.startsWith('~C') && !input.includes('<span')) {
+            input = `~C00${input}`;
+        }
+
+        // <span>タグを「~C**」に置換
+        let result = input
+            .replace(/<span\s+[^>]*style=["'][^>]*color:\s*([^;]+);?["'][^>]*>/g, (_, colorCode) => {
+                const colorNum = getColorNumByColorCode(colorCode);
+                return `~C${colorNum}`;
+            })
+            .replace(/<\/span>/g, '');
+
+        // <br>タグを改行文字「\n」に変換
+        result = result.replace(/<br\s*\/?>/g, '\n');
+
+        // 改行文字の後にテキストがない場合、改行文字を削除
+        result = result.replace(/\n+$/, '');
+
+        // テキストが「~C00」で終わっていることを確認
+        if (!result.endsWith('~C00')) {
+            result += '~C00';
+        }
+
+        return result;
     } else {
         return '';
     }
 };
 
 /**
- * ゲーム内で使用されるカラーコードから各色のクラス名を取得する
- * @param {string} code カラーコード
- * @returns {string} 色を示すクラス名
+ * ゲーム内で使用されるカラーナンバ－から各色のカラーコードを取得する\
+ * 配布セクションでは、タイトル用は上caseのみ、説明文用は上下case使用可能
+ * @param {string} code カラーナンバ－
+ * @returns {string} カラーコード
  */
-export const getColorNameByColorCode = (code: string): string => {
+const getColorCodeByColorNum = (code: string): string => {
     switch (code) {
-        case '00': {
-            return 'white'; // ffffff
+        case '00':
+        case '32': {
+            return 'ffffff'; // white
         }
 
-        case '01': {
-            return 'black'; // 323232
+        case '01':
+        case '33': {
+            return '323232'; // black
         }
 
-        case '02': {
-            return 'red'; // ff435d
+        case '02':
+        case '34': {
+            return 'ff435d'; // red
         }
 
-        case '03': {
-            return 'green'; // 56ff56
+        case '03':
+        case '35': {
+            return '56ff56'; // green
         }
 
-        case '04': {
-            return 'cyan'; // 57ffff
+        case '04':
+        case '36': {
+            return '57ffff'; // cyan
         }
 
-        case '05': {
-            return 'yellow'; // ffff50
+        case '05':
+        case '37': {
+            return 'ffff50'; // yellow
         }
 
-        case '06': {
-            return 'orange'; // fea461
+        case '06':
+        case '38': {
+            return 'fea461'; // orange
         }
 
-        case '07': {
-            return 'pink'; // ff84ff
+        case '07':
+        case '39': {
+            return 'ff84ff'; // pink
         }
 
-        case '16': {
-            return 'blue'; // 4c49ef
+        case '16':
+        case '48': {
+            return '4c49ef'; // blue
         }
 
         default: {
-            return 'white'; // ffffff
+            return 'ffffff'; // white
         }
     }
+};
+
+/**
+ * 各色のカラーコードからゲーム内で使用されるカラーナンバ－を取得する
+ * @param {string} colorCode カラーコード
+ * @returns {string} カラーナンバ－
+ */
+const getColorNumByColorCode = (colorCode: string): string => {
+    const colorMapping: Record<string, string> = {
+        '#ffffff': '00',
+        '#323232': '01',
+        '#ff435d': '02',
+        '#56ff56': '03',
+        '#57ffff': '04',
+        '#ffff50': '05',
+        '#fea461': '06',
+        '#ff84ff': '07',
+        '#4c49ef': '16',
+    };
+
+    return colorMapping[colorCode.toLowerCase()] || '00'; // デフォルト値は白色「00」
+};
+
+/**
+ * HTML文字列のテキストノード内の半角スペースを全て「\&nbsp;」に置換する
+ * @param {string} htmlString 変換元HTML文字列
+ * @returns {string} 変換後HTML文字列
+ */
+const replaceSpacesInTextNodes = (htmlString: string): string => {
+    // HTML文字列をDOM構造解析
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(htmlString, 'text/html');
+    const body = doc.body;
+
+    /**
+     * テキストノードのスペースを置換するため、ノードを再帰処理
+     *
+     * @param {Node} node 現在処理中のDOMノード
+     */
+    const replaceSpaces = (node: Node): void => {
+        if (node.nodeType === Node.TEXT_NODE) {
+            // 半角スペースを改行なしのスペース「&nbsp;」に置換
+            node.nodeValue = node.nodeValue?.replace(/ /g, '\u00A0') || null;
+        } else if (node.nodeType === Node.ELEMENT_NODE) {
+            // 子ノードを再帰処理
+            Array.from(node.childNodes).forEach(replaceSpaces);
+        }
+    };
+
+    // bodyから処理を開始
+    replaceSpaces(body);
+
+    return body.innerHTML;
 };

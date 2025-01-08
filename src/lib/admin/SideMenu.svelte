@@ -19,7 +19,7 @@
             text: 'Users & Characters',
             icon: 'person',
         },
-        bnr: {
+        banner: {
             text: 'Launcher Banner',
             icon: 'ad_group',
         },

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Editor from '@tinymce/tinymce-svelte';
     import type { ActionData, PageData } from './$types';
     import _ from 'lodash';
     import { onMount } from 'svelte';
@@ -21,6 +22,7 @@
     let bnrAddMode = $state(false);
     let isMobile = $state(false);
     const width: Tweened<number> = tweened(100);
+    let distAddMode = $state(false);
 
     onMount(() => {
         loaded = true;
@@ -218,7 +220,7 @@
             <span class="material-symbols-outlined">admin_panel_settings</span>
             Admin Console
 
-            {#if $adminTabValue === 'bnr' && !bnrAddMode}
+            {#if $adminTabValue === 'banner' && !bnrAddMode}
                 <button class="green_btn" onclick={() => (bnrAddMode = true)}>
                     <span class="btn_icon material-symbols-outlined">add</span>
                     <span class="btn_text">Add Banner</span>
@@ -228,10 +230,15 @@
                     <span class="btn_icon material-symbols-outlined">add</span>
                     <span class="btn_text">Add Info</span>
                 </button>
+            {:else if $adminTabValue === 'distribution' && !distAddMode}
+                <button class="green_btn" type="button" onclick={() => (distAddMode = true)}>
+                    <span class="btn_icon material-symbols-outlined">add</span>
+                    <span class="btn_text">Add Distribution</span>
+                </button>
             {/if}
         </h1>
 
-        <Main bind:infoAddMode bind:bnrAddMode {data} {form} {isMobile} />
+        <Main bind:infoAddMode bind:bnrAddMode {data} {form} {isMobile} bind:distAddMode />
     </article>
 </main>
 
@@ -243,3 +250,10 @@
         </p>
     </section>
 </footer>
+
+<!-- DistributionEditor.svelte用、エディター事前読み込み -->
+{#if !isMobile}
+    <div hidden>
+        <Editor apiKey="51d2rj7t18vzap70f8gvcrrkeuigsrtlke8xckmwk455ozjw" />
+    </div>
+{/if}

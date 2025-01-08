@@ -43,9 +43,9 @@
                 };
             }}
         >
-            <input type="hidden" name="char_id" value={$deleteCharacterData.char_id} />
-            <input type="hidden" name="char_name" value={$deleteCharacterData.char_name} />
-            <input type="hidden" name="type" value={$deleteCharacterData.form_action} />
+            <input type="hidden" name="char_id" value={$deleteCharacterData.charId} />
+            <input type="hidden" name="char_name" value={$deleteCharacterData.charName} />
+            <input type="hidden" name="type" value={$deleteCharacterData.formAction} />
 
             <div class="modal_header">
                 <h1>Delete / Restore Character</h1>
@@ -55,15 +55,15 @@
                 <ul class="modal_list">
                     <li class="modal_list_item">
                         <p>Character ID</p>
-                        <span>{$deleteCharacterData.char_id}</span>
+                        <span>{$deleteCharacterData.charId}</span>
                     </li>
 
                     <li class="modal_list_item">
                         <p>Character Name</p>
-                        <span>{$deleteCharacterData.char_name}</span>
+                        <span>{$deleteCharacterData.charName}</span>
                     </li>
 
-                    {#if $deleteCharacterData.form_action === 'deleteCharacter'}
+                    {#if $deleteCharacterData.formAction === 'deleteCharacter'}
                         <li class="modal_list_item">
                             <label>
                                 <p>Permanently Delete</p>
@@ -82,15 +82,20 @@
                     {/if}
                 </ul>
 
-                {#if $deleteCharacterData.form_action === 'deleteCharacter'}
+                {#if $deleteCharacterData.formAction === 'deleteCharacter'}
                     <p class="modal_note">* If the character to be deleted is linked to a discord account, the account linkage will be purged.</p>
                     <p class="modal_note">* If "Permanently Delete" is checked, all character data will be completely deleted from the database and can't be restored.</p>
                 {/if}
             </div>
             <div class="btn_group">
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
+                    <span class="btn_text">Close</span>
+                </button>
+
                 <button
                     class="blue_btn"
-                    formaction="?/{$deleteCharacterData.form_action}"
+                    formaction="?/{$deleteCharacterData.formAction}"
                     type="submit"
                     onclick={() => {
                         onSubmit.set(true);
@@ -98,11 +103,7 @@
                     }}
                 >
                     <span class="btn_icon material-symbols-outlined">check</span>
-                    <span class="btn_text">Yes</span>
-                </button>
-                <button class="red_btn" type="button" onclick={() => closeModal()}>
-                    <span class="btn_icon material-symbols-outlined">close</span>
-                    <span class="btn_text">No</span>
+                    <span class="btn_text">Delete</span>
                 </button>
             </div>
         </form>

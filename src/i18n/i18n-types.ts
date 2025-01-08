@@ -1536,7 +1536,7 @@ type RootTranslation = {
 			 */
 			message1: string
 			/**
-			 * P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​a​f​t​e​r​ ​a​ ​w​h​i​l​e​.
+			 * I​f​ ​t​h​i​s​ ​k​e​e​p​s​ ​h​a​p​p​e​n​i​n​g​ ​e​v​e​n​ ​a​f​t​e​r​ ​r​e​f​r​e​s​h​i​n​g​ ​t​h​e​ ​p​a​g​e​,​<​b​r​>​t​r​y​ ​a​c​c​e​s​s​i​n​g​ ​t​h​e​ ​p​a​g​e​ ​a​ ​f​e​w​ ​m​o​m​e​n​t​s​ ​l​a​t​e​r​.
 			 */
 			message3: string
 		}
@@ -3081,7 +3081,7 @@ export type TranslationFunctions = {
 			 */
 			message1: () => LocalizedString
 			/**
-			 * Please try again after a while.
+			 * If this keeps happening even after refreshing the page,<br>try accessing the page a few moments later.
 			 */
 			message3: () => LocalizedString
 		}

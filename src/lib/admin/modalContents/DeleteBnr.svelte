@@ -24,41 +24,42 @@
                 };
             }}
         >
-            <input type="hidden" name="bnr_id" value={$deleteBnrData.bnr_id} />
-            <input type="hidden" name="bnr_name" value={$deleteBnrData.bnr_name} />
+            <input type="hidden" name="bnr_id" value={$deleteBnrData.bnrId} />
+            <input type="hidden" name="bnr_name" value={$deleteBnrData.bnrName} />
             <div class="modal_header">
                 <h1>Delete Banner Data</h1>
             </div>
             <div class="modal_body">
                 <p>{$deleteBnrData.title}</p>
                 <ul class="modal_list">
-                    <button class="modal_list_item" type="button" onclick={() => window.open($deleteBnrData.bnr_url, '_blank')}>
+                    <button class="modal_list_item" type="button" onclick={() => window.open($deleteBnrData.bnrUrl, '_blank')}>
                         <p>Preview<span class="material-symbols-outlined">open_in_new</span></p>
-                        <img src={$deleteBnrData.bnr_url} alt={$deleteBnrData.bnr_name} />
+                        <img src={$deleteBnrData.bnrUrl} alt={$deleteBnrData.bnrName} />
                     </button>
 
                     <li class="modal_list_item">
                         <p>Name</p>
-                        <span>{$deleteBnrData.bnr_name}</span>
+                        <span>{$deleteBnrData.bnrName}</span>
                     </li>
                 </ul>
             </div>
             <div class="btn_group">
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
+                    <span class="btn_text">Close</span>
+                </button>
+
                 <button
                     class="blue_btn"
                     type="submit"
-                    formaction="?/{$deleteBnrData.form_action}"
+                    formaction="?/{$deleteBnrData.formAction}"
                     onclick={() => {
                         onSubmit.set(true);
                         $timeOut && closeMsgDisplay($timeOut);
                     }}
                 >
                     <span class="btn_icon material-symbols-outlined">check</span>
-                    <span class="btn_text">Yes</span>
-                </button>
-                <button class="red_btn" type="button" onclick={() => closeModal()}>
-                    <span class="btn_icon material-symbols-outlined">close</span>
-                    <span class="btn_text">No</span>
+                    <span class="btn_text">Delete</span>
                 </button>
             </div>
         </form>

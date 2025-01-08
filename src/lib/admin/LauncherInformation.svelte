@@ -72,7 +72,6 @@
 
     <div class="console_contents">
         <form
-            class="info_add_form"
             action="?/createInfoData"
             method="POST"
             use:enhance={() => {
@@ -127,6 +126,11 @@
             </dl>
 
             <div class="group_btns">
+                <button class="red_btn" type="button" onclick={() => (infoAddMode = false)}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
+                    <span class="btn_text">Cancel</span>
+                </button>
+                
                 <button
                     class="blue_btn"
                     type="submit"
@@ -137,11 +141,6 @@
                 >
                     <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Save</span>
-                </button>
-
-                <button class="red_btn" type="button" onclick={() => (infoAddMode = false)}>
-                    <span class="btn_icon material-symbols-outlined">close</span>
-                    <span class="btn_text">Cancel</span>
                 </button>
             </div>
         </form>
@@ -213,15 +212,15 @@
                                 onclick={() =>
                                     prepareModal('deleteInfo', {
                                         title: 'Delete the following information?',
-                                        form_action: 'deleteInfoData',
-                                        info_id: info.id,
-                                        info_title: info.title,
-                                        info_url: info.url,
-                                        info_created_at: DateTime.fromJSDate(info.created_at)
+                                        formAction: 'deleteInfoData',
+                                        infoId: info.id,
+                                        infoTitle: info.title,
+                                        infoUrl: info.url,
+                                        createdAt: DateTime.fromJSDate(info.created_at)
                                             .setZone(DateTime.local().zoneName)
                                             .setLocale('en')
                                             .toLocaleString({ year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
-                                        info_type: info.type,
+                                        infoType: info.type,
                                     })}
                             >
                                 <span class="btn_icon material-symbols-outlined">delete</span>

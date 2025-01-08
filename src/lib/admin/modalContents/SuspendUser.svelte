@@ -9,7 +9,7 @@
     }
     let { suspendedAccount }: Props = $props();
     let permanent: boolean = $state(false);
-    let stage = $state($suspendUserData.form_action === 'unsuspendUser' ? 2 : 1);
+    let stage = $state($suspendUserData.formAction === 'unsuspendUser' ? 2 : 1);
     let actionType = $state('suspend');
 </script>
 
@@ -41,16 +41,21 @@
             </div>
 
             <div class="btn_group">
+                <button class="red_btn" type="button" onclick={() => closeModal()}>
+                    <span class="btn_icon material-symbols-outlined">close</span>
+                    <span class="btn_text">Close</span>
+                </button>
+
                 <button
                     class="blue_btn"
                     type="button"
                     onclick={() => {
                         if (actionType === 'suspend') {
                             $suspendUserData.title = 'Suspend the following user?';
-                            $suspendUserData.form_action = 'suspendUser';
+                            $suspendUserData.formAction = 'suspendUser';
                         } else {
                             $suspendUserData.title = 'Delete the following user?';
-                            $suspendUserData.form_action = 'deleteUser';
+                            $suspendUserData.formAction = 'deleteUser';
                         }
 
                         stage = 2;
@@ -58,10 +63,6 @@
                 >
                     <span class="btn_icon material-symbols-outlined">check</span>
                     <span class="btn_text">Confirm</span>
-                </button>
-                <button class="red_btn" type="button" onclick={() => closeModal()}>
-                    <span class="btn_icon material-symbols-outlined">close</span>
-                    <span class="btn_text">Close</span>
                 </button>
             </div>
         {:else if stage === 2 && actionType === 'suspend'}
@@ -107,7 +108,7 @@
                     };
                 }}
             >
-                <input type="hidden" name="type" value={$suspendUserData.form_action} />
+                <input type="hidden" name="type" value={$suspendUserData.formAction} />
                 <input type="hidden" name="zoneName" value={DateTime.local().zoneName} />
 
                 <div class="modal_header">
@@ -119,8 +120,8 @@
                     <ul class="modal_list">
                         <li class="modal_list_item">
                             <p>User ID</p>
-                            <span>{$suspendUserData.user_id}</span>
-                            <input type="hidden" name="user_id" value={$suspendUserData.user_id} />
+                            <span>{$suspendUserData.userId}</span>
+                            <input type="hidden" name="user_id" value={$suspendUserData.userId} />
                         </li>
 
                         <li class="modal_list_item">
@@ -132,13 +133,13 @@
                         <li class="modal_list_item">
                             <p>Owned Character Name</p>
                             <span>
-                                {#each $suspendUserData.char_name as name, i}
+                                {#each $suspendUserData.charName as name, i}
                                     ({i + 1}){`${name}　`}
                                 {/each}
                             </span>
                         </li>
 
-                        {#if $suspendUserData.form_action === 'suspendUser'}
+                        {#if $suspendUserData.formAction === 'suspendUser'}
                             <li class="modal_list_item">
                                 <p>Reason</p>
                                 <select name="reason_type" required>
@@ -176,7 +177,7 @@
                             <li class="modal_list_item">
                                 <p>Suspention Period (until at)</p>
                                 <span>
-                                    {DateTime.fromJSDate(!$suspendUserData.until_at ? new Date(0) : $suspendUserData.until_at)
+                                    {DateTime.fromJSDate(!$suspendUserData.untilAt ? new Date(0) : $suspendUserData.untilAt)
                                         .setZone(DateTime.local().zoneName)
                                         .setLocale('en')
                                         .toLocaleString({
@@ -191,7 +192,7 @@
                         {/if}
                     </ul>
 
-                    {#if $suspendUserData.form_action === 'suspendUser'}
+                    {#if $suspendUserData.formAction === 'suspendUser'}
                         <p class="modal_note">* Empty isn't allowed for "Reason" and "Suspention Period (when "Permanently Suspend" is unchecked)."</p>
                         <p class="modal_note">
                             * If "Permanently Suspend" is checked, the user account, including all character data, will be completely deleted from our database and can't be restored. Otherwise, they
@@ -201,9 +202,14 @@
                     {/if}
                 </div>
                 <div class="btn_group">
+                    <button class="red_btn" type="button" onclick={() => (stage = 1)}>
+                        <span class="btn_icon material-symbols-outlined">arrow_back</span>
+                        <span class="btn_text">Back</span>
+                    </button>
+
                     <button
                         class="blue_btn"
-                        formaction="?/{$suspendUserData.form_action}"
+                        formaction="?/{$suspendUserData.formAction}"
                         type="submit"
                         onclick={() => {
                             onSubmit.set(true);
@@ -211,11 +217,7 @@
                         }}
                     >
                         <span class="btn_icon material-symbols-outlined">check</span>
-                        <span class="btn_text">Yes</span>
-                    </button>
-                    <button class="red_btn" type="button" onclick={() => (stage = 1)}>
-                        <span class="btn_icon material-symbols-outlined">arrow_back</span>
-                        <span class="btn_text">Back</span>
+                        <span class="btn_text">{$suspendUserData.formAction === 'suspendUser' ? 'Suspend' : 'Unuspend'}</span>
                     </button>
                 </div>
             </form>
@@ -257,8 +259,8 @@
                     <ul class="modal_list">
                         <li class="modal_list_item">
                             <p>User ID</p>
-                            <span>{$suspendUserData.user_id}</span>
-                            <input type="hidden" name="user_id" value={$suspendUserData.user_id} />
+                            <span>{$suspendUserData.userId}</span>
+                            <input type="hidden" name="user_id" value={$suspendUserData.userId} />
                         </li>
 
                         <li class="modal_list_item">
@@ -272,9 +274,14 @@
                     <p class="modal_note">* After a successful process, the search results will be reset.</p>
                 </div>
                 <div class="btn_group">
+                    <button class="red_btn" type="button" onclick={() => (stage = 1)}>
+                        <span class="btn_icon material-symbols-outlined">arrow_back</span>
+                        <span class="btn_text">Back</span>
+                    </button>
+
                     <button
                         class="blue_btn"
-                        formaction="?/{$suspendUserData.form_action}"
+                        formaction="?/{$suspendUserData.formAction}"
                         type="submit"
                         onclick={() => {
                             onSubmit.set(true);
@@ -282,11 +289,7 @@
                         }}
                     >
                         <span class="btn_icon material-symbols-outlined">check</span>
-                        <span class="btn_text">Yes</span>
-                    </button>
-                    <button class="red_btn" type="button" onclick={() => (stage = 1)}>
-                        <span class="btn_icon material-symbols-outlined">arrow_back</span>
-                        <span class="btn_text">Back</span>
+                        <span class="btn_text">Delete</span>
                     </button>
                 </div>
             </form>

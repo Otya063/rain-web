@@ -37,6 +37,7 @@
 	"dependencies": {
 		"@prisma/client": "^5.22.0",
 		"@prisma/extension-accelerate": "^1.2.1",
+		"@tinymce/tinymce-svelte": "^3.0.0",
 		"encoding-japanese": "^2.2.0",
 		"lodash": "^4.17.21",
 		"luxon": "^3.5.0",

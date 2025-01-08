@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 import { Buffer } from 'node:buffer'; // Node.jsとの互換性により、追加しないと「ReferenceError: Buffer is not defined」が発生する
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
 import { DistributionTypeObj, type BinaryTypes, type Distribution, type DistributionTypeName, type R2AssetsJsonData } from '$types';
-import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi, isNumber, convertColorCodeString, convHrToHrp, ManageDistribution } from '$utils/client';
+import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi, isNumber, convertColorString, convHrToHrp, ManageDistribution } from '$utils/client';
 import ServerData, { db, editName, getPaginatedAllianceData, getPaginatedClanData, getPaginatedUserData, getPaginationMeta, IsCharLogin, ManageBinary } from '$utils/server';
 
 const emptyMsg = 'Input value is empty.';
@@ -151,7 +151,7 @@ const createInfoData: Action = async ({ request }) => {
 
         return {
             success: true,
-            message: `The information data (ID: ${createdInfo.id}) has been successfully created.`,
+            message: `The information data (Title: ${createdInfo.title}) has been successfully created.`,
             createdInfo,
         };
     } catch (err) {
@@ -719,7 +719,7 @@ const deleteUser: Action = async ({ request }) => {
 
         return {
             success: true,
-            message: `The user account (Username: ${username}) was successfully deleted.`,
+            message: `The user account (Username: ${username}) has been successfully deleted.`,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -754,7 +754,7 @@ const suspendUser: Action = async ({ request }) => {
     } else {
         return {
             success: true,
-            message: `The user account (Username: ${username}) was successfully suspended. (Restorable)`,
+            message: `The user account (Username: ${username}) has been successfully suspended. (Restorable)`,
             suspendedAccount,
         };
     }
@@ -770,7 +770,7 @@ const unsuspendUser: Action = async ({ request }) => {
     } else {
         return {
             success: true,
-            message: `The user account (Username: ${username}) was successfully unsuspended.`,
+            message: `The user account (Username: ${username}) has been successfully unsuspended.`,
         };
     }
 };
@@ -818,7 +818,7 @@ const createBnrData: Action = async ({ request, url }) => {
             },
         });
 
-        return { success: true, message: `The banner data (Banner Name: ${bnr_name}) was successfully created.`, createdBnr };
+        return { success: true, message: `The banner data (Banner Name: ${bnr_name}) has been successfully created.`, createdBnr };
     } catch (err) {
         if (err instanceof Error) {
             return fail(400, { error: true, message: err.message });
@@ -1248,7 +1248,7 @@ const downloadBinary: Action = async ({ request }) => {
 const updateDistributionData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.dist_id);
-    const zonename = data.zonename;
+    const zonename = data?.zonename;
     const column = Object.keys(data)[1] as keyof Omit<Distribution, 'id'>;
     const value = Object.values(data)[1] as string | null;
 
@@ -1265,7 +1265,6 @@ const updateDistributionData: Action = async ({ request }) => {
     }
 
     try {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         if (column !== 'data') {
             await db.distribution.update({
                 where: {
@@ -1278,8 +1277,8 @@ const updateDistributionData: Action = async ({ request }) => {
                                   const _value = value as DistributionTypeName;
                                   return DistributionTypeObj[_value];
                               })()
-                            : column === 'event_name'
-                              ? convertColorCodeString('colorCode', value!) // ゲーム内カラーコードに変換
+                            : column === 'event_name' || column === 'description'
+                              ? convertColorString('colorNum', value!, column) // ゲーム内カラーコードに変換
                               : column === 'deadline'
                                 ? !value
                                     ? null // 無期限
@@ -1332,8 +1331,65 @@ const updateDistributionData: Action = async ({ request }) => {
     }
 };
 
-export const _deleteDistribution: Action = async ({ request }) => {
-    // TODO: 削除処理
+const deleteDistribution: Action = async ({ request }) => {
+    const data = await request.formData();
+    const id = Number(data.get('dist_id'));
+
+    try {
+        await db.distribution.delete({
+            where: {
+                id,
+            },
+        });
+
+        return {
+            success: true,
+            message: `The distribution data (ID: ${id}) has been successfully deleted.`,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const createDistData: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+
+    try {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
+        const keysToRemove = ['type', 'deadline', 'zonename', 'event_name', 'description', 'times_acceptable', 'character_id', 'min_hr', 'max_hr', 'min_gr', 'max_gr'];
+        const contentsData: { [key: string]: string } = Object.keys(data)
+            .filter((key) => !keysToRemove.includes(key))
+            .reduce(
+                (obj, key) => {
+                    obj[key] = data[key];
+                    return obj;
+                },
+                {} as { [key: string]: string },
+            );
+        console.log(data);
+        console.log(convertColorString('colorNum', data.event_name, 'event_name'));
+        console.log(convertColorString('colorNum', data.description, 'description'));
+        console.log(contentsData);
+
+        return {
+            success: true,
+            message: `The distribution data (Title: ) has been successfully created.`,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
 };
 
 export const actions: Actions = {
@@ -1362,5 +1418,6 @@ export const actions: Actions = {
     updateAllianceData,
     downloadBinary,
     updateDistributionData,
-    _deleteDistribution,
+    deleteDistribution,
+    createDistData,
 };
