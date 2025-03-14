@@ -11,5 +11,7 @@ node_modules
 !.env.example
 .cloudflare
 .wrangler
+todo.txt
+db_changes.txt
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*

@@ -1,16 +1,27 @@
 <script lang="ts">
-    import Editor from '@tinymce/tinymce-svelte';
-    import { PUBLIC_TINY_API } from "$env/static/public";
     import type { ActionData, PageData } from './$types';
     import _ from 'lodash';
     import { onMount } from 'svelte';
+    import { scrollTop } from 'svelte-scrolling';
     import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
     import { Svroller } from 'svrollbar';
     import Main from '$lib/admin/Main.svelte';
     import Modals from '$lib/admin/Modals.svelte';
     import SideMenu from '$lib/admin/SideMenu.svelte';
-    import { loadArticle, Timeout, msgClosed, errDetailMode, onSubmit, closeMsgDisplay, toggleMsgDetail, timeOut, adminTabValue, downloadBinary } from '$utils/client';
+    import {
+        loadArticle,
+        Timeout,
+        msgClosed,
+        errDetailMode,
+        onSubmit,
+        closeMsgDisplay,
+        toggleMsgDetail,
+        timeOut,
+        adminTabValue,
+        modalStates,
+        preventHorizScrollOnDetailRow,
+    } from '$utils/client';
     import '$scss/style_admin.scss';
 
     interface Props {
@@ -28,6 +39,7 @@
     onMount(() => {
         loaded = true;
         window.addEventListener('touchstart', handleTouchStart);
+        window.addEventListener('touchmove', handleSwipeHorizScroll);
         window.addEventListener('touchend', handleTouchEnd);
 
         const mobileDevices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
@@ -36,6 +48,7 @@
         // クリーンアップ処理
         return () => {
             window.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchmove', handleSwipeHorizScroll);
             window.removeEventListener('touchend', handleTouchEnd);
         };
     });
@@ -65,10 +78,10 @@
     /* モバイル用ナビゲーションメニュー制御
     ========================================================= */
     let openMobileNav = $state(false);
-    let scrollPosition = 0;
-    let touchStartX: number = 0;
-    let touchEndX: number = 0;
-    const swipeThreshold: number = 70; // メニューを起動するための最小スワイプ距離（ピクセル単位）
+    let menuYPosition = 0;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const swipeThreshold = 70; // メニューを起動するための最小スワイプ距離（ピクセル単位）
 
     /**
      * スワイプの開始位置を記録
@@ -77,11 +90,15 @@
      */
     const handleTouchStart = (e: TouchEvent): void => {
         // <swiper-container>内と編集エリア内でのタッチ開始の場合はスキップ
-        if ((e.target && (e.target as HTMLElement).closest('swiper-container')) || (e.target as HTMLElement).closest('.edit_area_box_wrapper')) {
+        if (
+            (e.target && (e.target as HTMLElement).closest('swiper-container')) ||
+            (e.target as HTMLElement).closest('.edit_area_box_wrapper') ||
+            (e.target as HTMLElement).closest('.console_contents_table_wrapper')
+        ) {
             return;
         }
 
-        touchStartX = e.changedTouches[0].screenX;
+        touchStartX = (e.changedTouches[0].screenX);
     };
 
     /**
@@ -91,11 +108,15 @@
      */
     const handleTouchEnd = (e: TouchEvent): void => {
         // <swiper-container>内と編集エリア内でのタッチ終了の場合はスキップ
-        if ((e.target && (e.target as HTMLElement).closest('swiper-container')) || (e.target as HTMLElement).closest('.edit_area_box_wrapper')) {
+        if (
+            (e.target && (e.target as HTMLElement).closest('swiper-container')) ||
+            (e.target as HTMLElement).closest('.edit_area_box_wrapper') ||
+            (e.target as HTMLElement).closest('.console_contents_table_wrapper')
+        ) {
             return;
         }
 
-        touchEndX = e.changedTouches[0].screenX;
+        touchEndX = (e.changedTouches[0].screenX);
         handleSwipeGesture();
     };
 
@@ -110,7 +131,7 @@
             openMenu();
         } else if (swipeDistance < -swipeThreshold) {
             // 左から右へのスワイプならメニュー閉じる
-            closeMenu();
+            closeMobileMenu(false);
         }
     };
 
@@ -120,11 +141,11 @@
     const openMenu = (): void => {
         if (!openMobileNav) {
             // 現在のスクロール位置を保存
-            scrollPosition = window.scrollY;
+            menuYPosition = window.scrollY;
 
-            // bodyをfixedし、スクロール位置で動かないように
+            // bodyをfixedし、現在のスクロール位置で動かないように
             document.body.style.position = 'fixed';
-            document.body.style.top = `-${scrollPosition}px`;
+            document.body.style.top = `-${menuYPosition}px`;
             document.body.style.width = '100%';
 
             openMobileNav = true;
@@ -132,19 +153,35 @@
     };
 
     /**
-     * ナビゲーションメニューを閉じ、画面のスクロールを元に戻す（モバイル限定）
+     * ナビゲーションメニューを閉じ、画面スクロールをページトップへ（モバイル限定）
+     *
+     * @param {booelan} btnClicked メニュー内のボタンをクリックしたかどうか
      */
-    let closeMenu = (): void => {
+    const closeMobileMenu = (btnClicked: boolean): void => {
         if (openMobileNav) {
             // bodyから各スタイルを削除
             document.body.style.position = '';
             document.body.style.top = '';
             document.body.style.width = '';
 
-            // スクロール位置を元に戻す
-            window.scrollTo(0, scrollPosition);
+            // スクロール位置を調節（メニュー内ボタンクリックならページトップへ、そうでないなら現在のスクロール位置から動かないように）
+            btnClicked ? scrollTop() : window.scrollTo(0, menuYPosition);
 
             openMobileNav = false;
+        }
+    };
+
+    /**
+     * タッチイベントが特定の要素（.detail_row）の上で発生したかを判定し、
+     * ストア変数`preventHorizScrollOnDetailRow`を更新して横スクロールの制御を行う
+     *
+     * @param {TouchEvent} e タッチイベント
+     */
+    const handleSwipeHorizScroll = (e: TouchEvent) => {
+        if (isMobile && (e.target as HTMLElement).closest('.detail_row')) {
+            preventHorizScrollOnDetailRow.set(true);
+        } else {
+            preventHorizScrollOnDetailRow.set(false);
         }
     };
 </script>
@@ -166,7 +203,7 @@
     <div class="saving_overlay">
         <div class="loader"></div>
         <p class="saving_overlay_text">
-            {#if $downloadBinary}
+            {#if $modalStates.downloadBinary}
                 Downloading...
             {:else}
                 Saving...
@@ -212,12 +249,12 @@
 
     <nav class="console_menu" class:open={openMobileNav}>
         <Svroller width="100%" height="100%" alwaysVisible={true}>
-            <SideMenu {closeMenu} />
+            <SideMenu {closeMobileMenu} />
         </Svroller>
     </nav>
 
     <article class="console_article">
-        <h1>
+        <h1 class="console_article_heading1">
             <span class="material-symbols-outlined">admin_panel_settings</span>
             Admin Console
 
@@ -226,16 +263,16 @@
                     <span class="btn_icon material-symbols-outlined">add</span>
                     <span class="btn_text">Add Banner</span>
                 </button>
-            {:else if $adminTabValue === 'info' && !infoAddMode}
+            <!-- {:else if $adminTabValue === 'info' && !infoAddMode}
                 <button class="green_btn" type="button" onclick={() => (infoAddMode = true)}>
                     <span class="btn_icon material-symbols-outlined">add</span>
                     <span class="btn_text">Add Info</span>
-                </button>
-            {:else if $adminTabValue === 'distribution' && !distAddMode}
+                </button> -->
+            <!-- {:else if $adminTabValue === 'distribution' && !distAddMode}
                 <button class="green_btn" type="button" onclick={() => (distAddMode = true)}>
                     <span class="btn_icon material-symbols-outlined">add</span>
                     <span class="btn_text">Add Distribution</span>
-                </button>
+                </button> -->
             {/if}
         </h1>
 
@@ -251,10 +288,3 @@
         </p>
     </section>
 </footer>
-
-<!-- DistributionEditor.svelte用、エディター事前読み込み -->
-{#if !isMobile}
-    <div hidden>
-        <Editor apiKey={PUBLIC_TINY_API} />
-    </div>
-{/if}

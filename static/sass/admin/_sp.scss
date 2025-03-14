@@ -3,8 +3,7 @@
 
 @include sp() {
     /* ヘッダー
-====================================================*/
-
+    ========================================================= */
     // ヘッダー帯
     header {
         background: #000;
@@ -78,8 +77,7 @@
     }
 
     /* 管理者コンソール
-====================================================*/
-
+    ========================================================= */
     // 背景画像
     .background_img {
         display: none;
@@ -101,7 +99,7 @@
             z-index: 1;
 
             // 管理者コンソールタイトル
-            h1 {
+            &_heading1 {
                 position: relative;
                 padding-left: 45px;
                 margin: 0 30px;
@@ -119,6 +117,8 @@
 
                 // 緑ボタン調整（インフォ/バナー追加ボタン）
                 .green_btn {
+                    position: absolute;
+                    right: 0;
                     bottom: -120%;
 
                     // ボタンテキスト（h1のフォントが適応されているので戻す）
@@ -133,8 +133,12 @@
                 position: relative;
                 padding-left: 45px;
                 font-size: 2rem;
-                margin: 12% 0 0 5%;
+                margin: 15% 0 0 5%;
                 user-select: none;
+
+                @include landscape {
+                    margin: 9% 0 0 5%;
+                }
 
                 // アイコン
                 .material-symbols-outlined {
@@ -159,6 +163,7 @@
 
             // 各コンテンツ
             .console_contents {
+                position: relative;
                 display: flex;
                 flex-direction: column;
                 margin: 0% 5% 5%;
@@ -190,12 +195,13 @@
                 }
 
                 // コンテンツ内リストタイトル
-                .console_contents_list_title {
+                &_list_title {
                     position: relative;
+                    display: flex;
+                    justify-content: space-between;
                     width: 100%;
                     font-size: 2rem;
                     padding: 10% 0 0 3%;
-                    color: #df9e27;
                     user-select: none;
                     border-bottom: #df9e27 2px solid;
                     font-weight: 700;
@@ -204,16 +210,10 @@
                         display: flex;
                     }
 
-                    // 赤ボタン調整
-                    .red_btn {
-                        position: absolute;
-                        bottom: 10%;
-                        right: 0;
-                    }
-
                     // ユーザー内情報切り替えパネル
                     .user_ctrl_panel {
                         display: flex;
+                        gap: 5px;
                         color: #333333;
                         width: fit-content;
 
@@ -223,7 +223,7 @@
 
                         // タブボタン
                         button {
-                            font-size: 3rem;
+                            font-size: 2.4rem;
 
                             // アクティブ時
                             &.active {
@@ -238,6 +238,50 @@
 
                         @include landscape {
                             font-size: 2rem;
+                        }
+                    }
+
+                    // タイトルテキスト
+                    &_text {
+                        max-width: 35vw;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: pre;
+
+                        @include landscape {
+                            max-width: 45vw;
+                        }
+
+                        &.distribution {
+                            max-width: 50vw;
+
+                            @include landscape {
+                                max-width: 60vw;
+                            }
+                        }
+                    }
+
+                    // その他のアクションメニュー
+                    .more_actions_list {
+                        position: absolute;
+                        right: 0;
+                        top: 110%;
+                        background: #f0f1f2;
+                        z-index: 1;
+                        box-shadow: 0px 4px 10px 1px #999;
+                        border-radius: 10px;
+                        min-width: 35vw;
+
+                        &_item {
+                            padding: 7% 10%;
+
+                            @include landscape {
+                                padding: 5% 7%;
+                            }
+                        }
+
+                        @include landscape {
+                            min-width: 21vw;
                         }
                     }
                 }
@@ -266,12 +310,12 @@
                 .console_contents_list {
                     position: relative;
                     display: grid;
-                    margin-bottom: 3%;
+                    margin-bottom: 5%;
 
                     // コンテンツアイテムタイトル
                     .contents_term {
                         font-weight: 700;
-                        padding: 3% 2% 2%;
+                        padding: 3% 2%;
                         user-select: none;
                         overflow-wrap: break-word;
 
@@ -284,10 +328,76 @@
                     // コンテンツアイテム説明
                     .contents_desc {
                         position: relative;
-                        padding: 3% 5% 2%;
+                        padding: 0 5% 5%;
                         border-bottom: 1px gray dashed;
                         overflow-wrap: break-word;
                         width: 84vw;
+
+                        // コンテンツアイテム説明アイテム
+                        &_item {
+                            width: 100%;
+                            height: 7vh;
+                            display: flex;
+                            align-items: center;
+
+                            @include landscape {
+                                height: 12vh;
+                            }
+
+                            // input要素幅/高さ調整
+                            input {
+                                height: 35px;
+
+                                // 長いバージョン
+                                &.long {
+                                    width: 100%;
+                                }
+                            }
+
+                            // テキスト部分（オーバーフロー省略）
+                            &_text {
+                                width: 100%;
+                                text-overflow: ellipsis;
+                                overflow: hidden;
+                                white-space: nowrap;
+
+                                input[type='datetime-local'] {
+                                    background-color: #bedfff;
+                                    border: none;
+                                    outline: none;
+                                    border-radius: 3px;
+                                    min-width: 160px; // モバイル端末で未入力時、フィールドが潰れる不具合対応
+                                    height: 26px;
+
+                                    &::-webkit-calendar-picker-indicator {
+                                        background-color: #ffffff;
+                                        padding: 5px;
+                                        cursor: pointer;
+                                        border-radius: 3px;
+                                    }
+                                }
+
+                                // オーバーフローしているリストを表示させるため、わざと上書き
+                                &.no_overflow {
+                                    overflow: visible;
+                                }
+
+                                // 選択ボックス幅調整（デフォルトは100%で広すぎる）
+                                .custom_select_box {
+                                    select {
+                                        width: auto;
+                                    }
+                                }
+                            }
+                        }
+
+                        // フォームボタングループ
+                        &_item_group_btn {
+                            display: flex;
+                            flex-direction: row-reverse;
+                            gap: 3vw;
+                            margin: 4% 0;
+                        }
 
                         // 編集モード切り替えボタン
                         .edit_btn {
@@ -311,16 +421,6 @@
                             }
                         }
 
-                        // ノーマルボタン調整（右下に）
-                        .normal_btn {
-                            margin: 3% 0 3% auto;
-                        }
-
-                        // 赤ボタン調整（右下に）
-                        .red_btn {
-                            margin: 3% 0 3% auto;
-                        }
-
                         // クランメンバ－一覧
                         .clan_members {
                             display: grid;
@@ -338,7 +438,7 @@
                         }
 
                         // バナー追加のページでファイル選択inputがオーバフローしないようwidthを親に合わせる
-                        input {
+                        .file_input {
                             width: 100%;
                         }
 
@@ -346,25 +446,40 @@
                         .preview_title {
                             color: #ffffff; // デフォルト色
                             background: #4d4d4dba;
+                            padding: 4px 5px 3px;
+                            white-space: break-spaces;
+                            min-height: 4.5vh; // テキスト未入力状態でボックスが潰れるのを防ぐ
                         }
-                    }
 
-                    // コンテンツがネストしたバージョン
-                    .nested {
-                        // 初めの要素以外、上部仕切り付ける
-                        &:not(:first-child) {
-                            .contents_term {
-                                border-top: 1px gray dashed;
+                        // コンテンツがネストしたバージョン
+                        &.nested {
+                            .console_contents_list {
+                                margin: 0;
+
+                                // 初めの要素以外、上部仕切り付ける
+                                &:not(:first-child) {
+                                    .contents_term {
+                                        border-top: 1px gray dashed;
+                                    }
+                                }
+
+                                .contents_term {
+                                    padding: 3% 2% 0;
+                                    border-bottom: 0px;
+                                }
+
+                                .contents_desc {
+                                    width: 80vw;
+                                    border-bottom: 0px;
+                                }
+
+                                // 最後の要素で不要な余白調整
+                                &:last-child {
+                                    .contents_desc {
+                                        padding: 0 5%;
+                                    }
+                                }
                             }
-                        }
-
-                        .contents_term {
-                            border-bottom: 0px;
-                        }
-
-                        .contents_desc {
-                            width: 80vw;
-                            border-bottom: 0px;
                         }
                     }
                 }
@@ -374,19 +489,367 @@
                     display: flex;
                     justify-content: space-evenly;
                 }
-            }
 
-            // 緑ボタン調整
-            .green_btn {
-                position: absolute;
-                right: 0;
-                z-index: 1;
+                // テーブルレイアウトワラップ（横スクロール対応）
+                .console_contents_table_wrapper {
+                    overflow-x: auto;
+                    -ms-overflow-style: none; // スクロールバー非表示（IE/Edge）
+                    scrollbar-width: none; // スクロールバー非表示（Firefox）
+                    min-height: 45vh; // 表の内容に応じて高さが変動しないように
+
+                    // テーブルレイアウト
+                    .console_contents_table {
+                        table-layout: fixed;
+                        width: 170vw;
+                        white-space: nowrap;
+                        border-spacing: 0;
+
+                        @include landscape {
+                            width: 120vw;
+                        }
+
+                        // モバイル用スクロールなし
+                        &.no_mobile_scroll {
+                            width: 100%;
+                        }
+
+                        // テーブル行
+                        .table_row {
+                            position: relative;
+
+                            // 選択行
+                            &.selected {
+                                background: #f6f8fa;
+                            }
+
+                            // テキスト非表示
+                            &.hide_text {
+                                color: transparent;
+                                pointer-events: none;
+                                user-select: none;
+                            }
+
+                            // 表内でのwidth調整
+                            .console_contents_list {
+                                width: 105%;
+                            }
+                        }
+
+                        // 詳細データ表示（スクロールさせず固定化）
+                        .detail_row {
+                            display: table-cell;
+                            position: sticky;
+                            left: 0;
+                            background: white;
+                            z-index: 1; // &_headerと&_dataのbox-shadowが上に重なるのを防ぐ
+                        }
+
+                        // テーブルヘッダー
+                        &_head {
+                            background: #f0f6fb;
+                            user-select: none;
+
+                            &_header {
+                                text-align: left;
+                                padding: 1%;
+                                border-bottom: 2px solid #eef0f2;
+                                border-top: 2px solid #eef0f2;
+
+                                // IDソート用
+                                &.id {
+                                    position: relative;
+
+                                    .material-symbols-outlined {
+                                        position: absolute;
+                                        top: 50%;
+                                        left: 50%;
+                                        transform: translateY(-60%);
+                                    }
+                                }
+
+                                // 削除用選択ボタン
+                                .material-symbols-outlined {
+                                    height: 31px;
+                                    line-height: 36px;
+                                }
+
+                                // 中央揃えテキスト
+                                &.center {
+                                    text-align: center;
+                                }
+
+                                // 右揃えテキスト
+                                &.right {
+                                    text-align: right;
+                                }
+
+                                // 最後の行固定
+                                &.fixed {
+                                    position: sticky;
+                                    right: 0;
+                                    background: #f0f6fb;
+                                    box-shadow: -10px 0 7px rgba(0, 0, 0, 0.1);
+                                }
+                            }
+
+                            // DistributionList/ClaimedDistribution.svelte
+                            &.distribution {
+                                .select {
+                                    width: 10%;
+                                }
+
+                                .id {
+                                    width: 10%;
+                                }
+
+                                .type {
+                                    width: 15%;
+                                }
+
+                                .title {
+                                    width: 55%;
+                                }
+
+                                .other {
+                                    width: 10%;
+                                }
+                            }
+
+                            // Information.svelte
+                            &.information {
+                                .select {
+                                    width: 10%;
+                                }
+
+                                .id {
+                                    width: 10%;
+                                }
+
+                                .title {
+                                    width: 30%;
+                                }
+
+                                .type {
+                                    width: 15%;
+                                }
+
+                                .created {
+                                    width: 25%;
+                                }
+
+                                .other {
+                                    width: 10%;
+                                }
+                            }
+                        }
+
+                        // テーブルデータ
+                        &_data {
+                            white-space: nowrap;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            padding: 1%;
+                            border-bottom: 2px solid #eef0f2;
+
+                            // 削除用選択ボタン
+                            .material-symbols-outlined {
+                                height: 31px;
+                                line-height: 36px;
+                            }
+
+                            // 表示データなしテキスト
+                            &.no_data {
+                                color: #ff4b4b;
+                                text-align: center;
+                            }
+
+                            // 中央揃えテキスト
+                            &.center {
+                                text-align: center;
+                            }
+
+                            // 右揃えテキスト
+                            &.right {
+                                text-align: right;
+                            }
+
+                            // 最後の行固定
+                            &.fixed {
+                                position: sticky;
+                                right: 0;
+                                background: #fff;
+                                box-shadow: -10px 0 7px rgba(0, 0, 0, 0.1);
+                            }
+                        }
+                    }
+
+                    // スクロールバー非表示（Chrome/Safari）
+                    &::-webkit-scrollbar {
+                        display: none;
+                    }
+                }
+
+                // 一時操作エリア（テーブルで使用）
+                .temp_operation_area {
+                    display: flex;
+                    gap: 10px;
+                    padding-bottom: 10px;
+                    flex-wrap: wrap;
+
+                    // 選択ボックス幅調整
+                    .custom_select_box {
+                        select {
+                            width: 96px !important; // デフォルトの.custom_select_box select幅を上書きする
+                        }
+                    }
+
+                    // フィルターする値入力欄
+                    &_search {
+                        cursor: text;
+                        display: flex;
+                        align-items: center;
+                        padding: 0 10px;
+                        width: 40vw;
+                        border: 1px solid #d5d2cf;
+                        border-radius: 5px;
+
+                        input {
+                            height: 34px;
+                            padding: 0 0 0 6px;
+                            border: none;
+                            box-sizing: border-box;
+                            color: #000;
+                            outline: none;
+                            width: 100%;
+                        }
+                    }
+
+                    // テーブル表示内容切り替えボタングループ
+                    &_toggle_btn_group {
+                        display: flex;
+
+                        .temp_operation_area_toggle_btn {
+                            background: #fdffff;
+                            border: 1px solid #d5d2cf;
+                            padding: 5%;
+                            min-width: 85px;
+
+                            @include landscape {
+                                min-width: 13vw;
+                            }
+
+                            &.selected {
+                                background: #ebf1f4;
+                            }
+                        }
+                    }
+
+                    // フィルター用チェックボックス
+                    .filter_checkbox_wrapper {
+                        position: absolute;
+                        background: #fcfdfc;
+                        padding: 10px 15px;
+                        max-height: 40vh;
+                        color: darkslategray;
+                        border: 2px solid #aeb6d0;
+                        top: 49px;
+                        left: 0;
+                        z-index: 2;
+                        overflow: scroll;
+
+                        @include landscape {
+                            max-height: 60vh;
+                        }
+
+                        label {
+                            width: fit-content;
+                            display: flex;
+                            align-items: center;
+                            gap: 0 0.5em;
+                            position: relative;
+                            margin-bottom: 0.5em;
+                            white-space: nowrap;
+
+                            &:last-child {
+                                margin: 0;
+                            }
+
+                            &::before,
+                            &:has(:checked)::after {
+                                content: '';
+                            }
+
+                            &::before {
+                                width: 17px;
+                                height: 17px;
+                                border-radius: 3px;
+                                background-color: #e6edf3;
+                            }
+
+                            &:has(:checked) {
+                                &::before {
+                                    background-color: #2589d0;
+                                }
+
+                                &::after {
+                                    position: absolute;
+                                    top: 6px;
+                                    left: 6px;
+                                    transform: rotate(45deg);
+                                    width: 4px;
+                                    height: 8px;
+                                    border: solid #fff;
+                                    border-width: 0 2px 2px 0;
+                                }
+                            }
+                        }
+
+                        // スクロールバー位置調整
+                        .v-scrollbar {
+                            right: -15px !important;
+                        }
+                    }
+                }
+
+                // ページネーションボタン
+                .pagination_btn_area {
+                    display: flex;
+                    padding-top: 10px;
+                    justify-content: center;
+                    gap: 4px;
+
+                    // ボタン本体
+                    .pagination_btn {
+                        width: 10vw;
+                        border: #dbdbdb solid 1px;
+                        background: #fafafa;
+                        color: #272727;
+                        font-weight: 600;
+                        box-shadow: 0 0px 2px #dbdbdb;
+                        border-radius: 3px;
+                        aspect-ratio: 1;
+
+                        // 選択時
+                        &.selected {
+                            border: none;
+                            background: #3f96fd;
+                            color: #f7f6f6;
+                            box-shadow: none;
+                        }
+                    }
+
+                    // 省略マーク（...）
+                    .pagination_gap {
+                        width: 10vw;
+                        aspect-ratio: 1;
+                    }
+                }
             }
         }
     }
 
     /* コンソールメニュー
-====================================================*/
+    ========================================================= */
     // モバイル用ナブメニュー背景
     .mobile_menu_cover {
         position: fixed;
@@ -470,200 +933,195 @@
         }
     }
 
-    /* フォームスタイル
-====================================================*/
-
+    /* 編集エリア
+    ========================================================= */
     .edit_area_box_wrapper {
-        overflow: hidden; // svelte5のバグ？でslideアニメーションがおかしいので、応急措置としてhiddenを適用。PCでは発生しないので不要
+        overflow: hidden; // svelte5のバグでslideアニメーションがおかしいので、応急措置としてhiddenを適用。PCでは発生しないので不要
+    }
 
-        // 編集フォーム本体
-        .edit_area_box {
-            // フォームdivタグ
-            .edit_area {
-                display: flex;
-                justify-content: space-around;
-                background-color: #f0f1f2;
+    // 編集フォーム本体
+    .edit_area_box {
+        // フォームdivタグ
+        .edit_area {
+            display: flex;
+            justify-content: space-around;
+            background-color: #f0f1f2;
+
+            // ラジオボタン
+            &.select {
+                align-items: center;
+                padding: 4% 2%;
+
+                // フォーム内タイトル
+                .edit_area_title {
+                    font-size: 1.8rem;
+                }
+
+                // フォームタイトル（ラジオボタン用は無し）
+                .edit_area_title {
+                    display: none;
+                }
+            }
+
+            // 通常
+            &.enter {
+                flex-direction: column;
+                padding: 5%;
+
+                // フォーム内タイトル
+                .edit_area_title {
+                    border-bottom: #333333 1px solid;
+                    padding-left: 2%;
+                    margin-bottom: 3%;
+                    font-size: 2.2rem;
+                }
+
+                // 青ボタン調整
+                .blue_btn {
+                    margin: 5% auto 0;
+                }
+
+                // フォームタイトル
+                .edit_area_title {
+                    font-size: 1.9rem;
+                    font-weight: 700;
+                    user-select: none;
+                }
+            }
+
+            // フォーム部品
+            .edit_area_box_parts {
+                user-select: none;
 
                 // ラジオボタン
-                &.select {
-                    align-items: center;
-                    padding: 4% 2%;
+                &.radio {
+                    label {
+                        display: flex;
+                        align-items: center;
+                        justify-content: flex-start;
 
-                    // フォーム内タイトル
-                    .edit_area_title {
-                        font-size: 1.8rem;
+                        // 丸アイコン
+                        .material-symbols-outlined {
+                            font-size: 2.1rem;
+                            padding: 0 10px 2px 0;
+                        }
                     }
 
-                    // フォームタイトル（ラジオボタン用は無し）
-                    .edit_area_title {
-                        display: none;
-                    }
-                }
-
-                // 通常
-                &.enter {
-                    flex-direction: column;
-                    padding: 5%;
-
-                    // フォーム内タイトル
-                    .edit_area_title {
-                        border-bottom: #333333 1px solid;
-                        padding-left: 2%;
-                        margin-bottom: 3%;
-                        font-size: 2.2rem;
+                    //利用権リストタイトル
+                    .course_list_title {
+                        border-left: 3px solid #808080;
+                        padding: 0 0 0.5% 2%;
+                        border-bottom: 1px dotted;
+                        margin: 0 0 2% 2%;
                     }
 
-                    // 青ボタン調整
-                    .blue_btn {
-                        margin: 5% auto 0;
-                    }
+                    // 利用権選択リスト
+                    .course_list {
+                        display: grid;
+                        column-gap: 10px;
+                        row-gap: 10px;
+                        grid-template-columns: repeat(2, 1fr);
+                        margin: 5% 3%;
 
-                    // フォームタイトル
-                    .edit_area_title {
-                        font-size: 1.9rem;
-                        font-weight: 700;
-                        user-select: none;
-                    }
-                }
-
-                // フォーム部品
-                .edit_area_box_parts {
-                    user-select: none;
-
-                    // ラジオボタン
-                    &.radio {
-                        label {
-                            display: flex;
-                            align-items: center;
-                            justify-content: flex-start;
-
-                            // 丸アイコン
+                        // 利用権各項目
+                        .course_item {
+                            // 丸/チェックアイコン
                             .material-symbols-outlined {
                                 font-size: 2.1rem;
-                                padding: 0 10px 2px 0;
+                                padding: 0 5px 2px 0;
                             }
                         }
 
-                        //利用権リストタイトル
-                        .course_list_title {
-                            border-left: 3px solid #808080;
-                            padding: 0 0 0.5% 2%;
-                            border-bottom: 1px dotted;
-                            margin: 0 0 2% 2%;
-                        }
-
-                        // 利用権選択リスト
-                        .course_list {
-                            display: grid;
-                            column-gap: 10px;
-                            row-gap: 10px;
-                            grid-template-columns: repeat(2, 1fr);
-                            margin: 5% 3%;
-
-                            // 利用権各項目
-                            .course_item {
-                                // 丸/チェックアイコン
-                                .material-symbols-outlined {
-                                    font-size: 2.1rem;
-                                    padding: 0 5px 2px 0;
-                                }
-                            }
-
-                            // ユーザーID複数選択input
-                            &_user_ids {
-                                position: relative;
-
-                                input {
-                                    width: 100%;
-                                }
-
-                                .help_btn {
-                                    position: absolute !important;
-                                    top: 0;
-                                    right: 0;
-                                }
-                            }
-                        }
-                    }
-
-                    // テキスト
-                    &.text {
-                        display: grid;
-                        justify-items: center;
-                        margin-top: 15px;
-
-                        dd {
-                            width: 100%;
+                        // ユーザーID複数選択input
+                        &_user_ids {
+                            position: relative;
 
                             input {
                                 width: 100%;
                             }
 
-                            select {
-                                width: 100%;
-                            }
-
-                            // 数値入力コンポーネントを持つもの
-                            &:has(.number_input_wrapper) {
-                                width: 40%;
+                            .help_btn {
+                                position: absolute !important;
+                                top: 0;
+                                right: 0;
                             }
                         }
                     }
+                }
 
-                    // 管理者コントロールパネル
-                    &.admin_ctrl {
-                        gap: 25px;
+                // テキスト
+                &.text {
+                    display: grid;
+                    justify-items: center;
+                    margin-top: 15px;
 
-                        .filter_form {
-                            #filter_input {
-                                width: 50%;
-                                margin-right: 5%;
-                            }
+                    dd {
+                        //width: 100%;
+                        width: 68vw;
 
-                            .filter_select {
-                                width: 60%;
-                                margin-left: 3%;
-                            }
+                        input {
+                            width: 100%;
                         }
 
-                        .green_btn {
-                            position: static;
-                            height: 37px;
+                        select {
+                            width: 100%;
+                        }
+
+                        // 数値入力コンポーネント用調整
+                        .number_input_wrapper {
+                            margin: 0 auto;
                         }
                     }
+                }
 
-                    // ユーザー内コントロールフォーム
+                // 管理者コントロールパネル
+                &.admin_ctrl {
+                    gap: 25px;
+
                     .filter_form {
-                        position: relative;
-                        display: flex;
-                        justify-content: center;
+                        #filter_input {
+                            width: 50%;
+                            margin-right: 5%;
+                        }
+
+                        .filter_select {
+                            width: 60%;
+                            margin-left: 3%;
+                        }
                     }
+                }
+
+                // ユーザー内コントロールフォーム
+                .filter_form {
+                    position: relative;
+                    display: flex;
+                    justify-content: center;
                 }
             }
+        }
 
-            // 配布コンテンツ編集用（DistributionList.svelte）
-            &.dist_list {
-                height: 60vh;
-                padding: 4px 11px;
-                box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5) inset;
-                margin: 10px 0;
-                user-select: none;
+        // 配布コンテンツ編集用（DistributionList.svelte）
+        &.dist_list {
+            height: 60vh;
+            padding: 4px 11px;
+            box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5) inset;
+            margin: 10px 0;
+            user-select: none;
+            overflow: scroll;
 
-                // スクロールバー非表示
-                .v-scrollbar {
-                    display: none;
-                }
+            @include landscape {
+                height: 70vh;
+            }
 
-                @include landscape {
-                    height: 70vh;
-                }
+            // スクロールバー非表示
+            .v-scrollbar {
+                display: none;
             }
         }
     }
 
     /* ボタン関連
-====================================================*/
-
+    ========================================================= */
     // ノーマルボタンデフォルト
     .normal_btn {
         position: relative;
@@ -677,8 +1135,7 @@
         font-size: 1.5rem;
         border-radius: 4px;
         transition: all 0.3s;
-        height: 35px;
-        padding: 0 10px 0 8px;
+        padding: 7px 10px 7px 8px;
 
         // ボタンアイコン
         .btn_icon {
@@ -687,8 +1144,8 @@
 
         // ボタンテキスト
         .btn_text {
-            line-height: 21px;
-            padding-top: 1px; // 一部テキストが上気味なので、下に調整
+            height: 24px; // アイコンサイズに合わせる
+            line-height: 26px; // 一部テキストが上気味なので、下に調整
         }
     }
 
@@ -705,8 +1162,7 @@
         font-size: 1.5rem;
         border-radius: 4px;
         transition: all 0.3s;
-        height: 35px;
-        padding: 0 10px 0 8px;
+        padding: 7px 10px 7px 8px;
 
         // ボタンアイコン
         .btn_icon {
@@ -715,8 +1171,8 @@
 
         // ボタンテキスト
         .btn_text {
-            line-height: 21px;
-            padding-top: 1px; // 一部テキストが上気味なので、下に調整
+            height: 24px; // アイコンサイズに合わせる
+            line-height: 26px; // 一部テキストが上気味なので、下に調整
         }
 
         // アクティブ時
@@ -740,8 +1196,7 @@
         font-size: 1.5rem;
         border-radius: 4px;
         transition: all 0.3s;
-        height: 35px;
-        padding: 0 10px 0 8px;
+        padding: 7px 10px 7px 8px;
 
         // ボタンアイコン
         .btn_icon {
@@ -750,8 +1205,8 @@
 
         // ボタンテキスト
         .btn_text {
-            line-height: 21px;
-            padding-top: 1px; // 一部テキストが上気味なので、下に調整
+            height: 24px; // アイコンサイズに合わせる
+            line-height: 26px; // 一部テキストが上気味なので、下に調整
         }
 
         // アクティブ時
@@ -759,6 +1214,20 @@
             color: #fff;
             background: #de6161;
             border: 1px solid #de6161;
+        }
+
+        // テキスト無しバージョン
+        &.no_text {
+            display: block;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px #de6161 solid;
+            padding: 0;
+            .btn_icon {
+                margin: 0;
+                line-height: 28px;
+            }
         }
     }
 
@@ -772,15 +1241,10 @@
         background: #fff;
         border: 1px solid #0ad275;
         font-weight: 700;
-        font-size: 1.6rem;
+        font-size: 1.5rem;
         border-radius: 4px;
         transition: all 0.3s;
-        height: 35px;
-        padding: 0 10px 0 8px;
-
-        @include landscape {
-            height: 37px;
-        }
+        padding: 7px 10px 7px 8px;
 
         // ボタンアイコン
         .btn_icon {
@@ -789,8 +1253,8 @@
 
         // ボタンテキスト
         .btn_text {
-            line-height: 21px;
-            padding-top: 1px; // 一部テキストが上気味なので、下に調整
+            height: 24px; // アイコンサイズに合わせる
+            line-height: 26px; // 一部テキストが上気味なので、下に調整
         }
 
         // ロード中
@@ -841,9 +1305,38 @@
         }
     }
 
-    /* Ban関連
-====================================================*/
+    // メニュー内ボタン（デフォルト背景色なし、ボーダーなし）
+    .menu_btn {
+        display: flex;
+        color: darkslategray;
+        font-weight: 700;
+        font-size: 1.5rem;
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        transition: all 0.3s;
 
+        // ボタンアイコン
+        .btn_icon {
+            margin-right: 5px;
+        }
+
+        // ボタンテキスト
+        .btn_text {
+            height: 24px; // アイコンサイズに合わせる
+            line-height: 26px; // 一部テキストが上気味なので、下に調整
+        }
+
+        // 配布物受取済み履歴ページ（ClaimedDistribution.svelte）内のユーザーページに戻るボタン
+        &.claimed_distribution_back {
+            width: auto;
+            margin: 3%;
+            padding: 0;
+        }
+    }
+
+    /* Ban関連
+    ========================================================= */
     // Ban済ユーザー表示
     .banned_user_container {
         position: absolute;
@@ -883,7 +1376,7 @@
     }
 
     /* ユーザーコンポーネント内キャラクターリスト
-====================================================*/
+    ========================================================= */
     // キャラクターなし
     .no_character_msg {
         text-align: center;
@@ -928,12 +1421,13 @@
         }
 
         // キャラクター削除ボタン
-        .delete_character {
+        .red_btn {
+            position: absolute;
             top: 10% !important;
             left: 5% !important;
-            z-index: 1;
             height: auto;
             padding: 0;
+            z-index: 1;
 
             .btn_icon {
                 font-size: 4.6vw;
@@ -953,44 +1447,20 @@
                     padding: 0.8vw;
                 }
             }
-        }
 
-        // 削除済みアカウントボタン
-        .deleted_character {
-            top: 10% !important;
-            left: 5% !important;
-            z-index: 1;
-            color: #fff;
-            background: #de6161;
-            border: 1px solid #de6161;
-            height: auto;
-            padding: 0;
-
-            .btn_icon {
-                font-size: 4.6vw;
-                padding: 1vw;
-                margin: 0;
-            }
-
-            .btn_text {
-                display: none;
-            }
-
-            @include landscape {
-                top: 12% !important;
-
-                .btn_icon {
-                    font-size: 2.9vw;
-                    padding: 0.8vw;
-                }
+            // 削除済みボタン
+            &.deleted_character {
+                color: #fff;
+                background: #de6161;
+                border: 1px solid #de6161;
             }
         }
 
         // アカウント連携ボタン
-        .link_character {
-            top: 10% !important;
-            right: 5% !important;
-            z-index: 1;
+        .green_btn {
+            position: absolute;
+            top: 10%;
+            right: 5%;
             height: auto;
             padding: 0;
 
@@ -1012,36 +1482,12 @@
                     padding: 0.8vw !important;
                 }
             }
-        }
 
-        // 連携済みアカウントボタン
-        .linked_character {
-            top: 10% !important;
-            right: 5% !important;
-            z-index: 1;
-            color: #fff;
-            background: #0ad275;
-            border: 1px solid #0ad275;
-            height: auto;
-            padding: 0;
-
-            .btn_icon {
-                font-size: 4.6vw;
-                padding: 1vw !important;
-                margin: 0;
-            }
-
-            .btn_text {
-                display: none;
-            }
-
-            @include landscape {
-                top: 12% !important;
-
-                .btn_icon {
-                    font-size: 2.9vw;
-                    padding: 0.8vw !important;
-                }
+            // 連携済みボタン
+            &.linked_character {
+                color: #fff;
+                background: #0ad275;
+                border: 1px solid #0ad275;
             }
         }
 
@@ -1109,7 +1555,7 @@
     }
 
     /* モーダルウィンドウ
-====================================================*/
+    ========================================================= */
     .modal {
         position: fixed;
         z-index: 998;
@@ -1213,7 +1659,7 @@
     }
 
     /* フッター
-====================================================*/
+    ========================================================= */
     .admin_footer {
         width: 100%;
         position: relative;
@@ -1247,8 +1693,7 @@
     }
 
     /* 成功・エラーメッセージ表示
-====================================================*/
-
+    ========================================================= */
     // メッセージ表示ボディ
     .msg_display {
         position: fixed;
@@ -1424,8 +1869,7 @@
     }
 
     /* オーバーレイ
-====================================================*/
-
+    ========================================================= */
     // DOMマウント待機オーバーレイ
     .mount_overlay {
         position: fixed;
@@ -1484,7 +1928,7 @@
     }
 
     /* 配布セクション
-========================================================= */
+    ========================================================= */
     // 個人別配布セクションのinput要素
     .indiv_dist_input {
         font-size: 1.6rem;
@@ -1493,17 +1937,14 @@
 
     // 配布物タイプselect/input要素グループ
     .dist_section {
+        width: 90%;
         display: flex;
-        align-items: center;
         flex-direction: column;
+        row-gap: 5px;
 
-        select {
-            width: 100%;
-        }
-
-        // 配布セクション内のみリストの幅を拡張
-        &_list {
-            width: 150%;
+        @include landscape {
+            width: auto;
+            row-gap: 10px;
         }
     }
 
@@ -1511,17 +1952,14 @@
     .dist_contents_data {
         display: flex;
         flex-direction: column;
-        justify-content: space-evenly;
         align-items: center;
         border-top: 2px dashed #a49b95;
-        height: 20vh;
+        padding: 10% 0;
+        row-gap: 15px;
 
         @include landscape {
-            display: flex;
             flex-direction: row;
             justify-content: space-between;
-            height: 25vh;
-            padding: 3% 0;
         }
 
         // 最初の要素はボーダーなし
@@ -1530,37 +1968,15 @@
         }
 
         // ボタン要素類グループ
-        .dist_contents_data_btn_group {
+        &_btn_group {
+            width: 80%;
             display: flex;
-            padding-left: 10px;
+            justify-content: space-between;
 
-            .number_input_wrapper {
-                .number_input_text {
-                    width: 35px !important;
-                    padding: 0;
-                }
-            }
-
-            // アイテム削除ボタン
-            .delete_btn {
-                width: 32px;
-                height: 32px;
-                border-radius: 50%;
-                border: 2px #de6161 solid;
-                position: relative;
-                margin: 0 0 0 10px !important; // red_btnのmarginに上書きされないようにimportant
-                padding: 0; // red_btnのpadding無効化
-
-                @include landscape {
-                    margin: 0 0 0 20px !important; // red_btnのmarginに上書きされないようにimportant
-                }
-
-                .btn_icon {
-                    position: absolute;
-                    top: 50%;
-                    left: 50%;
-                    margin: -12px 0 0 -12px;
-                }
+            @include landscape {
+                width: auto;
+                column-gap: 10px;
+                margin-right: 3px; // 本来スクロールバーがある箇所でボタン輪郭が切れてしまうため余白入れる
             }
         }
     }
@@ -1616,8 +2032,9 @@
             }
         }
     }
+
     /* 数値入力カスタムコンポーネント
-========================================================= */
+    ========================================================= */
     // 数値入力エリア
     .number_input_wrapper {
         display: flex;
@@ -1632,11 +2049,15 @@
         .increment_btn {
             background-color: #f9f9f9;
             border: none;
-            width: 30px;
-            height: 30px;
+            height: 4.5vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            aspect-ratio: 1 / 1;
+
+            @include landscape {
+                height: 8vh;
+            }
 
             // ボタン無効
             &:disabled {
@@ -1648,33 +2069,36 @@
         // input要素
         .number_input_text {
             width: 50px !important; // edit_area_box_parts.text dd内のinputスタイルが適用されてしまうため、上書きさせない
+            height: 4.5vh !important; // contents_desc_item内のinputスタイルが適用されてしまうため、上書きさせない
             text-align: center;
             border: none;
             outline: none;
+
+            @include landscape {
+                height: 8vh !important; // ポートレートモードの高さを上書き
+            }
         }
     }
 
     /* カスタム選択リスト
-========================================================= */
+    ========================================================= */
     // 選択エリア
-    .select_area {
+    .custom_select_with_filter_wrapper {
         position: relative;
 
-        // svrollbar用スクロール調整
-        .svlr-viewport,
-        .svlr-wrapper {
-            height: auto !important;
-            max-height: 250px !important;
-        }
+        // インプット
+        .custom_select_with_filter_input {
+            //width: 55vw;
+            width: 100%;
+            padding: 7px 9px 7px;
 
-        // svrollbar用リストアイテム並び調整
-        .svlr-contents {
-            display: flex;
-            flex-direction: column;
+            // @include landscape {
+            //     width: 35vw;
+            // }
         }
 
         // リスト
-        &_list {
+        .custom_select_with_filter {
             width: 100%;
             box-shadow: 0 2px 3px 0 rgba(44, 62, 80, 0.24);
             border-radius: 4px;
@@ -1687,22 +2111,92 @@
             &_item {
                 width: 100%;
                 text-align: left;
-                padding: 10px 20px;
-                transition: all 0.2s;
+                padding: 15px 20px;
+                white-space: break-spaces;
+                border-bottom: 1px solid #333;
+
+                &:last-child {
+                    border-bottom: none;
+                }
             }
 
-            // svrollbar用スクロール調整（配布物追加）
+            // svrollbar用スクロール調整
             .svlr-viewport,
             .svlr-wrapper {
                 height: auto !important;
-                max-height: 250px !important;
+                max-height: 40vh !important;
             }
 
-            // svrollbar用リストアイテム並び調整（配布物追加）
+            // svrollbar用リストアイテム並び調整
             .svlr-contents {
                 display: flex;
                 flex-direction: column;
             }
+
+            // スクロールバー非表示
+            .v-scrollbar {
+                display: none;
+            }
+        }
+    }
+
+    /* ツールチップモバイル用調整
+    ========================================================= */
+    .tippy-popper {
+        max-width: 95vw !important;
+    }
+
+    /* スクロールヒント調整
+    ========================================================= */
+    .scroll-hint-icon {
+        top: calc(50% - 45px) !important;
+
+        &::after {
+            top: 8px !important;
+            left: 60px !important;
+        }
+    }
+
+    /* カスタム選択ボックス要素
+    ========================================================= */
+    .custom_select_box {
+        position: relative;
+
+        &::before,
+        &::after {
+            position: absolute;
+            right: 15px;
+            width: 9px;
+            height: 6px;
+            background-color: #535353;
+            content: '';
+            pointer-events: none;
+        }
+
+        &::before {
+            top: calc(50% - 9px);
+            clip-path: polygon(50% 0, 100% 100%, 0 100%);
+        }
+
+        &::after {
+            bottom: calc(50% - 9px);
+            clip-path: polygon(0 0, 50% 100%, 100% 0);
+        }
+
+        select {
+            width: 100%;
+            height: 100%;
+            appearance: none;
+            padding: 8px 35px 6px 10px;
+            border: 1px solid #d5d2cf;
+            border-radius: 3px;
+            background-color: #fff;
+            color: #333333;
+            cursor: pointer;
+
+            // @include landscape {
+            //     padding: 2vh 35px 2vh 10px;
+            // }
         }
     }
 }

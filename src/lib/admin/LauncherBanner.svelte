@@ -1,35 +1,35 @@
 <script lang="ts">
-    import type { launcher_banner } from '@prisma/client/edge';
     import _ from 'lodash';
     import { slide } from 'svelte/transition';
     import { applyAction, enhance } from '$app/forms';
-    import { prepareModal, onSubmit, msgClosed, allBanners, conv2DArrayToObject, discordLinkConvertor, timeOut, closeMsgDisplay, tooltip } from '$utils/client';
+    import type { Banner } from '$types';
+    import { openModal, onSubmit, msgClosed, allBanners, conv2DArrayToObject, discordLinkConvertor, timeOut, closeMsgDisplay, tooltip } from '$utils/client';
 
     interface Props {
-        launcherBanner: launcher_banner[];
-        createdBnr: launcher_banner;
+        bannerData: Banner[];
+        createdBnr: Banner;
         bnrAddMode: boolean;
         isMobile: boolean;
     }
-    let { launcherBanner, createdBnr, bnrAddMode = $bindable(), isMobile }: Props = $props();
+    let { bannerData, createdBnr, bnrAddMode = $bindable(), isMobile }: Props = $props();
     let editingId: number = $state(0); // 編集対象のバナーID
     let editMode = false;
-    const catTypes: { [key in keyof Omit<launcher_banner, 'id' | 'bnr_name'>]: boolean } = $state({
+    const catTypes: { [key in keyof Omit<Banner, 'id' | 'bnr_name'>]: boolean } = $state({
         bnr_url: false,
         ja_img_src: false,
         en_img_src: false,
     }); // 編集中モードカテゴリー、stateで各項目間を自動で折りたためるように
-    allBanners.set(launcherBanner); // サーバーから取得したバナーデータをストアで管理
+    allBanners.set(bannerData); // サーバーから取得したバナーデータをストアで管理
 
     /**
      * 編集モードを切り替える
      *
      * @template T 編集対象のIDの型（数値）
-     * @template U 切り替え対象のカテゴリのタイプ。`launcher_banner` から `id` と `bnr_name` フィールドを除いたキー
+     * @template U 切り替え対象のカテゴリのタイプ。`RainBanner` から `id` と `bnr_name` フィールドを除いたキー
      * @param {T} id 編集対象のID
      * @param {U} type 切り替えたいカテゴリのタイプ
      */
-    const editModeSwitch = <T extends number, U extends keyof Omit<launcher_banner, 'id' | 'bnr_name'>>(id: T, type: U): void => {
+    const editModeSwitch = <T extends number, U extends keyof Omit<Banner, 'id' | 'bnr_name'>>(id: T, type: U): void => {
         // 別のカテゴリがすでに開かれているかを確認
         const activeCat = Object.values(catTypes).some((boolean) => boolean === true);
 
@@ -37,7 +37,7 @@
         if (activeCat && id !== 0) {
             // 全てのカテゴリを閉じる
             Object.keys(catTypes).forEach((_key) => {
-                const key = _key as keyof Omit<launcher_banner, 'id' | 'bnr_name'>;
+                const key = _key as keyof Omit<Banner, 'id' | 'bnr_name'>;
                 catTypes[key] = false;
             });
 
@@ -98,7 +98,7 @@
                 {/if}
 
                 <dd class="contents_desc">
-                    <input name="ja_file" type="file" accept=".png" />
+                    <input class="file_input" name="ja_file" type="file" accept=".png" />
                 </dd>
 
                 {#if isMobile}
@@ -108,7 +108,7 @@
                 {/if}
 
                 <dd class="contents_desc">
-                    <input name="en_file" type="file" accept=".png" />
+                    <input class="file_input" name="en_file" type="file" accept=".png" />
                 </dd>
 
                 <dt class="contents_term">
@@ -206,12 +206,11 @@
                 <dl class="console_contents_list">
                     <p class="console_contents_list_title">
                         <button
-                            class="red_btn"
+                            class="red_btn console_contents_list_title_outer"
                             type="button"
                             onclick={() =>
-                                prepareModal('deleteBnr', {
-                                    title: 'Delete the following banner data?',
-                                    formAction: 'deleteBnrData',
+                                openModal('deleteBnr', {
+                                    label: 'deleteBnr',
                                     bnrId: bnr.id,
                                     bnrUrl: bnr.en_img_src,
                                     bnrName: bnr.bnr_name,

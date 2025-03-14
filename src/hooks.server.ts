@@ -1,12 +1,11 @@
-import type { users } from '@prisma/client/edge';
 import type { Handle, HandleServerError, RequestEvent } from '@sveltejs/kit';
+import { initAcceptLanguageHeaderDetector } from 'typesafe-i18n/detectors';
 import { ADMIN_CREDENTIALS, ADMIN_IP } from '$env/static/private';
 import { PUBLIC_MAIN_DOMAIN, PUBLIC_AUTH_DOMAIN } from '$env/static/public';
 import type { Locales } from '$i18n/i18n-types';
 import { loadAllLocales } from '$i18n/i18n-util.sync';
 import { detectLocale, i18n, isLocale } from '$i18n/i18n-util';
-import ServerData from '$utils/server';
-import { initAcceptLanguageHeaderDetector } from 'typesafe-i18n/detectors';
+import { PostgresManager } from '$utils/server';
 
 loadAllLocales();
 const L = i18n();
@@ -34,7 +33,6 @@ export const handle: Handle = async ({ event, resolve }) => {
         }
     }
 
-    console.log(ADMIN_IP);
     if (event.platform?.env.MAINTENANCE_MODE === 'true' && event.url.pathname !== '/maintenance/') {
         const res = await fetch('https://api.ipify.org?format=json');
         const ip = (await res.json()).ip as string;
@@ -80,8 +78,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 
             const regex = /iphone;|(android|nokia|blackberry|bb10;).+mobile|android.+fennec|opera.+mobi|windows phone|symbianos/i;
             const isMobile = regex.test(event.request.headers.get('user-agent')!);
-            const authUser: users | null = await ServerData.getUserByAuthToken(session, isMobile);
-            if (!authUser) {
+            const sql = new PostgresManager('get', 'authUser', { loginKey: session, isMobile });
+            const username = await sql.execute();
+            if (!username) {
                 const redirectUrl = `${PUBLIC_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${PUBLIC_MAIN_DOMAIN}/admin`;
 
                 return new Response(null, {
@@ -90,7 +89,7 @@ export const handle: Handle = async ({ event, resolve }) => {
                 });
             }
 
-            event.locals.authUser = authUser;
+            event.locals.authUsername = username;
         }
 
         return resolve(event, {

@@ -15,7 +15,7 @@
         msgClosed,
         switchBtnInAuth,
         timeOut,
-        prepareModal,
+        openModal,
         consoleContDisable,
         filterAllianceValue,
         filterAllianceParam,
@@ -396,9 +396,8 @@
                     class="red_btn"
                     type="button"
                     onclick={() =>
-                        prepareModal('rebuildClan', {
-                            title: 'Rebuild the following clan?',
-                            formAction: 'rebuildClan',
+                        openModal('rebuildClan', {
+                            label: 'rebuildClan',
                             clanId: clan.id,
                             clanName: clan.name || 'NULL',
                             clanLeader: clan.leader_name || 'NULL',

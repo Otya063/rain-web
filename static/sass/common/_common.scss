@@ -101,9 +101,13 @@ select {
     input {
         font-size: 1.6rem;
     }
+
+    textarea {
+        font-size: 1.6rem;
+    }
 }
 
-// inputテキスト余白調整
+// inputテキスト調整
 input,
 input[type='text'],
 input[type='password'],
@@ -111,8 +115,19 @@ input[type='number'] {
     padding: 0 6px;
     outline: 0;
     background: white;
-    border: black 1px solid;
-    color: black;
+    color: #333;
+    // border: 1px solid #969da3;
+    border: 1px solid #d5d2cf;
+    border-radius: 3px;
+
+    &::placeholder {
+        color: #999;
+
+        // モバイル端末では文字少し小さく
+        @include sp() {
+            font-size: 1.4rem;
+        }
+    }
 }
 
 input[type='checkbox'],
@@ -190,4 +205,9 @@ h2 {
     position: relative !important;
     font-size: 2.2rem !important;
     cursor: help;
+}
+
+// Svrollerスクロールバーカーソル指定
+.v-scrollbar {
+    cursor: pointer;
 }

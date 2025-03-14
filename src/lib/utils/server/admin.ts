@@ -1,7 +1,8 @@
 import { error } from '@sveltejs/kit';
 import { Buffer } from 'node:buffer'; // Node.jsとの互換性により、追加しないと「ReferenceError: Buffer is not defined」が発生する
-import type { PaginatedUsers, PaginationMeta, PaginatedClans, PaginatedAlliances } from '$types';
-import ServerData, { IsCharLogin, db, ManageBinary, encodeToShiftJIS } from '.';
+import type { PaginationMeta, PaginatedClans, PaginatedAlliances } from '$types';
+import { BinaryManager, IsCharLogin, db } from '.';
+import { encodeToShiftJIS } from '$utils/client';
 
 /**
  * ページングされたユーザーのデータを取得する
@@ -13,7 +14,7 @@ import ServerData, { IsCharLogin, db, ManageBinary, encodeToShiftJIS } from '.';
  * @param {number} [skip=1] スキップするカーソルの数（通常は1を使用）
  * @returns {Promise<PaginatedUsers[]>} ページングされたユーザーデータの配列を返す
  */
-export const getPaginatedUserData = async (
+/* export const getPaginatedUserData = async (
     filterParam: 'username' | 'character_name' | 'user_id' | 'character_id',
     filterValue: string,
     status: 'init' | 'back' | 'next',
@@ -29,7 +30,7 @@ export const getPaginatedUserData = async (
 
     // データを加工
     return Promise.all(users.map(async (user) => moddedUserData(user)));
-};
+}; */
 
 /**
  * クエリ条件を構築
@@ -41,7 +42,7 @@ export const getPaginatedUserData = async (
  * @param {number} [cursor] データ検索の開始位置
  * @returns {any} prismaでのデータ取得に使用するクエリ
  */
-const buildQuery = (
+/* const buildQuery = (
     filterParam: 'username' | 'character_name' | 'user_id' | 'character_id',
     filterValue: string,
     status: 'init' | 'back' | 'next',
@@ -142,20 +143,20 @@ const buildQuery = (
     }
 
     return baseQuery;
-};
+}; */
 
 /**
  * ユーザーデータを加工
  * @param {any} user 元のユーザーデータ
  * @returns {Promise<PaginatedUsers>} 加工済みユーザーデータ
  */
-const moddedUserData = async (user: any): Promise<PaginatedUsers> => {
+/* const moddedUserData = async (user: any): Promise<PaginatedUsers> => {
     // savedataから必要プロパティを追加する
     const newCharacters = user.characters.map((character: any) => {
         const { savedata, ...rest } = character;
         return {
             ...rest,
-            playtime: ManageBinary.getDataFromSavedata('playtime', savedata),
+            playtime: ManageBinary.getDataFromSavedata('playtime', savedata?.toString('hex')),
         };
     });
 
@@ -167,7 +168,7 @@ const moddedUserData = async (user: any): Promise<PaginatedUsers> => {
         characters: newCharacters,
         suspended_account: suspendedAccount,
     };
-};
+}; */
 
 /**
  * ページングのメタデータを取得する
@@ -410,7 +411,7 @@ export const editName = async (
     }
 
     // 名前のbuffer生成（12バイト以下でないといけない、2文字で1バイト扱いなのでlengthは24）
-    const nameBuffer = encodeToShiftJIS(newName);
+    const nameBuffer = Buffer.from(new Uint8Array(encodeToShiftJIS(newName)));
     if (nameBuffer.toString('hex').length > 24 || nameBuffer.toString('hex').length === 0) {
         return { success: false, message: 'Character name must be 1-12 characters (1-6 characters in Japanese).' };
     }
@@ -433,7 +434,7 @@ export const editName = async (
         return { success: false, message: 'Savedata not found.' };
     }
 
-    const base64 = ManageBinary.exportEditedSavedata('name', savedata, paddedNameBuffer);
+    const base64 = new BinaryManager().exportEditedSavedata('name', savedata, paddedNameBuffer);
 
     try {
         await db.$executeRaw`UPDATE characters SET savedata = decode(${base64}, 'base64'), name = ${newName} WHERE id = ${characterId}`;

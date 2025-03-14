@@ -95,7 +95,7 @@
                     {:else if status === 403}
                         {$LL.error[403].message3()}
                     {:else if status === 500}
-                        {$LL.error[500].message3()}
+                        {@html $LL.error[500].message3()}
                     {/if}
                 {:else}
                     {@html $page.error?.message3}

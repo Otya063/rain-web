@@ -7,10 +7,10 @@
         max?: number;
         step?: number;
         name: string;
-        input: (value: number) => void;
+        // input: (value: number) => void;
         disabled?: boolean;
     }
-    let { value = $bindable(), min = 1, max = 100, step = 1, name, input, disabled = false }: Props = $props();
+    let { value = $bindable(), min = 1, max = 100, step = 1, name, disabled = false }: Props = $props();
     let intervalId: NodeJS.Timeout | null = null;
     let timeoutId: NodeJS.Timeout | null = null;
     let touchStartX = 0;
@@ -24,7 +24,7 @@
     const increment = (): void => {
         if (value < max) {
             value += step;
-            input(value);
+            // input(value);
         }
     };
 
@@ -35,7 +35,7 @@
     const decrement = (): void => {
         if (value > min) {
             value -= step;
-            input(value);
+            // input(value);
         }
     };
 
@@ -113,11 +113,11 @@
 
         if (isNumber(inputValue) && Number(inputValue) >= min && Number(inputValue) <= max) {
             value = Number(inputValue);
-            input(value);
+            // input(value);
         } else {
             // 無効な値である時は、最小値を設定
             value = min;
-            input(min);
+            // input(min);
         }
     };
 </script>
@@ -132,7 +132,7 @@
         onpointerleave={resetAutoRepeat}
         disabled={value <= min}>−</button
     >
-    <input class="number_input_text" type="text" {name} bind:value oninput={onInput} {disabled} />
+    <input class="number_input_text" type="text" {name} bind:value oninput={onInput} {disabled} autocomplete="off" />
     <button
         class="increment_btn"
         type="button"

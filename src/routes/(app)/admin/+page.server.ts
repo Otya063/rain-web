@@ -1,17 +1,31 @@
 import type { Action, Actions, PageServerLoad } from './$types';
-import type { discord, discord_register, launcher_banner, launcher_info, launcher_system, users } from '@prisma/client/edge';
+import type { discord, discord_register, launcher_system } from '@prisma/client/edge';
 import { error, fail } from '@sveltejs/kit';
 import { DateTime } from 'luxon';
 import { Buffer } from 'node:buffer'; // Node.jsとの互換性により、追加しないと「ReferenceError: Buffer is not defined」が発生する
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
-import { DistributionTypeObj, type BinaryTypes, type Distribution, type DistributionTypeName, type R2AssetsJsonData } from '$types';
-import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi, isNumber, convertColorString, convHrToHrp, ManageDistribution } from '$utils/client';
-import ServerData, { db, editName, getPaginatedAllianceData, getPaginatedClanData, getPaginatedUserData, getPaginationMeta, IsCharLogin, ManageBinary } from '$utils/server';
+import {
+    DistributionCategoryObj,
+    BinaryTypesArray,
+    type BinaryTypes,
+    type Distribution,
+    type DistributionCategoryName,
+    type PaginatedUsersResult,
+    type R2AssetsJsonData,
+    type CharacterEditableItemType,
+    type DistributionEditableItemType,
+    type InfoType,
+    type Information,
+    type InformationEditableItemType,
+    type UserEditableItemType,
+} from '$types';
+import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi, isNumber, ManageDistribution, getDistributionUpdatedValue } from '$utils/client';
+import ServerData, { db, editName, getPaginatedAllianceData, getPaginatedClanData, getPaginationMeta, IsCharLogin, PostgresManager } from '$utils/server';
 
 const emptyMsg = 'Input value is empty.';
 const requiredMsg = 'Required field is empty.';
 
-export const load: PageServerLoad = async ({ url, locals: { LL, authUser }, platform }) => {
+export const load: PageServerLoad = async ({ url, locals: { LL, authUsername }, platform }) => {
     const r2Response = await platform?.env.R2.get('EquipItemsEn.json');
     if (!r2Response) {
         error(404, { message: '', message1: undefined, message2: ['No r2-assets found.'], message3: undefined });
@@ -19,42 +33,25 @@ export const load: PageServerLoad = async ({ url, locals: { LL, authUser }, plat
 
     const r2JsonData = (await r2Response.json()) as R2AssetsJsonData;
 
-    const launcherSystem = (await ServerData.getLauncherSystem()) as launcher_system;
+    const sql = new PostgresManager('transactions', 'initAdmin');
+    const { launcherSystem, information, banners, distributions, charIdNamePair } = await sql.execute();
 
     // 管理者確認
     if (!url.origin.includes('localhost')) {
-        const isAdmin: boolean = launcherSystem['rain_admins'].includes(authUser.username);
+        const isAdmin: boolean = launcherSystem['rain_admins'].includes(authUsername);
 
         if (!isAdmin) {
             error(403, { message: '', message1: undefined, message2: undefined, message3: LL.error['adminForbidden']() });
         }
     }
 
-    const launcherInformation = (await ServerData.getInformation('ALL')) as { [key: string]: launcher_info[] };
-
-    const launcherBanner: launcher_banner[] = await ServerData.getBannerData();
-
-    const distributions = await ServerData.getDistributions();
-
-    // IDと名前ペアの文字列配列（「ID - 名前」の形式）
-    const charactersIdName = (
-        await db.characters.findMany({
-            select: {
-                id: true,
-                name: true,
-            },
-        })
-    ).map((character) => {
-        return `[${character.id}] ${character.name || 'Ready to Hunt'}`;
-    });
-
     return {
         launcherSystem,
-        launcherInformation,
-        launcherBanner,
+        information,
+        banners,
         distributions,
         r2JsonData,
-        charactersIdName,
+        charIdNamePair,
     };
 };
 
@@ -127,32 +124,25 @@ const updateAllMaintData: Action = async ({ request }) => {
     }
 };
 
-const createInfoData: Action = async ({ request }) => {
+const createInformation: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { title, type } = data as {
-        title: string;
-        type: 'Important' | 'Defects and Troubles' | 'Management and Service' | 'In-Game Events' | 'Updates and Maintenance' | 'Select the type of information here.';
-    };
-    let url = data.url as string | null;
+    const title = data.title;
+    const url = data.url;
+    const type = data.type as InfoType;
 
-    if (type === 'Select the type of information here.' || !title) {
+    if (!title || !type) {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: requiredMsg });
     }
 
     try {
-        const createdInfo = await db.launcher_info.create({
-            data: {
-                title,
-                url: !url ? null : url.indexOf('discord.com') ? discordLinkConvertor(url) : url,
-                type,
-            },
-        });
+        const sql = new PostgresManager('create', 'information', { title, url: url.indexOf('discord.com') ? discordLinkConvertor(url) : url, type });
+        const createdInformation: Information = await sql.execute();
 
         return {
             success: true,
-            message: `The information data (Title: ${createdInfo.title}) has been successfully created.`,
-            createdInfo,
+            message: `The information data (Title: ${createdInformation.title}) has been successfully created.`,
+            createdInformation,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -165,50 +155,25 @@ const createInfoData: Action = async ({ request }) => {
     }
 };
 
-const updateInfoData: Action = async ({ request }) => {
+const updateInformation: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const id = Number(data.info_id);
-    const zonename = data.zonename;
-    const column = Object.keys(data)[2] as keyof Omit<launcher_info, 'id'>;
-    let value = Object.values(data)[2] as string | null;
-    if (!value) {
-        switch (column) {
-            case 'title':
-            case 'type':
-            case 'created_at': {
-                await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
-                return fail(400, { error: true, message: emptyMsg });
-            }
+    const infoId = Number(data.info_id);
+    const column = Object.keys(data)[1] as InformationEditableItemType;
+    const value = Object.values(data)[1] as string | null;
 
-            default: {
-                break;
-            }
-        }
+    // url以外は空送信不可
+    if (!value && column !== 'url') {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
+        return fail(400, { error: true, message: emptyMsg });
     }
 
     try {
-        const updatedInfo = await db.launcher_info.update({
-            where: {
-                id,
-            },
-            data: {
-                [column]:
-                    column !== 'url'
-                        ? column === 'created_at'
-                            ? DateTime.fromISO(String(value), { zone: zonename }).toString()!
-                            : value
-                        : !value
-                          ? null
-                          : value.indexOf('discord.com')
-                            ? discordLinkConvertor(value)
-                            : value,
-            },
-        });
+        const sql = new PostgresManager('update', 'information', { infoId, column, value });
+        await sql.execute();
 
         return {
             success: true,
-            message: `The information data (ID: ${id}, Column: ${column}) has been successfully updated.`,
-            updatedInfo,
+            message: `The information data (ID: ${infoId}, Column: ${column}) has been successfully updated.`,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -221,20 +186,17 @@ const updateInfoData: Action = async ({ request }) => {
     }
 };
 
-const deleteInfoData: Action = async ({ request }) => {
+const deleteInformation: Action = async ({ request }) => {
     const data = await request.formData();
-    const id = Number(data.get('info_id'));
+    const deleteInfoIds: number[] = String(data.get('selectedInformationId')).split(',').map(Number);
 
     try {
-        await db.launcher_info.delete({
-            where: {
-                id,
-            },
-        });
+        const sql = new PostgresManager('delete', 'information', { deleteInfoIds });
+        const deletedInfoTitles: string[] = await sql.execute();
 
         return {
             success: true,
-            message: `The information data (ID: ${id}) has been successfully deleted.`,
+            message: `The information data (Title: ${deletedInfoTitles.map((title) => title.replace(/~C(\d{2})/g, ''))}) has been successfully deleted.`,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -327,7 +289,7 @@ const getPaginatedUsers: Action = async ({ request }) => {
     const { filter_param, filter_value, status, cursor } = data as {
         filter_param: 'username' | 'character_name' | 'user_id' | 'character_id';
         filter_value: string;
-        status: string;
+        status: 'init' | 'back' | 'next';
         cursor: number;
     };
 
@@ -340,35 +302,43 @@ const getPaginatedUsers: Action = async ({ request }) => {
         return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
     }
 
-    const { paginatedUsers, paginationMeta } = await (async () => {
-        switch (status) {
-            case 'init': {
-                const paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'init', 5);
+    const sql = new PostgresManager('get', 'paginatedUsers', {
+        filterParam: filter_param,
+        filterValue: filter_value,
+        status,
+        cursor,
+    });
+    const result: PaginatedUsersResult = await sql.execute();
 
-                const nextCursor = paginatedUsers[4]?.id || 0;
-                const paginationMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
+    // const { paginatedUsers, paginationMeta } = await (async () => {
+    //     switch (status) {
+    //         case 'init': {
+    //             const paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'init', 5);
 
-                return { paginatedUsers, paginationMeta };
-            }
+    //             const nextCursor = paginatedUsers[4]?.id || 0;
+    //             const paginationMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
 
-            case 'back':
-            case 'next': {
-                const paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1);
+    //             return { paginatedUsers, paginationMeta };
+    //         }
 
-                const prevCursor = paginatedUsers[0]?.id || 0;
-                const nextCursor = paginatedUsers[4]?.id || 0;
-                const paginationMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
+    //         case 'back':
+    //         case 'next': {
+    //             const paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1);
 
-                return { paginatedUsers, paginationMeta };
-            }
+    //             const prevCursor = paginatedUsers[0]?.id || 0;
+    //             const nextCursor = paginatedUsers[4]?.id || 0;
+    //             const paginationMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
 
-            default: {
-                error(400, { message: '', message1: '', message2: ['Invalid status.'], message3: undefined });
-            }
-        }
-    })();
+    //             return { paginatedUsers, paginationMeta };
+    //         }
 
-    if (!paginatedUsers.length) {
+    //         default: {
+    //             error(400, { message: '', message1: '', message2: ['Invalid status.'], message3: undefined });
+    //         }
+    //     }
+    // })();
+
+    if (!result.users.length) {
         return fail(400, {
             error: true,
             message:
@@ -380,7 +350,7 @@ const getPaginatedUsers: Action = async ({ request }) => {
         });
     }
 
-    return { paginatedUsers, paginationMeta };
+    return { searchResult: result };
 };
 
 const getPaginatedClans: Action = async ({ request }) => {
@@ -500,7 +470,7 @@ const updateUserData: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.user_id);
     const zonename = data.zonename;
-    const column = Object.keys(data)[1] as keyof Omit<users, 'id' | 'last_character' | 'last_login' | 'item_box' | 'web_login_key'>;
+    const column = Object.keys(data)[1] as UserEditableItemType;
     const value = Object.values(data)[1] as string | number;
     let rightsData: Record<string, any> = {};
 
@@ -568,18 +538,20 @@ const updateUserData: Action = async ({ request }) => {
 };
 
 const updateCharacterData: Action = async ({ request }) => {
-    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const form = await request.formData();
+    const data = conv2DArrayToObject([...form.entries()]);
     const id = Number(data.character_id);
-    const column = Object.keys(data)[2] as 'name' | 'bounty' | 'clan' | 'reupload_binary';
+    const column = Object.keys(data)[2] as CharacterEditableItemType;
     const value = Object.values(data)[2] as string | number;
 
     switch (column) {
         case 'name': {
-            const discordLinked = data.not_linked === 'false';
             const bountyCoin = Number(data.bounty_coin);
-            if (!discordLinked) {
+            if (!data.discord_id) {
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
                 return fail(400, { error: true, message: "This character isn't linked to a discord account." });
             } else if (bountyCoin < 50000) {
+                await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
                 return fail(400, { error: true, message: `Insufficient bounty coins (Owned: ${bountyCoin}).` });
             }
 
@@ -656,36 +628,43 @@ const updateCharacterData: Action = async ({ request }) => {
         }
 
         case 'reupload_binary': {
-            const file = data.file as File;
-            if (file.size === 0) {
+            const files = form.getAll('file');
+            const binaryData: { [key in BinaryTypes]?: ArrayBuffer } = {};
+
+            // ファイル未選択時
+            if (files.length === 1 && !(files[0] as File).name && !(files[0] as File).size) {
                 return fail(400, { error: true, message: 'No file selected.' });
             }
 
-            delete data.user_id;
-            delete data.character_id;
-            delete data.binary;
-            delete data.file;
+            for (const file of files) {
+                const f = file as File;
+                const fileName = f.name.split('.')[0] as BinaryTypes; // 「.bin」より前の部分を取り出す（カラム名と一致）
 
-            const binaryData: { [key in BinaryTypes]: string } = data as { [key in BinaryTypes]: string };
-            Object.keys(data).forEach((_value) => {
-                const value = _value as BinaryTypes;
-                const base64 = Buffer.from(new Uint8Array(data[value].split(',').map(Number))).toString('base64');
-                binaryData[value] = base64 === 'AA==' ? '' : base64;
-            });
+                // ファイル名がBinaryTypes型に一致しない時
+                if (!Object.values(BinaryTypesArray).includes(fileName)) {
+                    return fail(400, { error: true, message: `Invalid file name: ${fileName}.` });
+                }
 
-            const { success, message } = await ManageBinary.setBinary(id, binaryData);
-            if (!success) {
-                return fail(400, { error: true, message });
-            } else {
-                return {
-                    success: true,
-                    message: `The binary data of the character (ID: ${id}) has been successfully updated.`,
-                };
+                // ファイル名重複時
+                if (binaryData.hasOwnProperty(fileName)) {
+                    return fail(400, { error: true, message: `Duplicate file name: ${fileName}.` });
+                }
+
+                const arrayBuffer = await f.arrayBuffer();
+                binaryData[fileName] = arrayBuffer;
             }
+
+            const sql = new PostgresManager('update', 'characterBinary', { charId: id, binaryData });
+            await sql.execute();
+
+            return {
+                success: true,
+                message: `The binary data (${Object.keys(binaryData).join(', ')}) has been successfully updated.`,
+            };
         }
 
         default: {
-            error(400, { message: '', message1: '', message2: ['Invalid column.'], message3: undefined });
+            error(400, { message: '', message1: '', message2: [`Unsupported data type: ${column}.`], message3: undefined });
         }
     }
 };
@@ -932,6 +911,26 @@ const linkDiscord: Action = async ({ request }) => {
         return fail(400, { error: true, message: emptyMsg });
     }
 
+    /**
+     * ディスコードアカウント連携OK例
+     *
+     * 「未連携キャラクターA（ユーザーA）」に、「未連携ディスコードA」を連携
+     * 　-> 新規連携
+     *
+     * 「ディスコードAと連携済みキャラクターA（連携済みユーザーA）」の状態で、「ディスコードAを未連携キャラクターB（連携済みユーザーA）」に再連携（キャラクターA（連携済みユーザーA）は連携解除）
+     * 　-> 同一ユーザー内の異なるキャラクター間でディスコード連携の切り替えが可能（/switchコマンドと同様）
+     *
+     * 「ディスコードAと連携済みキャラクターA（連携済みユーザーA）」の状態で、「ディスコードAを未連携キャラクターA（未連携ユーザーB）」に再連携（キャラクターA（連携済みユーザーA）は連携解除）
+     * 　-> 再連携先ユーザーが未連携である場合のみ、異なるユーザー間でディスコード連携の切り替えが可能
+     */
+
+    /**
+     * ディスコードアカウント連携NG例
+     *
+     * 「未連携ディスコードA」もしくは「ディスコードAと連携済みキャラクターA（連携済みユーザーA）」の状態で、「ディスコードAを未連携キャラクターA（ディスコードBと連携済みユーザーB）」に再連携
+     * 　-> 再連携先ユーザーが連携済みである場合は、ディスコード連携の切り替えが不可能
+     */
+
     try {
         const discordRegisterByUserId: discord_register | null = await ServerData.getLinkedUserByUserId(Number(user_id));
         if (discordRegisterByUserId && discordRegisterByUserId.discord_id !== discord_id) {
@@ -943,56 +942,47 @@ const linkDiscord: Action = async ({ request }) => {
 
         // discord_register (user)
         const discordRegister: discord_register | null = await ServerData.getLinkedUserByDiscordId(discord_id);
-        (async () => {
-            if (discordRegister) {
-                await db.discord_register.update({
-                    where: {
-                        discord_id,
-                    },
-                    data: {
-                        user_id: Number(user_id),
-                    },
-                });
-            } else {
-                await db.discord_register.create({
-                    data: {
-                        user_id: Number(user_id),
-                        discord_id,
-                    },
-                });
-            }
-        })();
+        if (discordRegister) {
+            await db.discord_register.update({
+                where: {
+                    discord_id,
+                },
+                data: {
+                    user_id: Number(user_id),
+                },
+            });
+        } else {
+            await db.discord_register.create({
+                data: {
+                    user_id: Number(user_id),
+                    discord_id,
+                },
+            });
+        }
 
         // discord (character)
         const discord: discord | null = await ServerData.getLinkedCharactersByDiscordId(discord_id);
-        const { newDiscord } = await (async () => {
-            if (discord) {
-                const newDiscord = await db.discord.update({
-                    where: {
-                        discord_id,
-                    },
-                    data: {
-                        char_id: Number(char_id),
-                    },
-                });
-
-                return { newDiscord };
-            } else {
-                const newDiscord = await db.discord.create({
-                    data: {
-                        char_id: Number(char_id),
-                        discord_id,
-                    },
-                });
-
-                return { newDiscord };
-            }
-        })();
+        if (discord) {
+            await db.discord.update({
+                where: {
+                    discord_id,
+                },
+                data: {
+                    char_id: Number(char_id),
+                },
+            });
+        } else {
+            await db.discord.create({
+                data: {
+                    char_id: Number(char_id),
+                    discord_id,
+                },
+            });
+        }
 
         return {
             success: true,
             message: `The character (Character ID: ${char_id}) has been successfully linked to the discord account (Discord ID: ${discord_id}).`,
-            newDiscord,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -1245,20 +1235,19 @@ const downloadBinary: Action = async ({ request }) => {
     }
 };
 
-const updateDistributionData: Action = async ({ request }) => {
+const updateDistribution: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const id = Number(data.dist_id);
-    const zonename = data?.zonename;
-    const column = Object.keys(data)[1] as keyof Omit<Distribution, 'id'>;
+    const distId = Number(data.dist_id);
+    const column = Object.keys(data)[1] as DistributionEditableItemType;
     const value = Object.values(data)[1] as string | null;
 
-    // deadlineとcharacter_id以外は空不許可
+    // deadlineとcharacter_id以外は空送信不可
     if (!value && column !== 'deadline' && column !== 'character_id') {
         await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         return fail(400, { error: true, message: emptyMsg });
     }
 
-    // 配布データの場合、データのみにする
+    // dataカラムの場合、配布コンテンツデータのみにする
     if (column === 'data') {
         delete data.dist_id;
         delete data.data;
@@ -1266,57 +1255,26 @@ const updateDistributionData: Action = async ({ request }) => {
 
     try {
         if (column !== 'data') {
-            await db.distribution.update({
-                where: {
-                    id,
-                },
-                data: {
-                    [column]:
-                        column === 'type'
-                            ? (() => {
-                                  const _value = value as DistributionTypeName;
-                                  return DistributionTypeObj[_value];
-                              })()
-                            : column === 'event_name' || column === 'description'
-                              ? convertColorString('colorNum', value!, column) // ゲーム内カラーコードに変換
-                              : column === 'deadline'
-                                ? !value
-                                    ? null // 無期限
-                                    : DateTime.fromISO(value, { zone: zonename }).toString() // UTCとして保存（ゲーム内では+9日本時間に変換される）
-                                : column === 'times_acceptable'
-                                  ? Number(value!) // number型なので変換必要
-                                  : column === 'min_hr' || column === 'max_hr'
-                                    ? convHrToHrp(Number(value!))
-                                    : column === 'min_sr' || column === 'max_sr' || column === 'min_gr' || column === 'max_gr'
-                                      ? Number(value!) === 0
-                                          ? 65535 // 0の時は無条件なので65535
-                                          : Number(value!) // それ以外はそのままgr
-                                      : column === 'character_id'
-                                        ? !value
-                                            ? null // 特定キャラクター指定なし
-                                            : Number(value!) // number型なので変換必要
-                                        : value,
-                },
-            });
+            const sql = new PostgresManager('update', 'distribution', { distId, column, value });
+            await sql.execute();
 
             return {
                 success: true,
-                message: `The distribution data (ID: ${id}, Column: ${column}) has been successfully updated.`,
+                message: `The distribution data (ID: ${distId}, Column: ${column}) has been successfully updated.`,
             };
         } else {
-            // dataカラムの時は、executeRawを使用する
-            let contentsData = ManageDistribution.getHexString(data);
+            const contentsData = ManageDistribution.getHexString(data);
             if (!contentsData) {
                 await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
                 return fail(400, { error: true, message: 'Failed to get contents data.<br />Source data format is invalid.' });
             }
 
-            const base64 = Buffer.from(contentsData, 'hex').toString('base64');
-            await db.$executeRaw`UPDATE distribution SET data = decode(${base64}, 'base64') WHERE id = ${id}`;
+            const sql = new PostgresManager('update', 'distribution', { distId, column, value: contentsData });
+            await sql.execute();
 
             return {
                 success: true,
-                message: `The distribution data (ID: ${id}, Column: ${column}) has been successfully updated.`,
+                message: `The distribution data (ID: ${distId}, Column: ${column}) has been successfully updated.`,
                 updatedContentsData: contentsData,
             };
         }
@@ -1333,18 +1291,15 @@ const updateDistributionData: Action = async ({ request }) => {
 
 const deleteDistribution: Action = async ({ request }) => {
     const data = await request.formData();
-    const id = Number(data.get('dist_id'));
+    const deleteDistIds: number[] = String(data.get('selectedDistributionId')).split(',').map(Number);
 
     try {
-        await db.distribution.delete({
-            where: {
-                id,
-            },
-        });
+        const sql = new PostgresManager('delete', 'distributions', { deleteDistIds });
+        const deletedDistTitles: string[] = await sql.execute();
 
         return {
             success: true,
-            message: `The distribution data (ID: ${id}) has been successfully deleted.`,
+            message: `The distribution data (Title: ${deletedDistTitles.map((title) => title.replace(/~C(\d{2})/g, ''))}) has been successfully deleted.`,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -1357,13 +1312,32 @@ const deleteDistribution: Action = async ({ request }) => {
     }
 };
 
-const createDistData: Action = async ({ request }) => {
-    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+const createDistribution: Action = async ({ request }) => {
+    let data = conv2DArrayToObject([...(await request.formData()).entries()]);
+
+    // 必須項目空欄エラー
+    if (!data.type || !data.event_name || !data.description || !data.times_acceptable) {
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
+        return fail(400, { error: true, message: emptyMsg });
+    }
+
+    const charId = Number(data.character_id);
+    const category = DistributionCategoryObj[data.category as DistributionCategoryName];
+    const deadline = !data.deadline ? null : DateTime.fromISO(data.deadline).setZone('utc').toJSDate(); // data.deadlineは現地時間なので、UTCに変換して保存（ゲーム内では+9日本時間に変換される）
+    //const title = convertColorString('colorNum', data.event_name, 'event_name');
+    const title = data.event_name.replace(/ /g, ' '); // スペースのバグ（16進数：20ではなくなぜか803Fになる）を修正する
+    //const description = convertColorString('colorNum', data.description, 'description');
+    const description = data.description.replace(/ /g, ' '); // スペースのバグ（16進数：20ではなくなぜか803Fになる）を修正する
+    const remaining = Number(data.times_acceptable);
+    const minHr = Number(data.min_hr) === 0 ? 65535 : Number(data.min_hr);
+    const maxHr = Number(data.max_hr) === 0 ? 65535 : Number(data.max_hr);
+    const minGr = Number(data.min_gr) === 0 ? 65535 : Number(data.min_gr);
+    const maxGr = Number(data.max_gr) === 0 ? 65535 : Number(data.max_gr);
 
     try {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
         const keysToRemove = ['type', 'deadline', 'zonename', 'event_name', 'description', 'times_acceptable', 'character_id', 'min_hr', 'max_hr', 'min_gr', 'max_gr'];
-        const contentsData: { [key: string]: string } = Object.keys(data)
+
+        data = Object.keys(data)
             .filter((key) => !keysToRemove.includes(key))
             .reduce(
                 (obj, key) => {
@@ -1371,16 +1345,44 @@ const createDistData: Action = async ({ request }) => {
                     return obj;
                 },
                 {} as { [key: string]: string },
-            );
-        console.log(data);
-        console.log(convertColorString('colorNum', data.event_name, 'event_name'));
-        console.log(convertColorString('colorNum', data.description, 'description'));
-        console.log(contentsData);
+            ); // 配布コンテンツデータ以外を削除
+        const contentsData = ManageDistribution.getHexString(data);
+        if (!contentsData) {
+            await new Promise((resolve) => setTimeout(resolve, 1000)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
+            return fail(400, { error: true, message: 'Failed to get contents data.<br />Source data format is invalid.' });
+        }
+
+        const base64 = Buffer.from(contentsData, 'hex').toString('base64');
+
+        const sql = new PostgresManager('create', 'distribution', { charId, category, deadline, title, description, remaining, minHr, maxHr, minGr, maxGr, base64 });
+        const createdDistribution: Distribution = await sql.execute();
 
         return {
             success: true,
-            message: `The distribution data (Title: ) has been successfully created.`,
+            message: `The distribution data (Title: ${title.replace(/~C(\d{2})/g, '')}) has been successfully created.`,
+            createdDistribution,
         };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const deleteClaimedDistribution: Action = async ({ request }) => {
+    const data = await request.formData();
+    const charId = Number(data.get('charId'));
+    const deleteDistIds: number[] = String(data.get('selectedDistributionId')).split(',').map(Number);
+
+    try {
+        const sql = new PostgresManager('delete', 'claimedDistributions', { charId, deleteDistIds });
+        const deletedDistTitles: string[] = await sql.execute();
+
+        return { success: true, message: `The distribution data (Title: ${deletedDistTitles.map((title) => title.replace(/~C(\d{2})/g, ''))}) has been successfully deleted.` };
     } catch (err) {
         if (err instanceof Error) {
             return fail(400, { error: true, message: err.message });
@@ -1395,9 +1397,9 @@ const createDistData: Action = async ({ request }) => {
 export const actions: Actions = {
     updateSystemMode,
     updateAllMaintData,
-    createInfoData,
-    updateInfoData,
-    deleteInfoData,
+    createInformation,
+    updateInformation,
+    deleteInformation,
     courseControl,
     getPaginatedUsers,
     getPaginatedClans,
@@ -1417,7 +1419,8 @@ export const actions: Actions = {
     rebuildClan,
     updateAllianceData,
     downloadBinary,
-    updateDistributionData,
+    updateDistribution,
     deleteDistribution,
-    createDistData,
+    createDistribution,
+    deleteClaimedDistribution,
 };

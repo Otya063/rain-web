@@ -1,5 +1,6 @@
-name: 'Rain Web'
+name: 'Rain Web Dev'
 on:
+    workflow_dispatch:
     push:
         branches:
             - development
@@ -25,7 +26,6 @@ jobs:
             PUBLIC_AUTH_DOMAIN: ${{ secrets.DEV_AUTH_DOMAIN }}
             ADMIN_CREDENTIALS: ${{ secrets.ADMIN_CREDENTIALS }}
             ADMIN_IP: ${{ secrets.ADMIN_IP }}
-            PUBLIC_TINY_API: ${{ secrets.TINY_API }}
 
         steps:
             - name: Checkout

@@ -12,7 +12,7 @@ declare global {
         interface Locals {
             locale: Locales;
             LL: TranslationFunctions;
-            authUser: users;
+            authUsername: string;
         }
         // interface PageData {}
         interface Platform {

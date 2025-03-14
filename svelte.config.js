@@ -15,9 +15,9 @@ const config = {
             $lib: 'src/lib',
         },
     },
-    compilerOptions: {
+    /* compilerOptions: {
         preserveComments: true,
-    },
+    }, */
 };
 
 export default config;

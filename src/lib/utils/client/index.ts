@@ -6,15 +6,16 @@ import { replaceLocaleInUrl } from '.';
 export * from './admin';
 export * from './assets';
 export * from './converter';
-export * from './distribution';
 export * from './message';
-export * from './modal';
+export * from './pagination';
 export * from './scroll';
+export * from './store';
 export * from './tooltip';
 export * from './validation';
 
 /**
  * 記事ページを読み込み遷移する
+ *
  * @param {MouseEvent} e イベントオブジェクト
  * @param {URL} url 基本となるURL
  * @param {Locales} langCode 使用する言語コード

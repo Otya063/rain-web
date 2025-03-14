@@ -3,16 +3,16 @@
     import { adminTabValue } from '$utils/client';
 
     interface Props {
-        closeMenu: () => void;
+        closeMobileMenu: (btnClicked: boolean) => void;
     }
-    let { closeMenu }: Props = $props();
+    let { closeMobileMenu }: Props = $props();
     const menuList: Record<string, { [key: string]: string }> = {
         system: {
             text: 'Launcher System',
             icon: 'tune',
         },
         info: {
-            text: 'Launcher Information',
+            text: 'Information',
             icon: 'info',
         },
         users: {
@@ -47,7 +47,7 @@
             class:active={type === $adminTabValue}
             onclick={() => {
                 adminTabValue.set(type);
-                closeMenu();
+                closeMobileMenu(true);
             }}
         >
             <p class="console_menu_list_link">
