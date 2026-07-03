@@ -1,14 +1,10 @@
-<script lang="ts">
+<!-- 未使用コンポーネント 2025/03/16 -->
+<!-- <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import { InfoTypeObj, type Information } from '$types';
+    import { InfoTypeObj, type CreateInformationProps } from '$types';
     import { onSubmit, msgClosed, timeOut, closeMsgDisplay, tooltip, allInformationData } from '$utils/client';
 
-    interface Props {
-        createdInformation: Information;
-        infoAddMode: boolean;
-        isMobile: boolean;
-    }
-    let { createdInformation, infoAddMode = $bindable(false), isMobile }: Props = $props();
+    let { createdInformation, infoAddMode = $bindable(false), isMobile }: CreateInformationProps = $props();
 </script>
 
 <h2>
@@ -57,7 +53,7 @@
             <dd class="contents_desc">
                 <div class="contents_desc_item">
                     <div class="contents_desc_item_text">
-                        <input class="long" type="text" name="url" placeholder="Enter url." autocomplete="off" />
+                        <input class="long" type="text" name="url" placeholder="Enter information url." autocomplete="off" />
                     </div>
                 </div>
             </dd>
@@ -104,4 +100,4 @@
             </button>
         </div>
     </form>
-</div>
+</div> -->

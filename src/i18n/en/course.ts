@@ -91,7 +91,7 @@ export const courseEn = (bin: string[]): CourseEnData => {
         'NetCafe [Unused]': {
             id: 25,
             enabled: bin[25] === '1',
-            code: 'nc',
+            code: 'netcafe',
         },
         'Certified NetCafe': {
             id: 26,

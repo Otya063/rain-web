@@ -1,9 +1,10 @@
-<script lang="ts">
+<!-- 未使用コンポーネント 2025/03/16 -->
+<!-- <script lang="ts">
     import { DateTime } from 'luxon';
     import ScrollHint from 'scroll-hint';
     import { Svroller } from 'svrollbar';
     import { applyAction, enhance } from '$app/forms';
-    import { InfoTypeObj, type InformationEditableItemType, type Information } from '$types';
+    import { InfoTypeObj, type InformationEditableItemType, type Information, type InformationMainProps } from '$types';
     import {
         allInformationData,
         onSubmit,
@@ -18,18 +19,14 @@
         Pager,
         pagerInformationData,
         tooltipWhenOverflowText,
-        handleInformationEditField,
+        handleCommonEditField,
         generatePaginationBtn,
         preventHorizScrollOnDetailRow,
         toggleFilterCheckbox,
         sortId,
     } from '$utils/client';
 
-    interface Props {
-        infoAddMode: boolean;
-        isMobile: boolean;
-    }
-    let { infoAddMode = $bindable(false), isMobile }: Props = $props();
+    let { infoAddMode = $bindable(false), isMobile }: InformationMainProps = $props();
     let editingId: number = $state(0); // 編集対象のインフォID
     let catTypes: Record<InformationEditableItemType, boolean> = $state({
         title: false,
@@ -114,6 +111,33 @@
     }
 </script>
 
+{#snippet fieldButtons(col: InformationEditableItemType, infoId: number)}
+    {#if editingId === infoId && catTypes[col]}
+        <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, col)}>
+            <span class="btn_icon material-symbols-outlined">close</span>
+            <span class="btn_text">Cancel</span>
+        </button>
+
+        <button
+            class="blue_btn"
+            type="submit"
+            onclick={() => {
+                onSubmit.set(true);
+                $timeOut && closeMsgDisplay($timeOut);
+                setTimeout(() => handleEditModeSwitch(0, col), 100);
+            }}
+        >
+            <span class="btn_icon material-symbols-outlined">check</span>
+            <span class="btn_text">Save</span>
+        </button>
+    {:else}
+        <button class="normal_btn" type="button" onclick={() => handleEditModeSwitch(infoId, col)}>
+            <span class="btn_icon material-symbols-outlined">mode_edit</span>
+            <span class="btn_text">Edit</span>
+        </button>
+    {/if}
+{/snippet}
+
 <h2>
     <span class="material-symbols-outlined">info</span>
     Information
@@ -148,8 +172,8 @@
             value={isChecked
                 .map((checked, i) => (checked ? $pagerInformationData[i] : -1))
                 .filter((index) => index !== -1)
-                .map((information) => information?.id)}
-        /><!-- information?.idの理由：行選択後にページ切り替えを行うとundefinedになる -->
+                .map((information) => information.id)}
+        />
     </form>
 
     <div class="temp_operation_area">
@@ -162,7 +186,7 @@
 
         <label class="temp_operation_area_search">
             <span class="material-symbols-outlined">search</span>
-            <input type="text" bind:value={informationFilterText} placeholder="Keywords..." />
+            <input type="text" bind:value={informationFilterText} placeholder="Keywords..." autocomplete="off" />
         </label>
 
         <button class="normal_btn" type="button" onclick={() => (openTypeFilterCheckbox = !openTypeFilterCheckbox)}>
@@ -170,9 +194,7 @@
             <span class="btn_text">Filter</span>
 
             {#if openTypeFilterCheckbox}
-                <!-- svelte-ignore a11y_click_events_have_key_events -->
-                <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
-                <!-- チェックボックス押下時、button要素のonclickが実行されるのを防ぐためstopPropagation -->
+                チェックボックス押下時、button要素のonclickが実行されるのを防ぐためstopPropagation
                 <fieldset class="filter_checkbox_wrapper" onclick={(e) => e.stopPropagation()}>
                     <Svroller width="100%" height="100%" alwaysVisible={true}>
                         <p>Type</p>
@@ -271,7 +293,7 @@
 
                     <th class="console_contents_table_head_header created">Info Created</th>
 
-                    <th class="console_contents_table_head_header other" class:center={isMobile} class:fixed={$pagerInformationData.length}>
+                    <th class="console_contents_table_head_header other" class:center={isMobile} class:fixed_column={$pagerInformationData.length}>
                         {#if openInformationEditField.length}
                             <button class="material-symbols-outlined" type="button" use:tooltip={isMobile ? '' : 'Collapse all edit fields.'} onclick={() => (openInformationEditField = [])}>
                                 collapse_all
@@ -327,18 +349,14 @@
                                 .toLocaleString({ year: 'numeric', month: 'long', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
                         </td>
 
-                        <td class="console_contents_table_data" class:center={isMobile} class:fixed={$pagerInformationData.length}>
+                        <td class="console_contents_table_data" class:center={isMobile} class:fixed_column={$pagerInformationData.length}>
                             <button
                                 class="material-symbols-outlined"
                                 type="button"
-                                use:tooltip={isMobile ? '' : !openInformationEditField.includes(information.id) ? 'Show edit field.' : 'Hide edit field.'}
-                                onclick={() => (openInformationEditField = handleInformationEditField(openInformationEditField, information.id))}
+                                use:tooltip={isMobile ? '' : !openInformationEditField.includes(information.id) ? 'Show details.' : 'Hide details.'}
+                                onclick={() => (openInformationEditField = handleCommonEditField(openInformationEditField, information.id))}
                             >
-                                {#if openInformationEditField.includes(information.id)}
-                                    close
-                                {:else}
-                                    edit_square
-                                {/if}
+                                {openInformationEditField.includes(information.id) ? 'close' : 'expand_circle_down'}
                             </button>
                         </td>
                     </tr>
@@ -369,37 +387,14 @@
                                 >
                                     <input type="hidden" name="info_id" value={editingId} />
 
-                                    <!-- <p class="console_contents_list_title">
-                                            <button
-                                                class="red_btn console_contents_list_title_outer"
-                                                type="button"
-                                                onclick={() =>
-                                                    openModal('deleteInfo', {
-                                                        label: 'deleteInfo',
-                                                        infoId: information.id,
-                                                        infoTitle: information.title,
-                                                        infoUrl: information.url,
-                                                        createdAt: DateTime.fromJSDate(information.created_at)
-                                                            .setZone(DateTime.local().zoneName)
-                                                            .setLocale('en')
-                                                            .toLocaleString({ year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
-                                                        infoType: information.type,
-                                                    })}
-                                            >
-                                                <span class="btn_icon material-symbols-outlined">delete</span>
-                                                <span class="btn_text">Delete</span>
-                                            </button>
-
-                                            Info Data
-
-                                            <input type="hidden" name="info_id" value={information.id} />
-                                        </p> -->
-
                                     <dl class="console_contents_list">
                                         <dt class="contents_term">ID</dt>
                                         <dd class="contents_desc">{information.id}</dd>
 
-                                        <dt class="contents_term">Title</dt>
+                                        <dt class="contents_term">
+                                            Title{#if isMobile}&nbsp;{:else}<br />{/if}
+                                            <span class="contents_term_required">[Required]</span>
+                                        </dt>
                                         <dd class="contents_desc">
                                             <div class="contents_desc_item">
                                                 <p class="contents_desc_item_text">
@@ -412,33 +407,7 @@
                                             </div>
 
                                             <div class="contents_desc_item_group_btn">
-                                                {#if editingId === information.id && catTypes['title']}
-                                                    <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, 'title')}>
-                                                        <span class="btn_icon material-symbols-outlined">close</span>
-                                                        <span class="btn_text">Cancel</span>
-                                                    </button>
-
-                                                    <button
-                                                        class="blue_btn"
-                                                        type="submit"
-                                                        onclick={() => {
-                                                            onSubmit.set(true);
-                                                            $timeOut && closeMsgDisplay($timeOut);
-                                                            setTimeout(() => {
-                                                                // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                handleEditModeSwitch(0, 'title');
-                                                            }, 100);
-                                                        }}
-                                                    >
-                                                        <span class="btn_icon material-symbols-outlined">check</span>
-                                                        <span class="btn_text">Save</span>
-                                                    </button>
-                                                {:else}
-                                                    <button class="normal_btn" type="button" onclick={() => handleEditModeSwitch(information.id, 'title')}>
-                                                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                                        <span class="btn_text">Edit</span>
-                                                    </button>
-                                                {/if}
+                                                {@render fieldButtons('title', information.id)}
                                             </div>
                                         </dd>
 
@@ -447,7 +416,7 @@
                                             <div class="contents_desc_item">
                                                 <p class="contents_desc_item_text">
                                                     {#if editingId === information.id && catTypes['url']}
-                                                        <input class="long" type="text" name="url" value={information.url} autocomplete="off" placeholder="Enter url." />
+                                                        <input class="long" type="text" name="url" value={information.url} autocomplete="off" placeholder="Enter information url." />
                                                     {:else}
                                                         {information.url || 'None'}
                                                     {/if}
@@ -455,45 +424,19 @@
                                             </div>
 
                                             <div class="contents_desc_item_group_btn">
-                                                {#if editingId === information.id && catTypes['url']}
-                                                    <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, 'url')}>
-                                                        <span class="btn_icon material-symbols-outlined">close</span>
-                                                        <span class="btn_text">Cancel</span>
-                                                    </button>
-
-                                                    <button
-                                                        class="blue_btn"
-                                                        type="submit"
-                                                        onclick={() => {
-                                                            onSubmit.set(true);
-                                                            $timeOut && closeMsgDisplay($timeOut);
-                                                            setTimeout(() => {
-                                                                // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                handleEditModeSwitch(0, 'url');
-                                                            }, 100);
-                                                        }}
-                                                    >
-                                                        <span class="btn_icon material-symbols-outlined">check</span>
-                                                        <span class="btn_text">Save</span>
-                                                    </button>
-                                                {:else}
-                                                    <button class="normal_btn" type="button" onclick={() => handleEditModeSwitch(information.id, 'url')}>
-                                                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                                        <span class="btn_text">Edit</span>
-                                                    </button>
-                                                {/if}
+                                                {@render fieldButtons('url', information.id)}
                                             </div>
                                         </dd>
 
                                         <dt class="contents_term">
-                                            Info Created
+                                            Info Created{#if isMobile}&nbsp;{:else}<br />{/if}
+                                            <span class="contents_term_required">[Required]</span>
                                             <span class="help_btn material-symbols-outlined" use:tooltip={$dateTimeUTCBase}>help</span>
                                         </dt>
                                         <dd class="contents_desc">
                                             <div class="contents_desc_item">
                                                 <p class="contents_desc_item_text">
                                                     {#if editingId === information.id && catTypes['created_at']}
-                                                        <!-- inputは常に現地時間を想定 -->
                                                         <input type="datetime-local" name="created_at" value={DateTime.fromJSDate(information.created_at).toFormat("yyyy-MM-dd'T'HH:mm")} />
                                                     {:else}
                                                         {DateTime.fromJSDate(information.created_at)
@@ -505,33 +448,7 @@
                                             </div>
 
                                             <div class="contents_desc_item_group_btn">
-                                                {#if editingId === information.id && catTypes['created_at']}
-                                                    <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, 'created_at')}>
-                                                        <span class="btn_icon material-symbols-outlined">close</span>
-                                                        <span class="btn_text">Cancel</span>
-                                                    </button>
-
-                                                    <button
-                                                        class="blue_btn"
-                                                        type="submit"
-                                                        onclick={() => {
-                                                            onSubmit.set(true);
-                                                            $timeOut && closeMsgDisplay($timeOut);
-                                                            setTimeout(() => {
-                                                                // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                handleEditModeSwitch(0, 'created_at');
-                                                            }, 100);
-                                                        }}
-                                                    >
-                                                        <span class="btn_icon material-symbols-outlined">check</span>
-                                                        <span class="btn_text">Save</span>
-                                                    </button>
-                                                {:else}
-                                                    <button class="normal_btn" type="button" onclick={() => handleEditModeSwitch(information.id, 'created_at')}>
-                                                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                                        <span class="btn_text">Edit</span>
-                                                    </button>
-                                                {/if}
+                                                {@render fieldButtons('created_at', information.id)}
                                             </div>
                                         </dd>
 
@@ -554,33 +471,7 @@
                                             </div>
 
                                             <div class="contents_desc_item_group_btn">
-                                                {#if editingId === information.id && catTypes['type']}
-                                                    <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, 'type')}>
-                                                        <span class="btn_icon material-symbols-outlined">close</span>
-                                                        <span class="btn_text">Cancel</span>
-                                                    </button>
-
-                                                    <button
-                                                        class="blue_btn"
-                                                        type="submit"
-                                                        onclick={() => {
-                                                            onSubmit.set(true);
-                                                            $timeOut && closeMsgDisplay($timeOut);
-                                                            setTimeout(() => {
-                                                                // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                handleEditModeSwitch(0, 'type');
-                                                            }, 100);
-                                                        }}
-                                                    >
-                                                        <span class="btn_icon material-symbols-outlined">check</span>
-                                                        <span class="btn_text">Save</span>
-                                                    </button>
-                                                {:else}
-                                                    <button class="normal_btn" type="button" onclick={() => handleEditModeSwitch(information.id, 'type')}>
-                                                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                                        <span class="btn_text">Edit</span>
-                                                    </button>
-                                                {/if}
+                                                {@render fieldButtons('type', information.id)}
                                             </div>
                                         </dd>
                                     </dl>
@@ -619,11 +510,4 @@
             {/each}
         {/if}
     </div>
-</div>
-
-<!-- scroll-hint用cssインポート -->
-<svelte:head>
-    {#if isMobile}
-        <link rel="stylesheet" href="https://unpkg.com/scroll-hint@latest/css/scroll-hint.css" />
-    {/if}
-</svelte:head>
+</div> -->

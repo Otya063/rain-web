@@ -1,5 +1,4 @@
-import type { R2Bucket } from '@cloudflare/workers-types';
-import type { users } from '@prisma/client';
+import type { R2Bucket, KVNamespace } from '@cloudflare/workers-types';
 import type { Locales, TranslationFunctions } from '$i18n/i18n-types';
 
 declare global {
@@ -12,7 +11,8 @@ declare global {
         interface Locals {
             locale: Locales;
             LL: TranslationFunctions;
-            authUsername: string;
+            adminUserId: number | null;
+            adminUsername: string | null;
         }
         // interface PageData {}
         interface Platform {
@@ -20,6 +20,8 @@ declare global {
                 MAINTENANCE_MODE: string;
                 MAINTENANCE_DATE: string;
                 R2: R2Bucket;
+                DB_CONFIG: KVNamespace;
+                WEB_CONFIG: KVNamespace;
             };
         }
     }

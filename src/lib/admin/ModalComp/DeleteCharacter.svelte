@@ -1,6 +1,6 @@
 <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, modalData, conv2DArrayToObject, msgClosed, paginatedUsersData, timeOut, closeMsgDisplay, checkModalType } from '$utils/client';
+    import { onSubmit, closeModal, modalData, conv2DArrayToObject, msgClosed, timeOut, closeMsgDisplay, checkModalType } from '$utils/client';
 
     let permanent: boolean = $state(false);
 </script>
@@ -9,11 +9,13 @@
     <div class="modal">
         <div class="modal_content">
             <form
+                action="?/{$modalData.type === 0 ? 'deleteCharacter' : 'restoreCharacter'}"
                 method="POST"
                 use:enhance={({ formData }) => {
                     const data = conv2DArrayToObject([...formData.entries()]);
                     const char_id = Number(data.char_id);
-                    const type = String(data.type);
+                    const type = Number(data.type) as 0 | 1;
+                    const onSuccess = checkModalType('deleteCharacter', $modalData) ? $modalData.onSuccess : undefined;
 
                     return async ({ result }) => {
                         msgClosed.set(false);
@@ -21,23 +23,7 @@
                         await applyAction(result);
 
                         if (result.type === 'success') {
-                            $paginatedUsersData = $paginatedUsersData.map((user) => {
-                                // キャラクター削除
-                                type === 'deleteCharacter' && permanent && (user.characters = user.characters.filter((character) => character.id !== char_id));
-
-                                // deletedカラム更新
-                                user.characters = user.characters.map((character) => {
-                                    if (character.id === char_id)
-                                        return {
-                                            ...character,
-                                            deleted: type === 'deleteCharacter',
-                                        };
-
-                                    return character;
-                                });
-
-                                return user;
-                            });
+                            onSuccess?.(char_id, type, permanent);
                         }
 
                         closeModal();
@@ -55,12 +41,12 @@
                     <p>The following character will be {$modalData.type === 0 ? 'deleted' : 'restored'}:</p>
                     <ul class="modal_list">
                         <li class="modal_list_item">
-                            <p>Character ID</p>
+                            <p>ID</p>
                             <span>{$modalData.charId}</span>
                         </li>
 
                         <li class="modal_list_item">
-                            <p>Character Name</p>
+                            <p>Name</p>
                             <span>{$modalData.charName}</span>
                         </li>
 
@@ -68,16 +54,8 @@
                             <li class="modal_list_item">
                                 <label>
                                     <p>Permanently Delete</p>
-                                    <span id="permanent" class="material-symbols-outlined" style="font-size: 2.1rem;">check_box_outline_blank</span>
-                                    <input
-                                        type="checkbox"
-                                        name="permanently_del"
-                                        onchange={() => {
-                                            document.getElementById('permanent')!.textContent =
-                                                document.getElementById('permanent')?.textContent === 'check_box_outline_blank' ? 'check_box' : 'check_box_outline_blank';
-                                        }}
-                                        bind:checked={permanent}
-                                    />
+                                    <span class="material-symbols-outlined" style="font-size: 2.1rem;">{permanent ? 'check_box' : 'check_box_outline_blank'}</span>
+                                    <input type="checkbox" name="permanently_del" bind:checked={permanent} />
                                 </label>
                             </li>
                         {/if}
@@ -96,7 +74,6 @@
 
                     <button
                         class={$modalData.type === 0 ? 'red_btn' : 'green_btn'}
-                        formaction="?/{$modalData.type === 0 ? 'deleteCharacter' : 'restoreCharacter'}"
                         type="submit"
                         onclick={() => {
                             onSubmit.set(true);

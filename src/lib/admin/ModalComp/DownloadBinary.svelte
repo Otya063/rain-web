@@ -1,8 +1,10 @@
 <script lang="ts">
+    import { tick } from 'svelte';
     import { applyAction, enhance } from '$app/forms';
     import { onSubmit, closeModal, msgClosed, timeOut, closeMsgDisplay, modalData, downloadUserBinary, checkModalType } from '$utils/client';
 
     let result: string = $state('E');
+    let errorMessage: string = $state('');
 </script>
 
 {#if checkModalType('downloadBinary', $modalData)}
@@ -23,6 +25,7 @@
                 }}
             >
                 <input type="hidden" name="result" bind:value={result} />
+                <input type="hidden" name="error_message" bind:value={errorMessage} />
 
                 <div class="modal_header">
                     <h1>Download Binary</h1>
@@ -46,14 +49,14 @@
                             onSubmit.set(true);
                             $timeOut && closeMsgDisplay($timeOut);
 
-                            result = (await downloadUserBinary(String($modalData.charId), $modalData.charName)) ? 'S' : 'E';
+                            const downloadResult = await downloadUserBinary(String($modalData.charId), $modalData.charName);
+                            result = downloadResult.success ? 'S' : 'E';
+                            errorMessage = downloadResult.success ? '' : downloadResult.message;
 
                             const form = document.querySelector<HTMLFormElement>('form[name="download"]');
                             if (form) {
-                                // result値更新のため、少し待つ
-                                setTimeout(() => {
-                                    form.requestSubmit();
-                                }, 1000);
+                                await tick(); // result の DOM 反映を待ってから送信
+                                form.requestSubmit();
                             }
                         }}
                     >

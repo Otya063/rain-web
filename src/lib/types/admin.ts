@@ -1,3 +1,38 @@
+import type { LauncherSystem } from './postgres';
+
+/* ClanAllianceTable モード
+====================================================*/
+export type ClanAllianceMode = 'none' | 'clan' | 'alliance';
+
+/* アライアンス更新データ
+====================================================*/
+export type UpdatedAllianceData = Pick<PaginatedAlliances, 'id' | 'firstChildClan' | 'secondChildClan'>;
+
+/* コンポーネント Props
+====================================================*/
+export interface AllianceAlliesProps {
+    name: string;
+    clanNames: string[];
+    isMobile: boolean;
+    initClanName: string | null;
+}
+
+export interface SideMenuProps {
+    closeMobileMenu: (btnClicked: boolean) => void;
+}
+
+export interface LauncherSystemProps {
+    systemData: LauncherSystem;
+}
+
+export interface ClansProps {
+    isMobile: boolean;
+}
+
+export interface ClanAllianceTableProps {
+    isMobile: boolean;
+}
+
 /* ページングされたクラン情報
 ====================================================*/
 export interface PaginatedClans {

@@ -1,43 +1,34 @@
 <script lang="ts">
-    import { onMount } from 'svelte';
+    import type { SideMenuProps } from '$types';
     import { adminTabValue } from '$utils/client';
 
-    interface Props {
-        closeMobileMenu: (btnClicked: boolean) => void;
-    }
-    let { closeMobileMenu }: Props = $props();
+    let { closeMobileMenu }: SideMenuProps = $props();
     const menuList: Record<string, { [key: string]: string }> = {
         system: {
             text: 'Launcher System',
             icon: 'tune',
         },
-        info: {
-            text: 'Information',
-            icon: 'info',
-        },
-        users: {
-            text: 'Users & Characters',
+        // information: {
+        //     text: 'Information',
+        //     icon: 'info',
+        // },
+        user: {
+            text: 'User',
             icon: 'person',
         },
         banner: {
-            text: 'Launcher Banner',
+            text: 'Banner',
             icon: 'ad_group',
         },
         clan: {
-            text: 'Clans & Alliances',
-            icon: 'diversity_3',
+            text: 'Clan & Alliance',
+            icon: 'groups',
         },
         distribution: {
-            text: 'Distributions',
+            text: 'Distribution',
             icon: 'package_2',
         },
     }; // メニューリスト
-
-    // 初回ロード時に最初のリスト項目にactiveクラスを追加
-    onMount(() => {
-        const firstListItem = document.getElementsByClassName('console_menu_list_item')[0] as HTMLLIElement;
-        firstListItem.classList.add('active');
-    });
 </script>
 
 <div class="console_menu_list">

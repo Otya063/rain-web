@@ -1,6 +1,6 @@
 <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import { onSubmit, closeModal, modalData, msgClosed, timeOut, closeMsgDisplay, checkModalType, updatePaginatedUsersData } from '$utils/client';
+    import { onSubmit, closeModal, modalData, msgClosed, timeOut, closeMsgDisplay, checkModalType } from '$utils/client';
 </script>
 
 {#if checkModalType('linkDiscord', $modalData)}
@@ -10,9 +10,10 @@
                 action="?/{$modalData.type === 0 ? 'linkDiscord' : 'unlinkDiscord'}"
                 method="POST"
                 use:enhance={({ formData }) => {
-                    const userId = Number(formData.get('user_id'));
+                    const charId = Number(formData.get('char_id'));
                     const discord_id = String(formData.get('discord_id'));
                     const type = Number(formData.get('type'));
+                    const onSuccess = checkModalType('linkDiscord', $modalData) ? $modalData.onSuccess : undefined;
 
                     return async ({ result }) => {
                         msgClosed.set(false);
@@ -20,7 +21,7 @@
                         await applyAction(result);
 
                         if (result.type === 'success') {
-                            updatePaginatedUsersData(userId, 'link', type === 0 ? discord_id : null);
+                            onSuccess?.(charId, type === 0 ? discord_id : null);
                         }
 
                         closeModal();

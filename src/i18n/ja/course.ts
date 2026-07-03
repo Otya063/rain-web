@@ -91,7 +91,7 @@ export const courseJa = (bin: string[]): CourseJaData => {
         'ネットカフェ [未使用]': {
             id: 25,
             enabled: bin[25] === '1',
-            code: 'nc',
+            code: 'netcafe',
         },
         公認ネットカフェ: {
             id: 26,

@@ -1,8 +1,8 @@
 import { DateTime } from 'luxon';
-import type { DistributionEditableItemType, InformationEditableItemType } from '$types';
-import { getDistributionUpdatedValue, getInformationUpdatedValue } from '.';
+import type { DistributionEditableItemType } from '$types';
+import { getDistributionUpdatedValue } from '.';
 
-export class Pager<T extends { id: number; type: number }> {
+export class Pager<T extends { id: number; type?: number }> {
     private readonly limit: number = 5; // ページあたりの項目数
     private currentPage: number = 1; // 現在のページ数
     private originalItems: T[] = []; // ページ分割する元項目リスト（未フィルター）
@@ -205,22 +205,22 @@ export class Pager<T extends { id: number; type: number }> {
      * @param {InformationEditableItemType} column 更新するカラム名
      * @param {any} value 設定する新しい値
      */
-    updatePagerInformation(infoId: number, column: InformationEditableItemType, value: any): void {
-        this.originalItems = this.originalItems.map((information) => {
-            const updatedValue = getInformationUpdatedValue(column, value);
+    // updatePagerInformation(infoId: number, column: InformationEditableItemType, value: any): void {
+    //     this.originalItems = this.originalItems.map((information) => {
+    //         const updatedValue = getInformationUpdatedValue(column, value);
 
-            if (information.id === infoId) {
-                return {
-                    ...information,
-                    [column]: column === 'created_at' ? DateTime.fromISO(updatedValue as string).toJSDate() : updatedValue, // created_atカラムはstringなのでDateに変換
-                };
-            }
+    //         if (information.id === infoId) {
+    //             return {
+    //                 ...information,
+    //                 [column]: column === 'created_at' ? DateTime.fromISO(updatedValue as string).toJSDate() : updatedValue, // created_atカラムはstringなのでDateに変換
+    //             };
+    //         }
 
-            return information;
-        });
+    //         return information;
+    //     });
 
-        this.updateStore();
-    }
+    //     this.updateStore();
+    // }
 
     /**
      * 指定したIDを持つデータを削除する
@@ -231,6 +231,36 @@ export class Pager<T extends { id: number; type: number }> {
         this.originalItems = this.originalItems.filter((item) => !ids.includes(item.id));
         this.currentPage = Math.min(this.currentPage, this.max);
         this.updateStore();
+    }
+
+    /**
+     * 指定したIDを持つデータを更新する
+     *
+     * @param {number} id 更新するデータのID
+     * @param {(item: T) => T} updater 更新関数
+     */
+    updateItem(id: number, updater: (item: T) => T): void {
+        this.originalItems = this.originalItems.map((item) => (item.id === id ? updater(item) : item));
+        this.updateStore();
+    }
+
+    /**
+     * 全データに更新関数を適用する
+     *
+     * @param {(item: T) => T} updater 更新関数
+     */
+    updateItems(updater: (item: T) => T): void {
+        this.originalItems = this.originalItems.map(updater);
+        this.updateStore();
+    }
+
+    /**
+     * 全データを取得する（読み取り専用）
+     *
+     * @returns {T[]} 全項目のコピー
+     */
+    getItems(): T[] {
+        return [...this.originalItems];
     }
 }
 

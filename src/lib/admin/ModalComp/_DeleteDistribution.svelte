@@ -1,17 +1,31 @@
-<script lang="ts">
+<!-- 未使用コンポーネント 2025/02/01 -->
+<!-- <script lang="ts">
     import { applyAction, enhance } from '$app/forms';
-    import { allInformationData, onSubmit, closeModal, modalData, msgClosed, conv2DArrayToObject, timeOut, closeMsgDisplay, checkModalType } from '$utils/client';
+    import {
+        onSubmit,
+        closeModal,
+        modalData,
+        conv2DArrayToObject,
+        msgClosed,
+        timeOut,
+        closeMsgDisplay,
+        getDistributionCategoryName,
+        // specificDistributionData,
+        // commonDistributionData,
+        allDistributionData,
+        checkModalType,
+    } from '$utils/client';
 </script>
 
-{#if checkModalType('deleteInfo', $modalData)}
+{#if checkModalType('deleteDistribution', $modalData)}
     <div class="modal">
         <div class="modal_content">
             <form
+                action="?/deleteDistribution"
                 method="POST"
                 use:enhance={({ formData }) => {
                     const data = conv2DArrayToObject([...formData.entries()]);
-                    const id = Number(data.info_id);
-                    const type = String(data.info_type);
+                    const id = Number(data.dist_id);
 
                     return async ({ result }) => {
                         msgClosed.set(false);
@@ -19,44 +33,43 @@
                         await applyAction(result);
 
                         if (result.type === 'success') {
-                            $allInformationData[type] = $allInformationData[type].filter((info) => info.id !== id);
+                            $allDistributionData = $allDistributionData.filter((data) => data.id !== id); // DistributionList.svelteのscriptはページ遷移で常時実行されるため、全データからも削除しておく、これを忘れるとページ遷移で削除したものが見た目上は復活する
+
+                            // if ($modalData.isSpecific) {
+                            //     $specificDistributionData = $specificDistributionData.filter((data) => data.id !== id);
+                            // } else {
+                            //     $commonDistributionData = $commonDistributionData.filter((data) => data.id !== id);
+                            // }
                         }
 
                         closeModal();
                     };
                 }}
             >
-                <input type="hidden" name="info_id" value={$modalData.infoId} />
-                <div class="modal_header">
-                    <h1>Delete Information Data</h1>
-                </div>
+                <input type="hidden" name="dist_id" value={$modalData.distId} />
 
+                <div class="modal_header">
+                    <h1>Delete Distribution Data</h1>
+                </div>
                 <div class="modal_body">
-                    <p>The following information will be deleted:</p>
+                    <p>The following distribution will be deleted:</p>
                     <ul class="modal_list">
                         <li class="modal_list_item">
+                            <p>ID</p>
+                            <span>{$modalData.distId}</span>
+                        </li>
+
+                        <li class="modal_list_item">
                             <p>Title</p>
-                            <span>{$modalData.infoTitle}</span>
+                            <span>{$modalData.distTitle}</span>
                         </li>
 
                         <li class="modal_list_item">
-                            <p>Hyperlink</p>
-                            <span>{$modalData.infoUrl || 'None'}</span>
-                        </li>
-
-                        <li class="modal_list_item">
-                            <p>Created At</p>
-                            <span>{$modalData.createdAt}</span>
-                        </li>
-
-                        <li class="modal_list_item">
-                            <input type="hidden" name="info_type" value={$modalData.infoType} />
-                            <p>Type</p>
-                            <span>{$modalData.infoType}</span>
+                            <p>Category</p>
+                            <span>{getDistributionCategoryName($modalData.distCat)}</span>
                         </li>
                     </ul>
                 </div>
-
                 <div class="btn_group">
                     <button class="blue_btn" type="button" onclick={() => closeModal()}>
                         <span class="btn_icon material-symbols-outlined">close</span>
@@ -66,7 +79,6 @@
                     <button
                         class="red_btn"
                         type="submit"
-                        formaction="?/deleteInfoData"
                         onclick={() => {
                             onSubmit.set(true);
                             $timeOut && closeMsgDisplay($timeOut);
@@ -79,4 +91,4 @@
             </form>
         </div>
     </div>
-{/if}
+{/if} -->

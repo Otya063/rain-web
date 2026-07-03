@@ -2,15 +2,12 @@
     import { fade } from 'svelte/transition';
     import { Svroller } from 'svrollbar';
     import NumberInput from '$lib/common/NumberInput.svelte';
-    import type { DistributionContentsType } from '$types';
+    import type { DistributionContentsType, DistributionContentsDataProps } from '$types';
     import { distributionContentsData, getDistItemsData, ManageDistribution } from '$utils/client';
 
-    interface Props {
-        isMobile: boolean;
-    }
-    let { isMobile }: Props = $props();
-    let selectedDistributionContentsData = [''];
-    let distributionFilterOption = $state(['']);
+    let { isMobile }: DistributionContentsDataProps = $props();
+    let selectedDistributionContentsData: string[] = [];
+    let distributionFilterOption = $state<string[]>([]);
     const contentsDataOptions = [
         { value: 65535, label: 'Select contents type.' },
         { value: 0, label: 'Leg Armor' },
@@ -30,7 +27,6 @@
     class="green_btn add_item"
     type="button"
     onclick={() => {
-        // 新規データ配列追加
         distributionContentsData.update((data) => [
             {
                 item_data: {
@@ -57,6 +53,7 @@
 <ul class="edit_area_box dist_list">
     <Svroller width="100%" height="100%" alwaysVisible={!isMobile}>
         {#each $distributionContentsData as content, i}
+            {@const effectiveType = (content.selectedContentsType === 65535 ? content.types : content.selectedContentsType) as DistributionContentsType}
             <li class="dist_contents_data">
                 <section class="dist_section" class:disabled_elm={content.disabled}>
                     <label class="custom_select_box">
@@ -64,25 +61,20 @@
                             id={`${content.types}-${content.item_data.code}-[${content.item_data.name}]`}
                             bind:value={content.selectedContentsType}
                             onchange={(e) => {
-                                console.log((e.target as HTMLSelectElement)?.value);
-                                if (Number((e.target as HTMLSelectElement)?.value) === 16) {
-                                    // イメチェンポイントの場合
-                                    // コンテンツデータselect変更時、amountが確実に初期値になっていること
-                                    // リストから選ぶ処理が不要なので、既にtypesには値を代入しておく
+                                const selectedValue = Number((e.target as HTMLSelectElement).value) as DistributionContentsType;
+                                $distributionContentsData[i].amount = 1;
+                                if (selectedValue === 16) {
+                                    // イメチェンポイントの場合: リストから選ぶ処理が不要なので直接typesに代入
                                     $distributionContentsData[i].item_data.code = '0000';
                                     $distributionContentsData[i].item_data.name = 'Restyle Point';
                                     $distributionContentsData[i].types = 16;
-                                    $distributionContentsData[i].amount = 1;
                                     $distributionContentsData[i].selectedContentsType = 16;
                                 } else {
-                                    // それ以外
-                                    // コンテンツデータselect変更時、code/name/types/amountが確実に初期値になっていること
-                                    // selectedContentsTypeへ一時的に格納しておく。ここで仮置きすることで、content.typesと差別化できtype選択だけしてリスト上のアイテムを押下せずにsubmitをすることによるアイテムタイプとアイテムとの不一致という不具合を防ぐ。typesへ代入するのはリストから選んだ時のみ
+                                    // selectedContentsTypeへ仮置きすることでcontent.typesと差別化し、type選択のみでsubmitした場合のアイテムタイプ不一致を防ぐ。typesへ代入するのはリストから選んだ時のみ
                                     $distributionContentsData[i].item_data.code = '';
                                     $distributionContentsData[i].item_data.name = '';
                                     $distributionContentsData[i].types = 65535;
-                                    $distributionContentsData[i].amount = 1;
-                                    $distributionContentsData[i].selectedContentsType = Number((e.target as HTMLSelectElement)?.value) as DistributionContentsType;
+                                    $distributionContentsData[i].selectedContentsType = selectedValue;
                                 }
                             }}
                         >
@@ -94,8 +86,7 @@
                         </select>
                     </label>
 
-                    <!-- イメチェンポイント以外input要素表示 -->
-                    {#if content.selectedContentsType === 65535 ? content.types !== 16 : content.selectedContentsType !== 16}
+                    {#if effectiveType !== 16}
                         <div class="custom_select_with_filter_wrapper">
                             <input
                                 class="custom_select_with_filter_input"
@@ -103,16 +94,12 @@
                                 type="text"
                                 value={content.item_data.name}
                                 oninput={(ie) => {
-                                    // 入力値に応じてフィルタオプション変化
                                     distributionFilterOption = !ie.currentTarget.value
                                         ? []
                                         : selectedDistributionContentsData.filter((e) => e.toLowerCase().includes(ie.currentTarget.value.toLowerCase())).slice(0, 10);
                                 }}
                                 onfocus={(fe) => {
-                                    // インプット要素クリックでtypeに応じてコンテンツデータロードし、初期フィルタオプション設定
-                                    selectedDistributionContentsData = Object.entries(getDistItemsData(content.selectedContentsType === 65535 ? content.types : content.selectedContentsType)).map(
-                                        ([key, value]) => `${key} - ${value}`,
-                                    );
+                                    selectedDistributionContentsData = Object.entries(getDistItemsData(effectiveType)).map(([key, value]) => `${key} - ${value}`);
                                     distributionFilterOption = selectedDistributionContentsData.filter((e) => e.toLowerCase().includes(fe.currentTarget.value.toLowerCase())).slice(0, 10);
                                     $distributionContentsData[i].showDropdown = true;
                                 }}
@@ -129,10 +116,10 @@
                                                     type="button"
                                                     class="custom_select_with_filter_item"
                                                     onmousedown={(e) => {
-                                                        // 各アイテムデータ更新
-                                                        $distributionContentsData[i].types = content.selectedContentsType === 65535 ? content.types : content.selectedContentsType;
-                                                        $distributionContentsData[i].item_data.name = (e.target as HTMLButtonElement).innerText.replace(/^\w{4} - /, '');
-                                                        $distributionContentsData[i].item_data.code = ManageDistribution.getCodeFromItemName(content.types, content.item_data.name);
+                                                        const newName = (e.target as HTMLButtonElement).innerText.replace(/^\w{4} - /, '');
+                                                        $distributionContentsData[i].types = effectiveType;
+                                                        $distributionContentsData[i].item_data.name = newName;
+                                                        $distributionContentsData[i].item_data.code = ManageDistribution.getCodeFromItemName(effectiveType, newName);
                                                     }}
                                                 >
                                                     {option}

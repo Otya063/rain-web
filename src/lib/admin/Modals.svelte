@@ -1,33 +1,25 @@
 <script lang="ts">
-    import type { ActionData } from '../../routes/(app)/admin/$types';
-    import DeleteBnr from './ModalComp/DeleteBnr.svelte';
-    import DeleteChar from './ModalComp/DeleteChar.svelte';
-    import DeleteDistribution from './ModalComp/DeleteDistribution.svelte';
-    import DeleteInfo from './ModalComp/DeleteInfo.svelte';
-    import DeleteUser from './ModalComp/DeleteUser.svelte';
+    import DeleteBanner from './ModalComp/_DeleteBanner.svelte';
+    import DeleteCharacter from './ModalComp/DeleteCharacter.svelte';
+    import DeleteDistribution from './ModalComp/_DeleteDistribution.svelte';
+    import DeleteInformation from './ModalComp/_DeleteInformation.svelte';
+    import DeleteUsers from './ModalComp/DeleteUsers.svelte';
+    import SuspendUsers from './ModalComp/SuspendUsers.svelte';
     import DistributionEditor from './ModalComp/DistributionEditor.svelte';
     import DownloadBinary from './ModalComp/DownloadBinary.svelte';
     import LinkDiscord from './ModalComp/LinkDiscord.svelte';
-    import RebuildClan from './ModalComp/RebuildClan.svelte';
-    import SuspendUser from './ModalComp/SuspendUser.svelte';
+    import DeleteAlliance from './ModalComp/DeleteAlliance.svelte';
+    import DeleteClans from './ModalComp/DeleteClans.svelte';
+    import RebuildClans from './ModalComp/RebuildClans.svelte';
     import { modalStates } from '$utils/client';
-
-    interface Props {
-        form: ActionData;
-    }
-    let { form }: Props = $props();
 </script>
 
-{#if $modalStates.suspendUser}
-    <SuspendUser suspendedAccount={form?.suspendedAccount} />
+{#if $modalStates.deleteInformation}
+    <DeleteInformation />
 {/if}
 
-{#if $modalStates.deleteInfo}
-    <DeleteInfo />
-{/if}
-
-{#if $modalStates.deleteBnr}
-    <DeleteBnr />
+{#if $modalStates.deleteBanner}
+    <DeleteBanner />
 {/if}
 
 {#if $modalStates.linkDiscord}
@@ -35,11 +27,15 @@
 {/if}
 
 {#if $modalStates.deleteCharacter}
-    <DeleteChar />
+    <DeleteCharacter />
 {/if}
 
 {#if $modalStates.rebuildClan}
-    <RebuildClan />
+    <RebuildClans />
+{/if}
+
+{#if $modalStates.deleteClans}
+    <DeleteClans />
 {/if}
 
 {#if $modalStates.downloadBinary}
@@ -54,6 +50,14 @@
     <DistributionEditor />
 {/if}
 
-{#if $modalStates.deleteUser}
-    <DeleteUser />
+{#if $modalStates.deleteUsers}
+    <DeleteUsers />
+{/if}
+
+{#if $modalStates.suspendUsers}
+    <SuspendUsers />
+{/if}
+
+{#if $modalStates.deleteAlliance}
+    <DeleteAlliance />
 {/if}

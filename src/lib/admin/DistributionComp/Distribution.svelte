@@ -1,16 +1,9 @@
 <script lang="ts">
-    import { type Distribution } from '$types';
+    import type { DistributionProps } from '$types';
     import CreateDistribution from './CreateDistribution.svelte';
     import DistributionMain from './DistributionMain.svelte';
 
-    interface Props {
-        charactersIdName: string[];
-        isMobile: boolean;
-        updatedContentsData: string;
-        distAddMode: boolean;
-        createdDistribution: Distribution;
-    }
-    let { charactersIdName, isMobile, updatedContentsData, distAddMode = $bindable(false), createdDistribution }: Props = $props();
+    let { charactersIdName, isMobile, updatedContentsData, distAddMode = $bindable(false), createdDistribution }: DistributionProps = $props();
 </script>
 
 {#if distAddMode}

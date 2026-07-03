@@ -390,7 +390,7 @@ export const convHrpToHr = (hrp: number | null): number => {
  * @param {number | null} hr ハンターランク
  * @returns {number} 対応するハンターランクポイント
  */
-export const convHrToHrp = (hr: number): number => {
+export const convHrToHrp = (hr: number): number | null => {
     switch (hr) {
         case 7: {
             return 999;
@@ -421,7 +421,7 @@ export const convHrToHrp = (hr: number): number => {
         }
 
         default: {
-            return 65535;
+            return null;
         }
     }
 };
@@ -882,6 +882,11 @@ const replaceSpacesInTextNodes = (htmlString: string): string => {
  * @returns {{ insert: string; attributes?: { color: string } }[]} 変換後のデルタデータ
  */
 const convertColorNumToDelta = (input: string): { insert: string; attributes?: { color: string } }[] => {
+    // 先頭に「~C○○」がない場合、自動的に「~C00」があるものとして扱う
+    if (!input.startsWith('~C')) {
+        input = `~C00${input}`;
+    }
+
     const lines = input.split('\n');
     const tempDelta: Array<{ insert: string; attributes?: { color: string } }> = [];
     const delta: Array<{ insert: string; attributes?: { color: string } }> = [];

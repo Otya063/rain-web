@@ -2,26 +2,14 @@
     import type { ActionData, PageData } from './$types';
     import _ from 'lodash';
     import { onMount } from 'svelte';
-    import { scrollTop } from 'svelte-scrolling';
     import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
+    import { scrollTop } from 'svelte-scrolling';
     import { Svroller } from 'svrollbar';
     import Main from '$lib/admin/Main.svelte';
     import Modals from '$lib/admin/Modals.svelte';
     import SideMenu from '$lib/admin/SideMenu.svelte';
-    import {
-        loadArticle,
-        Timeout,
-        msgClosed,
-        errDetailMode,
-        onSubmit,
-        closeMsgDisplay,
-        toggleMsgDetail,
-        timeOut,
-        adminTabValue,
-        modalStates,
-        preventHorizScrollOnDetailRow,
-    } from '$utils/client';
+    import { loadArticle, Timeout, msgClosed, errDetailMode, onSubmit, closeMsgDisplay, toggleMsgDetail, timeOut, modalStates, preventHorizScrollOnDetailRow } from '$utils/client';
     import '$scss/style_admin.scss';
 
     interface Props {
@@ -98,7 +86,7 @@
             return;
         }
 
-        touchStartX = (e.changedTouches[0].screenX);
+        touchStartX = e.changedTouches[0].screenX;
     };
 
     /**
@@ -116,7 +104,7 @@
             return;
         }
 
-        touchEndX = (e.changedTouches[0].screenX);
+        touchEndX = e.changedTouches[0].screenX;
         handleSwipeGesture();
     };
 
@@ -257,23 +245,6 @@
         <h1 class="console_article_heading1">
             <span class="material-symbols-outlined">admin_panel_settings</span>
             Admin Console
-
-            {#if $adminTabValue === 'banner' && !bnrAddMode}
-                <button class="green_btn" onclick={() => (bnrAddMode = true)}>
-                    <span class="btn_icon material-symbols-outlined">add</span>
-                    <span class="btn_text">Add Banner</span>
-                </button>
-            <!-- {:else if $adminTabValue === 'info' && !infoAddMode}
-                <button class="green_btn" type="button" onclick={() => (infoAddMode = true)}>
-                    <span class="btn_icon material-symbols-outlined">add</span>
-                    <span class="btn_text">Add Info</span>
-                </button> -->
-            <!-- {:else if $adminTabValue === 'distribution' && !distAddMode}
-                <button class="green_btn" type="button" onclick={() => (distAddMode = true)}>
-                    <span class="btn_icon material-symbols-outlined">add</span>
-                    <span class="btn_text">Add Distribution</span>
-                </button> -->
-            {/if}
         </h1>
 
         <Main bind:infoAddMode bind:bnrAddMode {data} {form} {isMobile} bind:distAddMode />

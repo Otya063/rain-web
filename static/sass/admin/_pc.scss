@@ -201,21 +201,21 @@
                     font-weight: 700;
 
                     // ユーザー内情報切り替えパネル
-                    .user_ctrl_panel {
-                        display: flex;
-                        gap: 10px;
-                        color: #333333;
+                    // .user_ctrl_panel {
+                    //     display: flex;
+                    //     gap: 10px;
+                    //     color: #333333;
 
-                        // タブボタン
-                        button {
-                            font-size: 3rem;
+                    //     // タブボタン
+                    //     button {
+                    //         font-size: 3rem;
 
-                            // アクティブ時
-                            &.active {
-                                font-variation-settings: 'FILL' 1;
-                            }
-                        }
-                    }
+                    //         // アクティブ時
+                    //         &.active {
+                    //             font-variation-settings: 'FILL' 1;
+                    //         }
+                    //     }
+                    // }
 
                     // タイトルテキスト
                     &_text {
@@ -246,47 +246,46 @@
                     }
                 }
 
-                // キャラクターリスト用スワイパー
-                swiper-container {
-                    position: relative;
+                // swiper-container {
+                //     position: relative;
 
-                    // swiperコンテナ調整
-                    swiper-slide {
-                        display: flex;
-                        align-items: center;
-                        flex-direction: column;
-                    }
+                //     // swiperコンテナ調整
+                //     swiper-slide {
+                //         display: flex;
+                //         align-items: center;
+                //         flex-direction: column;
+                //     }
 
-                    // スワイパー矢印ボタン調整
-                    &::part(button-prev) {
-                        left: -5%;
-                        transform: rotate(270deg);
+                //     // スワイパー矢印ボタン調整
+                //     &::part(button-prev) {
+                //         left: -5%;
+                //         transform: rotate(270deg);
 
-                        &::before {
-                            content: '';
-                            position: absolute;
-                            top: 120px;
-                            left: -50px;
-                            width: 130px;
-                            height: 40px;
-                            background: url(#{$path_img}/common/char_sel_scroll.png);
-                        }
-                    }
-                    &::part(button-next) {
-                        right: -5%;
-                        transform: rotate(90deg);
+                //         &::before {
+                //             content: '';
+                //             position: absolute;
+                //             top: 120px;
+                //             left: -50px;
+                //             width: 130px;
+                //             height: 40px;
+                //             background: url(#{$path_img}/common/char_sel_scroll.png);
+                //         }
+                //     }
+                //     &::part(button-next) {
+                //         right: -5%;
+                //         transform: rotate(90deg);
 
-                        &::before {
-                            content: '';
-                            position: absolute;
-                            top: 120px;
-                            right: -50px;
-                            width: 130px;
-                            height: 40px;
-                            background: url(#{$path_img}/common/char_sel_scroll.png);
-                        }
-                    }
-                }
+                //         &::before {
+                //             content: '';
+                //             position: absolute;
+                //             top: 120px;
+                //             right: -50px;
+                //             width: 130px;
+                //             height: 40px;
+                //             background: url(#{$path_img}/common/char_sel_scroll.png);
+                //         }
+                //     }
+                // }
 
                 // コンテンツ内リスト
                 .console_contents_list {
@@ -324,6 +323,7 @@
                             display: flex;
                             align-items: center;
                             min-height: 40px;
+                            padding-bottom: 5px;
 
                             // input要素幅/高さ調整
                             input {
@@ -379,7 +379,6 @@
                         &_item_group_btn {
                             display: flex;
                             gap: 15px;
-                            margin-top: 2%;
                         }
 
                         // 編集モード切り替えボタン
@@ -412,7 +411,7 @@
                             grid-template-columns: repeat(2, 1fr);
                         }
 
-                        // 主にカラーコードを含む文字列編集用に使用する（DistributionList.svelte）
+                        // 主にカラーコードを含む文字列編集用に使用する（DistributionMain.svelte）
                         .preview_title {
                             color: #ffffff; // デフォルト色
                             background: #4d4d4dba;
@@ -479,6 +478,7 @@
                 // テーブルレイアウトワラップ（横スクロール対応）
                 .console_contents_table_wrapper {
                     min-height: 300px; // 表の内容に応じて高さが変動しないように
+                    user-select: none;
 
                     // テーブルレイアウト
                     .console_contents_table {
@@ -487,10 +487,12 @@
                         white-space: nowrap;
                         border-spacing: 0;
                         border-collapse: collapse;
+                        user-select: text;
 
                         // 行間ボーダー
                         .table_row {
                             border-bottom: 2px solid #eef0f2;
+                            user-select: none;
 
                             // 選択行
                             &.selected {
@@ -520,14 +522,14 @@
                                 padding: 5px;
 
                                 // IDソート用
-                                &.id {
+                                &.id:not(.no_sort) {
                                     position: relative;
                                     cursor: pointer;
 
                                     .material-symbols-outlined {
                                         position: absolute;
                                         top: 50%;
-                                        left: 50%;
+                                        right: 15%;
                                         transform: translateY(-60%);
                                     }
                                 }
@@ -537,25 +539,13 @@
                                     height: 31px;
                                     line-height: 36px;
                                 }
-
-                                // 中央揃えテキスト
-                                &.center {
-                                    text-align: center;
-                                }
-
-                                // 右揃えテキスト
-                                &.right {
-                                    text-align: right;
-                                }
                             }
 
-                            // DistributionList/ClaimedDistribution.svelte
+                            // DistributionMain/ClaimedDistribution.svelte
                             &.distribution {
-                                .select {
-                                    width: 10%;
-                                }
-
-                                .id {
+                                .select,
+                                .id,
+                                .other {
                                     width: 10%;
                                 }
 
@@ -566,19 +556,13 @@
                                 .title {
                                     width: 55%;
                                 }
-
-                                .other {
-                                    width: 10%;
-                                }
                             }
 
-                            // Information.svelte
+                            // InformationMain.svelte
                             &.information {
-                                .select {
-                                    width: 10%;
-                                }
-
-                                .id {
+                                .select,
+                                .id,
+                                .other {
                                     width: 10%;
                                 }
 
@@ -593,9 +577,76 @@
                                 .created {
                                     width: 25%;
                                 }
+                            }
 
+                            // BannerMain.svelte
+                            &.banner {
+                                .select,
+                                .id,
                                 .other {
                                     width: 10%;
+                                }
+
+                                .name {
+                                    width: 70%;
+                                }
+                            }
+
+                            // UserMain.svelte
+                            &.user {
+                                .select {
+                                    width: 10%;
+                                }
+
+                                .id,
+                                .other {
+                                    width: 15%;
+                                }
+
+                                .username,
+                                .last_login {
+                                    width: 30%;
+                                }
+                            }
+
+                            // ClanAllianceTable.svelte
+                            &.clan {
+                                .select,
+                                .other {
+                                    width: 15%;
+                                }
+
+                                .id,
+                                .leader {
+                                    width: 20%;
+                                }
+
+                                .clan_name {
+                                    width: 30%;
+                                }
+
+                                .other {
+                                    text-align: center;
+                                }
+                            }
+
+                            // ClanAllianceTable.svelte
+                            &.alliance {
+                                .select {
+                                    width: 10%;
+                                }
+
+                                .id {
+                                    width: 20%;
+                                }
+
+                                .alliance_name {
+                                    width: 50%;
+                                }
+
+                                .other {
+                                    width: 20%;
+                                    text-align: center;
                                 }
                             }
                         }
@@ -619,15 +670,30 @@
                                 text-align: center;
                             }
 
-                            // 中央揃えテキスト
-                            &.center {
-                                text-align: center;
-                            }
+                            // ユーザー表示情報切り替えタブ
+                            &.user_tabs {
+                                display: flex;
+                                gap: 10px;
 
-                            // 右揃えテキスト
-                            &.right {
-                                text-align: right;
+                                // タブアイコン
+                                .material-symbols-outlined {
+                                    // アクティブ時
+                                    &.active {
+                                        font-variation-settings: 'FILL' 1;
+                                    }
+                                }
                             }
+                        }
+
+                        // 以下&_headerと&_data用クラス
+                        // 中央揃えテキスト
+                        .center {
+                            text-align: center;
+                        }
+
+                        // 右揃えテキスト
+                        .right {
+                            text-align: right;
                         }
                     }
                 }
@@ -637,13 +703,14 @@
                     display: flex;
                     gap: 10px;
                     padding-bottom: 10px;
+                    user-select: none;
 
                     // 選択ボックス幅調整
-                    .custom_select_box {
-                        select {
-                            width: 100px; // デフォルトの100%を上書き
-                        }
-                    }
+                    // .custom_select_box {
+                    //     select {
+                    //         width: 100px; // デフォルトの100%を上書き
+                    //     }
+                    // }
 
                     // フィルターする値入力欄
                     &_search {
@@ -886,6 +953,8 @@
     ========================================================= */
     // 編集フォーム本体
     .edit_area_box {
+        margin-top: 8px; // transition:slideでアニメーションされるため、展開前に余白は生じない
+
         // フォームdivタグ
         .edit_area {
             display: flex;
@@ -959,15 +1028,22 @@
                         display: grid;
                         column-gap: 10px;
                         row-gap: 20px;
-                        grid-template-columns: repeat(2, 1fr);
+                        grid-template-columns: repeat(2, minmax(0, 1fr));
                         margin: 3% 4%;
+                        white-space: normal;
 
                         // 利用権各項目
                         .course_item {
+                            display: flex;
+                            align-items: center;
+                            word-break: break-word;
+                            overflow-wrap: break-word;
+
                             // 丸/チェックアイコン
                             .material-symbols-outlined {
                                 font-size: 2.1rem;
                                 padding: 0 10px 2px 0;
+                                flex-shrink: 0;
                             }
                         }
 
@@ -1012,31 +1088,34 @@
                     }
                 }
 
-                // 管理者コントロールパネル
-                &.admin_ctrl {
+                // コントロールパネル
+                &.ctrl_panel {
                     gap: 25px;
 
-                    .filter_form {
-                        #filter_input {
-                            width: 50%;
+                    .temp_operation_area {
+                        padding: 0;
+
+                        // カスタム選択ボックス幅調整
+                        .custom_select_box {
+                            select {
+                                width: 100%;
+                            }
                         }
 
-                        .filter_select {
-                            width: 50%;
+                        // フィルターインプット
+                        &_search {
+                            background: #fff;
+
+                            input {
+                                width: 100%;
+                            }
                         }
                     }
-                }
-
-                // ユーザー内コントロールフォーム
-                .filter_form {
-                    position: relative;
-                    display: flex;
-                    justify-content: center;
                 }
             }
         }
 
-        // 配布コンテンツ編集用（DistributionList.svelte）
+        // 配布コンテンツ編集用（DistributionMain.svelte）
         &.dist_list {
             height: 60vh;
             padding: 4px 10px 4px 10px;
@@ -1242,11 +1321,16 @@
 
         // ロード中
         &.loading_btn {
-            padding: 0; // そのままだと楕円形になってしまうのでpaddingはなし
-            border-radius: 50%;
+            .btn_icon {
+                opacity: 0;
+            }
+
+            .btn_text {
+                opacity: 0;
+            }
         }
 
-        // DistributionList.svelte内アイテム追加ボタン用
+        // DistributionMain.svelte内アイテム追加ボタン用
         &.add_item {
             position: static !important;
             margin-left: auto;
@@ -1270,6 +1354,8 @@
 
     // ボタンロード中
     .loading {
+        position: absolute;
+        left: 27%;
         width: 24px;
         height: 24px;
         margin: 10px;
@@ -1332,14 +1418,47 @@
         }
     }
 
+    // トグルスイッチ
+    .toggle_switch {
+        display: inline-flex;
+        align-items: center;
+        width: 46px;
+        height: 26px;
+        border-radius: 13px;
+        background: #636e72;
+        border: none;
+        cursor: pointer;
+        padding: 3px;
+        transition: background 0.25s ease;
+        flex-shrink: 0;
+
+        span {
+            display: block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            transition: transform 0.25s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+        }
+
+        &.on {
+            background: #00b894;
+
+            span {
+                transform: translateX(20px);
+            }
+        }
+    }
+
     /* Ban関連
     ========================================================= */
     // Ban済ユーザー表示
     .banned_user_container {
         position: absolute;
         width: 102%;
-        height: 105%;
-        top: -5%;
+        height: 100%;
+        top: 0%;
         left: -1%;
         display: flex;
         flex-direction: column;
@@ -1359,13 +1478,16 @@
             text-shadow: 3px 3px 5px black;
         }
 
-        // Ban解除ボタン
-        .remove_ban_btn {
-            color: red;
+        // 詳細テキスト（理由・実行者）
+        .banned_detail {
+            color: #ffd166;
+            font-size: 1.4rem;
             font-weight: 700;
-            font-size: 1.8rem;
-            text-shadow: 3px 3px 5px black;
-            margin: 5% 0 10% 0;
+            text-align: center;
+            text-shadow: 2px 2px 4px black;
+            background: rgba(0, 0, 0, 0.45);
+            padding: 2px 14px;
+            border-radius: 8px;
         }
     }
 
@@ -1377,118 +1499,165 @@
         color: #ff8100;
     }
 
-    //　各キャラクター
-    .character_item {
-        position: relative;
-        width: 520px;
-        height: 143px;
-        margin-bottom: 1%;
-        user-select: none;
+    // キャラクターリスト用カルーセルスライダー
+    .splide {
+        // 矢印ボタン
+        .splide__arrow {
+            width: 130px;
+            height: 40px;
+            border-radius: 0;
+            background: url(/img/common/char_sel_scroll.png);
+            top: 35%;
 
-        // 武器種名に応じて背景変更
-        $weaponNames: $weaponNamesArray;
-        @each $weapon in $weaponNames {
-            &.#{$weapon} {
-                background: url(#{$path_img}/common/char_background/#{$weapon}.png) no-repeat center center;
-            }
-        }
-
-        // 新規キャラクター編集不可
-        &.new {
-            cursor: not-allowed;
-
-            .name {
+            // 無効時
+            &:disabled {
                 cursor: not-allowed;
             }
+
+            // 前ボタン
+            &--prev {
+                transform: rotate(270deg);
+            }
+
+            // 次ボタン
+            &--next {
+                transform: rotate(90deg);
+            }
+
+            // デフォルトボタン非表示
+            svg {
+                display: none;
+            }
         }
 
-        // キャラクター名
-        .name {
-            @include right_left;
-            top: 13px;
-            font-size: 3rem;
-            font-weight: 700;
-            width: fit-content;
-        }
+        // ドット
+        .splide__pagination {
+            bottom: 0;
 
-        // キャラクター削除ボタン
-        .red_btn {
-            top: 12% !important;
-            left: 4% !important;
-            z-index: 1;
+            &__page {
+                background: #95a5a6;
+                width: 10px;
+                height: 10px;
 
-            // 削除済みボタン
-            &.deleted_character {
-                color: #fff;
-                background: #de6161;
-                border: 1px solid #de6161;
-
-                &:hover {
-                    background: #f57e7e;
-                    border: 1px solid #f57e7e;
+                &.is-active {
+                    background: #b4e900;
                 }
             }
         }
 
-        // アカウント連携ボタン
-        .green_btn {
-            position: absolute;
-            top: 12%;
-            right: 4%;
+        //　各キャラクターカード
+        .character_item {
+            position: relative;
+            width: 520px;
+            height: 143px;
+            margin-bottom: 2%;
+            user-select: none;
 
-            // 連携済みボタン
-            &.linked_character {
-                color: #fff;
-                background: #0ad275;
-                border: 1px solid #0ad275;
-
-                &:hover {
-                    background: #5ae3a3;
-                    border: 1px solid #5ae3a3;
-                }
-            }
-        }
-
-        // 武器アイコン
-        .wpn_icon {
-            position: absolute;
-            width: 48px;
-            height: 47px;
-            top: 48%;
-            left: 6%;
-            background: url(#{$path_img}/common/char_wpn_icon/NoData.png) no-repeat;
-
-            // 武器種名に応じてアイコン表示
+            // 武器種名に応じて背景変更
             $weaponNames: $weaponNamesArray;
             @each $weapon in $weaponNames {
                 &.#{$weapon} {
-                    background: url(#{$path_img}/common/char_wpn_icon/#{$weapon}.png) no-repeat;
+                    background: url(#{$path_img}/common/char_background/#{$weapon}.png) no-repeat center center;
                 }
             }
-        }
 
-        // 武器名
-        .wpn_text {
-            position: absolute;
-            font-weight: 700;
-            width: 170px;
-            left: 17%;
-            top: 50%;
+            // 新規キャラクター編集不可
+            &.new {
+                cursor: not-allowed;
 
-            p:nth-child(2) {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
+                .name {
+                    cursor: not-allowed;
+                }
             }
-        }
 
-        // その他情報（HR/GR/プレイ時間）
-        .other_info {
-            position: absolute;
-            top: 50%;
-            right: 10%;
-            font-weight: 700;
-            text-align: right;
+            // キャラクター名
+            .name {
+                @include right_left;
+                top: 13px;
+                font-size: 3rem;
+                font-weight: 700;
+                width: fit-content;
+            }
+
+            // キャラクター削除ボタン
+            .red_btn {
+                top: 12%;
+                left: 18%;
+                z-index: 1;
+
+                // 削除済みボタン
+                &.deleted_character {
+                    color: #fff;
+                    background: #de6161;
+                    border: 1px solid #de6161;
+
+                    &:hover {
+                        background: #f57e7e;
+                        border: 1px solid #f57e7e;
+                    }
+                }
+            }
+
+            // アカウント連携ボタン
+            .green_btn {
+                position: absolute;
+                top: 12%;
+                right: 18%;
+
+                // 連携済みボタン
+                &.linked_character {
+                    color: #fff;
+                    background: #0ad275;
+                    border: 1px solid #0ad275;
+
+                    &:hover {
+                        background: #5ae3a3;
+                        border: 1px solid #5ae3a3;
+                    }
+                }
+            }
+
+            // 武器アイコン
+            .wpn_icon {
+                position: absolute;
+                width: 48px;
+                height: 47px;
+                top: 48%;
+                left: 20%;
+                background: url(#{$path_img}/common/char_wpn_icon/NoData.png) no-repeat;
+
+                // 武器種名に応じてアイコン表示
+                $weaponNames: $weaponNamesArray;
+                @each $weapon in $weaponNames {
+                    &.#{$weapon} {
+                        background: url(#{$path_img}/common/char_wpn_icon/#{$weapon}.png) no-repeat;
+                    }
+                }
+            }
+
+            // 武器名
+            .wpn_text {
+                position: absolute;
+                font-weight: 700;
+                width: 170px;
+                left: 28%;
+                top: 50%;
+
+                p:nth-child(2) {
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                }
+            }
+
+            // その他情報（HR/GR/プレイ時間）
+            .other_info {
+                position: absolute;
+                top: 50%;
+                right: 20%;
+                font-weight: 700;
+                text-align: right;
+            }
         }
     }
 
@@ -1543,6 +1712,25 @@
                 // スクロールバー非表示
                 &::-webkit-scrollbar {
                     display: none;
+                }
+
+                // ユーザーごとのセクション（複数ユーザー停止時）
+                .modal_list_user_section {
+                    width: 100%;
+
+                    & + & {
+                        border-top: 1px solid #ccc;
+                        margin-top: 2%;
+                    }
+
+                    .modal_list_user_header {
+                        font-size: 1.6rem;
+                        font-weight: 700;
+                        padding: 1% 3%;
+                        background: #e8f4f8;
+                        border-left: 4px solid lightblue;
+                        margin: 2% 0 0;
+                    }
                 }
 
                 // モーダルリスト
@@ -1933,7 +2121,7 @@
         }
     }
 
-    // カラーパレット（DistributionList.svelte）
+    // カラーパレット（DistributionMain.svelte）
     .color_palette {
         display: grid;
         column-gap: 10px;

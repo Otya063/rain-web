@@ -7,6 +7,7 @@ build.command = "npm run build"
 compatibility_date = "2024-09-23"
 workers_dev = false
 compatibility_flags = [ "nodejs_compat" ]
+logpush = false
 
 [placement]
 mode = "smart"
@@ -18,3 +19,11 @@ MAINTENANCE_DATE = ""
 [[r2_buckets]]
 binding = "R2"
 bucket_name = "rain-web-assets"
+
+[[kv_namespaces]]
+binding = "DB_CONFIG"
+id = "1b169176d42d40ae9df1ccc1006ff8dd"
+
+[[kv_namespaces]]
+binding = "WEB_CONFIG"
+id = "6fe6d0c19e3f4fba9c59ec0c32de3826"

@@ -3,7 +3,7 @@
     import { scrollPosition } from 'svelte-scrolling';
     import { Svroller } from 'svrollbar';
     import { applyAction, enhance } from '$app/forms';
-    import { DistributionCategoryObj, type Distribution, type Replace } from '$types';
+    import { DistributionCategoryObj, type ClaimedDistributionProps } from '$types';
     import {
         claimedDistributions,
         closeMsgDisplay,
@@ -12,27 +12,21 @@
         timeOut,
         tooltip,
         tooltipWhenOverflowText,
-        userDisplayState,
         adminTabValue,
         openDistributionEditField,
         distributionFilterText,
         Pager,
         generatePaginationBtn,
-        paginatedUsersData,
+        pagerUserData,
+        lastSearchUsersResult,
         toggleFilterCheckbox,
         sortId,
     } from '$utils/client';
 
-    interface Props {
-        stage: number;
-        scrollYBeforeClickClaimedDist: number;
-        isMobile: boolean;
-    }
-    let { stage = $bindable(), scrollYBeforeClickClaimedDist = $bindable(), isMobile }: Props = $props();
+    let { stage = $bindable(), scrollYBeforeClickClaimedDist = $bindable(), openUserEditField = $bindable(), isMobile }: ClaimedDistributionProps = $props();
     let selectedRowCount = $state(0); // 選択された削除行数
     let checkAll = $state(false); // 全行選択フラグ
     let isChecked: boolean[] = $state(new Array($claimedDistributions.data.length).fill(false)); // 各行選択状態
-    let pager: Pager<Replace<Distribution, { deadline: string | null }>>;
     let currentPage = $state(1);
     let maxPage = $state(0);
     let filterType: 'id' | 'event_name' = $state('id');
@@ -46,7 +40,7 @@
     let selectedTypeFilterCheckbox: number[] = $state([0, 1]);
     let selectedCategoryFilterCheckbox: number[] = $state(Object.values(DistributionCategoryObj));
 
-    pager = new Pager($claimedDistributions.data);
+    const pager = new Pager($claimedDistributions.data);
     pager.bindStore((data) =>
         claimedDistributions.update((store) => ({
             ...store,
@@ -76,11 +70,9 @@
     // 「表示ページ切替、フィルター、IDソート」時に、各処理リセット
     $effect(() => {
         // 依存関係は$claimedDistributions.data
-        if ($claimedDistributions.data) {
-            isChecked = new Array($claimedDistributions.data.length).fill(false); // 各行選択状態全解除
-            checkAll = false; // 全行選択フラグリセット
-            selectedRowCount = 0; // 選択された削除行数リセット
-        }
+        isChecked = new Array($claimedDistributions.data.length).fill(false); // 各行選択状態全解除
+        checkAll = false; // 全行選択フラグリセット
+        selectedRowCount = 0; // 選択された削除行数リセット
     });
 
     // モバイル端末の場合、スクロールヒント出す
@@ -91,18 +83,18 @@
             });
         }, 500); // 少し実行をずらすことで、ヒントが最初チラつくのを防ぐ
     }
-
-    console.log($claimedDistributions.data);
 </script>
 
 <button
     class="menu_btn claimed_distribution_back"
     type="button"
     onclick={() => {
+        const userId = $claimedDistributions.userId;
         stage = 0;
         scrollPosition({ x: 0, y: scrollYBeforeClickClaimedDist }); // 配布物受取済み履歴ページ閲覧前の位置まで戻る
         scrollYBeforeClickClaimedDist = 0;
         claimedDistributions.set({ userId: 0, charId: 0, data: [] }); // リセット
+        openUserEditField = [...openUserEditField, userId]; // 遷移前に開いていたユーザーの編集フィールドを復元
     }}
 >
     <span class="btn_icon material-symbols-outlined">arrow_back</span>
@@ -132,38 +124,27 @@
                     maxPage = pager.max; // 最大ページ数再設定
                     currentPage = Math.min(currentPage, pager.max); // 現在ページ数調整（最大ページ数を超えないよう）
 
-                    // ストアpaginatedUsersDataのclaim_distributionプロパティから対象のものを削除
-                    paginatedUsersData.update((users) =>
+                    const removeFromUsers = <T extends { id: number; characters: any[] }>(users: T[]): T[] =>
                         users.map((user) => {
-                            if (user.id === $claimedDistributions.userId) {
-                                return {
-                                    ...user,
-                                    characters: user.characters.map((character, index) => {
-                                        if (index === $userDisplayState[user.id].selectedCharacterIndex) {
-                                            return { ...character, claim_distribution: character.claim_distribution.filter((distribution) => !selectedIds.includes(distribution.id)) };
-                                        } else {
-                                            return character;
-                                        }
-                                    }),
-                                };
-                            } else {
-                                return user;
-                            }
-                        }),
-                    );
+                            if (user.id !== $claimedDistributions.userId) return user;
+                            return {
+                                ...user,
+                                characters: user.characters.map((character) => {
+                                    if (!character || character.id !== $claimedDistributions.charId) return character;
+                                    return { ...character, claim_distribution: character.claim_distribution.filter((d: { id: number }) => !selectedIds.includes(d.id)) };
+                                }),
+                            };
+                        });
+
+                    // pagerUserDataとlastSearchUsersResultのclaim_distributionを同期更新
+                    pagerUserData.update(removeFromUsers);
+                    lastSearchUsersResult.update((users) => (users ? removeFromUsers(users) : users));
                 }
             };
         }}
     >
         <input name="charId" type="hidden" value={$claimedDistributions.charId} />
-        <input
-            name="selectedDistributionId"
-            type="hidden"
-            value={isChecked
-                .map((checked, i) => (checked ? $claimedDistributions.data[i] : -1))
-                .filter((index) => index !== -1)
-                .map((distribution) => distribution?.id)}
-        /><!-- distribution?.idの理由：行選択後にページ切り替えを行うとundefinedになる -->
+        <input name="selectedDistributionId" type="hidden" value={$claimedDistributions.data.filter((_, i) => isChecked[i]).map((d) => d.id)} />
     </form>
 
     <div class="temp_operation_area">

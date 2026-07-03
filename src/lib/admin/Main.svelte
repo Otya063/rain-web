@@ -1,12 +1,26 @@
 <script lang="ts">
     import type { ActionData, PageData } from '../../routes/(app)/admin/$types';
-    import Clans from '$lib/admin/Clans.svelte';
+    import Banner from '$lib/admin/BannerComp/Banner.svelte';
     import Distribution from '$lib/admin/DistributionComp/Distribution.svelte';
-    import LauncherBanner from '$lib/admin/LauncherBanner.svelte';
-    import Information from '$lib/admin/InformationComp/Information.svelte';
+    // import Information from '$lib/admin/InformationComp/Information.svelte';
+    import User from '$lib/admin/UserComp/User.svelte';
+    import Clan from '$lib/admin/ClanComp/Clan.svelte';
     import LauncherSystem from '$lib/admin/LauncherSystem.svelte';
-    import Users from '$lib/admin/Users.svelte';
-    import { adminTabValue, allDistributionData, allInformationData, armJson, chestJson, headJson, itemJson, legJson, meleeJson, poogieJson, rangedJson, waistJson } from '$utils/client';
+    import {
+        adminTabValue,
+        allBannerData,
+        allDistributionData,
+        // allInformationData,
+        armJson,
+        chestJson,
+        headJson,
+        itemJson,
+        legJson,
+        meleeJson,
+        poogieJson,
+        rangedJson,
+        waistJson,
+    } from '$utils/client';
 
     interface Props {
         data: PageData;
@@ -18,7 +32,6 @@
     }
     let { data, form, infoAddMode = $bindable(), bnrAddMode = $bindable(), isMobile, distAddMode = $bindable() }: Props = $props(); // bindableにしないと動かない
     const systemData = data.launcherSystem;
-    const bannerData = data.banners;
     const charactersIdName = data.charIdNamePair;
 
     // 各種アセットデータをjsonからストアへ格納
@@ -33,28 +46,28 @@
     poogieJson.set(data.r2JsonData.poogie);
 
     // ストア変数初期化
-    allInformationData.set(data.information);
+    // allInformationData.set(data.information);
     allDistributionData.set(data.distributions);
+    allBannerData.set(data.banners);
 </script>
 
-{#if $adminTabValue === '' || $adminTabValue === 'system'}
+{#if $adminTabValue === 'system'}
     <LauncherSystem {systemData} />
-{:else if $adminTabValue === 'info'}
-    <Information bind:infoAddMode createdInformation={form?.createdInformation} {isMobile} />
-{:else if $adminTabValue === 'users'}
-    <Users searchResult={form?.searchResult} {isMobile} />
+<!-- {:else if $adminTabValue === 'information'}
+    <Information bind:infoAddMode createdInformation={form?.createdInformation} {isMobile} /> -->
+{:else if $adminTabValue === 'user'}
+    <User searchedUsers={form?.searchedUsers} {isMobile} />
 {:else if $adminTabValue === 'banner'}
-    <LauncherBanner bind:bnrAddMode createdBnr={form?.createdBnr} {bannerData} {isMobile} />
+    <Banner bind:bnrAddMode createdBanner={form?.createdBanner} {isMobile} />
 {:else if $adminTabValue === 'clan'}
-    <Clans
-        paginatedClans={form?.paginatedClans}
-        paginationClanMeta={form?.paginationClanMeta}
-        paginatedAlliances={form?.paginatedAlliances}
-        paginationAllianceMeta={form?.paginationAllianceMeta}
-        clanNames={form?.nameArr}
-        updatedAllianceData={form?.updatedAllianceData}
-        {isMobile}
-    />
+    <Clan {isMobile} />
 {:else if $adminTabValue === 'distribution'}
     <Distribution {charactersIdName} {isMobile} updatedContentsData={form?.updatedContentsData} bind:distAddMode createdDistribution={form?.createdDistribution} />
 {/if}
+
+<!-- scroll-hint用cssインポート -->
+<svelte:head>
+    {#if isMobile}
+        <link rel="stylesheet" href="https://unpkg.com/scroll-hint@latest/css/scroll-hint.css" />
+    {/if}
+</svelte:head>

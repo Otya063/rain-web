@@ -1,13 +1,6 @@
 import { DateTime } from 'luxon';
 import { get } from 'svelte/store';
-import {
-    DistributionContentsTypeObj,
-    type DistributionContentsType,
-    type DistributionRawData,
-    DistributionCategoryObj,
-    type DistributionCategoryName,
-    type DistributionEditableItemType,
-} from '$types';
+import { DistributionContentsTypeObj, type DistributionContentsType, type DistributionRawData, type DistributionEditableItemType } from '$types';
 import {
     getDistributionContentsTypeName,
     armJson,
@@ -390,15 +383,14 @@ export const getDistributionUpdatedValue = (column: DistributionEditableItemType
 
         case 'min_hr':
         case 'max_hr': {
-            return convHrToHrp(Number(value));
+            return Number(value) === 0 ? null : convHrToHrp(Number(value));
         }
 
         case 'min_sr':
         case 'max_sr':
         case 'min_gr':
         case 'max_gr': {
-            // 0の時は無条件なので65535
-            return Number(value) === 0 ? 65535 : Number(value);
+            return Number(value) === 0 ? null : Number(value);
         }
 
         // クライアント側でdataカラムを更新する際は、サーバー側からformData経由で取得するためそのままvalueを返す

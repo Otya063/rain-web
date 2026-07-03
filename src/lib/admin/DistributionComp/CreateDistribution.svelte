@@ -3,7 +3,7 @@
     import { Svroller } from 'svrollbar';
     import { applyAction, enhance } from '$app/forms';
     import NumberInput from '$lib/common/NumberInput.svelte';
-    import { DistributionCategoryObj, type Distribution } from '$types';
+    import { DistributionCategoryObj, type CreateDistributionProps } from '$types';
     import {
         closeMsgDisplay,
         allDistributionData,
@@ -22,13 +22,7 @@
     } from '$utils/client';
     import DistributionContents from './DistributionContentsData.svelte';
 
-    interface Props {
-        charactersIdName: string[];
-        isMobile: boolean;
-        distAddMode: boolean;
-        createdDistribution: Distribution;
-    }
-    let { charactersIdName, isMobile, distAddMode = $bindable(false), createdDistribution }: Props = $props();
+    let { charactersIdName, isMobile, distAddMode = $bindable(false), createdDistribution }: CreateDistributionProps = $props();
     let previewDeadline = $state('');
     let previewTitle = $state('');
     let isValidPreviewTitle = $state(true);
@@ -51,7 +45,26 @@
     let targetCharShowDropdown = $state(false);
     let targetCharFilteredOption = $state(['']);
     let submitMobileTitle = $derived(convertColorString('colorNum', previewTitle, 'event_name'));
+
+    const titleTooltip =
+        '<p>"&lt;Color** /&gt;" is a color tag, and text after this tag is colored based on the two-digit color number in the tag. The color tag is inserted at the cursor position when you press the color button in the color palette below. Manual input is also possible. The expected color numbers are as follows:</p><p style="display: grid; row-gap: 10px; grid-template-columns: repeat(3, 1fr);"><span>00 - White</span><span>01 - Black</span><span>02 - Red</span><span>03 - Green</span><span>04 - Cyan</span><span>05 - Yellow</span><span>06 - Orange</span><span>07 - Pink</span><span>16 - Blue</span></p><hr /><p class="console_contents_note">* Text must be 32 characters or less.</p>';
+    const descTooltip =
+        '<p>"&lt;Color** /&gt;" is a color tag, and text after this tag is colored based on the two-digit color number in the tag. The color tag is inserted at the cursor position when you press the color button in the color palette below. Manual input is also possible. The expected color numbers are as follows:</p><p style="display: grid; row-gap: 10px; grid-template-columns: repeat(3, 1fr);"><span>00 - White</span><span>01 - Black</span><span>02 - Red</span><span>03 - Green</span><span>04 - Cyan</span><span>05 - Yellow</span><span>06 - Orange</span><span>07 - Pink</span><span>16 - Blue</span></p><hr /><p>"&lt;br&gt;" means a line break. Line break operation can\'t be performed in this form, but "&lt;br&gt;" is inserted automatically instead.</p>';
 </script>
+
+{#snippet colorPaletteButtons(element: HTMLInputElement | HTMLTextAreaElement | undefined, onInsert: (value: string) => void)}
+    <div class="color_palette">
+        {#each Object.entries(colorPalette) as [colorName, code]}
+            <!-- onblurイベントでisInputFocused=falseになる方がonclickより早いので使用できない。onmousedownで対応する -->
+            <button
+                class={`color_palette_btn ${colorName.toLowerCase()}`}
+                type="button"
+                onmousedown={() => insertTextAtCursor(`<Color${code} />`, element, isInputFocused, onInsert)}
+                aria-label="Color Palette Button"
+            ></button>
+        {/each}
+    </div>
+{/snippet}
 
 <h2>
     <span class="material-symbols-outlined">post_add</span>
@@ -72,7 +85,7 @@
                     allDistributionData.update((distribution) => {
                         return [...distribution, createdDistribution];
                     }); // common/specificの元データを更新
-                    // 新規作成後はDistributionListコンポーネントがマウントされるのでscript内が自動発火
+                    // 新規作成後はDistributionMainコンポーネントがマウントされるのでscript内が自動発火
 
                     // 各変数値リセット
                     createDistDataTitle.set('');
@@ -133,12 +146,7 @@
                 Title{#if isMobile}&nbsp;{:else}<br />{/if}
                 <span class="contents_term_required">[Required]</span>
                 {#if isMobile}
-                    <span
-                        class="help_btn material-symbols-outlined"
-                        use:tooltip={'<p>"&lt;Color** /&gt;" is a color tag, and text after this tag is colored based on the two-digit color number in the tag. The color tag is inserted at the cursor position when you press the color button in the color palette below. Manual input is also possible. The expected color numbers are as follows:</p><p style="display: grid; row-gap: 10px; grid-template-columns: repeat(3, 1fr);"><span>00 - White</span><span>01 - Black</span><span>02 - Red</span><span>03 - Green</span><span>04 - Cyan</span><span>05 - Yellow</span><span>06 - Orange</span><span>07 - Pink</span><span>16 - Blue</span></p><hr /><p class="console_contents_note">* Text must be 32 characters or less.</p>'}
-                    >
-                        help
-                    </span>
+                    <span class="help_btn material-symbols-outlined" use:tooltip={titleTooltip}>help</span>
                 {/if}
             </dt>
             <dd class="contents_desc vertical_center">
@@ -158,17 +166,7 @@
                     <div class="edit_area_box">
                         <div class="edit_area enter">
                             <dl class="edit_area_box_parts text">
-                                <div class="color_palette">
-                                    {#each Object.entries(colorPalette) as [colorName, code]}
-                                        <!-- onblurイベントでisInputFocused=falseになる方がonclickより早いので使用できない。onmousedownで対応する -->
-                                        <button
-                                            class={`color_palette_btn ${colorName.toLowerCase()}`}
-                                            type="button"
-                                            onmousedown={() => insertTextAtCursor(`<Color${code} />`, inputElement, isInputFocused, (newValue) => (previewTitle = newValue))}
-                                            aria-label="Color Palette Button"
-                                        ></button>
-                                    {/each}
-                                </div>
+                                {@render colorPaletteButtons(inputElement, (newValue) => (previewTitle = newValue))}
 
                                 <dd>
                                     <input type="hidden" name="event_name" value={submitMobileTitle} />
@@ -206,12 +204,7 @@
                 Description{#if isMobile}&nbsp;{:else}<br />{/if}
                 <span class="contents_term_required">[Required]</span>
                 {#if isMobile}
-                    <span
-                        class="help_btn material-symbols-outlined"
-                        use:tooltip={'<p>"&lt;Color** /&gt;" is a color tag, and text after this tag is colored based on the two-digit color number in the tag. The color tag is inserted at the cursor position when you press the color button in the color palette below. Manual input is also possible. The expected color numbers are as follows:</p><p style="display: grid; row-gap: 10px; grid-template-columns: repeat(3, 1fr);"><span>00 - White</span><span>01 - Black</span><span>02 - Red</span><span>03 - Green</span><span>04 - Cyan</span><span>05 - Yellow</span><span>06 - Orange</span><span>07 - Pink</span><span>16 - Blue</span></p><hr /><p>"&lt;br&gt;" means a line break. Line break operation can\'t be performed in this form, but "&lt;br&gt;" is inserted automatically instead.</p>'}
-                    >
-                        help
-                    </span>
+                    <span class="help_btn material-symbols-outlined" use:tooltip={descTooltip}>help</span>
                 {/if}
             </dt>
             <dd class="contents_desc vertical_center">
@@ -231,17 +224,7 @@
                     <div class="edit_area_box">
                         <div class="edit_area enter">
                             <dl class="edit_area_box_parts text">
-                                <div class="color_palette">
-                                    {#each Object.entries(colorPalette) as [colorName, code]}
-                                        <!-- onblurイベントでisInputFocused=falseになる方がonclickより早いので使用できない。onmousedownで対応する -->
-                                        <button
-                                            class={`color_palette_btn ${colorName.toLowerCase()}`}
-                                            type="button"
-                                            onmousedown={() => insertTextAtCursor(`<Color${code} />`, textAreaElement, isInputFocused, (newValue) => (previewDescription = newValue))}
-                                            aria-label="Color Palette Button"
-                                        ></button>
-                                    {/each}
-                                </div>
+                                {@render colorPaletteButtons(textAreaElement, (newValue) => (previewDescription = newValue))}
 
                                 <input type="hidden" name="description" value={mobileSubmitDescHtml} />
                                 <textarea
@@ -259,10 +242,7 @@
                 {/if}
             </dd>
 
-            <dt class="contents_term">
-                Remaining Claims{#if isMobile}&nbsp;{:else}<br />{/if}
-                <span class="contents_term_required">[Required]</span>
-            </dt>
+            <dt class="contents_term">Remaining Claims</dt>
             <dd class="contents_desc vertical_center">
                 <div class="contents_desc_item">
                     <p class="contents_desc_item_text">
@@ -437,7 +417,10 @@
                 </dl>
             </dd>
 
-            <dt class="contents_term">Contents Data</dt>
+            <dt class="contents_term">
+                Contents Data{#if isMobile}&nbsp;{:else}<br />{/if}
+                <span class="contents_term_required">[Required]</span>
+            </dt>
             <dd class="contents_desc">
                 <DistributionContents {isMobile} />
             </dd>

@@ -7,7 +7,7 @@
     import { Svroller } from 'svrollbar';
     import { applyAction, enhance } from '$app/forms';
     import NumberInput from '$lib/common/NumberInput.svelte';
-    import { DistributionCategoryObj, type DistributionEditableItemType } from '$types';
+    import { DistributionCategoryObj, type Distribution, type DistributionEditableItemType } from '$types';
     import {
         closeMsgDisplay,
         tooltip,
@@ -41,14 +41,9 @@
         sortId,
     } from '$utils/client';
     import DistributionContentsData from './DistributionContentsData.svelte';
+    import type { DistributionMainProps } from '$types';
 
-    interface Props {
-        charactersIdName: string[];
-        isMobile: boolean;
-        updatedContentsData?: string;
-        distAddMode: boolean;
-    }
-    let { charactersIdName, isMobile, updatedContentsData, distAddMode = $bindable(false) }: Props = $props();
+    let { charactersIdName, isMobile, updatedContentsData, distAddMode = $bindable(false) }: DistributionMainProps = $props();
     let filterType: 'id' | 'event_name' | 'character_id' = $state('id');
     let editingId: number = $state(0); // 編集対象の配布ID
     let catTypes: Record<DistributionEditableItemType, boolean> = $state({
@@ -85,6 +80,11 @@
     let targetCharShowDropdown = $state(false);
     let targetCharFilteredOption = $state(['']);
     const noReq = 'No Requirement'; // Scope of Distributionの条件なしテキスト
+    const titleMobileTooltip =
+        '<p>"&lt;Color** /&gt;" is a color tag, and text after this tag is colored based on the two-digit color number in the tag. The color tag is inserted at the cursor position when you press the color button in the color palette below. Manual input is also possible. The expected color numbers are as follows:</p><p style="display: grid; row-gap: 10px; grid-template-columns: repeat(3, 1fr);"><span>00 - White</span><span>01 - Black</span><span>02 - Red</span><span>03 - Green</span><span>04 - Cyan</span><span>05 - Yellow</span><span>06 - Orange</span><span>07 - Pink</span><span>16 - Blue</span></p><hr /><p class="console_contents_note">* Text must be 32 characters or less.</p>';
+    const descMobileTooltip =
+        '<p>"&lt;Color** /&gt;" is a color tag, and text after this tag is colored based on the two-digit color number in the tag. The color tag is inserted at the cursor position when you press the color button in the color palette below. Manual input is also possible. The expected color numbers are as follows:</p><p style="display: grid; row-gap: 10px; grid-template-columns: repeat(3, 1fr);"><span>00 - White</span><span>01 - Black</span><span>02 - Red</span><span>03 - Green</span><span>04 - Cyan</span><span>05 - Yellow</span><span>06 - Orange</span><span>07 - Pink</span><span>16 - Blue</span></p><hr /><p>"&lt;br&gt;" means a line break. Line break operation can\'t be performed in this form, but "&lt;br&gt;" is inserted automatically instead.</p>';
+    let pager: Pager<Distribution>;
     let scrollY = $state(0);
     let scrollYBeforeOpenData = $state(0); // コンテンツデータ表示前にスクロール位置を保存（submit後にメニュー閉じて位置がずれるため）
     let previewDescription = $state('');
@@ -115,28 +115,31 @@
         const { updatedCatTypes, updatedEditingId } = editModeSwitch<typeof type>(distId, type, catTypes);
         catTypes = updatedCatTypes;
         editingId = updatedEditingId;
+
+        return;
     };
 
-    distributionPagerInstance.set(new Pager($allDistributionData));
-    $distributionPagerInstance.bindStore((data) => pagerDistributionData.set(data)); // 格納先ストアバインド
-    maxPage = $distributionPagerInstance.max; // 最大ページ数設定
+    pager = new Pager($allDistributionData);
+    distributionPagerInstance.set(pager); // DistributionEditorとの共有用
+    pager.bindStore((data) => pagerDistributionData.set(data)); // 格納先ストアバインド
+    maxPage = pager.max; // 最大ページ数設定
 
     // フィルター時リアクティブ処理
     $effect(() => {
         // 依存関係は$distributionFilterText、filterType
-        $distributionPagerInstance.clearFilters(['exact_id', 'exact_character_id', 'text_event_name']); // 既存のフィルターをクリア
+        pager.clearFilters(['exact_id', 'exact_character_id', 'text_event_name']); // 既存のフィルターをクリア
         // filterTypeでフィルターするのは１つだけなので、クリアしないと混ざってしまう
 
         if ($distributionFilterText) {
             if (filterType === 'id' || filterType === 'character_id') {
-                $distributionPagerInstance.filterExactMatch(filterType, Number($distributionFilterText));
+                pager.filterExactMatch(filterType, Number($distributionFilterText));
             } else {
-                $distributionPagerInstance.filterStringInclude('event_name', $distributionFilterText.toLowerCase());
+                pager.filterStringInclude('event_name', $distributionFilterText.toLowerCase());
             }
         }
 
         currentPage = 1; // 初期ページ設定
-        maxPage = $distributionPagerInstance.max; // 最大ページ数再設定
+        maxPage = pager.max; // 最大ページ数再設定
         openDistributionEditField.set([]); // 展開済み編集フィールドリセット
     });
 
@@ -188,6 +191,53 @@
 
 <svelte:window bind:scrollY />
 
+{#snippet colorPaletteButtons(element: HTMLInputElement | HTMLTextAreaElement | undefined, onInsert: (value: string) => void)}
+    <div class="color_palette">
+        {#each Object.entries(colorPalette) as [colorName, code]}
+            <button
+                class={`color_palette_btn ${colorName.toLowerCase()}`}
+                type="button"
+                onmousedown={() => insertTextAtCursor(`<Color${code} />`, element, isInputFocused, onInsert)}
+                aria-label="Color Palette Button"
+            ></button>
+        {/each}
+    </div>
+{/snippet}
+
+{#snippet fieldButtons(col: DistributionEditableItemType, distId: number, onEdit?: () => void)}
+    {#if editingId === distId && catTypes[col]}
+        <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, col)}>
+            <span class="btn_icon material-symbols-outlined">close</span>
+            <span class="btn_text">Cancel</span>
+        </button>
+
+        <button
+            class="blue_btn"
+            type="submit"
+            onclick={() => {
+                onSubmit.set(true);
+                $timeOut && closeMsgDisplay($timeOut);
+                setTimeout(() => handleEditModeSwitch(0, col), 100);
+            }}
+        >
+            <span class="btn_icon material-symbols-outlined">check</span>
+            <span class="btn_text">Save</span>
+        </button>
+    {:else}
+        <button
+            class="normal_btn"
+            type="button"
+            onclick={() => {
+                handleEditModeSwitch(distId, col);
+                onEdit?.();
+            }}
+        >
+            <span class="btn_icon material-symbols-outlined">mode_edit</span>
+            <span class="btn_text">Edit</span>
+        </button>
+    {/if}
+{/snippet}
+
 <h2>
     <span class="material-symbols-outlined">package_2</span>
     Distribution
@@ -207,13 +257,18 @@
                 await applyAction(result);
 
                 if (result.type === 'success') {
-                    allDistributionData.update((data) => data.filter((distribution) => !selectedIds.includes(distribution.id))); // common/specificの元データを更新
-                    $distributionPagerInstance.deleteItem(selectedIds); // pager更新データ動的反映
-                    maxPage = $distributionPagerInstance.max; // 最大ページ数再設定
-                    currentPage = Math.min(currentPage, $distributionPagerInstance.max); // 現在ページ数調整（最大ページ数を超えないよう）
-                    openDistributionEditField.update((items) => {
-                        return items.filter((id) => !selectedIds.includes(id));
-                    }); // 開いているものを削除したら、そのidをストアから削除する
+                    allDistributionData.update((data) => data.filter((distribution) => !selectedIds.includes(distribution.id)));
+                    pager.deleteItem(selectedIds);
+                    // pagerDistributionData が短くなる前に isChecked を空にする。
+                    // $effect は DOM 更新後に実行されるため、再レンダリング時に
+                    // isChecked（旧サイズ）と $pagerDistributionData（新サイズ）が
+                    // ズレて hidden input 値の評価で TypeError が発生するのを防ぐ。
+                    isChecked = [];
+                    checkAll = false;
+                    selectedRowCount = 0;
+                    maxPage = pager.max;
+                    currentPage = Math.min(currentPage, pager.max);
+                    openDistributionEditField.update((items) => items.filter((id) => !selectedIds.includes(id)));
                 }
             };
         }}
@@ -224,8 +279,8 @@
             value={isChecked
                 .map((checked, i) => (checked ? $pagerDistributionData[i] : -1))
                 .filter((index) => index !== -1)
-                .map((distribution) => distribution?.id)}
-        /><!-- distribution?.idの理由：行選択後にページ切り替えを行うとundefinedになる -->
+                .map((distribution) => distribution.id)}
+        />
     </form>
 
     <div class="temp_operation_area">
@@ -239,7 +294,7 @@
 
         <label class="temp_operation_area_search">
             <span class="material-symbols-outlined">search</span>
-            <input type="text" bind:value={$distributionFilterText} placeholder="Keywords..." />
+            <input type="text" bind:value={$distributionFilterText} placeholder="Keywords..." autocomplete="off" />
         </label>
 
         <button class="normal_btn" type="button" onclick={() => (openTypeFilterCheckbox = !openTypeFilterCheckbox)}>
@@ -257,8 +312,9 @@
                             <span
                                 class="help_btn material-symbols-outlined"
                                 use:tooltip={'<span class="console_contents_note">Common</span>: Shows what is distributed for all characters.<br /><span class="console_contents_note">Specific</span>: Shows what is distributed for specific character.'}
-                                >help</span
                             >
+                                help
+                            </span>
                         </p>
                         {#each Object.entries(distributionType) as [typeName, typeIndex]}
                             <label>
@@ -275,8 +331,8 @@
                                     }}
                                     onchange={() => {
                                         selectedTypeFilterCheckbox = toggleFilterCheckbox(selectedTypeFilterCheckbox, typeIndex);
-                                        $distributionPagerInstance.filterNumberArrInclude('type', selectedTypeFilterCheckbox);
-                                        maxPage = $distributionPagerInstance.max; // 最大ページ数再設定
+                                        pager.filterNumberArrInclude('type', selectedTypeFilterCheckbox);
+                                        maxPage = pager.max; // 最大ページ数再設定
                                         currentPage = 1; // 現在ページリセット
                                         openDistributionEditField.set([]); // 展開済み編集フィールドリセット
                                     }}
@@ -301,8 +357,8 @@
                                     }}
                                     onchange={() => {
                                         selectedCategoryFilterCheckbox = toggleFilterCheckbox(selectedCategoryFilterCheckbox, catIndex);
-                                        $distributionPagerInstance.filterNumberArrInclude('category', selectedCategoryFilterCheckbox);
-                                        maxPage = $distributionPagerInstance.max; // 最大ページ数再設定
+                                        pager.filterNumberArrInclude('category', selectedCategoryFilterCheckbox);
+                                        maxPage = pager.max; // 最大ページ数再設定
                                         currentPage = 1; // 現在ページリセット
                                         openDistributionEditField.set([]); // 展開済み編集フィールドリセット
                                     }}
@@ -366,7 +422,7 @@
                         class="console_contents_table_head_header id"
                         use:tooltip={$sortId}
                         onclick={() => {
-                            $distributionPagerInstance.toggleSortOrder();
+                            pager.toggleSortOrder();
                             openDistributionEditField.set([]); // 展開済み編集フィールドリセット
                         }}
                     >
@@ -379,7 +435,7 @@
 
                     <th class="console_contents_table_head_header title">Title</th>
 
-                    <th class="console_contents_table_head_header other" class:center={isMobile} class:fixed={$pagerDistributionData.length}>
+                    <th class="console_contents_table_head_header other" class:center={isMobile} class:fixed_column={$pagerDistributionData.length}>
                         {#if $openDistributionEditField.length}
                             <button class="material-symbols-outlined" type="button" use:tooltip={isMobile ? '' : 'Collapse all edit fields.'} onclick={() => openDistributionEditField.set([])}>
                                 collapse_all
@@ -420,18 +476,14 @@
                             {distribution.event_name.replace(/~C(\d{2})/g, '')}
                         </td>
 
-                        <td class="console_contents_table_data" class:center={isMobile} class:fixed={$pagerDistributionData.length}>
+                        <td class="console_contents_table_data" class:center={isMobile} class:fixed_column={$pagerDistributionData.length}>
                             <button
                                 class="material-symbols-outlined"
                                 type="button"
-                                use:tooltip={isMobile ? '' : !$openDistributionEditField.includes(distribution.id) ? 'Show edit field.' : 'Hide edit field.'}
+                                use:tooltip={isMobile ? '' : !$openDistributionEditField.includes(distribution.id) ? 'Show details.' : 'Hide details.'}
                                 onclick={() => handleDistributionEditField(distribution.id)}
                             >
-                                {#if $openDistributionEditField.includes(distribution.id)}
-                                    close
-                                {:else}
-                                    edit_square
-                                {/if}
+                                {$openDistributionEditField.includes(distribution.id) ? 'close' : 'expand_circle_down'}
                             </button>
                         </td>
                     </tr>
@@ -455,7 +507,7 @@
 
                                             if (result.type === 'success') {
                                                 updateAllDistributionData(id, column, !updatedContentsData ? value : updatedContentsData); // allDistributionDataストアを更新
-                                                $distributionPagerInstance.updatePagerDistribution(id, column, !updatedContentsData ? value : updatedContentsData); // pager更新データ動的反映
+                                                pager.updatePagerDistribution(id, column, !updatedContentsData ? value : updatedContentsData); // pager更新データ動的反映
                                             }
                                         };
                                     }}
@@ -507,33 +559,7 @@
                                             </div>
 
                                             <div class="contents_desc_item_group_btn">
-                                                {#if editingId === distribution.id && catTypes['category']}
-                                                    <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, 'category')}>
-                                                        <span class="btn_icon material-symbols-outlined">close</span>
-                                                        <span class="btn_text">Cancel</span>
-                                                    </button>
-
-                                                    <button
-                                                        class="blue_btn"
-                                                        type="submit"
-                                                        onclick={() => {
-                                                            onSubmit.set(true);
-                                                            $timeOut && closeMsgDisplay($timeOut);
-                                                            setTimeout(() => {
-                                                                // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                handleEditModeSwitch(0, 'category');
-                                                            }, 100);
-                                                        }}
-                                                    >
-                                                        <span class="btn_icon material-symbols-outlined">check</span>
-                                                        <span class="btn_text">Save</span>
-                                                    </button>
-                                                {:else}
-                                                    <button class="normal_btn" type="button" onclick={() => handleEditModeSwitch(distribution.id, 'category')}>
-                                                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                                        <span class="btn_text">Edit</span>
-                                                    </button>
-                                                {/if}
+                                                {@render fieldButtons('category', distribution.id)}
                                             </div>
                                         </dd>
 
@@ -573,55 +599,21 @@
                                             </div>
 
                                             <div class="contents_desc_item_group_btn">
-                                                {#if editingId === distribution.id && catTypes['deadline']}
-                                                    <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, 'deadline')}>
-                                                        <span class="btn_icon material-symbols-outlined">close</span>
-                                                        <span class="btn_text">Cancel</span>
-                                                    </button>
-
-                                                    <button
-                                                        class="blue_btn"
-                                                        type="submit"
-                                                        onclick={() => {
-                                                            onSubmit.set(true);
-                                                            $timeOut && closeMsgDisplay($timeOut);
-                                                            setTimeout(() => {
-                                                                // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                handleEditModeSwitch(0, 'deadline');
-                                                            }, 100);
-                                                        }}
-                                                    >
-                                                        <span class="btn_icon material-symbols-outlined">check</span>
-                                                        <span class="btn_text">Save</span>
-                                                    </button>
-                                                {:else}
-                                                    <button
-                                                        class="normal_btn"
-                                                        type="button"
-                                                        onclick={() => {
-                                                            handleEditModeSwitch(distribution.id, 'deadline');
-                                                            previewDeadline = !distribution.deadline
-                                                                ? DateTime.now().setLocale('en').toFormat("yyyy-MM-dd'T'HH:mm") // デフォルト値は現在の現地時間
-                                                                : DateTime.fromJSDate(distribution.deadline).setZone(DateTime.local().zoneName).setLocale('en').toFormat("yyyy-MM-dd'T'HH:mm"); // 期限存在時はそれを現地時間に変換する
-                                                        }}
-                                                    >
-                                                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                                        <span class="btn_text">Edit</span>
-                                                    </button>
-                                                {/if}
+                                                {@render fieldButtons('deadline', distribution.id, () => {
+                                                    previewDeadline = !distribution.deadline
+                                                        ? DateTime.now().setLocale('en').toFormat("yyyy-MM-dd'T'HH:mm")
+                                                        : DateTime.fromJSDate(distribution.deadline).setZone(DateTime.local().zoneName).setLocale('en').toFormat("yyyy-MM-dd'T'HH:mm");
+                                                })}
                                             </div>
                                         </dd>
 
                                         <dt class="contents_term">
                                             Title
                                             {#if isMobile}
-                                                <span
-                                                    class="help_btn material-symbols-outlined"
-                                                    use:tooltip={'<p>"&lt;Color** /&gt;" is a color tag, and text after this tag is colored based on the two-digit color number in the tag. The color tag is inserted at the cursor position when you press the color button in the color palette below. Manual input is also possible. The expected color numbers are as follows:</p><p style="display: grid; row-gap: 10px; grid-template-columns: repeat(3, 1fr);"><span>00 - White</span><span>01 - Black</span><span>02 - Red</span><span>03 - Green</span><span>04 - Cyan</span><span>05 - Yellow</span><span>06 - Orange</span><span>07 - Pink</span><span>16 - Blue</span></p><hr /><p class="console_contents_note">* Text must be 32 characters or less.</p>'}
-                                                >
-                                                    help
-                                                </span>
+                                                <span class="help_btn material-symbols-outlined" use:tooltip={titleMobileTooltip}>help</span>
                                             {/if}
+                                            {#if isMobile}&nbsp;{:else}<br />{/if}
+                                            <span class="contents_term_required">[Required]</span>
                                         </dt>
                                         <dd class="contents_desc no_desc_item">
                                             <div class="contents_desc_item_group_btn">
@@ -668,18 +660,7 @@
                                                     <div transition:slide class="edit_area_box">
                                                         <div class="edit_area enter">
                                                             <dl class="edit_area_box_parts text">
-                                                                <div class="color_palette">
-                                                                    {#each Object.entries(colorPalette) as [colorName, code]}
-                                                                        <!-- onblurイベントでisInputFocused=falseになる方がonclickより早いので使用できない。onmousedownで対応する -->
-                                                                        <button
-                                                                            class={`color_palette_btn ${colorName.toLowerCase()}`}
-                                                                            type="button"
-                                                                            onmousedown={() =>
-                                                                                insertTextAtCursor(`<Color${code} />`, inputElement, isInputFocused, (newValue) => (previewTitle = newValue))}
-                                                                            aria-label="Color Palette Button"
-                                                                        ></button>
-                                                                    {/each}
-                                                                </div>
+                                                                {@render colorPaletteButtons(inputElement, (newValue) => (previewTitle = newValue))}
 
                                                                 <dt>Enter new title</dt>
                                                                 <dd>
@@ -736,13 +717,10 @@
                                         <dt class="contents_term">
                                             Description
                                             {#if isMobile}
-                                                <span
-                                                    class="help_btn material-symbols-outlined"
-                                                    use:tooltip={'<p>"&lt;Color** /&gt;" is a color tag, and text after this tag is colored based on the two-digit color number in the tag. The color tag is inserted at the cursor position when you press the color button in the color palette below. Manual input is also possible. The expected color numbers are as follows:</p><p style="display: grid; row-gap: 10px; grid-template-columns: repeat(3, 1fr);"><span>00 - White</span><span>01 - Black</span><span>02 - Red</span><span>03 - Green</span><span>04 - Cyan</span><span>05 - Yellow</span><span>06 - Orange</span><span>07 - Pink</span><span>16 - Blue</span></p><hr /><p>"&lt;br&gt;" means a line break. Line break operation can\'t be performed in this form, but "&lt;br&gt;" is inserted automatically instead.</p>'}
-                                                >
-                                                    help
-                                                </span>
+                                                <span class="help_btn material-symbols-outlined" use:tooltip={descMobileTooltip}>help</span>
                                             {/if}
+                                            {#if isMobile}&nbsp;{:else}<br />{/if}
+                                            <span class="contents_term_required">[Required]</span>
                                         </dt>
                                         <dd class="contents_desc no_desc_item">
                                             <div class="contents_desc_item_group_btn">
@@ -789,18 +767,7 @@
                                                     <div transition:slide class="edit_area_box">
                                                         <div class="edit_area enter">
                                                             <dl class="edit_area_box_parts text">
-                                                                <div class="color_palette">
-                                                                    {#each Object.entries(colorPalette) as [colorName, code]}
-                                                                        <!-- onblurイベントでisInputFocused=falseになる方がonclickより早いので使用できない。onmousedownで対応する -->
-                                                                        <button
-                                                                            class={`color_palette_btn ${colorName.toLowerCase()}`}
-                                                                            type="button"
-                                                                            onmousedown={() =>
-                                                                                insertTextAtCursor(`<Color${code} />`, textAreaElement, isInputFocused, (newValue) => (previewDescription = newValue))}
-                                                                            aria-label="Color Palette Button"
-                                                                        ></button>
-                                                                    {/each}
-                                                                </div>
+                                                                {@render colorPaletteButtons(textAreaElement, (newValue) => (previewDescription = newValue))}
 
                                                                 <dt>Enter new description</dt>
                                                                 <dd>
@@ -825,7 +792,7 @@
                                                                     $timeOut && closeMsgDisplay($timeOut);
                                                                     setTimeout(() => {
                                                                         // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                        handleEditModeSwitch(0, 'event_name');
+                                                                        handleEditModeSwitch(0, 'description');
                                                                     }, 100);
                                                                 }}
                                                             >
@@ -854,33 +821,7 @@
                                             </div>
 
                                             <div class="contents_desc_item_group_btn">
-                                                {#if editingId === distribution.id && catTypes['times_acceptable']}
-                                                    <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, 'times_acceptable')}>
-                                                        <span class="btn_icon material-symbols-outlined">close</span>
-                                                        <span class="btn_text">Cancel</span>
-                                                    </button>
-
-                                                    <button
-                                                        class="blue_btn"
-                                                        type="submit"
-                                                        onclick={() => {
-                                                            onSubmit.set(true);
-                                                            $timeOut && closeMsgDisplay($timeOut);
-                                                            setTimeout(() => {
-                                                                // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                handleEditModeSwitch(0, 'times_acceptable');
-                                                            }, 100);
-                                                        }}
-                                                    >
-                                                        <span class="btn_icon material-symbols-outlined">check</span>
-                                                        <span class="btn_text">Save</span>
-                                                    </button>
-                                                {:else}
-                                                    <button class="normal_btn" type="button" onclick={() => handleEditModeSwitch(distribution.id, 'times_acceptable')}>
-                                                        <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                                        <span class="btn_text">Edit</span>
-                                                    </button>
-                                                {/if}
+                                                {@render fieldButtons('times_acceptable', distribution.id)}
                                             </div>
                                         </dd>
 
@@ -975,33 +916,7 @@
                                                     </div>
 
                                                     <div class="contents_desc_item_group_btn">
-                                                        {#if editingId === distribution.id && catTypes['character_id']}
-                                                            <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, 'character_id')}>
-                                                                <span class="btn_icon material-symbols-outlined">close</span>
-                                                                <span class="btn_text">Cancel</span>
-                                                            </button>
-
-                                                            <button
-                                                                class="blue_btn"
-                                                                type="submit"
-                                                                onclick={() => {
-                                                                    onSubmit.set(true);
-                                                                    $timeOut && closeMsgDisplay($timeOut);
-                                                                    setTimeout(() => {
-                                                                        // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                        handleEditModeSwitch(0, 'character_id');
-                                                                    }, 100);
-                                                                }}
-                                                            >
-                                                                <span class="btn_icon material-symbols-outlined">check</span>
-                                                                <span class="btn_text">Save</span>
-                                                            </button>
-                                                        {:else}
-                                                            <button class="normal_btn" type="button" onclick={() => handleEditModeSwitch(distribution.id, 'character_id')}>
-                                                                <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                                                <span class="btn_text">Edit</span>
-                                                            </button>
-                                                        {/if}
+                                                        {@render fieldButtons('character_id', distribution.id)}
                                                     </div>
                                                 </dd>
                                             </dl>
@@ -1009,7 +924,7 @@
                                             <dl class="console_contents_list">
                                                 <dt class="contents_term">
                                                     Min. HR
-                                                    <span class="help_btn material-symbols-outlined" use:tooltip={'Valid value range: 1 - 7<br />0 means no requirement.'}> help </span>
+                                                    <span class="help_btn material-symbols-outlined" use:tooltip={'Valid value range: 1 - 7<br />0 means no requirement.'}>help</span>
                                                 </dt>
                                                 <dd class="contents_desc">
                                                     <div class="contents_desc_item">
@@ -1017,39 +932,13 @@
                                                             {#if editingId === distribution.id && catTypes['min_hr']}
                                                                 <NumberInput value={convHrpToHr(distribution.min_hr)} min={0} max={7} name="min_hr" />
                                                             {:else}
-                                                                {distribution.min_hr === 65535 ? noReq : convHrpToHr(distribution.min_hr)}
+                                                                {distribution.min_hr === null ? noReq : convHrpToHr(distribution.min_hr)}
                                                             {/if}
                                                         </p>
                                                     </div>
 
                                                     <div class="contents_desc_item_group_btn">
-                                                        {#if editingId === distribution.id && catTypes['min_hr']}
-                                                            <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, 'min_hr')}>
-                                                                <span class="btn_icon material-symbols-outlined">close</span>
-                                                                <span class="btn_text">Cancel</span>
-                                                            </button>
-
-                                                            <button
-                                                                class="blue_btn"
-                                                                type="submit"
-                                                                onclick={() => {
-                                                                    onSubmit.set(true);
-                                                                    $timeOut && closeMsgDisplay($timeOut);
-                                                                    setTimeout(() => {
-                                                                        // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                        handleEditModeSwitch(0, 'min_hr');
-                                                                    }, 100);
-                                                                }}
-                                                            >
-                                                                <span class="btn_icon material-symbols-outlined">check</span>
-                                                                <span class="btn_text">Save</span>
-                                                            </button>
-                                                        {:else}
-                                                            <button class="normal_btn" type="button" onclick={() => handleEditModeSwitch(distribution.id, 'min_hr')}>
-                                                                <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                                                <span class="btn_text">Edit</span>
-                                                            </button>
-                                                        {/if}
+                                                        {@render fieldButtons('min_hr', distribution.id)}
                                                     </div>
                                                 </dd>
                                             </dl>
@@ -1057,7 +946,7 @@
                                             <dl class="console_contents_list">
                                                 <dt class="contents_term">
                                                     Max. HR
-                                                    <span class="help_btn material-symbols-outlined" use:tooltip={'Valid value range: 1 - 7<br />0 means no requirement.'}> help </span>
+                                                    <span class="help_btn material-symbols-outlined" use:tooltip={'Valid value range: 1 - 7<br />0 means no requirement.'}>help</span>
                                                 </dt>
                                                 <dd class="contents_desc">
                                                     <div class="contents_desc_item">
@@ -1065,39 +954,13 @@
                                                             {#if editingId === distribution.id && catTypes['max_hr']}
                                                                 <NumberInput value={convHrpToHr(distribution.max_hr)} min={0} max={7} name="max_hr" />
                                                             {:else}
-                                                                {distribution.max_hr === 65535 ? noReq : convHrpToHr(distribution.max_hr)}
+                                                                {distribution.max_hr === null ? noReq : convHrpToHr(distribution.max_hr)}
                                                             {/if}
                                                         </p>
                                                     </div>
 
                                                     <div class="contents_desc_item_group_btn">
-                                                        {#if editingId === distribution.id && catTypes['max_hr']}
-                                                            <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, 'max_hr')}>
-                                                                <span class="btn_icon material-symbols-outlined">close</span>
-                                                                <span class="btn_text">Cancel</span>
-                                                            </button>
-
-                                                            <button
-                                                                class="blue_btn"
-                                                                type="submit"
-                                                                onclick={() => {
-                                                                    onSubmit.set(true);
-                                                                    $timeOut && closeMsgDisplay($timeOut);
-                                                                    setTimeout(() => {
-                                                                        // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                        handleEditModeSwitch(0, 'max_hr');
-                                                                    }, 100);
-                                                                }}
-                                                            >
-                                                                <span class="btn_icon material-symbols-outlined">check</span>
-                                                                <span class="btn_text">Save</span>
-                                                            </button>
-                                                        {:else}
-                                                            <button class="normal_btn" type="button" onclick={() => handleEditModeSwitch(distribution.id, 'max_hr')}>
-                                                                <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                                                <span class="btn_text">Edit</span>
-                                                            </button>
-                                                        {/if}
+                                                        {@render fieldButtons('max_hr', distribution.id)}
                                                     </div>
                                                 </dd>
                                             </dl>
@@ -1106,7 +969,7 @@
                                             <dl class="console_contents_list">
                                                 <dt class="contents_term">
                                                     Min. SR
-                                                    <span class="help_btn material-symbols-outlined" use:tooltip={'Valid value range: 1 - 999<br />0 means no requirement.'}> help </span>
+                                                    <span class="help_btn material-symbols-outlined" use:tooltip={'Valid value range: 1 - 999<br />0 means no requirement.'}>help</span>
                                                 </dt>
                                                 <dd class="contents_desc">
                                                     <div class="contents_desc_item">
@@ -1154,7 +1017,7 @@
                                             <dl class="console_contents_list">
                                                 <dt class="contents_term">
                                                     Max. SR
-                                                    <span class="help_btn material-symbols-outlined" use:tooltip={'Valid value range: 1 - 999<br />0 means no requirement.'}> help </span>
+                                                    <span class="help_btn material-symbols-outlined" use:tooltip={'Valid value range: 1 - 999<br />0 means no requirement.'}>help</span>
                                                 </dt>
                                                 <dd class="contents_desc">
                                                     <div class="contents_desc_item">
@@ -1203,47 +1066,21 @@
                                             <dl class="console_contents_list">
                                                 <dt class="contents_term">
                                                     Min. GR
-                                                    <span class="help_btn material-symbols-outlined" use:tooltip={'Valid value range: 1 - 999<br />0 means no requirement.'}> help </span>
+                                                    <span class="help_btn material-symbols-outlined" use:tooltip={'Valid value range: 1 - 999<br />0 means no requirement.'}>help</span>
                                                 </dt>
                                                 <dd class="contents_desc">
                                                     <div class="contents_desc_item">
                                                         <p class="contents_desc_item_text">
                                                             {#if editingId === distribution.id && catTypes['min_gr']}
-                                                                <NumberInput value={distribution.min_gr === 65535 ? 0 : distribution.min_gr} min={0} max={999} name="min_gr" />
+                                                                <NumberInput value={distribution.min_gr ?? 0} min={0} max={999} name="min_gr" />
                                                             {:else}
-                                                                {distribution.min_gr === 65535 ? noReq : distribution.min_gr}
+                                                                {distribution.min_gr === null ? noReq : distribution.min_gr}
                                                             {/if}
                                                         </p>
                                                     </div>
 
                                                     <div class="contents_desc_item_group_btn">
-                                                        {#if editingId === distribution.id && catTypes['min_gr']}
-                                                            <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, 'min_gr')}>
-                                                                <span class="btn_icon material-symbols-outlined">close</span>
-                                                                <span class="btn_text">Cancel</span>
-                                                            </button>
-
-                                                            <button
-                                                                class="blue_btn"
-                                                                type="submit"
-                                                                onclick={() => {
-                                                                    onSubmit.set(true);
-                                                                    $timeOut && closeMsgDisplay($timeOut);
-                                                                    setTimeout(() => {
-                                                                        // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                        handleEditModeSwitch(0, 'min_gr');
-                                                                    }, 100);
-                                                                }}
-                                                            >
-                                                                <span class="btn_icon material-symbols-outlined">check</span>
-                                                                <span class="btn_text">Save</span>
-                                                            </button>
-                                                        {:else}
-                                                            <button class="normal_btn" type="button" onclick={() => handleEditModeSwitch(distribution.id, 'min_gr')}>
-                                                                <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                                                <span class="btn_text">Edit</span>
-                                                            </button>
-                                                        {/if}
+                                                        {@render fieldButtons('min_gr', distribution.id)}
                                                     </div>
                                                 </dd>
                                             </dl>
@@ -1251,53 +1088,30 @@
                                             <dl class="console_contents_list">
                                                 <dt class="contents_term">
                                                     Max. GR
-                                                    <span class="help_btn material-symbols-outlined" use:tooltip={'Valid value range: 1 - 999<br />0 means no requirement.'}> help </span>
+                                                    <span class="help_btn material-symbols-outlined" use:tooltip={'Valid value range: 1 - 999<br />0 means no requirement.'}>help</span>
                                                 </dt>
                                                 <dd class="contents_desc">
                                                     <div class="contents_desc_item">
                                                         <p class="contents_desc_item_text">
                                                             {#if editingId === distribution.id && catTypes['max_gr']}
-                                                                <NumberInput value={distribution.max_gr === 65535 ? 0 : distribution.max_gr} min={0} max={999} name="max_gr" />
+                                                                <NumberInput value={distribution.max_gr ?? 0} min={0} max={999} name="max_gr" />
                                                             {:else}
-                                                                {distribution.max_gr === 65535 ? noReq : distribution.max_gr}
+                                                                {distribution.max_gr === null ? noReq : distribution.max_gr}
                                                             {/if}
                                                         </p>
                                                     </div>
 
                                                     <div class="contents_desc_item_group_btn">
-                                                        {#if editingId === distribution.id && catTypes['max_gr']}
-                                                            <button class="red_btn" type="button" onclick={() => handleEditModeSwitch(0, 'max_gr')}>
-                                                                <span class="btn_icon material-symbols-outlined">close</span>
-                                                                <span class="btn_text">Cancel</span>
-                                                            </button>
-
-                                                            <button
-                                                                class="blue_btn"
-                                                                type="submit"
-                                                                onclick={() => {
-                                                                    onSubmit.set(true);
-                                                                    $timeOut && closeMsgDisplay($timeOut);
-                                                                    setTimeout(() => {
-                                                                        // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                        handleEditModeSwitch(0, 'max_gr');
-                                                                    }, 100);
-                                                                }}
-                                                            >
-                                                                <span class="btn_icon material-symbols-outlined">check</span>
-                                                                <span class="btn_text">Save</span>
-                                                            </button>
-                                                        {:else}
-                                                            <button class="normal_btn" type="button" onclick={() => handleEditModeSwitch(distribution.id, 'max_gr')}>
-                                                                <span class="btn_icon material-symbols-outlined">mode_edit</span>
-                                                                <span class="btn_text">Edit</span>
-                                                            </button>
-                                                        {/if}
+                                                        {@render fieldButtons('max_gr', distribution.id)}
                                                     </div>
                                                 </dd>
                                             </dl>
                                         </dd>
 
-                                        <dt class="contents_term">Contents Data</dt>
+                                        <dt class="contents_term">
+                                            Contents Data{#if isMobile}&nbsp;{:else}<br />{/if}
+                                            <span class="contents_term_required">[Required]</span>
+                                        </dt>
                                         <dd class="contents_desc no_desc_item">
                                             <div class="contents_desc_item_group_btn">
                                                 {#if editingId === distribution.id && catTypes['data']}
@@ -1332,7 +1146,6 @@
                                                             handleEditModeSwitch(distribution.id, 'data');
                                                             scrollYBeforeOpenData = scrollY;
                                                             distributionContentsData.set(ManageDistribution.parseHexString(distribution.data));
-                                                            console.log($distributionContentsData);
                                                         }}
                                                     >
                                                         <span class="btn_icon material-symbols-outlined">expand_all</span>
@@ -1410,7 +1223,7 @@
                     onclick={() => {
                         if (currentPage !== Number(page)) {
                             // 選択中のボタン以外がonclick対象
-                            $distributionPagerInstance.getContent(Number(page)); // ページ数に応じた表示内容に切り替え
+                            pager.getContent(Number(page)); // ページ数に応じた表示内容に切り替え
                             currentPage = Number(page); // 現在ページ数更新
                             openDistributionEditField.set([]); // 展開済み編集フィールドリセット
                         }
@@ -1422,10 +1235,3 @@
         {/if}
     </div>
 </div>
-
-<!-- scroll-hint用cssインポート -->
-<svelte:head>
-    {#if isMobile}
-        <link rel="stylesheet" href="https://unpkg.com/scroll-hint@latest/css/scroll-hint.css" />
-    {/if}
-</svelte:head>

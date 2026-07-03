@@ -8,6 +8,7 @@ const config: UserConfig = {
         fs: {
             allow: ['..'],
         },
+        // port: 5174
     },
     css: {
         preprocessorOptions: {

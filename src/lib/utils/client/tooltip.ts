@@ -16,6 +16,7 @@ export const tooltip = (node: HTMLElement, content: string): { update(newContent
               content,
               theme: 'material',
               allowHTML: true,
+              interactive: true,
           });
 
     return {

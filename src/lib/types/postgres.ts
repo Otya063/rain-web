@@ -1,4 +1,15 @@
-import type { BinaryTypes, DistributionCategory, DistributionEditableItemType, InformationEditableItemType, Replace } from '$types';
+import type { BinaryTypes, DistributionCategory, DistributionEditableItemType, Replace, PaginatedClans, PaginatedAlliances } from '$types';
+
+/**
+ * データベース認証情報jsonデータ
+ */
+export interface DatabaseConfig {
+    host: string;
+    port: number;
+    database: string;
+    username: string;
+    password: string;
+}
 
 /**
  * 引数の「アクション名」と「テーブル名」に基づく入力と戻り値の型マッピング
@@ -13,21 +24,30 @@ export type ActionTableTypeMap = {
                 title: string;
                 description: string;
                 remaining: number;
-                minHr: number;
-                maxHr: number;
-                minGr: number;
-                maxGr: number;
+                minHr: number | null;
+                maxHr: number | null;
+                minGr: number | null;
+                maxGr: number | null;
                 base64: string;
             };
             return: Distribution;
         };
-        information: {
+        // information: {
+        //     input: {
+        //         title: string;
+        //         url: string | null;
+        //         type: InfoType;
+        //     };
+        //     return: Information;
+        // };
+        banner: {
             input: {
-                title: string;
-                url: string | null;
-                type: InfoType;
+                bnrName: string;
+                bnrUrl: string | null;
+                jaImgSrc: string;
+                enImgSrc: string;
             };
-            return: Information;
+            return: Banner;
         };
     };
     delete: {
@@ -50,11 +70,48 @@ export type ActionTableTypeMap = {
             };
             return: string[];
         };
-        information: {
+        // information: {
+        //     input: {
+        //         deleteInfoIds: number[];
+        //     };
+        //     return: string[];
+        // };
+        banner: {
             input: {
-                deleteInfoIds: number[];
+                deleteBnrIds: number[];
             };
-            return: string[];
+            return: void;
+        };
+        users: {
+            input: {
+                userIds: number[];
+            };
+            return: void;
+        };
+        character: {
+            input: {
+                charId: number;
+                permanent: boolean;
+            };
+            return: void;
+        };
+        unlinkDiscord: {
+            input: {
+                discordId: string;
+            };
+            return: void;
+        };
+        deleteClans: {
+            input: {
+                clanIds: number[];
+            };
+            return: void;
+        };
+        deleteAlliances: {
+            input: {
+                allianceIds: number[];
+            };
+            return: void;
         };
     };
     get: {
@@ -62,17 +119,46 @@ export type ActionTableTypeMap = {
             input: {
                 filterParam: 'username' | 'character_name' | 'user_id' | 'character_id';
                 filterValue: string;
-                status: 'init' | 'back' | 'next';
-                cursor?: number;
+                // status: 'init' | 'back' | 'next';
+                // cursor?: number;
             };
-            return: PaginatedUsersResult;
+            return: User[] | [null];
         };
         authUser: {
             input: {
                 loginKey: string;
                 isMobile: boolean;
             };
+            return: { id: number; username: string } | null;
+        };
+        adminDiscordId: {
+            input: {
+                username: string;
+            };
             return: string | null;
+        };
+        character: {
+            input: {
+                charId: number;
+            };
+            return: CharacterRaw | null;
+        };
+        paginatedClans: {
+            input: {
+                filterParam: 'clan_name' | 'clan_id';
+                filterValue: string;
+            };
+            return: PaginatedClans[] | [null];
+        };
+        paginatedAlliances: {
+            input: {
+                filterParam: 'alliance_name' | 'alliance_id';
+                filterValue: string;
+            };
+            return: {
+                alliances: PaginatedAlliances[] | [null];
+                clanNames: string[];
+            };
         };
     };
     transactions: {
@@ -80,7 +166,7 @@ export type ActionTableTypeMap = {
             input: undefined; // 第三引数不要
             return: {
                 launcherSystem: LauncherSystem;
-                information: Information[];
+                // information: Information[];
                 banners: Banner[];
                 distributions: Distribution[];
                 charIdNamePair: string[];
@@ -95,19 +181,123 @@ export type ActionTableTypeMap = {
             };
             return: void;
         };
-        information: {
-            input: {
-                infoId: number;
-                column: InformationEditableItemType;
-                value: string | null;
-            };
-            return: void;
-        };
+        // information: {
+        //     input: {
+        //         infoId: number;
+        //         column: InformationEditableItemType;
+        //         value: string | null;
+        //     };
+        //     return: void;
+        // };
         distribution: {
             input: {
                 distId: number;
                 column: DistributionEditableItemType;
                 value: string | null;
+            };
+            return: void;
+        };
+        banner: {
+            input: {
+                bnrId: number;
+                value: string | null;
+            };
+            return: void;
+        };
+        charName: {
+            input: {
+                charId: number;
+                newName: string;
+                bountyCoin: number;
+            };
+            return: {
+                success: boolean;
+                message: string;
+            };
+        };
+        launcherSystem: {
+            input: {
+                column: keyof Omit<LauncherSystem, 'id'> | 'maint_all';
+                value: string; // boolean系: 'true'/'false'
+            };
+            return: void;
+        };
+        user: {
+            input: {
+                id: number;
+                column: string;
+                value: string | number | null;
+            };
+            return: void;
+        };
+        courseControl: {
+            input: {
+                rights: number;
+                userIds?: number[]; // 未指定 = 全ユーザー対象
+            };
+            return: void;
+        };
+        suspendUsers: {
+            input: {
+                entries: {
+                    userId: number;
+                    username: string;
+                    reasonType: number;
+                    permanent: boolean;
+                    untilAt?: string;
+                    otherReason?: string;
+                }[];
+                zoneName: string;
+                byWhom: number | null;
+            };
+            return: void;
+        };
+        unsuspendUsers: {
+            input: {
+                userIds: number[];
+            };
+            return: void;
+        };
+        bounty: {
+            input: {
+                charId: number;
+                amount: number;
+            };
+            return: void;
+        };
+        leaveClan: {
+            input: {
+                charId: number;
+                clanId: number;
+                isLastMember: boolean;
+            };
+            return: void;
+        };
+        rebuildClans: {
+            input: {
+                clanIds: number[];
+            };
+            return: { oldId: number; newId: number; name: string | null }[];
+        };
+        restoreCharacter: {
+            input: {
+                charId: number;
+            };
+            return: void;
+        };
+        linkDiscord: {
+            input: {
+                userId: number;
+                charId: number;
+                discordId: string;
+            };
+            return: void;
+        };
+        allianceData: {
+            input: {
+                allianceId: number;
+                sub1Id: number;
+                sub2Id: number | null;
             };
             return: void;
         };
@@ -141,12 +331,12 @@ export type Distribution = {
     event_name: string;
     description: string;
     times_acceptable: number;
-    min_hr: number;
-    max_hr: number;
-    min_sr: number;
-    max_sr: number;
-    min_gr: number;
-    max_gr: number;
+    min_hr: number | null;
+    max_hr: number | null;
+    min_sr: number | null;
+    max_sr: number | null;
+    min_gr: number | null;
+    max_gr: number | null;
     data: string;
     type: 0 | 1;
 };
@@ -160,9 +350,7 @@ export type LauncherSystem = {
     RainUS: boolean;
     RainEU: boolean;
     update: boolean;
-    debug: boolean;
-    client_data: string[];
-    rain_admins: string[];
+    download: boolean;
 };
 
 /**
@@ -202,12 +390,11 @@ export type Banner = {
 };
 
 /**
- * ユーザーページネーション結果
+ * キャラクターバイナリ生データ（ダウンロード用）
  */
-export type PaginatedUsersResult = {
-    users: User[];
-    meta: PaginationMeta;
-};
+export type CharacterRaw = {
+    name: string | null;
+} & { [K in BinaryTypes]: Uint8Array | null };
 
 /**
  * ユーザーデータ
@@ -232,9 +419,9 @@ export type User = {
 };
 
 /**
- * ページネーションメタデータ
+ * 検索メタデータ
  */
-export type PaginationMeta = {
+export type SearchMeta = {
     hasPrevPage: boolean;
     hasNextPage: boolean;
     prevCursor: number;
@@ -286,6 +473,7 @@ type SuspendedStatus =
           permanent: null;
           other_reason: null;
           by_whom: null;
+          by_whom_username: null;
       }
     | {
           is_suspended: true;
@@ -296,4 +484,5 @@ type SuspendedStatus =
           permanent: boolean;
           other_reason: string | null;
           by_whom: number;
+          by_whom_username: string | null;
       };

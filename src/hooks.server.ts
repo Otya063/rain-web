@@ -1,11 +1,12 @@
 import type { Handle, HandleServerError, RequestEvent } from '@sveltejs/kit';
 import { initAcceptLanguageHeaderDetector } from 'typesafe-i18n/detectors';
-import { ADMIN_CREDENTIALS, ADMIN_IP } from '$env/static/private';
+import { ADMIN_CREDENTIALS, ADMIN_IP, DISCORD_BOT_TOKEN } from '$env/static/private';
 import { PUBLIC_MAIN_DOMAIN, PUBLIC_AUTH_DOMAIN } from '$env/static/public';
 import type { Locales } from '$i18n/i18n-types';
 import { loadAllLocales } from '$i18n/i18n-util.sync';
 import { detectLocale, i18n, isLocale } from '$i18n/i18n-util';
-import { PostgresManager } from '$utils/server';
+import type { DatabaseConfig } from '$types';
+import { initDb, PostgresManager } from '$utils/server';
 
 loadAllLocales();
 const L = i18n();
@@ -51,6 +52,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 
     event.locals.locale = locale;
     event.locals.LL = LL;
+    event.locals.adminUserId = null;
+    event.locals.adminUsername = null;
 
     if (!lang) {
         const locale = getPreferredLocale(event);
@@ -61,13 +64,20 @@ export const handle: Handle = async ({ event, resolve }) => {
         });
     }
 
+    const dbConfig = (await event.platform?.env.DB_CONFIG.get('db_config', 'json')) as DatabaseConfig | null;
+    if (!dbConfig) {
+        return new Response('DB_CONFIG_UNDEFINED', { status: 500 });
+    }
+
+    initDb(dbConfig); // 初回のみ接続を生成、以後はスキップ
+
     if (event.url.pathname === '/admin/') {
         console.log('[Admins Normal Browsing.]');
 
         // 本番環境の時、ユーザーが管理者か確認
         if (!event.url.origin.includes('localhost')) {
-            const session = event.cookies.get('rainLoginKey');
-            if (!session) {
+            const loginKey = event.cookies.get('rainLoginKey');
+            if (!loginKey) {
                 const redirectUrl = `${PUBLIC_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${PUBLIC_MAIN_DOMAIN}/admin`;
 
                 return new Response(null, {
@@ -78,9 +88,8 @@ export const handle: Handle = async ({ event, resolve }) => {
 
             const regex = /iphone;|(android|nokia|blackberry|bb10;).+mobile|android.+fennec|opera.+mobi|windows phone|symbianos/i;
             const isMobile = regex.test(event.request.headers.get('user-agent')!);
-            const sql = new PostgresManager('get', 'authUser', { loginKey: session, isMobile });
-            const username = await sql.execute();
-            if (!username) {
+            const authUser = await new PostgresManager('get', 'authUser', { loginKey, isMobile }).execute();
+            if (!authUser) {
                 const redirectUrl = `${PUBLIC_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${PUBLIC_MAIN_DOMAIN}/admin`;
 
                 return new Response(null, {
@@ -89,7 +98,27 @@ export const handle: Handle = async ({ event, resolve }) => {
                 });
             }
 
-            event.locals.authUsername = username;
+            const { id: adminUserId, username } = authUser;
+            const discordId = await new PostgresManager('get', 'adminDiscordId', { username }).execute();
+            if (!discordId) {
+                return new Response('Forbidden: No Discord account linked to this user.', { status: 403 });
+            }
+
+            const adminRoleIds = (await event.platform?.env.WEB_CONFIG?.get('admin_role_ids', 'json')) as string[] | null;
+            if (!adminRoleIds) {
+                return new Response('Forbidden: admin_role_ids not configured.', { status: 403 });
+            }
+
+            const memberRes = await fetch(`https://discord.com/api/v10/guilds/937230168223789066/members/${discordId}`, {
+                headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` },
+            });
+            const memberData = (await memberRes.json()) as { roles: string[] };
+            if (!memberRes.ok || !memberData.roles.some((role) => adminRoleIds.includes(role))) {
+                return new Response('Forbidden: Insufficient Discord role.', { status: 403 });
+            }
+
+            event.locals.adminUserId = adminUserId;
+            event.locals.adminUsername = username;
         }
 
         return resolve(event, {

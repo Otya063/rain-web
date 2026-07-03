@@ -1,14 +1,13 @@
 export * from './admin';
 export * from './assets';
+export * from './banner';
 export * from './binary';
 export * from './course';
-export * from './database';
 export * from './distribution';
 export * from './information';
 export * from './modal';
 export * from './postgres';
 export * from './user';
-//export * from './weapon';
 
 /* 型定義一部変更
 ========================================================= */

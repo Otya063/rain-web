@@ -63,3 +63,31 @@ export interface DistributionRawData {
  * 編集可能な配布データの項目
  */
 export type DistributionEditableItemType = keyof Omit<Distribution, 'id' | 'type'>;
+
+/* コンポーネント Props
+====================================================*/
+export interface DistributionProps {
+    charactersIdName: string[];
+    isMobile: boolean;
+    updatedContentsData: string;
+    distAddMode: boolean;
+    createdDistribution: Distribution;
+}
+
+export interface DistributionMainProps {
+    charactersIdName: string[];
+    isMobile: boolean;
+    updatedContentsData?: string;
+    distAddMode: boolean;
+}
+
+export interface DistributionContentsDataProps {
+    isMobile: boolean;
+}
+
+export interface CreateDistributionProps {
+    charactersIdName: string[];
+    isMobile: boolean;
+    distAddMode: boolean;
+    createdDistribution: Distribution;
+}
