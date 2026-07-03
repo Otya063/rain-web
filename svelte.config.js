@@ -6,7 +6,11 @@ const config = {
     preprocess: vitePreprocess(),
 
     kit: {
-        adapter: adapter(),
+        adapter: adapter({
+            platformProxy: {
+                environment: 'development',
+            },
+        }),
         alias: {
             $i18n: 'src/i18n',
             $scss: 'static/sass',

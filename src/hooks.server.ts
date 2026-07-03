@@ -108,7 +108,6 @@ export const handle: Handle = async ({ event, resolve }) => {
             if (!adminRoleIds) {
                 return new Response('Forbidden: admin_role_ids not configured.', { status: 403 });
             }
-            console.log(adminRoleIds);
 
             const memberRes = await fetch(`https://discord.com/api/v10/guilds/937230168223789066/members/${discordId}`, {
                 headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` },
@@ -117,7 +116,6 @@ export const handle: Handle = async ({ event, resolve }) => {
             if (!memberRes.ok || !memberData.roles.some((role) => adminRoleIds.includes(role))) {
                 return new Response('Forbidden: Insufficient Discord role.', { status: 403 });
             }
-            console.log(memberData);
 
             event.locals.adminUserId = adminUserId;
             event.locals.adminUsername = username;
