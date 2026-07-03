@@ -24,6 +24,7 @@ jobs:
             PUBLIC_AUTH_DOMAIN: ${{ secrets.DEV_AUTH_DOMAIN }}
             ADMIN_CREDENTIALS: ${{ secrets.ADMIN_CREDENTIALS }}
             ADMIN_IP: ${{ secrets.ADMIN_IP }}
+            DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
 
         steps:
             - name: Checkout
