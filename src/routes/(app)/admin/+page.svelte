@@ -227,7 +227,7 @@
     </div>
 {/if}
 
-<Modals {form} />
+<Modals />
 
 <main class="console_body">
     {#if openMobileNav}

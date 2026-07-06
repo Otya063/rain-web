@@ -6,7 +6,7 @@ import type { Locales } from '$i18n/i18n-types';
 import { loadAllLocales } from '$i18n/i18n-util.sync';
 import { detectLocale, i18n, isLocale } from '$i18n/i18n-util';
 import type { DatabaseConfig } from '$types';
-import { initDb, PostgresManager } from '$utils/server';
+import { runWithDb, PostgresManager } from '$utils/server';
 
 loadAllLocales();
 const L = i18n();
@@ -69,68 +69,70 @@ export const handle: Handle = async ({ event, resolve }) => {
         return new Response('DB_CONFIG_UNDEFINED', { status: 500 });
     }
 
-    initDb(dbConfig); // 初回のみ接続を生成、以後はスキップ
+    // リクエストごとにDB接続を生成し、そのリクエストの処理が終わったら接続も破棄する
+    // （Cloudflare Workersは異なるリクエスト間でI/Oオブジェクトを共有できないため）
+    return runWithDb(dbConfig, async () => {
+        if (event.url.pathname === '/admin/') {
+            console.log('[Admins Normal Browsing.]');
 
-    if (event.url.pathname === '/admin/') {
-        console.log('[Admins Normal Browsing.]');
+            // 本番環境の時、ユーザーが管理者か確認
+            if (!event.url.origin.includes('localhost')) {
+                const loginKey = event.cookies.get('rainLoginKey');
+                if (!loginKey) {
+                    const redirectUrl = `${PUBLIC_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${PUBLIC_MAIN_DOMAIN}/admin`;
 
-        // 本番環境の時、ユーザーが管理者か確認
-        if (!event.url.origin.includes('localhost')) {
-            const loginKey = event.cookies.get('rainLoginKey');
-            if (!loginKey) {
-                const redirectUrl = `${PUBLIC_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${PUBLIC_MAIN_DOMAIN}/admin`;
+                    return new Response(null, {
+                        status: 302,
+                        headers: { Location: redirectUrl },
+                    });
+                }
 
-                return new Response(null, {
-                    status: 302,
-                    headers: { Location: redirectUrl },
+                const regex = /iphone;|(android|nokia|blackberry|bb10;).+mobile|android.+fennec|opera.+mobi|windows phone|symbianos/i;
+                const isMobile = regex.test(event.request.headers.get('user-agent')!);
+                const authUser = await new PostgresManager('get', 'authUser', { loginKey, isMobile }).execute();
+                if (!authUser) {
+                    const redirectUrl = `${PUBLIC_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${PUBLIC_MAIN_DOMAIN}/admin`;
+
+                    return new Response(null, {
+                        status: 302,
+                        headers: { Location: redirectUrl },
+                    });
+                }
+
+                const { id: adminUserId, username } = authUser;
+                const discordId = await new PostgresManager('get', 'adminDiscordId', { username }).execute();
+                if (!discordId) {
+                    return new Response('Forbidden: No Discord account linked to this user.', { status: 403 });
+                }
+
+                const adminRoleIds = (await event.platform?.env.WEB_CONFIG?.get('admin_role_ids', 'json')) as string[] | null;
+                if (!adminRoleIds) {
+                    return new Response('Forbidden: admin_role_ids not configured.', { status: 403 });
+                }
+
+                const memberRes = await fetch(`https://discord.com/api/v10/guilds/937230168223789066/members/${discordId}`, {
+                    headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` },
                 });
+                const memberData = (await memberRes.json()) as { roles: string[] };
+                if (!memberRes.ok || !memberData.roles.some((role) => adminRoleIds.includes(role))) {
+                    return new Response('Forbidden: Insufficient Discord role.', { status: 403 });
+                }
+
+                event.locals.adminUserId = adminUserId;
+                event.locals.adminUsername = username;
             }
 
-            const regex = /iphone;|(android|nokia|blackberry|bb10;).+mobile|android.+fennec|opera.+mobi|windows phone|symbianos/i;
-            const isMobile = regex.test(event.request.headers.get('user-agent')!);
-            const authUser = await new PostgresManager('get', 'authUser', { loginKey, isMobile }).execute();
-            if (!authUser) {
-                const redirectUrl = `${PUBLIC_AUTH_DOMAIN}/${event.locals.locale}/login/?redirect_url=${PUBLIC_MAIN_DOMAIN}/admin`;
-
-                return new Response(null, {
-                    status: 302,
-                    headers: { Location: redirectUrl },
-                });
-            }
-
-            const { id: adminUserId, username } = authUser;
-            const discordId = await new PostgresManager('get', 'adminDiscordId', { username }).execute();
-            if (!discordId) {
-                return new Response('Forbidden: No Discord account linked to this user.', { status: 403 });
-            }
-
-            const adminRoleIds = (await event.platform?.env.WEB_CONFIG?.get('admin_role_ids', 'json')) as string[] | null;
-            if (!adminRoleIds) {
-                return new Response('Forbidden: admin_role_ids not configured.', { status: 403 });
-            }
-
-            const memberRes = await fetch(`https://discord.com/api/v10/guilds/937230168223789066/members/${discordId}`, {
-                headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` },
+            return resolve(event, {
+                transformPageChunk: ({ html }) => html.replace('%lang%', 'en'),
             });
-            const memberData = (await memberRes.json()) as { roles: string[] };
-            if (!memberRes.ok || !memberData.roles.some((role) => adminRoleIds.includes(role))) {
-                return new Response('Forbidden: Insufficient Discord role.', { status: 403 });
-            }
+        } else {
+            console.log('[User Normal Browsing.]');
 
-            event.locals.adminUserId = adminUserId;
-            event.locals.adminUsername = username;
+            return resolve(event, {
+                transformPageChunk: ({ html }) => html.replace('%lang%', locale),
+            });
         }
-
-        return resolve(event, {
-            transformPageChunk: ({ html }) => html.replace('%lang%', 'en'),
-        });
-    } else {
-        console.log('[User Normal Browsing.]');
-
-        return resolve(event, {
-            transformPageChunk: ({ html }) => html.replace('%lang%', locale),
-        });
-    }
+    });
 };
 
 const getPreferredLocale = ({ request }: RequestEvent) => {
