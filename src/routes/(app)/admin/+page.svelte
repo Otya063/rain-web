@@ -1,88 +1,75 @@
 <script lang="ts">
     import type { ActionData, PageData } from './$types';
-    import DeleteBnr from '$lib/admin/modalContents/DeleteBnr.svelte';
-    import DeleteChar from '$lib/admin/modalContents/DeleteChar.svelte';
-    import DeleteInfo from '$lib/admin/modalContents/DeleteInfo.svelte';
-    import DownloadBinary from '$lib/admin/modalContents/DownloadBinary.svelte';
-    import LinkDiscord from '$lib/admin/modalContents/LinkDiscord.svelte';
-    import RebuildClan from '$lib/admin/modalContents/RebuildClan.svelte';
-    import SuspendUser from '$lib/admin/modalContents/SuspendUser.svelte';
-    import AdminContents from '$lib/admin/AdminContents.svelte';
-    import AdminMenu from '$lib/admin/AdminMenu.svelte';
-    import {
-        suspendUser,
-        deleteInfo,
-        deleteBnr,
-        linkDiscord,
-        deleteChar,
-        loadArticle,
-        Timeout,
-        msgClosed,
-        errDetailMode,
-        onSubmit,
-        closeMsgDisplay,
-        toggleMsgDetail,
-        timeOut,
-        adminTabValue,
-        rebuildClan,
-        downloadBinary,
-    } from '$lib/utils';
     import _ from 'lodash';
     import { onMount } from 'svelte';
     import { tweened, type Tweened } from 'svelte/motion';
     import { slide, fade } from 'svelte/transition';
+    import { scrollTop } from 'svelte-scrolling';
     import { Svroller } from 'svrollbar';
+    import Main from '$lib/admin/Main.svelte';
+    import Modals from '$lib/admin/Modals.svelte';
+    import SideMenu from '$lib/admin/SideMenu.svelte';
+    import { loadArticle, Timeout, msgClosed, errDetailMode, onSubmit, closeMsgDisplay, toggleMsgDetail, timeOut, modalStates, preventHorizScrollOnDetailRow } from '$utils/client';
     import '$scss/style_admin.scss';
 
-    // data from the server
-    export let data: PageData;
-    export let form: ActionData;
-    const { url } = data;
-    const origin = url.origin;
-    let width: Tweened<number>;
-    let loaded = false;
+    interface Props {
+        data: PageData;
+        form: ActionData;
+    }
+    let { data, form }: Props = $props();
+    let loaded = $state(false);
+    let infoAddMode = $state(false);
+    let bnrAddMode = $state(false);
+    let isMobile = $state(false);
+    const width: Tweened<number> = tweened(100);
+    let distAddMode = $state(false);
 
     onMount(() => {
         loaded = true;
         window.addEventListener('touchstart', handleTouchStart);
+        window.addEventListener('touchmove', handleSwipeHorizScroll);
         window.addEventListener('touchend', handleTouchEnd);
+
+        const mobileDevices = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+        isMobile = mobileDevices.test(navigator.userAgent);
 
         // クリーンアップ処理
         return () => {
             window.removeEventListener('touchstart', handleTouchStart);
+            window.removeEventListener('touchmove', handleSwipeHorizScroll);
             window.removeEventListener('touchend', handleTouchEnd);
         };
     });
 
-    // message display timer bar
-    $: if (form?.success || form?.error) {
-        width = tweened(100);
-        width.set(0, { duration: 5000 });
-        timeOut.set(
-            new Timeout(() => {
-                msgClosed.set(true);
-            }, 5000)
-        );
-    }
+    // メッセージ表示タイマーバー
+    $effect(() => {
+        if (form?.success || form?.error) {
+            width.set(100, { duration: 0 }); // 表示前に再度バー値をマックスにしておく
+            width.set(0, { duration: 5000 });
 
-    // reset display when on:submit is performed while a message is being displayed
-    $: if ($onSubmit && $timeOut && $timeOut.time !== 0) {
-        msgClosed.set(true);
-        $timeOut.stop();
-    }
+            timeOut.set(
+                new Timeout(() => {
+                    msgClosed.set(true);
+                }, 5000),
+            );
+        }
+    });
 
-    let addBnrMode: (enable: boolean) => void;
-    let addInfoMode: (enable: boolean) => void;
-    let infoAddMode: boolean;
-    let bnrAddMode: boolean;
+    // メッセージ表示中にonsubmitが実行された場合、表示をリセット
+    $effect(() => {
+        if ($onSubmit && $timeOut && $timeOut.time !== 0) {
+            msgClosed.set(true);
+            $timeOut.stop();
+        }
+    });
 
     /* モバイル用ナビゲーションメニュー制御
     ========================================================= */
-    let openMobileNav = false;
-    let scrollPosition = 0;
-    let touchStartX: number = 0;
-    let touchEndX: number = 0;
-    const swipeThreshold: number = 70; // メニューを起動するための最小スワイプ距離（ピクセル単位）
+    let openMobileNav = $state(false);
+    let menuYPosition = 0;
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const swipeThreshold = 70; // メニューを起動するための最小スワイプ距離（ピクセル単位）
 
     /**
      * スワイプの開始位置を記録
@@ -90,6 +77,15 @@
      * @param {TouchEvent} e タッチ開始イベント
      */
     const handleTouchStart = (e: TouchEvent): void => {
+        // <swiper-container>内と編集エリア内でのタッチ開始の場合はスキップ
+        if (
+            (e.target && (e.target as HTMLElement).closest('swiper-container')) ||
+            (e.target as HTMLElement).closest('.edit_area_box_wrapper') ||
+            (e.target as HTMLElement).closest('.console_contents_table_wrapper')
+        ) {
+            return;
+        }
+
         touchStartX = e.changedTouches[0].screenX;
     };
 
@@ -99,6 +95,15 @@
      * @param {TouchEvent} e タッチ終了イベント
      */
     const handleTouchEnd = (e: TouchEvent): void => {
+        // <swiper-container>内と編集エリア内でのタッチ終了の場合はスキップ
+        if (
+            (e.target && (e.target as HTMLElement).closest('swiper-container')) ||
+            (e.target as HTMLElement).closest('.edit_area_box_wrapper') ||
+            (e.target as HTMLElement).closest('.console_contents_table_wrapper')
+        ) {
+            return;
+        }
+
         touchEndX = e.changedTouches[0].screenX;
         handleSwipeGesture();
     };
@@ -114,7 +119,7 @@
             openMenu();
         } else if (swipeDistance < -swipeThreshold) {
             // 左から右へのスワイプならメニュー閉じる
-            closeMenu();
+            closeMobileMenu(false);
         }
     };
 
@@ -124,11 +129,11 @@
     const openMenu = (): void => {
         if (!openMobileNav) {
             // 現在のスクロール位置を保存
-            scrollPosition = window.scrollY;
+            menuYPosition = window.scrollY;
 
-            // bodyをfixedし、スクロール位置で動かないように
+            // bodyをfixedし、現在のスクロール位置で動かないように
             document.body.style.position = 'fixed';
-            document.body.style.top = `-${scrollPosition}px`;
+            document.body.style.top = `-${menuYPosition}px`;
             document.body.style.width = '100%';
 
             openMobileNav = true;
@@ -136,19 +141,35 @@
     };
 
     /**
-     * ナビゲーションメニューを閉じ、画面のスクロールを元に戻す
+     * ナビゲーションメニューを閉じ、画面スクロールをページトップへ（モバイル限定）
+     *
+     * @param {booelan} btnClicked メニュー内のボタンをクリックしたかどうか
      */
-    let closeMenu = (): void => {
+    const closeMobileMenu = (btnClicked: boolean): void => {
         if (openMobileNav) {
             // bodyから各スタイルを削除
             document.body.style.position = '';
             document.body.style.top = '';
             document.body.style.width = '';
 
-            // スクロール位置を元に戻す
-            window.scrollTo(0, scrollPosition);
+            // スクロール位置を調節（メニュー内ボタンクリックならページトップへ、そうでないなら現在のスクロール位置から動かないように）
+            btnClicked ? scrollTop() : window.scrollTo(0, menuYPosition);
 
             openMobileNav = false;
+        }
+    };
+
+    /**
+     * タッチイベントが特定の要素（.detail_row）の上で発生したかを判定し、
+     * ストア変数`preventHorizScrollOnDetailRow`を更新して横スクロールの制御を行う
+     *
+     * @param {TouchEvent} e タッチイベント
+     */
+    const handleSwipeHorizScroll = (e: TouchEvent) => {
+        if (isMobile && (e.target as HTMLElement).closest('.detail_row')) {
+            preventHorizScrollOnDetailRow.set(true);
+        } else {
+            preventHorizScrollOnDetailRow.set(false);
         }
     };
 </script>
@@ -159,19 +180,18 @@
 
 <header>
     <div class="header_inner">
-        <!-- svelte-ignore a11y-label-has-associated-control -->
-        <label class="header_platform" />
+        <label class="header_platform" for=""></label>
         <p class="header_logo">
-            <button class="header_logo_button" on:click={(e) => loadArticle(e, url, 'en', 'root')} />
+            <button class="header_logo_button" aria-label="Back to Home" onclick={(e) => loadArticle(e, data.url, 'en', 'root')}></button>
         </p>
     </div>
 </header>
 
 {#if $onSubmit}
     <div class="saving_overlay">
-        <div class="loader" />
+        <div class="loader"></div>
         <p class="saving_overlay_text">
-            {#if $downloadBinary}
+            {#if $modalStates.downloadBinary}
                 Downloading...
             {:else}
                 Saving...
@@ -180,22 +200,22 @@
     </div>
 {/if}
 
-<div class="background_img" />
+<div class="background_img"></div>
 
 {#if !$msgClosed}
     <div transition:fade class="msg_display" class:success={form?.success} class:error={form?.error}>
         <div class="msg_display_contents">
-            <span class="msg_display_left_bar" />
+            <span class="msg_display_left_bar"></span>
             {#if form?.success}
-                <span class="msg_display_icon material-icons-outlined">check_circle</span>
+                <span class="msg_display_icon material-symbols-outlined">check_circle</span>
                 <p class="msg_display_status">{form?.message}</p>
             {:else if form?.error}
-                <span class="msg_display_icon material-icons-outlined">warning</span>
+                <span class="msg_display_icon material-symbols-outlined">warning</span>
                 <p class="msg_display_status">Error occurred.</p>
-                <button id="error_view_btn" class="error_view_btn material-icons-outlined" class:open={$errDetailMode} on:click={(e) => toggleMsgDetail(e, $timeOut, width)}>expand_more</button>
+                <button id="error_view_btn" class="error_view_btn material-symbols-outlined" class:open={$errDetailMode} onclick={(e) => toggleMsgDetail(e, $timeOut, width)}>expand_more</button>
             {/if}
-            <button id="msg_close_btn" class="msg_close_btn material-icons-outlined" on:click={() => closeMsgDisplay($timeOut)}>highlight_off</button>
-            <div class="timer_bar" style={`width: ${$width}%;`} />
+            <button id="msg_close_btn" class="msg_close_btn material-symbols-outlined" onclick={() => closeMsgDisplay($timeOut)}>highlight_off</button>
+            <div class="timer_bar" style={`width: ${$width}%;`}></div>
         </div>
 
         {#if $errDetailMode}
@@ -207,33 +227,7 @@
     </div>
 {/if}
 
-{#if $suspendUser}
-    <SuspendUser suspendedAccount={form?.suspendedAccount} />
-{/if}
-
-{#if $deleteInfo}
-    <DeleteInfo />
-{/if}
-
-{#if $deleteBnr}
-    <DeleteBnr />
-{/if}
-
-{#if $linkDiscord}
-    <LinkDiscord newDiscord={form?.newDiscord} />
-{/if}
-
-{#if $deleteChar}
-    <DeleteChar />
-{/if}
-
-{#if $rebuildClan}
-    <RebuildClan />
-{/if}
-
-{#if $downloadBinary}
-    <DownloadBinary />
-{/if}
+<Modals />
 
 <main class="console_body">
     {#if openMobileNav}
@@ -243,29 +237,17 @@
 
     <nav class="console_menu" class:open={openMobileNav}>
         <Svroller width="100%" height="100%" alwaysVisible={true}>
-            <AdminMenu bind:closeMenu />
+            <SideMenu {closeMobileMenu} />
         </Svroller>
     </nav>
 
     <article class="console_article">
-        <h1>
+        <h1 class="console_article_heading1">
             <span class="material-symbols-outlined">admin_panel_settings</span>
             Admin Console
-
-            {#if $adminTabValue === 'bnr' && !bnrAddMode}
-                <button class="green_btn" on:click={() => addBnrMode(true)}>
-                    <span class="btn_icon material-icons">add</span>
-                    <span class="btn_text">Add Banner</span>
-                </button>
-            {:else if $adminTabValue === 'info' && !infoAddMode}
-                <button class="green_btn" type="button" on:click={() => addInfoMode(true)}>
-                    <span class="btn_icon material-icons">add</span>
-                    <span class="btn_text">Add Information</span>
-                </button>
-            {/if}
         </h1>
 
-        <AdminContents bind:addBnrMode bind:addInfoMode bind:infoAddMode bind:bnrAddMode {data} {form} />
+        <Main bind:infoAddMode bind:bnrAddMode {data} {form} {isMobile} bind:distAddMode />
     </article>
 </main>
 
@@ -277,36 +259,3 @@
         </p>
     </section>
 </footer>
-
-<svelte:head>
-    <title>Admin Console</title>
-    <meta name="robots" content="noindex,nofollow,noarchive" />
-    <meta name="description" content="This page is for Rain Server administrators only." />
-    <!-- ogp -->
-    <meta property="og:title" content="Admin Console | Rain Server" />
-    <meta property="og:description" content="This page is for Rain Server administrators only." />
-    <meta property="og:image" content="{origin}/img/common/sns_share.webp" />
-    <meta property="og:url" content={String(url)} />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Rain Server" />
-    <!-- twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <!-- favicon -->
-    <link rel="icon" href="/rain-favicon.ico" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
-    <!-- mobile -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="format-detection" content="telephone=no" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <!-- font -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" crossOrigin="true" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&family=Open+Sans:wght@400;700;800&family=Roboto:wght@400;700;900&display=swap" />
-    <!-- icon -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons%7CMaterial+Icons+Outlined" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0..1,0" />
-</svelte:head>

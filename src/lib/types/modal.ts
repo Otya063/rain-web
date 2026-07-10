@@ -1,49 +1,106 @@
-export type ModalType = 'deleteInfo' | 'deleteBnr' | 'suspendUser' | 'deleteCharacter' | 'linkDiscord' | 'rebuildClan' | 'downloadBinary';
+import type { DistributionCategory } from '$types';
 
-/* Modal in Admin Console
+/**
+ * モーダルの状態を管理するストア用型定義マッピング
+ */
+export type ModalDataMap = {
+    deleteInformation: DeleteInformationData;
+    deleteBanner: DeleteBannerData;
+    deleteCharacter: DeleteCharacterData;
+    linkDiscord: LinkDiscordData;
+    rebuildClan: RebuildClanData;
+    deleteClans: DeleteClanData;
+    downloadBinary: DownloadBinary;
+    deleteDistribution: DeleteDistributionData;
+    distributionEditor: DistributionEditorData;
+    deleteUsers: DeleteUserData;
+    suspendUsers: SuspendUserData;
+    deleteAlliance: DeleteAllianceData;
+};
+export type ModalType = keyof ModalDataMap;
+
+/* モーダル各コンテンツ型定義
 ====================================================*/
-export interface ModalCommonData {
-    title: string;
-    form_action: string;
-}
+type DeleteInformationData = {
+    label: ModalType; // 型ガード時のデータ判別に使用する
+    infoId: number;
+    infoTitle: string;
+    infoUrl: string | null;
+    createdAt: string;
+    infoType: number;
+};
 
-export interface DeleteInfoData extends ModalCommonData {
-    info_id: number;
-    info_title: string;
-    info_url: string | null;
-    info_created_at: string;
-    info_type: string;
-}
+type DeleteBannerData = {
+    label: ModalType; // 型ガード時のデータ判別に使用する
+    bnrId: number;
+    bnrUrl: string;
+    bnrName: string;
+};
 
-export interface DeleteBnrData extends ModalCommonData {
-    bnr_id: number;
-    bnr_url: string;
-    bnr_name: string;
-}
+type SuspendUserData = {
+    label: ModalType;
+    type: 0 | 1; // 0: アカウント停止、1: アカウント停止解除
+    users: { id: number; username: string; charName?: string[]; untilAt?: Date | null }[];
+    onSuccess?: (entries: { id: number; permanent: boolean; reason: number; otherReason: string | null; suspendedBy: { id: number; username: string | null } | null }[]) => void;
+};
 
-export interface SuspendUserData extends ModalCommonData {
-    user_id: number;
+type DeleteCharacterData = {
+    label: ModalType; // 型ガード時のデータ判別に使用する
+    type: 0 | 1; // 0: 削除、1: 復元
+    charId: number;
+    charName: string;
+    onSuccess?: (charId: number, type: 0 | 1, permanent: boolean) => void;
+};
+
+type LinkDiscordData = {
+    label: ModalType; // 型ガード時のデータ判別に使用する
+    type: 0 | 1; // 0: 連携、1: 連携解除
+    userId: number;
     username: string;
-    char_name: string[];
-    until_at?: Date;
-}
+    charId: number;
+    charName: string;
+    discordId?: string | null;
+    onSuccess?: (charId: number, discordId: string | null) => void;
+};
 
-export interface DeleteCharacterData extends ModalCommonData {
-    char_id: number;
-    char_name: string | null;
-}
+type RebuildClanData = {
+    label: ModalType; // 型ガード時のデータ判別に使用する
+    clans: { id: number; name: string | null; leaderName: string | null; createdAt: Date | null }[];
+    onSuccess?: (results: { oldId: number; newId: number; name: string | null }[]) => void;
+};
 
-export interface LinkDiscordData extends ModalCommonData {
-    user_id: number;
-    username: string;
-    char_id: number;
-    char_name: string;
-    discord_id?: string;
-}
+type DownloadBinary = Omit<DeleteCharacterData, 'type'>;
 
-export interface RebuildClanData extends ModalCommonData {
-    clan_id: number;
-    clan_name: string;
-    clan_leader: string;
-    created_at: Date | null;
-}
+type DeleteDistributionData = {
+    label: ModalType; // 型ガード時のデータ判別に使用する
+    distId: number;
+    distTitle: string;
+    distCat: DistributionCategory;
+    isSpecific: boolean;
+};
+
+export type DistributionEditorData = {
+    label: ModalType;
+    type: 0 | 1; // 0: 配布タイトル、1: 配布説明文
+    distId: number;
+    contents: string;
+    showCharacterId: boolean;
+};
+
+type DeleteUserData = {
+    label: ModalType;
+    users: { id: number; username: string }[];
+    onSuccess?: (ids: number[]) => void;
+};
+
+type DeleteClanData = {
+    label: ModalType;
+    clans: { id: number; name: string | null }[];
+    onSuccess?: (ids: number[]) => void;
+};
+
+type DeleteAllianceData = {
+    label: ModalType;
+    alliances: { id: number; name: string }[];
+    onSuccess?: (ids: number[]) => void;
+};

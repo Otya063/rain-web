@@ -1,65 +1,60 @@
 import type { Action, Actions, PageServerLoad } from './$types';
-import type { discord, discord_register, launcher_banner, launcher_info, launcher_system, users } from '@prisma/client/edge';
 import { error, fail } from '@sveltejs/kit';
-import { R2_BNR_UNIQUE_URL } from '$env/static/private';
-import ServerData, { db, getPaginatedAllianceData, getPaginatedClanData, getPaginatedUserData, getPaginationMeta, IsCharLogin } from '$lib/database';
-import type { BinaryTypes } from '$lib/types';
-import { getCourseByObjData, deleteFileViaApi, discordLinkConvertor, conv2DArrayToObject, uploadFileViaApi } from '$lib/utils';
 import { DateTime } from 'luxon';
-import { Buffer } from 'node:buffer';
+import { Buffer } from 'node:buffer'; // Node.jsとの互換性により、追加しないと「ReferenceError: Buffer is not defined」が発生する
+import { R2_BNR_UNIQUE_URL } from '$env/static/private';
+import {
+    DistributionCategoryObj,
+    BinaryTypesArray,
+    type BinaryTypes,
+    type Distribution,
+    type DistributionCategoryName,
+    type R2AssetsJsonData,
+    type CharacterEditableItemType,
+    type DistributionEditableItemType,
+    type UserEditableItemType,
+    type User,
+    type LauncherSystem,
+} from '$types';
+import { getCourseByObjData, discordLinkConvertor, conv2DArrayToObject, isNumber, ManageDistribution, convHrToHrp } from '$utils/client';
+import { checkBannerImage, deleteBannerFromR2, PostgresManager, uploadBannerToR2 } from '$utils/server';
 
 const emptyMsg = 'Input value is empty.';
-const requiredMsg = 'Required field is empty.';
+const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
 
-export const load: PageServerLoad = async ({ url, locals: { LL, authUser } }) => {
-    const launcherSystem = (await ServerData.getLauncherSystem()) as launcher_system;
-
-    // check rain admin
-    if (!url.origin.includes('localhost')) {
-        const isAdmin: boolean = launcherSystem['rain_admins'].includes(authUser.username);
-
-        if (!isAdmin) {
-            throw error(403, { message: '', message1: undefined, message2: undefined, message3: LL.error['adminForbidden']() });
-        }
+export const load: PageServerLoad = async ({ platform }) => {
+    const r2Response = await platform?.env.R2.get('EquipItemsEn.json');
+    if (!r2Response) {
+        error(404, { message: '', message1: undefined, message2: ['No r2-assets found.'], message3: undefined });
     }
 
-    const launcherInformation = (await ServerData.getInformation('ALL')) as { [key: string]: launcher_info[] };
+    const r2JsonData = (await r2Response.json()) as R2AssetsJsonData;
 
-    const launcherBanner: launcher_banner[] = await ServerData.getBannerData();
+    const { launcherSystem, banners, distributions, charIdNamePair } = await new PostgresManager('transactions', 'initAdmin').execute();
 
     return {
         launcherSystem,
-        launcherInformation,
-        launcherBanner,
+        banners,
+        distributions,
+        r2JsonData,
+        charIdNamePair,
     };
 };
 
 const updateSystemMode: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    let column = Object.keys(data)[0] as keyof Omit<launcher_system, 'id'> | 'client_data_0' | 'client_data_1';
-    let value = Object.values(data)[0] as string;
-
-    if ((column === 'client_data_0' || column === 'rain_admins') && !value) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-        return fail(400, { error: true, message: emptyMsg });
-    }
-
-    // client_data column
-    column === 'client_data_0' && Object.keys(data)[1] === 'client_data_1' && (column = 'client_data');
+    const column = Object.keys(data)[0] as keyof Omit<LauncherSystem, 'id'> | 'maint_all';
+    const value = Object.values(data)[0] as string;
 
     try {
-        await db.launcher_system.update({
-            where: {
-                id: 1,
-            },
-            data: {
-                [column]: column === 'client_data' ? [value.length === 1 ? `${value}.0` : value, Object.values(data)[1]] : column === 'rain_admins' ? value.split(',') : value === 'true',
-            },
-        });
+        await new PostgresManager('update', 'launcherSystem', { column, value }).execute();
 
         return {
             success: true,
-            message: `The system mode (${column}) has been successfully updated.`,
+            message:
+                column === 'maint_all'
+                    ? `All maintenance modes have been successfully updated (${value === 'true' ? 'Enable' : 'Disable'}).`
+                    : `The system mode (${column}) has been successfully updated.`,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -72,156 +67,87 @@ const updateSystemMode: Action = async ({ request }) => {
     }
 };
 
-const updateAllMaintData: Action = async ({ request }) => {
-    const data = await request.formData();
-    const value = data.get('maint_all') as string;
+// const createInformation: Action = async ({ request }) => {
+//     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+//     const title = data.title;
+//     const url = data.url;
+//     const type = data.type as InfoType;
 
-    try {
-        await db.launcher_system.update({
-            where: {
-                id: 1,
-            },
-            data: {
-                RainJP: value === 'true',
-                RainEU: value === 'true',
-                RainUS: value === 'true',
-            },
-        });
+//     if (!title || !type) {
+//         await delay(1000);
+//         return fail(400, { error: true, message: emptyMsg });
+//     }
 
-        return {
-            success: true,
-            message: `All maintenance modes have been successfully updated (${value === 'true' ? 'Enable' : 'Disable'}).`,
-        };
-    } catch (err) {
-        if (err instanceof Error) {
-            return fail(400, { error: true, message: err.message });
-        } else if (typeof err === 'string') {
-            return fail(400, { error: true, message: err });
-        } else {
-            return fail(400, { error: true, message: 'Unexpected Error' });
-        }
-    }
-};
+//     try {
+//         const createdInformation: Information = await new PostgresManager('create', 'information', { title, url: url.indexOf('discord.com') ? discordLinkConvertor(url) : url, type }).execute();
 
-const createInfoData: Action = async ({ request }) => {
-    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { title, type } = data as {
-        title: string;
-        type: 'Important' | 'Defects and Troubles' | 'Management and Service' | 'In-Game Events' | 'Updates and Maintenance' | 'Select the type of information here.';
-    };
-    let url = data.url as string | null;
+//         return {
+//             success: true,
+//             message: `The information data (Title: ${createdInformation.title}) has been successfully created.`,
+//             createdInformation,
+//         };
+//     } catch (err) {
+//         if (err instanceof Error) {
+//             return fail(400, { error: true, message: err.message });
+//         } else if (typeof err === 'string') {
+//             return fail(400, { error: true, message: err });
+//         } else {
+//             return fail(400, { error: true, message: 'Unexpected Error' });
+//         }
+//     }
+// };
 
-    if (type === 'Select the type of information here.' || !title) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-        return fail(400, { error: true, message: requiredMsg });
-    }
+// const updateInformation: Action = async ({ request }) => {
+//     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+//     const infoId = Number(data.info_id);
+//     const column = Object.keys(data)[1] as InformationEditableItemType;
+//     const value = Object.values(data)[1] as string | null;
 
-    try {
-        const createdInfo = await db.launcher_info.create({
-            data: {
-                title,
-                url: !url ? null : url.indexOf('discord.com') ? discordLinkConvertor(url) : url,
-                type,
-            },
-        });
+//     // url以外は空送信不可
+//     if (!value && column !== 'url') {
+//         await delay(1000);
+//         return fail(400, { error: true, message: emptyMsg });
+//     }
 
-        return {
-            success: true,
-            message: `The information data (ID: ${createdInfo.id}) has been successfully created.`,
-            createdInfo,
-        };
-    } catch (err) {
-        if (err instanceof Error) {
-            return fail(400, { error: true, message: err.message });
-        } else if (typeof err === 'string') {
-            return fail(400, { error: true, message: err });
-        } else {
-            return fail(400, { error: true, message: 'Unexpected Error' });
-        }
-    }
-};
+//     try {
+//         await new PostgresManager('update', 'information', { infoId, column, value }).execute();
 
-const updateInfoData: Action = async ({ request }) => {
-    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const id = Number(data.info_id);
-    const zonename = data.zonename;
-    const column = Object.keys(data)[2] as keyof Omit<launcher_info, 'id'>;
-    let value = Object.values(data)[2] as string | null;
-    if (!value) {
-        switch (column) {
-            case 'title':
-            case 'type':
-            case 'created_at': {
-                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-                return fail(400, { error: true, message: emptyMsg });
-            }
+//         return {
+//             success: true,
+//             message: `The information data (ID: ${infoId}, Column: ${column}) has been successfully updated.`,
+//         };
+//     } catch (err) {
+//         if (err instanceof Error) {
+//             return fail(400, { error: true, message: err.message });
+//         } else if (typeof err === 'string') {
+//             return fail(400, { error: true, message: err });
+//         } else {
+//             return fail(400, { error: true, message: 'Unexpected Error' });
+//         }
+//     }
+// };
 
-            default: {
-                break;
-            }
-        }
-    }
+// const deleteInformation: Action = async ({ request }) => {
+//     const data = await request.formData();
+//     const deleteInfoIds: number[] = String(data.get('selectedInformationId')).split(',').map(Number);
 
-    try {
-        const updatedInfo = await db.launcher_info.update({
-            where: {
-                id,
-            },
-            data: {
-                [column]:
-                    column !== 'url'
-                        ? column === 'created_at'
-                            ? DateTime.fromISO(String(value), { zone: zonename }).toString()!
-                            : value
-                        : !value
-                        ? null
-                        : value.indexOf('discord.com')
-                        ? discordLinkConvertor(value)
-                        : value,
-            },
-        });
+//     try {
+//         const deletedInfoTitles: string[] = await new PostgresManager('delete', 'information', { deleteInfoIds }).execute();
 
-        return {
-            success: true,
-            message: `The information data (ID: ${id}, Type: ${column}) has been successfully updated.`,
-            updatedInfo,
-        };
-    } catch (err) {
-        if (err instanceof Error) {
-            return fail(400, { error: true, message: err.message });
-        } else if (typeof err === 'string') {
-            return fail(400, { error: true, message: err });
-        } else {
-            return fail(400, { error: true, message: 'Unexpected Error' });
-        }
-    }
-};
-
-const deleteInfoData: Action = async ({ request }) => {
-    const data = await request.formData();
-    const id = Number(data.get('info_id'));
-
-    try {
-        await db.launcher_info.delete({
-            where: {
-                id,
-            },
-        });
-
-        return {
-            success: true,
-            message: `The information data (ID: ${id}) has been successfully deleted.`,
-        };
-    } catch (err) {
-        if (err instanceof Error) {
-            return fail(400, { error: true, message: err.message });
-        } else if (typeof err === 'string') {
-            return fail(400, { error: true, message: err });
-        } else {
-            return fail(400, { error: true, message: 'Unexpected Error' });
-        }
-    }
-};
+//         return {
+//             success: true,
+//             message: `The information data (Title: ${deletedInfoTitles}) has been successfully deleted.`,
+//         };
+//     } catch (err) {
+//         if (err instanceof Error) {
+//             return fail(400, { error: true, message: err.message });
+//         } else if (typeof err === 'string') {
+//             return fail(400, { error: true, message: err });
+//         } else {
+//             return fail(400, { error: true, message: 'Unexpected Error' });
+//         }
+//     }
+// };
 
 const courseControl: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
@@ -235,11 +161,11 @@ const courseControl: Action = async ({ request }) => {
                 delete data.specified_u_text;
 
                 if (!Object.keys(data).length) {
-                    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                    await delay(1000);
                     return fail(400, { error: true, message: 'You must choose at least one course.' });
                 }
 
-                await db.$queryRaw`UPDATE users SET rights = ${getCourseByObjData(data)}`;
+                await new PostgresManager('update', 'courseControl', { rights: getCourseByObjData(data) }).execute();
 
                 return {
                     success: true,
@@ -249,7 +175,7 @@ const courseControl: Action = async ({ request }) => {
 
             case 'specified': {
                 if (!data.specified_u_text) {
-                    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                    await delay(1000);
                     return fail(400, { error: true, message: 'Specify the user ID.' });
                 }
 
@@ -257,25 +183,16 @@ const courseControl: Action = async ({ request }) => {
                 delete data.specified_u_text;
 
                 if (!Object.keys(data).length) {
-                    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                    await delay(1000);
                     return fail(400, { error: true, message: 'You must select at least one course.' });
                 }
 
                 if (ids.length > 10) {
-                    await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                    await delay(1000);
                     return fail(400, { error: true, message: 'No more than 10 users can be specified.' });
                 }
 
-                for (const id of ids) {
-                    await db.users.update({
-                        where: {
-                            id,
-                        },
-                        data: {
-                            rights: getCourseByObjData(data),
-                        },
-                    });
-                }
+                await new PostgresManager('update', 'courseControl', { rights: getCourseByObjData(data), userIds: ids }).execute();
 
                 return {
                     success: true,
@@ -300,179 +217,98 @@ const courseControl: Action = async ({ request }) => {
 
 const getPaginatedUsers: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { filter_param, filter_value, status, cursor } = data as {
+    const { filter_param, filter_value } = data as {
         filter_param: 'username' | 'character_name' | 'user_id' | 'character_id';
-        filter_value: string | number;
-        status: string;
-        cursor: number;
+        filter_value: string;
     };
 
-    if (!filter_value) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+    if (!filter_value || !filter_param) {
+        await delay(1000);
         return fail(400, { error: true, message: emptyMsg });
-    } else if ((filter_param === 'user_id' || filter_param === 'character_id') && isNaN(filter_value as number)) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+    } else if ((filter_param === 'user_id' || filter_param === 'character_id') && !isNumber(filter_value)) {
+        // 数値に変換可能かどうか確認
+        await delay(1000);
         return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
     }
 
-    const { paginatedUsers, paginationMeta } = await (async () => {
-        switch (status) {
-            case 'init': {
-                const paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'init', 5);
-
-                const nextCursor = paginatedUsers[4]?.id || 0;
-                const paginationMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
-
-                return { paginatedUsers, paginationMeta };
-            }
-
-            case 'back':
-            case 'next': {
-                const paginatedUsers = await getPaginatedUserData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1);
-
-                const prevCursor = paginatedUsers[0]?.id || 0;
-                const nextCursor = paginatedUsers[4]?.id || 0;
-                const paginationMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
-
-                return { paginatedUsers, paginationMeta };
-            }
-
-            default: {
-                error(400, { message: '', message1: '', message2: ['Invalid status.'], message3: undefined });
-            }
-        }
-    })();
-
-    if (!paginatedUsers.length) {
+    const searchedUsers: User[] | [null] = await new PostgresManager('get', 'paginatedUsers', { filterParam: filter_param, filterValue: filter_value }).execute();
+    if (!searchedUsers.length) {
         return fail(400, {
             error: true,
             message:
                 filter_param === 'username'
                     ? `The user(s) with the entered username (${filter_value}) doesn't exist.`
                     : filter_param === 'character_name'
-                    ? `The character(s) with the entered character name (${filter_value}) doesn't exist.`
-                    : `The account with the entered ${filter_param} (${filter_value}) doesn't exist.`,
+                      ? `The character(s) with the entered character name (${filter_value}) doesn't exist.`
+                      : `The account with the entered ${filter_param} (${filter_value}) doesn't exist.`,
+        });
+    } else if (!searchedUsers[0]) {
+        // 1000件以上のデータがある場合（[null]）は、エラーを返す
+        return fail(400, {
+            error: true,
+            message: 'Too many results. Please narrow down the search criteria.',
         });
     }
 
-    return { paginatedUsers, paginationMeta };
+    return { searchedUsers };
 };
 
 const getPaginatedClans: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'clan_name' | 'clan_id'; filter_value: string | number; status: string; cursor: number };
+    const { filter_param, filter_value } = data as { filter_param: 'clan_name' | 'clan_id'; filter_value: string };
 
-    if (!filter_value) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+    if (!filter_value || !filter_param) {
+        await delay(1000);
         return fail(400, { error: true, message: emptyMsg });
-    } else if (filter_param === 'clan_id' && isNaN(filter_value as number)) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+    } else if (filter_param === 'clan_id' && !isNumber(filter_value)) {
+        await delay(1000);
         return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
     }
 
-    const { paginatedClans, paginationClanMeta } = await (async () => {
-        switch (status) {
-            case 'init': {
-                const paginatedClans = await getPaginatedClanData(filter_param, filter_value, 'init', 5);
+    const searchedClans = await new PostgresManager('get', 'paginatedClans', { filterParam: filter_param, filterValue: filter_value }).execute();
 
-                const nextCursor = paginatedClans[4]?.id || 0;
-                const paginationClanMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
-
-                return { paginatedClans, paginationClanMeta };
-            }
-
-            case 'back':
-            case 'next': {
-                const paginatedClans = await getPaginatedClanData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1);
-
-                const prevCursor = paginatedClans[0]?.id || 0;
-                const nextCursor = paginatedClans[4]?.id || 0;
-                const paginationClanMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
-
-                return { paginatedClans, paginationClanMeta };
-            }
-
-            default: {
-                error(400, { message: '', message1: '', message2: ['Invalid status.'], message3: undefined });
-            }
-        }
-    })();
-
-    if (!paginatedClans.length) {
+    if (!searchedClans.length) {
         return fail(400, {
             error: true,
             message: `The clan with the entered ${filter_param} (${filter_value}) doesn't exist.`,
         });
+    } else if (!searchedClans[0]) {
+        return fail(400, { error: true, message: 'Too many results. Please narrow down the search criteria.' });
     }
 
-    return { paginatedClans, paginationClanMeta, paginatedAlliances: [], paginationAllianceMeta: { hasPrevPage: false, hasNextPage: false, prevCursor: 0, nextCursor: 0 }, clanNames: [] };
+    return { searchedClans };
 };
 
 const getPaginatedAlliances: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { filter_param, filter_value, status, cursor } = data as { filter_param: 'alliance_name' | 'alliance_id'; filter_value: string | number; status: string; cursor: number };
+    const { filter_param, filter_value } = data as { filter_param: 'alliance_name' | 'alliance_id'; filter_value: string };
 
-    if (!filter_value) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+    if (!filter_value || !filter_param) {
+        await delay(1000);
         return fail(400, { error: true, message: emptyMsg });
-    } else if (filter_param === 'alliance_id' && isNaN(filter_value as number)) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+    } else if (filter_param === 'alliance_id' && !isNumber(filter_value)) {
+        await delay(1000);
         return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
     }
 
-    const { paginatedAlliances, paginationAllianceMeta } = await (async () => {
-        switch (status) {
-            case 'init': {
-                const paginatedAlliances = await getPaginatedAllianceData(filter_param, filter_value, 'init', 5);
+    const { alliances: searchedAlliances, clanNames } = await new PostgresManager('get', 'paginatedAlliances', { filterParam: filter_param, filterValue: filter_value }).execute();
 
-                const nextCursor = paginatedAlliances[4]?.id || 0;
-                const paginationAllianceMeta = await getPaginationMeta(filter_param, filter_value, 0, nextCursor);
-
-                return { paginatedAlliances, paginationAllianceMeta };
-            }
-
-            case 'back':
-            case 'next': {
-                const paginatedAlliances = await getPaginatedAllianceData(filter_param, filter_value, 'back', status === 'back' ? -5 : 5, Number(cursor), 1);
-
-                const prevCursor = paginatedAlliances[0]?.id || 0;
-                const nextCursor = paginatedAlliances[4]?.id || 0;
-                const paginationAllianceMeta = await getPaginationMeta(filter_param, filter_value, prevCursor, nextCursor);
-
-                return { paginatedAlliances, paginationAllianceMeta };
-            }
-
-            default: {
-                error(400, { message: '', message1: '', message2: ['Invalid status.'], message3: undefined });
-            }
-        }
-    })();
-
-    const clanNames = await db.guilds.findMany({
-        select: {
-            name: true,
-        },
-        orderBy: {
-            id: 'asc',
-        },
-    });
-    const nameArr = clanNames.map((a) => a.name) as string[];
-
-    if (!paginatedAlliances.length) {
+    if (!searchedAlliances.length) {
         return fail(400, {
             error: true,
-            message: `The clan with the entered ${filter_param} (${filter_value}) doesn't exist.`,
+            message: `The alliance with the entered ${filter_param} (${filter_value}) doesn't exist.`,
         });
+    } else if (!searchedAlliances[0]) {
+        return fail(400, { error: true, message: 'Too many results. Please narrow down the search criteria.' });
     }
 
-    return { paginatedClans: [], paginationClanMeta: { hasPrevPage: false, hasNextPage: false, prevCursor: 0, nextCursor: 0 }, paginatedAlliances, paginationAllianceMeta, nameArr };
+    return { searchedAlliances, clanNames };
 };
 
-const updateUserData: Action = async ({ request }) => {
+const updateUser: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
     const id = Number(data.user_id);
-    const zonename = data.zonename;
-    const column = Object.keys(data)[1] as keyof Omit<users, 'id' | 'last_character' | 'last_login' | 'item_box' | 'web_login_key'>;
+    const column = Object.keys(data)[1] as UserEditableItemType;
     const value = Object.values(data)[1] as string | number;
     let rightsData: Record<string, any> = {};
 
@@ -481,7 +317,7 @@ const updateUserData: Action = async ({ request }) => {
             case 'username':
             case 'password':
             case 'return_expires': {
-                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+                await delay(1000);
                 return fail(400, { error: true, message: emptyMsg });
             }
 
@@ -503,30 +339,25 @@ const updateUserData: Action = async ({ request }) => {
         }
     }
 
+    const dbValue =
+        column === 'rights'
+            ? getCourseByObjData(rightsData)
+            : column === 'return_expires'
+              ? DateTime.fromISO(String(value)).setZone('utc').toString()! // valueは現地時間なので、UTCに変換して保存
+              : ['frontier_points', 'gacha_premium', 'gacha_trial'].includes(column)
+                ? !value
+                    ? null
+                    : Number(value)
+                : ['psn_id', 'wiiu_key'].includes(column) && !value
+                  ? null
+                  : value;
+
     try {
-        await db.users.update({
-            where: {
-                id,
-            },
-            data: {
-                [column]:
-                    column === 'rights'
-                        ? getCourseByObjData(rightsData)
-                        : column === 'return_expires'
-                        ? DateTime.fromISO(String(value), { zone: zonename }).toString()!
-                        : column === 'frontier_points' || column === 'gacha_premium' || column === 'gacha_trial'
-                        ? !value
-                            ? null
-                            : Number(value)
-                        : (column === 'psn_id' || column === 'wiiu_key') && !value
-                        ? null
-                        : value,
-            },
-        });
+        await new PostgresManager('update', 'user', { id, column, value: dbValue }).execute();
 
         return {
             success: true,
-            message: `The user data (Type: ${column}) has been successfully updated.`,
+            message: `The user data (Column: ${column}) has been successfully updated.`,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -539,23 +370,25 @@ const updateUserData: Action = async ({ request }) => {
     }
 };
 
-const updateCharacterData: Action = async ({ request }) => {
-    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+const updateCharacter: Action = async ({ request }) => {
+    const form = await request.formData();
+    const data = conv2DArrayToObject([...form.entries()]);
     const id = Number(data.character_id);
-    const column = Object.keys(data)[2] as 'name' | 'bounty' | 'clan' | 'reupload_binary';
+    const column = Object.keys(data)[2] as CharacterEditableItemType;
     const value = Object.values(data)[2] as string | number;
 
     switch (column) {
         case 'name': {
-            const discordLinked = data.not_linked === 'false';
             const bountyCoin = Number(data.bounty_coin);
-            if (!discordLinked) {
+            if (!data.discord_id) {
+                await delay(1000);
                 return fail(400, { error: true, message: "This character isn't linked to a discord account." });
             } else if (bountyCoin < 50000) {
+                await delay(1000);
                 return fail(400, { error: true, message: `Insufficient bounty coins (Owned: ${bountyCoin}).` });
             }
 
-            const { success, message } = await db.characters.editName(id, String(value), bountyCoin);
+            const { success, message } = await new PostgresManager('update', 'charName', { charId: id, newName: String(value), bountyCoin }).execute();
             if (!success) {
                 return fail(400, { error: true, message });
             } else {
@@ -568,14 +401,7 @@ const updateCharacterData: Action = async ({ request }) => {
 
         case 'bounty': {
             try {
-                await db.discord.update({
-                    where: {
-                        char_id: id,
-                    },
-                    data: {
-                        bounty: Number(value),
-                    },
-                });
+                await new PostgresManager('update', 'bounty', { charId: id, amount: Number(value) }).execute();
 
                 return {
                     success: true,
@@ -598,19 +424,7 @@ const updateCharacterData: Action = async ({ request }) => {
             const clanName = data.clan_name;
 
             try {
-                if (clanCharNum - 1 === 0) {
-                    await db.guilds.delete({
-                        where: {
-                            id: clanId,
-                        },
-                    });
-                } else {
-                    await db.guild_characters.delete({
-                        where: {
-                            character_id: id,
-                        },
-                    });
-                }
+                await new PostgresManager('update', 'leaveClan', { charId: id, clanId, isLastMember: clanCharNum - 1 === 0 }).execute();
 
                 return {
                     success: true,
@@ -628,70 +442,60 @@ const updateCharacterData: Action = async ({ request }) => {
         }
 
         case 'reupload_binary': {
-            const file = data.file as File;
-            if (file.size === 0) {
+            const files = form.getAll('file');
+            const binaryData: { [key in BinaryTypes]?: ArrayBuffer } = {};
+
+            // ファイル未選択時
+            if (files.length === 1 && !(files[0] as File).name && !(files[0] as File).size) {
+                await delay(1000);
                 return fail(400, { error: true, message: 'No file selected.' });
             }
 
-            delete data.user_id;
-            delete data.character_id;
-            delete data.binary;
-            delete data.file;
+            for (const file of files) {
+                const f = file as File;
+                const fileName = f.name.split('.')[0] as BinaryTypes; // 「.bin」より前の部分を取り出す（カラム名と一致）
 
-            const binaryData: { [key in BinaryTypes]: string } = data as { [key in BinaryTypes]: string };
-            Object.keys(data).forEach((_value) => {
-                const value = _value as BinaryTypes;
-                const base64 = Buffer.from(new Uint8Array(data[value].split(',').map(Number))).toString('base64');
-                binaryData[value] = base64 === 'AA==' ? '' : base64;
-            });
+                // ファイル名がBinaryTypes型に一致しない時
+                if (!Object.values(BinaryTypesArray).includes(fileName)) {
+                    return fail(400, { error: true, message: `Invalid file name: ${fileName}.` });
+                }
 
-            const { success, message } = await db.characters.setBinary(id, binaryData);
-            if (!success) {
-                return fail(400, { error: true, message });
-            } else {
-                return {
-                    success: true,
-                    message: `The binary data of the character (ID: ${id}) has been successfully updated.`,
-                };
+                // ファイル名重複時
+                if (binaryData.hasOwnProperty(fileName)) {
+                    return fail(400, { error: true, message: `Duplicate file name: ${fileName}.` });
+                }
+
+                const arrayBuffer = await f.arrayBuffer();
+                binaryData[fileName] = arrayBuffer;
             }
+
+            await new PostgresManager('update', 'characterBinary', { charId: id, binaryData }).execute();
+
+            return {
+                success: true,
+                message: `The binary data (${Object.keys(binaryData).join(', ')}) has been successfully updated.`,
+            };
         }
 
         default: {
-            error(400, { message: '', message1: '', message2: ['Invalid column.'], message3: undefined });
+            await delay(1000);
+            error(400, { message: '', message1: '', message2: [`Unsupported data type: ${column}.`], message3: undefined });
         }
     }
 };
 
-const deleteUser: Action = async ({ request }) => {
+const deleteUsers: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { user_id, username } = data as { user_id: number; username: string };
 
-    const charIds = (
-        await db.characters.findMany({
-            where: {
-                user_id: Number(user_id),
-            },
-            select: {
-                id: true,
-            },
-        })
-    ).map((char) => char.id);
-
-    const result = await new IsCharLogin(charIds).checkMulti();
-    if (result.check && result.charIds.length) {
-        return fail(400, { error: true, message: `Couldn't process because all characters haven't logged out.<br />Logged-In Character's ID: ${result.charIds}` });
-    }
+    const userIds: number[] = data.user_ids ? JSON.parse(String(data.user_ids)).map(Number) : [Number(data.user_id)];
+    const usernames: string[] = data.usernames ? JSON.parse(String(data.usernames)) : [String(data.username)];
 
     try {
-        await db.users.delete({
-            where: {
-                id: Number(user_id),
-            },
-        });
+        await new PostgresManager('delete', 'users', { userIds }).execute();
 
         return {
             success: true,
-            message: `The user account (Username: ${username}) was successfully deleted.`,
+            message: userIds.length === 1 ? `The user account (Username: ${usernames[0]}) has been successfully deleted.` : `${userIds.length} user accounts have been successfully deleted.`,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -704,93 +508,63 @@ const deleteUser: Action = async ({ request }) => {
     }
 };
 
-const suspendUser: Action = async ({ request }) => {
+const suspendUsers: Action = async ({ request, locals }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { user_id, username, reason_type, permanently_del, until_at, zoneName } = data as {
-        user_id: number;
-        username: string;
-        reason_type: number;
-        permanently_del: string;
-        until_at?: string;
-        zoneName: string;
-    };
+    const zoneName = String(data.zoneName);
 
-    if (!reason_type || (permanently_del !== 'on' && !until_at)) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-        return fail(400, { error: true, message: emptyMsg });
-    }
+    // user_ids JSON配列が存在する場合は複数ユーザー、そうでなければ単一ユーザー
+    const userIds: number[] = data.user_ids ? JSON.parse(String(data.user_ids)).map(Number) : [Number(data.user_id)];
+    const usernames: string[] = data.usernames ? JSON.parse(String(data.usernames)) : [String(data.username)];
 
-    const { success, message, suspendedAccount } = await db.users.suspend(Number(user_id), username, Number(reason_type), permanently_del === 'on', zoneName, until_at);
-    if (!success || !suspendedAccount) {
-        return fail(400, { error: true, message });
+    // reason_type_0 が存在する場合はユーザーごとに個別設定された複数ユーザーモード
+    const isPerUserMode = data.reason_type_0 !== undefined;
+
+    let entries: { userId: number; username: string; reasonType: number; permanent: boolean; untilAt?: string; otherReason?: string }[];
+
+    if (isPerUserMode) {
+        for (let i = 0; i < userIds.length; i++) {
+            if (!data[`reason_type_${i}`] || (data[`permanent_${i}`] !== 'on' && !data[`until_at_${i}`]) || (Number(data[`reason_type_${i}`]) === 0 && !data[`other_reason_${i}`])) {
+                await delay(1000);
+
+                return fail(400, { error: true, message: emptyMsg });
+            }
+        }
+
+        entries = userIds.map((userId, i) => ({
+            userId,
+            username: usernames[i],
+            reasonType: Number(data[`reason_type_${i}`]),
+            permanent: data[`permanent_${i}`] === 'on',
+            untilAt: data[`until_at_${i}`] ? String(data[`until_at_${i}`]) : undefined,
+            otherReason: data[`other_reason_${i}`] ? String(data[`other_reason_${i}`]) : undefined,
+        }));
     } else {
-        return {
-            success: true,
-            message: `The user account (Username: ${username}) was successfully suspended. (Restorable)`,
-            suspendedAccount,
-        };
-    }
-};
+        const { reason_type, permanently_del, until_at, other_reason } = data as { reason_type: number; permanently_del: string; until_at?: string; other_reason?: string };
 
-const unsuspendUser: Action = async ({ request }) => {
-    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { user_id, username } = data as { user_id: number; username: string };
+        if (!reason_type || (permanently_del !== 'on' && !until_at) || (Number(reason_type) === 0 && !other_reason)) {
+            await delay(1000);
 
-    const { success, message } = await db.users.unsuspend(Number(user_id));
-    if (!success) {
-        return fail(400, { error: true, message });
-    } else {
-        return {
-            success: true,
-            message: `The user account (Username: ${username}) was successfully unsuspended.`,
-        };
-    }
-};
+            return fail(400, { error: true, message: emptyMsg });
+        }
 
-const createBnrData: Action = async ({ request, url }) => {
-    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { ja_file, en_file, bnr_name } = data as { ja_file: File; en_file: File; bnr_name: string };
-    let bnr_url = data.bnr_url as string | null;
-
-    // file check
-    if (ja_file.size === 0 || en_file.size === 0 || !bnr_name) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-        return fail(400, { error: true, message: `Failed to upload the files. ${requiredMsg} ` });
-    }
-
-    // file name validation
-    if (ja_file.name !== `${bnr_name}_ja.png` || en_file.name !== `${bnr_name}_en.png`) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-        return fail(400, { error: true, message: 'Failed to upload the files. Invalid file name' });
-    }
-
-    // file type validation
-    if (ja_file.type !== 'image/png' || en_file.type !== 'image/png') {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-        return fail(400, { error: true, message: 'Failed to upload the files. Invalid type of file.' });
-    }
-
-    // url convertor
-    bnr_url = !bnr_url ? null : bnr_url.indexOf('discord.com') ? discordLinkConvertor(bnr_url) : bnr_url;
-
-    const uploadJa: Promise<boolean> = uploadFileViaApi(url.origin, ja_file, 'ja');
-    const uploadEn: Promise<boolean> = uploadFileViaApi(url.origin, en_file, 'en');
-    const result: boolean[] = await Promise.all([uploadJa, uploadEn]);
-    if (result.every((boolean) => boolean !== true)) {
-        return fail(400, { error: true, message: 'Failed to upload the files. Please try again.' });
+        entries = userIds.map((userId, i) => ({
+            userId,
+            username: usernames[i],
+            reasonType: Number(reason_type),
+            permanent: permanently_del === 'on',
+            untilAt: until_at ? String(until_at) : undefined,
+            otherReason: other_reason ? String(other_reason) : undefined,
+        }));
     }
 
     try {
-        const createdBnr = await db.launcher_banner.create({
-            data: {
-                bnr_name,
-                bnr_url,
-                ja_img_src: `https://${R2_BNR_UNIQUE_URL}/ja/${ja_file.name}`,
-                en_img_src: `https://${R2_BNR_UNIQUE_URL}/en/${en_file.name}`,
-            },
-        });
+        await new PostgresManager('update', 'suspendUsers', { entries, zoneName, byWhom: locals.adminUserId }).execute();
 
-        return { success: true, message: `The banner data (Banner Name: ${bnr_name}) was successfully created.`, createdBnr };
+        return {
+            success: true,
+            message: userIds.length === 1 ? `The user account (Username: ${usernames[0]}) has been successfully suspended.` : `${userIds.length} user accounts have been successfully suspended.`,
+            suspendedBy: locals.adminUserId !== null ? { id: locals.adminUserId, username: locals.adminUsername } : null,
+        };
     } catch (err) {
         if (err instanceof Error) {
             return fail(400, { error: true, message: err.message });
@@ -802,57 +576,114 @@ const createBnrData: Action = async ({ request, url }) => {
     }
 };
 
-const updateBnrData: Action = async ({ request, url }) => {
+const unsuspendUsers: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const column = Object.keys(data)[1] as 'bnr_url' | 'file';
-    const { bnr_id, file, bnr_name, lang } = data as { bnr_id: number; file?: File; bnr_name?: string; lang?: string };
-    let bnr_url = data.bnr_url as string | null | undefined;
+    const userIds: number[] = data.user_ids ? JSON.parse(String(data.user_ids)).map(Number) : [Number(data.user_id)];
+    const usernames: string[] = data.usernames ? JSON.parse(String(data.usernames)) : [String(data.username)];
 
     try {
-        if (!file) {
-            bnr_url = !bnr_url ? null : bnr_url.indexOf('discord.com') ? discordLinkConvertor(bnr_url) : bnr_url;
+        await new PostgresManager('update', 'unsuspendUsers', { userIds }).execute();
 
-            await db.launcher_banner.update({
-                where: {
-                    id: Number(bnr_id),
-                },
-                data: {
-                    bnr_url,
-                },
-            });
-
-            return { success: true, message: `The banner data (ID: ${bnr_id} / Type: ${column}) has been successfully updated.` };
+        return { success: true, message: `The user account (Username: ${usernames[0]}) has been successfully unsuspended.` };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
         } else {
-            // file check
-            if (file.size === 0 || !bnr_name || !lang) {
-                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-                return fail(400, { error: true, message: "Failed to re-upload the files. You haven't selected an image to update." });
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const createBanner: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const bnrName = data.bnr_name;
+    const jaFile = data.ja_file as File;
+    const enFile = data.en_file as File;
+    let bnrUrl = data.bnr_url as string | null;
+
+    if (!jaFile.size || !enFile.size || !bnrName) {
+        await delay(1000);
+        return fail(400, { error: true, message: 'No file selected or banner name is empty.' });
+    }
+
+    if (jaFile.name !== `${bnrName}_ja.png` || enFile.name !== `${bnrName}_en.png`) {
+        await delay(1000);
+        return fail(400, { error: true, message: 'Invalid file name.<br />File name example: [name]_ja.png / [name]_en.png' });
+    }
+
+    const [jaResult, enResult] = await Promise.all([checkBannerImage(jaFile), checkBannerImage(enFile)]);
+    if (!jaResult.success) {
+        await delay(1000);
+        return fail(400, { error: true, message: `Failed to create Japanese banner.<br />${jaResult.error}` });
+    }
+    if (!enResult.success) {
+        await delay(1000);
+        return fail(400, { error: true, message: `Failed to create English banner.<br />${enResult.error}` });
+    }
+
+    bnrUrl = !bnrUrl ? null : bnrUrl.indexOf('discord.com') ? discordLinkConvertor(bnrUrl) : bnrUrl;
+
+    try {
+        await Promise.all([uploadBannerToR2(jaFile, 'ja'), uploadBannerToR2(enFile, 'en')]);
+
+        const createdBanner = await new PostgresManager('create', 'banner', {
+            bnrName,
+            bnrUrl,
+            jaImgSrc: `https://${R2_BNR_UNIQUE_URL}/ja/${jaFile.name}`,
+            enImgSrc: `https://${R2_BNR_UNIQUE_URL}/en/${enFile.name}`,
+        }).execute();
+
+        return { success: true, message: `The banner (Name: ${bnrName}) has been successfully created.`, createdBanner };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const updateBanner: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const bnrId = Number(data.bnr_id);
+    const bnrName = data.bnr_name;
+    const jaFile = data.ja_file as File;
+    const enFile = data.en_file as File;
+    const file = !jaFile.size ? enFile : jaFile;
+    const lang = !jaFile.size ? 'en' : 'ja';
+    const isBnrUrlEdited = data.hasOwnProperty('bnr_url');
+    const bnrUrl = isBnrUrlEdited ? data.bnr_url : '';
+
+    try {
+        if (!isBnrUrlEdited) {
+            if (!file.size) {
+                await delay(1000);
+                return fail(400, { error: true, message: 'No file selected.' });
             }
 
-            // file name validation
-            if (file.name !== `${bnr_name}_${lang}.png`) {
-                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-                return fail(400, { error: true, message: 'Failed to re-upload the files. Invalid file name' });
+            if (file.name !== `${bnrName}_${lang}.png`) {
+                await delay(1000);
+                return fail(400, { error: true, message: 'Invalid file name.<br />File name example: [name]_ja.png / [name]_en.png' });
             }
 
-            // file type validation
-            if (file.type !== 'image/png') {
-                await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-                return fail(400, { error: true, message: 'Failed to re-upload the files. Invalid type of file.' });
+            const result = await checkBannerImage(file);
+            if (!result.success) {
+                await delay(1000);
+                return fail(400, { error: true, message: result.error ?? 'Image validation failed.' });
             }
 
-            // delete and upload file
-            const result = Promise.resolve()
-                .then(() => deleteFileViaApi(url.origin, file.name, lang))
-                .then(() => uploadFileViaApi(url.origin, file, lang))
-                .then(() => {
-                    return { success: true, message: `The banner (ID: ${bnr_id}) has been successfully re-uploaded.` };
-                })
-                .catch(() => {
-                    return fail(400, { error: true, message: 'Failed to re-upload the files. Please try again.' });
-                });
+            await deleteBannerFromR2(file.name, lang);
+            await uploadBannerToR2(file, lang);
 
-            return await result;
+            return { success: true, message: `The banner (ID: ${bnrId}) has been successfully re-uploaded.` };
+        } else {
+            await new PostgresManager('update', 'banner', { bnrId, value: !bnrUrl ? null : bnrUrl.indexOf('discord.com') ? discordLinkConvertor(bnrUrl) : bnrUrl }).execute();
+
+            return { success: true, message: `The banner (ID: ${bnrId}, Column: bnr_url) has been successfully updated.` };
         }
     } catch (err) {
         if (err instanceof Error) {
@@ -865,25 +696,17 @@ const updateBnrData: Action = async ({ request, url }) => {
     }
 };
 
-const deleteBnrData: Action = async ({ request, url }) => {
-    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { bnr_id, bnr_name } = data as { bnr_id: number; bnr_name: string };
-
-    const deletedJa: Promise<boolean> = deleteFileViaApi(url.origin, `${bnr_name}_ja.png`, 'ja');
-    const deletedEn: Promise<boolean> = deleteFileViaApi(url.origin, `${bnr_name}_en.png`, 'en');
-    const result: boolean[] = await Promise.all([deletedJa, deletedEn]);
-    if (result.every((boolean) => boolean !== true)) {
-        return fail(400, { error: true, message: 'Failed to upload the files. Please try again.' });
-    }
+const deleteBanner: Action = async ({ request }) => {
+    const data = await request.formData();
+    const deleteBnrIds: number[] = String(data.get('selectedBannerId')).split(',').map(Number);
+    const deleteBnrNames: string[] = String(data.get('selectedBannerName')).split(',');
 
     try {
-        await db.launcher_banner.delete({
-            where: {
-                id: Number(bnr_id),
-            },
-        });
+        await Promise.all(deleteBnrNames.flatMap((bnrName) => [deleteBannerFromR2(`${bnrName}_ja.png`, 'ja'), deleteBannerFromR2(`${bnrName}_en.png`, 'en')]));
 
-        return { success: true, message: `The banner data (ID: ${bnr_id} / Banner Name: ${bnr_name}) has been successfully deleted.` };
+        await new PostgresManager('delete', 'banner', { deleteBnrIds }).execute();
+
+        return { success: true, message: `The banner (Name: ${deleteBnrNames.join(', ')}) has been successfully deleted.` };
     } catch (err) {
         if (err instanceof Error) {
             return fail(400, { error: true, message: err.message });
@@ -900,71 +723,36 @@ const linkDiscord: Action = async ({ request }) => {
     const { user_id, char_id, discord_id } = data as { user_id: number; char_id: number; discord_id: string };
 
     if (!discord_id) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
+        await delay(1000);
         return fail(400, { error: true, message: emptyMsg });
     }
 
+    /**
+     * ディスコードアカウント連携OK例
+     *
+     * 「未連携キャラクターA（ユーザーA）」に、「未連携ディスコードA」を連携
+     * 　-> 新規連携
+     *
+     * 「ディスコードAと連携済みキャラクターA（連携済みユーザーA）」の状態で、「ディスコードAを未連携キャラクターB（連携済みユーザーA）」に再連携（キャラクターA（連携済みユーザーA）は連携解除）
+     * 　-> 同一ユーザー内の異なるキャラクター間でディスコード連携の切り替えが可能（/switchコマンドと同様）
+     *
+     * 「ディスコードAと連携済みキャラクターA（連携済みユーザーA）」の状態で、「ディスコードAを未連携キャラクターA（未連携ユーザーB）」に再連携（キャラクターA（連携済みユーザーA）は連携解除）
+     * 　-> 再連携先ユーザーが未連携である場合のみ、異なるユーザー間でディスコード連携の切り替えが可能
+     */
+
+    /**
+     * ディスコードアカウント連携NG例
+     *
+     * 「未連携ディスコードA」もしくは「ディスコードAと連携済みキャラクターA（連携済みユーザーA）」の状態で、「ディスコードAを未連携キャラクターA（ディスコードBと連携済みユーザーB）」に再連携
+     * 　-> 再連携先ユーザーが連携済みである場合は、ディスコード連携の切り替えが不可能
+     */
+
     try {
-        const discordRegisterByUserId: discord_register | null = await ServerData.getLinkedUserByUserId(Number(user_id));
-        if (discordRegisterByUserId && discordRegisterByUserId.discord_id !== discord_id) {
-            return fail(400, {
-                error: true,
-                message: 'This user account is already linked to another discord account.<br>Linked data can only be transferred between characters with the same discord ID (account).',
-            });
-        }
-
-        // discord_register (user)
-        const discordRegister: discord_register | null = await ServerData.getLinkedUserByDiscordId(discord_id);
-        (async () => {
-            if (discordRegister) {
-                await db.discord_register.update({
-                    where: {
-                        discord_id,
-                    },
-                    data: {
-                        user_id: Number(user_id),
-                    },
-                });
-            } else {
-                await db.discord_register.create({
-                    data: {
-                        user_id: Number(user_id),
-                        discord_id,
-                    },
-                });
-            }
-        })();
-
-        // discord (character)
-        const discord: discord | null = await ServerData.getLinkedCharactersByDiscordId(discord_id);
-        const { newDiscord } = await (async () => {
-            if (discord) {
-                const newDiscord = await db.discord.update({
-                    where: {
-                        discord_id,
-                    },
-                    data: {
-                        char_id: Number(char_id),
-                    },
-                });
-
-                return { newDiscord };
-            } else {
-                const newDiscord = await db.discord.create({
-                    data: {
-                        char_id: Number(char_id),
-                        discord_id,
-                    },
-                });
-
-                return { newDiscord };
-            }
-        })();
+        await new PostgresManager('update', 'linkDiscord', { userId: Number(user_id), charId: Number(char_id), discordId: discord_id }).execute();
 
         return {
             success: true,
             message: `The character (Character ID: ${char_id}) has been successfully linked to the discord account (Discord ID: ${discord_id}).`,
-            newDiscord,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -982,32 +770,7 @@ const unlinkDiscord: Action = async ({ request }) => {
     const { char_id, discord_id } = data as { char_id: number; discord_id: string };
 
     try {
-        const discord = await db.discord.findFirst({
-            where: {
-                discord_id,
-            },
-        });
-
-        const discordRegister = await db.discord_register.findFirst({
-            where: {
-                discord_id,
-            },
-        });
-
-        const id1 = discord!['id'];
-        const id2 = discordRegister!['id'];
-
-        await db.discord.delete({
-            where: {
-                id: id1,
-            },
-        });
-
-        await db.discord_register.delete({
-            where: {
-                id: id2,
-            },
-        });
+        await new PostgresManager('delete', 'unlinkDiscord', { discordId: discord_id }).execute();
 
         return {
             success: true,
@@ -1026,36 +789,18 @@ const unlinkDiscord: Action = async ({ request }) => {
 
 const deleteCharacter: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { char_id, char_name, permanently_del } = data as { char_id: number; char_name: string; permanently_del: string };
-
-    const { success, message } = await db.characters.remove(Number(char_id), permanently_del === 'on');
-    if (!success) {
-        return fail(400, { error: true, message });
-    } else {
-        return {
-            success: true,
-            message: `The character (Character Name: ${char_name}) has been successfully deleted. (Not Restorable)`,
-        };
-    }
-};
-
-const restoreCharacter: Action = async ({ request }) => {
-    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { char_id, char_name } = data as { char_id: number; char_name: string };
+    const charId = Number(data.char_id);
+    const charName = String(data.char_name);
+    const permanent = data.permanently_del === 'on';
 
     try {
-        await db.characters.update({
-            where: {
-                id: Number(char_id),
-            },
-            data: {
-                deleted: false,
-            },
-        });
+        await new PostgresManager('delete', 'character', { charId, permanent }).execute();
 
         return {
             success: true,
-            message: `The character (Character Name: ${char_name}) has been successfully restored.`,
+            message: permanent
+                ? `The character (Character Name: ${charName}) has been permanently deleted. (Not Restorable)`
+                : `The character (Character Name: ${charName}) has been successfully deleted.`,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -1068,154 +813,170 @@ const restoreCharacter: Action = async ({ request }) => {
     }
 };
 
-const rebuildClan: Action = async ({ request }) => {
+const restoreCharacter: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { clan_id, clan_name } = data as { clan_id: number; clan_name: string };
+    const charId = Number(data.char_id);
+    const charName = String(data.char_name);
 
-    const charIds = (
-        await db.guild_characters.findMany({
-            where: {
-                guild_id: Number(clan_id),
-            },
-            select: {
-                character_id: true,
-            },
-        })
-    ).map((character) => character.character_id!);
+    try {
+        await new PostgresManager('update', 'restoreCharacter', { charId }).execute();
 
-    const result = await new IsCharLogin(charIds).checkMulti();
-    if (result.check && !!result.charIds.length) {
-        return fail(400, { error: true, message: `Couldn't process because all characters haven't logged out.<br />Logged-In Character's ID: ${result.charIds}` });
-    }
-
-    const { success, message } = await db.guilds.rebuild(Number(clan_id), clan_name);
-    if (!success) {
-        return fail(400, { error: true, message });
-    } else {
         return {
             success: true,
-            message: `The clan data (Name: ${clan_name}, New ID: ${message}) has been successfully rebuilt.`,
+            message: `The character (Character Name: ${charName}) has been successfully restored.`,
         };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
     }
 };
 
-const updateAllianceData: Action = async ({ request }) => {
-    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const { alliance_id, first_clan_name, second_clan_name } = data as { alliance_id: number; first_clan_name: string; second_clan_name: string };
+const rebuildClans: Action = async ({ request }) => {
+    const formData = await request.formData();
+    const clanIds = formData
+        .getAll('clan_ids')
+        .map(Number)
+        .filter((n) => !isNaN(n) && n > 0);
 
-    if (first_clan_name && second_clan_name && JSON.parse(first_clan_name).value === JSON.parse(second_clan_name).value) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-        return fail(400, { error: true, message: 'The first and second clan must be different.' });
-    } else if (!first_clan_name && second_clan_name) {
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // prevent messages from disappearing instantly when submitting while timer is running
-        return fail(400, { error: true, message: 'Before selecting the second clan, the first clan must be selected.' });
+    if (!clanIds.length) {
+        await delay(1000);
+        return fail(400, { error: true, message: 'No clan IDs provided.' });
     }
 
     try {
-        // get each selected clan data
-        const firstClanData = await (async () => {
-            if (!first_clan_name) {
-                return null;
-            } else {
-                return await db.guilds.findFirst({
-                    where: {
-                        name: JSON.parse(first_clan_name).value,
-                    },
-                    select: {
-                        id: true,
-                        name: true,
-                        leader_id: true,
-                    },
-                });
-            }
-        })();
-        const secondClanData = await (async () => {
-            if (!second_clan_name) {
-                return null;
-            } else {
-                return await db.guilds.findFirst({
-                    where: {
-                        name: JSON.parse(second_clan_name).value,
-                    },
-                    select: {
-                        id: true,
-                        name: true,
-                        leader_id: true,
-                    },
-                });
-            }
-        })();
+        const results = await new PostgresManager('update', 'rebuildClans', { clanIds }).execute();
 
-        const isExist1 = firstClanData?.id
-            ? await db.guild_alliances.findFirst({
-                  where: {
-                      OR: [{ parent_id: firstClanData.id }, { sub1_id: firstClanData.id }, { sub2_id: firstClanData.id }],
-                  },
-              })
-            : null;
-        const isExist2 = secondClanData?.id
-            ? await db.guild_alliances.findFirst({
-                  where: {
-                      OR: [{ parent_id: secondClanData.id }, { sub1_id: secondClanData.id }, { sub2_id: secondClanData.id }],
-                  },
-              })
-            : null;
-        if (isExist1 && isExist1.name !== firstClanData?.name) {
-            return fail(400, { error: true, message: `The selected 1st clan has already joined the alliance (Name: ${isExist1.name}).` });
-        } else if (isExist2 && isExist2.name !== secondClanData?.name) {
-            return fail(400, { error: true, message: `The selected 2nd clan has already joined the alliance (Name: ${isExist2.name}).` });
+        return {
+            success: true,
+            message:
+                results.length === 1
+                    ? `The clan data (Name: ${results[0].name ?? 'Unknown'}, New ID: ${results[0].newId}) has been successfully rebuilt.`
+                    : `${results.length} clan data have been successfully rebuilt.`,
+            rebuiltClans: results,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
         }
+    }
+};
 
-        await db.guild_alliances.update({
-            where: {
-                id: Number(alliance_id),
-            },
-            data: {
-                sub1_id: firstClanData?.id || null,
-                sub2_id: secondClanData?.id || null,
-            },
-        });
+const deleteClans: Action = async ({ request }) => {
+    const formData = await request.formData();
+    const clanIds = formData
+        .getAll('clan_ids')
+        .map(Number)
+        .filter((n) => !isNaN(n) && n > 0);
 
-        // get each clan leader name
-        const firstClanLeader = await (async () => {
-            if (!firstClanData) {
-                return null;
-            } else {
-                return (await db.characters.findFirst({
-                    where: {
-                        id: firstClanData.leader_id,
-                    },
-                    select: {
-                        name: true,
-                    },
-                }))!.name;
-            }
-        })();
-        const secondClanLeader = await (async () => {
-            if (!secondClanData) {
-                return null;
-            } else {
-                return (await db.characters.findFirst({
-                    where: {
-                        id: secondClanData.leader_id,
-                    },
-                    select: {
-                        name: true,
-                    },
-                }))!.name;
-            }
-        })();
+    if (!clanIds.length) {
+        await delay(1000);
+        return fail(400, { error: true, message: 'No clan IDs provided.' });
+    }
+
+    try {
+        await new PostgresManager('delete', 'deleteClans', { clanIds }).execute();
+
+        return {
+            success: true,
+            message: clanIds.length === 1 ? 'The clan has been successfully deleted.' : `${clanIds.length} clans have been successfully deleted.`,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const deleteAlliances: Action = async ({ request }) => {
+    const formData = await request.formData();
+    const allianceIds = formData
+        .getAll('alliance_ids')
+        .map(Number)
+        .filter((n) => !isNaN(n) && n > 0);
+
+    if (!allianceIds.length) {
+        await delay(1000);
+        return fail(400, { error: true, message: 'No alliance IDs provided.' });
+    }
+
+    try {
+        await new PostgresManager('delete', 'deleteAlliances', { allianceIds }).execute();
+
+        return {
+            success: true,
+            message: allianceIds.length === 1 ? 'The alliance has been successfully deleted.' : `${allianceIds.length} alliances have been successfully deleted.`,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const updateAlliance: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const { alliance_id, first_clan, second_clan } = data as { alliance_id: number; first_clan: string | null; second_clan: string | null };
+    let clan1Id: number, clan1Name: string, clan2Id: number | null, clan2Name: string | null;
+
+    if (!first_clan && !second_clan) {
+        await delay(1000);
+        return fail(400, { error: true, message: 'The first clan must be set at least.' });
+    } else if (first_clan === second_clan) {
+        await delay(1000);
+        return fail(400, { error: true, message: 'The first and second clans must be different from each other.' });
+    } else if (!first_clan && second_clan) {
+        await delay(1000);
+        return fail(400, { error: true, message: 'Before setting the second clan, the first clan must be set.' });
+    }
+
+    // 第１加入猟団（セット必須）
+    const match1 = first_clan!.match(/\[(\d+)\] - (.+)/);
+    if (match1) {
+        clan1Id = Number(match1[1]);
+        clan1Name = match1[2];
+    } else {
+        await delay(1000);
+        return fail(400, { error: true, message: `String format is invalid: ${first_clan}` });
+    }
+
+    // 第２加入猟団（任意）
+    const match2 = second_clan?.match(/\[(\d+)\] - (.+)/);
+    if (match2) {
+        clan2Id = Number(match2[1]);
+        clan2Name = match2[2];
+    } else {
+        clan2Id = null;
+        clan2Name = null;
+    }
+
+    try {
+        await new PostgresManager('update', 'allianceData', {
+            allianceId: Number(alliance_id),
+            sub1Id: clan1Id,
+            sub2Id: clan2Id,
+        }).execute();
 
         const updatedAllianceData = {
             id: Number(alliance_id),
-            first_child_clan: {
-                clan_name: firstClanData?.name || null,
-                leader_name: firstClanLeader || null,
-            },
-            second_child_clan: {
-                clan_name: secondClanData?.name || null,
-                leader_name: secondClanLeader || null,
-            },
+            firstChildClan: clan1Name,
+            secondChildClan: clan2Name,
         };
 
         return {
@@ -1243,33 +1004,199 @@ const downloadBinary: Action = async ({ request }) => {
             message: 'The binary data has been successfully downloaded.',
         };
     } else {
-        return fail(400, { error: true, message: "The download failed for one of the following reasons:<br />ー The character doesn't exist.<br />ー All binary data are NULL.<br />ー Couldn't access API server." });
+        return fail(400, {
+            error: true,
+            message: data.error_message || 'Unexpected Error',
+        });
+    }
+};
+
+const updateDistribution: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const distId = Number(data.dist_id);
+    const column = Object.keys(data)[1] as DistributionEditableItemType;
+    const value = Object.values(data)[1] as string | null;
+
+    // deadlineとcharacter_id以外は空送信不可
+    if (!value && column !== 'deadline' && column !== 'character_id') {
+        await delay(1000);
+        return fail(400, { error: true, message: emptyMsg });
+    }
+
+    // dataカラムの場合、配布コンテンツデータのみにする
+    if (column === 'data') {
+        delete data.dist_id;
+        delete data.data;
+    }
+
+    try {
+        if (column !== 'data') {
+            await new PostgresManager('update', 'distribution', { distId, column, value }).execute();
+
+            return {
+                success: true,
+                message: `The distribution data (ID: ${distId}, Column: ${column}) has been successfully updated.`,
+            };
+        } else {
+            const contentsData = ManageDistribution.getHexString(data);
+            if (!contentsData) {
+                await delay(1000);
+                return fail(400, { error: true, message: 'Failed to get contents data.<br />Source data format is invalid.' });
+            }
+
+            await new PostgresManager('update', 'distribution', { distId, column, value: contentsData }).execute();
+
+            return {
+                success: true,
+                message: `The distribution data (ID: ${distId}, Column: ${column}) has been successfully updated.`,
+                updatedContentsData: contentsData,
+            };
+        }
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const deleteDistribution: Action = async ({ request }) => {
+    const data = await request.formData();
+    const deleteDistIds: number[] = String(data.get('selectedDistributionId')).split(',').map(Number);
+
+    try {
+        const deletedDistTitles: string[] = await new PostgresManager('delete', 'distributions', { deleteDistIds }).execute();
+
+        return {
+            success: true,
+            message: `The distribution data (Title: ${deletedDistTitles.map((title) => title.replace(/~C(\d{2})/g, ''))}) has been successfully deleted.`,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const createDistribution: Action = async ({ request }) => {
+    let data = conv2DArrayToObject([...(await request.formData()).entries()]);
+
+    // 必須項目空欄エラー
+    if (!data.category || !data.event_name || !data.description || !data.times_acceptable) {
+        await delay(1000);
+        return fail(400, { error: true, message: emptyMsg });
+    }
+
+    const charId = Number(data.character_id);
+    const category = DistributionCategoryObj[data.category as DistributionCategoryName];
+    const deadline = !data.deadline ? null : DateTime.fromISO(data.deadline).setZone('utc').toJSDate(); // data.deadlineは現地時間なので、UTCに変換して保存（ゲーム内では+9日本時間に変換される）
+    //const title = convertColorString('colorNum', data.event_name, 'event_name');
+    const title = data.event_name.replace(/ /g, ' '); // スペースのバグ（16進数：20ではなくなぜか803Fになる）を修正する
+    //const description = convertColorString('colorNum', data.description, 'description');
+    const description = data.description.replace(/ /g, ' '); // スペースのバグ（16進数：20ではなくなぜか803Fになる）を修正する
+    const remaining = Number(data.times_acceptable);
+    const minHr = Number(data.min_hr) === 0 ? null : convHrToHrp(Number(data.min_hr));
+    const maxHr = Number(data.max_hr) === 0 ? null : convHrToHrp(Number(data.max_hr));
+    const minGr = Number(data.min_gr) === 0 ? null : Number(data.min_gr);
+    const maxGr = Number(data.max_gr) === 0 ? null : Number(data.max_gr);
+
+    try {
+        const keysToRemove = ['category', 'deadline', 'event_name', 'description', 'times_acceptable', 'character_id', 'min_hr', 'max_hr', 'min_gr', 'max_gr'];
+
+        data = Object.fromEntries(Object.entries(data).filter(([key]) => !keysToRemove.includes(key))); // 配布コンテンツデータ以外を削除
+        const contentsData = ManageDistribution.getHexString(data);
+        if (!contentsData) {
+            await delay(1000);
+            return fail(400, { error: true, message: 'Failed to get contents data.<br />Source data format is invalid.' });
+        }
+
+        const base64 = Buffer.from(contentsData, 'hex').toString('base64');
+
+        const createdDistribution: Distribution = await new PostgresManager('create', 'distribution', {
+            charId,
+            category,
+            deadline,
+            title,
+            description,
+            remaining,
+            minHr,
+            maxHr,
+            minGr,
+            maxGr,
+            base64,
+        }).execute();
+
+        return {
+            success: true,
+            message: `The distribution data (Title: ${title.replace(/~C(\d{2})/g, '')}) has been successfully created.`,
+            createdDistribution,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const deleteClaimedDistribution: Action = async ({ request }) => {
+    const data = await request.formData();
+    const charId = Number(data.get('charId'));
+    const deleteDistIds: number[] = String(data.get('selectedDistributionId')).split(',').map(Number);
+
+    try {
+        const deletedDistTitles: string[] = await new PostgresManager('delete', 'claimedDistributions', { charId, deleteDistIds }).execute();
+
+        return { success: true, message: `The distribution data (Title: ${deletedDistTitles.map((title) => title.replace(/~C(\d{2})/g, ''))}) has been successfully deleted.` };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
     }
 };
 
 export const actions: Actions = {
     updateSystemMode,
-    updateAllMaintData,
-    createInfoData,
-    updateInfoData,
-    deleteInfoData,
+    // createInformation,
+    // updateInformation,
+    // deleteInformation,
     courseControl,
     getPaginatedUsers,
     getPaginatedClans,
     getPaginatedAlliances,
-    updateUserData,
-    updateCharacterData,
-    deleteUser,
-    suspendUser,
-    unsuspendUser,
-    createBnrData,
-    updateBnrData,
-    deleteBnrData,
+    updateUser,
+    updateCharacter,
+    deleteUsers,
+    suspendUsers,
+    unsuspendUsers,
+    createBanner,
+    updateBanner,
+    deleteBanner,
     linkDiscord,
     unlinkDiscord,
     deleteCharacter,
     restoreCharacter,
-    rebuildClan,
-    updateAllianceData,
+    rebuildClans,
+    deleteClans,
+    deleteAlliances,
+    updateAlliance,
     downloadBinary,
+    updateDistribution,
+    deleteDistribution,
+    createDistribution,
+    deleteClaimedDistribution,
 };

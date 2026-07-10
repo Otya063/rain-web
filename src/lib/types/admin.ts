@@ -1,73 +1,39 @@
-import type { guild_characters, suspended_account, discord } from '@prisma/client/edge';
+import type { LauncherSystem } from './postgres';
 
-/* Binary Data
+/* ClanAllianceTable モード
 ====================================================*/
-export type BinaryTypes =
-    | 'savedata'
-    | 'decomyset'
-    | 'hunternavi'
-    | 'otomoairou'
-    | 'partner'
-    | 'platebox'
-    | 'platedata'
-    | 'platemyset'
-    | 'rengokudata'
-    | 'savemercenary'
-    | 'skin_hist'
-    | 'minidata'
-    | 'scenariodata'
-    | 'savefavoritequest';
+export type ClanAllianceMode = 'none' | 'clan' | 'alliance';
 
-/* Paginated User Type
+/* アライアンス更新データ
 ====================================================*/
-export interface PaginatedUsers {
-    id: number;
-    username: string;
-    password: string;
-    rights: number;
-    last_character: number | null;
-    last_login: Date | null;
-    return_expires: Date | null;
-    gacha_premium: number | null;
-    gacha_trial: number | null;
-    frontier_points: number | null;
-    psn_id: string | null;
-    wiiu_key: string | null;
-    web_login_key: string | null;
-    web_login_key_mobile: string | null;
-    characters: PaginatedCharacter[];
-    suspended_account: suspended_account | null;
+export type UpdatedAllianceData = Pick<PaginatedAlliances, 'id' | 'firstChildClan' | 'secondChildClan'>;
+
+/* コンポーネント Props
+====================================================*/
+export interface AllianceAlliesProps {
+    name: string;
+    clanNames: string[];
+    isMobile: boolean;
+    initClanName: string | null;
 }
 
-export interface PaginatedCharacter {
-    id: number;
-    user_id: number | null;
-    is_new_character: boolean | null;
-    name: string | null;
-    gr: number | null;
-    hrp: number | null;
-    weapon_type: number | null;
-    weapon_id: number;
-    last_login: number | null;
-    deleted: boolean;
-    discord: discord | null;
-    guild_characters: {
-        guilds: {
-            id: number;
-            name: string | null;
-            guild_characters: guild_characters[];
-        } | null;
-    } | null;
+export interface SideMenuProps {
+    closeMobileMenu: (btnClicked: boolean) => void;
 }
 
-export interface PaginationMeta {
-    hasPrevPage: boolean;
-    hasNextPage: boolean;
-    prevCursor: number;
-    nextCursor: number;
+export interface LauncherSystemProps {
+    systemData: LauncherSystem;
 }
 
-/* Paginated Clan Type
+export interface ClansProps {
+    isMobile: boolean;
+}
+
+export interface ClanAllianceTableProps {
+    isMobile: boolean;
+}
+
+/* ページングされたクラン情報
 ====================================================*/
 export interface PaginatedClans {
     id: number;
@@ -86,7 +52,7 @@ export interface PaginatedClans {
     }[];
 }
 
-/* Paginated Alliance Type
+/* ページングされたクラン情報
 ====================================================*/
 export interface PaginatedAlliances {
     id: number;
@@ -95,16 +61,7 @@ export interface PaginatedAlliances {
     parent_id: number;
     sub1_id: number | null;
     sub2_id: number | null;
-    parent_clan: {
-        clan_name: string | null;
-        leader_name: string | null;
-    };
-    first_child_clan: {
-        clan_name: string | null;
-        leader_name: string | null;
-    };
-    second_child_clan: {
-        clan_name: string | null;
-        leader_name: string | null;
-    };
+    parentClan: string | null;
+    firstChildClan: string | null;
+    secondChildClan: string | null;
 }

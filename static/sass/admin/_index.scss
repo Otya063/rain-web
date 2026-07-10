@@ -15,3 +15,18 @@ body {
     width: 100%;
     overflow: hidden;
 }
+
+// コンテンツ注意事項（tooltipsにも使用するため、外に出す）
+.console_contents_note {
+    color: #ff4b4b;
+    white-space: normal;
+}
+
+// tippyツールチップ内リンク
+.tippy-box a {
+    color: #74b9ff;
+
+    &:hover {
+        color: #a8d8ff;
+    }
+}

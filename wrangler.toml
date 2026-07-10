@@ -3,13 +3,52 @@ site.bucket = "./.cloudflare/public"
 
 build.command = "npm run build"
 
-compatibility_date = "2021-11-12"
+# Node.js compatibility: https://developers.cloudflare.com/workers/runtime-apis/nodejs/
+compatibility_date = "2026-07-03"
 workers_dev = false
 compatibility_flags = [ "nodejs_compat" ]
+logpush = false
 
 [placement]
 mode = "smart"
 
-[vars]
+# vars / kv_namespaces / r2_buckets are NOT inherited between environments,
+# so each [env.*] block below must fully redeclare its own bindings.
+
+[env.development]
+name = "development"
+
+[env.development.vars]
 MAINTENANCE_MODE = "false"
 MAINTENANCE_DATE = ""
+
+[[env.development.r2_buckets]]
+binding = "R2"
+bucket_name = "rain-web-assets"
+
+[[env.development.kv_namespaces]]
+binding = "DB_CONFIG"
+id = "045dffe2093148debaf5f2b09afb1f1f"
+
+[[env.development.kv_namespaces]]
+binding = "WEB_CONFIG"
+id = "6fe6d0c19e3f4fba9c59ec0c32de3826"
+
+[env.production]
+name = "production"
+
+[env.production.vars]
+MAINTENANCE_MODE = "false"
+MAINTENANCE_DATE = ""
+
+[[env.production.r2_buckets]]
+binding = "R2"
+bucket_name = "rain-web-assets"
+
+[[env.production.kv_namespaces]]
+binding = "DB_CONFIG"
+id = "1b169176d42d40ae9df1ccc1006ff8dd"
+
+[[env.production.kv_namespaces]]
+binding = "WEB_CONFIG"
+id = "6fe6d0c19e3f4fba9c59ec0c32de3826"

@@ -1,6 +1,6 @@
 <script lang="ts">
     import LL, { locale } from '$i18n/i18n-svelte';
-    import { scrollToElm } from '$lib/utils';
+    import { scrollToElm } from '$utils/client';
 
     const articleData = $LL.manual['article'].register['discord'];
     const { 1: discord } = articleData.section;
@@ -12,11 +12,7 @@
     <ul>
         {#each Object.entries(articleData.outlineContents) as [data_target, text]}
             <li>
-                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <!-- svelte-ignore a11y-no-static-element-interactions -->
-                <!-- svelte-ignore a11y-missing-attribute -->
-                <a on:click={(e) => scrollToElm(e)} data-target={data_target}>{text()}</a>
+                <button onclick={(e) => scrollToElm(e)} data-target={data_target}>{text()}</button>
             </li>
         {/each}
     </ul>
@@ -33,6 +29,7 @@
         {#each Object.entries(discord.centerBox) as [number, { text, img }]}
             <li class="center_box">
                 <p class="center_box_text">（{number}）{@html text()}</p>
+
                 {#each Object.values(img) as src}
                     <p class="center_box_img"><img src="/img/{$locale}/articles/register/discord/{src()}.png" alt={src()} /></p>
                 {/each}

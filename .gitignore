@@ -12,6 +12,7 @@ node_modules
 .cloudflare
 .wrangler
 todo.txt
+changes.txt
 db_changes.txt
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*

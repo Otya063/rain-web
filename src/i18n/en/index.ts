@@ -664,7 +664,7 @@ const en: BaseTranslation = {
         500: {
             title: 'Internal Error',
             message1: 'An error occurred inside the server for the following reasons:',
-            message3: 'Please try again after a while.',
+            message3: 'If this keeps happening even after refreshing the page,<br>try accessing the page a few moments later.',
         },
     },
 };

@@ -6,16 +6,22 @@ const config = {
     preprocess: vitePreprocess(),
 
     kit: {
-        adapter: adapter(),
+        adapter: adapter({
+            platformProxy: {
+                environment: 'development',
+            },
+        }),
         alias: {
-            $lib: 'src/lib',
             $i18n: 'src/i18n',
             $scss: 'static/sass',
+            $utils: 'src/lib/utils',
+            $types: 'src/lib/types',
+            $lib: 'src/lib',
         },
     },
-    compilerOptions: {
+    /* compilerOptions: {
         preserveComments: true,
-    },
+    }, */
 };
 
 export default config;

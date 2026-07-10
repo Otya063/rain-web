@@ -17,6 +17,7 @@
             </li>
         {/each}
     </ul>
+
     <div class="footer_note">
         <p>
             {@html $LL.disclaimer()}
