@@ -1,4 +1,4 @@
-import type { LauncherSystem } from './postgres';
+import type { LauncherSystem, RainServer } from './postgres';
 
 /* ClanAllianceTable モード
 ====================================================*/
@@ -23,6 +23,9 @@ export interface SideMenuProps {
 
 export interface LauncherSystemProps {
     systemData: LauncherSystem;
+    createdRainServer: RainServer;
+    rainServerAddMode: boolean;
+    isMobile: boolean;
 }
 
 export interface ClansProps {

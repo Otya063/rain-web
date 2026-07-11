@@ -2,20 +2,16 @@
     import { applyAction, enhance } from '$app/forms';
     import type { LauncherSystem, LauncherSystemProps } from '$types';
     import { onSubmit, msgClosed, conv2DArrayToObject, timeOut, closeMsgDisplay } from '$utils/client';
+    import RainServer from './RainServerComp/RainServer.svelte';
 
-    let { systemData }: LauncherSystemProps = $props();
+    let { systemData, isMobile, createdRainServer, rainServerAddMode = $bindable() }: LauncherSystemProps = $props();
 
     const { id: _id, ...rest } = systemData;
     let sys = $state<Omit<LauncherSystem, 'id'>>(rest);
 
     const updateSystemValue = (data: Record<string, any>): void => {
         const [[column, rawValue]] = Object.entries(data) as [[string, string]];
-
-        if (column === 'maint_all') {
-            sys.RainJP = sys.RainUS = sys.RainEU = rawValue === 'true';
-        } else {
-            sys[column as keyof typeof sys] = rawValue === 'true';
-        }
+        sys[column as keyof typeof sys] = rawValue === 'true';
     };
 </script>
 
@@ -47,62 +43,11 @@
     </form>
 {/snippet}
 
-<h2>
-    <span class="material-symbols-outlined">engineering</span>
-    Servers Maintenance Settings
-</h2>
-
-<div class="console_contents">
-    <dl class="console_contents_list">
-        <dt class="contents_term">Rain (JP)</dt>
-        <dd class="contents_desc">
-            {@render toggleField('RainJP')}
-        </dd>
-
-        <dt class="contents_term">Rain (US)</dt>
-        <dd class="contents_desc">
-            {@render toggleField('RainUS')}
-        </dd>
-
-        <dt class="contents_term">Rain (EU)</dt>
-        <dd class="contents_desc">
-            {@render toggleField('RainEU')}
-        </dd>
-    </dl>
-
-    <form
-        action="?/updateSystemMode"
-        method="POST"
-        use:enhance={({ formData }) => {
-            const data = conv2DArrayToObject([...formData.entries()]);
-            onSubmit.set(true);
-            $timeOut && closeMsgDisplay($timeOut);
-            return async ({ result }) => {
-                msgClosed.set(false);
-                onSubmit.set(false);
-                await applyAction(result);
-                if (result.type === 'success') {
-                    updateSystemValue(data);
-                }
-            };
-        }}
-    >
-        <div class="group_btns" style="margin-top: 16px;">
-            <button type="submit" name="maint_all" value="true" class="green_btn">
-                <span class="btn_icon material-symbols-outlined">check_circle</span>
-                <span class="btn_text">Enable All</span>
-            </button>
-            <button type="submit" name="maint_all" value="false" class="red_btn">
-                <span class="btn_icon material-symbols-outlined">cancel</span>
-                <span class="btn_text">Disable All</span>
-            </button>
-        </div>
-    </form>
-</div>
+<RainServer {isMobile} {createdRainServer} bind:rainServerAddMode />
 
 <h2>
     <span class="material-symbols-outlined">update</span>
-    Launcher Update & Other Settings
+    Launcher Update & Download Modes
 </h2>
 <div class="console_contents">
     <dl class="console_contents_list">

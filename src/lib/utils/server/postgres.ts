@@ -6,6 +6,7 @@ import {
     type InputType,
     type ReturnType,
     type LauncherSystem,
+    type RainServer,
     type ConstructorParams,
     type Banner,
     type User,
@@ -37,6 +38,7 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
             distribution: this.createDistribution.bind(this),
             // information: this.createInformation.bind(this),
             banner: this.createBanner.bind(this),
+            rainServer: this.createRainServer.bind(this),
         },
         delete: {
             distribution: this.deleteDistribution.bind(this),
@@ -49,6 +51,7 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
             unlinkDiscord: this.unlinkDiscord.bind(this),
             deleteClans: this.deleteClans.bind(this),
             deleteAlliances: this.deleteAlliances.bind(this),
+            rainServer: this.deleteRainServer.bind(this),
         },
         get: {
             paginatedUsers: this.getPaginatedUsers.bind(this),
@@ -68,6 +71,8 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
             banner: this.updateBanner.bind(this),
             charName: this.editName.bind(this),
             launcherSystem: this.updateLauncherSystem.bind(this),
+            rainServer: this.updateRainServer.bind(this),
+            rainServerMaintenance: this.updateRainServerMaintenance.bind(this),
             user: this.updateUser.bind(this),
             courseControl: this.updateCourseControl.bind(this),
             suspendUsers: this.suspendUsers.bind(this),
@@ -116,10 +121,14 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
     }
 
     private async initAdmin(): Promise<ReturnType<'transactions', 'initAdmin'>> {
-        const [launcherSystem, banners, distributions, charIdNamePair] = await this.sql.begin(async (sql) => {
+        const [launcherSystem, rainServers, banners, distributions, charIdNamePair] = await this.sql.begin(async (sql) => {
             /* システム情報取得
             ========================================================= */
             const [launcherSystem] = await sql<LauncherSystem[]>`SELECT * FROM launcher_system WHERE id = 1`;
+
+            /* サーバー一覧情報取得
+            ========================================================= */
+            const rainServers = await sql<RainServer[]>`SELECT * FROM rain_server_list ORDER BY id ASC`;
 
             /* お知らせ情報取得
             ========================================================= */
@@ -143,10 +152,10 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
                 return `[${character.id}] ${character.name || 'Ready to Hunt'}`;
             });
 
-            return [launcherSystem, banners, distributions, charIdNamePair];
+            return [launcherSystem, rainServers, banners, distributions, charIdNamePair];
         });
 
-        return { launcherSystem, banners, distributions, charIdNamePair };
+        return { launcherSystem, rainServers, banners, distributions, charIdNamePair };
     }
 
     private async getPaginatedUsers(obj: InputType<'get', 'paginatedUsers'>): Promise<ReturnType<'get', 'paginatedUsers'>> {
@@ -572,12 +581,29 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
     private async updateLauncherSystem(obj: InputType<'update', 'launcherSystem'>): Promise<ReturnType<'update', 'launcherSystem'>> {
         const { column, value } = obj;
 
-        if (column === 'maint_all') {
-            const boolValue = value === 'true';
-            await this.sql`UPDATE launcher_system SET "RainJP" = ${boolValue}, "RainUS" = ${boolValue}, "RainEU" = ${boolValue} WHERE id = 1`;
-        } else {
-            await this.sql`UPDATE launcher_system SET ${this.sql(column)} = ${value === 'true'} WHERE id = 1`;
-        }
+        await this.sql`UPDATE launcher_system SET ${this.sql(column)} = ${value === 'true'} WHERE id = 1`;
+    }
+
+    private async createRainServer(obj: InputType<'create', 'rainServer'>): Promise<ReturnType<'create', 'rainServer'>> {
+        const [server] = await this.sql<
+            RainServer[]
+        >`INSERT INTO rain_server_list (name, host, port, entrance_port) VALUES (${obj.name}, ${obj.host}, ${obj.port}, ${obj.entrancePort}) RETURNING id, name, host, port, entrance_port, maintenance`;
+
+        return server;
+    }
+
+    private async updateRainServer(obj: InputType<'update', 'rainServer'>): Promise<ReturnType<'update', 'rainServer'>> {
+        const value = obj.column === 'port' || obj.column === 'entrance_port' ? Number(obj.value) : obj.value;
+
+        await this.sql`UPDATE rain_server_list SET ${this.sql(obj.column)} = ${value} WHERE id = ${obj.id}`;
+    }
+
+    private async updateRainServerMaintenance(obj: InputType<'update', 'rainServerMaintenance'>): Promise<ReturnType<'update', 'rainServerMaintenance'>> {
+        await this.sql`UPDATE rain_server_list SET maintenance = ${obj.value === 'true'} WHERE id = ${obj.id}`;
+    }
+
+    private async deleteRainServer(obj: InputType<'delete', 'rainServer'>): Promise<ReturnType<'delete', 'rainServer'>> {
+        await this.sql`DELETE FROM rain_server_list WHERE id = ANY(${obj.deleteServerIds}::int[])`;
     }
 
     private async deleteUsers(obj: InputType<'delete', 'users'>): Promise<ReturnType<'delete', 'users'>> {

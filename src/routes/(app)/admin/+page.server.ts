@@ -15,12 +15,15 @@ import {
     type UserEditableItemType,
     type User,
     type LauncherSystem,
+    type RainServerEditableItemType,
 } from '$types';
 import { getCourseByObjData, discordLinkConvertor, conv2DArrayToObject, isNumber, ManageDistribution, convHrToHrp } from '$utils/client';
 import { checkBannerImage, deleteBannerFromR2, PostgresManager, uploadBannerToR2 } from '$utils/server';
 
 const emptyMsg = 'Input value is empty.';
 const delay = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms)); // タイマー実行中に送信するとメッセージが即座に消えるのを防ぐ
+const DEFAULT_RAIN_SERVER_PORT = '8080';
+const DEFAULT_RAIN_SERVER_ENTRANCE_PORT = '53310';
 
 export const load: PageServerLoad = async ({ platform }) => {
     const r2Response = await platform?.env.R2.get('EquipItemsEn.json');
@@ -30,10 +33,11 @@ export const load: PageServerLoad = async ({ platform }) => {
 
     const r2JsonData = (await r2Response.json()) as R2AssetsJsonData;
 
-    const { launcherSystem, banners, distributions, charIdNamePair } = await new PostgresManager('transactions', 'initAdmin').execute();
+    const { launcherSystem, rainServers, banners, distributions, charIdNamePair } = await new PostgresManager('transactions', 'initAdmin').execute();
 
     return {
         launcherSystem,
+        rainServers,
         banners,
         distributions,
         r2JsonData,
@@ -43,7 +47,7 @@ export const load: PageServerLoad = async ({ platform }) => {
 
 const updateSystemMode: Action = async ({ request }) => {
     const data = conv2DArrayToObject([...(await request.formData()).entries()]);
-    const column = Object.keys(data)[0] as keyof Omit<LauncherSystem, 'id'> | 'maint_all';
+    const column = Object.keys(data)[0] as keyof Omit<LauncherSystem, 'id'>;
     const value = Object.values(data)[0] as string;
 
     try {
@@ -51,10 +55,124 @@ const updateSystemMode: Action = async ({ request }) => {
 
         return {
             success: true,
+            message: `The system mode (${column}) has been successfully updated.`,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const createRainServer: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const { name, host, port, entrance_port } = data as { name: string; host: string; port: string; entrance_port: string };
+
+    if (!name || !host) {
+        await delay(1000);
+        return fail(400, { error: true, message: emptyMsg });
+    }
+
+    try {
+        const createdRainServer = await new PostgresManager('create', 'rainServer', {
+            name,
+            host,
+            port: Number(port || DEFAULT_RAIN_SERVER_PORT),
+            entrancePort: Number(entrance_port || DEFAULT_RAIN_SERVER_ENTRANCE_PORT),
+        }).execute();
+
+        return {
+            success: true,
+            message: `The server (Name: ${name}) has been successfully created.`,
+            createdRainServer,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const updateRainServer: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const id = Number(data.server_id);
+    const column = Object.keys(data)[1] as RainServerEditableItemType;
+    let value = Object.values(data)[1] as string;
+
+    if (!value) {
+        if (column === 'port') {
+            value = DEFAULT_RAIN_SERVER_PORT;
+        } else if (column === 'entrance_port') {
+            value = DEFAULT_RAIN_SERVER_ENTRANCE_PORT;
+        } else {
+            await delay(1000);
+            return fail(400, { error: true, message: emptyMsg });
+        }
+    }
+
+    try {
+        await new PostgresManager('update', 'rainServer', { id, column, value }).execute();
+
+        return {
+            success: true,
+            message: `The server data (ID: ${id}, Column: ${column}) has been successfully updated.`,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const updateRainServerMaintenance: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const id = Number(data.server_id);
+    const value = String(data.maintenance);
+
+    try {
+        await new PostgresManager('update', 'rainServerMaintenance', { id, value }).execute();
+
+        return {
+            success: true,
+            message: `The server (ID: ${id}) maintenance mode has been successfully updated (${value === 'true' ? 'Enable' : 'Disable'}).`,
+        };
+    } catch (err) {
+        if (err instanceof Error) {
+            return fail(400, { error: true, message: err.message });
+        } else if (typeof err === 'string') {
+            return fail(400, { error: true, message: err });
+        } else {
+            return fail(400, { error: true, message: 'Unexpected Error' });
+        }
+    }
+};
+
+const deleteRainServer: Action = async ({ request }) => {
+    const data = await request.formData();
+    const deleteServerIds: number[] = String(data.get('selectedServerId')).split(',').map(Number);
+    const deleteServerNames: string[] = String(data.get('selectedServerName')).split(',');
+
+    try {
+        await new PostgresManager('delete', 'rainServer', { deleteServerIds }).execute();
+
+        return {
+            success: true,
             message:
-                column === 'maint_all'
-                    ? `All maintenance modes have been successfully updated (${value === 'true' ? 'Enable' : 'Disable'}).`
-                    : `The system mode (${column}) has been successfully updated.`,
+                deleteServerIds.length === 1
+                    ? `The server (Name: ${deleteServerNames[0]}) has been successfully deleted.`
+                    : `${deleteServerIds.length} servers have been successfully deleted.`,
         };
     } catch (err) {
         if (err instanceof Error) {
@@ -1171,6 +1289,10 @@ const deleteClaimedDistribution: Action = async ({ request }) => {
 
 export const actions: Actions = {
     updateSystemMode,
+    createRainServer,
+    updateRainServer,
+    updateRainServerMaintenance,
+    deleteRainServer,
     // createInformation,
     // updateInformation,
     // deleteInformation,

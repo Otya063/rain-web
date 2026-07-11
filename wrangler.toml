@@ -12,6 +12,9 @@ logpush = false
 [placement]
 mode = "smart"
 
+[limits]
+cpu_ms = 10000
+
 # vars / kv_namespaces / r2_buckets are NOT inherited between environments,
 # so each [env.*] block below must fully redeclare its own bindings.
 
