@@ -23,6 +23,7 @@
     let isMobile = $state(false);
     const width: Tweened<number> = tweened(100);
     let distAddMode = $state(false);
+    let rainServerAddMode = $state(false);
 
     onMount(() => {
         loaded = true;
@@ -247,7 +248,7 @@
             Admin Console
         </h1>
 
-        <Main bind:infoAddMode bind:bnrAddMode {data} {form} {isMobile} bind:distAddMode />
+        <Main bind:infoAddMode bind:bnrAddMode {data} {form} {isMobile} bind:distAddMode bind:rainServerAddMode />
     </article>
 </main>
 

@@ -592,6 +592,24 @@
                                 }
                             }
 
+                            // RainServerMain.svelte
+                            &.rain_server {
+                                .select,
+                                .id {
+                                    width: 10%;
+                                }
+
+                                .name {
+                                    width: 40%;
+                                }
+
+                                .maintenance,
+                                .other {
+                                    width: 20%;
+                                    text-align: center;
+                                }
+                            }
+
                             // UserMain.svelte
                             &.user {
                                 .select {

@@ -7,6 +7,7 @@ export * from './distribution';
 export * from './information';
 export * from './modal';
 export * from './postgres';
+export * from './rainServer';
 export * from './user';
 
 /* 型定義一部変更

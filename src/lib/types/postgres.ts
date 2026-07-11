@@ -49,6 +49,15 @@ export type ActionTableTypeMap = {
             };
             return: Banner;
         };
+        rainServer: {
+            input: {
+                name: string;
+                host: string;
+                port: number;
+                entrancePort: number;
+            };
+            return: RainServer;
+        };
     };
     delete: {
         distribution: {
@@ -113,6 +122,12 @@ export type ActionTableTypeMap = {
             };
             return: void;
         };
+        rainServer: {
+            input: {
+                deleteServerIds: number[];
+            };
+            return: void;
+        };
     };
     get: {
         paginatedUsers: {
@@ -166,6 +181,7 @@ export type ActionTableTypeMap = {
             input: undefined; // 第三引数不要
             return: {
                 launcherSystem: LauncherSystem;
+                rainServers: RainServer[];
                 // information: Information[];
                 banners: Banner[];
                 distributions: Distribution[];
@@ -217,7 +233,22 @@ export type ActionTableTypeMap = {
         };
         launcherSystem: {
             input: {
-                column: keyof Omit<LauncherSystem, 'id'> | 'maint_all';
+                column: keyof Omit<LauncherSystem, 'id'>;
+                value: string; // boolean系: 'true'/'false'
+            };
+            return: void;
+        };
+        rainServer: {
+            input: {
+                id: number;
+                column: keyof Omit<RainServer, 'id' | 'maintenance'>;
+                value: string;
+            };
+            return: void;
+        };
+        rainServerMaintenance: {
+            input: {
+                id: number;
                 value: string; // boolean系: 'true'/'false'
             };
             return: void;
@@ -346,11 +377,20 @@ export type Distribution = {
  */
 export type LauncherSystem = {
     id: number;
-    RainJP: boolean;
-    RainUS: boolean;
-    RainEU: boolean;
     update: boolean;
     download: boolean;
+};
+
+/**
+ * Rainサーバー一覧データ
+ */
+export type RainServer = {
+    id: number;
+    name: string;
+    host: string;
+    port: number;
+    entrance_port: number;
+    maintenance: boolean;
 };
 
 /**

@@ -10,6 +10,7 @@
         adminTabValue,
         allBannerData,
         allDistributionData,
+        allRainServerData,
         // allInformationData,
         armJson,
         chestJson,
@@ -29,8 +30,9 @@
         bnrAddMode: boolean;
         isMobile: boolean;
         distAddMode: boolean;
+        rainServerAddMode: boolean;
     }
-    let { data, form, infoAddMode = $bindable(), bnrAddMode = $bindable(), isMobile, distAddMode = $bindable() }: Props = $props(); // bindableにしないと動かない
+    let { data, form, infoAddMode = $bindable(), bnrAddMode = $bindable(), isMobile, distAddMode = $bindable(), rainServerAddMode = $bindable() }: Props = $props(); // bindableにしないと動かない
     const systemData = data.launcherSystem;
     const charactersIdName = data.charIdNamePair;
 
@@ -49,10 +51,11 @@
     // allInformationData.set(data.information);
     allDistributionData.set(data.distributions);
     allBannerData.set(data.banners);
+    allRainServerData.set(data.rainServers);
 </script>
 
 {#if $adminTabValue === 'system'}
-    <LauncherSystem {systemData} />
+    <LauncherSystem {systemData} {isMobile} createdRainServer={form?.createdRainServer} bind:rainServerAddMode />
 <!-- {:else if $adminTabValue === 'information'}
     <Information bind:infoAddMode createdInformation={form?.createdInformation} {isMobile} /> -->
 {:else if $adminTabValue === 'user'}
