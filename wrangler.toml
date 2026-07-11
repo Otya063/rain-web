@@ -15,9 +15,6 @@ mode = "smart"
 [limits]
 cpu_ms = 10000
 
-[cache]
-enabled = true
-
 # vars / kv_namespaces / r2_buckets are NOT inherited between environments,
 # so each [env.*] block below must fully redeclare its own bindings.
 

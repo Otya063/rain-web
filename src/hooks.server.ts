@@ -87,6 +87,9 @@ export const handle: Handle = async ({ event, resolve }) => {
                     });
                 }
 
+                // authUser/adminDiscordIdクエリと依存関係がないため、先行して並行取得しておく
+                const adminRoleIdsPromise = event.platform?.env.WEB_CONFIG?.get('admin_role_ids', 'json') as Promise<string[] | null> | undefined;
+
                 const regex = /iphone;|(android|nokia|blackberry|bb10;).+mobile|android.+fennec|opera.+mobi|windows phone|symbianos/i;
                 const isMobile = regex.test(event.request.headers.get('user-agent')!);
                 const authUser = await new PostgresManager('get', 'authUser', { loginKey, isMobile }).execute();
@@ -105,14 +108,17 @@ export const handle: Handle = async ({ event, resolve }) => {
                     return new Response('Forbidden: No Discord account linked to this user.', { status: 403 });
                 }
 
-                const adminRoleIds = (await event.platform?.env.WEB_CONFIG?.get('admin_role_ids', 'json')) as string[] | null;
+                // discordIdが判明次第、adminRoleIdsの取得完了を待たずにDiscord APIへのfetchを開始する
+                const memberResPromise = fetch(`https://discord.com/api/v10/guilds/937230168223789066/members/${discordId}`, {
+                    headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` },
+                });
+
+                const adminRoleIds = (await adminRoleIdsPromise) ?? null;
                 if (!adminRoleIds) {
                     return new Response('Forbidden: admin_role_ids not configured.', { status: 403 });
                 }
 
-                const memberRes = await fetch(`https://discord.com/api/v10/guilds/937230168223789066/members/${discordId}`, {
-                    headers: { Authorization: `Bot ${DISCORD_BOT_TOKEN}` },
-                });
+                const memberRes = await memberResPromise;
                 const memberData = (await memberRes.json()) as { roles: string[] };
                 if (!memberRes.ok || !memberData.roles.some((role) => adminRoleIds.includes(role))) {
                     return new Response('Forbidden: Insufficient Discord role.', { status: 403 });
