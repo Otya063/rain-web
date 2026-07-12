@@ -47,7 +47,7 @@
 
     let { charactersIdName, isMobile, updatedContentsData, distAddMode = $bindable(false), searchedDistributions }: DistributionMainProps = $props();
     let bindedValue = $state(''); // Control Panel検索フォーム用
-    let bindedParam: 'distribution_id' | 'event_name' | 'character_id' = $state('distribution_id');
+    let bindedParam: 'event_name' | 'character_id' = $state('event_name');
     let searching = $state(false); // 検索中フラグ
     let filterPanelOpen = $state(false); // Control Panel開閉フラグ
     let filterType: 'id' | 'event_name' | 'character_id' = $state('id'); // 検索結果の絞り込み用
