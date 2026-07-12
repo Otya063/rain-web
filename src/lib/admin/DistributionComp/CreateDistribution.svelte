@@ -6,7 +6,7 @@
     import { DistributionCategoryObj, type CreateDistributionProps } from '$types';
     import {
         closeMsgDisplay,
-        allDistributionData,
+        lastSearchDistributionsResult,
         convertColorString,
         createDistDataDesc,
         createDistDataTitle,
@@ -82,9 +82,7 @@
                 await applyAction(result);
 
                 if (result.type === 'success') {
-                    allDistributionData.update((distribution) => {
-                        return [...distribution, createdDistribution];
-                    }); // common/specificの元データを更新
+                    lastSearchDistributionsResult.update((data) => [...(data ?? []), createdDistribution]); // 一覧再表示時（再マウント時）に反映されるよう保存
                     // 新規作成後はDistributionMainコンポーネントがマウントされるのでscript内が自動発火
 
                     // 各変数値リセット

@@ -1,4 +1,4 @@
-import type { Distribution } from '$types';
+import type { Distribution, DistributionContentsItem } from '$types';
 
 // 配布内容物の種類
 export const DistributionContentsTypeObj = {
@@ -69,16 +69,18 @@ export type DistributionEditableItemType = keyof Omit<Distribution, 'id' | 'type
 export interface DistributionProps {
     charactersIdName: string[];
     isMobile: boolean;
-    updatedContentsData: string;
+    updatedContentsData: DistributionContentsItem[];
     distAddMode: boolean;
     createdDistribution: Distribution;
+    searchedDistributions?: Distribution[];
 }
 
 export interface DistributionMainProps {
     charactersIdName: string[];
     isMobile: boolean;
-    updatedContentsData?: string;
+    updatedContentsData?: DistributionContentsItem[];
     distAddMode: boolean;
+    searchedDistributions?: Distribution[];
 }
 
 export interface DistributionContentsDataProps {

@@ -2,9 +2,12 @@ import { writable } from 'svelte/store';
 import type { Distribution, DistributionRawData, Replace } from '$types';
 import type { Pager } from '..';
 
-export const allDistributionData = writable<Distribution[]>([]);
+export const filterDistributionValue = writable<string>('');
+export const filterDistributionParam = writable<string>('distribution_id');
+export const lastSearchDistributionsResult = writable<Distribution[] | undefined>(undefined); // DistributionMain再マウント時のpager復元用
+export const pendingDistributionSearch = writable<{ param: string; value: string } | null>(null); // ClaimedDistributionからの「Jump to edit」検索引き継ぎ用
 export const pagerDistributionData = writable<Distribution[]>([]); // pager用
-export const claimedDistributions = writable<{ userId: number; charId: number; data: Replace<Distribution, { deadline: string | null }>[] }>({ userId: 0, charId: 0, data: [] });
+export const claimedDistributions = writable<{ userId: number; charId: number; data: Omit<Replace<Distribution, { deadline: string | null }>, 'contentsData'>[] }>({ userId: 0, charId: 0, data: [] });
 export const distributionContentsData = writable<DistributionRawData[]>([
     {
         item_data: {
@@ -20,6 +23,5 @@ export const distributionContentsData = writable<DistributionRawData[]>([
 ]);
 export const createDistDataTitle = writable<string>('');
 export const createDistDataDesc = writable<string>('');
-export const distributionFilterText = writable<string>('');
 export const openDistributionEditField = writable<number[]>([]);
 export const distributionPagerInstance = writable<Pager<Distribution>>(); // DistributionListとDistributionEditorでpagerインスタンスを共有するため

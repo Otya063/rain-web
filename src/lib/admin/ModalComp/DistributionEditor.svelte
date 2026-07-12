@@ -15,7 +15,6 @@
         adjustLineBreakOps,
         createDistDataTitle,
         createDistDataDesc,
-        updateAllDistributionData,
         distributionPagerInstance,
         preventEnterKeyInEditor,
         encodeToShiftJIS,
@@ -88,7 +87,6 @@
                         await applyAction(result);
 
                         if (result.type === 'success') {
-                            updateAllDistributionData(id, editorType, contents);
                             $distributionPagerInstance.updatePagerDistribution(id, editorType, contents);
                         }
 
