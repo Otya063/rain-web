@@ -2,7 +2,8 @@
     import { DateTime } from 'luxon';
     import ScrollHint from 'scroll-hint';
     import { onDestroy } from 'svelte';
-    import { slide } from 'svelte/transition';
+    import { get } from 'svelte/store';
+    import { fade, slide } from 'svelte/transition';
     import { scrollPosition } from 'svelte-scrolling';
     import { Svroller } from 'svrollbar';
     import { applyAction, enhance } from '$app/forms';
@@ -21,11 +22,12 @@
         convHrpToHr,
         distributionContentsData,
         openModal,
-        updateAllDistributionData,
-        allDistributionData,
         Pager,
         tooltipWhenOverflowText,
-        distributionFilterText,
+        filterDistributionValue,
+        filterDistributionParam,
+        lastSearchDistributionsResult,
+        pendingDistributionSearch,
         openDistributionEditField,
         insertTextAtCursor,
         handleKeyDownInTextArea,
@@ -43,8 +45,13 @@
     import DistributionContentsData from './DistributionContentsData.svelte';
     import type { DistributionMainProps } from '$types';
 
-    let { charactersIdName, isMobile, updatedContentsData, distAddMode = $bindable(false) }: DistributionMainProps = $props();
-    let filterType: 'id' | 'event_name' | 'character_id' = $state('id');
+    let { charactersIdName, isMobile, updatedContentsData, distAddMode = $bindable(false), searchedDistributions }: DistributionMainProps = $props();
+    let bindedValue = $state(''); // Control Panel検索フォーム用
+    let bindedParam: 'event_name' | 'character_id' = $state('event_name');
+    let searching = $state(false); // 検索中フラグ
+    let filterPanelOpen = $state(false); // Control Panel開閉フラグ
+    let filterType: 'id' | 'event_name' | 'character_id' = $state('id'); // 検索結果の絞り込み用
+    let distributionFilterText = $state('');
     let editingId: number = $state(0); // 編集対象の配布ID
     let catTypes: Record<DistributionEditableItemType, boolean> = $state({
         character_id: false,
@@ -59,7 +66,7 @@
         max_sr: false,
         min_gr: false,
         max_gr: false,
-        data: false,
+        contentsData: false,
     }); // 編集中モードカテゴリー、stateで各項目間を自動で折りたためるように
     let previewTitle = $state('');
     let previewDeadline = $state('');
@@ -84,7 +91,7 @@
         '<p>"&lt;Color** /&gt;" is a color tag, and text after this tag is colored based on the two-digit color number in the tag. The color tag is inserted at the cursor position when you press the color button in the color palette below. Manual input is also possible. The expected color numbers are as follows:</p><p style="display: grid; row-gap: 10px; grid-template-columns: repeat(3, 1fr);"><span>00 - White</span><span>01 - Black</span><span>02 - Red</span><span>03 - Green</span><span>04 - Cyan</span><span>05 - Yellow</span><span>06 - Orange</span><span>07 - Pink</span><span>16 - Blue</span></p><hr /><p class="console_contents_note">* Text must be 32 characters or less.</p>';
     const descMobileTooltip =
         '<p>"&lt;Color** /&gt;" is a color tag, and text after this tag is colored based on the two-digit color number in the tag. The color tag is inserted at the cursor position when you press the color button in the color palette below. Manual input is also possible. The expected color numbers are as follows:</p><p style="display: grid; row-gap: 10px; grid-template-columns: repeat(3, 1fr);"><span>00 - White</span><span>01 - Black</span><span>02 - Red</span><span>03 - Green</span><span>04 - Cyan</span><span>05 - Yellow</span><span>06 - Orange</span><span>07 - Pink</span><span>16 - Blue</span></p><hr /><p>"&lt;br&gt;" means a line break. Line break operation can\'t be performed in this form, but "&lt;br&gt;" is inserted automatically instead.</p>';
-    let pager: Pager<Distribution>;
+    let pager: Pager<Distribution> = $state(new Pager<Distribution>([]));
     let scrollY = $state(0);
     let scrollYBeforeOpenData = $state(0); // コンテンツデータ表示前にスクロール位置を保存（submit後にメニュー閉じて位置がずれるため）
     let previewDescription = $state('');
@@ -119,22 +126,68 @@
         return;
     };
 
-    pager = new Pager($allDistributionData);
-    distributionPagerInstance.set(pager); // DistributionEditorとの共有用
-    pager.bindStore((data) => pagerDistributionData.set(data)); // 格納先ストアバインド
-    maxPage = pager.max; // 最大ページ数設定
+    /**
+     * Pagerの初期化処理
+     *
+     * @param distributions 初期化に使用する配布データ。検索結果がある場合はそのデータ、ない場合は前回の検索結果を使用
+     */
+    const initPager = (distributions: Distribution[]) => {
+        pager = new Pager(distributions);
+        lastSearchDistributionsResult.set(distributions); // 再マウント時の復元用に保存
+        pager.bindStore((data) => pagerDistributionData.set(data)); // 格納先ストアバインド
+        pager.filterNumberArrInclude('type', selectedTypeFilterCheckbox); // type/categoryチェックボックスの選択状態を再検索後も維持
+        pager.filterNumberArrInclude('category', selectedCategoryFilterCheckbox);
+        maxPage = pager.max; // 最大ページ数設定
 
-    // フィルター時リアクティブ処理
+        return;
+    };
+
+    // DistributionEditorモーダルとの共有用、pagerが再代入されるたびに追従
     $effect(() => {
-        // 依存関係は$distributionFilterText、filterType
+        distributionPagerInstance.set(pager);
+    });
+
+    // 検索結果が既にある場合pager初期化。searchedDistributionsがundefined（他のform処理後の再マウント）の場合は保存済みデータで復元
+    const initDistributions = searchedDistributions ?? get(lastSearchDistributionsResult);
+    if (initDistributions) {
+        initPager(initDistributions);
+    }
+
+    // ClaimedDistributionからの「Jump to edit」検索引き継ぎ
+    $effect(() => {
+        const pending = $pendingDistributionSearch;
+        if (pending) {
+            pendingDistributionSearch.set(null);
+            bindedParam = pending.param as typeof bindedParam;
+            bindedValue = pending.value;
+            filterDistributionParam.set(pending.param);
+            filterDistributionValue.set(pending.value);
+            filterPanelOpen = true; // フォームをDOMに描画させてから送信する
+            searching = true;
+
+            setTimeout(() => (document.getElementById('getPaginatedDistributions') as HTMLFormElement)?.requestSubmit(), 0);
+        }
+    });
+
+    // 破棄時に現在のpager状態を保存(配布データ削除・更新等の変更を次回再マウント時に反映するため)
+    onDestroy(() => {
+        const items = pager.getItems();
+        if (items.length > 0) {
+            lastSearchDistributionsResult.set(items);
+        }
+    });
+
+    // 検索結果内の絞り込み(temp_operation_area)時リアクティブ処理
+    $effect(() => {
+        // 依存関係はpager、distributionFilterText、filterType
         pager.clearFilters(['exact_id', 'exact_character_id', 'text_event_name']); // 既存のフィルターをクリア
         // filterTypeでフィルターするのは１つだけなので、クリアしないと混ざってしまう
 
-        if ($distributionFilterText) {
+        if (distributionFilterText) {
             if (filterType === 'id' || filterType === 'character_id') {
-                pager.filterExactMatch(filterType, Number($distributionFilterText));
+                pager.filterExactMatch(filterType, Number(distributionFilterText));
             } else {
-                pager.filterStringInclude('event_name', $distributionFilterText.toLowerCase());
+                pager.filterStringInclude('event_name', distributionFilterText.toLowerCase());
             }
         }
 
@@ -257,7 +310,6 @@
                 await applyAction(result);
 
                 if (result.type === 'success') {
-                    allDistributionData.update((data) => data.filter((distribution) => !selectedIds.includes(distribution.id)));
                     pager.deleteItem(selectedIds);
                     // pagerDistributionData が短くなる前に isChecked を空にする。
                     // $effect は DOM 更新後に実行されるため、再レンダリング時に
@@ -283,6 +335,83 @@
         />
     </form>
 
+    <div class="edit_area_box" style="margin-bottom: 2%;">
+        <div class="edit_area enter">
+            <p class="edit_area_title" style="margin: 0;">Control Panel</p>
+            <div class="group_btns" class:disabled_elm={searching} style="margin-bottom: 30px;">
+                <button class="blue_btn" type="button" onclick={() => (filterPanelOpen = !filterPanelOpen)} class:active={filterPanelOpen}>
+                    <span class="btn_icon material-symbols-outlined">search</span>
+                    <span class="btn_text">Distribution</span>
+                </button>
+            </div>
+
+            {#if filterPanelOpen}
+                <div class="edit_area_box_parts text ctrl_panel">
+                    <form
+                        id="getPaginatedDistributions"
+                        action="?/getPaginatedDistributions"
+                        method="POST"
+                        use:enhance={() => {
+                            return async ({ result }) => {
+                                await applyAction(result);
+                                searching = false;
+
+                                if (result.type === 'success') {
+                                    openDistributionEditField.set([]); // 展開済み編集フィールドリセット(再検索時フィールド展開想定)
+                                    initPager(searchedDistributions ?? []);
+                                } else {
+                                    msgClosed.set(false);
+                                }
+                            };
+                        }}
+                    >
+                        <input name="filter_value" type="hidden" value={$filterDistributionValue} />
+                        <input name="filter_param" type="hidden" value={$filterDistributionParam} />
+
+                        <div class="temp_operation_area" class:disabled_elm={searching}>
+                            <label class="custom_select_box">
+                                <select bind:value={bindedParam}>
+                                    <option value="event_name" title="The distribution title.">Distribution Title</option>
+                                    <option value="character_id" title="The character ID for the scope of distribution.">Char ID</option>
+                                </select>
+                            </label>
+
+                            <label class="temp_operation_area_search">
+                                <span class="material-symbols-outlined">search</span>
+                                <input type="text" bind:value={bindedValue} placeholder="Keywords..." autocomplete="off" />
+                            </label>
+                        </div>
+                    </form>
+
+                    <button
+                        id="btn"
+                        class="green_btn"
+                        class:loading_btn={searching}
+                        style={!searching ? '' : 'cursor: not-allowed; pointer-events: none;'}
+                        type="submit"
+                        form="getPaginatedDistributions"
+                        onclick={() => {
+                            if (!searching) {
+                                searching = true;
+                                (document.activeElement as HTMLInputElement).blur(); // input要素からEnterキーで検索した際に、フォーカスがinput要素に残るのを防ぐ
+                                $timeOut && closeMsgDisplay($timeOut);
+                                filterDistributionValue.set(bindedValue);
+                                filterDistributionParam.set(bindedParam);
+                            }
+                        }}
+                    >
+                        {#if searching}
+                            <span in:fade class="loading"></span>
+                        {/if}
+
+                        <span class="btn_icon material-symbols-outlined">search</span>
+                        <span class="btn_text">Search</span>
+                    </button>
+                </div>
+            {/if}
+        </div>
+    </div>
+
     <div class="temp_operation_area">
         <label class="custom_select_box">
             <select bind:value={filterType}>
@@ -294,7 +423,7 @@
 
         <label class="temp_operation_area_search">
             <span class="material-symbols-outlined">search</span>
-            <input type="text" bind:value={$distributionFilterText} placeholder="Keywords..." autocomplete="off" />
+            <input type="text" bind:value={distributionFilterText} placeholder="Keywords..." autocomplete="off" />
         </label>
 
         <button class="normal_btn" type="button" onclick={() => (openTypeFilterCheckbox = !openTypeFilterCheckbox)}>
@@ -506,7 +635,6 @@
                                             await applyAction(result);
 
                                             if (result.type === 'success') {
-                                                updateAllDistributionData(id, column, !updatedContentsData ? value : updatedContentsData); // allDistributionDataストアを更新
                                                 pager.updatePagerDistribution(id, column, !updatedContentsData ? value : updatedContentsData); // pager更新データ動的反映
                                             }
                                         };
@@ -1114,12 +1242,12 @@
                                         </dt>
                                         <dd class="contents_desc no_desc_item">
                                             <div class="contents_desc_item_group_btn">
-                                                {#if editingId === distribution.id && catTypes['data']}
+                                                {#if editingId === distribution.id && catTypes['contentsData']}
                                                     <button
                                                         class="red_btn"
                                                         type="button"
                                                         onclick={() => {
-                                                            handleEditModeSwitch(0, 'data');
+                                                            handleEditModeSwitch(0, 'contentsData');
                                                             distributionContentsData.set([
                                                                 {
                                                                     item_data: {
@@ -1143,9 +1271,9 @@
                                                         class="normal_btn"
                                                         type="button"
                                                         onclick={() => {
-                                                            handleEditModeSwitch(distribution.id, 'data');
+                                                            handleEditModeSwitch(distribution.id, 'contentsData');
                                                             scrollYBeforeOpenData = scrollY;
-                                                            distributionContentsData.set(ManageDistribution.parseHexString(distribution.data));
+                                                            distributionContentsData.set(ManageDistribution.buildRawDataFromContentsData(distribution.contentsData));
                                                         }}
                                                     >
                                                         <span class="btn_icon material-symbols-outlined">expand_all</span>
@@ -1156,9 +1284,9 @@
 
                                             <!-- svelte5のバグでslideアニメーションがおかしいので、応急措置として「div.edit_area_box_wrapper」でワラップする -->
                                             <div class="edit_area_box_wrapper">
-                                                {#if editingId === distribution.id && catTypes['data']}
+                                                {#if editingId === distribution.id && catTypes['contentsData']}
                                                     <div transition:slide>
-                                                        <input type="hidden" name="data" value="0" />
+                                                        <input type="hidden" name="contentsData" value="0" />
 
                                                         <DistributionContentsData {isMobile} />
 
@@ -1173,7 +1301,7 @@
                                                                     $timeOut && closeMsgDisplay($timeOut);
                                                                     setTimeout(() => {
                                                                         // 送信時にeditingIdが「0」となって送られるのを防ぐため、リセットは少し遅らせる
-                                                                        handleEditModeSwitch(0, 'data');
+                                                                        handleEditModeSwitch(0, 'contentsData');
                                                                         distributionContentsData.set([
                                                                             {
                                                                                 item_data: {

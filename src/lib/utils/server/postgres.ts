@@ -2,6 +2,7 @@ import { error } from '@sveltejs/kit';
 import { DateTime } from 'luxon';
 import {
     type Distribution,
+    type DistributionContentsItem,
     type ActionTableTypeMap,
     type InputType,
     type ReturnType,
@@ -60,6 +61,7 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
             character: this.getCharacterRaw.bind(this),
             paginatedClans: this.getPaginatedClans.bind(this),
             paginatedAlliances: this.getPaginatedAlliances.bind(this),
+            paginatedDistributions: this.getPaginatedDistributions.bind(this),
         },
         transactions: {
             initAdmin: this.initAdmin.bind(this),
@@ -108,10 +110,29 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
 
     private async createDistribution(obj: InputType<'create', 'distribution'>): Promise<ReturnType<'create', 'distribution'>> {
         const [distribution] = await this.sql<
-            Distribution[]
-        >`INSERT INTO distribution (character_id, type, deadline, event_name, description, times_acceptable, min_hr, max_hr, min_gr, max_gr, data) VALUES (NULLIF(${obj.charId}, 0), ${obj.category}, ${obj.deadline}, ${obj.title}, ${obj.description}, ${obj.remaining}, ${obj.minHr}, ${obj.maxHr}, ${obj.minGr}, ${obj.maxGr}, decode(${obj.base64}, 'base64')) RETURNING id, character_id, type AS category, deadline, event_name, description, times_acceptable, min_hr, max_hr, min_sr, max_sr, min_gr, max_gr, encode(data, 'hex') AS data, CASE WHEN character_id IS NULL THEN 0 ELSE 1 END AS type`;
+            Omit<Distribution, 'contentsData'>[]
+        >`INSERT INTO distribution (character_id, type, deadline, event_name, description, times_acceptable, min_hr, max_hr, min_gr, max_gr) VALUES (NULLIF(${obj.charId}, 0), ${obj.category}, ${obj.deadline}, ${obj.title}, ${obj.description}, ${obj.remaining}, ${obj.minHr}, ${obj.maxHr}, ${obj.minGr}, ${obj.maxGr}) RETURNING id, character_id, type AS category, deadline, event_name, description, times_acceptable, min_hr, max_hr, min_sr, max_sr, min_gr, max_gr, CASE WHEN character_id IS NULL THEN 0 ELSE 1 END AS type`;
 
-        return distribution;
+        await this.setDistributionItems(distribution.id, obj.contentsData);
+
+        return { ...distribution, contentsData: obj.contentsData };
+    }
+
+    /**
+     * 特定の配布IDに紐づく配布アイテムデータを設定する（既存データは削除して再作成）
+     *
+     * @param {number} distId 配布ID
+     * @param {DistributionContentsItem[]} items 配布アイテムデータ配列
+     */
+    private async setDistributionItems(distId: number, items: DistributionContentsItem[]): Promise<void> {
+        await this.sql.begin(async (sql) => {
+            await sql`DELETE FROM distribution_items WHERE distribution_id = ${distId}`;
+
+            if (items.length) {
+                const records = items.map((item) => ({ distribution_id: distId, item_type: item.item_type, item_id: item.item_id, quantity: item.quantity }));
+                await sql`INSERT INTO distribution_items ${sql(records, 'distribution_id', 'item_type', 'item_id', 'quantity')}`;
+            }
+        });
     }
 
     private async deleteDistribution(obj: InputType<'delete', 'distribution'>): Promise<ReturnType<'delete', 'distribution'>> {
@@ -121,7 +142,7 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
     }
 
     private async initAdmin(): Promise<ReturnType<'transactions', 'initAdmin'>> {
-        const [launcherSystem, rainServers, banners, distributions, charIdNamePair] = await this.sql.begin(async (sql) => {
+        const [launcherSystem, rainServers, banners, charIdNamePair] = await this.sql.begin(async (sql) => {
             /* システム情報取得
             ========================================================= */
             const [launcherSystem] = await sql<LauncherSystem[]>`SELECT * FROM launcher_system WHERE id = 1`;
@@ -138,24 +159,18 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
             ========================================================= */
             const banners = await sql<Banner[]>`SELECT * FROM banner ORDER BY id ASC`;
 
-            /* 配布情報取得
-            ========================================================= */
-            const distributions = await this.sql<
-                Distribution[]
-            >`SELECT id, character_id, type AS category, deadline, event_name, description, times_acceptable, min_hr, max_hr, min_sr, max_sr, min_gr, max_gr, encode(data, 'hex') AS data, CASE WHEN character_id IS NULL THEN 0 ELSE 1 END AS type FROM distribution`;
-
             /* キャラクターIDと名前のペア配列取得（DistributionList.svelteで使用）
             ========================================================= */
-            const characters = await this.sql<Pick<Character, 'id' | 'name'>[]>`SELECT id, name FROM characters`;
+            const characters = await sql<Pick<Character, 'id' | 'name'>[]>`SELECT id, name FROM characters`;
 
             const charIdNamePair = characters.map((character) => {
                 return `[${character.id}] ${character.name || 'Ready to Hunt'}`;
             });
 
-            return [launcherSystem, rainServers, banners, distributions, charIdNamePair];
+            return [launcherSystem, rainServers, banners, charIdNamePair];
         });
 
-        return { launcherSystem, rainServers, banners, distributions, charIdNamePair };
+        return { launcherSystem, rainServers, banners, charIdNamePair };
     }
 
     private async getPaginatedUsers(obj: InputType<'get', 'paginatedUsers'>): Promise<ReturnType<'get', 'paginatedUsers'>> {
@@ -204,7 +219,7 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
                             'times_acceptable', distribution.times_acceptable, 'min_hr', distribution.min_hr,
                             'max_hr', distribution.max_hr, 'min_sr', distribution.min_sr, 'max_sr', distribution.max_sr,
                             'min_gr', distribution.min_gr, 'max_gr', distribution.max_gr,
-                            'data', encode(distribution.data, 'hex'), 'type',
+                            'type',
                             CASE WHEN distribution.character_id IS NULL THEN 0 ELSE 1 END
                         )
                         ELSE NULL
@@ -363,12 +378,11 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
         };
 
         const dbColumn = (columnMap[obj.column] || obj.column) as DistributionEditableItemType;
-        const value = getDistributionUpdatedValue(dbColumn, obj.value);
 
-        if (dbColumn === 'data') {
-            const base64 = Buffer.from(value as string, 'hex').toString('base64');
-            await this.sql.unsafe(`UPDATE distribution SET ${dbColumn} = decode($1, 'base64') WHERE id = $2`, [base64, obj.distId]);
+        if (dbColumn === 'contentsData') {
+            await this.setDistributionItems(obj.distId, obj.value as DistributionContentsItem[]);
         } else {
+            const value = getDistributionUpdatedValue(dbColumn, obj.value as string | null);
             await this.sql.unsafe(`UPDATE distribution SET ${dbColumn} = $1 WHERE id = $2`, [value, obj.distId]);
         }
 
@@ -504,6 +518,53 @@ export class PostgresManager<O extends keyof ActionTableTypeMap, T extends keyof
         const clanNames = guilds.map((g) => `[${g.id}] - ${g.name ?? ''}`);
 
         return { alliances, clanNames };
+    }
+
+    private async getPaginatedDistributions(obj: InputType<'get', 'paginatedDistributions'>): Promise<ReturnType<'get', 'paginatedDistributions'>> {
+        const { sql } = this;
+
+        const filterParams: (string | number)[] = [];
+        let filteredDistributionsCTE: string;
+
+        if (obj.filterParam === 'event_name') {
+            filteredDistributionsCTE = `SELECT id FROM distribution WHERE event_name ILIKE $1`;
+            filterParams.push(`%${obj.filterValue}%`);
+        } else if (obj.filterParam === 'character_id') {
+            filteredDistributionsCTE = `SELECT id FROM distribution WHERE character_id = $1`;
+            filterParams.push(Number(obj.filterValue));
+        } else {
+            filteredDistributionsCTE = `SELECT id FROM distribution WHERE id = $1`;
+            filterParams.push(Number(obj.filterValue));
+        }
+
+        const query = `
+        WITH filtered_distributions AS (
+            ${filteredDistributionsCTE}
+        )
+        SELECT
+            d.id, d.character_id, d.type AS category, d.deadline, d.event_name, d.description,
+            d.times_acceptable, d.min_hr, d.max_hr, d.min_sr, d.max_sr, d.min_gr, d.max_gr,
+            COALESCE(
+                (
+                    SELECT json_agg(json_build_object('item_type', di.item_type, 'item_id', COALESCE(di.item_id, 0), 'quantity', COALESCE(di.quantity, 0)) ORDER BY di.id)
+                    FROM distribution_items di
+                    WHERE di.distribution_id = d.id
+                ),
+                '[]'::json
+            ) AS "contentsData",
+            CASE WHEN d.character_id IS NULL THEN 0 ELSE 1 END AS type
+        FROM distribution d
+        JOIN filtered_distributions fd ON d.id = fd.id
+        ORDER BY d.id ASC
+        `;
+
+        const distributions = await sql.unsafe<Distribution[]>(query, filterParams);
+
+        if (distributions.length >= 1000) {
+            return [null];
+        }
+
+        return distributions;
     }
 
     private async createBanner(obj: InputType<'create', 'banner'>): Promise<ReturnType<'create', 'banner'>> {

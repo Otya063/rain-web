@@ -14,7 +14,7 @@
         tooltipWhenOverflowText,
         adminTabValue,
         openDistributionEditField,
-        distributionFilterText,
+        pendingDistributionSearch,
         Pager,
         generatePaginationBtn,
         pagerUserData,
@@ -324,8 +324,8 @@
                                 use:tooltip={isMobile ? '' : 'Jump to edit.'}
                                 type="button"
                                 onclick={() => {
+                                    pendingDistributionSearch.set({ param: 'distribution_id', value: String(claimedDistribution.id) });
                                     adminTabValue.set('distribution');
-                                    distributionFilterText.set(String(claimedDistribution.id));
                                     openDistributionEditField.update(() => {
                                         return [claimedDistribution.id]; // 指定したIDの配布データへジャンプ、既に存在するIDは上書きする
                                     });

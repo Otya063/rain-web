@@ -1,6 +1,6 @@
 import { DateTime } from 'luxon';
 import { get } from 'svelte/store';
-import { DistributionContentsTypeObj, type DistributionContentsType, type DistributionRawData, type DistributionEditableItemType } from '$types';
+import { DistributionContentsTypeObj, type DistributionContentsType, type DistributionContentsItem, type DistributionRawData, type DistributionEditableItemType } from '$types';
 import {
     getDistributionContentsTypeName,
     armJson,
@@ -15,7 +15,6 @@ import {
     getDistItemsData,
     convHrToHrp,
     openDistributionEditField,
-    allDistributionData,
 } from '..';
 
 /**
@@ -127,12 +126,12 @@ export class ManageDistribution {
     };
 
     /**
-     * 選択されたアイテムを16進数文字列に変換
+     * 選択されたアイテムを配布アイテムデータ配列に変換
      *
      * @param {Record<string, any>} data クライアントから送られてきた変換元データ
-     * @returns {string} アイテムデータを含む16進数文字列、選択されたアイテムがない場合は空文字を返す
+     * @returns {DistributionContentsItem[] | null} 変換後の配布アイテムデータ配列、選択されたアイテムがない場合や不正な形式の場合はnullを返す
      */
-    public static getHexString(data: Record<string, any>): string {
+    public static getContentsDataArray(data: Record<string, any>): DistributionContentsItem[] | null {
         let contDataArr: DistributionRawData[] = Object.entries(data).map(([key, amount]) => {
             const match = key.match(/^(\d{1,2})-(\w{4})-\[(.+)\]$/);
             if (!match) {
@@ -164,84 +163,45 @@ export class ManageDistribution {
             };
         });
 
-        // 一要素でもitem_data.codeが「----」であった場合（正規表現にマッチしない）、空文字列を返す
+        // 一要素でもitem_data.codeが「----」であった場合（正規表現にマッチしない）、nullを返す
         if (contDataArr.some((item) => item.item_data.code === '----')) {
-            return '';
+            return null;
         }
 
-        // アイテム空の場合、空文字を返す
+        // アイテム空の場合、nullを返す
         if (contDataArr.length === 0) {
-            return '';
+            return null;
         }
 
         // 配列を昇順にソートする
         contDataArr = this.sortContentsDataArray(contDataArr);
 
-        let result = this.formatHex(contDataArr.length, 4);
-        for (const item of contDataArr) {
-            result += `${this.formatHex(item.types, 2)}0000${this.reverseHex(item.item_data.code)}0000${this.formatHex(item.amount, 4)}00000000`;
-        }
-
-        return result;
+        return contDataArr.map((item) => ({
+            item_type: item.types,
+            item_id: parseInt(this.reverseHex(item.item_data.code), 16),
+            quantity: item.amount,
+        }));
     }
 
     /**
-     * hex文字列を解析し、各データ値を取得する
+     * 配布アイテムデータ配列を解析し、フォーム編集用のデータ値を取得する
      *
-     * @param {string} hexString 解析対象の16進数文字列
+     * @param {DistributionContentsItem[]} items 解析対象の配布アイテムデータ配列
      * @returns {DistributionRawData[]} 解析後の配布物データオブジェクト配列
      */
-    public static parseHexString(hexString: string): DistributionRawData[] {
-        const items: DistributionRawData[] = [];
-        let currentIndex = 0;
+    public static buildRawDataFromContentsData(items: DistributionContentsItem[]): DistributionRawData[] {
+        return items.map((item) => {
+            const code = this.reverseHex(this.formatHex(item.item_id, 4));
 
-        // アイテムの数を取得（最初の4文字）
-        const itemCountHex = hexString.slice(currentIndex, currentIndex + 4);
-        const itemCount = parseInt(itemCountHex, 16);
-        currentIndex += 4;
-
-        // 各アイテムデータを解析
-        for (let i = 0; i < itemCount; i++) {
-            // type（2文字）を取得
-            const typesHex = hexString.slice(currentIndex, currentIndex + 2);
-            const types = parseInt(typesHex, 16) as DistributionContentsType;
-            currentIndex += 2;
-
-            //「0000」のプレースホルダ部分をスキップ
-            currentIndex += 4;
-
-            // item_data.code（4文字、BE -> LE）をLE形式で取得
-            const codeHex = hexString.slice(currentIndex, currentIndex + 4);
-            const code = this.reverseHex(codeHex).toUpperCase();
-            currentIndex += 4;
-
-            //「0000」のプレースホルダ部分をスキップ
-            currentIndex += 4;
-
-            // amount（4文字）を取得
-            const amountHex = hexString.slice(currentIndex, currentIndex + 4);
-            const amount = parseInt(amountHex, 16);
-            currentIndex += 4;
-
-            //「00000000」のプレースホルダ部分をスキップ
-            currentIndex += 8;
-
-            // データオブジェクト準備
-            const itemData: DistributionRawData = {
-                types,
-                item_data: { code, name: '' },
-                amount,
+            return {
+                types: item.item_type,
+                item_data: { code, name: getDistContentsNameByType(item.item_type, code) },
+                amount: item.quantity,
                 disabled: false, // アイテム無効化フラグ
                 showDropdown: false, // アイテムリスト表示フラグ
-                selectedContentsType: types, // セレクトボックスから選んだ時に設定（デフォルト値はtypesと同じ）
+                selectedContentsType: item.item_type, // セレクトボックスから選んだ時に設定（デフォルト値はtypesと同じ）
             };
-
-            itemData.item_data.name = getDistContentsNameByType(types, code);
-
-            items.push(itemData);
-        }
-
-        return items;
+        });
     }
 
     /**
@@ -318,31 +278,6 @@ export const handleDistributionEditField = (distributionId: number): void => {
             return [...items, distributionId]; // 追加
         }
     });
-};
-
-/**
- * ストア変数allDistributionData内のデータを更新する
- *
- * @param {number} distId 更新する配布物ID
- * @param {DistributionEditableItemType} column 更新するカラム名
- * @param {string | null} value カラム名に代入する値
- */
-export const updateAllDistributionData = (distId: number, column: DistributionEditableItemType, value: string | null): void => {
-    allDistributionData.update((data) =>
-        data.map((distribution) => {
-            if (distribution.id === distId) {
-                const updatedValue = getDistributionUpdatedValue(column, value);
-
-                return {
-                    ...distribution,
-                    [column]: column === 'deadline' && updatedValue ? DateTime.fromISO(updatedValue as string).toJSDate() : updatedValue, // deadlineカラムはstringなのでDateに変換（nullの可能性があるため、updatedValue存在確認必要）
-                    ...(column === 'character_id' && { type: !updatedValue ? 0 : 1 }),
-                };
-            }
-
-            return distribution;
-        }),
-    );
 };
 
 /**

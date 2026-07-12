@@ -1,7 +1,6 @@
 import type { Action, Actions, PageServerLoad } from './$types';
 import { error, fail } from '@sveltejs/kit';
 import { DateTime } from 'luxon';
-import { Buffer } from 'node:buffer'; // Node.jsとの互換性により、追加しないと「ReferenceError: Buffer is not defined」が発生する
 import { R2_BNR_UNIQUE_URL } from '$env/static/private';
 import {
     DistributionCategoryObj,
@@ -33,13 +32,12 @@ export const load: PageServerLoad = async ({ platform }) => {
 
     const r2JsonData = (await r2Response.json()) as R2AssetsJsonData;
 
-    const { launcherSystem, rainServers, banners, distributions, charIdNamePair } = await new PostgresManager('transactions', 'initAdmin').execute();
+    const { launcherSystem, rainServers, banners, charIdNamePair } = await new PostgresManager('transactions', 'initAdmin').execute();
 
     return {
         launcherSystem,
         rainServers,
         banners,
-        distributions,
         r2JsonData,
         charIdNamePair,
     };
@@ -421,6 +419,32 @@ const getPaginatedAlliances: Action = async ({ request }) => {
     }
 
     return { searchedAlliances, clanNames };
+};
+
+const getPaginatedDistributions: Action = async ({ request }) => {
+    const data = conv2DArrayToObject([...(await request.formData()).entries()]);
+    const { filter_param, filter_value } = data as { filter_param: 'distribution_id' | 'event_name' | 'character_id'; filter_value: string };
+
+    if (!filter_value || !filter_param) {
+        await delay(1000);
+        return fail(400, { error: true, message: emptyMsg });
+    } else if ((filter_param === 'distribution_id' || filter_param === 'character_id') && !isNumber(filter_value)) {
+        await delay(1000);
+        return fail(400, { error: true, message: `If "${filter_param}" is selected, no strings are allowed.` });
+    }
+
+    const searchedDistributions = await new PostgresManager('get', 'paginatedDistributions', { filterParam: filter_param, filterValue: filter_value }).execute();
+
+    if (!searchedDistributions.length) {
+        return fail(400, {
+            error: true,
+            message: `The distribution(s) with the entered ${filter_param} (${filter_value}) doesn't exist.`,
+        });
+    } else if (!searchedDistributions[0]) {
+        return fail(400, { error: true, message: 'Too many results. Please narrow down the search criteria.' });
+    }
+
+    return { searchedDistributions };
 };
 
 const updateUser: Action = async ({ request }) => {
@@ -1141,14 +1165,14 @@ const updateDistribution: Action = async ({ request }) => {
         return fail(400, { error: true, message: emptyMsg });
     }
 
-    // dataカラムの場合、配布コンテンツデータのみにする
-    if (column === 'data') {
+    // contentsDataカラムの場合、配布コンテンツデータのみにする
+    if (column === 'contentsData') {
         delete data.dist_id;
-        delete data.data;
+        delete data.contentsData;
     }
 
     try {
-        if (column !== 'data') {
+        if (column !== 'contentsData') {
             await new PostgresManager('update', 'distribution', { distId, column, value }).execute();
 
             return {
@@ -1156,7 +1180,7 @@ const updateDistribution: Action = async ({ request }) => {
                 message: `The distribution data (ID: ${distId}, Column: ${column}) has been successfully updated.`,
             };
         } else {
-            const contentsData = ManageDistribution.getHexString(data);
+            const contentsData = ManageDistribution.getContentsDataArray(data);
             if (!contentsData) {
                 await delay(1000);
                 return fail(400, { error: true, message: 'Failed to get contents data.<br />Source data format is invalid.' });
@@ -1229,13 +1253,11 @@ const createDistribution: Action = async ({ request }) => {
         const keysToRemove = ['category', 'deadline', 'event_name', 'description', 'times_acceptable', 'character_id', 'min_hr', 'max_hr', 'min_gr', 'max_gr'];
 
         data = Object.fromEntries(Object.entries(data).filter(([key]) => !keysToRemove.includes(key))); // 配布コンテンツデータ以外を削除
-        const contentsData = ManageDistribution.getHexString(data);
+        const contentsData = ManageDistribution.getContentsDataArray(data);
         if (!contentsData) {
             await delay(1000);
             return fail(400, { error: true, message: 'Failed to get contents data.<br />Source data format is invalid.' });
         }
-
-        const base64 = Buffer.from(contentsData, 'hex').toString('base64');
 
         const createdDistribution: Distribution = await new PostgresManager('create', 'distribution', {
             charId,
@@ -1248,7 +1270,7 @@ const createDistribution: Action = async ({ request }) => {
             maxHr,
             minGr,
             maxGr,
-            base64,
+            contentsData,
         }).execute();
 
         return {
@@ -1300,6 +1322,7 @@ export const actions: Actions = {
     getPaginatedUsers,
     getPaginatedClans,
     getPaginatedAlliances,
+    getPaginatedDistributions,
     updateUser,
     updateCharacter,
     deleteUsers,

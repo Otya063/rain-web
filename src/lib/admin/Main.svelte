@@ -9,7 +9,6 @@
     import {
         adminTabValue,
         allBannerData,
-        allDistributionData,
         allRainServerData,
         // allInformationData,
         armJson,
@@ -49,7 +48,6 @@
 
     // ストア変数初期化
     // allInformationData.set(data.information);
-    allDistributionData.set(data.distributions);
     allBannerData.set(data.banners);
     allRainServerData.set(data.rainServers);
 </script>
@@ -65,7 +63,14 @@
 {:else if $adminTabValue === 'clan'}
     <Clan {isMobile} />
 {:else if $adminTabValue === 'distribution'}
-    <Distribution {charactersIdName} {isMobile} updatedContentsData={form?.updatedContentsData} bind:distAddMode createdDistribution={form?.createdDistribution} />
+    <Distribution
+        {charactersIdName}
+        {isMobile}
+        updatedContentsData={form?.updatedContentsData}
+        bind:distAddMode
+        createdDistribution={form?.createdDistribution}
+        searchedDistributions={form?.searchedDistributions}
+    />
 {/if}
 
 <!-- scroll-hint用cssインポート -->

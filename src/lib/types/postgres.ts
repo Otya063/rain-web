@@ -1,4 +1,4 @@
-import type { BinaryTypes, DistributionCategory, DistributionEditableItemType, Replace, PaginatedClans, PaginatedAlliances } from '$types';
+import type { BinaryTypes, DistributionCategory, DistributionContentsType, DistributionEditableItemType, Replace, PaginatedClans, PaginatedAlliances } from '$types';
 
 /**
  * データベース認証情報jsonデータ
@@ -28,7 +28,7 @@ export type ActionTableTypeMap = {
                 maxHr: number | null;
                 minGr: number | null;
                 maxGr: number | null;
-                base64: string;
+                contentsData: DistributionContentsItem[];
             };
             return: Distribution;
         };
@@ -175,6 +175,13 @@ export type ActionTableTypeMap = {
                 clanNames: string[];
             };
         };
+        paginatedDistributions: {
+            input: {
+                filterParam: 'distribution_id' | 'event_name' | 'character_id';
+                filterValue: string;
+            };
+            return: Distribution[] | [null];
+        };
     };
     transactions: {
         initAdmin: {
@@ -184,7 +191,6 @@ export type ActionTableTypeMap = {
                 rainServers: RainServer[];
                 // information: Information[];
                 banners: Banner[];
-                distributions: Distribution[];
                 charIdNamePair: string[];
             };
         };
@@ -209,7 +215,7 @@ export type ActionTableTypeMap = {
             input: {
                 distId: number;
                 column: DistributionEditableItemType;
-                value: string | null;
+                value: string | null | DistributionContentsItem[];
             };
             return: void;
         };
@@ -368,9 +374,25 @@ export type Distribution = {
     max_sr: number | null;
     min_gr: number | null;
     max_gr: number | null;
-    data: string;
+    contentsData: DistributionContentsItem[];
     type: 0 | 1;
 };
+
+/**
+ * 配布アイテムデータ（distribution_itemsテーブルの行）
+ */
+export type DistributionItem = {
+    id: number;
+    distribution_id: number;
+    item_type: DistributionContentsType;
+    item_id: number;
+    quantity: number;
+};
+
+/**
+ * 配布アイテムデータのうち、配布コンテンツとして送受信される部分
+ */
+export type DistributionContentsItem = Pick<DistributionItem, 'item_type' | 'item_id' | 'quantity'>;
 
 /**
  * システムデータ
@@ -487,7 +509,7 @@ export type Character = {
     linked_discord_id: string | null;
     bounty_coin: number | null;
     clan: JoinedClan;
-    claim_distribution: Replace<Distribution, { deadline: string | null }>[];
+    claim_distribution: Omit<Replace<Distribution, { deadline: string | null }>, 'contentsData'>[];
 };
 
 /**
