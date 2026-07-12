@@ -371,8 +371,7 @@
                         <div class="temp_operation_area" class:disabled_elm={searching}>
                             <label class="custom_select_box">
                                 <select bind:value={bindedParam}>
-                                    <option value="distribution_id" title="The distribution ID.">ID</option>
-                                    <option value="event_name" title="The distribution title.">Title</option>
+                                    <option value="event_name" title="The distribution title.">Distribution Title</option>
                                     <option value="character_id" title="The character ID for the scope of distribution.">Char ID</option>
                                 </select>
                             </label>
