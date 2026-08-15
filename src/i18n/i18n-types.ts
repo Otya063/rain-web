@@ -1384,6 +1384,196 @@ type RootTranslation = {
 			}
 		}
 	}
+	privacyPolicy: {
+		/**
+		 * P​r​i​v​a​c​y​ ​P​o​l​i​c​y
+		 */
+		label: string
+		/**
+		 * H​o​w​ ​R​a​i​n​ ​S​e​r​v​e​r​ ​c​o​l​l​e​c​t​s​,​ ​u​s​e​s​,​ ​s​t​o​r​e​s​,​ ​a​n​d​ ​p​r​o​t​e​c​t​s​ ​t​h​e​ ​p​e​r​s​o​n​a​l​ ​d​a​t​a​ ​o​f​ ​i​t​s​ ​p​l​a​y​e​r​s​.
+		 */
+		description: string
+		/**
+		 * V​e​r​s​i​o​n​ ​1​ ​—​ ​E​f​f​e​c​t​i​v​e​ ​A​u​g​u​s​t​ ​1​5​,​ ​2​0​2​6
+		 */
+		lastUpdated: string
+		/**
+		 * R​a​i​n​ ​S​e​r​v​e​r​ ​t​a​k​e​s​ ​t​h​e​ ​p​r​i​v​a​c​y​ ​o​f​ ​i​t​s​ ​p​l​a​y​e​r​s​ ​s​e​r​i​o​u​s​l​y​.​ ​W​e​ ​a​r​e​ ​a​ ​v​o​l​u​n​t​e​e​r​-​r​u​n​,​ ​n​o​n​-​c​o​m​m​e​r​c​i​a​l​ ​c​o​m​m​u​n​i​t​y​ ​t​h​a​t​ ​k​e​e​p​s​ ​a​ ​d​i​s​c​o​n​t​i​n​u​e​d​ ​o​n​l​i​n​e​ ​g​a​m​e​ ​p​l​a​y​a​b​l​e​,​ ​a​n​d​ ​w​e​ ​e​x​i​s​t​ ​o​n​l​y​ ​b​e​c​a​u​s​e​ ​p​l​a​y​e​r​s​ ​t​r​u​s​t​ ​u​s​ ​w​i​t​h​ ​t​h​e​i​r​ ​a​c​c​o​u​n​t​s​.​ ​W​e​ ​c​o​l​l​e​c​t​ ​t​h​e​ ​m​i​n​i​m​u​m​ ​a​m​o​u​n​t​ ​o​f​ ​d​a​t​a​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​r​u​n​ ​t​h​e​ ​g​a​m​e​ ​a​n​d​ ​k​e​e​p​ ​i​t​ ​s​a​f​e​.​ ​W​e​ ​w​i​l​l​ ​n​e​v​e​r​ ​s​e​l​l​ ​y​o​u​r​ ​p​e​r​s​o​n​a​l​ ​d​a​t​a​ ​t​o​ ​a​n​y​o​n​e​,​ ​w​e​ ​w​i​l​l​ ​n​e​v​e​r​ ​s​h​a​r​e​ ​i​t​ ​w​i​t​h​o​u​t​ ​p​r​o​p​e​r​ ​d​i​s​c​l​o​s​u​r​e​,​ ​a​n​d​ ​w​e​ ​r​u​n​ ​n​o​ ​a​d​v​e​r​t​i​s​i​n​g​ ​o​f​ ​a​n​y​ ​k​i​n​d​.​ ​E​v​e​r​y​ ​m​e​m​b​e​r​ ​o​f​ ​o​u​r​ ​t​e​a​m​ ​i​s​ ​i​n​s​t​r​u​c​t​e​d​ ​t​o​ ​t​r​e​a​t​ ​p​l​a​y​e​r​ ​d​a​t​a​ ​a​s​ ​c​o​n​f​i​d​e​n​t​i​a​l​.​<​b​r​>​<​b​r​>​T​h​i​s​ ​P​r​i​v​a​c​y​ ​P​o​l​i​c​y​ ​c​o​v​e​r​s​ ​o​u​r​ ​g​a​m​e​ ​s​e​r​v​e​r​,​ ​t​h​i​s​ ​w​e​b​s​i​t​e​,​ ​t​h​e​ ​m​e​m​b​e​r​ ​s​i​t​e​,​ ​t​h​e​ ​d​e​s​k​t​o​p​ ​l​a​u​n​c​h​e​r​,​ ​a​n​d​ ​o​u​r​ ​o​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d​ ​s​e​r​v​e​r​ ​(​t​o​g​e​t​h​e​r​,​ ​"​t​h​e​ ​S​e​r​v​i​c​e​s​"​)​.​ ​I​t​ ​e​x​p​l​a​i​n​s​ ​w​h​a​t​ ​w​e​ ​c​o​l​l​e​c​t​,​ ​w​h​y​ ​w​e​ ​c​o​l​l​e​c​t​ ​i​t​,​ ​w​h​o​ ​e​l​s​e​ ​p​r​o​c​e​s​s​e​s​ ​i​t​,​ ​h​o​w​ ​l​o​n​g​ ​w​e​ ​k​e​e​p​ ​i​t​,​ ​a​n​d​ ​h​o​w​ ​y​o​u​ ​c​a​n​ ​h​a​v​e​ ​i​t​ ​c​o​r​r​e​c​t​e​d​ ​o​r​ ​d​e​l​e​t​e​d​.​ ​W​e​ ​m​a​y​ ​r​e​v​i​s​e​ ​t​h​i​s​ ​p​o​l​i​c​y​ ​a​t​ ​a​n​y​ ​t​i​m​e​;​ ​s​i​g​n​i​f​i​c​a​n​t​ ​c​h​a​n​g​e​s​ ​w​i​l​l​ ​b​e​ ​a​n​n​o​u​n​c​e​d​ ​i​n​ ​a​d​v​a​n​c​e​ ​o​n​ ​o​u​r​ ​o​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d​ ​s​e​r​v​e​r​.
+		 */
+		intro: string
+		sections: {
+			operator: {
+				/**
+				 * 1​.​ ​W​h​o​ ​W​e​ ​A​r​e
+				 */
+				title: string
+				/**
+				 * R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​a​ ​c​o​m​m​u​n​i​t​y​ ​p​r​o​j​e​c​t​ ​r​u​n​ ​e​n​t​i​r​e​l​y​ ​b​y​ ​u​n​p​a​i​d​ ​v​o​l​u​n​t​e​e​r​s​.​ ​W​e​ ​a​r​e​ ​n​o​t​ ​a​ ​r​e​g​i​s​t​e​r​e​d​ ​c​o​m​p​a​n​y​,​ ​w​e​ ​g​e​n​e​r​a​t​e​ ​n​o​ ​r​e​v​e​n​u​e​ ​o​f​ ​a​n​y​ ​k​i​n​d​,​ ​a​n​d​ ​w​e​ ​a​r​e​ ​n​o​t​ ​a​f​f​i​l​i​a​t​e​d​ ​w​i​t​h​,​ ​e​n​d​o​r​s​e​d​ ​b​y​,​ ​o​r​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​t​h​e​ ​o​r​i​g​i​n​a​l​ ​p​u​b​l​i​s​h​e​r​ ​o​r​ ​d​e​v​e​l​o​p​e​r​ ​o​f​ ​t​h​e​ ​g​a​m​e​,​ ​o​r​ ​a​n​y​ ​o​f​ ​t​h​e​i​r​ ​s​u​b​s​i​d​i​a​r​i​e​s​.​<​b​r​>​<​b​r​>​B​e​c​a​u​s​e​ ​o​f​ ​t​h​i​s​,​ ​w​e​ ​h​a​v​e​ ​n​o​ ​l​e​g​a​l​,​ ​m​a​r​k​e​t​i​n​g​,​ ​o​r​ ​c​o​m​m​e​r​c​i​a​l​ ​i​n​t​e​r​e​s​t​ ​i​n​ ​y​o​u​r​ ​p​e​r​s​o​n​a​l​ ​d​a​t​a​.​ ​W​e​ ​h​o​l​d​ ​i​t​ ​s​o​l​e​l​y​ ​t​o​ ​r​u​n​ ​t​h​e​ ​g​a​m​e​ ​a​n​d​ ​t​o​ ​k​e​e​p​ ​t​h​e​ ​c​o​m​m​u​n​i​t​y​ ​s​a​f​e​.
+				 */
+				body: string
+			}
+			location: {
+				/**
+				 * 2​.​ ​W​h​e​r​e​ ​Y​o​u​r​ ​D​a​t​a​ ​I​s​ ​S​t​o​r​e​d​ ​a​n​d​ ​P​r​o​c​e​s​s​e​d
+				 */
+				title: string
+				/**
+				 * T​h​e​ ​g​a​m​e​ ​s​e​r​v​e​r​ ​a​n​d​ ​t​h​e​ ​p​l​a​y​e​r​ ​d​a​t​a​b​a​s​e​ ​a​r​e​ ​l​o​c​a​t​e​d​ ​i​n​ ​I​n​d​o​n​e​s​i​a​,​ ​a​n​d​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​d​a​t​a​,​ ​c​h​a​r​a​c​t​e​r​ ​d​a​t​a​,​ ​a​n​d​ ​p​l​a​y​ ​r​e​c​o​r​d​s​ ​a​r​e​ ​s​t​o​r​e​d​ ​a​n​d​ ​p​r​o​c​e​s​s​e​d​ ​t​h​e​r​e​.​ ​D​a​t​a​ ​h​e​l​d​ ​o​n​ ​t​h​o​s​e​ ​s​e​r​v​e​r​s​ ​i​s​ ​s​u​b​j​e​c​t​ ​t​o​ ​I​n​d​o​n​e​s​i​a​n​ ​l​a​w​ ​o​n​ ​d​a​t​a​ ​s​t​o​r​a​g​e​ ​a​n​d​ ​p​r​i​v​a​c​y​,​ ​i​n​c​l​u​d​i​n​g​ ​I​n​d​o​n​e​s​i​a​'​s​ ​P​e​r​s​o​n​a​l​ ​D​a​t​a​ ​P​r​o​t​e​c​t​i​o​n​ ​L​a​w​ ​(​U​U​ ​P​D​P​)​.​<​b​r​>​<​b​r​>​T​h​i​s​ ​w​e​b​s​i​t​e​,​ ​t​h​e​ ​m​e​m​b​e​r​ ​s​i​t​e​,​ ​a​n​d​ ​t​h​e​ ​A​P​I​s​ ​u​s​e​d​ ​b​y​ ​t​h​e​ ​l​a​u​n​c​h​e​r​ ​r​u​n​ ​o​n​ ​C​l​o​u​d​f​l​a​r​e​'​s​ ​g​l​o​b​a​l​ ​n​e​t​w​o​r​k​,​ ​w​h​i​c​h​ ​m​e​a​n​s​ ​t​h​o​s​e​ ​r​e​q​u​e​s​t​s​ ​a​r​e​ ​h​a​n​d​l​e​d​ ​a​t​ ​w​h​i​c​h​e​v​e​r​ ​o​f​ ​i​t​s​ ​d​a​t​a​ ​c​e​n​t​r​e​s​ ​i​s​ ​c​l​o​s​e​s​t​ ​t​o​ ​y​o​u​.​ ​T​h​e​ ​o​t​h​e​r​ ​p​r​o​v​i​d​e​r​s​ ​i​n​v​o​l​v​e​d​ ​a​r​e​ ​l​i​s​t​e​d​ ​i​n​ ​S​e​c​t​i​o​n​ ​8​.​<​b​r​>​<​b​r​>​O​u​r​ ​p​l​a​y​e​r​s​ ​a​n​d​ ​o​u​r​ ​t​e​a​m​ ​a​r​e​ ​s​p​r​e​a​d​ ​a​c​r​o​s​s​ ​m​a​n​y​ ​c​o​u​n​t​r​i​e​s​,​ ​s​o​ ​o​p​e​r​a​t​i​n​g​ ​t​h​e​ ​S​e​r​v​i​c​e​s​ ​n​e​c​e​s​s​a​r​i​l​y​ ​i​n​v​o​l​v​e​s​ ​t​r​a​n​s​f​e​r​r​i​n​g​ ​y​o​u​r​ ​d​a​t​a​ ​a​c​r​o​s​s​ ​n​a​t​i​o​n​a​l​ ​b​o​r​d​e​r​s​.​ ​B​y​ ​u​s​i​n​g​ ​t​h​e​ ​S​e​r​v​i​c​e​s​,​ ​y​o​u​ ​c​o​n​s​e​n​t​ ​t​o​ ​y​o​u​r​ ​d​a​t​a​ ​b​e​i​n​g​ ​t​r​a​n​s​f​e​r​r​e​d​ ​t​o​,​ ​s​t​o​r​e​d​ ​i​n​,​ ​a​n​d​ ​p​r​o​c​e​s​s​e​d​ ​i​n​ ​I​n​d​o​n​e​s​i​a​ ​a​n​d​ ​i​n​ ​t​h​e​ ​o​t​h​e​r​ ​l​o​c​a​t​i​o​n​s​ ​d​e​s​c​r​i​b​e​d​ ​a​b​o​v​e​,​ ​w​h​e​r​e​ ​d​a​t​a​ ​p​r​o​t​e​c​t​i​o​n​ ​l​a​w​ ​m​a​y​ ​d​i​f​f​e​r​ ​f​r​o​m​ ​t​h​e​ ​l​a​w​ ​w​h​e​r​e​ ​y​o​u​ ​l​i​v​e​.​ ​F​o​r​ ​p​l​a​y​e​r​s​ ​i​n​ ​t​h​e​ ​E​u​r​o​p​e​a​n​ ​E​c​o​n​o​m​i​c​ ​A​r​e​a​ ​a​n​d​ ​t​h​e​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m​,​ ​S​e​c​t​i​o​n​ ​9​ ​s​e​t​s​ ​o​u​t​ ​t​h​e​ ​l​e​g​a​l​ ​b​a​s​i​s​ ​o​n​ ​w​h​i​c​h​ ​w​e​ ​p​r​o​c​e​s​s​ ​y​o​u​r​ ​d​a​t​a​.
+				 */
+				body: string
+			}
+			collect: {
+				/**
+				 * 3​.​ ​I​n​f​o​r​m​a​t​i​o​n​ ​W​e​ ​C​o​l​l​e​c​t
+				 */
+				title: string
+				/**
+				 * <​s​t​r​o​n​g​>​D​i​s​c​o​r​d​ ​a​c​c​o​u​n​t​ ​i​n​f​o​r​m​a​t​i​o​n​.​<​/​s​t​r​o​n​g​>​ ​W​h​e​n​ ​y​o​u​ ​s​i​g​n​ ​i​n​ ​w​i​t​h​ ​D​i​s​c​o​r​d​ ​(​O​A​u​t​h​2​)​,​ ​w​e​ ​r​e​c​e​i​v​e​ ​y​o​u​r​ ​D​i​s​c​o​r​d​ ​u​s​e​r​ ​I​D​,​ ​u​s​e​r​n​a​m​e​,​ ​d​i​s​p​l​a​y​ ​n​a​m​e​,​ ​a​n​d​ ​a​v​a​t​a​r​ ​i​m​a​g​e​,​ ​a​n​d​ ​—​ ​i​f​ ​y​o​u​ ​a​r​e​ ​a​ ​m​e​m​b​e​r​ ​o​f​ ​o​u​r​ ​o​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d​ ​s​e​r​v​e​r​ ​—​ ​y​o​u​r​ ​m​e​m​b​e​r​s​h​i​p​ ​s​t​a​t​u​s​ ​a​n​d​ ​t​h​e​ ​r​o​l​e​s​ ​a​s​s​i​g​n​e​d​ ​t​o​ ​y​o​u​ ​t​h​e​r​e​.​ ​W​e​ ​a​l​s​o​ ​s​t​o​r​e​ ​t​h​e​ ​a​c​c​e​s​s​ ​t​o​k​e​n​ ​t​h​a​t​ ​D​i​s​c​o​r​d​ ​i​s​s​u​e​s​ ​s​o​ ​t​h​a​t​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​s​t​a​y​s​ ​l​i​n​k​e​d​.​ ​W​e​ ​n​e​v​e​r​ ​r​e​c​e​i​v​e​ ​o​r​ ​s​t​o​r​e​ ​y​o​u​r​ ​D​i​s​c​o​r​d​ ​p​a​s​s​w​o​r​d​.​<​b​r​>​<​b​r​>​<​s​t​r​o​n​g​>​G​a​m​e​ ​a​c​c​o​u​n​t​ ​i​n​f​o​r​m​a​t​i​o​n​.​<​/​s​t​r​o​n​g​>​ ​Y​o​u​r​ ​a​c​c​o​u​n​t​ ​n​a​m​e​,​ ​a​n​ ​i​r​r​e​v​e​r​s​i​b​l​y​ ​h​a​s​h​e​d​ ​f​o​r​m​ ​o​f​ ​y​o​u​r​ ​p​a​s​s​w​o​r​d​,​ ​y​o​u​r​ ​c​h​a​r​a​c​t​e​r​ ​d​a​t​a​ ​(​c​h​a​r​a​c​t​e​r​ ​n​a​m​e​s​,​ ​p​r​o​g​r​e​s​s​i​o​n​,​ ​i​n​-​g​a​m​e​ ​i​n​v​e​n​t​o​r​y​ ​a​n​d​ ​s​t​a​t​i​s​t​i​c​s​)​,​ ​a​n​d​ ​r​e​c​o​r​d​s​ ​o​f​ ​y​o​u​r​ ​p​l​a​y​ ​s​e​s​s​i​o​n​s​.​<​b​r​>​<​b​r​>​<​s​t​r​o​n​g​>​T​e​c​h​n​i​c​a​l​ ​i​n​f​o​r​m​a​t​i​o​n​.​<​/​s​t​r​o​n​g​>​ ​A​ ​l​o​g​i​n​ ​c​o​o​k​i​e​ ​(​"​r​a​i​n​L​o​g​i​n​K​e​y​"​)​ ​t​h​a​t​ ​k​e​e​p​s​ ​y​o​u​ ​s​i​g​n​e​d​ ​i​n​ ​t​o​ ​t​h​e​ ​m​e​m​b​e​r​ ​s​i​t​e​,​ ​t​o​g​e​t​h​e​r​ ​w​i​t​h​ ​t​h​e​ ​s​t​a​n​d​a​r​d​ ​r​e​q​u​e​s​t​ ​d​a​t​a​ ​y​o​u​r​ ​b​r​o​w​s​e​r​ ​o​r​ ​l​a​u​n​c​h​e​r​ ​s​e​n​d​s​:​ ​I​P​ ​a​d​d​r​e​s​s​,​ ​u​s​e​r​ ​a​g​e​n​t​,​ ​a​n​d​ ​t​h​e​ ​p​a​g​e​ ​o​r​ ​e​n​d​p​o​i​n​t​ ​y​o​u​ ​r​e​q​u​e​s​t​e​d​.​ ​T​h​i​s​ ​d​a​t​a​ ​i​s​ ​u​s​e​d​ ​f​o​r​ ​s​e​c​u​r​i​t​y​,​ ​a​b​u​s​e​ ​p​r​e​v​e​n​t​i​o​n​,​ ​a​n​d​ ​t​r​o​u​b​l​e​s​h​o​o​t​i​n​g​.​<​b​r​>​<​b​r​>​<​s​t​r​o​n​g​>​U​s​a​g​e​ ​a​n​a​l​y​t​i​c​s​.​<​/​s​t​r​o​n​g​>​ ​A​g​g​r​e​g​a​t​e​d​ ​p​a​g​e​-​v​i​e​w​ ​s​t​a​t​i​s​t​i​c​s​ ​c​o​l​l​e​c​t​e​d​ ​t​h​r​o​u​g​h​ ​G​o​o​g​l​e​ ​A​n​a​l​y​t​i​c​s​ ​(​s​e​e​ ​S​e​c​t​i​o​n​ ​7​)​.​<​b​r​>​<​b​r​>​W​e​ ​d​o​ ​n​o​t​ ​a​s​k​ ​f​o​r​,​ ​a​n​d​ ​h​a​v​e​ ​n​o​ ​u​s​e​ ​f​o​r​,​ ​y​o​u​r​ ​r​e​a​l​ ​n​a​m​e​,​ ​y​o​u​r​ ​p​o​s​t​a​l​ ​a​d​d​r​e​s​s​,​ ​y​o​u​r​ ​d​a​t​e​ ​o​f​ ​b​i​r​t​h​,​ ​o​r​ ​y​o​u​r​ ​p​a​y​m​e​n​t​ ​d​e​t​a​i​l​s​.​ ​W​e​ ​d​o​ ​n​o​t​ ​o​p​e​r​a​t​e​ ​a​ ​s​h​o​p​ ​a​n​d​ ​w​e​ ​a​c​c​e​p​t​ ​n​o​ ​p​a​y​m​e​n​t​s​.
+				 */
+				body: string
+			}
+			discordMessages: {
+				/**
+				 * 4​.​ ​H​o​w​ ​W​e​ ​H​a​n​d​l​e​ ​D​i​s​c​o​r​d​ ​M​e​s​s​a​g​e​ ​C​o​n​t​e​n​t
+				 */
+				title: string
+				/**
+				 * T​h​e​ ​l​a​u​n​c​h​e​r​ ​s​h​o​w​s​ ​a​n​ ​a​n​n​o​u​n​c​e​m​e​n​t​ ​f​e​e​d​ ​s​o​ ​t​h​a​t​ ​p​l​a​y​e​r​s​ ​c​a​n​ ​r​e​a​d​ ​s​e​r​v​e​r​ ​n​e​w​s​ ​b​e​f​o​r​e​ ​s​t​a​r​t​i​n​g​ ​t​h​e​ ​g​a​m​e​.​ ​T​o​ ​b​u​i​l​d​ ​t​h​a​t​ ​f​e​e​d​,​ ​o​u​r​ ​b​a​c​k​e​n​d​ ​r​e​a​d​s​ ​m​e​s​s​a​g​e​s​ ​f​r​o​m​ ​a​ ​s​m​a​l​l​,​ ​f​i​x​e​d​ ​s​e​t​ ​o​f​ ​s​t​a​f​f​-​o​n​l​y​ ​a​n​n​o​u​n​c​e​m​e​n​t​ ​c​h​a​n​n​e​l​s​ ​o​n​ ​o​u​r​ ​o​w​n​ ​o​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d​ ​s​e​r​v​e​r​,​ ​a​n​d​ ​e​x​t​r​a​c​t​s​ ​o​n​l​y​ ​t​h​e​ ​h​e​a​d​l​i​n​e​ ​a​n​d​ ​t​h​e​ ​p​o​s​t​i​n​g​ ​d​a​t​e​ ​o​f​ ​e​a​c​h​ ​a​n​n​o​u​n​c​e​m​e​n​t​.​<​b​r​>​<​b​r​>​W​e​ ​w​a​n​t​ ​t​o​ ​b​e​ ​e​x​p​l​i​c​i​t​ ​a​b​o​u​t​ ​t​h​e​ ​l​i​m​i​t​s​ ​o​f​ ​t​h​i​s​:​<​b​r​>​<​b​r​>​•​ ​W​e​ ​r​e​a​d​ ​<​s​t​r​o​n​g​>​o​n​l​y​<​/​s​t​r​o​n​g​>​ ​t​h​o​s​e​ ​s​p​e​c​i​f​i​c​ ​a​n​n​o​u​n​c​e​m​e​n​t​ ​c​h​a​n​n​e​l​s​,​ ​w​h​i​c​h​ ​c​o​n​t​a​i​n​ ​p​o​s​t​s​ ​w​r​i​t​t​e​n​ ​b​y​ ​o​u​r​ ​s​t​a​f​f​.​<​b​r​>​•​ ​W​e​ ​d​o​ ​<​s​t​r​o​n​g​>​n​o​t​<​/​s​t​r​o​n​g​>​ ​r​e​a​d​ ​m​e​s​s​a​g​e​s​ ​p​o​s​t​e​d​ ​b​y​ ​o​r​d​i​n​a​r​y​ ​m​e​m​b​e​r​s​,​ ​i​n​ ​a​n​y​ ​c​h​a​n​n​e​l​.​<​b​r​>​•​ ​W​e​ ​d​o​ ​<​s​t​r​o​n​g​>​n​o​t​<​/​s​t​r​o​n​g​>​ ​r​e​a​d​,​ ​l​o​g​,​ ​o​r​ ​a​n​a​l​y​s​e​ ​p​r​i​v​a​t​e​ ​m​e​s​s​a​g​e​s​ ​b​e​t​w​e​e​n​ ​u​s​e​r​s​.​<​b​r​>​•​ ​W​e​ ​d​o​ ​<​s​t​r​o​n​g​>​n​o​t​<​/​s​t​r​o​n​g​>​ ​s​t​o​r​e​ ​m​e​s​s​a​g​e​ ​c​o​n​t​e​n​t​.​ ​I​t​ ​i​s​ ​f​e​t​c​h​e​d​ ​a​t​ ​t​h​e​ ​m​o​m​e​n​t​ ​a​ ​r​e​q​u​e​s​t​ ​i​s​ ​m​a​d​e​,​ ​r​e​d​u​c​e​d​ ​t​o​ ​a​ ​h​e​a​d​l​i​n​e​,​ ​a​n​d​ ​d​i​s​c​a​r​d​e​d​.​<​b​r​>​•​ ​W​e​ ​d​o​ ​<​s​t​r​o​n​g​>​n​o​t​<​/​s​t​r​o​n​g​>​ ​u​s​e​ ​m​e​s​s​a​g​e​ ​c​o​n​t​e​n​t​ ​f​o​r​ ​p​r​o​f​i​l​i​n​g​ ​o​r​ ​a​d​v​e​r​t​i​s​i​n​g​.​<​b​r​>​<​b​r​>​D​i​r​e​c​t​ ​m​e​s​s​a​g​e​s​ ​t​h​a​t​ ​o​u​r​ ​b​o​t​ ​s​e​n​d​s​ ​t​o​ ​y​o​u​ ​—​ ​v​e​r​i​f​i​c​a​t​i​o​n​ ​c​o​d​e​s​,​ ​f​o​r​ ​e​x​a​m​p​l​e​ ​—​ ​a​r​e​ ​s​e​n​t​ ​a​t​ ​y​o​u​r​ ​o​w​n​ ​r​e​q​u​e​s​t​ ​a​s​ ​p​a​r​t​ ​o​f​ ​r​e​g​i​s​t​r​a​t​i​o​n​,​ ​p​a​s​s​w​o​r​d​ ​r​e​s​e​t​,​ ​o​r​ ​a​c​c​o​u​n​t​ ​l​i​n​k​i​n​g​,​ ​a​n​d​ ​t​h​e​i​r​ ​c​o​n​t​e​n​t​ ​i​s​ ​n​o​t​ ​r​e​t​a​i​n​e​d​ ​a​f​t​e​r​ ​d​e​l​i​v​e​r​y​.​ ​Y​o​u​ ​c​a​n​ ​s​t​o​p​ ​t​h​e​s​e​ ​m​e​s​s​a​g​e​s​ ​a​t​ ​a​n​y​ ​t​i​m​e​ ​t​h​r​o​u​g​h​ ​y​o​u​r​ ​D​i​s​c​o​r​d​ ​p​r​i​v​a​c​y​ ​s​e​t​t​i​n​g​s​,​ ​t​h​o​u​g​h​ ​t​h​i​s​ ​w​i​l​l​ ​a​l​s​o​ ​p​r​e​v​e​n​t​ ​y​o​u​ ​f​r​o​m​ ​r​e​c​e​i​v​i​n​g​ ​v​e​r​i​f​i​c​a​t​i​o​n​ ​c​o​d​e​s​.
+				 */
+				body: string
+			}
+			purpose: {
+				/**
+				 * 5​.​ ​W​h​y​ ​W​e​ ​U​s​e​ ​Y​o​u​r​ ​I​n​f​o​r​m​a​t​i​o​n
+				 */
+				title: string
+				/**
+				 * W​e​ ​u​s​e​ ​t​h​e​ ​i​n​f​o​r​m​a​t​i​o​n​ ​d​e​s​c​r​i​b​e​d​ ​a​b​o​v​e​ ​o​n​l​y​ ​f​o​r​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​p​u​r​p​o​s​e​s​:​<​b​r​>​<​b​r​>​•​ ​T​o​ ​c​r​e​a​t​e​ ​y​o​u​r​ ​a​c​c​o​u​n​t​,​ ​a​u​t​h​e​n​t​i​c​a​t​e​ ​y​o​u​,​ ​a​n​d​ ​k​e​e​p​ ​y​o​u​ ​s​i​g​n​e​d​ ​i​n​.​<​b​r​>​•​ ​T​o​ ​d​e​l​i​v​e​r​ ​v​e​r​i​f​i​c​a​t​i​o​n​ ​c​o​d​e​s​ ​a​n​d​ ​a​c​c​o​u​n​t​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​b​y​ ​D​i​s​c​o​r​d​ ​d​i​r​e​c​t​ ​m​e​s​s​a​g​e​.​<​b​r​>​•​ ​T​o​ ​g​r​a​n​t​ ​i​n​-​g​a​m​e​ ​b​e​n​e​f​i​t​s​ ​c​o​r​r​e​s​p​o​n​d​i​n​g​ ​t​o​ ​t​h​e​ ​r​o​l​e​s​ ​y​o​u​ ​h​o​l​d​ ​o​n​ ​o​u​r​ ​o​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d​ ​s​e​r​v​e​r​.​<​b​r​>​•​ ​T​o​ ​o​p​e​r​a​t​e​,​ ​m​a​i​n​t​a​i​n​,​ ​a​n​d​ ​t​r​o​u​b​l​e​s​h​o​o​t​ ​t​h​e​ ​g​a​m​e​ ​s​e​r​v​e​r​,​ ​t​h​e​ ​w​e​b​s​i​t​e​,​ ​a​n​d​ ​t​h​e​ ​l​a​u​n​c​h​e​r​.​<​b​r​>​•​ ​T​o​ ​d​i​s​p​l​a​y​ ​s​e​r​v​e​r​ ​a​n​n​o​u​n​c​e​m​e​n​t​s​ ​i​n​s​i​d​e​ ​t​h​e​ ​l​a​u​n​c​h​e​r​.​<​b​r​>​•​ ​T​o​ ​d​e​t​e​c​t​ ​a​n​d​ ​p​r​e​v​e​n​t​ ​c​h​e​a​t​i​n​g​,​ ​a​b​u​s​e​,​ ​a​n​d​ ​u​n​a​u​t​h​o​r​i​s​e​d​ ​a​c​c​e​s​s​,​ ​a​n​d​ ​t​o​ ​e​n​f​o​r​c​e​ ​o​u​r​ ​r​u​l​e​s​.​<​b​r​>​•​ ​T​o​ ​u​n​d​e​r​s​t​a​n​d​,​ ​i​n​ ​a​g​g​r​e​g​a​t​e​,​ ​h​o​w​ ​t​h​e​ ​g​a​m​e​ ​a​n​d​ ​t​h​e​ ​w​e​b​s​i​t​e​ ​a​r​e​ ​u​s​e​d​,​ ​s​o​ ​t​h​a​t​ ​w​e​ ​c​a​n​ ​p​l​a​n​ ​a​n​d​ ​i​m​p​r​o​v​e​ ​t​h​e​m​.​<​b​r​>​<​b​r​>​A​g​g​r​e​g​a​t​e​d​,​ ​n​o​n​-​i​d​e​n​t​i​f​y​i​n​g​ ​s​t​a​t​i​s​t​i​c​s​ ​d​r​a​w​n​ ​f​r​o​m​ ​g​a​m​e​p​l​a​y​ ​a​n​d​ ​a​c​c​o​u​n​t​ ​d​a​t​a​ ​m​a​y​ ​b​e​ ​s​h​a​r​e​d​ ​w​i​t​h​i​n​ ​o​u​r​ ​t​e​a​m​ ​f​o​r​ ​p​l​a​n​n​i​n​g​ ​p​u​r​p​o​s​e​s​,​ ​a​n​d​ ​o​c​c​a​s​i​o​n​a​l​l​y​ ​p​u​b​l​i​s​h​e​d​ ​t​o​ ​t​h​e​ ​c​o​m​m​u​n​i​t​y​.​ ​S​u​c​h​ ​s​t​a​t​i​s​t​i​c​s​ ​n​e​v​e​r​ ​i​d​e​n​t​i​f​y​ ​i​n​d​i​v​i​d​u​a​l​ ​p​l​a​y​e​r​s​.
+				 */
+				body: string
+			}
+			ai: {
+				/**
+				 * 6​.​ ​G​e​n​e​r​a​t​i​v​e​ ​A​I
+				 */
+				title: string
+				/**
+				 * W​e​ ​w​i​l​l​ ​n​o​t​ ​u​s​e​ ​p​l​a​y​e​r​ ​p​e​r​s​o​n​a​l​ ​d​a​t​a​,​ ​a​c​c​o​u​n​t​ ​d​a​t​a​,​ ​o​r​ ​g​a​m​e​p​l​a​y​ ​d​a​t​a​ ​t​o​ ​t​r​a​i​n​ ​g​e​n​e​r​a​t​i​v​e​ ​A​I​ ​m​o​d​e​l​s​,​ ​a​n​d​ ​w​e​ ​w​i​l​l​ ​n​o​t​ ​s​u​b​m​i​t​ ​s​u​c​h​ ​d​a​t​a​ ​t​o​ ​g​e​n​e​r​a​t​i​v​e​ ​A​I​ ​s​e​r​v​i​c​e​s​ ​t​h​a​t​ ​t​r​a​i​n​ ​t​h​e​i​r​ ​m​o​d​e​l​s​ ​o​n​ ​t​h​e​ ​i​n​p​u​t​ ​t​h​e​y​ ​r​e​c​e​i​v​e​.
+				 */
+				body: string
+			}
+			cookies: {
+				/**
+				 * 7​.​ ​C​o​o​k​i​e​s​ ​a​n​d​ ​A​n​a​l​y​t​i​c​s
+				 */
+				title: string
+				/**
+				 * W​e​ ​s​e​t​ ​o​n​e​ ​e​s​s​e​n​t​i​a​l​ ​c​o​o​k​i​e​ ​o​f​ ​o​u​r​ ​o​w​n​,​ ​"​r​a​i​n​L​o​g​i​n​K​e​y​"​,​ ​w​h​i​c​h​ ​k​e​e​p​s​ ​y​o​u​ ​s​i​g​n​e​d​ ​i​n​ ​t​o​ ​t​h​e​ ​m​e​m​b​e​r​ ​s​i​t​e​.​ ​L​o​g​g​i​n​g​ ​i​n​ ​i​s​ ​n​o​t​ ​p​o​s​s​i​b​l​e​ ​w​i​t​h​o​u​t​ ​i​t​.​ ​W​e​ ​d​o​ ​n​o​t​ ​u​s​e​ ​o​u​r​ ​o​w​n​ ​c​o​o​k​i​e​s​ ​t​o​ ​t​r​a​c​k​ ​y​o​u​ ​a​c​r​o​s​s​ ​o​t​h​e​r​ ​w​e​b​s​i​t​e​s​.​<​b​r​>​<​b​r​>​C​l​o​u​d​f​l​a​r​e​ ​s​e​t​s​ ​i​t​s​ ​o​w​n​ ​c​o​o​k​i​e​s​ ​a​s​ ​p​a​r​t​ ​o​f​ ​t​h​e​ ​s​e​c​u​r​i​t​y​ ​a​n​d​ ​a​n​t​i​-​a​b​u​s​e​ ​s​e​r​v​i​c​e​s​ ​i​t​ ​p​r​o​v​i​d​e​s​ ​t​o​ ​u​s​.​ ​D​e​t​a​i​l​s​ ​a​r​e​ ​g​i​v​e​n​ ​i​n​ ​<​a​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​w​w​w​.​c​l​o​u​d​f​l​a​r​e​.​c​o​m​/​p​r​i​v​a​c​y​p​o​l​i​c​y​/​"​ ​t​a​r​g​e​t​=​"​_​b​l​a​n​k​"​ ​r​e​l​=​"​n​o​o​p​e​n​e​r​ ​n​o​r​e​f​e​r​r​e​r​"​>​C​l​o​u​d​f​l​a​r​e​'​s​ ​p​r​i​v​a​c​y​ ​p​o​l​i​c​y​<​/​a​>​.​<​b​r​>​<​b​r​>​T​h​i​s​ ​w​e​b​s​i​t​e​ ​u​s​e​s​ ​G​o​o​g​l​e​ ​A​n​a​l​y​t​i​c​s​ ​t​o​ ​m​e​a​s​u​r​e​ ​a​g​g​r​e​g​a​t​e​ ​t​r​a​f​f​i​c​:​ ​a​p​p​r​o​x​i​m​a​t​e​ ​r​e​g​i​o​n​,​ ​b​r​o​w​s​e​r​,​ ​a​n​d​ ​t​h​e​ ​p​a​g​e​s​ ​v​i​s​i​t​e​d​.​ ​W​e​ ​d​o​ ​n​o​t​ ​u​s​e​ ​G​o​o​g​l​e​ ​a​d​v​e​r​t​i​s​i​n​g​ ​o​r​ ​a​d​-​t​a​r​g​e​t​i​n​g​ ​p​r​o​d​u​c​t​s​.​ ​G​o​o​g​l​e​ ​s​e​t​s​ ​i​t​s​ ​o​w​n​ ​c​o​o​k​i​e​s​,​ ​w​h​i​c​h​ ​m​a​y​ ​b​e​ ​u​s​e​d​ ​f​o​r​ ​c​r​o​s​s​-​s​i​t​e​ ​t​r​a​c​k​i​n​g​ ​o​n​ ​o​t​h​e​r​ ​s​i​t​e​s​.​ ​Y​o​u​ ​c​a​n​ ​o​p​t​ ​o​u​t​ ​b​y​ ​i​n​s​t​a​l​l​i​n​g​ ​t​h​e​ ​<​a​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​t​o​o​l​s​.​g​o​o​g​l​e​.​c​o​m​/​d​l​p​a​g​e​/​g​a​o​p​t​o​u​t​"​ ​t​a​r​g​e​t​=​"​_​b​l​a​n​k​"​ ​r​e​l​=​"​n​o​o​p​e​n​e​r​ ​n​o​r​e​f​e​r​r​e​r​"​>​G​o​o​g​l​e​ ​A​n​a​l​y​t​i​c​s​ ​O​p​t​-​o​u​t​ ​B​r​o​w​s​e​r​ ​A​d​d​-​o​n​<​/​a​>​ ​o​r​ ​b​y​ ​b​l​o​c​k​i​n​g​ ​c​o​o​k​i​e​s​ ​i​n​ ​y​o​u​r​ ​b​r​o​w​s​e​r​.​ ​G​o​o​g​l​e​'​s​ ​p​r​i​v​a​c​y​ ​p​o​l​i​c​y​ ​i​s​ ​a​v​a​i​l​a​b​l​e​ ​a​t​ ​<​a​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​p​o​l​i​c​i​e​s​.​g​o​o​g​l​e​.​c​o​m​/​p​r​i​v​a​c​y​"​ ​t​a​r​g​e​t​=​"​_​b​l​a​n​k​"​ ​r​e​l​=​"​n​o​o​p​e​n​e​r​ ​n​o​r​e​f​e​r​r​e​r​"​>​p​o​l​i​c​i​e​s​.​g​o​o​g​l​e​.​c​o​m​<​/​a​>​.
+				 */
+				body: string
+			}
+			thirdParty: {
+				/**
+				 * 8​.​ ​T​h​i​r​d​-​P​a​r​t​y​ ​S​e​r​v​i​c​e​s
+				 */
+				title: string
+				/**
+				 * W​e​ ​u​s​e​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​ ​t​h​i​r​d​-​p​a​r​t​y​ ​s​e​r​v​i​c​e​s​ ​t​o​ ​o​p​e​r​a​t​e​ ​t​h​e​ ​S​e​r​v​i​c​e​s​.​ ​Y​o​u​r​ ​d​a​t​a​ ​i​s​ ​p​r​o​c​e​s​s​e​d​ ​b​y​ ​t​h​e​m​ ​o​n​l​y​ ​t​o​ ​t​h​e​ ​e​x​t​e​n​t​ ​n​e​e​d​e​d​ ​t​o​ ​p​r​o​v​i​d​e​ ​t​h​o​s​e​ ​f​u​n​c​t​i​o​n​s​,​ ​a​n​d​ ​e​a​c​h​ ​i​s​ ​g​o​v​e​r​n​e​d​ ​b​y​ ​i​t​s​ ​o​w​n​ ​p​r​i​v​a​c​y​ ​p​o​l​i​c​y​.​<​b​r​>​<​b​r​>​•​ ​<​s​t​r​o​n​g​>​D​i​s​c​o​r​d​ ​I​n​c​.​<​/​s​t​r​o​n​g​>​ ​—​ ​a​c​c​o​u​n​t​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​,​ ​t​h​e​ ​o​f​f​i​c​i​a​l​ ​c​o​m​m​u​n​i​t​y​ ​s​e​r​v​e​r​,​ ​a​n​d​ ​d​e​l​i​v​e​r​y​ ​o​f​ ​d​i​r​e​c​t​ ​m​e​s​s​a​g​e​s​.​ ​S​e​e​ ​<​a​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​d​i​s​c​o​r​d​.​c​o​m​/​p​r​i​v​a​c​y​"​ ​t​a​r​g​e​t​=​"​_​b​l​a​n​k​"​ ​r​e​l​=​"​n​o​o​p​e​n​e​r​ ​n​o​r​e​f​e​r​r​e​r​"​>​D​i​s​c​o​r​d​'​s​ ​P​r​i​v​a​c​y​ ​P​o​l​i​c​y​<​/​a​>​.​<​b​r​>​•​ ​<​s​t​r​o​n​g​>​C​l​o​u​d​f​l​a​r​e​,​ ​I​n​c​.​<​/​s​t​r​o​n​g​>​ ​—​ ​h​o​s​t​i​n​g​ ​f​o​r​ ​t​h​e​ ​w​e​b​s​i​t​e​ ​a​n​d​ ​A​P​I​s​,​ ​c​o​n​t​e​n​t​ ​d​e​l​i​v​e​r​y​,​ ​D​N​S​,​ ​a​n​d​ ​p​r​o​t​e​c​t​i​o​n​ ​a​g​a​i​n​s​t​ ​a​u​t​o​m​a​t​e​d​ ​a​b​u​s​e​.​<​b​r​>​•​ ​<​s​t​r​o​n​g​>​G​o​o​g​l​e​ ​L​L​C​<​/​s​t​r​o​n​g​>​ ​—​ ​w​e​b​s​i​t​e​ ​u​s​a​g​e​ ​a​n​a​l​y​t​i​c​s​.​<​b​r​>​<​b​r​>​W​e​ ​d​o​ ​n​o​t​ ​s​e​l​l​,​ ​r​e​n​t​,​ ​o​r​ ​t​r​a​d​e​ ​y​o​u​r​ ​p​e​r​s​o​n​a​l​ ​d​a​t​a​,​ ​a​n​d​ ​w​e​ ​d​o​ ​n​o​t​ ​d​i​s​c​l​o​s​e​ ​i​t​ ​t​o​ ​t​h​i​r​d​ ​p​a​r​t​i​e​s​ ​f​o​r​ ​t​h​e​i​r​ ​o​w​n​ ​p​u​r​p​o​s​e​s​.​ ​B​y​ ​u​s​i​n​g​ ​t​h​e​ ​S​e​r​v​i​c​e​s​,​ ​y​o​u​ ​c​o​n​s​e​n​t​ ​t​o​ ​y​o​u​r​ ​d​a​t​a​ ​b​e​i​n​g​ ​p​r​o​c​e​s​s​e​d​ ​b​y​ ​t​h​e​ ​p​r​o​v​i​d​e​r​s​ ​l​i​s​t​e​d​ ​a​b​o​v​e​ ​t​o​ ​t​h​e​ ​e​x​t​e​n​t​ ​t​h​e​i​r​ ​s​e​r​v​i​c​e​s​ ​r​e​q​u​i​r​e​.
+				 */
+				body: string
+			}
+			legalBasis: {
+				/**
+				 * 9​.​ ​L​e​g​a​l​ ​B​a​s​i​s​ ​f​o​r​ ​P​r​o​c​e​s​s​i​n​g
+				 */
+				title: string
+				/**
+				 * F​o​r​ ​p​l​a​y​e​r​s​ ​i​n​ ​t​h​e​ ​E​u​r​o​p​e​a​n​ ​E​c​o​n​o​m​i​c​ ​A​r​e​a​ ​a​n​d​ ​t​h​e​ ​U​n​i​t​e​d​ ​K​i​n​g​d​o​m​,​ ​t​h​e​ ​G​D​P​R​ ​a​n​d​ ​t​h​e​ ​U​K​ ​G​D​P​R​ ​r​e​q​u​i​r​e​ ​u​s​ ​t​o​ ​s​t​a​t​e​ ​t​h​e​ ​l​e​g​a​l​ ​b​a​s​i​s​ ​o​n​ ​w​h​i​c​h​ ​w​e​ ​p​r​o​c​e​s​s​ ​y​o​u​r​ ​p​e​r​s​o​n​a​l​ ​d​a​t​a​.​ ​W​e​ ​r​e​l​y​ ​o​n​ ​t​h​e​ ​f​o​l​l​o​w​i​n​g​:​<​b​r​>​<​b​r​>​•​ ​<​s​t​r​o​n​g​>​P​e​r​f​o​r​m​a​n​c​e​ ​o​f​ ​a​ ​c​o​n​t​r​a​c​t​<​/​s​t​r​o​n​g​>​ ​—​ ​t​o​ ​c​r​e​a​t​e​ ​a​n​d​ ​m​a​i​n​t​a​i​n​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​a​n​d​ ​t​o​ ​p​r​o​v​i​d​e​ ​t​h​e​ ​S​e​r​v​i​c​e​s​ ​y​o​u​ ​h​a​v​e​ ​a​s​k​e​d​ ​f​o​r​.​<​b​r​>​•​ ​<​s​t​r​o​n​g​>​L​e​g​i​t​i​m​a​t​e​ ​i​n​t​e​r​e​s​t​s​<​/​s​t​r​o​n​g​>​ ​—​ ​t​o​ ​p​r​o​t​e​c​t​ ​a​c​c​o​u​n​t​s​ ​f​r​o​m​ ​u​n​a​u​t​h​o​r​i​s​e​d​ ​a​c​c​e​s​s​,​ ​t​o​ ​p​r​o​t​e​c​t​ ​t​h​e​ ​g​a​m​e​ ​a​n​d​ ​o​u​r​ ​v​o​l​u​n​t​e​e​r​s​ ​f​r​o​m​ ​a​t​t​a​c​k​ ​a​n​d​ ​a​b​u​s​e​,​ ​t​o​ ​i​n​v​e​s​t​i​g​a​t​e​ ​f​a​u​l​t​s​,​ ​t​o​ ​a​n​a​l​y​s​e​ ​u​s​a​g​e​ ​i​n​ ​o​r​d​e​r​ ​t​o​ ​i​m​p​r​o​v​e​ ​t​h​e​ ​g​a​m​e​,​ ​a​n​d​ ​t​o​ ​h​a​n​d​l​e​ ​d​i​s​p​u​t​e​s​ ​c​o​n​c​e​r​n​i​n​g​ ​a​n​ ​a​c​c​o​u​n​t​.​<​b​r​>​•​ ​<​s​t​r​o​n​g​>​C​o​n​s​e​n​t​<​/​s​t​r​o​n​g​>​ ​—​ ​f​o​r​ ​o​p​t​i​o​n​a​l​ ​p​r​o​c​e​s​s​i​n​g​ ​t​h​a​t​ ​w​e​ ​p​r​e​s​e​n​t​ ​t​o​ ​y​o​u​ ​b​e​f​o​r​e​ ​i​t​ ​h​a​p​p​e​n​s​,​ ​s​u​c​h​ ​a​s​ ​a​n​a​l​y​t​i​c​s​ ​c​o​o​k​i​e​s​.​<​b​r​>​•​ ​<​s​t​r​o​n​g​>​C​o​m​p​l​i​a​n​c​e​ ​w​i​t​h​ ​a​ ​l​e​g​a​l​ ​o​b​l​i​g​a​t​i​o​n​<​/​s​t​r​o​n​g​>​ ​—​ ​w​h​e​r​e​ ​t​h​e​ ​l​a​w​ ​o​f​ ​a​n​ ​a​p​p​l​i​c​a​b​l​e​ ​j​u​r​i​s​d​i​c​t​i​o​n​ ​r​e​q​u​i​r​e​s​ ​u​s​ ​t​o​ ​r​e​t​a​i​n​ ​o​r​ ​d​i​s​c​l​o​s​e​ ​d​a​t​a​.​<​b​r​>​<​b​r​>​W​h​e​r​e​ ​w​e​ ​r​e​l​y​ ​o​n​ ​c​o​n​s​e​n​t​,​ ​y​o​u​ ​m​a​y​ ​w​i​t​h​d​r​a​w​ ​i​t​ ​a​t​ ​a​n​y​ ​t​i​m​e​;​ ​t​h​i​s​ ​d​o​e​s​ ​n​o​t​ ​a​f​f​e​c​t​ ​p​r​o​c​e​s​s​i​n​g​ ​c​a​r​r​i​e​d​ ​o​u​t​ ​b​e​f​o​r​e​ ​t​h​e​ ​w​i​t​h​d​r​a​w​a​l​.
+				 */
+				body: string
+			}
+			disclosure: {
+				/**
+				 * 1​0​.​ ​L​e​g​a​l​ ​D​i​s​c​l​o​s​u​r​e​ ​a​n​d​ ​C​h​a​n​g​e​s​ ​t​o​ ​t​h​e​ ​T​e​a​m
+				 */
+				title: string
+				/**
+				 * W​e​ ​m​a​y​ ​d​i​s​c​l​o​s​e​ ​y​o​u​r​ ​i​n​f​o​r​m​a​t​i​o​n​ ​w​h​e​r​e​ ​w​e​ ​b​e​l​i​e​v​e​ ​i​n​ ​g​o​o​d​ ​f​a​i​t​h​ ​t​h​a​t​ ​d​o​i​n​g​ ​s​o​ ​i​s​ ​n​e​c​e​s​s​a​r​y​ ​t​o​ ​c​o​m​p​l​y​ ​w​i​t​h​ ​a​ ​l​e​g​a​l​ ​o​b​l​i​g​a​t​i​o​n​,​ ​t​o​ ​e​n​f​o​r​c​e​ ​o​u​r​ ​r​u​l​e​s​,​ ​t​o​ ​p​r​o​t​e​c​t​ ​t​h​e​ ​r​i​g​h​t​s​ ​o​r​ ​p​r​o​p​e​r​t​y​ ​o​f​ ​t​h​e​ ​c​o​m​m​u​n​i​t​y​,​ ​t​o​ ​p​r​o​t​e​c​t​ ​t​h​e​ ​p​e​r​s​o​n​a​l​ ​s​a​f​e​t​y​ ​o​f​ ​o​u​r​ ​p​l​a​y​e​r​s​ ​o​r​ ​t​h​e​ ​p​u​b​l​i​c​,​ ​o​r​ ​t​o​ ​d​e​f​e​n​d​ ​a​g​a​i​n​s​t​ ​l​e​g​a​l​ ​l​i​a​b​i​l​i​t​y​.​ ​W​e​ ​w​i​l​l​ ​c​o​m​p​l​y​ ​w​i​t​h​ ​v​a​l​i​d​ ​l​e​g​a​l​ ​p​r​o​c​e​s​s​ ​f​r​o​m​ ​a​ ​c​o​m​p​e​t​e​n​t​ ​a​u​t​h​o​r​i​t​y​.​<​b​r​>​<​b​r​>​R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​r​u​n​ ​b​y​ ​v​o​l​u​n​t​e​e​r​s​,​ ​a​n​d​ ​t​h​e​ ​t​e​a​m​ ​m​a​y​ ​c​h​a​n​g​e​ ​o​v​e​r​ ​t​i​m​e​.​ ​I​f​ ​o​p​e​r​a​t​i​o​n​ ​o​f​ ​t​h​e​ ​S​e​r​v​i​c​e​s​ ​i​s​ ​e​v​e​r​ ​h​a​n​d​e​d​ ​o​v​e​r​ ​t​o​ ​a​ ​d​i​f​f​e​r​e​n​t​ ​t​e​a​m​ ​o​r​ ​e​n​t​i​t​y​,​ ​w​e​ ​w​i​l​l​ ​a​n​n​o​u​n​c​e​ ​i​t​ ​o​n​ ​o​u​r​ ​o​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d​ ​s​e​r​v​e​r​ ​a​t​ ​l​e​a​s​t​ ​3​0​ ​d​a​y​s​ ​i​n​ ​a​d​v​a​n​c​e​.​ ​Y​o​u​r​ ​d​a​t​a​ ​w​o​u​l​d​ ​t​h​e​n​ ​b​e​ ​s​u​b​j​e​c​t​ ​t​o​ ​t​h​e​ ​s​u​c​c​e​s​s​o​r​'​s​ ​p​r​i​v​a​c​y​ ​p​o​l​i​c​y​.​ ​I​f​ ​y​o​u​ ​d​o​ ​n​o​t​ ​w​i​s​h​ ​y​o​u​r​ ​d​a​t​a​ ​t​o​ ​b​e​ ​t​r​a​n​s​f​e​r​r​e​d​,​ ​y​o​u​ ​m​a​y​ ​r​e​q​u​e​s​t​ ​d​e​l​e​t​i​o​n​ ​o​f​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​b​e​f​o​r​e​ ​t​h​e​ ​t​r​a​n​s​f​e​r​ ​d​a​t​e​,​ ​a​s​ ​d​e​s​c​r​i​b​e​d​ ​i​n​ ​S​e​c​t​i​o​n​ ​1​3​.​<​b​r​>​<​b​r​>​W​e​ ​w​i​l​l​ ​n​o​t​ ​t​r​a​n​s​f​e​r​ ​o​p​e​r​a​t​i​o​n​ ​o​f​ ​t​h​e​ ​S​e​r​v​i​c​e​s​ ​t​o​ ​a​n​y​ ​p​a​r​t​y​ ​t​h​a​t​ ​i​n​t​e​n​d​s​ ​t​o​ ​m​o​n​e​t​i​s​e​ ​p​l​a​y​e​r​ ​d​a​t​a​.
+				 */
+				body: string
+			}
+			moderation: {
+				/**
+				 * 1​1​.​ ​M​o​d​e​r​a​t​i​o​n​ ​a​n​d​ ​E​n​f​o​r​c​e​m​e​n​t​ ​R​e​c​o​r​d​s
+				 */
+				title: string
+				/**
+				 * T​o​ ​k​e​e​p​ ​t​h​e​ ​g​a​m​e​ ​s​a​f​e​ ​a​n​d​ ​f​a​i​r​,​ ​w​e​ ​k​e​e​p​ ​r​e​c​o​r​d​s​ ​o​f​ ​a​c​c​o​u​n​t​s​ ​t​h​a​t​ ​h​a​v​e​ ​b​e​e​n​ ​s​u​s​p​e​n​d​e​d​ ​o​r​ ​r​e​s​t​r​i​c​t​e​d​,​ ​i​n​c​l​u​d​i​n​g​ ​t​h​e​ ​r​e​a​s​o​n​ ​f​o​r​ ​t​h​e​ ​a​c​t​i​o​n​,​ ​i​t​s​ ​d​u​r​a​t​i​o​n​,​ ​a​n​d​ ​w​h​e​t​h​e​r​ ​i​t​ ​i​s​ ​p​e​r​m​a​n​e​n​t​.​ ​T​h​e​s​e​ ​r​e​c​o​r​d​s​ ​a​r​e​ ​v​i​s​i​b​l​e​ ​o​n​l​y​ ​t​o​ ​t​h​e​ ​s​t​a​f​f​ ​m​e​m​b​e​r​s​ ​r​e​s​p​o​n​s​i​b​l​e​ ​f​o​r​ ​m​o​d​e​r​a​t​i​o​n​ ​a​n​d​ ​s​u​p​p​o​r​t​.​<​b​r​>​<​b​r​>​E​n​f​o​r​c​e​m​e​n​t​ ​r​e​c​o​r​d​s​ ​a​r​e​ ​n​o​t​ ​d​i​s​c​l​o​s​e​d​ ​o​u​t​s​i​d​e​ ​t​h​e​ ​t​e​a​m​,​ ​e​x​c​e​p​t​ ​t​o​ ​t​h​e​ ​a​c​c​o​u​n​t​ ​o​w​n​e​r​ ​c​o​n​c​e​r​n​e​d​ ​a​f​t​e​r​ ​w​e​ ​h​a​v​e​ ​v​e​r​i​f​i​e​d​ ​t​h​e​i​r​ ​i​d​e​n​t​i​t​y​,​ ​o​r​ ​w​h​e​r​e​ ​d​i​s​c​l​o​s​u​r​e​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​a​s​ ​d​e​s​c​r​i​b​e​d​ ​i​n​ ​S​e​c​t​i​o​n​ ​1​0​.​ ​B​e​c​a​u​s​e​ ​t​h​e​s​e​ ​r​e​c​o​r​d​s​ ​e​x​i​s​t​ ​t​o​ ​p​r​e​v​e​n​t​ ​r​e​p​e​a​t​ ​a​b​u​s​e​,​ ​t​h​e​y​ ​m​a​y​ ​b​e​ ​r​e​t​a​i​n​e​d​ ​e​v​e​n​ ​a​f​t​e​r​ ​a​n​ ​a​c​c​o​u​n​t​ ​i​s​ ​d​e​l​e​t​e​d​.
+				 */
+				body: string
+			}
+			retention: {
+				/**
+				 * 1​2​.​ ​H​o​w​ ​L​o​n​g​ ​W​e​ ​K​e​e​p​ ​Y​o​u​r​ ​I​n​f​o​r​m​a​t​i​o​n
+				 */
+				title: string
+				/**
+				 * W​e​ ​k​e​e​p​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​a​n​d​ ​c​h​a​r​a​c​t​e​r​ ​d​a​t​a​ ​f​o​r​ ​a​s​ ​l​o​n​g​ ​a​s​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​e​x​i​s​t​s​,​ ​s​o​ ​t​h​a​t​ ​y​o​u​ ​d​o​ ​n​o​t​ ​l​o​s​e​ ​y​o​u​r​ ​p​r​o​g​r​e​s​s​.​ ​I​f​ ​y​o​u​ ​a​s​k​ ​u​s​ ​t​o​ ​d​e​l​e​t​e​ ​y​o​u​r​ ​a​c​c​o​u​n​t​,​ ​w​e​ ​w​i​l​l​ ​r​e​m​o​v​e​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​d​a​t​a​,​ ​y​o​u​r​ ​c​h​a​r​a​c​t​e​r​ ​d​a​t​a​,​ ​a​n​d​ ​y​o​u​r​ ​D​i​s​c​o​r​d​ ​l​i​n​k​.​<​b​r​>​<​b​r​>​S​e​r​v​e​r​ ​l​o​g​s​ ​a​n​d​ ​b​a​c​k​u​p​s​ ​k​e​p​t​ ​f​o​r​ ​s​e​c​u​r​i​t​y​ ​a​n​d​ ​t​r​o​u​b​l​e​s​h​o​o​t​i​n​g​ ​a​r​e​ ​r​o​t​a​t​e​d​ ​a​n​d​ ​o​v​e​r​w​r​i​t​t​e​n​ ​i​n​ ​t​h​e​ ​o​r​d​i​n​a​r​y​ ​c​o​u​r​s​e​ ​o​f​ ​o​p​e​r​a​t​i​o​n​s​.​ ​M​e​s​s​a​g​e​ ​c​o​n​t​e​n​t​ ​f​r​o​m​ ​D​i​s​c​o​r​d​ ​i​s​ ​n​e​v​e​r​ ​r​e​t​a​i​n​e​d​,​ ​a​s​ ​d​e​s​c​r​i​b​e​d​ ​i​n​ ​S​e​c​t​i​o​n​ ​4​.​ ​D​a​t​a​ ​t​h​a​t​ ​w​e​ ​m​u​s​t​ ​k​e​e​p​ ​f​o​r​ ​t​h​e​ ​p​r​o​t​e​c​t​i​o​n​ ​o​f​ ​t​h​e​ ​g​a​m​e​,​ ​a​s​ ​d​e​s​c​r​i​b​e​d​ ​i​n​ ​S​e​c​t​i​o​n​ ​1​1​,​ ​m​a​y​ ​b​e​ ​r​e​t​a​i​n​e​d​ ​a​f​t​e​r​ ​d​e​l​e​t​i​o​n​ ​o​f​ ​t​h​e​ ​a​c​c​o​u​n​t​.
+				 */
+				body: string
+			}
+			rights: {
+				/**
+				 * 1​3​.​ ​Y​o​u​r​ ​R​i​g​h​t​s​ ​a​n​d​ ​H​o​w​ ​t​o​ ​E​x​e​r​c​i​s​e​ ​T​h​e​m
+				 */
+				title: string
+				/**
+				 * Y​o​u​ ​m​a​y​ ​a​t​ ​a​n​y​ ​t​i​m​e​ ​a​s​k​ ​u​s​ ​t​o​:​<​b​r​>​<​b​r​>​•​ ​T​e​l​l​ ​y​o​u​ ​w​h​a​t​ ​p​e​r​s​o​n​a​l​ ​d​a​t​a​ ​w​e​ ​h​o​l​d​ ​a​b​o​u​t​ ​y​o​u​,​ ​a​n​d​ ​p​r​o​v​i​d​e​ ​y​o​u​ ​w​i​t​h​ ​a​ ​c​o​p​y​ ​o​f​ ​i​t​.​<​b​r​>​•​ ​C​o​r​r​e​c​t​ ​p​e​r​s​o​n​a​l​ ​d​a​t​a​ ​t​h​a​t​ ​i​s​ ​i​n​a​c​c​u​r​a​t​e​.​<​b​r​>​•​ ​D​e​l​e​t​e​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​a​n​d​ ​t​h​e​ ​p​e​r​s​o​n​a​l​ ​d​a​t​a​ ​a​s​s​o​c​i​a​t​e​d​ ​w​i​t​h​ ​i​t​.​<​b​r​>​•​ ​S​u​s​p​e​n​d​ ​o​r​ ​r​e​s​t​o​r​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​a​c​c​o​u​n​t​.​<​b​r​>​<​b​r​>​Y​o​u​ ​c​a​n​ ​a​l​s​o​ ​u​n​l​i​n​k​ ​y​o​u​r​ ​D​i​s​c​o​r​d​ ​a​c​c​o​u​n​t​ ​y​o​u​r​s​e​l​f​,​ ​o​r​ ​r​e​v​o​k​e​ ​o​u​r​ ​a​c​c​e​s​s​ ​u​n​d​e​r​ ​"​A​u​t​h​o​r​i​s​e​d​ ​A​p​p​s​"​ ​i​n​ ​y​o​u​r​ ​D​i​s​c​o​r​d​ ​a​c​c​o​u​n​t​ ​s​e​t​t​i​n​g​s​,​ ​a​n​d​ ​y​o​u​ ​c​a​n​ ​d​i​s​a​b​l​e​ ​a​n​a​l​y​t​i​c​s​ ​c​o​o​k​i​e​s​ ​a​s​ ​d​e​s​c​r​i​b​e​d​ ​i​n​ ​S​e​c​t​i​o​n​ ​7​.​<​b​r​>​<​b​r​>​R​e​q​u​e​s​t​s​ ​a​r​e​ ​m​a​d​e​ ​t​h​r​o​u​g​h​ ​o​u​r​ ​o​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d​ ​s​e​r​v​e​r​ ​(​s​e​e​ ​S​e​c​t​i​o​n​ ​1​7​)​.​ ​B​e​c​a​u​s​e​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​i​s​ ​l​i​n​k​e​d​ ​t​o​ ​y​o​u​r​ ​D​i​s​c​o​r​d​ ​a​c​c​o​u​n​t​,​ ​w​e​ ​v​e​r​i​f​y​ ​y​o​u​r​ ​i​d​e​n​t​i​t​y​ ​t​h​r​o​u​g​h​ ​t​h​a​t​ ​l​i​n​k​,​ ​a​n​d​ ​w​e​ ​m​a​y​ ​a​s​k​ ​a​d​d​i​t​i​o​n​a​l​ ​q​u​e​s​t​i​o​n​s​ ​i​f​ ​t​h​e​ ​l​i​n​k​ ​h​a​s​ ​b​e​e​n​ ​r​e​m​o​v​e​d​.​ ​W​e​ ​w​i​l​l​ ​r​e​s​p​o​n​d​ ​w​i​t​h​i​n​ ​3​0​ ​d​a​y​s​.​<​b​r​>​<​b​r​>​A​c​c​o​u​n​t​ ​d​e​l​e​t​i​o​n​ ​i​s​ ​n​o​t​ ​i​m​m​e​d​i​a​t​e​:​ ​o​n​c​e​ ​v​e​r​i​f​i​e​d​,​ ​y​o​u​r​ ​a​c​c​o​u​n​t​ ​i​s​ ​d​i​s​a​b​l​e​d​ ​a​n​d​ ​h​e​l​d​ ​f​o​r​ ​s​e​v​e​n​ ​d​a​y​s​ ​s​o​ ​t​h​a​t​ ​y​o​u​ ​c​a​n​ ​c​h​a​n​g​e​ ​y​o​u​r​ ​m​i​n​d​.​ ​A​f​t​e​r​ ​t​h​a​t​ ​p​e​r​i​o​d​,​ ​d​a​t​a​ ​t​h​a​t​ ​w​e​ ​a​r​e​ ​n​o​t​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​r​e​t​a​i​n​ ​i​s​ ​d​e​l​e​t​e​d​ ​w​i​t​h​i​n​ ​3​0​ ​d​a​y​s​.​<​b​r​>​<​b​r​>​T​h​e​s​e​ ​r​i​g​h​t​s​ ​a​r​e​ ​s​u​b​j​e​c​t​ ​t​o​ ​t​h​e​ ​l​i​m​i​t​s​ ​a​n​d​ ​e​x​c​e​p​t​i​o​n​s​ ​o​f​ ​a​p​p​l​i​c​a​b​l​e​ ​l​a​w​.​ ​I​f​ ​y​o​u​ ​a​r​e​ ​i​n​ ​a​ ​j​u​r​i​s​d​i​c​t​i​o​n​ ​w​i​t​h​ ​a​ ​d​a​t​a​ ​p​r​o​t​e​c​t​i​o​n​ ​a​u​t​h​o​r​i​t​y​,​ ​y​o​u​ ​h​a​v​e​ ​t​h​e​ ​r​i​g​h​t​ ​t​o​ ​c​o​m​p​l​a​i​n​ ​t​o​ ​i​t​ ​—​ ​t​h​o​u​g​h​ ​w​e​ ​w​o​u​l​d​ ​a​s​k​ ​y​o​u​ ​t​o​ ​r​a​i​s​e​ ​t​h​e​ ​m​a​t​t​e​r​ ​w​i​t​h​ ​u​s​ ​f​i​r​s​t​,​ ​s​o​ ​t​h​a​t​ ​w​e​ ​h​a​v​e​ ​t​h​e​ ​c​h​a​n​c​e​ ​t​o​ ​p​u​t​ ​i​t​ ​r​i​g​h​t​.
+				 */
+				body: string
+			}
+			security: {
+				/**
+				 * 1​4​.​ ​S​e​c​u​r​i​t​y
+				 */
+				title: string
+				/**
+				 * P​a​s​s​w​o​r​d​s​ ​a​r​e​ ​s​t​o​r​e​d​ ​o​n​l​y​ ​a​s​ ​i​r​r​e​v​e​r​s​i​b​l​e​ ​b​c​r​y​p​t​ ​h​a​s​h​e​s​;​ ​w​e​ ​c​a​n​n​o​t​ ​r​e​a​d​ ​t​h​e​m​,​ ​a​n​d​ ​w​e​ ​w​i​l​l​ ​n​e​v​e​r​ ​a​s​k​ ​y​o​u​ ​f​o​r​ ​y​o​u​r​ ​p​a​s​s​w​o​r​d​.​ ​T​r​a​f​f​i​c​ ​b​e​t​w​e​e​n​ ​y​o​u​ ​a​n​d​ ​t​h​e​ ​S​e​r​v​i​c​e​s​ ​i​s​ ​e​n​c​r​y​p​t​e​d​ ​i​n​ ​t​r​a​n​s​i​t​.​ ​A​c​c​e​s​s​ ​t​o​ ​t​h​e​ ​p​l​a​y​e​r​ ​d​a​t​a​b​a​s​e​ ​a​n​d​ ​t​o​ ​a​d​m​i​n​i​s​t​r​a​t​i​v​e​ ​t​o​o​l​s​ ​i​s​ ​r​e​s​t​r​i​c​t​e​d​ ​t​o​ ​a​ ​s​m​a​l​l​ ​n​u​m​b​e​r​ ​o​f​ ​s​t​a​f​f​ ​m​e​m​b​e​r​s​.​<​b​r​>​<​b​r​>​N​o​ ​s​y​s​t​e​m​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​t​h​e​ ​I​n​t​e​r​n​e​t​ ​c​a​n​ ​b​e​ ​g​u​a​r​a​n​t​e​e​d​ ​t​o​ ​b​e​ ​c​o​m​p​l​e​t​e​l​y​ ​s​e​c​u​r​e​,​ ​b​u​t​ ​w​e​ ​t​a​k​e​ ​r​e​a​s​o​n​a​b​l​e​ ​m​e​a​s​u​r​e​s​ ​t​o​ ​p​r​o​t​e​c​t​ ​y​o​u​r​ ​i​n​f​o​r​m​a​t​i​o​n​,​ ​a​n​d​ ​w​e​ ​w​i​l​l​ ​i​n​f​o​r​m​ ​t​h​e​ ​c​o​m​m​u​n​i​t​y​ ​p​r​o​m​p​t​l​y​ ​i​f​ ​w​e​ ​b​e​c​o​m​e​ ​a​w​a​r​e​ ​o​f​ ​a​ ​b​r​e​a​c​h​ ​a​f​f​e​c​t​i​n​g​ ​p​l​a​y​e​r​ ​d​a​t​a​.​ ​W​e​ ​e​n​c​o​u​r​a​g​e​ ​y​o​u​ ​t​o​ ​u​s​e​ ​a​ ​p​a​s​s​w​o​r​d​ ​t​h​a​t​ ​y​o​u​ ​d​o​ ​n​o​t​ ​r​e​u​s​e​ ​e​l​s​e​w​h​e​r​e​,​ ​a​n​d​ ​t​o​ ​e​n​a​b​l​e​ ​t​w​o​-​f​a​c​t​o​r​ ​a​u​t​h​e​n​t​i​c​a​t​i​o​n​ ​o​n​ ​y​o​u​r​ ​D​i​s​c​o​r​d​ ​a​c​c​o​u​n​t​,​ ​s​i​n​c​e​ ​t​h​a​t​ ​a​c​c​o​u​n​t​ ​c​o​n​t​r​o​l​s​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​s​ ​h​e​r​e​.
+				 */
+				body: string
+			}
+			minors: {
+				/**
+				 * 1​5​.​ ​C​h​i​l​d​r​e​n
+				 */
+				title: string
+				/**
+				 * T​h​e​ ​S​e​r​v​i​c​e​s​ ​a​r​e​ ​n​o​t​ ​d​i​r​e​c​t​e​d​ ​a​t​ ​y​o​u​n​g​ ​c​h​i​l​d​r​e​n​.​ ​B​e​c​a​u​s​e​ ​a​c​c​e​s​s​ ​r​e​q​u​i​r​e​s​ ​a​ ​D​i​s​c​o​r​d​ ​a​c​c​o​u​n​t​,​ ​y​o​u​ ​m​u​s​t​ ​m​e​e​t​ ​D​i​s​c​o​r​d​'​s​ ​m​i​n​i​m​u​m​ ​a​g​e​ ​r​e​q​u​i​r​e​m​e​n​t​ ​—​ ​a​t​ ​l​e​a​s​t​ ​1​3​ ​y​e​a​r​s​ ​o​l​d​,​ ​o​r​ ​o​l​d​e​r​ ​w​h​e​r​e​ ​t​h​e​ ​l​a​w​ ​o​f​ ​y​o​u​r​ ​c​o​u​n​t​r​y​ ​s​e​t​s​ ​a​ ​h​i​g​h​e​r​ ​m​i​n​i​m​u​m​.​ ​I​f​ ​w​e​ ​l​e​a​r​n​ ​t​h​a​t​ ​w​e​ ​h​o​l​d​ ​d​a​t​a​ ​b​e​l​o​n​g​i​n​g​ ​t​o​ ​a​ ​c​h​i​l​d​ ​b​e​l​o​w​ ​t​h​e​ ​a​p​p​l​i​c​a​b​l​e​ ​a​g​e​,​ ​w​e​ ​w​i​l​l​ ​d​e​l​e​t​e​ ​i​t​.
+				 */
+				body: string
+			}
+			changes: {
+				/**
+				 * 1​6​.​ ​C​h​a​n​g​e​s​ ​t​o​ ​T​h​i​s​ ​P​o​l​i​c​y
+				 */
+				title: string
+				/**
+				 * W​e​ ​m​a​y​ ​u​p​d​a​t​e​ ​t​h​i​s​ ​P​r​i​v​a​c​y​ ​P​o​l​i​c​y​ ​f​r​o​m​ ​t​i​m​e​ ​t​o​ ​t​i​m​e​,​ ​f​o​r​ ​e​x​a​m​p​l​e​ ​w​h​e​n​ ​w​e​ ​a​d​d​ ​a​ ​f​e​a​t​u​r​e​ ​o​r​ ​c​h​a​n​g​e​ ​a​ ​s​e​r​v​i​c​e​ ​p​r​o​v​i​d​e​r​.​ ​W​h​e​n​ ​w​e​ ​d​o​,​ ​w​e​ ​w​i​l​l​ ​u​p​d​a​t​e​ ​t​h​e​ ​v​e​r​s​i​o​n​ ​a​n​d​ ​d​a​t​e​ ​s​h​o​w​n​ ​a​t​ ​t​h​e​ ​t​o​p​ ​o​f​ ​t​h​i​s​ ​p​a​g​e​.​ ​S​i​g​n​i​f​i​c​a​n​t​ ​c​h​a​n​g​e​s​ ​w​i​l​l​ ​b​e​ ​a​n​n​o​u​n​c​e​d​ ​o​n​ ​o​u​r​ ​o​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d​ ​s​e​r​v​e​r​ ​b​e​f​o​r​e​ ​t​h​e​y​ ​t​a​k​e​ ​e​f​f​e​c​t​.​ ​C​o​n​t​i​n​u​i​n​g​ ​t​o​ ​u​s​e​ ​t​h​e​ ​S​e​r​v​i​c​e​s​ ​a​f​t​e​r​ ​a​ ​c​h​a​n​g​e​ ​t​a​k​e​s​ ​e​f​f​e​c​t​ ​m​e​a​n​s​ ​t​h​a​t​ ​y​o​u​ ​a​c​c​e​p​t​ ​t​h​e​ ​u​p​d​a​t​e​d​ ​p​o​l​i​c​y​.
+				 */
+				body: string
+			}
+			contact: {
+				/**
+				 * 1​7​.​ ​C​o​n​t​a​c​t​ ​U​s
+				 */
+				title: string
+				/**
+				 * R​a​i​n​ ​S​e​r​v​e​r​ ​i​s​ ​a​n​ ​o​n​l​i​n​e​ ​c​o​m​m​u​n​i​t​y​.​ ​W​e​ ​a​r​e​ ​n​o​t​ ​a​ ​r​e​g​i​s​t​e​r​e​d​ ​c​o​m​p​a​n​y​ ​a​n​d​ ​w​e​ ​m​a​i​n​t​a​i​n​ ​n​o​ ​p​o​s​t​a​l​ ​o​r​ ​e​m​a​i​l​ ​c​o​n​t​a​c​t​ ​a​d​d​r​e​s​s​;​ ​o​u​r​ ​o​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d​ ​s​e​r​v​e​r​ ​i​s​ ​t​h​e​ ​o​n​l​y​ ​w​a​y​ ​t​o​ ​r​e​a​c​h​ ​u​s​.​<​b​r​>​<​b​r​>​F​o​r​ ​a​n​y​ ​q​u​e​s​t​i​o​n​ ​o​r​ ​r​e​q​u​e​s​t​ ​r​e​g​a​r​d​i​n​g​ ​t​h​i​s​ ​P​r​i​v​a​c​y​ ​P​o​l​i​c​y​ ​o​r​ ​y​o​u​r​ ​p​e​r​s​o​n​a​l​ ​d​a​t​a​,​ ​p​l​e​a​s​e​ ​c​o​n​t​a​c​t​ ​u​s​ ​o​n​ ​o​u​r​ ​<​a​ ​h​r​e​f​=​"​h​t​t​p​s​:​/​/​d​i​s​c​o​r​d​.​g​g​/​T​c​p​k​p​U​p​e​G​w​"​ ​t​a​r​g​e​t​=​"​_​b​l​a​n​k​"​ ​r​e​l​=​"​n​o​o​p​e​n​e​r​ ​n​o​r​e​f​e​r​r​e​r​"​>​o​f​f​i​c​i​a​l​ ​D​i​s​c​o​r​d​ ​s​e​r​v​e​r​<​/​a​>​ ​—​ ​e​i​t​h​e​r​ ​i​n​ ​t​h​e​ ​s​u​p​p​o​r​t​ ​c​h​a​n​n​e​l​ ​o​r​ ​b​y​ ​d​i​r​e​c​t​ ​m​e​s​s​a​g​e​ ​t​o​ ​a​ ​m​e​m​b​e​r​ ​o​f​ ​s​t​a​f​f​.
+				 */
+				body: string
+			}
+		}
+	}
 	footer: {
 		rain_web: {
 			/**
@@ -2927,6 +3117,196 @@ export type TranslationFunctions = {
 						}
 					}
 				}
+			}
+		}
+	}
+	privacyPolicy: {
+		/**
+		 * Privacy Policy
+		 */
+		label: () => LocalizedString
+		/**
+		 * How Rain Server collects, uses, stores, and protects the personal data of its players.
+		 */
+		description: () => LocalizedString
+		/**
+		 * Version 1 — Effective August 15, 2026
+		 */
+		lastUpdated: () => LocalizedString
+		/**
+		 * Rain Server takes the privacy of its players seriously. We are a volunteer-run, non-commercial community that keeps a discontinued online game playable, and we exist only because players trust us with their accounts. We collect the minimum amount of data required to run the game and keep it safe. We will never sell your personal data to anyone, we will never share it without proper disclosure, and we run no advertising of any kind. Every member of our team is instructed to treat player data as confidential.<br><br>This Privacy Policy covers our game server, this website, the member site, the desktop launcher, and our official Discord server (together, "the Services"). It explains what we collect, why we collect it, who else processes it, how long we keep it, and how you can have it corrected or deleted. We may revise this policy at any time; significant changes will be announced in advance on our official Discord server.
+		 */
+		intro: () => LocalizedString
+		sections: {
+			operator: {
+				/**
+				 * 1. Who We Are
+				 */
+				title: () => LocalizedString
+				/**
+				 * Rain Server is a community project run entirely by unpaid volunteers. We are not a registered company, we generate no revenue of any kind, and we are not affiliated with, endorsed by, or connected to the original publisher or developer of the game, or any of their subsidiaries.<br><br>Because of this, we have no legal, marketing, or commercial interest in your personal data. We hold it solely to run the game and to keep the community safe.
+				 */
+				body: () => LocalizedString
+			}
+			location: {
+				/**
+				 * 2. Where Your Data Is Stored and Processed
+				 */
+				title: () => LocalizedString
+				/**
+				 * The game server and the player database are located in Indonesia, and your account data, character data, and play records are stored and processed there. Data held on those servers is subject to Indonesian law on data storage and privacy, including Indonesia's Personal Data Protection Law (UU PDP).<br><br>This website, the member site, and the APIs used by the launcher run on Cloudflare's global network, which means those requests are handled at whichever of its data centres is closest to you. The other providers involved are listed in Section 8.<br><br>Our players and our team are spread across many countries, so operating the Services necessarily involves transferring your data across national borders. By using the Services, you consent to your data being transferred to, stored in, and processed in Indonesia and in the other locations described above, where data protection law may differ from the law where you live. For players in the European Economic Area and the United Kingdom, Section 9 sets out the legal basis on which we process your data.
+				 */
+				body: () => LocalizedString
+			}
+			collect: {
+				/**
+				 * 3. Information We Collect
+				 */
+				title: () => LocalizedString
+				/**
+				 * <strong>Discord account information.</strong> When you sign in with Discord (OAuth2), we receive your Discord user ID, username, display name, and avatar image, and — if you are a member of our official Discord server — your membership status and the roles assigned to you there. We also store the access token that Discord issues so that your account stays linked. We never receive or store your Discord password.<br><br><strong>Game account information.</strong> Your account name, an irreversibly hashed form of your password, your character data (character names, progression, in-game inventory and statistics), and records of your play sessions.<br><br><strong>Technical information.</strong> A login cookie ("rainLoginKey") that keeps you signed in to the member site, together with the standard request data your browser or launcher sends: IP address, user agent, and the page or endpoint you requested. This data is used for security, abuse prevention, and troubleshooting.<br><br><strong>Usage analytics.</strong> Aggregated page-view statistics collected through Google Analytics (see Section 7).<br><br>We do not ask for, and have no use for, your real name, your postal address, your date of birth, or your payment details. We do not operate a shop and we accept no payments.
+				 */
+				body: () => LocalizedString
+			}
+			discordMessages: {
+				/**
+				 * 4. How We Handle Discord Message Content
+				 */
+				title: () => LocalizedString
+				/**
+				 * The launcher shows an announcement feed so that players can read server news before starting the game. To build that feed, our backend reads messages from a small, fixed set of staff-only announcement channels on our own official Discord server, and extracts only the headline and the posting date of each announcement.<br><br>We want to be explicit about the limits of this:<br><br>• We read <strong>only</strong> those specific announcement channels, which contain posts written by our staff.<br>• We do <strong>not</strong> read messages posted by ordinary members, in any channel.<br>• We do <strong>not</strong> read, log, or analyse private messages between users.<br>• We do <strong>not</strong> store message content. It is fetched at the moment a request is made, reduced to a headline, and discarded.<br>• We do <strong>not</strong> use message content for profiling or advertising.<br><br>Direct messages that our bot sends to you — verification codes, for example — are sent at your own request as part of registration, password reset, or account linking, and their content is not retained after delivery. You can stop these messages at any time through your Discord privacy settings, though this will also prevent you from receiving verification codes.
+				 */
+				body: () => LocalizedString
+			}
+			purpose: {
+				/**
+				 * 5. Why We Use Your Information
+				 */
+				title: () => LocalizedString
+				/**
+				 * We use the information described above only for the following purposes:<br><br>• To create your account, authenticate you, and keep you signed in.<br>• To deliver verification codes and account notifications by Discord direct message.<br>• To grant in-game benefits corresponding to the roles you hold on our official Discord server.<br>• To operate, maintain, and troubleshoot the game server, the website, and the launcher.<br>• To display server announcements inside the launcher.<br>• To detect and prevent cheating, abuse, and unauthorised access, and to enforce our rules.<br>• To understand, in aggregate, how the game and the website are used, so that we can plan and improve them.<br><br>Aggregated, non-identifying statistics drawn from gameplay and account data may be shared within our team for planning purposes, and occasionally published to the community. Such statistics never identify individual players.
+				 */
+				body: () => LocalizedString
+			}
+			ai: {
+				/**
+				 * 6. Generative AI
+				 */
+				title: () => LocalizedString
+				/**
+				 * We will not use player personal data, account data, or gameplay data to train generative AI models, and we will not submit such data to generative AI services that train their models on the input they receive.
+				 */
+				body: () => LocalizedString
+			}
+			cookies: {
+				/**
+				 * 7. Cookies and Analytics
+				 */
+				title: () => LocalizedString
+				/**
+				 * We set one essential cookie of our own, "rainLoginKey", which keeps you signed in to the member site. Logging in is not possible without it. We do not use our own cookies to track you across other websites.<br><br>Cloudflare sets its own cookies as part of the security and anti-abuse services it provides to us. Details are given in <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare's privacy policy</a>.<br><br>This website uses Google Analytics to measure aggregate traffic: approximate region, browser, and the pages visited. We do not use Google advertising or ad-targeting products. Google sets its own cookies, which may be used for cross-site tracking on other sites. You can opt out by installing the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">Google Analytics Opt-out Browser Add-on</a> or by blocking cookies in your browser. Google's privacy policy is available at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">policies.google.com</a>.
+				 */
+				body: () => LocalizedString
+			}
+			thirdParty: {
+				/**
+				 * 8. Third-Party Services
+				 */
+				title: () => LocalizedString
+				/**
+				 * We use the following third-party services to operate the Services. Your data is processed by them only to the extent needed to provide those functions, and each is governed by its own privacy policy.<br><br>• <strong>Discord Inc.</strong> — account authentication, the official community server, and delivery of direct messages. See <a href="https://discord.com/privacy" target="_blank" rel="noopener noreferrer">Discord's Privacy Policy</a>.<br>• <strong>Cloudflare, Inc.</strong> — hosting for the website and APIs, content delivery, DNS, and protection against automated abuse.<br>• <strong>Google LLC</strong> — website usage analytics.<br><br>We do not sell, rent, or trade your personal data, and we do not disclose it to third parties for their own purposes. By using the Services, you consent to your data being processed by the providers listed above to the extent their services require.
+				 */
+				body: () => LocalizedString
+			}
+			legalBasis: {
+				/**
+				 * 9. Legal Basis for Processing
+				 */
+				title: () => LocalizedString
+				/**
+				 * For players in the European Economic Area and the United Kingdom, the GDPR and the UK GDPR require us to state the legal basis on which we process your personal data. We rely on the following:<br><br>• <strong>Performance of a contract</strong> — to create and maintain your account and to provide the Services you have asked for.<br>• <strong>Legitimate interests</strong> — to protect accounts from unauthorised access, to protect the game and our volunteers from attack and abuse, to investigate faults, to analyse usage in order to improve the game, and to handle disputes concerning an account.<br>• <strong>Consent</strong> — for optional processing that we present to you before it happens, such as analytics cookies.<br>• <strong>Compliance with a legal obligation</strong> — where the law of an applicable jurisdiction requires us to retain or disclose data.<br><br>Where we rely on consent, you may withdraw it at any time; this does not affect processing carried out before the withdrawal.
+				 */
+				body: () => LocalizedString
+			}
+			disclosure: {
+				/**
+				 * 10. Legal Disclosure and Changes to the Team
+				 */
+				title: () => LocalizedString
+				/**
+				 * We may disclose your information where we believe in good faith that doing so is necessary to comply with a legal obligation, to enforce our rules, to protect the rights or property of the community, to protect the personal safety of our players or the public, or to defend against legal liability. We will comply with valid legal process from a competent authority.<br><br>Rain Server is run by volunteers, and the team may change over time. If operation of the Services is ever handed over to a different team or entity, we will announce it on our official Discord server at least 30 days in advance. Your data would then be subject to the successor's privacy policy. If you do not wish your data to be transferred, you may request deletion of your account before the transfer date, as described in Section 13.<br><br>We will not transfer operation of the Services to any party that intends to monetise player data.
+				 */
+				body: () => LocalizedString
+			}
+			moderation: {
+				/**
+				 * 11. Moderation and Enforcement Records
+				 */
+				title: () => LocalizedString
+				/**
+				 * To keep the game safe and fair, we keep records of accounts that have been suspended or restricted, including the reason for the action, its duration, and whether it is permanent. These records are visible only to the staff members responsible for moderation and support.<br><br>Enforcement records are not disclosed outside the team, except to the account owner concerned after we have verified their identity, or where disclosure is required as described in Section 10. Because these records exist to prevent repeat abuse, they may be retained even after an account is deleted.
+				 */
+				body: () => LocalizedString
+			}
+			retention: {
+				/**
+				 * 12. How Long We Keep Your Information
+				 */
+				title: () => LocalizedString
+				/**
+				 * We keep your account and character data for as long as your account exists, so that you do not lose your progress. If you ask us to delete your account, we will remove your account data, your character data, and your Discord link.<br><br>Server logs and backups kept for security and troubleshooting are rotated and overwritten in the ordinary course of operations. Message content from Discord is never retained, as described in Section 4. Data that we must keep for the protection of the game, as described in Section 11, may be retained after deletion of the account.
+				 */
+				body: () => LocalizedString
+			}
+			rights: {
+				/**
+				 * 13. Your Rights and How to Exercise Them
+				 */
+				title: () => LocalizedString
+				/**
+				 * You may at any time ask us to:<br><br>• Tell you what personal data we hold about you, and provide you with a copy of it.<br>• Correct personal data that is inaccurate.<br>• Delete your account and the personal data associated with it.<br>• Suspend or restore access to your account.<br><br>You can also unlink your Discord account yourself, or revoke our access under "Authorised Apps" in your Discord account settings, and you can disable analytics cookies as described in Section 7.<br><br>Requests are made through our official Discord server (see Section 17). Because your account is linked to your Discord account, we verify your identity through that link, and we may ask additional questions if the link has been removed. We will respond within 30 days.<br><br>Account deletion is not immediate: once verified, your account is disabled and held for seven days so that you can change your mind. After that period, data that we are not required to retain is deleted within 30 days.<br><br>These rights are subject to the limits and exceptions of applicable law. If you are in a jurisdiction with a data protection authority, you have the right to complain to it — though we would ask you to raise the matter with us first, so that we have the chance to put it right.
+				 */
+				body: () => LocalizedString
+			}
+			security: {
+				/**
+				 * 14. Security
+				 */
+				title: () => LocalizedString
+				/**
+				 * Passwords are stored only as irreversible bcrypt hashes; we cannot read them, and we will never ask you for your password. Traffic between you and the Services is encrypted in transit. Access to the player database and to administrative tools is restricted to a small number of staff members.<br><br>No system connected to the Internet can be guaranteed to be completely secure, but we take reasonable measures to protect your information, and we will inform the community promptly if we become aware of a breach affecting player data. We encourage you to use a password that you do not reuse elsewhere, and to enable two-factor authentication on your Discord account, since that account controls access to yours here.
+				 */
+				body: () => LocalizedString
+			}
+			minors: {
+				/**
+				 * 15. Children
+				 */
+				title: () => LocalizedString
+				/**
+				 * The Services are not directed at young children. Because access requires a Discord account, you must meet Discord's minimum age requirement — at least 13 years old, or older where the law of your country sets a higher minimum. If we learn that we hold data belonging to a child below the applicable age, we will delete it.
+				 */
+				body: () => LocalizedString
+			}
+			changes: {
+				/**
+				 * 16. Changes to This Policy
+				 */
+				title: () => LocalizedString
+				/**
+				 * We may update this Privacy Policy from time to time, for example when we add a feature or change a service provider. When we do, we will update the version and date shown at the top of this page. Significant changes will be announced on our official Discord server before they take effect. Continuing to use the Services after a change takes effect means that you accept the updated policy.
+				 */
+				body: () => LocalizedString
+			}
+			contact: {
+				/**
+				 * 17. Contact Us
+				 */
+				title: () => LocalizedString
+				/**
+				 * Rain Server is an online community. We are not a registered company and we maintain no postal or email contact address; our official Discord server is the only way to reach us.<br><br>For any question or request regarding this Privacy Policy or your personal data, please contact us on our <a href="https://discord.gg/TcpkpUpeGw" target="_blank" rel="noopener noreferrer">official Discord server</a> — either in the support channel or by direct message to a member of staff.
+				 */
+				body: () => LocalizedString
 			}
 		}
 	}

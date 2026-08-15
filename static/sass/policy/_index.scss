@@ -1,0 +1,184 @@
+@charset "UTF-8";
+
+@use '../global/' as *;
+
+/*==================================
+　　　　　プライバシーポリシー
+==================================*/
+
+// 上下の余白は親のpaddingで確保する（カード側marginだとマージン相殺で背景の外に漏れる）
+.policy_bg {
+    @include pc {
+        padding: 4% 0;
+    }
+
+    @include sp {
+        padding: 8% 3%;
+    }
+}
+
+.policy_main {
+    max-width: 900px;
+    margin: auto;
+}
+
+// 本文カード
+.policy_doc {
+    background: rgba(255, 255, 255, 0.85);
+    border: rgba(0, 0, 0, 0.2) solid 2px;
+    border-top: #1ecbff solid 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin: 0;
+
+    @include pc {
+        padding: 60px 70px;
+    }
+
+    @include sp {
+        padding: 30px 20px;
+    }
+
+    // オンラインマニュアル用の見出し装飾を打ち消す
+    h1,
+    h2 {
+        background: none;
+        color: #333;
+        text-align: start;
+        text-shadow: none;
+
+        &::before,
+        &::after {
+            content: none;
+        }
+    }
+}
+
+// ページタイトル
+.policy_title {
+    font-family: $font_title_ja;
+    font-weight: 700;
+    line-height: 1.4;
+    border-bottom: rgba(0, 0, 0, 0.15) solid 1px;
+    padding: 0 0 0.5em;
+    margin: 0;
+
+    &:lang(en) {
+        font-family: $font_title_en;
+    }
+
+    @include pc {
+        font-size: 3.2rem;
+    }
+
+    @include sp {
+        font-size: 2.2rem;
+    }
+}
+
+// 最終更新日
+.policy_updated {
+    color: #777;
+    margin-top: 1em;
+
+    @include pc {
+        font-size: 1.4rem;
+    }
+
+    @include sp {
+        font-size: 1.3rem;
+    }
+}
+
+// 前文
+.policy_intro {
+    line-height: 1.9;
+    margin-top: 2em;
+}
+
+// 目次
+.policy_toc {
+    background: rgba(30, 203, 255, 0.08);
+    border-left: #1ecbff solid 3px;
+    list-style: none;
+    line-height: 1.9;
+    margin-top: 2.5em;
+
+    @include pc {
+        padding: 25px 30px;
+        columns: 2;
+        column-gap: 40px;
+    }
+
+    @include sp {
+        padding: 20px;
+        font-size: 1.4rem;
+    }
+
+    li {
+        break-inside: avoid;
+    }
+
+    a {
+        color: #0b7f9e;
+        text-decoration: none;
+
+        &:hover {
+            color: #0b7f9e;
+            text-decoration: underline;
+        }
+    }
+}
+
+// 各条項
+.policy_section {
+    scroll-margin-top: 20px;
+
+    @include pc {
+        margin: 3em 0 0;
+    }
+
+    @include sp {
+        margin: 2.5em 0 0;
+    }
+}
+
+.policy_section_title {
+    font-family: $font_title_ja;
+    font-weight: 700;
+    line-height: 1.5;
+    border-left: #1ecbff solid 5px;
+    padding-left: 0.6em;
+    margin: 0 0 1em;
+
+    &:lang(en) {
+        font-family: $font_title_en;
+    }
+
+    @include pc {
+        font-size: 2rem;
+    }
+
+    @include sp {
+        font-size: 1.6rem;
+    }
+}
+
+.policy_section_body {
+    line-height: 2;
+    word-break: normal;
+    overflow-wrap: anywhere;
+
+    @include sp {
+        line-height: 1.9;
+    }
+
+    a {
+        color: #0b7f9e;
+        text-decoration: underline;
+
+        &:hover {
+            color: #0b7f9e;
+            opacity: 0.7;
+        }
+    }
+}

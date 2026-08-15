@@ -1506,6 +1506,20 @@
                 text-align: center;
                 color: #fff;
                 font-size: 1.3rem;
+
+                // プライバシーポリシーへのリンク
+                .footer_policy_link {
+                    margin-bottom: 1.2em;
+
+                    a {
+                        text-decoration: underline;
+
+                        &:hover {
+                            text-decoration: underline;
+                            opacity: 0.7;
+                        }
+                    }
+                }
             }
         }
     }
