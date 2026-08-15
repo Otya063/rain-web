@@ -22,7 +22,6 @@ jobs:
             R2_BNR_UNIQUE_URL: ${{ secrets.R2_BNR_UNIQUE_URL }}
             PUBLIC_MAIN_DOMAIN: ${{ secrets.PROD_MAIN_DOMAIN }}
             PUBLIC_AUTH_DOMAIN: ${{ secrets.PROD_AUTH_DOMAIN }}
-            ADMIN_CREDENTIALS: ${{ secrets.ADMIN_CREDENTIALS }}
             ADMIN_IP: ${{ secrets.ADMIN_IP }}
             DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
 
