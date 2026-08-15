@@ -19,6 +19,10 @@
     </ul>
 
     <div class="footer_note">
+        <p class="footer_policy_link">
+            <a href="/{$locale}/privacy-policy/">{$LL.privacyPolicy['label']()}</a>
+        </p>
+
         <p>
             {@html $LL.disclaimer()}
         </p>

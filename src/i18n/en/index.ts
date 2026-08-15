@@ -596,6 +596,84 @@ const en: BaseTranslation = {
         },
     },
 
+    // Privacy Policy
+    privacyPolicy: {
+        label: 'Privacy Policy',
+        description: 'How Rain Server collects, uses, stores, and protects the personal data of its players.',
+        lastUpdated: 'Version 1 — Effective August 15, 2026',
+        intro: 'Rain Server takes the privacy of its players seriously. We are a volunteer-run, non-commercial community that keeps a discontinued online game playable, and we exist only because players trust us with their accounts. We collect the minimum amount of data required to run the game and keep it safe. We will never sell your personal data to anyone, we will never share it without proper disclosure, and we run no advertising of any kind. Every member of our team is instructed to treat player data as confidential.<br><br>This Privacy Policy covers our game server, this website, the member site, the desktop launcher, and our official Discord server (together, "the Services"). It explains what we collect, why we collect it, who else processes it, how long we keep it, and how you can have it corrected or deleted. We may revise this policy at any time; significant changes will be announced in advance on our official Discord server.',
+        sections: {
+            operator: {
+                title: '1. Who We Are',
+                body: 'Rain Server is a community project run entirely by unpaid volunteers. We are not a registered company, we generate no revenue of any kind, and we are not affiliated with, endorsed by, or connected to the original publisher or developer of the game, or any of their subsidiaries.<br><br>Because of this, we have no legal, marketing, or commercial interest in your personal data. We hold it solely to run the game and to keep the community safe.',
+            },
+            location: {
+                title: '2. Where Your Data Is Stored and Processed',
+                body: 'The game server and the player database are located in Indonesia, and your account data, character data, and play records are stored and processed there. Data held on those servers is subject to Indonesian law on data storage and privacy, including Indonesia\'s Personal Data Protection Law (UU PDP).<br><br>This website, the member site, and the APIs used by the launcher run on Cloudflare\'s global network, which means those requests are handled at whichever of its data centres is closest to you. The other providers involved are listed in Section 8.<br><br>Our players and our team are spread across many countries, so operating the Services necessarily involves transferring your data across national borders. By using the Services, you consent to your data being transferred to, stored in, and processed in Indonesia and in the other locations described above, where data protection law may differ from the law where you live. For players in the European Economic Area and the United Kingdom, Section 9 sets out the legal basis on which we process your data.',
+            },
+            collect: {
+                title: '3. Information We Collect',
+                body: '<strong>Discord account information.</strong> When you sign in with Discord (OAuth2), we receive your Discord user ID, username, display name, and avatar image, and — if you are a member of our official Discord server — your membership status and the roles assigned to you there. We also store the access token that Discord issues so that your account stays linked. We never receive or store your Discord password.<br><br><strong>Game account information.</strong> Your account name, an irreversibly hashed form of your password, your character data (character names, progression, in-game inventory and statistics), and records of your play sessions.<br><br><strong>Technical information.</strong> A login cookie ("rainLoginKey") that keeps you signed in to the member site, together with the standard request data your browser or launcher sends: IP address, user agent, and the page or endpoint you requested. This data is used for security, abuse prevention, and troubleshooting.<br><br><strong>Usage analytics.</strong> Aggregated page-view statistics collected through Google Analytics (see Section 7).<br><br>We do not ask for, and have no use for, your real name, your postal address, your date of birth, or your payment details. We do not operate a shop and we accept no payments.',
+            },
+            discordMessages: {
+                title: '4. How We Handle Discord Message Content',
+                body: 'The launcher shows an announcement feed so that players can read server news before starting the game. To build that feed, our backend reads messages from a small, fixed set of staff-only announcement channels on our own official Discord server, and extracts only the headline and the posting date of each announcement.<br><br>We want to be explicit about the limits of this:<br><br>• We read <strong>only</strong> those specific announcement channels, which contain posts written by our staff.<br>• We do <strong>not</strong> read messages posted by ordinary members, in any channel.<br>• We do <strong>not</strong> read, log, or analyse private messages between users.<br>• We do <strong>not</strong> store message content. It is fetched at the moment a request is made, reduced to a headline, and discarded.<br>• We do <strong>not</strong> use message content for profiling or advertising.<br><br>Direct messages that our bot sends to you — verification codes, for example — are sent at your own request as part of registration, password reset, or account linking, and their content is not retained after delivery. You can stop these messages at any time through your Discord privacy settings, though this will also prevent you from receiving verification codes.',
+            },
+            purpose: {
+                title: '5. Why We Use Your Information',
+                body: 'We use the information described above only for the following purposes:<br><br>• To create your account, authenticate you, and keep you signed in.<br>• To deliver verification codes and account notifications by Discord direct message.<br>• To grant in-game benefits corresponding to the roles you hold on our official Discord server.<br>• To operate, maintain, and troubleshoot the game server, the website, and the launcher.<br>• To display server announcements inside the launcher.<br>• To detect and prevent cheating, abuse, and unauthorised access, and to enforce our rules.<br>• To understand, in aggregate, how the game and the website are used, so that we can plan and improve them.<br><br>Aggregated, non-identifying statistics drawn from gameplay and account data may be shared within our team for planning purposes, and occasionally published to the community. Such statistics never identify individual players.',
+            },
+            ai: {
+                title: '6. Generative AI',
+                body: 'We will not use player personal data, account data, or gameplay data to train generative AI models, and we will not submit such data to generative AI services that train their models on the input they receive.',
+            },
+            cookies: {
+                title: '7. Cookies and Analytics',
+                body: 'We set one essential cookie of our own, "rainLoginKey", which keeps you signed in to the member site. Logging in is not possible without it. We do not use our own cookies to track you across other websites.<br><br>Cloudflare sets its own cookies as part of the security and anti-abuse services it provides to us. Details are given in <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">Cloudflare\'s privacy policy</a>.<br><br>This website uses Google Analytics to measure aggregate traffic: approximate region, browser, and the pages visited. We do not use Google advertising or ad-targeting products. Google sets its own cookies, which may be used for cross-site tracking on other sites. You can opt out by installing the <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">Google Analytics Opt-out Browser Add-on</a> or by blocking cookies in your browser. Google\'s privacy policy is available at <a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">policies.google.com</a>.',
+            },
+            thirdParty: {
+                title: '8. Third-Party Services',
+                body: 'We use the following third-party services to operate the Services. Your data is processed by them only to the extent needed to provide those functions, and each is governed by its own privacy policy.<br><br>• <strong>Discord Inc.</strong> — account authentication, the official community server, and delivery of direct messages. See <a href="https://discord.com/privacy" target="_blank" rel="noopener noreferrer">Discord\'s Privacy Policy</a>.<br>• <strong>Cloudflare, Inc.</strong> — hosting for the website and APIs, content delivery, DNS, and protection against automated abuse.<br>• <strong>Google LLC</strong> — website usage analytics.<br><br>We do not sell, rent, or trade your personal data, and we do not disclose it to third parties for their own purposes. By using the Services, you consent to your data being processed by the providers listed above to the extent their services require.',
+            },
+            legalBasis: {
+                title: '9. Legal Basis for Processing',
+                body: 'For players in the European Economic Area and the United Kingdom, the GDPR and the UK GDPR require us to state the legal basis on which we process your personal data. We rely on the following:<br><br>• <strong>Performance of a contract</strong> — to create and maintain your account and to provide the Services you have asked for.<br>• <strong>Legitimate interests</strong> — to protect accounts from unauthorised access, to protect the game and our volunteers from attack and abuse, to investigate faults, to analyse usage in order to improve the game, and to handle disputes concerning an account.<br>• <strong>Consent</strong> — for optional processing that we present to you before it happens, such as analytics cookies.<br>• <strong>Compliance with a legal obligation</strong> — where the law of an applicable jurisdiction requires us to retain or disclose data.<br><br>Where we rely on consent, you may withdraw it at any time; this does not affect processing carried out before the withdrawal.',
+            },
+            disclosure: {
+                title: '10. Legal Disclosure and Changes to the Team',
+                body: 'We may disclose your information where we believe in good faith that doing so is necessary to comply with a legal obligation, to enforce our rules, to protect the rights or property of the community, to protect the personal safety of our players or the public, or to defend against legal liability. We will comply with valid legal process from a competent authority.<br><br>Rain Server is run by volunteers, and the team may change over time. If operation of the Services is ever handed over to a different team or entity, we will announce it on our official Discord server at least 30 days in advance. Your data would then be subject to the successor\'s privacy policy. If you do not wish your data to be transferred, you may request deletion of your account before the transfer date, as described in Section 13.<br><br>We will not transfer operation of the Services to any party that intends to monetise player data.',
+            },
+            moderation: {
+                title: '11. Moderation and Enforcement Records',
+                body: 'To keep the game safe and fair, we keep records of accounts that have been suspended or restricted, including the reason for the action, its duration, and whether it is permanent. These records are visible only to the staff members responsible for moderation and support.<br><br>Enforcement records are not disclosed outside the team, except to the account owner concerned after we have verified their identity, or where disclosure is required as described in Section 10. Because these records exist to prevent repeat abuse, they may be retained even after an account is deleted.',
+            },
+            retention: {
+                title: '12. How Long We Keep Your Information',
+                body: 'We keep your account and character data for as long as your account exists, so that you do not lose your progress. If you ask us to delete your account, we will remove your account data, your character data, and your Discord link.<br><br>Server logs and backups kept for security and troubleshooting are rotated and overwritten in the ordinary course of operations. Message content from Discord is never retained, as described in Section 4. Data that we must keep for the protection of the game, as described in Section 11, may be retained after deletion of the account.',
+            },
+            rights: {
+                title: '13. Your Rights and How to Exercise Them',
+                body: 'You may at any time ask us to:<br><br>• Tell you what personal data we hold about you, and provide you with a copy of it.<br>• Correct personal data that is inaccurate.<br>• Delete your account and the personal data associated with it.<br>• Suspend or restore access to your account.<br><br>You can also unlink your Discord account yourself, or revoke our access under "Authorised Apps" in your Discord account settings, and you can disable analytics cookies as described in Section 7.<br><br>Requests are made through our official Discord server (see Section 17). Because your account is linked to your Discord account, we verify your identity through that link, and we may ask additional questions if the link has been removed. We will respond within 30 days.<br><br>Account deletion is not immediate: once verified, your account is disabled and held for seven days so that you can change your mind. After that period, data that we are not required to retain is deleted within 30 days.<br><br>These rights are subject to the limits and exceptions of applicable law. If you are in a jurisdiction with a data protection authority, you have the right to complain to it — though we would ask you to raise the matter with us first, so that we have the chance to put it right.',
+            },
+            security: {
+                title: '14. Security',
+                body: 'Passwords are stored only as irreversible bcrypt hashes; we cannot read them, and we will never ask you for your password. Traffic between you and the Services is encrypted in transit. Access to the player database and to administrative tools is restricted to a small number of staff members.<br><br>No system connected to the Internet can be guaranteed to be completely secure, but we take reasonable measures to protect your information, and we will inform the community promptly if we become aware of a breach affecting player data. We encourage you to use a password that you do not reuse elsewhere, and to enable two-factor authentication on your Discord account, since that account controls access to yours here.',
+            },
+            minors: {
+                title: '15. Children',
+                body: 'The Services are not directed at young children. Because access requires a Discord account, you must meet Discord\'s minimum age requirement — at least 13 years old, or older where the law of your country sets a higher minimum. If we learn that we hold data belonging to a child below the applicable age, we will delete it.',
+            },
+            changes: {
+                title: '16. Changes to This Policy',
+                body: 'We may update this Privacy Policy from time to time, for example when we add a feature or change a service provider. When we do, we will update the version and date shown at the top of this page. Significant changes will be announced on our official Discord server before they take effect. Continuing to use the Services after a change takes effect means that you accept the updated policy.',
+            },
+            contact: {
+                title: '17. Contact Us',
+                body: 'Rain Server is an online community. We are not a registered company and we maintain no postal or email contact address; our official Discord server is the only way to reach us.<br><br>For any question or request regarding this Privacy Policy or your personal data, please contact us on our <a href="https://discord.gg/TcpkpUpeGw" target="_blank" rel="noopener noreferrer">official Discord server</a> — either in the support channel or by direct message to a member of staff.',
+            },
+        },
+    },
+
     // Footer
     footer: {
         // key is class name
